@@ -67,6 +67,19 @@ nav.bar .wrap{display:flex;gap:6px;align-items:center;padding-top:9px;padding-bo
 .spacer{margin-left:auto}
 
 main{padding:34px 0 80px}
+
+.setup{border:1px solid var(--rule2);background:var(--raised);padding:14px 18px;margin-top:26px;
+  display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start}
+.setup fieldset{border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.setup legend{font-family:var(--display);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);font-weight:700;padding:0;margin-bottom:2px}
+.opts{display:flex;gap:5px;flex-wrap:wrap}
+.opt{font-size:12.5px;padding:4px 10px;border:1px solid var(--rule2);background:var(--bg);color:var(--ink2);
+  border-radius:2px;cursor:pointer;font-family:var(--body);white-space:nowrap}
+.opt:hover{border-color:var(--accent);color:var(--accent)}
+.opt[aria-pressed=true]{background:var(--accent);color:var(--raised);border-color:var(--accent);font-weight:600}
+.setup .hint{flex-basis:100%;font-size:12.5px;color:var(--ink3);margin:0}
+.synced{flex-basis:100%;font-size:12px;color:var(--ink3);margin:0}
+
 section{padding-top:44px;scroll-margin-top:60px}
 .sec-head{display:flex;align-items:baseline;gap:14px;border-bottom:1px solid var(--rule2);padding-bottom:10px;margin-bottom:22px}
 .sec-head h2{font-size:clamp(21px,3vw,29px);font-stretch:87.5%}
@@ -194,6 +207,8 @@ section,.tier-block{scroll-margin-top:calc(var(--sbh) + 46px)}
 
 <main class="wrap">
 
+<section class="setup" id="setup" aria-label="게임 설정" style="padding-top:0"></section>
+
 <!-- ── 먼저 알 것 ── -->
 <section id="truth" style="padding-top:34px">
   <div class="key">
@@ -244,8 +259,49 @@ section,.tier-block{scroll-margin-top:calc(var(--sbh) + 46px)}
 <!-- ── 첫 10분 ── -->
 <section id="first">
   <div class="sec-head"><h2>착륙 후 첫 10분</h2><span class="tag">티어 0 시작</span></div>
-  <p class="lede">튜토리얼이 시키는 대로만 따라가면 자원 위치를 모른 채 허브를 짓게 됩니다. 순서를 하나만 바꾸면 됩니다 — <strong>짓기 전에 정찰</strong>.</p>
+  <p class="lede" id="firstlede">튜토리얼이 시키는 대로만 따라가면 자원 위치를 모른 채 허브를 짓게 됩니다. 순서를 하나만 바꾸면 됩니다 — <strong>짓기 전에 정찰</strong>.</p>
 
+  <div id="skippath" hidden>
+    <div class="ok" style="margin-top:0"><b>튜토리얼 스킵 시작</b>티어 0 마일스톤이 <strong>전부 해금된 상태</strong>로 시작합니다 — 제련기·제작기·컨베이어 벨트·<strong>채굴기 Mk.1</strong>·바이오매스 연소기가 이미 열려 있습니다. 손 채굴 단계를 통째로 건너뜁니다.</div>
+
+    <div class="step"><span class="n">1</span><div>
+      <h3>짓기 전에 스캔한다 <span style="color:var(--accent);font-size:13px">← 스킵해도 이건 똑같이 중요</span></h3>
+      <p>자원 스캐너(<span class="k">V</span> 길게)로 <strong>철·구리·석회석</strong> 위치를 먼저 확인하세요. 스킵 시작은 허브를 바로 지을 재료가 있어서 더 성급해지기 쉽습니다.</p>
+      <p>근처에 <strong>순수(Pure) 철 노드</strong>가 있는지 특히 잘 보세요 — 바로 채굴기를 꽂을 수 있으니 노드 선택의 가치가 첫 순간부터 발생합니다.</p>
+    </div></div>
+
+    <div class="step"><span class="n">2</span><div>
+      <h3>허브를 짓는다 — 들고 있는 철광 20개가 정확히 그 비용</h3>
+      <p>스킵해도 <strong>허브는 직접 지어야 합니다.</strong> 시작 인벤토리의 철광석 20개가 건설비와 정확히 일치합니다.</p>
+      <p>세 자원의 대략적인 무게중심, 그리고 평지. 완벽할 필요 없습니다 — 허브는 나중에 자유롭게 옮길 수 있습니다.</p>
+    </div></div>
+
+    <div class="step"><span class="n">3</span><div>
+      <h3>휴대용 채굴기 4개를 즉시 꽂는다</h3>
+      <p>시작 인벤토리에 <strong>휴대용 채굴기가 4개</strong> 있습니다. 아무 노드에나 꽂아두면 걸어다니는 동안 알아서 캡니다. 놀리는 만큼 그대로 손해입니다.</p>
+    </div></div>
+
+    <div class="step"><span class="n">4</span><div>
+      <h3>첫 자동화를 바로 세운다</h3>
+      <p>채굴기 Mk.1·벨트·제련기·제작기가 이미 해금돼 있으니 <a href="#auto">아래 배치</a>를 그대로 세우세요. 튜토리얼 경로는 HUB 5까지 가야 여기 도달합니다.</p>
+      <p><strong>석회석 라인을 우선</strong>하세요. 아래 표에서 보듯 철판은 이미 넘치고 콘크리트만 크게 모자랍니다.</p>
+    </div></div>
+
+    <div class="tw" style="margin-top:16px">
+      <table>
+        <caption>티어 1 첫 마일스톤 — 기지 건설(Base Building)까지의 격차</caption>
+        <thead><tr><th>필요 부품</th><th class="n">요구</th><th class="n">시작 보유</th><th class="n">부족</th><th>조달</th></tr></thead>
+        <tbody>
+          <tr><td>철판 (Iron Plate)</td><td class="n">100</td><td class="n">129</td><td class="n" style="color:var(--good);font-weight:600">충족</td><td>—</td></tr>
+          <tr><td>철봉 (Iron Rod)</td><td class="n">100</td><td class="n">60</td><td class="n">40</td><td>철 잉곳 40</td></tr>
+          <tr><td class="mark">콘크리트 (Concrete)</td><td class="n">200</td><td class="n">58</td><td class="n mark">142</td><td class="mark">석회석 426</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="ok"><b>결론</b>스킵 시작의 첫 목표는 <strong>석회석 라인</strong>입니다. 철 계열은 이미 충분하니 석회석 노드에 채굴기를 꽂고 제작기로 콘크리트를 뽑는 것이 최단 경로입니다.</div>
+  </div>
+
+  <div id="fullpath">
   <div class="step"><span class="n">1</span><div>
     <h3>드롭포드를 철거한다</h3>
     <p>빌드건(<span class="k">F</span>)으로 드롭포드를 철거하면 <strong>철광석 20개</strong>가 나옵니다. 허브 건설비가 정확히 이것입니다.</p>
@@ -268,6 +324,8 @@ section,.tier-block{scroll-margin-top:calc(var(--sbh) + 46px)}
     <p>HUB 2에서 바이오매스 연소기가 풀립니다. 그때 연료가 없으면 멈춰서 잎을 주우러 다녀야 합니다.</p>
     <p>이동하면서 <strong>나뭇잎·나무를 계속 주우세요.</strong> 특히 사구 사막에서 시작했다면 주변에 식생이 거의 없으니 더 부지런히 모아야 합니다.</p>
   </div></div>
+
+  </div>
 
   <div class="note"><b>하지 말 것</b>이 단계의 건물을 <strong>본 공장 예정지 한가운데</strong>에 짓지 마세요. 파운데이션은 티어 1에서야 풀리고, 맨땅에 지은 것은 그때 전부 철거하게 됩니다. 임시 라인은 부지 <em>바깥</em>에 두세요.</div>
 </section>
@@ -490,6 +548,69 @@ document.getElementById("theme").onclick = () => {
   const dark = r.dataset.theme ? r.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
   r.dataset.theme = dark ? "light" : "dark";
 };
+
+// ── 마일스톤 화면과 공유하는 설정 (같은 localStorage 키) ──
+const KEY = "sops.progress.v1";
+const DEFAULT = () => ({schemaVersion:2, done:{}, setup:{mode:"full", start:"", random:false}});
+let state = DEFAULT();
+try{
+  const r = localStorage.getItem(KEY);
+  if(r){
+    let p = JSON.parse(r);
+    if(p && p.schemaVersion === 1) p = {...p, schemaVersion:2, setup:DEFAULT().setup};
+    if(p && p.schemaVersion === 2) state = {...DEFAULT(), ...p, setup:{...DEFAULT().setup, ...(p.setup||{})}};
+  }
+}catch(e){}
+const save = () => { try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} };
+
+const MODES = [{v:"full", l:"튜토리얼 진행"}, {v:"skip", l:"튜토리얼 스킵"}];
+const STARTS = [{v:"rocky", l:"바위 사막", pin:3}, {v:"north", l:"북부 숲", pin:5},
+                {v:"grass", l:"잔디 평야", pin:1}, {v:"dune", l:"사구 사막", pin:6}, {v:"", l:"미정", pin:5}];
+
+function renderSetup(zoomToStart){
+  const s = state.setup;
+  document.getElementById("setup").innerHTML = `
+    <fieldset><legend>시작 방식</legend><div class="opts">
+      ${MODES.map(m => `<button class="opt" type="button" data-set="mode" data-v="${m.v}" aria-pressed="${s.mode===m.v}">${m.l}</button>`).join("")}
+    </div></fieldset>
+    <fieldset><legend>시작 지점</legend><div class="opts">
+      ${STARTS.map(x => `<button class="opt" type="button" data-set="start" data-v="${x.v}" aria-pressed="${s.start===x.v}">${x.l}</button>`).join("")}
+    </div></fieldset>
+    <fieldset><legend>자원 랜덤화</legend><div class="opts">
+      <button class="opt" type="button" data-set="random" data-v="0" aria-pressed="${!s.random}">끔 (시드 0)</button>
+      <button class="opt" type="button" data-set="random" data-v="1" aria-pressed="${!!s.random}">켬</button>
+    </div></fieldset>
+    ${s.random ? `<p class="hint">⚠ 자원 랜덤화를 켠 세이브에서는 노드 위치·순도가 달라져 <b>이 화면의 입지 조언이 무효</b>입니다.</p>` : ""}
+    <p class="synced">이 설정은 <a href="index.html">마일스톤 화면</a>과 공유됩니다.</p>`;
+
+  // 시작 방식에 따라 "첫 10분" 경로 전환
+  const skip = s.mode === "skip";
+  document.getElementById("skippath").hidden = !skip;
+  document.getElementById("fullpath").hidden = skip;
+  document.getElementById("firstlede").innerHTML = skip
+    ? "티어 0이 이미 해금된 상태라 <strong>손 채굴 단계가 없습니다.</strong> 대신 순서를 지키지 않으면 자원 위치를 모른 채 성급하게 짓게 됩니다."
+    : "튜토리얼이 시키는 대로만 따라가면 자원 위치를 모른 채 허브를 짓게 됩니다. 순서를 하나만 바꾸면 됩니다 — <strong>짓기 전에 정찰</strong>.";
+
+  // 시작 지점을 골랐으면 지도를 그 구역으로
+  if(zoomToStart && s.start){
+    const st = STARTS.find(x => x.v === s.start);
+    if(st){ show(st.pin); focusSite(st.pin, 2.2); }
+  }
+}
+
+document.addEventListener("click", e => {
+  const opt = e.target.closest("[data-set]");
+  if(!opt) return;
+  const k = opt.dataset.set, v = opt.dataset.v;
+  state.setup[k] = (k === "random") ? v === "1" : v;
+  save(); renderSetup(k === "start");
+});
+
+renderSetup(false);
+if(state.setup.start){
+  const st = STARTS.find(x => x.v === state.setup.start);
+  if(st) show(st.pin);
+}
 </script>
 </body>
 </html>
