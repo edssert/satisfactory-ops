@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>satisfactory-ops — 공장 설계 플레이북</title>
+<meta name="description" content="마일스톤 단위로 '지금 할 일'과 '지금 남겨둬야 할 것'을 알려주는 Satisfactory 진행 플레이북.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏭</text></svg>">
+<style>
+:root{
+  --bg:#F4F2ED; --raised:#FFFDF9; --sunk:#E9E5DC;
+  --ink:#1A1C20; --ink2:#4B4E55; --ink3:#7C766A;
+  --rule:#D8D2C5; --rule2:#BCB4A3;
+  --accent:#C25A17; --accent-wash:#F8E4D3;
+  --good:#2A6E46; --good-wash:#DDEEE3;
+  --hazard:#8A5D00; --hazard-wash:#FAEFD0;
+  --display:"Bahnschrift","DIN Alternate","Arial Narrow","Segoe UI","Malgun Gothic",system-ui,sans-serif;
+  --body:"Pretendard Variable",Pretendard,"Segoe UI Variable Text","Segoe UI","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif;
+  --mono:"Cascadia Mono",Consolas,ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#131519; --raised:#1C1F25; --sunk:#0D0F12;
+  --ink:#E9E7E1; --ink2:#ADABA4; --ink3:#847F74;
+  --rule:#2A2E35; --rule2:#3C424B;
+  --accent:#F2842B; --accent-wash:#38220F;
+  --good:#63BE88; --good-wash:#152C1F;
+  --hazard:#E4B429; --hazard-wash:#33290D;
+}}
+:root[data-theme=dark]{
+  --bg:#131519; --raised:#1C1F25; --sunk:#0D0F12;
+  --ink:#E9E7E1; --ink2:#ADABA4; --ink3:#847F74;
+  --rule:#2A2E35; --rule2:#3C424B;
+  --accent:#F2842B; --accent-wash:#38220F;
+  --good:#63BE88; --good-wash:#152C1F;
+  --hazard:#E4B429; --hazard-wash:#33290D;
+}
+:root[data-theme=light]{
+  --bg:#F4F2ED; --raised:#FFFDF9; --sunk:#E9E5DC;
+  --ink:#1A1C20; --ink2:#4B4E55; --ink3:#7C766A;
+  --rule:#D8D2C5; --rule2:#BCB4A3;
+  --accent:#C25A17; --accent-wash:#F8E4D3;
+  --good:#2A6E46; --good-wash:#DDEEE3;
+  --hazard:#8A5D00; --hazard-wash:#FAEFD0;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--display);font-weight:700;margin:0;text-wrap:balance;line-height:1.15}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+header.top{border-bottom:2px solid var(--ink);background:var(--sunk);padding:32px 0 0}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.brand i{width:30px;height:4px;background:var(--accent);display:block}
+.brand span{font-family:var(--display);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink3);font-weight:700}
+header.top h1{font-size:clamp(28px,5vw,46px);font-stretch:87.5%;letter-spacing:-.015em;margin-bottom:10px}
+header.top h1 em{font-style:normal;color:var(--accent)}
+header.top p{color:var(--ink2);max-width:58ch;margin:0 0 26px}
+.stats{display:flex;flex-wrap:wrap;border-top:1px solid var(--rule2)}
+.stat{flex:1 1 150px;padding:14px 18px;border-right:1px solid var(--rule)}
+.stat:last-child{border-right:0}
+.stat dt{font-family:var(--display);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink3);margin-bottom:3px}
+.stat dd{margin:0;font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:20px;font-weight:600}
+.stat dd small{font-size:12px;color:var(--ink3);font-weight:400}
+
+.bar{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--rule2)}
+.bar .wrap{display:flex;gap:8px;align-items:center;padding-top:9px;padding-bottom:9px;overflow-x:auto}
+.bar .lbl{font-family:var(--display);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink3);white-space:nowrap;padding-right:4px}
+.chip{font-family:var(--display);font-weight:700;font-size:13px;padding:5px 11px;border:1px solid var(--rule2);background:transparent;color:var(--ink2);border-radius:2px;cursor:pointer;white-space:nowrap;font-family:var(--display)}
+.chip:hover{background:var(--accent-wash);color:var(--accent);border-color:var(--accent)}
+.chip[aria-pressed=true]{background:var(--accent);color:var(--raised);border-color:var(--accent)}
+.spacer{margin-left:auto}
+
+main{padding:36px 0 80px}
+.now{border:1px solid var(--accent);background:var(--accent-wash);padding:18px 20px;margin-bottom:32px}
+.now h2{font-size:15px;font-family:var(--display);letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+.now .tier{font-family:var(--display);font-size:34px;font-stretch:75%;line-height:1;color:var(--accent);margin-bottom:12px}
+.now ol{margin:0;padding-left:20px;font-size:14.5px;color:var(--ink);line-height:1.7}
+.now ol b{font-weight:600}
+
+.tier-block{margin-bottom:34px;scroll-margin-top:64px}
+.tier-head{display:flex;align-items:baseline;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:8px;margin-bottom:16px;flex-wrap:wrap}
+.tier-head h2{font-family:var(--display);font-size:26px;font-stretch:87.5%}
+.tier-head .no{font-family:var(--display);font-weight:700;font-stretch:75%;font-size:40px;line-height:.85;color:var(--accent)}
+.prog{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--ink3)}
+.track{width:110px;height:6px;background:var(--sunk);border:1px solid var(--rule2)}
+.fill{height:100%;background:var(--accent);transition:width .2s}
+
+.ms{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;background:var(--raised);border:1px solid var(--rule);padding:14px 16px;margin-bottom:10px;align-items:start}
+.ms.done{background:var(--good-wash);border-color:var(--good)}
+.ms input[type=checkbox]{width:20px;height:20px;margin:2px 0 0;accent-color:var(--accent);cursor:pointer;flex:none}
+.ms h3{font-size:16px;margin-bottom:8px}
+.ms.done h3{color:var(--ink2)}
+.ms .en{font-family:var(--mono);font-size:11.5px;color:var(--ink3);font-weight:400}
+.cost{display:flex;flex-wrap:wrap;gap:5px}
+.c{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;padding:3px 9px;border:1px solid var(--rule2);background:var(--bg);border-radius:2px;white-space:nowrap}
+.c b{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:600;color:var(--ink2)}
+.c i{font-style:normal;color:var(--ink3);font-size:11px}
+
+.msg{border:1px solid var(--rule2);background:var(--raised);padding:22px;color:var(--ink2)}
+.msg code{font-family:var(--mono);font-size:13px;background:var(--sunk);padding:2px 5px}
+footer{border-top:1px solid var(--rule);padding:22px 0 40px;font-size:13px;color:var(--ink3)}
+footer a{color:var(--ink2)}
+@media (max-width:640px){.stat{flex-basis:50%}.tier-head .no{font-size:32px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><i></i><span>satisfactory-ops · 비공식 팬 프로젝트</span></div>
+    <h1>지금 할 일과<br><em>지금 남겨둬야 할 것</em></h1>
+    <p>마일스톤을 체크하면 앱이 현재 티어를 판정하고 다음에 할 일을 제시합니다. 진행 상황은 이 브라우저에만 저장되며 서버로 전송되지 않습니다.</p>
+    <dl class="stats" id="stats"></dl>
+  </div>
+</header>
+
+<nav class="bar" aria-label="티어 바로가기">
+  <div class="wrap">
+    <span class="lbl">Tier</span>
+    <span id="tierchips"></span>
+    <span class="spacer"></span>
+    <button class="chip" id="theme" type="button">테마</button>
+    <button class="chip" id="reset" type="button">초기화</button>
+  </div>
+</nav>
+
+<main class="wrap">
+  <section class="now" id="now" hidden>
+    <h2>현재 상황</h2>
+    <div class="tier" id="nowtier"></div>
+    <ol id="nowlist"></ol>
+  </section>
+  <div id="out"><p class="msg">데이터를 불러오는 중…</p></div>
+</main>
+
+<footer class="wrap">
+  <p>게임 데이터는 Satisfactory 설치본의 공식 덤프(<code>CommunityResources/Docs</code>)에서 생성했습니다 — 손으로 옮겨 적은 수치가 아닙니다.
+  Coffee Stain Studios와 무관한 비공식 프로젝트입니다.
+  <a href="https://github.com/edssert/satisfactory-ops">GitHub</a></p>
+</footer>
+
+<script type="module">
+const KO = {
+  "Concrete":"콘크리트","Iron Plate":"철판","Iron Rod":"철봉","Wire":"전선","Cable":"케이블",
+  "Screw":"나사","Screws":"나사","Iron Ingot":"철 잉곳","Copper Ingot":"구리 잉곳","Copper Sheet":"구리판",
+  "Reinforced Iron Plate":"강화 철판","Rotor":"로터","Modular Frame":"모듈러 프레임","Smart Plating":"스마트 플레이팅",
+  "Steel Ingot":"강철 잉곳","Steel Beam":"강철빔","Steel Pipe":"강철관","Encased Industrial Beam":"피복 산업용 빔",
+  "Stator":"스테이터","Motor":"모터","Versatile Framework":"다목적 프레임","Automated Wiring":"자동 배선",
+  "Plastic":"플라스틱","Rubber":"고무","Fuel":"연료","Circuit Board":"회로 기판","Computer":"컴퓨터",
+  "Heavy Modular Frame":"헤비 모듈러 프레임","Quickwire":"퀵와이어","Caterium Ingot":"캐터리움 잉곳",
+  "AI Limiter":"AI 리미터","High-Speed Connector":"고속 커넥터","Supercomputer":"슈퍼컴퓨터",
+  "Alclad Aluminum Sheet":"알클래드 알루미늄 시트","Aluminum Casing":"알루미늄 케이싱","Aluminum Ingot":"알루미늄 잉곳",
+  "Radio Control Unit":"무선 제어 장치","Crystal Oscillator":"수정 진동자","Quartz Crystal":"석영 결정","Silica":"실리카",
+  "Fused Modular Frame":"융합 모듈러 프레임","Turbo Motor":"터보 모터","Cooling System":"냉각 시스템",
+  "Gas Filter":"가스 필터","Battery":"배터리","Electromagnetic Control Rod":"전자기 제어봉",
+  "Time Crystal":"타임 크리스탈","Ficsite Trigon":"픽사이트 트라이곤","SAM Fluctuator":"SAM 변동자",
+  "Neural-Quantum Processor":"신경 양자 프로세서","Superposition Oscillator":"중첩 진동자",
+  "Adaptive Control Unit":"적응형 제어 장치","Modular Engine":"모듈러 엔진","Assembly Director System":"조립 관리 시스템",
+  "Magnetic Field Generator":"자기장 발생기","Thermal Propulsion Rocket":"열추진 로켓","Nuclear Pasta":"핵 파스타",
+  "Biochemical Sculptor":"생화학 조각기","Ballistic Warp Drive":"탄도 워프 드라이브","Petroleum Coke":"석유 코크스",
+  "Empty Canister":"빈 캐니스터","Packaged Fuel":"포장된 연료","Uranium Fuel Rod":"우라늄 연료봉",
+  "Electromagnetic Field Generator":"전자기장 발생기","Sulfur":"황","Coal":"석탄","Limestone":"석회석"
+};
+const TIER_NAME = {1:"기반 구축",2:"부품 조립",3:"석탄과 강철",4:"블루프린트 분기점",5:"석유 화학",6:"산업화와 철도",7:"알루미늄",8:"원자력과 입자 가속",9:"양자 기술"};
+const HINT = {
+  1:["<b>파운데이션이 풀리는 즉시</b> 본 부지를 40m(파운데이션 10칸) 격자로 정리하세요. 맨땅에 지은 것은 예외 없이 다시 뜯게 됩니다.",
+     "스플리터가 풀리면 기존 1:1 라인을 전부 <b>매니폴드</b>로 바꾸세요. 지금이 가장 싸게 고칠 수 있는 시점입니다.",
+     "MAM을 세우고 <b>하드드라이브 스캔을 시작</b>하세요. 개당 10분, 동시에 하나만 — 놀리는 시간이 곧 손실입니다."],
+  2:["이 티어는 <b>나사만 1,000개 이상</b> 요구합니다. 나사 라인 규모를 넉넉히 잡으세요.",
+     "모든 라인 끝에 <b>오버플로 싱크</b>를 다는 습관을 지금 들이세요.",
+     "<b>Cast Screws</b> 대체 레시피를 노리세요. 철봉 단계를 건너뜁니다."],
+  3:["석탄 발전은 <b>물 추출기 3 : 발전기 8</b>이 정확히 맞습니다 (360 m³). 순수 석탄 노드 하나가 8기를 먹입니다.",
+     "발전소 부지를 <b>24기(3세트)</b>가 들어갈 만큼 확보하세요. T5에 재공사를 피합니다.",
+     "<b>기차 부지를 지금 비워두세요.</b> T6에 뚫으려면 공장을 관통해야 합니다."],
+  4:["<b>블루프린트 해금 직후 표준 모듈 3종을 만드세요.</b> 손으로 계속 지으면 T6부터 진행이 무너집니다.",
+     "모듈은 제품별이 아니라 <b>기계 묶음별</b>로. 입출력을 가장자리에 정확히 맞추면 복제 시 자동 연결됩니다.",
+     "우선순위 스위치로 라인을 등급 분리하고 <b>발전소는 그룹 1</b>에 넣으세요."],
+  5:["정유소는 <b>두 산출물이 모두</b> 빠져야 돕니다. 하나라도 막히면 전체 정지입니다.",
+     "중유잔여물을 <b>잔여 연료 + 석유 코크스</b> 두 갈래로 처리하세요.",
+     "연료 발전기는 석탄 대비 <b>3.3배 출력</b>. 터보연료면 같은 250MW를 7.5 m³/분으로 냅니다."],
+  6:["기차 해금 = <b>단일 베이스 시대의 종료</b>. 원광 말고 중간재를 실어 나르세요.",
+     "헤비모듈러프레임은 <b>나사를 240/분</b> 먹습니다. 대체 레시피가 없으면 여기서 막힙니다.",
+     "간선은 처음부터 <b>양방향 2선</b>, 역 뒤로 100m 이상 여유를 두세요."],
+  7:["알루미늄은 <b>폐수 재순환 루프</b>가 필수입니다. 오버플로 밸브와 싱크 없이는 반드시 멈춥니다.",
+     "컨베이어 Mk.5(780/분) 해금 — 채굴기 Mk.3 + 순수 노드(480)를 받으려면 필요합니다.",
+     "호버팩을 미루지 마세요. 대형 공장 건설 속도가 실제로 달라집니다."],
+  8:["원자력은 <b>발전소를 짓기 전에 폐기물 처리 계획</b>부터 세우세요. 폐기물은 소각도 싱크도 안 됩니다.",
+     "입자 가속기는 소비 전력이 <b>변동</b>합니다. 축전지 뱅크를 함께 늘리세요.",
+     "물 소비가 막대하니 대형 수원 옆 <b>별도 위성 단지</b>로 짓고 전력만 송전하세요."],
+  9:["이 티어는 <b>물량 자체가 도전</b>입니다. 새로 설계하는 단계가 아니라 모듈을 복제하는 단계입니다.",
+     "최고 효율은 철판 10,000개를 요구합니다. 초반 철 라인이 확장 가능하게 지어져 있어야 합니다.",
+     "SAM은 맵 전역에 흩어져 있어 <b>기차 물류망의 완성도</b>가 곧 진행 속도입니다."]
+};
+
+const KEY = "sops.progress.v1";
+let state = {schemaVersion:1, done:{}};
+try{ const r = localStorage.getItem(KEY); if(r){ const p = JSON.parse(r); if(p && p.schemaVersion===1) state = p; } }catch(e){}
+const save = () => { try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} };
+
+const ko = n => KO[n] ? `${KO[n]}<i>(${n})</i>` : n;
+const out = document.getElementById("out");
+
+let MS = [];
+try{
+  const res = await fetch("src/data/milestones.json");
+  if(!res.ok) throw new Error(res.status);
+  MS = await res.json();
+}catch(e){
+  out.innerHTML = `<p class="msg"><b>데이터를 불러오지 못했습니다.</b><br><br>
+  <code>file://</code>로 직접 열면 브라우저가 로컬 파일 읽기를 막습니다. 로컬 서버로 여세요:<br><br>
+  <code>npx serve .</code> 또는 <code>python -m http.server</code><br><br>
+  <span style="color:var(--ink3)">원인: ${e.message}</span></p>`;
+  throw e;
+}
+
+const tiers = [...new Set(MS.map(m => m.techTier))].filter(t => t != null).sort((a,b) => a-b);
+const byTier = t => MS.filter(m => m.techTier === t).sort((a,b) => (a.menuPriority??0)-(b.menuPriority??0));
+const isDone = m => !!state.done[m.className];
+
+function render(){
+  // 티어 칩
+  document.getElementById("tierchips").innerHTML = tiers.map(t => {
+    const list = byTier(t), n = list.filter(isDone).length;
+    return `<button class="chip" type="button" data-goto="t${t}" aria-pressed="${n===list.length}">${t}</button>`;
+  }).join(" ");
+
+  // 통계
+  const total = MS.length, done = MS.filter(isDone).length;
+  const cur = tiers.filter(t => byTier(t).some(isDone)).pop() ?? null;
+  document.getElementById("stats").innerHTML = `
+    <div class="stat"><dt>현재 티어</dt><dd>${cur ?? "—"}<small>${cur?" / 9":""}</small></dd></div>
+    <div class="stat"><dt>완료 마일스톤</dt><dd>${done}<small> / ${total}</small></dd></div>
+    <div class="stat"><dt>진척률</dt><dd>${Math.round(done/total*100)}<small>%</small></dd></div>
+    <div class="stat"><dt>게임 버전</dt><dd>1.2<small> · 시드 0</small></dd></div>`;
+
+  // 지금 할 일
+  const now = document.getElementById("now");
+  const focus = cur ?? tiers[0];
+  const hints = HINT[focus];
+  if(hints){
+    now.hidden = false;
+    document.getElementById("nowtier").textContent = `T${focus} — ${TIER_NAME[focus] ?? ""}`;
+    document.getElementById("nowlist").innerHTML = hints.map(h => `<li>${h}</li>`).join("");
+  } else now.hidden = true;
+
+  // 티어별 목록
+  out.innerHTML = tiers.map(t => {
+    const list = byTier(t), n = list.filter(isDone).length;
+    return `<section class="tier-block" id="t${t}">
+      <div class="tier-head">
+        <span class="no">T${t}</span>
+        <h2>${TIER_NAME[t] ?? ""}</h2>
+        <div class="prog"><span class="num">${n}/${list.length}</span>
+          <span class="track"><span class="fill" style="width:${n/list.length*100}%"></span></span></div>
+      </div>
+      ${list.map(m => `<label class="ms${isDone(m)?" done":""}">
+        <input type="checkbox" data-id="${m.className}" ${isDone(m)?"checked":""}>
+        <div>
+          <h3>${m.name} <span class="en">${m.className.replace(/^Schematic_|_C$/g,"")}</span></h3>
+          <div class="cost">${(m.cost??[]).map(c => `<span class="c">${ko(c.name)}<b>${c.amount.toLocaleString()}</b></span>`).join("")}</div>
+        </div></label>`).join("")}
+    </section>`;
+  }).join("");
+}
+
+document.addEventListener("change", e => {
+  const id = e.target.dataset?.id; if(!id) return;
+  if(e.target.checked) state.done[id] = 1; else delete state.done[id];
+  save(); render();
+});
+document.addEventListener("click", e => {
+  const g = e.target.dataset?.goto;
+  if(g) document.getElementById(g)?.scrollIntoView({behavior:"smooth", block:"start"});
+});
+document.getElementById("reset").onclick = () => {
+  if(confirm("진행 상황을 모두 지웁니다. 되돌릴 수 없습니다.")){ state = {schemaVersion:1, done:{}}; save(); render(); }
+};
+document.getElementById("theme").onclick = () => {
+  const r = document.documentElement;
+  const dark = r.dataset.theme ? r.dataset.theme === "dark"
+    : matchMedia("(prefers-color-scheme: dark)").matches;
+  r.dataset.theme = dark ? "light" : "dark";
+};
+
+render();
+</script>
+</body>
+</html>
