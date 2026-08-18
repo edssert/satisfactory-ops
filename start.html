@@ -106,6 +106,15 @@ section{padding-top:44px;scroll-margin-top:60px}
 .pin:hover{background:var(--accent);color:var(--raised)}
 .pin.best{width:32px;height:32px;background:var(--accent);color:var(--raised);font-size:15px;box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 28%,transparent)}
 .pin[aria-pressed=true]{background:var(--accent);color:var(--raised)}
+.nd{position:absolute;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;box-shadow:0 0 0 1px rgba(0,0,0,.45)}
+.nd.pure{width:9px;height:9px;box-shadow:0 0 0 1.5px #fff,0 0 0 2.5px rgba(0,0,0,.5)}
+.nd.normal{width:7px;height:7px}
+.nd.impure{width:5px;height:5px;opacity:.75}
+.nfil{display:flex;gap:4px;flex-wrap:wrap;margin:10px 0 18px}
+.nfil button{font-size:12px;padding:3px 9px;border:1px solid var(--rule2);background:var(--raised);color:var(--ink2);cursor:pointer;border-radius:2px;display:inline-flex;align-items:center;gap:6px;font-family:var(--body)}
+.nfil button i{width:9px;height:9px;border-radius:50%;display:block;box-shadow:0 0 0 1px rgba(0,0,0,.35)}
+.nfil button[aria-pressed=true]{border-color:var(--accent);color:var(--ink);font-weight:600;background:var(--accent-wash)}
+.nleg{font-size:12px;color:var(--ink3);margin:0 0 18px}
 .mapctl{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:18px;font-size:12.5px;color:var(--ink3)}
 .mapctl button{font-family:var(--display);font-weight:700;font-size:13px;padding:4px 10px;border:1px solid var(--rule2);background:var(--raised);color:var(--ink2);cursor:pointer;border-radius:2px}
 .mapctl button:hover{border-color:var(--accent);color:var(--accent)}
@@ -227,6 +236,7 @@ section,.tier-block{scroll-margin-top:calc(var(--sbh) + 46px)}
   <div class="mapbox" id="mapbox">
     <div class="mapstage" id="mapstage">
       <img src="assets/map/biome-map.webp" alt="Satisfactory 월드 바이옴 지도. 그리드 좌표와 4개 시작 지점이 표시되어 있다." width="1600" height="1600" decoding="async">
+      <div id="nodes"></div>
       <div id="pins"></div>
     </div>
   </div>
@@ -237,6 +247,8 @@ section,.tier-block{scroll-margin-top:calc(var(--sbh) + 46px)}
     <span>휠 확대 · 드래그 이동 · 핀 클릭</span>
   </div>
 
+  <div class="nfil" id="nfil"></div>
+  <p class="nleg">점 크기 = 순도 · <b>큰 흰테=순수(Pure)</b> · 중간=일반(Normal) · 작고 흐림=불순(Impure). 자원 노드 459 · 자원정 118 · 간헐천 31.</p>
   <div id="sitecard"></div>
 
   <div class="tw">
@@ -605,6 +617,36 @@ document.addEventListener("click", e => {
   state.setup[k] = (k === "random") ? v === "1" : v;
   save(); renderSetup(k === "start");
 });
+
+// ── 자원 노드 오버레이 ──
+const NCOL = {"철광석":"#9AA7B4","구리광석":"#C87A45","석회석":"#C9B98A","석탄":"#3E434A",
+ "원유":"#7B5AA0","캐터리움":"#D8A62B","석영":"#D07DBB","황":"#C9BE2A","보크사이트":"#B96A45",
+ "우라늄":"#6BAE4A","SAM":"#8E7BD8","질소가스":"#63A9C4","물":"#3E9CC4","간헐천":"#4FBFA8"};
+const ORDER = ["철광석","구리광석","석회석","석탄","원유","캐터리움","석영","황","보크사이트","우라늄","SAM","질소가스","물","간헐천"];
+let NODES = [], NON = new Set(["철광석","구리광석","석회석","석탄"]);
+
+function drawNodes(){
+  const el = document.getElementById("nodes");
+  el.innerHTML = NODES.filter(n => NON.has(n.ko)).map(n =>
+    `<span class="nd ${n.purity||"normal"}" style="left:${(n.fx*100).toFixed(3)}%;top:${(n.fy*100).toFixed(3)}%;background:${NCOL[n.ko]||"#888"}" title="${n.ko} ${n.purity||""} ${n.cell}"></span>`).join("");
+}
+function drawFilter(){
+  const cnt = {};
+  NODES.forEach(n => cnt[n.ko] = (cnt[n.ko]||0)+1);
+  document.getElementById("nfil").innerHTML = ORDER.filter(k => cnt[k]).map(k =>
+    `<button type="button" data-res="${k}" aria-pressed="${NON.has(k)}"><i style="background:${NCOL[k]}"></i>${k} ${cnt[k]}</button>`).join("");
+}
+document.getElementById("nfil").addEventListener("click", e => {
+  const b = e.target.closest("[data-res]"); if(!b) return;
+  const k = b.dataset.res;
+  NON.has(k) ? NON.delete(k) : NON.add(k);
+  drawFilter(); drawNodes();
+});
+fetch("src/data/resource-nodes.json").then(r => r.ok ? r.json() : null).then(j => {
+  if(!j) return;
+  NODES = j.nodes;
+  drawFilter(); drawNodes();
+}).catch(() => {});
 
 renderSetup(false);
 if(state.setup.start){

@@ -33,3 +33,13 @@ Coffee Stain Studios, sourced from the official Satisfactory Wiki
 reference and are not covered by the MIT license. All rights remain with
 Coffee Stain Studios. If you are a rights holder and want them removed,
 open an issue.
+
+---
+
+THIRD-PARTY DATA
+
+`src/data/resource-nodes.json` is derived from
+`src/recipes/WorldResourceNodes.json` in https://github.com/rockfactory/satisfactory-logistics
+(MIT License, Copyright (c) rockfactory), transformed into image-fraction and
+world-grid coordinates. The MIT license of that project is compatible with this one
+and is acknowledged here with thanks.
