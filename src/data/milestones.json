@@ -1,0 +1,1952 @@
+[
+  {
+    "className": "Schematic_1-1_C",
+    "name": "Base Building",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 1,
+    "cost": [
+      {
+        "item": "Desc_Cement_C",
+        "name": "Concrete",
+        "amount": 200
+      },
+      {
+        "item": "Desc_IronPlate_C",
+        "name": "Iron Plate",
+        "amount": 100
+      },
+      {
+        "item": "Desc_IronRod_C",
+        "name": "Iron Rod",
+        "amount": 100
+      }
+    ],
+    "timeToCompleteSec": 120,
+    "menuPriority": 1,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_LookoutTower_C",
+        "Recipe_Foundation_8x1_01_C",
+        "Recipe_Foundation_8x2_01_C",
+        "Recipe_Foundation_8x4_01_C",
+        "Recipe_Ramp_8x1_01_C",
+        "Recipe_Ramp_8x2_01_C",
+        "Recipe_Ramp_8x4_01_C",
+        "Recipe_Wall_8x4_01_C",
+        "Recipe_Wall_Orange_8x1_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_1-2_C",
+    "name": "Logistics",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 1,
+    "cost": [
+      {
+        "item": "Desc_IronPlate_C",
+        "name": "Iron Plate",
+        "amount": 150
+      },
+      {
+        "item": "Desc_IronRod_C",
+        "name": "Iron Rod",
+        "amount": 150
+      },
+      {
+        "item": "Desc_Wire_C",
+        "name": "Wire",
+        "amount": 300
+      }
+    ],
+    "timeToCompleteSec": 240,
+    "menuPriority": 2,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_ConveyorAttachmentSplitter_C",
+        "Recipe_ConveyorAttachmentMerger_C",
+        "Recipe_ConveyorLiftMk1_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": [
+        "BP_UnlockBuildEfficiency_C"
+      ]
+    }
+  },
+  {
+    "className": "Schematic_1-3_C",
+    "name": "Field Research",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 1,
+    "cost": [
+      {
+        "item": "Desc_Wire_C",
+        "name": "Wire",
+        "amount": 300
+      },
+      {
+        "item": "Desc_IronScrew_C",
+        "name": "Screws",
+        "amount": 300
+      },
+      {
+        "item": "Desc_IronPlate_C",
+        "name": "Iron Plate",
+        "amount": 100
+      }
+    ],
+    "timeToCompleteSec": 180,
+    "menuPriority": 3,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_Mam_C",
+        "Recipe_ObjectScanner_C",
+        "Recipe_StoragePlayer_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 3,
+      "armSlots": 0,
+      "other": [
+        "BP_UnlockMap_C"
+      ]
+    }
+  },
+  {
+    "className": "Schematic_2-1_C",
+    "name": "Part Assembly",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 2,
+    "cost": [
+      {
+        "item": "Desc_Cable_C",
+        "name": "Cable",
+        "amount": 200
+      },
+      {
+        "item": "Desc_IronRod_C",
+        "name": "Iron Rod",
+        "amount": 200
+      },
+      {
+        "item": "Desc_IronScrew_C",
+        "name": "Screws",
+        "amount": 500
+      },
+      {
+        "item": "Desc_IronPlate_C",
+        "name": "Iron Plate",
+        "amount": 300
+      }
+    ],
+    "timeToCompleteSec": 360,
+    "menuPriority": 1,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_AssemblerMk1_C",
+        "Recipe_CopperSheet_C",
+        "Recipe_Rotor_C",
+        "Recipe_ModularFrame_C",
+        "Recipe_SpaceElevatorPart_1_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_2-2_C",
+    "name": "Obstacle Clearing",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 2,
+    "cost": [
+      {
+        "item": "Desc_IronScrew_C",
+        "name": "Screws",
+        "amount": 500
+      },
+      {
+        "item": "Desc_Cable_C",
+        "name": "Cable",
+        "amount": 100
+      },
+      {
+        "item": "Desc_Cement_C",
+        "name": "Concrete",
+        "amount": 100
+      }
+    ],
+    "timeToCompleteSec": 180,
+    "menuPriority": 2,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_Chainsaw_C",
+        "Recipe_Biofuel_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 3,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_2-3_C",
+    "name": "Jump Pads",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 2,
+    "cost": [
+      {
+        "item": "Desc_Rotor_C",
+        "name": "Rotor",
+        "amount": 50
+      },
+      {
+        "item": "Desc_IronPlate_C",
+        "name": "Iron Plate",
+        "amount": 300
+      },
+      {
+        "item": "Desc_Cable_C",
+        "name": "Cable",
+        "amount": 150
+      }
+    ],
+    "timeToCompleteSec": 240,
+    "menuPriority": 3,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_JumpPadAdjustable_C",
+        "Recipe_UJellyLandingPad_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_2-5_C",
+    "name": "Resource Sink Bonus Program",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 2,
+    "cost": [
+      {
+        "item": "Desc_Cement_C",
+        "name": "Concrete",
+        "amount": 400
+      },
+      {
+        "item": "Desc_Wire_C",
+        "name": "Wire",
+        "amount": 500
+      },
+      {
+        "item": "Desc_IronRod_C",
+        "name": "Iron Rod",
+        "amount": 200
+      },
+      {
+        "item": "Desc_IronPlate_C",
+        "name": "Iron Plate",
+        "amount": 200
+      }
+    ],
+    "timeToCompleteSec": 300,
+    "menuPriority": 4,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_ResourceSink_C",
+        "Recipe_ResourceSinkShop_C"
+      ],
+      "schematics": [
+        "CustomizerUnlock_ColourSwatches_C",
+        "CustomizerUnlock_PipelineSwatch_C"
+      ],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": [
+        "BP_UnlockInfoOnly_C"
+      ]
+    }
+  },
+  {
+    "className": "Schematic_3-2_C",
+    "name": "Logistics Mk.2",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 2,
+    "cost": [
+      {
+        "item": "Desc_IronPlateReinforced_C",
+        "name": "Reinforced Iron Plate",
+        "amount": 50
+      },
+      {
+        "item": "Desc_Cement_C",
+        "name": "Concrete",
+        "amount": 200
+      },
+      {
+        "item": "Desc_IronRod_C",
+        "name": "Iron Rod",
+        "amount": 300
+      },
+      {
+        "item": "Desc_IronPlate_C",
+        "name": "Iron Plate",
+        "amount": 300
+      }
+    ],
+    "timeToCompleteSec": 360,
+    "menuPriority": 5,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_ConveyorBeltMk2_C",
+        "Recipe_ConveyorPoleStackable_C",
+        "Recipe_ConveyorLiftMk2_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_3-1_C",
+    "name": "Coal Power",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 3,
+    "cost": [
+      {
+        "item": "Desc_IronPlateReinforced_C",
+        "name": "Reinforced Iron Plate",
+        "amount": 150
+      },
+      {
+        "item": "Desc_Rotor_C",
+        "name": "Rotor",
+        "amount": 50
+      },
+      {
+        "item": "Desc_Cable_C",
+        "name": "Cable",
+        "amount": 500
+      }
+    ],
+    "timeToCompleteSec": 480,
+    "menuPriority": 1,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_GeneratorCoal_C",
+        "Recipe_WaterPump_C",
+        "Recipe_Pipeline_C",
+        "Recipe_PipeSupport_C",
+        "Recipe_PipelineJunction_Cross_C",
+        "Recipe_PipelineJunction_T_C",
+        "Recipe_PipelinePump_C",
+        "Recipe_PipeStorageTank_C"
+      ],
+      "schematics": [
+        "CustomizerUnlock_PipelineSwatch_C"
+      ],
+      "items": [],
+      "scannables": [
+        "Desc_Coal_C"
+      ],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_3-3_C",
+    "name": "Vehicular Transport",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 3,
+    "cost": [
+      {
+        "item": "Desc_ModularFrame_C",
+        "name": "Modular Frame",
+        "amount": 25
+      },
+      {
+        "item": "Desc_Rotor_C",
+        "name": "Rotor",
+        "amount": 100
+      },
+      {
+        "item": "Desc_Cable_C",
+        "name": "Cable",
+        "amount": 200
+      },
+      {
+        "item": "Desc_IronPlate_C",
+        "name": "Iron Plate",
+        "amount": 400
+      }
+    ],
+    "timeToCompleteSec": 240,
+    "menuPriority": 2,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_Tractor_C",
+        "Recipe_TruckStation_C",
+        "Recipe_VehiclePath_Tractor_C",
+        "Recipe_VehiclePath_Universal_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 3,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_3-4_C",
+    "name": "Basic Steel Production",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 3,
+    "cost": [
+      {
+        "item": "Desc_ModularFrame_C",
+        "name": "Modular Frame",
+        "amount": 50
+      },
+      {
+        "item": "Desc_Rotor_C",
+        "name": "Rotor",
+        "amount": 150
+      },
+      {
+        "item": "Desc_Cement_C",
+        "name": "Concrete",
+        "amount": 500
+      },
+      {
+        "item": "Desc_Wire_C",
+        "name": "Wire",
+        "amount": 1000
+      }
+    ],
+    "timeToCompleteSec": 480,
+    "menuPriority": 3,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_SmelterMk1_C",
+        "Recipe_IngotSteel_C",
+        "Recipe_SteelBeam_C",
+        "Recipe_SteelPipe_C",
+        "Recipe_SpaceElevatorPart_2_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": [
+        "BP_UnlockInfoOnly_C"
+      ]
+    }
+  },
+  {
+    "className": "Schematic_4-2_C",
+    "name": "Enhanced Asset Security",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 3,
+    "cost": [
+      {
+        "item": "Desc_IronPlateReinforced_C",
+        "name": "Reinforced Iron Plate",
+        "amount": 100
+      },
+      {
+        "item": "Desc_IronRod_C",
+        "name": "Iron Rod",
+        "amount": 600
+      },
+      {
+        "item": "Desc_Wire_C",
+        "name": "Wire",
+        "amount": 1500
+      }
+    ],
+    "timeToCompleteSec": 180,
+    "menuPriority": 4,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_XenoBasher_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 3,
+      "armSlots": 1,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_4-5_C",
+    "name": "FICSIT Blueprints",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 4,
+    "cost": [
+      {
+        "item": "Desc_ModularFrame_C",
+        "name": "Modular Frame",
+        "amount": 100
+      },
+      {
+        "item": "Desc_SteelPlate_C",
+        "name": "Steel Beam",
+        "amount": 200
+      },
+      {
+        "item": "Desc_Cable_C",
+        "name": "Cable",
+        "amount": 500
+      },
+      {
+        "item": "Desc_Cement_C",
+        "name": "Concrete",
+        "amount": 1000
+      }
+    ],
+    "timeToCompleteSec": 300,
+    "menuPriority": 1,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_BlueprintDesigner_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": [
+        "BP_UnlockInfoOnly_C",
+        "BP_UnlockBlueprints_C"
+      ]
+    }
+  },
+  {
+    "className": "Schematic_5-3_C",
+    "name": "Logistics Mk.3",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 4,
+    "cost": [
+      {
+        "item": "Desc_SteelPlate_C",
+        "name": "Steel Beam",
+        "amount": 200
+      },
+      {
+        "item": "Desc_SteelPipe_C",
+        "name": "Steel Pipe",
+        "amount": 200
+      },
+      {
+        "item": "Desc_IronPlateReinforced_C",
+        "name": "Reinforced Iron Plate",
+        "amount": 400
+      }
+    ],
+    "timeToCompleteSec": 300,
+    "menuPriority": 2,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_StorageContainerMk2_C",
+        "Recipe_ConveyorBeltMk3_C",
+        "Recipe_ConveyorLiftMk3_C",
+        "Recipe_PipeSupportStackable_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_4-1_C",
+    "name": "Advanced Steel Production",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 4,
+    "cost": [
+      {
+        "item": "Desc_SteelPipe_C",
+        "name": "Steel Pipe",
+        "amount": 100
+      },
+      {
+        "item": "Desc_ModularFrame_C",
+        "name": "Modular Frame",
+        "amount": 100
+      },
+      {
+        "item": "Desc_Rotor_C",
+        "name": "Rotor",
+        "amount": 200
+      },
+      {
+        "item": "Desc_Cement_C",
+        "name": "Concrete",
+        "amount": 500
+      }
+    ],
+    "timeToCompleteSec": 600,
+    "menuPriority": 3,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_MinerMk2_C",
+        "Recipe_EncasedIndustrialBeam_C",
+        "Recipe_Stator_C",
+        "Recipe_Motor_C",
+        "Recipe_SpaceElevatorPart_3_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_4-3_C",
+    "name": "Expanded Power Infrastructure",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 4,
+    "cost": [
+      {
+        "item": "Desc_SteelPlateReinforced_C",
+        "name": "Encased Industrial Beam",
+        "amount": 50
+      },
+      {
+        "item": "Desc_SteelPlate_C",
+        "name": "Steel Beam",
+        "amount": 100
+      },
+      {
+        "item": "Desc_ModularFrame_C",
+        "name": "Modular Frame",
+        "amount": 200
+      },
+      {
+        "item": "Desc_Wire_C",
+        "name": "Wire",
+        "amount": 2000
+      }
+    ],
+    "timeToCompleteSec": 300,
+    "menuPriority": 4,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_PowerStorageMk1_C",
+        "Recipe_PowerTower_C",
+        "Recipe_PowerTowerPlatform_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_4-4_C",
+    "name": "Hypertubes",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 4,
+    "cost": [
+      {
+        "item": "Desc_SteelPlateReinforced_C",
+        "name": "Encased Industrial Beam",
+        "amount": 50
+      },
+      {
+        "item": "Desc_SteelPipe_C",
+        "name": "Steel Pipe",
+        "amount": 300
+      },
+      {
+        "item": "Desc_CopperSheet_C",
+        "name": "Copper Sheet",
+        "amount": 500
+      }
+    ],
+    "timeToCompleteSec": 600,
+    "menuPriority": 5,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_PipeHyperStart_C",
+        "Recipe_PipeHyper_C",
+        "Recipe_PipeHyperSupport_C",
+        "Recipe_HyperPoleStackable_C",
+        "Recipe_HyperTubeJunction_C",
+        "Recipe_HyperTubeTJunction_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_6-2_C",
+    "name": "Jetpack",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 5,
+    "cost": [
+      {
+        "item": "Desc_Motor_C",
+        "name": "Motor",
+        "amount": 50
+      },
+      {
+        "item": "Desc_Cable_C",
+        "name": "Cable",
+        "amount": 1000
+      },
+      {
+        "item": "Desc_IronPlate_C",
+        "name": "Iron Plate",
+        "amount": 1000
+      }
+    ],
+    "timeToCompleteSec": 300,
+    "menuPriority": 1,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_JetPack_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 3,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_5-1_C",
+    "name": "Oil Processing",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 5,
+    "cost": [
+      {
+        "item": "Desc_Motor_C",
+        "name": "Motor",
+        "amount": 50
+      },
+      {
+        "item": "Desc_SteelPlateReinforced_C",
+        "name": "Encased Industrial Beam",
+        "amount": 100
+      },
+      {
+        "item": "Desc_SteelPipe_C",
+        "name": "Steel Pipe",
+        "amount": 500
+      },
+      {
+        "item": "Desc_CopperSheet_C",
+        "name": "Copper Sheet",
+        "amount": 500
+      }
+    ],
+    "timeToCompleteSec": 600,
+    "menuPriority": 2,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_PetroleumCoke_C",
+        "Recipe_CircuitBoard_C",
+        "Recipe_OilPump_C",
+        "Recipe_OilRefinery_C",
+        "Recipe_Valve_C",
+        "Recipe_Plastic_C",
+        "Recipe_Rubber_C",
+        "Recipe_LiquidFuel_C"
+      ],
+      "schematics": [
+        "Schematic_5-1-1_C"
+      ],
+      "items": [],
+      "scannables": [
+        "Desc_LiquidOil_C"
+      ],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": [
+        "BP_UnlockInfoOnly_C",
+        "BP_UnlockInfoOnly_C",
+        "BP_UnlockInfoOnly_C"
+      ]
+    }
+  },
+  {
+    "className": "Schematic_6-1_C",
+    "name": "Logistics Mk.4",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 5,
+    "cost": [
+      {
+        "item": "Desc_Rubber_C",
+        "name": "Rubber",
+        "amount": 200
+      },
+      {
+        "item": "Desc_SteelPlateReinforced_C",
+        "name": "Encased Industrial Beam",
+        "amount": 300
+      },
+      {
+        "item": "Desc_ModularFrame_C",
+        "name": "Modular Frame",
+        "amount": 400
+      }
+    ],
+    "timeToCompleteSec": 300,
+    "menuPriority": 3,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_ConveyorBeltMk4_C",
+        "Recipe_ConveyorLiftMk4_C",
+        "Recipe_Truck_C",
+        "Recipe_FluidTruck_C",
+        "Recipe_FluidTruckStation_C",
+        "Recipe_VehiclePath_Truck_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_5-4_C",
+    "name": "Fluid Packaging",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 5,
+    "cost": [
+      {
+        "item": "Desc_Plastic_C",
+        "name": "Plastic",
+        "amount": 200
+      },
+      {
+        "item": "Desc_SteelPlate_C",
+        "name": "Steel Beam",
+        "amount": 400
+      },
+      {
+        "item": "Desc_CopperSheet_C",
+        "name": "Copper Sheet",
+        "amount": 1000
+      }
+    ],
+    "timeToCompleteSec": 300,
+    "menuPriority": 4,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_Packager_C",
+        "Recipe_FluidCanister_C",
+        "Recipe_PackagedWater_C",
+        "Recipe_PackagedCrudeOil_C",
+        "Recipe_Fuel_C",
+        "Recipe_PackagedOilResidue_C",
+        "Recipe_PackagedBiofuel_C",
+        "Recipe_LiquidBiofuel_C"
+      ],
+      "schematics": [
+        "Schematic_5-4-1_C"
+      ],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_5-5_C",
+    "name": "Petroleum Power",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 5,
+    "cost": [
+      {
+        "item": "Desc_Motor_C",
+        "name": "Motor",
+        "amount": 100
+      },
+      {
+        "item": "Desc_SteelPlateReinforced_C",
+        "name": "Encased Industrial Beam",
+        "amount": 100
+      },
+      {
+        "item": "Desc_Rubber_C",
+        "name": "Rubber",
+        "amount": 200
+      },
+      {
+        "item": "Desc_Plastic_C",
+        "name": "Plastic",
+        "amount": 200
+      }
+    ],
+    "timeToCompleteSec": 600,
+    "menuPriority": 5,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_GeneratorFuel_C",
+        "Recipe_IndustrialTank_C"
+      ],
+      "schematics": [
+        "Schematic_5-5-1_C"
+      ],
+      "items": [],
+      "scannables": [
+        "Desc_OreGold_C"
+      ],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_5-2_C",
+    "name": "Industrial Manufacturing",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 6,
+    "cost": [
+      {
+        "item": "Desc_Motor_C",
+        "name": "Motor",
+        "amount": 200
+      },
+      {
+        "item": "Desc_ModularFrame_C",
+        "name": "Modular Frame",
+        "amount": 200
+      },
+      {
+        "item": "Desc_Plastic_C",
+        "name": "Plastic",
+        "amount": 400
+      },
+      {
+        "item": "Desc_Cable_C",
+        "name": "Cable",
+        "amount": 1000
+      }
+    ],
+    "timeToCompleteSec": 900,
+    "menuPriority": 1,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_ManufacturerMk1_C",
+        "Recipe_Computer_C",
+        "Recipe_ModularFrameHeavy_C",
+        "Recipe_SpaceElevatorPart_4_C",
+        "Recipe_SpaceElevatorPart_5_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_6-3_C",
+    "name": "Monorail Train Technology",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 6,
+    "cost": [
+      {
+        "item": "Desc_Motor_C",
+        "name": "Motor",
+        "amount": 250
+      },
+      {
+        "item": "Desc_SteelPlateReinforced_C",
+        "name": "Encased Industrial Beam",
+        "amount": 500
+      },
+      {
+        "item": "Desc_SteelPlate_C",
+        "name": "Steel Beam",
+        "amount": 1000
+      },
+      {
+        "item": "Desc_SteelPipe_C",
+        "name": "Steel Pipe",
+        "amount": 1000
+      }
+    ],
+    "timeToCompleteSec": 600,
+    "menuPriority": 2,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_Locomotive_C",
+        "Recipe_FreightWagon_C",
+        "Recipe_RailroadTrack_C",
+        "Recipe_TrainStation_C",
+        "Recipe_TrainDockingStation_C",
+        "Recipe_TrainDockingStationLiquid_C",
+        "Recipe_TrainPlatformEmpty_C",
+        "Recipe_TrainPlatformEmpty_02_C",
+        "Recipe_RailroadEndStop_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_6-7_C",
+    "name": "Railway Signalling",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 6,
+    "cost": [
+      {
+        "item": "Desc_Computer_C",
+        "name": "Computer",
+        "amount": 50
+      },
+      {
+        "item": "Desc_SteelPipe_C",
+        "name": "Steel Pipe",
+        "amount": 400
+      },
+      {
+        "item": "Desc_CopperSheet_C",
+        "name": "Copper Sheet",
+        "amount": 1000
+      }
+    ],
+    "timeToCompleteSec": 300,
+    "menuPriority": 3,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_RailroadBlockSignal_C",
+        "Recipe_RailroadPathSignal_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_6-5_C",
+    "name": "Pipeline Engineering Mk.2",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 6,
+    "cost": [
+      {
+        "item": "Desc_ModularFrameHeavy_C",
+        "name": "Heavy Modular Frame",
+        "amount": 50
+      },
+      {
+        "item": "Desc_Plastic_C",
+        "name": "Plastic",
+        "amount": 1000
+      },
+      {
+        "item": "Desc_Rubber_C",
+        "name": "Rubber",
+        "amount": 1000
+      }
+    ],
+    "timeToCompleteSec": 300,
+    "menuPriority": 4,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_PipelineMK2_C",
+        "Recipe_PipelinePumpMK2_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_6-6_C",
+    "name": "FICSIT Blueprints Mk.2",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 6,
+    "cost": [
+      {
+        "item": "Desc_ModularFrameHeavy_C",
+        "name": "Heavy Modular Frame",
+        "amount": 100
+      },
+      {
+        "item": "Desc_Computer_C",
+        "name": "Computer",
+        "amount": 100
+      },
+      {
+        "item": "Desc_Rubber_C",
+        "name": "Rubber",
+        "amount": 400
+      },
+      {
+        "item": "Desc_Cement_C",
+        "name": "Concrete",
+        "amount": 1500
+      }
+    ],
+    "timeToCompleteSec": 600,
+    "menuPriority": 5,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_BlueprintDesigner_Mk2_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_7-1_C",
+    "name": "Bauxite Refinement",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 7,
+    "cost": [
+      {
+        "item": "Desc_Computer_C",
+        "name": "Computer",
+        "amount": 100
+      },
+      {
+        "item": "Desc_ModularFrameHeavy_C",
+        "name": "Heavy Modular Frame",
+        "amount": 100
+      },
+      {
+        "item": "Desc_Motor_C",
+        "name": "Motor",
+        "amount": 250
+      },
+      {
+        "item": "Desc_Rubber_C",
+        "name": "Rubber",
+        "amount": 500
+      }
+    ],
+    "timeToCompleteSec": 600,
+    "menuPriority": 1,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_AluminaSolution_C",
+        "Recipe_PackagedAlumina_C",
+        "Recipe_AluminumScrap_C",
+        "Recipe_IngotAluminum_C",
+        "Recipe_AluminumSheet_C",
+        "Recipe_AluminumCasing_C"
+      ],
+      "schematics": [
+        "Schematic_7-1-1_C"
+      ],
+      "items": [],
+      "scannables": [
+        "Desc_OreBauxite_C",
+        "Desc_RawQuartz_C"
+      ],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_8-3_C",
+    "name": "Hoverpack",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 7,
+    "cost": [
+      {
+        "item": "Desc_AluminumPlate_C",
+        "name": "Alclad Aluminum Sheet",
+        "amount": 100
+      },
+      {
+        "item": "Desc_ModularFrameHeavy_C",
+        "name": "Heavy Modular Frame",
+        "amount": 100
+      },
+      {
+        "item": "Desc_Computer_C",
+        "name": "Computer",
+        "amount": 100
+      },
+      {
+        "item": "Desc_Motor_C",
+        "name": "Motor",
+        "amount": 250
+      }
+    ],
+    "timeToCompleteSec": 300,
+    "menuPriority": 2,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_Hoverpack_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 3,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_7-2_C",
+    "name": "Logistics Mk.5",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 7,
+    "cost": [
+      {
+        "item": "Desc_AluminumPlate_C",
+        "name": "Alclad Aluminum Sheet",
+        "amount": 200
+      },
+      {
+        "item": "Desc_SteelPlateReinforced_C",
+        "name": "Encased Industrial Beam",
+        "amount": 400
+      },
+      {
+        "item": "Desc_IronPlateReinforced_C",
+        "name": "Reinforced Iron Plate",
+        "amount": 600
+      }
+    ],
+    "timeToCompleteSec": 300,
+    "menuPriority": 3,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_ConveyorBeltMk5_C",
+        "Recipe_ConveyorLiftMk5_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_7-3_C",
+    "name": "Hazmat Suit",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 7,
+    "cost": [
+      {
+        "item": "Desc_Filter_C",
+        "name": "Gas Filter",
+        "amount": 50
+      },
+      {
+        "item": "Desc_AluminumCasing_C",
+        "name": "Aluminum Casing",
+        "amount": 100
+      },
+      {
+        "item": "Desc_HighSpeedWire_C",
+        "name": "Quickwire",
+        "amount": 500
+      }
+    ],
+    "timeToCompleteSec": 300,
+    "menuPriority": 4,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_HazmatSuit_C",
+        "Recipe_FilterHazmat_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 3,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_7-5_C",
+    "name": "Control System Development",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 7,
+    "cost": [
+      {
+        "item": "Desc_AluminumPlate_C",
+        "name": "Alclad Aluminum Sheet",
+        "amount": 200
+      },
+      {
+        "item": "Desc_AluminumCasing_C",
+        "name": "Aluminum Casing",
+        "amount": 400
+      },
+      {
+        "item": "Desc_Computer_C",
+        "name": "Computer",
+        "amount": 200
+      },
+      {
+        "item": "Desc_Plastic_C",
+        "name": "Plastic",
+        "amount": 1000
+      }
+    ],
+    "timeToCompleteSec": 900,
+    "menuPriority": 5,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_SulfuricAcid_C",
+        "Recipe_PackagedSulfuricAcid_C",
+        "Recipe_Battery_C",
+        "Recipe_RadioControlUnit_C",
+        "Recipe_ComputerSuper_C",
+        "Recipe_SpaceElevatorPart_7_C",
+        "Recipe_Blender_C"
+      ],
+      "schematics": [
+        "Schematic_7-4-1_C"
+      ],
+      "items": [],
+      "scannables": [
+        "Desc_Sulfur_C"
+      ],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_7-4_C",
+    "name": "Aeronautical Engineering",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 8,
+    "cost": [
+      {
+        "item": "Desc_ModularFrameLightweight_C",
+        "name": "Radio Control Unit",
+        "amount": 50
+      },
+      {
+        "item": "Desc_AluminumPlate_C",
+        "name": "Alclad Aluminum Sheet",
+        "amount": 100
+      },
+      {
+        "item": "Desc_AluminumCasing_C",
+        "name": "Aluminum Casing",
+        "amount": 200
+      },
+      {
+        "item": "Desc_Motor_C",
+        "name": "Motor",
+        "amount": 300
+      }
+    ],
+    "timeToCompleteSec": 600,
+    "menuPriority": 1,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_DroneTransport_C",
+        "Recipe_DroneStation_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_8-1_C",
+    "name": "Nuclear Power",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 8,
+    "cost": [
+      {
+        "item": "Desc_ComputerSuper_C",
+        "name": "Supercomputer",
+        "amount": 50
+      },
+      {
+        "item": "Desc_ModularFrameHeavy_C",
+        "name": "Heavy Modular Frame",
+        "amount": 200
+      },
+      {
+        "item": "Desc_Cable_C",
+        "name": "Cable",
+        "amount": 1000
+      },
+      {
+        "item": "Desc_Cement_C",
+        "name": "Concrete",
+        "amount": 2000
+      }
+    ],
+    "timeToCompleteSec": 900,
+    "menuPriority": 2,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_UraniumCell_C",
+        "Recipe_ElectromagneticControlRod_C",
+        "Recipe_NuclearFuelRod_C",
+        "Recipe_GeneratorNuclear_C",
+        "Recipe_SpaceElevatorPart_6_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [
+        "Desc_OreUranium_C"
+      ],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_8-2_C",
+    "name": "Advanced Aluminum Production",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 8,
+    "cost": [
+      {
+        "item": "Desc_ModularFrameLightweight_C",
+        "name": "Radio Control Unit",
+        "amount": 50
+      },
+      {
+        "item": "Desc_AluminumCasing_C",
+        "name": "Aluminum Casing",
+        "amount": 200
+      },
+      {
+        "item": "Desc_AluminumPlate_C",
+        "name": "Alclad Aluminum Sheet",
+        "amount": 400
+      },
+      {
+        "item": "Desc_Wire_C",
+        "name": "Wire",
+        "amount": 3000
+      }
+    ],
+    "timeToCompleteSec": 900,
+    "menuPriority": 3,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_FrackingSmasher_C",
+        "Recipe_FrackingExtractor_C",
+        "Recipe_GasTank_C",
+        "Recipe_PackagedNitrogen_C",
+        "Recipe_HeatSink_C",
+        "Recipe_CoolingSystem_C",
+        "Recipe_FusedModularFrame_C"
+      ],
+      "schematics": [
+        "Schematic_8-2-1_C"
+      ],
+      "items": [],
+      "scannables": [
+        "Desc_Water_C",
+        "Desc_LiquidOil_C",
+        "Desc_NitrogenGas_C"
+      ],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_8-4_C",
+    "name": "Leading-Edge Production",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 8,
+    "cost": [
+      {
+        "item": "Desc_ModularFrameFused_C",
+        "name": "Fused Modular Frame",
+        "amount": 50
+      },
+      {
+        "item": "Desc_ComputerSuper_C",
+        "name": "Supercomputer",
+        "amount": 100
+      },
+      {
+        "item": "Desc_SteelPipe_C",
+        "name": "Steel Pipe",
+        "amount": 1000
+      }
+    ],
+    "timeToCompleteSec": 300,
+    "menuPriority": 4,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_MotorTurbo_C",
+        "Recipe_MinerMk3_C",
+        "Recipe_SpaceElevatorPart_8_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_8-5_C",
+    "name": "Particle Enrichment",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 8,
+    "cost": [
+      {
+        "item": "Desc_MotorLightweight_C",
+        "name": "Turbo Motor",
+        "amount": 50
+      },
+      {
+        "item": "Desc_ModularFrameFused_C",
+        "name": "Fused Modular Frame",
+        "amount": 100
+      },
+      {
+        "item": "Desc_CoolingSystem_C",
+        "name": "Cooling System",
+        "amount": 200
+      },
+      {
+        "item": "Desc_HighSpeedWire_C",
+        "name": "Quickwire",
+        "amount": 2500
+      }
+    ],
+    "timeToCompleteSec": 1200,
+    "menuPriority": 5,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_NitricAcid_C",
+        "Recipe_PackagedNitricAcid_C",
+        "Recipe_NonFissileUranium_C",
+        "Recipe_Plutonium_C",
+        "Recipe_PlutoniumCell_C",
+        "Recipe_PlutoniumFuelRod_C",
+        "Recipe_HadronCollider_C",
+        "Recipe_CopperDust_C",
+        "Recipe_PressureConversionCube_C",
+        "Recipe_SpaceElevatorPart_9_C"
+      ],
+      "schematics": [
+        "Schematic_8-5-1_C"
+      ],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_9-1_C",
+    "name": "Matter Conversion",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 9,
+    "cost": [
+      {
+        "item": "Desc_ModularFrameFused_C",
+        "name": "Fused Modular Frame",
+        "amount": 100
+      },
+      {
+        "item": "Desc_ModularFrameLightweight_C",
+        "name": "Radio Control Unit",
+        "amount": 250
+      },
+      {
+        "item": "Desc_CoolingSystem_C",
+        "name": "Cooling System",
+        "amount": 500
+      }
+    ],
+    "timeToCompleteSec": 900,
+    "menuPriority": 1,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_Converter_C",
+        "Recipe_FicsiteIngot_Iron_C",
+        "Recipe_FicsiteMesh_C",
+        "Recipe_Diamond_C",
+        "Recipe_TimeCrystal_C",
+        "Recipe_SpaceElevatorPart_10_C",
+        "Recipe_IngotSAM_C",
+        "Recipe_SAMFluctuator_C"
+      ],
+      "schematics": [
+        "Schematic_9-1-1_C"
+      ],
+      "items": [],
+      "scannables": [
+        "Desc_SAM_C"
+      ],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_9-2_C",
+    "name": "Quantum Encoding",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 9,
+    "cost": [
+      {
+        "item": "Desc_TimeCrystal_C",
+        "name": "Time Crystal",
+        "amount": 50
+      },
+      {
+        "item": "Desc_FicsiteMesh_C",
+        "name": "Ficsite Trigon",
+        "amount": 100
+      },
+      {
+        "item": "Desc_MotorLightweight_C",
+        "name": "Turbo Motor",
+        "amount": 200
+      },
+      {
+        "item": "Desc_ComputerSuper_C",
+        "name": "Supercomputer",
+        "amount": 400
+      }
+    ],
+    "timeToCompleteSec": 1200,
+    "menuPriority": 2,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_QuantumEncoder_C",
+        "Recipe_QuantumEnergy_C",
+        "Recipe_DarkEnergy_C",
+        "Recipe_DarkMatter_C",
+        "Recipe_SuperpositionOscillator_C",
+        "Recipe_TemporalProcessor_C",
+        "Recipe_SpaceElevatorPart_12_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_9-3_C",
+    "name": "FICSIT Blueprints Mk.3",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 9,
+    "cost": [
+      {
+        "item": "Desc_TemporalProcessor_C",
+        "name": "Neural-Quantum Processor",
+        "amount": 100
+      },
+      {
+        "item": "Desc_TimeCrystal_C",
+        "name": "Time Crystal",
+        "amount": 250
+      },
+      {
+        "item": "Desc_FicsiteMesh_C",
+        "name": "Ficsite Trigon",
+        "amount": 500
+      },
+      {
+        "item": "Desc_ModularFrameFused_C",
+        "name": "Fused Modular Frame",
+        "amount": 500
+      }
+    ],
+    "timeToCompleteSec": 900,
+    "menuPriority": 3,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_BlueprintDesigner_Mk3_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_9-4_C",
+    "name": "Spatial Energy Regulation",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 9,
+    "cost": [
+      {
+        "item": "Desc_QuantumOscillator_C",
+        "name": "Superposition Oscillator",
+        "amount": 100
+      },
+      {
+        "item": "Desc_MotorLightweight_C",
+        "name": "Turbo Motor",
+        "amount": 250
+      },
+      {
+        "item": "Desc_ModularFrameLightweight_C",
+        "name": "Radio Control Unit",
+        "amount": 500
+      },
+      {
+        "item": "Desc_SAMFluctuator_C",
+        "name": "SAM Fluctuator",
+        "amount": 1000
+      }
+    ],
+    "timeToCompleteSec": 600,
+    "menuPriority": 4,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_Portal_C",
+        "Recipe_PortalSatellite_C",
+        "Recipe_SingularityCell_C",
+        "Recipe_SpaceElevatorPart_11_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_9-5_C",
+    "name": "Peak Efficiency",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 9,
+    "cost": [
+      {
+        "item": "Desc_TimeCrystal_C",
+        "name": "Time Crystal",
+        "amount": 250
+      },
+      {
+        "item": "Desc_FicsiteMesh_C",
+        "name": "Ficsite Trigon",
+        "amount": 250
+      },
+      {
+        "item": "Desc_AluminumPlate_C",
+        "name": "Alclad Aluminum Sheet",
+        "amount": 5000
+      },
+      {
+        "item": "Desc_IronPlate_C",
+        "name": "Iron Plate",
+        "amount": 10000
+      }
+    ],
+    "timeToCompleteSec": 600,
+    "menuPriority": 5,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_ConveyorBeltMk6_C",
+        "Recipe_ConveyorLiftMk6_C",
+        "Recipe_Ficsonium_C",
+        "Recipe_FicsoniumFuelRod_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  }
+]
