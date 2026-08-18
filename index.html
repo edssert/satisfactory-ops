@@ -121,9 +121,37 @@ footer{border-top:1px solid var(--rule);padding:22px 0 40px;font-size:13px;color
 footer a{color:var(--ink2)}
 @media (max-width:640px){.stat{flex-basis:50%}.tier-head .no{font-size:32px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+:root{--sbh:44px}
+.sitebar{position:sticky;top:0;z-index:30;background:var(--ink);border-bottom:2px solid var(--accent)}
+.sitebar .wrap{display:flex;align-items:center;gap:2px;padding-top:0;padding-bottom:0;overflow-x:auto}
+.sitebar .wrap::-webkit-scrollbar{height:0}
+.sitebar .logo{display:flex;align-items:center;gap:8px;padding:0 16px 0 0;margin-right:8px;white-space:nowrap;text-decoration:none;border:0}
+.sitebar .logo i{width:22px;height:3px;background:var(--accent);display:block}
+.sitebar .logo b{font-family:var(--display);font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--bg)}
+.sitebar a,.sitebar .soon{font-family:var(--display);font-weight:700;font-size:13px;padding:13px 13px 11px;text-decoration:none;white-space:nowrap;border-bottom:3px solid transparent;color:color-mix(in srgb,var(--bg) 70%,transparent)}
+.sitebar a:hover{color:var(--bg);background:color-mix(in srgb,var(--bg) 9%,transparent)}
+.sitebar a[aria-current=page]{color:var(--bg);border-bottom-color:var(--accent)}
+.sitebar .soon{color:color-mix(in srgb,var(--bg) 30%,transparent);cursor:default}
+.sitebar .spacer{margin-left:auto}
+nav.bar,.bar{top:var(--sbh)!important}
+section,.tier-block{scroll-margin-top:calc(var(--sbh) + 46px)}
 </style>
 </head>
 <body>
+
+<nav class="sitebar" aria-label="주요 화면">
+  <div class="wrap">
+    <a class="logo" href="index.html"><i></i><b>satisfactory-ops</b></a>
+    <a href="start.html">시작 가이드</a>
+    <a href="index.html" aria-current="page">마일스톤</a>
+    <span class="soon" title="준비 중">계산기</span>
+    <span class="soon" title="준비 중">단계도</span>
+    <span class="soon" title="준비 중">용어집</span>
+    <span class="spacer"></span>
+    <a href="https://github.com/edssert/satisfactory-ops">GitHub ↗</a>
+  </div>
+</nav>
 
 <header class="top">
   <div class="wrap">
