@@ -542,6 +542,92 @@ pins.addEventListener("click", e => {
   const i = e.target.closest(".pin")?.dataset?.i;
   if(i){ show(+i); focusSite(+i); }
 });
+// ── 자원 노드 오버레이 ──
+const NCOL = {"철광석":"#9AA7B4","구리광석":"#C87A45","석회석":"#C9B98A","석탄":"#3E434A",
+ "원유":"#7B5AA0","캐터리움":"#D8A62B","석영":"#D07DBB","황":"#C9BE2A","보크사이트":"#B96A45",
+ "우라늄":"#6BAE4A","SAM":"#8E7BD8","질소가스":"#63A9C4","물":"#3E9CC4","간헐천":"#4FBFA8"};
+const ORDER = ["철광석","구리광석","석회석","석탄","원유","캐터리움","석영","황","보크사이트","우라늄","SAM","질소가스","물","간헐천"];
+let NODES = [], NON = new Set(["철광석","구리광석","석회석","석탄"]);
+
+function drawNodes(){
+  const el = document.getElementById("nodes");
+  el.innerHTML = NODES.filter(n => NON.has(n.ko)).map(n =>
+    `<span class="nd ${n.purity||"normal"}" style="left:${(n.fx*100).toFixed(3)}%;top:${(n.fy*100).toFixed(3)}%;background:${NCOL[n.ko]||"#888"}" title="${n.ko} ${n.purity||""} ${n.cell}"></span>`).join("");
+}
+function drawFilter(){
+  const cnt = {};
+  NODES.forEach(n => cnt[n.ko] = (cnt[n.ko]||0)+1);
+  document.getElementById("nfil").innerHTML = ORDER.filter(k => cnt[k]).map(k =>
+    `<button type="button" data-res="${k}" aria-pressed="${NON.has(k)}"><i style="background:${NCOL[k]}"></i>${k} ${cnt[k]}</button>`).join("");
+}
+document.getElementById("nfil").addEventListener("click", e => {
+  const b = e.target.closest("[data-res]"); if(!b) return;
+  const k = b.dataset.res;
+  NON.has(k) ? NON.delete(k) : NON.add(k);
+  drawFilter(); drawNodes();
+});
+fetch("src/data/resource-nodes.json").then(r => r.ok ? r.json() : null).then(j => {
+  if(!j) return;
+  NODES = j.nodes;
+  drawFilter(); drawNodes();
+  const cur = pins.querySelector('.pin[aria-pressed=true]');
+  renderPlan(cur ? +cur.dataset.i : 5);
+}).catch(() => {});
+
+// ── 티어 1 노드 계획 ──
+const MINER1 = {pure:120, normal:60, impure:30};
+const T1RES = [
+  {ko:"철광석", need:60,  why:"철판·철봉 전부의 뿌리. 제련기 2대를 채우려면 60/분"},
+  {ko:"석회석", need:60,  why:"기지 건설에만 콘크리트 200 = 석회석 600. 게임 끝까지 계속 모자람"},
+  {ko:"구리광석", need:30, why:"전선·케이블용. T1까지는 30/분이면 충분"}
+];
+const W = (n) => ({x: n.fx*750100 - 324698, y: n.fy*750000 - 375000});
+const dist = (a,b) => Math.hypot(a.x-b.x, a.y-b.y)/100;   // cm -> m
+
+function renderPlan(pinNo){
+  const el = document.getElementById("plan");
+  const s = SITES.find(x => x.n === pinNo);
+  if(!s || !NODES.length){ el.innerHTML = ""; return; }
+  const c = cell(s.X, s.Y);
+  const origin = {x: c.x*750100 - 324698, y: c.y*750000 - 375000};
+
+  let rows = "", total = {}, short = [];
+  for(const t of T1RES){
+    const near = NODES.filter(n => n.ko === t.ko && n.type === "node")
+      .map(n => ({...n, d: dist(W(n), origin)}))
+      .sort((a,b) => a.d - b.d).slice(0, 3);
+    let acc = 0;
+    rows += near.map((n,i) => {
+      const rate = MINER1[n.purity] || 60;
+      acc += rate;
+      return `<tr>${i===0?`<td rowspan="${near.length}"><b>${t.ko}</b><br><span style="font-size:11px;color:var(--ink3)">목표 ${t.need}/분</span></td>`:""}
+        <td><span class="pu ${n.purity}">${n.purity==="pure"?"순수":n.purity==="normal"?"일반":"불순"}</span></td>
+        <td class="n">${Math.round(n.d).toLocaleString()} m</td>
+        <td class="n">${rate}/분</td>
+        <td class="num" style="font-size:11.5px;color:var(--ink3)">${n.cell}</td></tr>`;
+    }).join("");
+    total[t.ko] = acc;
+    if(acc < t.need) short.push(t.ko);
+  }
+
+  const ok = short.length === 0;
+  el.innerHTML = `
+    <div class="ph">
+      <h4>${s.n}. ${s.name} — 티어 1 노드 계획</h4>
+      <span class="sub">X${s.X}Y${s.Y} 중심 · 가까운 순 3개</span>
+      <span class="verdict ${ok?"ok":"warn"}">${ok?"T1 충족":"부족: "+short.join("·")}</span>
+    </div>
+    <div class="body"><div class="tw" style="border:0;margin:0">
+      <table><thead><tr><th>자원</th><th>순도</th><th class="n">거리</th><th class="n">채굴기 Mk.1</th><th>그리드</th></tr></thead>
+      <tbody>${rows}</tbody></table></div></div>
+    <div class="sum">
+      가까운 3개만 써도 <b>철 ${total["철광석"]}/분 · 석회석 ${total["석회석"]}/분 · 구리 ${total["구리광석"]}/분</b>.
+      ${ok ? "티어 1을 통과하기에 충분합니다." : `<b style="color:var(--hazard)">${short.join("·")}이(가) 목표에 못 미칩니다.</b> 더 먼 노드를 쓰거나 다른 부지를 보세요.`}
+      <br><span style="font-size:12.5px;color:var(--ink3)">${T1RES.map(t=>`<b>${t.ko}</b> ${t.why}`).join(" · ")}</span>
+    </div>`;
+}
+
+
 show(5);
 
 // 확대·이동
@@ -634,91 +720,6 @@ document.addEventListener("click", e => {
   state.setup[k] = (k === "random") ? v === "1" : v;
   save(); renderSetup(k === "start");
 });
-
-// ── 자원 노드 오버레이 ──
-const NCOL = {"철광석":"#9AA7B4","구리광석":"#C87A45","석회석":"#C9B98A","석탄":"#3E434A",
- "원유":"#7B5AA0","캐터리움":"#D8A62B","석영":"#D07DBB","황":"#C9BE2A","보크사이트":"#B96A45",
- "우라늄":"#6BAE4A","SAM":"#8E7BD8","질소가스":"#63A9C4","물":"#3E9CC4","간헐천":"#4FBFA8"};
-const ORDER = ["철광석","구리광석","석회석","석탄","원유","캐터리움","석영","황","보크사이트","우라늄","SAM","질소가스","물","간헐천"];
-let NODES = [], NON = new Set(["철광석","구리광석","석회석","석탄"]);
-
-function drawNodes(){
-  const el = document.getElementById("nodes");
-  el.innerHTML = NODES.filter(n => NON.has(n.ko)).map(n =>
-    `<span class="nd ${n.purity||"normal"}" style="left:${(n.fx*100).toFixed(3)}%;top:${(n.fy*100).toFixed(3)}%;background:${NCOL[n.ko]||"#888"}" title="${n.ko} ${n.purity||""} ${n.cell}"></span>`).join("");
-}
-function drawFilter(){
-  const cnt = {};
-  NODES.forEach(n => cnt[n.ko] = (cnt[n.ko]||0)+1);
-  document.getElementById("nfil").innerHTML = ORDER.filter(k => cnt[k]).map(k =>
-    `<button type="button" data-res="${k}" aria-pressed="${NON.has(k)}"><i style="background:${NCOL[k]}"></i>${k} ${cnt[k]}</button>`).join("");
-}
-document.getElementById("nfil").addEventListener("click", e => {
-  const b = e.target.closest("[data-res]"); if(!b) return;
-  const k = b.dataset.res;
-  NON.has(k) ? NON.delete(k) : NON.add(k);
-  drawFilter(); drawNodes();
-});
-fetch("src/data/resource-nodes.json").then(r => r.ok ? r.json() : null).then(j => {
-  if(!j) return;
-  NODES = j.nodes;
-  drawFilter(); drawNodes();
-  const cur = pins.querySelector('.pin[aria-pressed=true]');
-  renderPlan(cur ? +cur.dataset.i : 5);
-}).catch(() => {});
-
-// ── 티어 1 노드 계획 ──
-const MINER1 = {pure:120, normal:60, impure:30};
-const T1RES = [
-  {ko:"철광석", need:60,  why:"철판·철봉 전부의 뿌리. 제련기 2대를 채우려면 60/분"},
-  {ko:"석회석", need:60,  why:"기지 건설에만 콘크리트 200 = 석회석 600. 게임 끝까지 계속 모자람"},
-  {ko:"구리광석", need:30, why:"전선·케이블용. T1까지는 30/분이면 충분"}
-];
-const W = (n) => ({x: n.fx*750100 - 324698, y: n.fy*750000 - 375000});
-const dist = (a,b) => Math.hypot(a.x-b.x, a.y-b.y)/100;   // cm -> m
-
-function renderPlan(pinNo){
-  const el = document.getElementById("plan");
-  const s = SITES.find(x => x.n === pinNo);
-  if(!s || !NODES.length){ el.innerHTML = ""; return; }
-  const c = cell(s.X, s.Y);
-  const origin = {x: c.x*750100 - 324698, y: c.y*750000 - 375000};
-
-  let rows = "", total = {}, short = [];
-  for(const t of T1RES){
-    const near = NODES.filter(n => n.ko === t.ko && n.type === "node")
-      .map(n => ({...n, d: dist(W(n), origin)}))
-      .sort((a,b) => a.d - b.d).slice(0, 3);
-    let acc = 0;
-    rows += near.map((n,i) => {
-      const rate = MINER1[n.purity] || 60;
-      acc += rate;
-      return `<tr>${i===0?`<td rowspan="${near.length}"><b>${t.ko}</b><br><span style="font-size:11px;color:var(--ink3)">목표 ${t.need}/분</span></td>`:""}
-        <td><span class="pu ${n.purity}">${n.purity==="pure"?"순수":n.purity==="normal"?"일반":"불순"}</span></td>
-        <td class="n">${Math.round(n.d).toLocaleString()} m</td>
-        <td class="n">${rate}/분</td>
-        <td class="num" style="font-size:11.5px;color:var(--ink3)">${n.cell}</td></tr>`;
-    }).join("");
-    total[t.ko] = acc;
-    if(acc < t.need) short.push(t.ko);
-  }
-
-  const ok = short.length === 0;
-  el.innerHTML = `
-    <div class="ph">
-      <h4>${s.n}. ${s.name} — 티어 1 노드 계획</h4>
-      <span class="sub">X${s.X}Y${s.Y} 중심 · 가까운 순 3개</span>
-      <span class="verdict ${ok?"ok":"warn"}">${ok?"T1 충족":"부족: "+short.join("·")}</span>
-    </div>
-    <div class="body"><div class="tw" style="border:0;margin:0">
-      <table><thead><tr><th>자원</th><th>순도</th><th class="n">거리</th><th class="n">채굴기 Mk.1</th><th>그리드</th></tr></thead>
-      <tbody>${rows}</tbody></table></div></div>
-    <div class="sum">
-      가까운 3개만 써도 <b>철 ${total["철광석"]}/분 · 석회석 ${total["석회석"]}/분 · 구리 ${total["구리광석"]}/분</b>.
-      ${ok ? "티어 1을 통과하기에 충분합니다." : `<b style="color:var(--hazard)">${short.join("·")}이(가) 목표에 못 미칩니다.</b> 더 먼 노드를 쓰거나 다른 부지를 보세요.`}
-      <br><span style="font-size:12.5px;color:var(--ink3)">${T1RES.map(t=>`<b>${t.ko}</b> ${t.why}`).join(" · ")}</span>
-    </div>`;
-}
 
 renderSetup(false);
 if(state.setup.start){
