@@ -364,7 +364,15 @@ document.addEventListener("change", e => {
   save(); render();
 });
 document.addEventListener("click", e => {
-  const g = e.target.dataset?.goto;
+  // 설정 버튼 (시작 방식 / 시작 지점 / 랜덤화)
+  const opt = e.target.closest("[data-set]");
+  if(opt){
+    const k = opt.dataset.set, v = opt.dataset.v;
+    state.setup[k] = (k === "random") ? v === "1" : v;
+    save(); render();
+    return;
+  }
+  const g = e.target.closest("[data-goto]")?.dataset.goto;
   if(g) document.getElementById(g)?.scrollIntoView({behavior:"smooth", block:"start"});
 });
 document.getElementById("reset").onclick = () => {
