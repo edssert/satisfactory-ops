@@ -232,6 +232,7 @@ section,.tier-block{scroll-margin-top:calc(var(--sbh) + 46px)}
     <a class="chip" href="#site">입지 선정</a>
     <a class="chip" href="#first">첫 10분</a>
     <a class="chip" href="#hub">HUB 1–6</a>
+    <a class="chip" href="#t1auto">T1 자동화</a>
     <a class="chip" href="#auto">첫 자동화</a>
     <span class="spacer"></span>
     <a class="chip" href="index.html">체크리스트 →</a>
@@ -422,6 +423,13 @@ section,.tier-block{scroll-margin-top:calc(var(--sbh) + 46px)}
     </table>
   </div>
   <div class="ok"><b>계획에 쓰세요</b>철광 <span class="num">533</span>이 티어 0 전체의 비용입니다. 일반 노드에 채굴기 하나(60/분)를 꽂으면 <strong>9분</strong>이면 나오는 양입니다. 손으로 캐면 훨씬 오래 걸리죠 — 그래서 HUB 5의 채굴기가 분기점입니다.</div>
+</section>
+
+<!-- ── T1 자동화 전체 ── -->
+<section id="t1auto">
+  <div class="sec-head"><h2>티어 1 전체 자동화</h2><span class="tag">마일스톤 3개 통과 구성</span></div>
+  <p class="lede">티어 1의 마일스톤 세 개(<strong>기지 건설 · 물류 · 현장 연구</strong>)를 전부 통과하는 데 필요한 라인 전체입니다. 아래 수치는 시작 방식 설정에 따라 보유량을 반영해 자동 계산됩니다.</p>
+  <div id="t1out"></div>
 </section>
 
 <!-- ── 첫 자동화 ── -->
@@ -743,6 +751,7 @@ function renderSetup(zoomToStart){
     : "튜토리얼이 시키는 대로만 따라가면 자원 위치를 모른 채 허브를 짓게 됩니다. 순서를 하나만 바꾸면 됩니다 — <strong>짓기 전에 정찰</strong>.";
 
   // 시작 지점을 골랐으면 지도를 그 구역으로
+  renderT1();
   if(zoomToStart && s.start){
     const st = STARTS.find(x => x.v === s.start);
     if(st){ show(st.pin); focusSite(st.pin, 2.2); }
@@ -756,6 +765,79 @@ document.addEventListener("click", e => {
   state.setup[k] = (k === "random") ? v === "1" : v;
   save(); renderSetup(k === "start");
 });
+
+// ── 티어 1 전체 자동화 계산 ──
+const T1_NEED = {"철판":350, "철봉":250, "전선":600, "나사":300, "콘크리트":200};
+const T1_MS = [["기지 건설","콘크리트 200 · 철판 100 · 철봉 100"],
+               ["물류","철판 150 · 철봉 150 · 전선 300"],
+               ["현장 연구","전선 300 · 나사 300 · 철판 100"]];
+const SKIP_HAVE = {"철판":129, "철봉":60, "전선":48, "콘크리트":58, "나사":0};
+
+function renderT1(){
+  const skip = state.setup.mode === "skip";
+  const have = skip ? SKIP_HAVE : {"철판":0,"철봉":0,"전선":0,"나사":0,"콘크리트":0};
+  const net = {}; for(const k in T1_NEED) net[k] = Math.max(0, T1_NEED[k] - (have[k]||0));
+
+  // 원자재 환산 — 철판 3:2, 철봉 1:1, 나사(철봉 10 -> 40), 전선 1:2, 콘크리트 3:1
+  const rodForScrew = Math.ceil(net["나사"] / 4);
+  const ironIngot = Math.ceil(net["철판"]*1.5) + net["철봉"] + rodForScrew;
+  const copperIngot = Math.ceil(net["전선"]/2);
+  const limestone = net["콘크리트"]*3;
+
+  // 라인 구성 (순수 철 120/분 · 일반 구리 60/분 · 일반 석회석 60/분 기준)
+  const LINES = [
+    ["철 라인", [["채굴기 Mk.1 (순수 철)",1,"120/분 채굴"],["제련기",4,"철광 120 → 철잉곳 120"],
+      ["제작기 — 철판",2,"철잉곳 60 → 철판 40/분"],["제작기 — 철봉",4,"철잉곳 60 → 철봉 60/분"],
+      ["제작기 — 나사",2,"철봉 20 → 나사 80/분"]]],
+    ["구리 라인", [["채굴기 Mk.1 (일반 구리)",1,"60/분 채굴"],["제련기",2,"구리광 60 → 구리잉곳 60"],
+      ["제작기 — 전선",4,"구리잉곳 60 → 전선 120/분"]]],
+    ["석회석 라인", [["채굴기 Mk.1 (일반 석회석)",1,"60/분 채굴"],
+      ["제작기 — 콘크리트",1,"석회석 45 → 콘크리트 15/분"]]]
+  ];
+  const RATE = {"철판":40, "철봉":40, "나사":80, "전선":120, "콘크리트":15};
+  const miners = 3, smelters = 6, constructors = 13;
+  const power = miners*5 + smelters*4 + constructors*4;
+  const burners = Math.ceil(power/30);
+
+  const tRow = (k) => {
+    const mins = net[k] / RATE[k];
+    return `<tr><td><b>${k}</b></td><td class="n">${T1_NEED[k]}</td><td class="n">${have[k]||0}</td>
+      <td class="n ${net[k]===0?'':'mark'}">${net[k]===0?"충족":net[k]}</td>
+      <td class="n">${RATE[k]}/분</td><td class="n">${net[k]===0?"—":mins.toFixed(1)+"분"}</td></tr>`;
+  };
+  const slowest = Object.keys(net).filter(k=>net[k]>0).sort((a,b)=>net[b]/RATE[b]-net[a]/RATE[a])[0];
+
+  document.getElementById("t1out").innerHTML = `
+    <div class="tw"><table><caption>티어 1 마일스톤 요구 합계</caption>
+      <thead><tr><th>부품</th><th class="n">총 요구</th><th class="n">시작 보유</th><th class="n">실제 필요</th><th class="n">라인 산출</th><th class="n">소요</th></tr></thead>
+      <tbody>${Object.keys(T1_NEED).map(tRow).join("")}</tbody></table></div>
+    <div class="${slowest?"note":"ok"}"><b>${slowest?"병목":"완료"}</b>${slowest
+      ? `<b>${slowest}</b>가 가장 오래 걸립니다 (${(net[slowest]/RATE[slowest]).toFixed(1)}분). 여기부터 세우세요.`
+      : "이미 전부 보유하고 있습니다."}</div>
+
+    <div class="tw"><table><caption>필요 원자재 (실제 필요분 기준)</caption>
+      <thead><tr><th>원자재</th><th class="n">필요량</th><th>근거</th></tr></thead><tbody>
+      <tr><td class="mark">철광석</td><td class="n mark">${ironIngot.toLocaleString()}</td><td>철판 ${net["철판"]}(×1.5) + 철봉 ${net["철봉"]} + 나사용 철봉 ${rodForScrew}</td></tr>
+      <tr><td>구리광석</td><td class="n">${copperIngot.toLocaleString()}</td><td>전선 ${net["전선"]} (구리잉곳 1 → 전선 2)</td></tr>
+      <tr><td>석회석</td><td class="n">${limestone.toLocaleString()}</td><td>콘크리트 ${net["콘크리트"]} (석회석 3 → 콘크리트 1)</td></tr>
+      </tbody></table></div>
+
+    ${LINES.map(([nm, ms]) => `<div class="tw"><table><caption>${nm}</caption>
+      <thead><tr><th>설비</th><th class="n">대수</th><th>처리</th></tr></thead>
+      <tbody>${ms.map(([a,b,c])=>`<tr><td>${a}</td><td class="n">${b}</td><td style="color:var(--ink2)">${c}</td></tr>`).join("")}</tbody>
+      </table></div>`).join("")}
+
+    <div class="tw"><table><caption>전력</caption>
+      <thead><tr><th>설비</th><th class="n">대수</th><th class="n">개당</th><th class="n">소계</th></tr></thead><tbody>
+      <tr><td>채굴기 Mk.1</td><td class="n">${miners}</td><td class="n">5 MW</td><td class="n">${miners*5} MW</td></tr>
+      <tr><td>제련기</td><td class="n">${smelters}</td><td class="n">4 MW</td><td class="n">${smelters*4} MW</td></tr>
+      <tr><td>제작기</td><td class="n">${constructors}</td><td class="n">4 MW</td><td class="n">${constructors*4} MW</td></tr>
+      <tr><td><b>합계</b></td><td class="n">${miners+smelters+constructors}</td><td class="n">—</td><td class="n mark"><b>${power} MW</b></td></tr>
+      </tbody></table></div>
+    <div class="note"><b>전력 주의</b>바이오매스 연소기는 <b>30 MW</b>입니다. 위 구성을 전부 돌리려면 <b>${burners}대</b>가 필요하고, 전부 <b>손으로 연료를 채워야</b> 합니다.
+      한 번에 다 짓지 말고 <b>${slowest||"철"} 라인부터 순서대로</b> 세우면서 연소기를 늘리세요. 잎·나무를 계속 주워 비축해 두세요.</div>
+    <div class="ok"><b>다음</b>티어 1을 통과하면 <b>파운데이션</b>이 풀립니다. 그 즉시 본 부지를 <b>40m(파운데이션 10칸) 격자</b>로 정리하고 위 라인을 그 위로 옮기세요. 여기 지은 것은 임시입니다.</div>`;
+}
 
 renderSetup(false);
 if(state.setup.start){
