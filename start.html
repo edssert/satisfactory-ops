@@ -413,7 +413,20 @@ function show(n){
     </dl>`;
   pins.querySelectorAll(".pin").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.i === n)));
 }
-pins.addEventListener("click", e => { const i = e.target.dataset?.i; if(i) show(+i); });
+// 핀 클릭 → 해당 구역으로 부분 확대 (도면의 상세도처럼)
+function focusSite(n, level = 2.6){
+  const s = SITES.find(x => x.n === n); if(!s) return;
+  const p = cell(s.X, s.Y);
+  const w = box.clientWidth, h = box.clientHeight;
+  z = level;
+  tx = w/2 - p.x * w * z;
+  ty = h/2 - p.y * h * z;
+  apply();
+}
+pins.addEventListener("click", e => {
+  const i = e.target.closest(".pin")?.dataset?.i;
+  if(i){ show(+i); focusSite(+i); }
+});
 show(5);
 
 // 확대·이동
