@@ -115,6 +115,21 @@ section{padding-top:44px;scroll-margin-top:60px}
 .nfil button i{width:9px;height:9px;border-radius:50%;display:block;box-shadow:0 0 0 1px rgba(0,0,0,.35)}
 .nfil button[aria-pressed=true]{border-color:var(--accent);color:var(--ink);font-weight:600;background:var(--accent-wash)}
 .nleg{font-size:12px;color:var(--ink3);margin:0 0 18px}
+#plan{border:1px solid var(--rule);background:var(--raised);padding:0;margin-bottom:22px}
+#plan .ph{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;padding:14px 18px;border-bottom:1px solid var(--rule);background:var(--sunk)}
+#plan .ph h4{font-size:16px}
+#plan .ph .sub{font-family:var(--mono);font-size:12px;color:var(--ink3)}
+#plan .verdict{margin-left:auto;font-family:var(--display);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:3px 9px;border-radius:2px}
+#plan .verdict.ok{color:var(--good);border:1px solid var(--good);background:var(--good-wash)}
+#plan .verdict.warn{color:var(--hazard);border:1px solid var(--hazard);background:var(--hazard-wash)}
+#plan .body{padding:4px 0 0}
+#plan table{min-width:520px}
+.pu{font-family:var(--display);font-size:10px;font-weight:700;letter-spacing:.08em;padding:1px 6px;border-radius:2px;white-space:nowrap}
+.pu.pure{background:var(--good-wash);color:var(--good);border:1px solid var(--good)}
+.pu.normal{background:var(--sunk);color:var(--ink2);border:1px solid var(--rule2)}
+.pu.impure{background:var(--hazard-wash);color:var(--hazard);border:1px solid var(--hazard)}
+#plan .sum{padding:12px 18px;border-top:1px solid var(--rule);font-size:13.5px;color:var(--ink2)}
+#plan .sum b{color:var(--ink)}
 .mapctl{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:18px;font-size:12.5px;color:var(--ink3)}
 .mapctl button{font-family:var(--display);font-weight:700;font-size:13px;padding:4px 10px;border:1px solid var(--rule2);background:var(--raised);color:var(--ink2);cursor:pointer;border-radius:2px}
 .mapctl button:hover{border-color:var(--accent);color:var(--accent)}
@@ -250,6 +265,7 @@ section,.tier-block{scroll-margin-top:calc(var(--sbh) + 46px)}
   <div class="nfil" id="nfil"></div>
   <p class="nleg">점 크기 = 순도 · <b>큰 흰테=순수(Pure)</b> · 중간=일반(Normal) · 작고 흐림=불순(Impure). 자원 노드 459 · 자원정 118 · 간헐천 31.</p>
   <div id="sitecard"></div>
+  <div id="plan"></div>
 
   <div class="tw">
     <table>
@@ -510,6 +526,7 @@ function show(n){
       <dt>언제</dt><dd>${s.who}</dd>
     </dl>`;
   pins.querySelectorAll(".pin").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.i === n)));
+  if(typeof renderPlan === "function") renderPlan(n);
 }
 // 핀 클릭 → 해당 구역으로 부분 확대 (도면의 상세도처럼)
 function focusSite(n, level = 2.6){
@@ -646,7 +663,62 @@ fetch("src/data/resource-nodes.json").then(r => r.ok ? r.json() : null).then(j =
   if(!j) return;
   NODES = j.nodes;
   drawFilter(); drawNodes();
+  const cur = pins.querySelector('.pin[aria-pressed=true]');
+  renderPlan(cur ? +cur.dataset.i : 5);
 }).catch(() => {});
+
+// ── 티어 1 노드 계획 ──
+const MINER1 = {pure:120, normal:60, impure:30};
+const T1RES = [
+  {ko:"철광석", need:60,  why:"철판·철봉 전부의 뿌리. 제련기 2대를 채우려면 60/분"},
+  {ko:"석회석", need:60,  why:"기지 건설에만 콘크리트 200 = 석회석 600. 게임 끝까지 계속 모자람"},
+  {ko:"구리광석", need:30, why:"전선·케이블용. T1까지는 30/분이면 충분"}
+];
+const W = (n) => ({x: n.fx*750100 - 324698, y: n.fy*750000 - 375000});
+const dist = (a,b) => Math.hypot(a.x-b.x, a.y-b.y)/100;   // cm -> m
+
+function renderPlan(pinNo){
+  const el = document.getElementById("plan");
+  const s = SITES.find(x => x.n === pinNo);
+  if(!s || !NODES.length){ el.innerHTML = ""; return; }
+  const c = cell(s.X, s.Y);
+  const origin = {x: c.x*750100 - 324698, y: c.y*750000 - 375000};
+
+  let rows = "", total = {}, short = [];
+  for(const t of T1RES){
+    const near = NODES.filter(n => n.ko === t.ko && n.type === "node")
+      .map(n => ({...n, d: dist(W(n), origin)}))
+      .sort((a,b) => a.d - b.d).slice(0, 3);
+    let acc = 0;
+    rows += near.map((n,i) => {
+      const rate = MINER1[n.purity] || 60;
+      acc += rate;
+      return `<tr>${i===0?`<td rowspan="${near.length}"><b>${t.ko}</b><br><span style="font-size:11px;color:var(--ink3)">목표 ${t.need}/분</span></td>`:""}
+        <td><span class="pu ${n.purity}">${n.purity==="pure"?"순수":n.purity==="normal"?"일반":"불순"}</span></td>
+        <td class="n">${Math.round(n.d).toLocaleString()} m</td>
+        <td class="n">${rate}/분</td>
+        <td class="num" style="font-size:11.5px;color:var(--ink3)">${n.cell}</td></tr>`;
+    }).join("");
+    total[t.ko] = acc;
+    if(acc < t.need) short.push(t.ko);
+  }
+
+  const ok = short.length === 0;
+  el.innerHTML = `
+    <div class="ph">
+      <h4>${s.n}. ${s.name} — 티어 1 노드 계획</h4>
+      <span class="sub">X${s.X}Y${s.Y} 중심 · 가까운 순 3개</span>
+      <span class="verdict ${ok?"ok":"warn"}">${ok?"T1 충족":"부족: "+short.join("·")}</span>
+    </div>
+    <div class="body"><div class="tw" style="border:0;margin:0">
+      <table><thead><tr><th>자원</th><th>순도</th><th class="n">거리</th><th class="n">채굴기 Mk.1</th><th>그리드</th></tr></thead>
+      <tbody>${rows}</tbody></table></div></div>
+    <div class="sum">
+      가까운 3개만 써도 <b>철 ${total["철광석"]}/분 · 석회석 ${total["석회석"]}/분 · 구리 ${total["구리광석"]}/분</b>.
+      ${ok ? "티어 1을 통과하기에 충분합니다." : `<b style="color:var(--hazard)">${short.join("·")}이(가) 목표에 못 미칩니다.</b> 더 먼 노드를 쓰거나 다른 부지를 보세요.`}
+      <br><span style="font-size:12.5px;color:var(--ink3)">${T1RES.map(t=>`<b>${t.ko}</b> ${t.why}`).join(" · ")}</span>
+    </div>`;
+}
 
 renderSetup(false);
 if(state.setup.start){
