@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>시작 가이드 — satisfactory-ops</title>
+<meta name="description" content="착륙부터 첫 자동화까지. 베이스 위치 선정과 허브 건설을 단계별로.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏭</text></svg>">
+<style>
+:root{
+  --bg:#F4F2ED; --raised:#FFFDF9; --sunk:#E9E5DC;
+  --ink:#1A1C20; --ink2:#4B4E55; --ink3:#7C766A;
+  --rule:#D8D2C5; --rule2:#BCB4A3;
+  --accent:#C25A17; --accent-wash:#F8E4D3;
+  --good:#2A6E46; --good-wash:#DDEEE3;
+  --hazard:#8A5D00; --hazard-wash:#FAEFD0;
+  --fluid:#186E8B;
+  --display:"Bahnschrift","DIN Alternate","Arial Narrow","Segoe UI","Malgun Gothic",system-ui,sans-serif;
+  --body:"Pretendard Variable",Pretendard,"Segoe UI Variable Text","Segoe UI","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif;
+  --mono:"Cascadia Mono",Consolas,ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#131519; --raised:#1C1F25; --sunk:#0D0F12;
+  --ink:#E9E7E1; --ink2:#ADABA4; --ink3:#847F74;
+  --rule:#2A2E35; --rule2:#3C424B;
+  --accent:#F2842B; --accent-wash:#38220F;
+  --good:#63BE88; --good-wash:#152C1F;
+  --hazard:#E4B429; --hazard-wash:#33290D; --fluid:#55B8D8;
+}}
+:root[data-theme=dark]{
+  --bg:#131519; --raised:#1C1F25; --sunk:#0D0F12;
+  --ink:#E9E7E1; --ink2:#ADABA4; --ink3:#847F74;
+  --rule:#2A2E35; --rule2:#3C424B;
+  --accent:#F2842B; --accent-wash:#38220F;
+  --good:#63BE88; --good-wash:#152C1F;
+  --hazard:#E4B429; --hazard-wash:#33290D; --fluid:#55B8D8;
+}
+:root[data-theme=light]{
+  --bg:#F4F2ED; --raised:#FFFDF9; --sunk:#E9E5DC;
+  --ink:#1A1C20; --ink2:#4B4E55; --ink3:#7C766A;
+  --rule:#D8D2C5; --rule2:#BCB4A3;
+  --accent:#C25A17; --accent-wash:#F8E4D3;
+  --good:#2A6E46; --good-wash:#DDEEE3;
+  --hazard:#8A5D00; --hazard-wash:#FAEFD0; --fluid:#186E8B;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--display);font-weight:700;margin:0;text-wrap:balance;line-height:1.15}
+p{margin:0}
+a{color:var(--accent);text-underline-offset:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.wrap{max-width:1000px;margin:0 auto;padding:0 24px}
+
+header.top{border-bottom:2px solid var(--ink);background:var(--sunk);padding:30px 0 26px}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.brand i{width:30px;height:4px;background:var(--accent);display:block}
+.brand span{font-family:var(--display);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink3);font-weight:700}
+header.top h1{font-size:clamp(28px,5vw,48px);font-stretch:87.5%;letter-spacing:-.015em;margin-bottom:12px}
+header.top h1 em{font-style:normal;color:var(--accent)}
+header.top p{color:var(--ink2);max-width:60ch}
+
+nav.bar{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--rule2)}
+nav.bar .wrap{display:flex;gap:6px;align-items:center;padding-top:9px;padding-bottom:9px;overflow-x:auto}
+.chip{font-family:var(--display);font-weight:700;font-size:13px;padding:5px 11px;border:1px solid var(--rule2);background:transparent;color:var(--ink2);border-radius:2px;cursor:pointer;white-space:nowrap;text-decoration:none}
+.chip:hover{background:var(--accent-wash);color:var(--accent);border-color:var(--accent)}
+.spacer{margin-left:auto}
+
+main{padding:34px 0 80px}
+section{padding-top:44px;scroll-margin-top:60px}
+.sec-head{display:flex;align-items:baseline;gap:14px;border-bottom:1px solid var(--rule2);padding-bottom:10px;margin-bottom:22px}
+.sec-head h2{font-size:clamp(21px,3vw,29px);font-stretch:87.5%}
+.sec-head .tag{margin-left:auto;font-family:var(--display);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink3);font-weight:700;white-space:nowrap}
+.lede{font-size:16px;color:var(--ink2);max-width:68ch;margin-bottom:24px}
+
+.key{border:2px solid var(--accent);background:var(--accent-wash);padding:20px 22px;margin-bottom:8px}
+.key h3{font-size:19px;margin-bottom:10px;color:var(--accent)}
+.key p{font-size:15px}
+.key p + p{margin-top:10px}
+
+.note{border-left:3px solid var(--hazard);background:var(--hazard-wash);padding:12px 16px;margin:16px 0;font-size:14px}
+.note b{font-family:var(--display);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--hazard);display:block;margin-bottom:3px}
+.ok{border-left:3px solid var(--good);background:var(--good-wash);padding:12px 16px;margin:16px 0;font-size:14px}
+.ok b{font-family:var(--display);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--good);display:block;margin-bottom:3px}
+
+/* map */
+.mapbox{position:relative;border:1px solid var(--rule2);background:var(--sunk);overflow:hidden;margin-bottom:8px;touch-action:none}
+.mapbox img{display:block;width:100%;height:auto;user-select:none;-webkit-user-drag:none}
+.mapstage{position:relative;transform-origin:0 0;will-change:transform}
+.pin{position:absolute;transform:translate(-50%,-50%);width:26px;height:26px;border-radius:50%;
+  background:var(--raised);border:2px solid var(--accent);color:var(--accent);
+  font-family:var(--display);font-weight:700;font-size:13px;display:grid;place-items:center;cursor:pointer;padding:0;line-height:1}
+.pin:hover{background:var(--accent);color:var(--raised)}
+.pin.best{width:32px;height:32px;background:var(--accent);color:var(--raised);font-size:15px;box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 28%,transparent)}
+.pin[aria-pressed=true]{background:var(--accent);color:var(--raised)}
+.mapctl{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:18px;font-size:12.5px;color:var(--ink3)}
+.mapctl button{font-family:var(--display);font-weight:700;font-size:13px;padding:4px 10px;border:1px solid var(--rule2);background:var(--raised);color:var(--ink2);cursor:pointer;border-radius:2px}
+.mapctl button:hover{border-color:var(--accent);color:var(--accent)}
+#sitecard{border:1px solid var(--rule);background:var(--raised);padding:16px 18px;margin-bottom:22px}
+#sitecard h4{font-size:17px;margin-bottom:4px}
+#sitecard .co{font-family:var(--mono);font-size:12px;color:var(--ink3);margin-bottom:10px}
+#sitecard dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:14px}
+#sitecard dt{font-family:var(--display);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);padding-top:3px}
+#sitecard dd{margin:0;color:var(--ink2)}
+
+.tw{overflow-x:auto;border:1px solid var(--rule);background:var(--raised);margin-bottom:22px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:540px}
+caption{text-align:left;font-family:var(--display);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink3);padding:12px 16px 0;font-weight:700}
+th,td{padding:9px 14px;text-align:left;border-bottom:1px solid var(--rule);vertical-align:top}
+thead th{font-family:var(--display);font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3);border-bottom:1px solid var(--rule2);font-weight:700;white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.mark{color:var(--accent);font-weight:600}
+
+/* steps */
+.step{display:grid;grid-template-columns:52px minmax(0,1fr);gap:18px;border:1px solid var(--rule);background:var(--raised);padding:16px 18px;margin-bottom:10px;align-items:start}
+.step .n{font-family:var(--display);font-weight:700;font-stretch:75%;font-size:30px;line-height:1;color:var(--accent)}
+.step h3{font-size:17px;margin-bottom:7px}
+.step p{font-size:14.5px;color:var(--ink2)}
+.step p + p{margin-top:7px}
+.step .k{display:inline-block;font-family:var(--mono);font-size:12px;background:var(--sunk);border:1px solid var(--rule2);border-radius:3px;padding:0 5px;color:var(--ink)}
+
+.hub{display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;border:1px solid var(--rule);background:var(--raised);padding:15px 18px;margin-bottom:9px;align-items:start}
+.hub.gate{border-left:3px solid var(--accent)}
+.hub .lv{font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.1em;color:var(--accent);border:1px solid var(--accent);padding:3px 8px;border-radius:2px;white-space:nowrap}
+.hub h3{font-size:16px;margin-bottom:8px}
+.cost{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px}
+.c{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;padding:3px 9px;border:1px solid var(--rule2);background:var(--bg);border-radius:2px;white-space:nowrap}
+.c b{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:600}
+.c i{font-style:normal;color:var(--ink3);font-size:11px}
+.hub .do{font-size:14px;color:var(--ink2)}
+.hub .do b{color:var(--ink);font-weight:600}
+
+.svgwrap{overflow-x:auto;border:1px solid var(--rule);background:var(--raised);padding:18px;margin-bottom:10px}
+.svgwrap svg{display:block;min-width:580px;width:100%;height:auto}
+figcaption{font-size:12.5px;color:var(--ink3);margin-bottom:22px;line-height:1.55}
+
+footer{border-top:1px solid var(--rule);padding:24px 0 44px;font-size:13px;color:var(--ink3)}
+footer a{color:var(--ink2)}
+@media (max-width:640px){.step{grid-template-columns:1fr;gap:8px}.hub{grid-template-columns:1fr;gap:10px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><i></i><span>satisfactory-ops · 시작 가이드</span></div>
+    <h1>착륙에서<br><em>첫 자동화</em>까지</h1>
+    <p>어디에 지을지, 뭘 먼저 할지, 무엇을 남겨둘지. 티어 0 전체를 단계별로 다룹니다.</p>
+  </div>
+</header>
+
+<nav class="bar">
+  <div class="wrap">
+    <a class="chip" href="#truth">먼저 알 것</a>
+    <a class="chip" href="#site">입지 선정</a>
+    <a class="chip" href="#first">첫 10분</a>
+    <a class="chip" href="#hub">HUB 1–6</a>
+    <a class="chip" href="#auto">첫 자동화</a>
+    <span class="spacer"></span>
+    <a class="chip" href="index.html">체크리스트 →</a>
+    <button class="chip" id="theme" type="button">테마</button>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- ── 먼저 알 것 ── -->
+<section id="truth" style="padding-top:34px">
+  <div class="key">
+    <h3>허브 위치로 고민하지 마세요</h3>
+    <p><strong>허브(The HUB)는 언제든 철거하고 다시 지을 수 있습니다.</strong> 철거하면 건설에 쓴 철광석 20개를 돌려받고, <strong>업그레이드와 마일스톤 진행도는 전부 유지됩니다.</strong> 다른 건물과 똑같이 자유롭게 옮길 수 있습니다.</p>
+    <p>그래서 진짜 결정은 "허브를 어디 놓나"가 아니라 <strong>"본 공장을 어디에 세우나"</strong>입니다. 허브는 마일스톤 납품 단말일 뿐이고, 공장이 그 옆에 있을 필요도 없습니다.</p>
+    <p style="color:var(--ink2);font-size:14px">→ 착륙 지점 근처에 일단 짓고 게임을 진행하세요. 부지는 아래 <a href="#site">입지 선정</a>을 보고 정하면 됩니다.</p>
+  </div>
+</section>
+
+<!-- ── 입지 ── -->
+<section id="site">
+  <div class="sec-head"><h2>입지 선정</h2><span class="tag">공략 5종 교차 검증</span></div>
+  <p class="lede">시작 지점은 4곳 중에서 고릅니다. 그 안에서 본 공장을 세울 자리는 아래 지도의 핀을 참고하세요. 좌표계는 <strong>남서쪽 모서리가 X0Y0</strong>, 한 칸이 <span class="num">1.024 km</span>로 게임 내 지도와 동일합니다.</p>
+
+  <div class="mapbox" id="mapbox">
+    <div class="mapstage" id="mapstage">
+      <img src="assets/map/biome-map.webp" alt="Satisfactory 월드 바이옴 지도. 그리드 좌표와 4개 시작 지점이 표시되어 있다." width="1600" height="1600" decoding="async">
+      <div id="pins"></div>
+    </div>
+  </div>
+  <div class="mapctl">
+    <button type="button" id="zin">확대 +</button>
+    <button type="button" id="zout">축소 −</button>
+    <button type="button" id="zreset">맞춤</button>
+    <span>휠 확대 · 드래그 이동 · 핀 클릭</span>
+  </div>
+
+  <div id="sitecard"></div>
+
+  <div class="tw">
+    <table>
+      <caption>시작 지점 4곳</caption>
+      <thead><tr><th>시작 지점</th><th>좌표</th><th>지형</th><th>강점</th><th>약점</th></tr></thead>
+      <tbody>
+        <tr><td class="mark">바위 사막<br><span class="num" style="font-size:11px;color:var(--ink3)">Rocky Desert</span></td><td class="num">X0Y3–X1Y4</td><td>완만·넓음</td><td class="mark">석탄·황이 가깝고 해안으로 물·원유 접근 — 초반 두 벽을 동시에 해소</td><td>바이오매스 부족, 미관이 단조로움</td></tr>
+        <tr><td>북부 숲<br><span class="num" style="font-size:11px;color:var(--ink3)">Northern Forest</span></td><td class="num">X2Y3–X4Y4</td><td>험함<br>(중앙만 평탄)</td><td>순수 노드 밀집 + 맵 중앙. 자원 효율 최상</td><td>지형 난이도 최상. <b>중앙 포켓을 못 찾으면 최악</b></td></tr>
+        <tr><td>잔디 평야<br><span class="num" style="font-size:11px;color:var(--ink3)">Grass Fields</span></td><td class="num">X2Y0</td><td>최대 평지</td><td>정지작업 거의 불필요. 초보 접근성 최고</td><td class="mark">물 부족 — 석탄 발전에 치명적. 노드 대부분 불순~일반</td></tr>
+        <tr><td>사구 사막<br><span class="num" style="font-size:11px;color:var(--ink3)">Dune Desert</span></td><td class="num">X5Y3–X6Y5</td><td>광활·평탄</td><td>석탄·황 즉시 접근, 물 가까움</td><td>바이오매스 극빈 → <b>초반 전력이 가장 빡셈</b></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ok"><b>처음이라면</b><strong>바위 사막(Rocky Desert)</strong>. 검증한 공략 5종 중 3종이 명시적 1위로 꼽았고, 이유가 하나로 모입니다 — 초반의 두 벽인 <strong>전력(석탄)과 물</strong>이 동시에 해결되는 유일한 시작지입니다.</div>
+  <div class="note"><b>이견</b>북부 숲의 지형 평가가 출처마다 갈립니다. 바이옴 전체는 산악이지만 <strong>중앙 포켓(X3Y3)만 평지</strong>입니다. 둘 다 맞는 말이고, "북부 숲 추천"은 사실상 "그 한 자리 추천"입니다. 지도를 보고 자리를 찾을 자신이 있을 때만 고르세요.</div>
+</section>
+
+<!-- ── 첫 10분 ── -->
+<section id="first">
+  <div class="sec-head"><h2>착륙 후 첫 10분</h2><span class="tag">티어 0 시작</span></div>
+  <p class="lede">튜토리얼이 시키는 대로만 따라가면 자원 위치를 모른 채 허브를 짓게 됩니다. 순서를 하나만 바꾸면 됩니다 — <strong>짓기 전에 정찰</strong>.</p>
+
+  <div class="step"><span class="n">1</span><div>
+    <h3>드롭포드를 철거한다</h3>
+    <p>빌드건(<span class="k">F</span>)으로 드롭포드를 철거하면 <strong>철광석 20개</strong>가 나옵니다. 허브 건설비가 정확히 이것입니다.</p>
+  </div></div>
+
+  <div class="step"><span class="n">2</span><div>
+    <h3>짓기 전에 주변을 스캔한다 <span style="color:var(--accent);font-size:13px">← 여기가 핵심</span></h3>
+    <p>자원 스캐너(<span class="k">V</span> 길게)로 <strong>철·구리·석회석</strong>의 위치를 먼저 확인하세요. 튜토리얼은 이 단계를 시키지 않지만, 안 하면 허브를 엉뚱한 곳에 짓게 됩니다.</p>
+    <p>확인할 것: 세 자원이 <strong>걸어서 오갈 만한 거리</strong>에 모여 있는가, 그 사이에 <strong>평지</strong>가 있는가.</p>
+  </div></div>
+
+  <div class="step"><span class="n">3</span><div>
+    <h3>허브를 세 노드의 가운데에 짓는다</h3>
+    <p>철·구리·석회석 노드의 <strong>대략적인 무게중심</strong>, 그리고 평지. 이 두 조건이면 충분합니다. 완벽할 필요 없습니다 — 언제든 옮길 수 있으니까요.</p>
+    <p>초반에는 자원을 손으로 캐서 걸어서 납품합니다. 왕복 거리가 곧 시간입니다.</p>
+  </div></div>
+
+  <div class="step"><span class="n">4</span><div>
+    <h3>바이오매스를 미리 모아둔다</h3>
+    <p>HUB 2에서 바이오매스 연소기가 풀립니다. 그때 연료가 없으면 멈춰서 잎을 주우러 다녀야 합니다.</p>
+    <p>이동하면서 <strong>나뭇잎·나무를 계속 주우세요.</strong> 특히 사구 사막에서 시작했다면 주변에 식생이 거의 없으니 더 부지런히 모아야 합니다.</p>
+  </div></div>
+
+  <div class="note"><b>하지 말 것</b>이 단계의 건물을 <strong>본 공장 예정지 한가운데</strong>에 짓지 마세요. 파운데이션은 티어 1에서야 풀리고, 맨땅에 지은 것은 그때 전부 철거하게 됩니다. 임시 라인은 부지 <em>바깥</em>에 두세요.</div>
+</section>
+
+<!-- ── HUB ── -->
+<section id="hub">
+  <div class="sec-head"><h2>HUB 업그레이드 1–6</h2><span class="tag">티어 0 전체</span></div>
+  <p class="lede">각 단계의 정확한 요구량과 해금 항목입니다. 3단계까지는 손 제작으로 충분하고, <strong>4단계부터 손으로 만들기가 버거워집니다.</strong></p>
+
+  <div class="hub"><span class="lv">HUB 1</span><div>
+    <h3>저장 상자 · 휴대용 채굴기</h3>
+    <div class="cost"><span class="c">철봉<i>(Iron Rod)</i><b>10</b></span></div>
+    <p class="do">철광석을 손으로 캐서 제련 없이 시작합니다. <b>휴대용 채굴기</b>를 노드에 꽂아두면 걸어다니는 동안 알아서 캡니다 — 반드시 쓰세요.</p>
+  </div></div>
+
+  <div class="hub"><span class="lv">HUB 2</span><div>
+    <h3>제련기 · 바이오매스 연소기</h3>
+    <div class="cost"><span class="c">철봉<i>(Iron Rod)</i><b>20</b></span><span class="c">철판<i>(Iron Plate)</i><b>10</b></span></div>
+    <p class="do">첫 전력이 들어옵니다. <b>연소기는 손으로 연료를 채워야</b> 하니 모아둔 바이오매스를 넣으세요. 제련기를 철광 노드 근처가 아니라 <b>허브 근처</b>에 두면 납품이 편합니다.</p>
+  </div></div>
+
+  <div class="hub"><span class="lv">HUB 3</span><div>
+    <h3>제작기 · 전주</h3>
+    <div class="cost"><span class="c">철판<i>(Iron Plate)</i><b>20</b></span><span class="c">철봉<i>(Iron Rod)</i><b>20</b></span><span class="c">전선<i>(Wire)</i><b>20</b></span></div>
+    <p class="do">구리가 필요해집니다. <b>기계는 전주에 물리세요</b> — 기계끼리 직접 연결하면 나중에 한 대를 철거할 때 하류가 전부 정전됩니다. 이 습관은 끝까지 갑니다.</p>
+  </div></div>
+
+  <div class="hub gate"><span class="lv">HUB 4</span><div>
+    <h3>컨베이어 벨트</h3>
+    <div class="cost"><span class="c">철판<i>(Iron Plate)</i><b>75</b></span><span class="c">케이블<i>(Cable)</i><b>20</b></span><span class="c">콘크리트<i>(Concrete)</i><b>10</b></span></div>
+    <p class="do">요구량이 갑자기 뜁니다. 석회석도 처음 필요해집니다. <b>여기서부터 손 제작이 버거워지니</b> 제련기와 제작기를 여러 대 돌려두고 다른 일을 하세요. 벨트는 풀렸지만 <b>아직 채굴기가 없어</b> 완전 자동화는 안 됩니다.</p>
+  </div></div>
+
+  <div class="hub gate"><span class="lv">HUB 5</span><div>
+    <h3>채굴기 Mk.1 · 바이오매스 연소기 추가 <span style="color:var(--accent);font-size:12px">← 첫 자동화</span></h3>
+    <div class="cost"><span class="c">철봉<i>(Iron Rod)</i><b>75</b></span><span class="c">케이블<i>(Cable)</i><b>50</b></span><span class="c">콘크리트<i>(Concrete)</i><b>20</b></span></div>
+    <p class="do"><b>여기가 진짜 시작입니다.</b> 채굴기 + 벨트가 모두 갖춰져 손 채굴을 그만둘 수 있습니다. 아래 <a href="#auto">첫 자동화</a> 배치대로 세우세요.</p>
+  </div></div>
+
+  <div class="hub"><span class="lv">HUB 6</span><div>
+    <h3>우주 엘리베이터</h3>
+    <div class="cost"><span class="c">철봉<i>(Iron Rod)</i><b>100</b></span><span class="c">철판<i>(Iron Plate)</i><b>100</b></span><span class="c">전선<i>(Wire)</i><b>100</b></span><span class="c">콘크리트<i>(Concrete)</i><b>50</b></span></div>
+    <p class="do">티어 1이 열립니다. 자동화 라인이 돌고 있으면 금방 통과합니다. 우주 엘리베이터는 <b>넓은 평지</b>가 필요하니 자리를 넉넉히 잡으세요.</p>
+  </div></div>
+
+  <div class="tw">
+    <table>
+      <caption>티어 0 전체에 필요한 원자재 (누적)</caption>
+      <thead><tr><th>원자재</th><th class="n">총 필요량</th><th>계산 근거</th></tr></thead>
+      <tbody>
+        <tr><td class="mark">철광석 (Iron Ore)</td><td class="n mark">533</td><td>철봉 225개(1:1) + 철판 205개(3:2 → 잉곳 308)</td></tr>
+        <tr><td>구리광석 (Copper Ore)</td><td class="n">130</td><td>전선 120개(1:2 → 잉곳 60) + 케이블 70개(전선 140 → 잉곳 70)</td></tr>
+        <tr><td>석회석 (Limestone)</td><td class="n">240</td><td>콘크리트 80개 (3:1)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="ok"><b>계획에 쓰세요</b>철광 <span class="num">533</span>이 티어 0 전체의 비용입니다. 일반 노드에 채굴기 하나(60/분)를 꽂으면 <strong>9분</strong>이면 나오는 양입니다. 손으로 캐면 훨씬 오래 걸리죠 — 그래서 HUB 5의 채굴기가 분기점입니다.</div>
+</section>
+
+<!-- ── 첫 자동화 ── -->
+<section id="auto">
+  <div class="sec-head"><h2>첫 자동화 배치</h2><span class="tag">HUB 5 이후</span></div>
+  <p class="lede">채굴기 하나로 철판과 철봉을 동시에 뽑는 최소 구성입니다. 티어 1에서 어차피 옮기게 되므로 <strong>예쁘게 짓지 말고 빠르게</strong> 세우세요.</p>
+
+  <figure>
+    <div class="svgwrap">
+      <svg viewBox="0 0 700 200" role="img" aria-labelledby="s0t">
+        <title id="s0t">채굴기에서 분배기를 거쳐 제련기 2대와 제작기 2대로 흐르는 첫 자동화 라인 계통도</title>
+        <defs><marker id="a0" markerWidth="8" markerHeight="8" refX="7.5" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="var(--accent)"/></marker></defs>
+        <g font-family="Bahnschrift, Segoe UI, Malgun Gothic, sans-serif" font-size="11.5">
+          <rect x="24" y="46" width="104" height="48" fill="var(--sunk)" stroke="var(--ink2)" stroke-width="1.5"/>
+          <text x="76" y="66" text-anchor="middle" font-weight="700" fill="var(--ink)" font-size="12.5">채굴기 Mk.1</text>
+          <text x="76" y="82" text-anchor="middle" fill="var(--ink3)" font-family="Consolas,monospace">일반 노드 60/분</text>
+          <g stroke="var(--accent)" stroke-width="2" fill="none">
+            <path d="M130,70 L156,70"/>
+            <path d="M156,70 L156,46 L184,46" marker-end="url(#a0)"/>
+            <path d="M156,70 L156,94 L184,94" marker-end="url(#a0)"/>
+          </g>
+          <rect x="150" y="64" width="12" height="12" fill="var(--accent)"/>
+          <text x="156" y="124" text-anchor="middle" fill="var(--ink3)" font-size="10.5">분배기</text>
+          <rect x="188" y="26" width="108" height="40" fill="var(--accent-wash)" stroke="var(--accent)" stroke-width="1.5"/>
+          <text x="242" y="43" text-anchor="middle" font-weight="700" fill="var(--ink)" font-size="12">제련기 1</text>
+          <text x="242" y="57" text-anchor="middle" fill="var(--ink3)" font-family="Consolas,monospace">30 → 30</text>
+          <rect x="188" y="74" width="108" height="40" fill="var(--accent-wash)" stroke="var(--accent)" stroke-width="1.5"/>
+          <text x="242" y="91" text-anchor="middle" font-weight="700" fill="var(--ink)" font-size="12">제련기 2</text>
+          <text x="242" y="105" text-anchor="middle" fill="var(--ink3)" font-family="Consolas,monospace">30 → 30</text>
+          <g stroke="var(--accent)" stroke-width="2" fill="none">
+            <path d="M298,46 L334,46" marker-end="url(#a0)"/>
+            <path d="M298,94 L334,94" marker-end="url(#a0)"/>
+          </g>
+          <rect x="338" y="26" width="126" height="40" fill="var(--accent-wash)" stroke="var(--accent)" stroke-width="1.5"/>
+          <text x="401" y="43" text-anchor="middle" font-weight="700" fill="var(--ink)" font-size="12">제작기 — 철판</text>
+          <text x="401" y="57" text-anchor="middle" fill="var(--ink3)" font-family="Consolas,monospace">30 → 20</text>
+          <rect x="338" y="74" width="126" height="40" fill="var(--accent-wash)" stroke="var(--accent)" stroke-width="1.5"/>
+          <text x="401" y="91" text-anchor="middle" font-weight="700" fill="var(--ink)" font-size="12">제작기 — 철봉</text>
+          <text x="401" y="105" text-anchor="middle" fill="var(--ink3)" font-family="Consolas,monospace">15 → 15</text>
+          <g stroke="var(--accent)" stroke-width="2" fill="none">
+            <path d="M466,46 L512,46" marker-end="url(#a0)"/>
+            <path d="M466,94 L512,94" marker-end="url(#a0)"/>
+          </g>
+          <rect x="516" y="46" width="112" height="48" fill="var(--sunk)" stroke="var(--ink2)" stroke-width="1.5"/>
+          <text x="572" y="66" text-anchor="middle" font-weight="700" fill="var(--ink)" font-size="12.5">저장 컨테이너</text>
+          <text x="572" y="82" text-anchor="middle" fill="var(--ink3)" font-size="10.5">허브에 손으로 납품</text>
+          <rect x="24" y="148" width="152" height="40" fill="var(--good-wash)" stroke="var(--good)" stroke-width="1.5"/>
+          <text x="100" y="165" text-anchor="middle" font-weight="700" fill="var(--ink)" font-size="12">바이오매스 연소기 ×2</text>
+          <text x="100" y="179" text-anchor="middle" fill="var(--ink3)" font-family="Consolas,monospace">수동 급유</text>
+          <g stroke="var(--good)" stroke-width="1.5" stroke-dasharray="5 4" fill="none">
+            <path d="M178,168 L628,168"/><path d="M242,168 L242,118"/><path d="M401,168 L401,118"/>
+          </g>
+          <text x="628" y="160" text-anchor="end" fill="var(--ink3)" font-size="10.5">전력 간선</text>
+        </g>
+      </svg>
+    </div>
+    <figcaption>채굴기 60/분 → 분배기 → 제련기 2대(각 30) → 제작기. 철판 20/분과 철봉 15/분이 안정 출력입니다. 제련기 2대를 쓰는 이유는 제련기 한 대가 30/분만 처리하기 때문입니다.</figcaption>
+  </figure>
+
+  <div class="ok"><b>노드 선택</b>근처에 <strong>순수(Pure) 노드</strong>가 있으면 무조건 그쪽부터 잡으세요. 순수 노드는 채굴기 Mk.3에서 <span class="num">480/분</span>까지 올라가지만 불순 노드는 <span class="num">120/분</span>에서 끝납니다. 지금 차이는 두 배지만 후반에는 네 배가 됩니다.</div>
+  <div class="note"><b>다음 단계</b>티어 1의 <strong>기지 건설(Base Building)</strong>로 파운데이션이 풀리는 즉시 본 부지를 <strong>40m(파운데이션 10칸) 격자</strong>로 정리하고, 그 위에만 다시 지으세요. 이 숫자는 티어 4의 블루프린트 디자이너 크기와 정확히 같습니다.</div>
+
+  <p style="margin-top:26px"><a class="chip" href="index.html" style="padding:8px 14px">→ 마일스톤 체크리스트로 이동</a></p>
+</section>
+
+</main>
+
+<footer class="wrap">
+  <p>게임 데이터는 Satisfactory 설치본의 공식 덤프에서 생성했습니다. 지도 이미지는 <a href="https://satisfactory.wiki.gg">공식 위키</a> 출처이며 Coffee Stain Studios의 자산입니다. 비공식 팬 프로젝트입니다.
+  <a href="https://github.com/edssert/satisfactory-ops">GitHub</a></p>
+</footer>
+
+<script type="module">
+// 그리드 캘리브레이션 (1600px 원본): x = 31 + 218.857i, y = 142 + 219.167j (j=0이 Y5)
+const GX0 = 31, GW = 218.857, GY0 = 142, GH = 219.167, IMG = 1600;
+const cell = (X, Y) => ({
+  x: (GX0 + (X + 0.5) * GW) / IMG,
+  y: (GY0 + (5 - Y + 0.5) * GH) / IMG
+});
+
+const SITES = [
+  {n:1, X:2, Y:0, name:"중앙 잔디 평야", en:"Central Grass Fields",
+   good:"최대 평지 · 정지작업 거의 불필요 · 순수 석회석", bad:"물 부족 — 석탄·원자력 발전에 치명적", who:"평지가 최우선일 때"},
+  {n:2, X:1, Y:1, name:"서부 첨탑 해안", en:"West Spires Shore",
+   good:"순수 철·구리·석회석 + 물 무제한 + 원유 노드", bad:"지형 굴곡 — 정지작업 필요", who:"잔디 평야의 물 문제를 보완할 때"},
+  {n:3, X:0, Y:4, name:"북서 바위 사막", en:"NW Rocky Desert",
+   good:"비교적 평탄 · 철·구리·석회석·캐터리움·황·석영 집결", bad:"바이오매스 부족 — 초반 전력이 빡빡", who:"처음이라면 여기"},
+  {n:4, X:2, Y:3, name:"북서 북부 숲", en:"NW Northern Forest",
+   good:"순수 철·석회석·구리 + 북동쪽 원유 다수", bad:"1.0에서 석탄·캐터리움·황이 멀어짐", who:"바위 사막과 북부 숲 사이를 노릴 때"},
+  {n:5, X:3, Y:3, name:"중앙 북부 숲", en:"Central Northern Forest", best:true,
+   good:"순수 철 다수 + 순수 석탄이 동서 양쪽 + 캐터리움 + 이 구역만 평탄", bad:"불순 황만 있음 · 주변 생물 위험", who:"자원 효율 최적해. 자리를 찾을 자신이 있을 때"},
+  {n:6, X:5, Y:4, name:"서부 사구 사막", en:"West Dune Desert",
+   good:"광활한 평지 + 물 즉시 접근 + 순수 캐터리움·황 각 2", bad:"대부분 일반(Normal) 순도 · 바이오매스 극빈", who:"메가베이스 부지를 원할 때"}
+];
+
+const pins = document.getElementById("pins");
+const card = document.getElementById("sitecard");
+
+pins.innerHTML = SITES.map(s => {
+  const p = cell(s.X, s.Y);
+  return `<button class="pin${s.best?" best":""}" type="button" data-i="${s.n}"
+    style="left:${(p.x*100).toFixed(3)}%;top:${(p.y*100).toFixed(3)}%"
+    aria-pressed="false" title="${s.name}">${s.n}</button>`;
+}).join("");
+
+function show(n){
+  const s = SITES.find(x => x.n === n);
+  card.innerHTML = `<h4>${s.n}. ${s.name}${s.best?' <span style="color:var(--accent);font-size:13px">추천</span>':""}</h4>
+    <div class="co">${s.en} · X${s.X}Y${s.Y}</div>
+    <dl>
+      <dt>강점</dt><dd>${s.good}</dd>
+      <dt>약점</dt><dd>${s.bad}</dd>
+      <dt>언제</dt><dd>${s.who}</dd>
+    </dl>`;
+  pins.querySelectorAll(".pin").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.i === n)));
+}
+pins.addEventListener("click", e => { const i = e.target.dataset?.i; if(i) show(+i); });
+show(5);
+
+// 확대·이동
+const box = document.getElementById("mapbox"), stage = document.getElementById("mapstage");
+let z = 1, tx = 0, ty = 0, drag = null;
+const clamp = () => {
+  const w = box.clientWidth, h = box.clientHeight;
+  const min = Math.min(0, w - w*z), minY = Math.min(0, h - h*z);
+  tx = Math.max(min, Math.min(0, tx)); ty = Math.max(minY, Math.min(0, ty));
+};
+const apply = () => { clamp(); stage.style.transform = `translate(${tx}px,${ty}px) scale(${z})`; };
+const zoom = (f, cx, cy) => {
+  const nz = Math.max(1, Math.min(5, z * f));
+  const r = box.getBoundingClientRect();
+  const px = (cx ?? r.width/2) - tx, py = (cy ?? r.height/2) - ty;
+  tx -= px * (nz/z - 1); ty -= py * (nz/z - 1); z = nz; apply();
+};
+box.addEventListener("wheel", e => { e.preventDefault(); const r = box.getBoundingClientRect();
+  zoom(e.deltaY < 0 ? 1.18 : 1/1.18, e.clientX - r.left, e.clientY - r.top); }, {passive:false});
+box.addEventListener("pointerdown", e => {
+  if(e.target.closest(".pin")) return;
+  drag = {x:e.clientX - tx, y:e.clientY - ty}; box.setPointerCapture(e.pointerId); box.style.cursor = "grabbing";
+});
+box.addEventListener("pointermove", e => { if(!drag) return; tx = e.clientX - drag.x; ty = e.clientY - drag.y; apply(); });
+box.addEventListener("pointerup", () => { drag = null; box.style.cursor = ""; });
+document.getElementById("zin").onclick = () => zoom(1.4);
+document.getElementById("zout").onclick = () => zoom(1/1.4);
+document.getElementById("zreset").onclick = () => { z = 1; tx = 0; ty = 0; apply(); };
+addEventListener("resize", apply);
+
+document.getElementById("theme").onclick = () => {
+  const r = document.documentElement;
+  const dark = r.dataset.theme ? r.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  r.dataset.theme = dark ? "light" : "dark";
+};
+</script>
+</body>
+</html>
