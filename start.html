@@ -115,6 +115,16 @@ section{padding-top:44px;scroll-margin-top:60px}
 .nfil button i{width:9px;height:9px;border-radius:50%;display:block;box-shadow:0 0 0 1px rgba(0,0,0,.35)}
 .nfil button[aria-pressed=true]{border-color:var(--accent);color:var(--ink);font-weight:600;background:var(--accent-wash)}
 .nleg{font-size:12px;color:var(--ink3);margin:0 0 18px}
+.basemark{position:absolute;transform:translate(-50%,-50%);pointer-events:none;z-index:5}
+.basemark .x{width:30px;height:30px;border:2.5px solid var(--accent);background:color-mix(in srgb,var(--accent) 22%,transparent);
+  box-shadow:0 0 0 2px rgba(255,255,255,.75),0 0 0 3px rgba(0,0,0,.35)}
+.basemark .lb{position:absolute;left:50%;top:calc(100% + 4px);transform:translateX(-50%);white-space:nowrap;
+  font-family:var(--display);font-weight:700;font-size:11px;letter-spacing:.08em;color:#fff;background:var(--accent);
+  padding:2px 7px;border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,.4)}
+.basemark .ray{position:absolute;left:50%;top:50%;transform-origin:0 0;height:2px;background:var(--accent);opacity:.5}
+#plan .site{padding:13px 18px;border-top:1px solid var(--rule);background:var(--accent-wash);font-size:14px}
+#plan .site b{color:var(--ink)}
+#plan .site .co{font-family:var(--mono);font-size:12.5px;color:var(--ink2)}
 #plan{border:1px solid var(--rule);background:var(--raised);padding:0;margin-bottom:22px}
 #plan .ph{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;padding:14px 18px;border-bottom:1px solid var(--rule);background:var(--sunk)}
 #plan .ph h4{font-size:16px}
@@ -252,6 +262,7 @@ section,.tier-block{scroll-margin-top:calc(var(--sbh) + 46px)}
     <div class="mapstage" id="mapstage">
       <img src="assets/map/biome-map.webp" alt="Satisfactory 월드 바이옴 지도. 그리드 좌표와 4개 시작 지점이 표시되어 있다." width="1600" height="1600" decoding="async">
       <div id="nodes"></div>
+      <div id="base"></div>
       <div id="pins"></div>
     </div>
   </div>
@@ -591,17 +602,21 @@ function renderPlan(pinNo){
   const c = cell(s.X, s.Y);
   const origin = {x: c.x*750100 - 324698, y: c.y*750000 - 375000};
 
-  let rows = "", total = {}, short = [];
+  let rows = "", total = {}, short = [], picked = [];
   for(const t of T1RES){
     const near = NODES.filter(n => n.ko === t.ko && n.type === "node")
       .map(n => ({...n, d: dist(W(n), origin)}))
       .sort((a,b) => a.d - b.d).slice(0, 3);
+    // 목표를 채우는 최소 조합을 실제 사용 노드로 선정
+    let got = 0;
+    for(const n of near){ if(got >= t.need) break; got += MINER1[n.purity] || 60; picked.push(n); }
     let acc = 0;
     rows += near.map((n,i) => {
       const rate = MINER1[n.purity] || 60;
       acc += rate;
-      return `<tr>${i===0?`<td rowspan="${near.length}"><b>${t.ko}</b><br><span style="font-size:11px;color:var(--ink3)">목표 ${t.need}/분</span></td>`:""}
-        <td><span class="pu ${n.purity}">${n.purity==="pure"?"순수":n.purity==="normal"?"일반":"불순"}</span></td>
+      const use = picked.includes(n);
+      return `<tr${use?' style="background:var(--accent-wash)"':''}>${i===0?`<td rowspan="${near.length}"><b>${t.ko}</b><br><span style="font-size:11px;color:var(--ink3)">목표 ${t.need}/분</span></td>`:""}
+        <td><span class="pu ${n.purity}">${n.purity==="pure"?"순수":n.purity==="normal"?"일반":"불순"}</span>${use?' <b style="color:var(--accent);font-size:11px">사용</b>':''}</td>
         <td class="n">${Math.round(n.d).toLocaleString()} m</td>
         <td class="n">${rate}/분</td>
         <td class="num" style="font-size:11.5px;color:var(--ink3)">${n.cell}</td></tr>`;
@@ -609,6 +624,20 @@ function renderPlan(pinNo){
     total[t.ko] = acc;
     if(acc < t.need) short.push(t.ko);
   }
+
+  // 사용 노드들의 무게중심 = 권장 임시 베이스 위치
+  const bw = {x: picked.reduce((s,n)=>s+W(n).x,0)/picked.length,
+              y: picked.reduce((s,n)=>s+W(n).y,0)/picked.length};
+  const bfx = (bw.x + 324698)/750100, bfy = (bw.y + 375000)/750000;
+  const bgx = (bfx*IMG - GX0)/GW, bgy = 5 - (bfy*IMG - GY0)/GH;
+  const bcell = `X${Math.max(0,Math.min(6,Math.floor(bgx)))}Y${Math.max(0,Math.min(5,Math.floor(bgy)))}`;
+  const legs = picked.map(n => ({ko:n.ko, d: dist(W(n), bw), a: Math.atan2(W(n).y-bw.y, W(n).x-bw.x)}));
+  const far = Math.max(...legs.map(l => l.d));
+  const belt = Math.round(legs.reduce((s,l)=>s+l.d,0));
+
+  document.getElementById("base").innerHTML = `<div class="basemark" style="left:${(bfx*100).toFixed(3)}%;top:${(bfy*100).toFixed(3)}%">
+    ${legs.map(l => `<span class="ray" style="width:${(l.d*100/750100*1600/16).toFixed(2)}%;transform:rotate(${(l.a*180/Math.PI).toFixed(1)}deg)"></span>`).join("")}
+    <div class="x"></div><div class="lb">임시 베이스</div></div>`;
 
   const ok = short.length === 0;
   el.innerHTML = `
@@ -620,6 +649,13 @@ function renderPlan(pinNo){
     <div class="body"><div class="tw" style="border:0;margin:0">
       <table><thead><tr><th>자원</th><th>순도</th><th class="n">거리</th><th class="n">채굴기 Mk.1</th><th>그리드</th></tr></thead>
       <tbody>${rows}</tbody></table></div></div>
+    <div class="site">
+      <b>권장 임시 베이스</b> — 위 <b style="color:var(--accent)">사용</b> 노드 ${picked.length}개의 무게중심.
+      지도에 <b style="color:var(--accent)">주황 사각형</b>으로 표시됩니다.
+      <div class="co" style="margin-top:6px">그리드 ${bcell} · 가장 먼 노드까지 <b>${Math.round(far).toLocaleString()} m</b> · 벨트 총연장 대략 <b>${belt.toLocaleString()} m</b></div>
+      <div style="margin-top:6px;font-size:13px;color:var(--ink2)">${legs.map(l=>`${l.ko} ${Math.round(l.d).toLocaleString()}m`).join(" · ")}</div>
+      <div style="margin-top:8px;font-size:12.5px;color:var(--ink3)">여기는 <b>자원 접근이 최단인 지점</b>일 뿐 지형은 반영하지 않습니다. 실제로는 이 부근에서 <b>평지</b>를 찾아 파운데이션을 깔고, 허브는 언제든 옮길 수 있으니 부담 갖지 마세요.</div>
+    </div>
     <div class="sum">
       가까운 3개만 써도 <b>철 ${total["철광석"]}/분 · 석회석 ${total["석회석"]}/분 · 구리 ${total["구리광석"]}/분</b>.
       ${ok ? "티어 1을 통과하기에 충분합니다." : `<b style="color:var(--hazard)">${short.join("·")}이(가) 목표에 못 미칩니다.</b> 더 먼 노드를 쓰거나 다른 부지를 보세요.`}
