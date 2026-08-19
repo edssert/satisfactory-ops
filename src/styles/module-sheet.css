@@ -598,3 +598,87 @@
   font-size: 12px;
   font-weight: 600;
 }
+
+/*
+ * ── 공정 흐름도 (FlowChart)
+ *
+ * 축척이 없다. "무엇이 무엇을 먹어 무엇이 되는가"만 보여준다.
+ * 미니멀하게 — 선은 얇게, 상자는 흰 바탕에 얇은 테두리, 색은 최소로.
+ */
+.fc {
+  margin: var(--s6) 0;
+  overflow-x: auto;
+}
+.fc-svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+.fc-cap {
+  margin-top: var(--s2);
+  font-size: var(--t-caption);
+  color: var(--ink-muted);
+}
+.fc-node rect {
+  fill: var(--surface);
+  stroke: var(--line-strong);
+  stroke-width: 1.5;
+}
+.fc-name {
+  fill: var(--ink);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+}
+.fc-count {
+  fill: var(--accent-ink);
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+.fc-sub {
+  fill: var(--ink-muted);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+.fc-link {
+  stroke: var(--line-strong);
+  stroke-width: 2;
+}
+.fc-arrowhead {
+  fill: var(--line-strong);
+}
+/* 유량 칩 — 아이템 아이콘 + 분당 수량 */
+.fc-chip {
+  fill: var(--surface-2);
+  stroke: var(--line);
+  stroke-width: 1;
+}
+.fc-chip.is-out {
+  fill: var(--ink);
+  stroke: none;
+}
+.fc-chiptext {
+  fill: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+}
+.fc-chiptext.is-out {
+  fill: var(--bg);
+}
+/* 분배기·병합기 — 갈라지고 모이는 지점 */
+.fc-hub circle {
+  fill: var(--bg);
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+.fc-hub.is-merge circle {
+  stroke: var(--ink);
+  stroke-dasharray: 3 2;
+}
+.fc-hub text {
+  fill: var(--ink);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 700;
+}
