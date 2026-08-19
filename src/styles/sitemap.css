@@ -94,47 +94,83 @@
   display: block;
   width: 100%;
   height: auto;
+  /* 원본이 1600px 래스터라 3배를 넘기면 흐려진다. 보간을 부드럽게 유지해 격자만 선명하게 남긴다. */
+  image-rendering: auto;
 }
 
-/* 순도는 모양으로 구분한다 — 색만으로 인코딩하지 않는다 (TRD A-4) */
+/*
+ * 마커는 스테이지의 scale 을 되돌려 **화면상 크기를 일정하게** 유지한다.
+ * 그렇게 하지 않으면 5배 확대에서 6px 점이 30px 덩어리가 되어 노드 위치를 가린다.
+ * 지도를 확대하는 목적은 점을 키우는 게 아니라 지형을 자세히 보는 것이다.
+ */
 .sm-node {
   position: absolute;
-  width: 6px;
-  height: 6px;
-  margin: -3px 0 0 -3px;
+  width: calc(6px / var(--z, 1));
+  height: calc(6px / var(--z, 1));
+  margin: calc(-3px / var(--z, 1)) 0 0 calc(-3px / var(--z, 1));
   border-radius: 50%;
   opacity: 0.9;
   pointer-events: auto;
 }
+/* 순도는 모양으로 구분한다 — 색만으로 인코딩하지 않는다 (TRD A-4) */
 .sm-node.is-impure {
-  width: 4px;
-  height: 4px;
-  margin: -2px 0 0 -2px;
+  width: calc(4px / var(--z, 1));
+  height: calc(4px / var(--z, 1));
+  margin: calc(-2px / var(--z, 1)) 0 0 calc(-2px / var(--z, 1));
   opacity: 0.65;
 }
 .sm-node.is-pure {
-  width: 10px;
-  height: 10px;
-  margin: -5px 0 0 -5px;
-  box-shadow: 0 0 0 2px var(--bg);
-  outline: 1px solid var(--ink);
+  width: calc(10px / var(--z, 1));
+  height: calc(10px / var(--z, 1));
+  margin: calc(-5px / var(--z, 1)) 0 0 calc(-5px / var(--z, 1));
+  outline: calc(1px / var(--z, 1)) solid var(--ink);
+  box-shadow: 0 0 0 calc(2px / var(--z, 1)) var(--bg);
+}
+
+/* 벡터 격자 — 확대해도 선이 뭉개지지 않는다 */
+.sm-grid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.sm-grid line {
+  stroke: var(--ink);
+  /* non-scaling-stroke 가 이미 화면 기준 굵기를 보장한다 — 여기서 또 나누면 확대할수록 얇아진다 */
+  stroke-width: 1;
+  opacity: 0.35;
+  vector-effect: non-scaling-stroke;
+}
+.sm-grid text {
+  fill: var(--ink);
+  opacity: 0.55;
+  font-family: var(--font-mono);
+  font-size: calc(13px / var(--z, 1));
+}
+
+.sm-zoomlevel {
+  font-size: var(--t-caption);
+  color: var(--ink-2);
+  align-self: center;
 }
 
 .sm-pin {
   position: absolute;
-  width: 22px;
-  height: 22px;
-  margin: -11px 0 0 -11px;
+  width: calc(22px / var(--z, 1));
+  height: calc(22px / var(--z, 1));
+  margin: calc(-11px / var(--z, 1)) 0 0 calc(-11px / var(--z, 1));
   border-radius: 50%;
   border: 2px solid var(--bg);
   background: var(--ink);
   color: var(--bg);
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: calc(11px / var(--z, 1));
   font-weight: 500;
   line-height: 1;
   cursor: pointer;
   padding: 0;
+  border-width: calc(2px / var(--z, 1));
 }
 .sm-pin.is-rec {
   background: var(--accent);

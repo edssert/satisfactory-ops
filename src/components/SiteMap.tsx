@@ -73,6 +73,7 @@ export default function SiteMap({ mapSrc, sites, nodes, demand, minerMk1, source
     () => new Set(['철광석', '구리광석', '석회석', '석탄'])
   );
   const [zoom, setZoom] = useState(1);
+  const [showGrid, setShowGrid] = useState(true);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const boxRef = useRef<HTMLDivElement>(null);
   const drag = useRef<{ x: number; y: number; px: number; py: number } | null>(null);
@@ -170,6 +171,15 @@ export default function SiteMap({ mapSrc, sites, nodes, demand, minerMk1, source
           >
             맞춤
           </button>
+          <button
+            type="button"
+            class="btn"
+            aria-pressed={showGrid}
+            onClick={() => setShowGrid(!showGrid)}
+          >
+            격자 {showGrid ? '끄기' : '켜기'}
+          </button>
+          <span class="sm-zoomlevel n">{Math.round(zoom * 100)}%</span>
         </div>
         <div class="sm-filters">
           {Object.keys(counts)
@@ -207,7 +217,11 @@ export default function SiteMap({ mapSrc, sites, nodes, demand, minerMk1, source
       >
         <div
           class="sm-stage"
-          style={{ transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})` }}
+          style={{
+            transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+            // 마커는 이 값으로 역스케일해 화면상 크기를 일정하게 유지한다
+            '--z': String(zoom),
+          }}
         >
           <img
             src={mapSrc}
@@ -216,6 +230,33 @@ export default function SiteMap({ mapSrc, sites, nodes, demand, minerMk1, source
             height="1600"
             decoding="async"
           />
+          {/*
+            그리드는 이미지에 그려진 선에 의존하지 않고 SVG로 다시 그린다.
+            래스터 이미지는 확대하면 뭉개지지만 벡터 격자는 어느 배율에서도 선명하다.
+            좌표는 ADR-0006 캘리브레이션 값 그대로다.
+          */}
+          {showGrid && (
+            <svg class="sm-grid" viewBox={`0 0 ${IMG} ${IMG}`} aria-hidden="true">
+              {Array.from({ length: 8 }, (_, i) => (
+                <line key={`v${i}`} x1={GX0 + i * GW} y1={GY0} x2={GX0 + i * GW} y2={GY0 + 6 * GH} />
+              ))}
+              {Array.from({ length: 7 }, (_, j) => (
+                <line key={`h${j}`} x1={GX0} y1={GY0 + j * GH} x2={GX0 + 7 * GW} y2={GY0 + j * GH} />
+              ))}
+              {Array.from({ length: 7 }, (_, X) =>
+                Array.from({ length: 6 }, (_, Y) => (
+                  <text
+                    key={`t${X}-${Y}`}
+                    x={GX0 + X * GW + 6}
+                    y={GY0 + (5 - Y) * GH + 18}
+                  >
+                    X{X}Y{Y}
+                  </text>
+                ))
+              )}
+            </svg>
+          )}
+
           {nodes
             .filter((n) => visible.has(n.ko))
             .map((n, i) => (
