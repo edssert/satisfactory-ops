@@ -16,7 +16,10 @@ import {
   chooseDistribution,
   findOverlaps,
   mergeStages,
+  mergersFor,
   planLayout,
+  polesFor,
+  splittersFor,
   validateGeometry,
   type BeltSpec,
   type StageInput,
@@ -222,6 +225,31 @@ test('채널은 겹치지 않는 연결끼리 재사용한다', () => {
   assert.equal(result.connections.length, 2);
   // A→B 와 B→C 는 구간이 겹치지 않으므로 같은 채널을 써도 된다
   assert.equal(result.channels, 1, `채널이 ${result.channels}개 — 겹치지 않는 연결은 같은 열을 써야 도면이 단순하다`);
+});
+
+
+test('부속 수량이 실제 발행 시트와 일치한다', () => {
+  // "IRON PLATES" 시트: 제련기 4 + 제작기 4 → 스플리터 2 / 머저 2 / 전주 4
+  // 제련기 4대를 벨트 2줄로 먹임 → 줄마다 2대 → ceil(1/2)=1, 2줄이므로 2개
+  assert.equal(splittersFor(2) * 2, 2, '스플리터는 출력 3개라 2대 먹이는 데 1개');
+  assert.equal(mergersFor(4), 2, '머저는 입력 3개라 산출 4줄을 합치는 데 2개');
+  assert.equal(polesFor(8 + 2), 4, '기계 8대 + 채굴기 2대 = 전주 4개 (연결 4개 중 1개는 체인)');
+
+  // "IRON BARS" 시트: 제련기 4 + 제작기 8 → 스플리터 7 / 머저 4
+  assert.equal(splittersFor(8), 4, '제작기 8대를 한 벨트로 먹이면 스플리터 4개');
+  assert.equal(mergersFor(8), 4, '산출 8줄을 합치면 머저 4개');
+});
+
+test('모듈이 자기 부속 수량을 보고한다', () => {
+  const result = planLayout([stage({ machineId: 'Build_SmelterMk1_C', machinesExact: 4 })], {
+    belt: beltMk1,
+    designerMk: null,
+  });
+  const m = result.modules[0]!;
+  assert.equal(m.machinesBuilt, 4);
+  assert.equal(m.splitters, splittersFor(4));
+  assert.equal(m.mergers, mergersFor(4));
+  assert.equal(result.powerPoles, polesFor(4));
 });
 
 // ---------------------------------------------------------------- 블루프린트 경계 (F13-16)

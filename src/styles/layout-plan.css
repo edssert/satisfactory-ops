@@ -249,3 +249,410 @@ marker path {
   margin: 0 0 var(--s2);
   max-width: var(--measure);
 }
+
+/* ---------------------------------------------------------------- 설계 시트 */
+/* 참고 시트 구조: 왼쪽 스펙 패널 + 오른쪽 도면 */
+
+.lp-sheet {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  margin: var(--s6) 0;
+  overflow: hidden;
+}
+@media (max-width: 860px) {
+  .lp-sheet {
+    grid-template-columns: 1fr;
+  }
+}
+
+.lp-spec {
+  background: var(--surface-2);
+  border-right: 1px solid var(--line);
+  padding: var(--s6) var(--s4);
+}
+.lp-spec-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--t-h3);
+  color: var(--accent-ink);
+  margin: 0 0 2px;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+.lp-spec-sub {
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin: 0 0 var(--s6);
+  padding-bottom: var(--s4);
+  border-bottom: 1px solid var(--line);
+}
+.lp-spec h4 {
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+  margin: var(--s6) 0 var(--s2);
+}
+.lp-spec-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: var(--t-body-s);
+  color: var(--ink);
+}
+.lp-spec-list li {
+  padding: 2px 0;
+}
+
+.lp-canvas {
+  padding: var(--s4);
+  background: var(--surface);
+}
+
+.lp-grid-view {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--s3) var(--s4);
+  margin-bottom: var(--s6);
+}
+.lp-grid-view summary {
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.lp-grid-view .lp-canvas {
+  padding: var(--s4) 0 0;
+}
+
+/* ---------------------------------------------------------------- 흐름도 */
+
+.fl {
+  display: block;
+  height: auto;
+}
+
+/* 품목 구역 — 색만으로 구분하지 않고 라벨을 항상 붙인다 (G-3) */
+.fl-zone rect {
+  fill: var(--surface-2);
+  stroke: var(--line);
+  stroke-width: 1;
+}
+.fl-zone.tint-1 rect {
+  fill: color-mix(in oklch, var(--accent) 7%, var(--surface-2));
+}
+.fl-zone.tint-2 rect {
+  fill: color-mix(in oklch, var(--ink) 5%, var(--surface-2));
+}
+.fl-zone.tint-3 rect {
+  fill: color-mix(in oklch, var(--ok) 7%, var(--surface-2));
+}
+.fl-zone text {
+  fill: var(--ink-2);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* 노드 */
+.fl-node rect {
+  fill: var(--bg);
+  stroke: var(--line-strong);
+  stroke-width: 1.5;
+}
+.fl-node.is-machine rect {
+  stroke: var(--ink);
+}
+.fl-node.is-source rect {
+  stroke: var(--line-strong);
+  stroke-dasharray: 4 3;
+}
+.fl-node.is-sink rect {
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+.fl-node.is-split rect,
+.fl-node.is-merge rect {
+  fill: var(--surface-2);
+}
+.fl-label {
+  fill: var(--ink);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+}
+.fl-sub {
+  fill: var(--ink-2);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+.fl-clock {
+  fill: var(--accent-ink);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+}
+.fl-port.is-in {
+  fill: var(--ok);
+}
+.fl-port.is-out {
+  fill: var(--accent);
+}
+
+/* 간선 — 모든 선에 유량 배지가 붙는다 */
+.fl-edge path {
+  stroke: var(--ink-2);
+  stroke-linejoin: round;
+}
+.fl-edge.is-over path {
+  stroke: var(--danger);
+}
+.fl-badge {
+  fill: var(--surface);
+  stroke: var(--line);
+  stroke-width: 1;
+}
+.fl-edge text {
+  fill: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+.fl-edge.is-over text {
+  fill: var(--danger);
+  font-weight: 500;
+}
+
+/* ---------------------------------------------------------------- 층 도면 (청사진) */
+
+.fps-stage {
+  margin: 0 0 var(--s8);
+  padding-bottom: var(--s6);
+  border-bottom: 1px solid var(--line);
+}
+.fps-stage:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+.fps-stage figcaption {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  flex-wrap: wrap;
+  margin-bottom: var(--s3);
+  font-size: var(--t-body-s);
+}
+.fps-no {
+  color: var(--accent-ink);
+}
+.fps-stage figcaption strong {
+  font-family: var(--font-display);
+  font-size: var(--t-body-l);
+}
+.fps-badge {
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.04em;
+  color: var(--ink-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-chip);
+  padding: 1px var(--s2);
+}
+.fps-badge.is-stack {
+  color: var(--accent-ink);
+  border-color: var(--accent);
+}
+.fps-caption-size {
+  margin-left: auto;
+  font-size: var(--t-caption);
+  color: var(--ink-2);
+}
+
+.fps-svg {
+  display: block;
+  height: auto;
+}
+
+/* 토대 격자 — 청사진 */
+.fps-floor {
+  fill: var(--surface-2);
+}
+.fps-grid-line {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+.fps-boundary {
+  fill: none;
+  stroke: var(--line-strong);
+  stroke-width: 2.5;
+}
+
+/* 벨트 */
+.fps-belt line {
+  stroke: var(--ink-2);
+  stroke-linecap: round;
+}
+.fps-belt.is-supply line {
+  stroke: var(--accent);
+}
+.fps-belt.is-over line {
+  stroke: var(--danger);
+}
+.fps-chevron {
+  stroke: var(--bg);
+  stroke-width: 1.5;
+  opacity: 0.8;
+}
+
+/* 분배기 · 머저 */
+.fps-attach rect {
+  fill: var(--bg);
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+.fps-attach text {
+  fill: var(--ink);
+  font-family: var(--font-body);
+  font-size: 9.5px;
+  font-weight: 600;
+}
+.fps-attach.is-merger rect {
+  stroke: var(--ink);
+}
+
+/* 기계 블록 */
+.fps-machine rect {
+  fill: var(--bg);
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+.fps-m-product {
+  fill: var(--ink);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 700;
+}
+.fps-m-meta {
+  fill: var(--accent-ink);
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+.fps-m-input {
+  fill: var(--ink-2);
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+.fps-m-type {
+  fill: var(--ink-2);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* 입출력 알약 — 경계 밖 */
+.fps-pill rect {
+  fill: var(--surface);
+  stroke: var(--line-strong);
+  stroke-width: 1;
+}
+.fps-pill.is-in rect {
+  stroke: var(--accent);
+}
+.fps-pill.is-out rect {
+  stroke: var(--ok);
+}
+.fps-pill text {
+  fill: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+.fps-pill line {
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+
+.fps-title {
+  fill: var(--ink-2);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+.fps-lift rect {
+  fill: var(--surface);
+  stroke: var(--accent);
+  stroke-width: 1;
+}
+.fps-lift text {
+  fill: var(--accent-ink);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+}
+.fps-scale line {
+  stroke: var(--ink-2);
+  stroke-width: 1.5;
+}
+.fps-scale text {
+  fill: var(--ink-2);
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.fps-spec {
+  font-size: var(--t-body-s);
+  color: var(--ink-2);
+  margin: var(--s3) 0 0;
+  border-left: 3px solid var(--accent);
+  padding: var(--s2) var(--s4);
+  max-width: none;
+}
+
+.fps-attach line {
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+.fps-attach.is-merger line {
+  stroke: var(--ink);
+}
+
+.fps-legend {
+  font-size: var(--t-caption);
+  color: var(--ink-2);
+  margin: var(--s2) 0 0;
+}
+.fps-key {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  vertical-align: -2px;
+  border: 1.5px solid var(--ink);
+  border-radius: 2px;
+}
+.fps-key.is-merger {
+  border-color: var(--ink-2);
+}
+.fps-key.is-supply {
+  border: 0;
+  height: 4px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+.fps-key.is-spine {
+  border: 0;
+  height: 4px;
+  background: var(--ink-2);
+  border-radius: 2px;
+}

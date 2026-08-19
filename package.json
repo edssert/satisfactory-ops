@@ -18,9 +18,10 @@
     "build": "npm run data:check && astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "test": "node --test tests/solver.test.ts tests/sw.test.ts tests/recipe-select.test.ts tests/layout.test.ts",
+    "test": "node --test tests/solver.test.ts tests/sw.test.ts tests/recipe-select.test.ts tests/layout.test.ts tests/floorplan.test.ts",
     "verify": "npm run data:check && npm test && astro check --minimumSeverity error",
-    "test:sw": "node --test tests/sw-runtime.test.ts"
+    "test:sw": "node --test tests/sw-runtime.test.ts",
+    "render": "astro build && node scripts/render-plan.mjs"
   },
   "dependencies": {
     "@astrojs/preact": "6.0.3",
@@ -31,6 +32,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@resvg/resvg-js": "^2.6.2",
     "@types/node": "^24.13.3",
     "typescript": "5.9.2",
     "zod": "4.4.3"

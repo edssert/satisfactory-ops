@@ -150,6 +150,27 @@ CI(`.github/workflows/deploy.yml`)가 이 순서를 그대로 돌리고 `dist/`�
 
 ---
 
+## 6.5 도면을 눈으로 검증하는 루프
+
+도면 기능에서 **겹침·잘림을 보지 못한 채 세 번 배포했다.** 테스트는 좌표(기하)를 검사할 수 있지만
+"글자가 블록 밖으로 새는가"는 못 잡는다. 그래서 렌더 루프를 만들었다.
+
+```bash
+npm run render     # astro build 후 dist/plan-preview.png 생성
+```
+
+`scripts/render-plan.mjs`가 빌드된 페이지에서 도면 SVG를 꺼내 `@resvg/resvg-js`로 PNG를 만든다.
+CSS 커스텀 프로퍼티는 `tokens.css`의 라이트 값으로 치환한다(resvg는 `var()`를 모른다).
+
+**도면을 바꿨으면 이 PNG를 열어 확인한 뒤 배포한다.** 이 루프로 실제로 잡은 것:
+세로 라벨 잘림("분배기" → "배기"), 기계 블록 밖으로 새는 유량 텍스트, 잘린 입출력 알약,
+마지막 머저부터만 그려져 끊겨 보이던 스파인 벨트.
+
+기하 문제는 `validateGeometry`(layout) · `validateFloorPlan`(floorplan)이 테스트에서 잡는다.
+둘은 역할이 다르다 — 좌표는 테스트, 픽셀은 렌더 확인.
+
+---
+
 ## 7. 아직 없는 것
 
 - F3 공장 성장 단계도 (SVG를 데이터에서 생성하는 방식으로 다시 그려야 한다 — `legacy/README.md`)

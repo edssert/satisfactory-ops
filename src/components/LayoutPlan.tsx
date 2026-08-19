@@ -13,6 +13,10 @@
 import { useMemo, useState } from 'preact/hooks';
 import '../styles/layout-plan.css';
 import FactoryDrawing from './FactoryDrawing.tsx';
+import FlowDiagram from './FlowDiagram.tsx';
+import FloorPlanSheet from './FloorPlanSheet.tsx';
+import { buildFlow } from '../lib/flow.ts';
+import { buildFloorPlan, type StageForFloorPlan } from '../lib/floorplan.ts';
 import { toNumber } from '../lib/rational.ts';
 import { solve, type RecipeBook, type SolveNode, type SolverRecipe } from '../lib/solver.ts';
 import {
@@ -132,6 +136,33 @@ export default function LayoutPlan(props: Props) {
     });
   }, [solved, belt, beltIdx, designerMk, machineById, recipeById, props]);
 
+  const flow = useMemo(() => (plan ? buildFlow(plan, belt.perMinute) : null), [plan, belt]);
+
+  // 층 단위 도면 — 기계 한 대 기준 입출력을 넘긴다 (참고 도면과 같은 방식)
+  const floorPlan = useMemo(() => {
+    if (!plan) return null;
+    const stages: StageForFloorPlan[] = plan.modules.map((m) => {
+      const machines = Math.max(1, m.machinesBuilt);
+      const mv = machineById.get(m.machineId);
+      return {
+        key: m.key,
+        itemKo: m.producesKo,
+        machineKo: m.machineKo,
+        machineEn: m.machineEn,
+        machinesTotal: machines,
+        footprint: mv?.footprint ?? null,
+        machinePowerMW: mv?.powerMW ?? 0,
+        inputPerMachine: m.inputBreakdown.map((i) => ({
+          itemKo: i.itemKo,
+          perMinute: Math.round((i.perMinute / machines) * 100) / 100,
+          isFluid: i.isFluid,
+        })),
+        outputPerMachine: Math.round((m.outputRatePerMinute / machines) * 100) / 100,
+      };
+    });
+    return buildFloorPlan(stages, belt);
+  }, [plan, belt, props.machines]);
+
   return (
     <div class="lp">
       <form class="lp-controls" onSubmit={(e) => e.preventDefault()}>
@@ -230,9 +261,81 @@ export default function LayoutPlan(props: Props) {
             </p>
           ))}
 
-          <div class="scroll-x lp-canvas">
-            <FactoryDrawing plan={plan} />
+          <div class="lp-sheet">
+            <aside class="lp-spec">
+              <h3 class="lp-spec-title">{plan.modules.at(-1)?.title ?? '설계'}</h3>
+              <p class="lp-spec-sub">단층 · 확장 가능</p>
+
+              <h4>구성</h4>
+              <ul class="lp-spec-list">
+                <li>
+                  부지 <span class="n">{plan.totalWidthTiles * TILE_M}</span>×
+                  <span class="n">{plan.totalLengthTiles * TILE_M}</span> m · 토대{' '}
+                  <span class="n">{plan.foundation?.tiles ?? 0}</span>장
+                </li>
+                <li>
+                  벨트 {belt.ko} (<span class="n">{belt.perMinute}</span>/분)
+                </li>
+                <li>
+                  {designerMk === 0
+                    ? '블루프린트 미해금 — 손으로 건설'
+                    : `블루프린트 Mk.${designerMk}`}
+                </li>
+                {floorPlan && (
+                  <li>
+                    최대 <span class="n">{floorPlan.maxFloors}</span>층
+                    {floorPlan.needsLift ? ' · 리프트 필요' : ' · 단층'}
+                  </li>
+                )}
+              </ul>
+
+              <h4>필요 설비</h4>
+              <ul class="lp-spec-list">
+                {machineTally(plan).map((t) => (
+                  <li key={t.ko}>
+                    {t.ko} <span class="n">{t.count}</span>대
+                  </li>
+                ))}
+                <li>
+                  분배기 <span class="n">{plan.totalSplitters}</span>개
+                </li>
+                <li>
+                  병합기 <span class="n">{plan.totalMergers}</span>개
+                </li>
+                <li>
+                  전주 <span class="n">{plan.powerPoles}</span>개{' '}
+                  <span class="muted">(연결 4개 중 1개는 체인)</span>
+                </li>
+                <li>저장고 1개 (선택)</li>
+                <li>
+                  전력 <span class="n">{plan.totalPowerMW}</span> MW
+                </li>
+              </ul>
+
+              <h4>건설 자재</h4>
+              <ul class="lp-spec-list">
+                {plan.buildCost.slice(0, 8).map((c) => (
+                  <li key={c.itemKo}>
+                    {c.itemKo} <span class="n">{c.amount}</span>
+                  </li>
+                ))}
+              </ul>
+            </aside>
+
+            <div class="lp-canvas">{floorPlan && <FloorPlanSheet plan={floorPlan} />}</div>
           </div>
+
+          <details class="lp-grid-view">
+            <summary>공정 흐름도 (품목별 구역 · 분배기 · 유량)</summary>
+            <div class="scroll-x lp-canvas">{flow && <FlowDiagram flow={flow} />}</div>
+          </details>
+
+          <details class="lp-grid-view">
+            <summary>8m 격자 배치도 (물리 배치)</summary>
+            <div class="scroll-x lp-canvas">
+              <FactoryDrawing plan={plan} />
+            </div>
+          </details>
 
           <section class="lp-steps">
             <h3 class="lp-h">공정별 상세</h3>
@@ -272,4 +375,13 @@ export default function LayoutPlan(props: Props) {
       )}
     </div>
   );
+}
+
+/** 기계 종류별 대수 — 스펙 패널의 "필요 설비" 목록 */
+function machineTally(plan: import('../lib/layout.ts').LayoutResult) {
+  const tally = new Map<string, number>();
+  for (const m of plan.modules) tally.set(m.machineKo, (tally.get(m.machineKo) ?? 0) + m.machinesBuilt);
+  return [...tally.entries()]
+    .map(([ko, count]) => ({ ko, count }))
+    .sort((a, b) => b.count - a.count);
 }

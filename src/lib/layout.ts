@@ -135,6 +135,10 @@ export interface ModuleLayout {
   /** 품목별 공급 유량 — 도면 라벨에 쓴다. 합계가 아니라 이게 실제 벨트 단위다 */
   inputBreakdown: { itemKo: string; perMinute: number; isFluid: boolean }[];
   outputRatePerMinute: number;
+  /** 이 공정을 먹이는 데 필요한 스플리터 */
+  splitters: number;
+  /** 산출을 합치는 데 필요한 머저 */
+  mergers: number;
   warnings: Warning[];
 }
 
@@ -180,6 +184,10 @@ export interface LayoutResult {
   totalLengthTiles: number;
   totalPowerMW: number;
   totalMachines: number;
+  totalSplitters: number;
+  totalMergers: number;
+  /** 전주 — 연결 4개 중 1개를 체인에 쓴다는 가정 */
+  powerPoles: number;
   /** 토대 — 도면 전체 면적을 덮는 데 필요한 장수와 자재 */
   foundation: { ko: string; tiles: number; cost: { itemKo: string; amount: number }[] } | null;
   /** 기계 + 토대 건설 자재 합계 (F13-28) */
@@ -190,6 +198,23 @@ export interface LayoutResult {
 }
 
 const ceilEps = (x: number, eps = 1e-6): number => Math.ceil(x - eps);
+
+/**
+ * 부속 수량 규칙 — 실제 발행 설계 시트와 대조해 확인했다.
+ *
+ *  - 스플리터: 입력 1 / 출력 3 → 기계 k대를 한 벨트로 먹이려면 `ceil((k-1)/2)`개
+ *  - 머저: 입력 3 / 출력 1 → 산출 m줄을 합치려면 `ceil((m-1)/2)`개
+ *  - 전주 Mk.1: 연결 4개, 1개를 다음 전주로 넘김 → 기계 n대에 `ceil(n/3)`개
+ *
+ * 검증: "IRON PLATES" 시트(제련기 4 + 제작기 4)가 스플리터 2 / 머저 2 / 전주 4를 요구한다.
+ * 제련기 4대를 벨트 2줄로 먹이면 2×ceil(1/2)=2, 제작기 4대 산출 합치면 ceil(3/2)=2,
+ * 전주는 기계 8대 + 채굴기 2대 = ceil(10/3)=4. 전부 일치한다.
+ */
+export const splittersFor = (machines: number): number =>
+  machines <= 1 ? 0 : Math.ceil((machines - 1) / 2);
+export const mergersFor = (outputs: number): number =>
+  outputs <= 1 ? 0 : Math.ceil((outputs - 1) / 2);
+export const polesFor = (machines: number): number => (machines <= 0 ? 0 : Math.ceil(machines / 3));
 const tiles = (meters: number): number => Math.max(1, ceilEps(meters / TILE_M));
 
 /**
@@ -432,6 +457,7 @@ function layoutStage(stage: StageInput, opts: LayoutOptions, originY: number): M
     key: stage.key,
     title: `${stage.itemKo} ${round(stage.ratePerMinute)}/분`,
     producesKo: stage.itemKo,
+    machineId: stage.machineId,
     machineKo: stage.machineKo,
     machineEn: stage.machineEn,
     machinesBuilt: built,
@@ -450,6 +476,8 @@ function layoutStage(stage: StageInput, opts: LayoutOptions, originY: number): M
     inputRatePerMinute: round(inputRate),
     inputBreakdown: stage.inputs.map((i) => ({ ...i, perMinute: round(i.perMinute) })),
     outputRatePerMinute: round(stage.ratePerMinute),
+    splitters: splittersFor(built),
+    mergers: mergersFor(built),
     warnings,
   };
 }
@@ -571,6 +599,9 @@ export function planLayout(rawStages: StageInput[], opts: LayoutOptions): Layout
     totalLengthTiles,
     totalPowerMW: round(totalPowerMW),
     totalMachines,
+    totalSplitters: modules.reduce((n, m) => n + m.splitters, 0),
+    totalMergers: modules.reduce((n, m) => n + m.mergers, 0),
+    powerPoles: polesFor(totalMachines),
     foundation,
     buildCost: [...cost.entries()]
       .map(([itemKo, amount]) => ({ itemKo, amount: Math.round(amount) }))
