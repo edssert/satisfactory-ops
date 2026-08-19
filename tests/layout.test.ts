@@ -15,7 +15,9 @@ import {
   TILE_M,
   chooseDistribution,
   findOverlaps,
+  mergeStages,
   planLayout,
+  validateGeometry,
   type BeltSpec,
   type StageInput,
 } from '../src/lib/layout.ts';
@@ -38,6 +40,7 @@ function stage(over: Partial<StageInput> & { machineId: string }): StageInput {
   const b = byId.get(over.machineId)!;
   return {
     key: over.key ?? 'stage',
+    recipeId: over.recipeId,
     itemKo: over.itemKo ?? '아이템',
     itemEn: over.itemEn ?? 'Item',
     recipeKo: over.recipeKo ?? '레시피',
@@ -117,6 +120,19 @@ test('디자이너가 없어도 한 줄이 32m를 넘지 않는다 (F13-19)', ()
   assert.ok(m.widthTiles <= 4, `한 줄 폭이 ${m.widthTiles}타일 — Mk.1 블루프린트 4타일을 넘으면 나중에 묶을 수 없다`);
 });
 
+
+test('같은 레시피를 쓰는 공정은 한 라인으로 합친다', () => {
+  // 철 주괴는 철판 가지와 철봉 가지에 각각 매달려 두 번 나온다
+  const merged = mergeStages([
+    stage({ key: 'a', recipeId: 'Recipe_IngotIron_C', machineId: 'Build_SmelterMk1_C', machinesExact: 6, ratePerMinute: 180, inputs: [{ itemKo: '철 광석', perMinute: 180, isFluid: false }] }),
+    stage({ key: 'b', recipeId: 'Recipe_IngotIron_C', machineId: 'Build_SmelterMk1_C', machinesExact: 18, ratePerMinute: 540, inputs: [{ itemKo: '철 광석', perMinute: 540, isFluid: false }] }),
+  ]);
+  assert.equal(merged.length, 1, '같은 레시피가 두 라인으로 갈라지면 도면이 공장이 아니라 트리를 그린 것이다');
+  assert.equal(merged[0]!.machinesExact, 24);
+  assert.equal(merged[0]!.ratePerMinute, 720);
+  assert.equal(merged[0]!.inputs[0]!.perMinute, 720);
+});
+
 // ---------------------------------------------------------------- 배치
 
 test('기계가 겹치지 않는다', () => {
@@ -145,6 +161,29 @@ test('부동소수점 오차로 대수가 하나 늘지 않는다', () => {
     designerMk: null,
   });
   assert.equal(result.modules[0]!.machinesBuilt, 4);
+});
+
+
+test('도면 기하가 성립한다 — 기계·레인·모듈이 겹치지 않는다', () => {
+  const result = planLayout(
+    [
+      stage({ key: 'rip', machineId: 'Build_AssemblerMk1_C', machinesExact: 12, inputs: [{ itemKo: '철판', perMinute: 360, isFluid: false }] }),
+      stage({ key: 'plate', machineId: 'Build_ConstructorMk1_C', machinesExact: 18, inputs: [{ itemKo: '철 주괴', perMinute: 540, isFluid: false }] }),
+      stage({ key: 'ingot', machineId: 'Build_SmelterMk1_C', machinesExact: 18, inputs: [{ itemKo: '철 광석', perMinute: 540, isFluid: false }] }),
+    ],
+    { belt: beltMk1, betterBelts: belts, designerMk: null }
+  );
+  assert.deepEqual(validateGeometry(result), [], '도면 기하 문제가 있으면 지을 수 없는 그림이다');
+});
+
+test('기계 줄마다 공급 레인이 하나씩 있다', () => {
+  const result = planLayout([stage({ machineId: 'Build_SmelterMk1_C', machinesExact: 12 })], {
+    belt: beltMk1,
+    designerMk: null,
+  });
+  const m = result.modules[0]!;
+  const rows = new Set(m.placements.map((p) => p.y)).size;
+  assert.equal(m.supplyLanes.length, rows, '줄 수와 공급 레인 수가 같아야 분기선이 다른 기계를 가로지르지 않는다');
 });
 
 // ---------------------------------------------------------------- 블루프린트 경계 (F13-16)

@@ -32,6 +32,8 @@ export interface Footprint {
 /** 배치할 공정 하나 — 솔버 결과 한 노드에 대응한다. */
 export interface StageInput {
   key: string;
+  /** 같은 레시피는 한 라인으로 합친다. 병합 기준 키. */
+  recipeId?: string;
   /** 만드는 것 */
   itemKo: string;
   itemEn: string;
@@ -47,6 +49,8 @@ export interface StageInput {
   powerMW: number | null;
   /** 이 공정에 들어오는 재료들의 분당 수량 */
   inputs: { itemKo: string; perMinute: number; isFluid: boolean }[];
+  /** 기계 한 대의 건설비 */
+  buildCost?: { itemKo: string; amount: number }[];
   /** 목표 외 부산물 */
   byproducts: { itemKo: string; perMinute: number }[];
 }
@@ -57,7 +61,17 @@ export interface BeltSpec {
   tier: number | null;
 }
 
+/** 토대(파운데이션) 규격. 배치는 무조건 이 위에 선다. */
+export interface FoundationSpec {
+  id: string;
+  ko: string;
+  /** 8×8 한 장의 건설비 */
+  costPerTile: { itemKo: string; amount: number }[];
+}
+
 export interface LayoutOptions {
+  /** 토대. 넘기면 도면 면적만큼의 장수와 자재를 계산한다 */
+  foundation?: FoundationSpec;
   /** 쓸 수 있는 최고 벨트 */
   belt: BeltSpec;
   /** 더 높은 벨트가 있으면 제안에 쓴다 */
@@ -96,9 +110,14 @@ export interface ModuleLayout {
   machinesBuilt: number;
   machinesExact: number;
   placements: Placement[];
-  /** 공급 레인 (매니폴드 벨트가 지나가는 줄) */
-  supplyLane: { x: number; y: number; lengthTiles: number };
-  outputLane: { x: number; y: number; lengthTiles: number };
+  /**
+   * 기계 줄마다 공급 레인이 하나씩 있다.
+   * 레인을 맨 위 하나만 두면 아랫줄로 가는 분기선이 다른 기계를 가로지른다 — 지을 수 없는 도면이 된다.
+   */
+  supplyLanes: { y: number; xFrom: number; xTo: number }[];
+  outputLane: { y: number; xFrom: number; xTo: number };
+  /** 도면 왼쪽 간선(버스)이 지나갈 열 */
+  trunkX: number;
   distribution: DistributionKind;
   /** 왜 이 분배 방식인가 (F13-7) */
   distributionReason: string;
@@ -123,6 +142,10 @@ export interface LayoutResult {
   totalLengthTiles: number;
   totalPowerMW: number;
   totalMachines: number;
+  /** 토대 — 도면 전체 면적을 덮는 데 필요한 장수와 자재 */
+  foundation: { ko: string; tiles: number; cost: { itemKo: string; amount: number }[] } | null;
+  /** 기계 + 토대 건설 자재 합계 (F13-28) */
+  buildCost: { itemKo: string; amount: number }[];
   warnings: Warning[];
   /** 도면 전체가 성립하는가 — error가 하나라도 있으면 false */
   ok: boolean;
@@ -195,6 +218,46 @@ export function chooseDistribution(
 
 const round = (n: number): number => Math.round(n * 100) / 100;
 
+/**
+ * 같은 레시피를 쓰는 공정을 하나로 합친다.
+ *
+ * 솔버는 트리를 낸다. 철 주괴는 철판 가지와 철봉 가지에 각각 매달려 두 번 나온다.
+ * 그대로 배치하면 제련기 6대짜리 라인과 18대짜리 라인이 따로 서는 도면이 된다 —
+ * 실제 공장이라면 24대 한 라인이다. 도면은 트리가 아니라 **공장**을 그려야 한다.
+ */
+export function mergeStages(stages: StageInput[]): StageInput[] {
+  const byRecipe = new Map<string, StageInput>();
+  const order: string[] = [];
+
+  for (const s of stages) {
+    const key = s.recipeId ?? s.key;
+    const hit = byRecipe.get(key);
+    if (!hit) {
+      byRecipe.set(key, {
+        ...s,
+        inputs: s.inputs.map((i) => ({ ...i })),
+        byproducts: s.byproducts.map((b) => ({ ...b })),
+      });
+      order.push(key);
+      continue;
+    }
+    hit.ratePerMinute += s.ratePerMinute;
+    hit.machinesExact += s.machinesExact;
+    for (const i of s.inputs) {
+      const found = hit.inputs.find((x) => x.itemKo === i.itemKo);
+      if (found) found.perMinute += i.perMinute;
+      else hit.inputs.push({ ...i });
+    }
+    for (const b of s.byproducts) {
+      const found = hit.byproducts.find((x) => x.itemKo === b.itemKo);
+      if (found) found.perMinute += b.perMinute;
+      else hit.byproducts.push({ ...b });
+    }
+  }
+
+  return order.map((k) => byRecipe.get(k)!);
+}
+
 /** 공정 하나를 격자에 앉힌다. 기계를 한 줄로 늘어놓고 한쪽에 공급 레인, 반대쪽에 산출 레인을 둔다. */
 function layoutStage(stage: StageInput, opts: LayoutOptions, originY: number): ModuleLayout {
   const warnings: Warning[] = [];
@@ -229,13 +292,21 @@ function layoutStage(stage: StageInput, opts: LayoutOptions, originY: number): M
   const perRow = Math.max(1, Math.floor(rowTiles / mw));
   const rows = Math.max(1, Math.ceil(built / perRow));
 
+  // 줄 구성: [공급 레인 1타일] + [기계 ml타일] 을 줄 수만큼 쌓고, 맨 아래에 산출 레인 1타일.
+  const rowPitch = 1 + ml;
   const placements: Placement[] = [];
+  const supplyLanes: { y: number; xFrom: number; xTo: number }[] = [];
+  const widthTiles = Math.min(built, perRow) * mw;
+
+  for (let r = 0; r < rows; r++) {
+    supplyLanes.push({ y: originY + r * rowPitch, xFrom: 0, xTo: widthTiles });
+  }
   for (let i = 0; i < built; i++) {
     const row = Math.floor(i / perRow);
     const col = i % perRow;
     placements.push({
       x: col * mw,
-      y: originY + row * (ml + 2) + 1, // +1 = 공급 레인 한 줄
+      y: originY + row * rowPitch + 1,
       w: mw,
       l: ml,
       label: stage.machineKo,
@@ -243,8 +314,8 @@ function layoutStage(stage: StageInput, opts: LayoutOptions, originY: number): M
     });
   }
 
-  const widthTiles = Math.min(built, perRow) * mw;
-  const lengthTiles = rows * (ml + 2);
+  const lengthTiles = rows * rowPitch + 1;
+  const outputLane = { y: originY + rows * rowPitch, xFrom: 0, xTo: widthTiles };
 
   // 디자이너 경계 검사 (F13-16)
   let fitsDesigner: boolean | null = null;
@@ -327,8 +398,9 @@ function layoutStage(stage: StageInput, opts: LayoutOptions, originY: number): M
     machinesBuilt: built,
     machinesExact: stage.machinesExact,
     placements,
-    supplyLane: { x: 0, y: originY, lengthTiles: widthTiles },
-    outputLane: { x: 0, y: originY + lengthTiles - 1, lengthTiles: widthTiles },
+    supplyLanes,
+    outputLane,
+    trunkX: -1,
     distribution: dist.kind,
     distributionReason: dist.reason,
     widthTiles,
@@ -344,7 +416,8 @@ function layoutStage(stage: StageInput, opts: LayoutOptions, originY: number): M
 }
 
 /** 전체 배치를 만든다. 공정을 세로로 쌓고 각 공정 사이에 레인을 둔다. */
-export function planLayout(stages: StageInput[], opts: LayoutOptions): LayoutResult {
+export function planLayout(rawStages: StageInput[], opts: LayoutOptions): LayoutResult {
+  const stages = mergeStages(rawStages);
   const modules: ModuleLayout[] = [];
   let y = 0;
   for (const stage of stages) {
@@ -371,6 +444,25 @@ export function planLayout(stages: StageInput[], opts: LayoutOptions): LayoutRes
   const totalPowerMW = modules.reduce((n, m) => n + m.powerMW, 0);
   const totalMachines = modules.reduce((n, m) => n + m.machinesBuilt, 0);
 
+  // 토대 — 배치는 무조건 파운데이션 위에 선다. 도면 면적을 덮는 장수를 센다.
+  const cost = new Map<string, number>();
+  const add = (itemKo: string, amount: number) => cost.set(itemKo, (cost.get(itemKo) ?? 0) + amount);
+
+  for (let i = 0; i < stages.length; i++) {
+    for (const c of stages[i]!.buildCost ?? []) add(c.itemKo, c.amount * modules[i]!.machinesBuilt);
+  }
+
+  let foundation: LayoutResult['foundation'] = null;
+  if (opts.foundation) {
+    const tilesNeeded = totalWidthTiles * totalLengthTiles;
+    const fCost = opts.foundation.costPerTile.map((c) => ({
+      itemKo: c.itemKo,
+      amount: c.amount * tilesNeeded,
+    }));
+    for (const c of fCost) add(c.itemKo, c.amount);
+    foundation = { ko: opts.foundation.ko, tiles: tilesNeeded, cost: fCost };
+  }
+
   const all = [...warnings, ...modules.flatMap((m) => m.warnings)];
   return {
     modules,
@@ -378,9 +470,56 @@ export function planLayout(stages: StageInput[], opts: LayoutOptions): LayoutRes
     totalLengthTiles,
     totalPowerMW: round(totalPowerMW),
     totalMachines,
+    foundation,
+    buildCost: [...cost.entries()]
+      .map(([itemKo, amount]) => ({ itemKo, amount: Math.round(amount) }))
+      .sort((a, b) => b.amount - a.amount),
     warnings,
     ok: !all.some((w) => w.level === 'error'),
   };
+}
+
+/**
+ * 도면 기하 검증. 겹치면 그건 도면이 아니라 그림이다.
+ *
+ * 검사 항목:
+ *  1. 기계끼리 겹치지 않는가
+ *  2. 기계가 벨트 레인 위에 올라앉지 않았는가
+ *  3. 레인끼리 같은 줄을 쓰지 않는가
+ *  4. 모듈끼리 세로로 겹치지 않는가
+ */
+export function validateGeometry(result: LayoutResult): string[] {
+  const problems = [...findOverlaps(result)].map((o) => `기계 겹침 ${o}`);
+
+  const laneRows = new Set<number>();
+  for (const m of result.modules) {
+    const lanes = [...m.supplyLanes, m.outputLane];
+    for (const lane of lanes) {
+      if (laneRows.has(lane.y)) problems.push(`레인 중복: y=${lane.y} (${m.key})`);
+      laneRows.add(lane.y);
+    }
+    for (const p of m.placements) {
+      for (let dy = 0; dy < p.l; dy++) {
+        const row = p.y + dy;
+        if (lanes.some((l) => l.y === row)) {
+          problems.push(`기계가 레인 위에 있음: ${m.key} y=${row}`);
+        }
+      }
+    }
+  }
+
+  // 모듈 간 세로 겹침
+  const spans = result.modules.map((m) => {
+    const ys = [...m.placements.map((p) => p.y), ...m.supplyLanes.map((l) => l.y), m.outputLane.y];
+    return { key: m.key, top: Math.min(...ys), bottom: Math.max(...m.placements.map((p) => p.y + p.l - 1), m.outputLane.y) };
+  });
+  for (let i = 1; i < spans.length; i++) {
+    if (spans[i]!.top <= spans[i - 1]!.bottom) {
+      problems.push(`모듈 세로 겹침: ${spans[i - 1]!.key} ↔ ${spans[i]!.key}`);
+    }
+  }
+
+  return problems;
 }
 
 /** 배치가 겹치는지 검사한다. 생성기의 자기 검증용 — 겹치면 도면이 거짓말이다. */

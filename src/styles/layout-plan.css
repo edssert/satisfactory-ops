@@ -1,4 +1,4 @@
-/* LayoutPlan 아일랜드 — 도면 화면. 색은 토큰만 쓴다. */
+/* LayoutPlan — 도면 화면. 색은 토큰만 쓴다. */
 
 .lp-controls {
   display: flex;
@@ -48,7 +48,7 @@
 }
 
 .lp-summary {
-  margin-bottom: var(--s6);
+  margin-bottom: var(--s4);
 }
 
 .lp-note {
@@ -68,27 +68,140 @@
   color: var(--ink);
 }
 
-.lp-module {
-  border-top: 1px solid var(--line);
-  padding: var(--s6) 0;
+/* ---------------------------------------------------------------- 도면 */
+
+.lp-canvas {
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: var(--s4);
+  margin: var(--s6) 0;
 }
-.lp-module-head {
+
+.lp-svg {
+  display: block;
+  height: auto;
+}
+
+/* 토대 — 모든 배치가 이 위에 선다 */
+.lp-foundation rect {
+  fill: var(--surface-2);
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.lp-trunk {
+  stroke: var(--line-strong);
+  stroke-width: 2;
+  stroke-dasharray: 2 4;
+}
+
+.lp-machine-rect {
+  fill: var(--bg);
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+.lp-machine-no {
+  fill: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.lp-lane-supply {
+  stroke: var(--accent);
+  stroke-width: 2.5;
+}
+.lp-lane-supply + line,
+marker path {
+  fill: var(--accent);
+}
+.lp-lane-output {
+  stroke: var(--ink-2);
+  stroke-width: 2;
+  stroke-dasharray: 6 3;
+}
+.lp-branch {
+  stroke: var(--accent);
+  stroke-width: 1.25;
+  opacity: 0.7;
+}
+.lp-branch.is-out {
+  stroke: var(--ink-2);
+  opacity: 0.55;
+}
+
+/* 글자는 전부 격자 바깥에만 둔다 */
+.lp-band-no {
+  fill: var(--accent-ink);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+}
+.lp-band-title {
+  fill: var(--ink);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+}
+.lp-band-sub {
+  fill: var(--ink-2);
+  font-family: var(--font-body);
+  font-size: 11px;
+}
+.lp-flow {
+  fill: var(--ink-2);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+}
+.lp-flow.is-in {
+  fill: var(--accent-ink);
+}
+.lp-dim {
+  fill: var(--ink-2);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+/* ---------------------------------------------------------------- 공정 목록 */
+
+.lp-h {
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  border-bottom: 1px solid var(--line-strong);
+  padding-bottom: var(--s1);
+  margin: var(--s8) 0 var(--s4);
+}
+
+.lp-step {
+  border-bottom: 1px solid var(--line);
+  padding: var(--s4) 0;
+}
+.lp-step header {
   display: flex;
   align-items: baseline;
-  gap: var(--s4);
+  gap: var(--s3);
   flex-wrap: wrap;
   margin-bottom: var(--s2);
 }
-.lp-module-head h3 {
-  font-size: var(--t-h3);
+.lp-step-no {
+  color: var(--accent-ink);
+  font-size: var(--t-body-s);
+}
+.lp-step h4 {
   font-family: var(--font-display);
   font-weight: 700;
+  font-size: var(--t-body-l);
+  margin: 0;
 }
-.lp-machine {
+.lp-step-machine {
   font-size: var(--t-body-s);
   color: var(--ink-2);
 }
-.lp-size {
+.lp-step-size {
   margin-left: auto;
   font-size: var(--t-caption);
   color: var(--ink-2);
@@ -98,60 +211,6 @@
   color: var(--ink-2);
   border-left: 3px solid var(--accent);
   padding: var(--s2) var(--s4);
-  margin: 0 0 var(--s4);
+  margin: 0 0 var(--s2);
   max-width: var(--measure);
-}
-
-/* ---------------------------------------------------------------- 도면 */
-
-.lp-svg {
-  display: block;
-  max-width: 100%;
-  height: auto;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-}
-
-.lp-grid line {
-  stroke: var(--line);
-  stroke-width: 1;
-}
-
-.lp-machine-box rect {
-  fill: var(--surface-2);
-  stroke: var(--line-strong);
-  stroke-width: 1.5;
-}
-.lp-machine-box text {
-  fill: var(--ink);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.lp-lane line {
-  stroke: var(--accent);
-  stroke-width: 2.5;
-}
-.lp-lane.is-output line {
-  stroke: var(--ink-2);
-  stroke-dasharray: 5 3;
-}
-.lp-lane text {
-  fill: var(--ink-2);
-  font-family: var(--font-mono);
-  font-size: 11px;
-}
-
-.lp-branch {
-  stroke: var(--accent);
-  stroke-width: 1.5;
-  opacity: 0.65;
-}
-
-.lp-dim {
-  fill: var(--ink-2);
-  font-family: var(--font-mono);
-  font-size: 11px;
 }

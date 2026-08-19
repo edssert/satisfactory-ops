@@ -8,9 +8,11 @@
 import Base from '../../layouts/Base.astro';
 import LayoutPlan from '../../components/LayoutPlan.tsx';
 import {
+  building,
   calculatorRecipes,
   findBuilding,
   findItem,
+  item,
   logistics,
   nameOf,
   producerIndexOf,
@@ -49,8 +51,17 @@ const machines = [...machineIds].map((id) => {
     en: b?.en ?? id,
     powerMW: b?.powerMW ?? null,
     footprint: b?.footprint ?? null,
+    buildCost: (b?.buildCost ?? []).map((c) => ({ itemKo: item(c.item).ko, amount: c.amount })),
   };
 });
+
+// 토대 — 배치는 무조건 파운데이션 위에 선다 (8×8, 콘크리트 5)
+const foundationBuilding = building('Build_Foundation_8x1_01_C');
+const foundation = {
+  id: foundationBuilding.id,
+  ko: foundationBuilding.ko,
+  costPerTile: foundationBuilding.buildCost.map((c) => ({ itemKo: item(c.item).ko, amount: c.amount })),
+};
 
 const belts = logistics().belts.map((b) => ({
   ko: b.ko,
@@ -94,6 +105,7 @@ const missingFootprint = machines.filter((m) => !m.footprint).length;
       producers={producers}
       fluids={fluids}
       belts={belts}
+      foundation={foundation}
       defaultTarget="Desc_IronPlateReinforced_C"
     />
 

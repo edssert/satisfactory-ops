@@ -1,13 +1,18 @@
 /**
  * LayoutPlan — F13 도면 생성 화면 (아일랜드).
  *
- * 생산 목표 → 솔버 → 배치 엔진 → 탑다운 SVG 도면.
- * 계산과 배치는 전부 순수 모듈(lib/solver, lib/layout)이 하고, 여기서는 그리기만 한다.
+ * 공장 전체를 **한 장의 도면**으로 그린다. 공정별로 쪼개면 그건 부품 목록이지 도면이 아니다.
+ * 계산과 배치는 순수 모듈(lib/solver, lib/layout)이 하고 여기서는 그리기만 한다.
+ *
+ * 겹침을 막는 규칙 (실제로 겹쳐서 다시 만든 부분):
+ *  1. 글자는 격자 **바깥**에만 둔다 — 왼쪽 거터(공정명), 오른쪽 여백(유량). 격자 안은 기계 번호뿐
+ *  2. 공급 레인은 기계 줄마다 하나씩 — 분기선이 다른 기계를 가로지르지 않는다
+ *  3. 간선(버스)은 격자 왼쪽 별도 열에 둔다
  */
 
 import { useMemo, useState } from 'preact/hooks';
 import '../styles/layout-plan.css';
-import { ceilNum, toNumber } from '../lib/rational.ts';
+import { toNumber } from '../lib/rational.ts';
 import { solve, type RecipeBook, type SolveNode, type SolverRecipe } from '../lib/solver.ts';
 import {
   DESIGNERS,
@@ -16,6 +21,7 @@ import {
   type BeltSpec,
   type DesignerMk,
   type Footprint,
+  type LayoutResult,
   type StageInput,
 } from '../lib/layout.ts';
 
@@ -25,6 +31,7 @@ export interface MachineView {
   en: string;
   powerMW: number | null;
   footprint: Footprint | null;
+  buildCost: { itemKo: string; amount: number }[];
 }
 
 export interface Props {
@@ -35,10 +42,20 @@ export interface Props {
   producers: Record<string, string[]>;
   fluids: Record<string, boolean>;
   belts: BeltSpec[];
+  foundation: { id: string; ko: string; costPerTile: { itemKo: string; amount: number }[] };
   defaultTarget: string;
 }
 
-const PX_PER_TILE = 34;
+const PX = 30;
+
+const distLabel = (k: string) =>
+  k === 'manifold'
+    ? '매니폴드'
+    : k === 'injected-manifold'
+      ? '인젝티드 매니폴드'
+      : k === 'balancer'
+        ? '로드 밸런서'
+        : '직결';
 
 export default function LayoutPlan(props: Props) {
   const [target, setTarget] = useState(props.defaultTarget);
@@ -69,29 +86,32 @@ export default function LayoutPlan(props: Props) {
   const solved = useMemo(() => (valid ? solve(target, parsed, book) : null), [target, parsed, valid, book]);
 
   const belt = props.belts[beltIdx] ?? props.belts[0]!;
-  const betterBelts = props.belts.slice(beltIdx + 1);
 
   const plan = useMemo(() => {
     if (!solved?.ok) return null;
-    const stages: StageInput[] = [];
+    const collected: (StageInput & { depth: number })[] = [];
     const walk = (n: SolveNode) => {
       if (n.recipeId && n.machineId) {
         const m = machineById.get(n.machineId);
-        stages.push({
+        const machines = n.machines ? toNumber(n.machines) : 0;
+        collected.push({
+          depth: n.depth,
           key: n.itemId + ':' + n.depth,
+          recipeId: n.recipeId,
           itemKo: n.ko,
           itemEn: n.en,
           recipeKo: n.recipeKo ?? '',
           ratePerMinute: toNumber(n.rate),
-          machinesExact: n.machines ? toNumber(n.machines) : 0,
+          machinesExact: machines,
           machineId: n.machineId,
           machineKo: n.machineKo ?? n.machineId,
           machineEn: m?.en ?? '',
           footprint: m?.footprint ?? null,
           powerMW: m?.powerMW ?? null,
+          buildCost: m?.buildCost ?? [],
           inputs: (recipeById.get(n.recipeId)?.ingredients ?? []).map((g) => ({
             itemKo: props.names[g.item]?.ko ?? g.item,
-            perMinute: (n.machines ? toNumber(n.machines) : 0) * g.perMinute,
+            perMinute: machines * g.perMinute,
             isFluid: !!props.fluids[g.item],
           })),
           byproducts: n.byproducts.map((b) => ({ itemKo: b.ko, perMinute: toNumber(b.rate) })),
@@ -100,13 +120,18 @@ export default function LayoutPlan(props: Props) {
       n.children.forEach(walk);
     };
     walk(solved.root);
-    return planLayout(stages, {
+
+    // 원자재가 위, 완제품이 아래로 오도록 흐름 순서로 정렬한다.
+    collected.sort((a, b) => b.depth - a.depth);
+
+    return planLayout(collected, {
       belt,
-      betterBelts,
+      betterBelts: props.belts.slice(beltIdx + 1),
       designerMk: designerMk === 0 ? null : designerMk,
       floorHeightM: TILE_M,
+      foundation: props.foundation,
     });
-  }, [solved, belt, betterBelts, designerMk, machineById, recipeById, props.names, props.fluids]);
+  }, [solved, belt, beltIdx, designerMk, machineById, recipeById, props]);
 
   return (
     <div class="lp">
@@ -134,7 +159,11 @@ export default function LayoutPlan(props: Props) {
         </div>
         <div class="lp-field">
           <label for="lp-belt">가진 벨트</label>
-          <select id="lp-belt" value={String(beltIdx)} onChange={(e) => setBeltIdx(Number((e.target as HTMLSelectElement).value))}>
+          <select
+            id="lp-belt"
+            value={String(beltIdx)}
+            onChange={(e) => setBeltIdx(Number((e.target as HTMLSelectElement).value))}
+          >
             {props.belts.map((b, i) => (
               <option key={b.ko} value={String(i)}>
                 {b.ko} ({b.perMinute}/분)
@@ -169,23 +198,29 @@ export default function LayoutPlan(props: Props) {
         <>
           <div class="lp-summary kv">
             <div>
-              <span class="k">전체 규모</span>
+              <span class="k">부지</span>
               <span class="v">
                 <span class="n">{plan.totalWidthTiles * TILE_M}</span> ×{' '}
-                <span class="n">{plan.totalLengthTiles * TILE_M}</span> m (
-                <span class="n">{plan.totalWidthTiles}</span>×<span class="n">{plan.totalLengthTiles}</span> 타일)
+                <span class="n">{plan.totalLengthTiles * TILE_M}</span> m · 토대{' '}
+                <span class="n">{plan.foundation?.tiles ?? 0}</span>장
               </span>
             </div>
             <div>
               <span class="k">기계</span>
               <span class="v">
-                <span class="n">{plan.totalMachines}</span>대 · 전력 <span class="n">{plan.totalPowerMW}</span> MW
+                <span class="n">{plan.totalMachines}</span>대 · <span class="n">{plan.modules.length}</span>개 공정 ·
+                전력 <span class="n">{plan.totalPowerMW}</span> MW
               </span>
             </div>
             <div>
-              <span class="k">공정</span>
+              <span class="k">건설 자재</span>
               <span class="v">
-                <span class="n">{plan.modules.length}</span>단계
+                {plan.buildCost.slice(0, 6).map((c, i) => (
+                  <span key={c.itemKo}>
+                    {i > 0 && ' · '}
+                    {c.itemKo} <span class="n">{c.amount}</span>
+                  </span>
+                ))}
               </span>
             </div>
           </div>
@@ -196,145 +231,210 @@ export default function LayoutPlan(props: Props) {
             </p>
           ))}
 
-          {plan.modules.map((m) => (
-            <section class="lp-module" key={m.key}>
-              <header class="lp-module-head">
-                <h3>{m.title}</h3>
-                <span class="lp-machine">
-                  {m.machineKo} <span class="n">{m.machinesBuilt}</span>대
-                  {m.machinesExact % 1 !== 0 && (
-                    <span class="muted"> (정확히 {Math.round(m.machinesExact * 100) / 100})</span>
-                  )}
-                </span>
-                <span class="lp-size n">
-                  {m.widthTiles * TILE_M}×{m.lengthTiles * TILE_M} m
-                </span>
-              </header>
+          <div class="scroll-x lp-canvas">
+            <FactoryDrawing plan={plan} />
+          </div>
 
-              <p class="lp-dist">
-                <span class="note-title">{distLabel(m.distribution)}</span>
-                {m.distributionReason}
-              </p>
-
-              <div class="scroll-x">
-                <ModuleDrawing module={m} />
-              </div>
-
-              {m.warnings.map((w, i) => (
-                <p key={i} class={`lp-note is-${w.level}`}>
-                  {w.message}
+          <section class="lp-steps">
+            <h3 class="lp-h">공정별 상세</h3>
+            {plan.modules.map((m, i) => (
+              <article class="lp-step" key={m.key}>
+                <header>
+                  <span class="lp-step-no n">{i + 1}</span>
+                  <h4>{m.title}</h4>
+                  <span class="lp-step-machine">
+                    {m.machineKo} <span class="n">{m.machinesBuilt}</span>대
+                    {m.machinesExact % 1 !== 0 && (
+                      <span class="muted"> (정확히 {Math.round(m.machinesExact * 100) / 100})</span>
+                    )}
+                  </span>
+                  <span class="lp-step-size n">
+                    {m.widthTiles * TILE_M}×{m.lengthTiles * TILE_M} m
+                  </span>
+                </header>
+                <p class="lp-dist">
+                  <span class="note-title">{distLabel(m.distribution)}</span>
+                  {m.distributionReason}
                 </p>
-              ))}
-
-              {m.stamps > 1 && (
-                <p class="lp-note is-info">
-                  블루프린트 <span class="n">{m.stamps}</span>장을 찍어 이어 붙입니다.
-                </p>
-              )}
-            </section>
-          ))}
+                {m.warnings.map((w, k) => (
+                  <p key={k} class={`lp-note is-${w.level}`}>
+                    {w.message}
+                  </p>
+                ))}
+                {m.stamps > 1 && (
+                  <p class="lp-note is-info">
+                    블루프린트 <span class="n">{m.stamps}</span>장을 찍어 이어 붙입니다.
+                  </p>
+                )}
+              </article>
+            ))}
+          </section>
         </>
       )}
     </div>
   );
 }
 
-const distLabel = (k: string) =>
-  k === 'manifold' ? '매니폴드' : k === 'injected-manifold' ? '인젝티드 매니폴드' : k === 'balancer' ? '로드 밸런서' : '직결';
+/** 공장 전체를 한 장으로 그린다. 글자는 전부 격자 바깥에 둔다. */
+function FactoryDrawing({ plan }: { plan: LayoutResult }) {
+  const GUTTER = 190;
+  const RIGHT = 170;
+  const TOP = 34;
+  const BOTTOM = 28;
+  const TRUNK = 24;
 
-/** 모듈 하나의 탑다운 도면. 8m 격자 위에 기계와 벨트 레인을 그린다. */
-function ModuleDrawing({ module: m }: { module: import('../lib/layout.ts').ModuleLayout }) {
-  const minY = Math.min(...m.placements.map((p) => p.y), m.supplyLane.y);
-  const w = Math.max(m.widthTiles, 1);
-  const h = m.lengthTiles;
-  const W = w * PX_PER_TILE;
-  const H = h * PX_PER_TILE;
-  const pad = 26;
+  const rows = plan.totalLengthTiles;
+  const cols = Math.max(1, plan.totalWidthTiles);
+  const W = cols * PX;
+  const H = rows * PX;
 
   return (
     <svg
       class="lp-svg"
-      viewBox={`${-pad} ${-pad} ${W + pad * 2} ${H + pad * 2}`}
-      width={W + pad * 2}
-      height={H + pad * 2}
+      viewBox={`${-GUTTER} ${-TOP} ${GUTTER + W + RIGHT} ${TOP + H + BOTTOM}`}
+      width={GUTTER + W + RIGHT}
+      height={TOP + H + BOTTOM}
       role="img"
-      aria-label={`${m.title} 배치도. ${m.machineKo} ${m.machinesBuilt}대를 ${w * TILE_M}m × ${h * TILE_M}m 안에 배치하고, 위쪽에 공급 벨트, 아래쪽에 산출 벨트를 둡니다.`}
+      aria-label={drawingAlt(plan)}
     >
-      {/* 8m 격자 */}
-      <g class="lp-grid">
-        {Array.from({ length: w + 1 }, (_, i) => (
-          <line key={`v${i}`} x1={i * PX_PER_TILE} y1={0} x2={i * PX_PER_TILE} y2={H} />
-        ))}
-        {Array.from({ length: h + 1 }, (_, j) => (
-          <line key={`h${j}`} x1={0} y1={j * PX_PER_TILE} x2={W} y2={j * PX_PER_TILE} />
-        ))}
+      <defs>
+        <marker id="lp-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto">
+          <path d="M0,0 L8,4 L0,8 z" />
+        </marker>
+      </defs>
+
+      {/* 토대 — 모든 배치는 파운데이션 위에 선다 */}
+      <g class="lp-foundation">
+        {Array.from({ length: rows }, (_, r) =>
+          Array.from({ length: cols }, (_, c) => (
+            <rect key={`f${r}-${c}`} x={c * PX} y={r * PX} width={PX} height={PX} />
+          ))
+        )}
       </g>
 
-      {/* 공급 레인 */}
-      <g class="lp-lane is-supply">
-        <line
-          x1={0}
-          y1={(m.supplyLane.y - minY) * PX_PER_TILE + PX_PER_TILE / 2}
-          x2={W}
-          y2={(m.supplyLane.y - minY) * PX_PER_TILE + PX_PER_TILE / 2}
-        />
-        <text x={2} y={(m.supplyLane.y - minY) * PX_PER_TILE - 4}>
-          공급 {m.inputBreakdown.length
-            ? m.inputBreakdown.map((i) => `${i.itemKo} ${i.perMinute}/분`).join(' · ')
-            : '없음'}
-        </text>
-      </g>
+      {/* 간선 — 공정 사이를 잇는 벨트가 지나갈 열 */}
+      <line class="lp-trunk" x1={-TRUNK} y1={0} x2={-TRUNK} y2={H} />
 
-      {/* 기계 */}
-      {m.placements.map((p, i) => (
-        <g key={i} class="lp-machine-box">
-          <rect
-            x={p.x * PX_PER_TILE + 2}
-            y={(p.y - minY) * PX_PER_TILE + 2}
-            width={p.w * PX_PER_TILE - 4}
-            height={p.l * PX_PER_TILE - 4}
-            rx="2"
-          />
-          <text
-            x={p.x * PX_PER_TILE + p.w * PX_PER_TILE / 2}
-            y={(p.y - minY) * PX_PER_TILE + p.l * PX_PER_TILE / 2 + 4}
-            text-anchor="middle"
-          >
-            {i + 1}
-          </text>
-          {/* 공급 분기 */}
-          <line
-            class="lp-branch"
-            x1={p.x * PX_PER_TILE + p.w * PX_PER_TILE / 2}
-            y1={(m.supplyLane.y - minY) * PX_PER_TILE + PX_PER_TILE / 2}
-            x2={p.x * PX_PER_TILE + p.w * PX_PER_TILE / 2}
-            y2={(p.y - minY) * PX_PER_TILE + 2}
-          />
-        </g>
-      ))}
+      {plan.modules.map((m, i) => {
+        const top = Math.min(...m.supplyLanes.map((l) => l.y), ...m.placements.map((p) => p.y));
+        return (
+          <g key={m.key} class="lp-band">
+            {/* 공정 라벨 — 격자 바깥 거터 */}
+            <text class="lp-band-no" x={-GUTTER + 4} y={top * PX + 14}>
+              {i + 1}
+            </text>
+            <text class="lp-band-title" x={-GUTTER + 24} y={top * PX + 14}>
+              {m.title}
+            </text>
+            <text class="lp-band-sub" x={-GUTTER + 24} y={top * PX + 30}>
+              {m.machineKo} {m.machinesBuilt}대 · {distLabel(m.distribution)}
+            </text>
 
-      {/* 산출 레인 */}
-      <g class="lp-lane is-output">
-        <line
-          x1={0}
-          y1={(m.outputLane.y - minY) * PX_PER_TILE + PX_PER_TILE / 2}
-          x2={W}
-          y2={(m.outputLane.y - minY) * PX_PER_TILE + PX_PER_TILE / 2}
-        />
-        <text x={2} y={(m.outputLane.y - minY) * PX_PER_TILE + PX_PER_TILE + 12}>
-          산출 {m.outputRatePerMinute}/분
-        </text>
-      </g>
+            {/* 공급 레인 — 기계 줄마다 하나씩 */}
+            {m.supplyLanes.map((lane, k) => (
+              <g key={`s${k}`}>
+                <line
+                  class="lp-lane-supply"
+                  x1={-TRUNK}
+                  y1={lane.y * PX + PX / 2}
+                  x2={lane.xTo * PX}
+                  y2={lane.y * PX + PX / 2}
+                  marker-end="url(#lp-arrow)"
+                />
+              </g>
+            ))}
+
+            {/* 기계 */}
+            {m.placements.map((p, k) => (
+              <g key={`m${k}`}>
+                <line
+                  class="lp-branch"
+                  x1={p.x * PX + (p.w * PX) / 2}
+                  y1={(p.y - 1) * PX + PX / 2}
+                  x2={p.x * PX + (p.w * PX) / 2}
+                  y2={p.y * PX + 3}
+                />
+                <line
+                  class="lp-branch is-out"
+                  x1={p.x * PX + (p.w * PX) / 2}
+                  y1={(p.y + p.l) * PX - 3}
+                  x2={p.x * PX + (p.w * PX) / 2}
+                  y2={m.outputLane.y * PX + PX / 2}
+                />
+                <rect
+                  class="lp-machine-rect"
+                  x={p.x * PX + 3}
+                  y={p.y * PX + 3}
+                  width={p.w * PX - 6}
+                  height={p.l * PX - 6}
+                  rx="2"
+                />
+                <text
+                  class="lp-machine-no"
+                  x={p.x * PX + (p.w * PX) / 2}
+                  y={p.y * PX + (p.l * PX) / 2 + 4}
+                  text-anchor="middle"
+                >
+                  {k + 1}
+                </text>
+              </g>
+            ))}
+
+            {/* 산출 레인 */}
+            <line
+              class="lp-lane-output"
+              x1={m.outputLane.xFrom * PX}
+              y1={m.outputLane.y * PX + PX / 2}
+              x2={m.outputLane.xTo * PX}
+              y2={m.outputLane.y * PX + PX / 2}
+            />
+            <line
+              class="lp-lane-output"
+              x1={m.outputLane.xTo * PX}
+              y1={m.outputLane.y * PX + PX / 2}
+              x2={W + 6}
+              y2={m.outputLane.y * PX + PX / 2}
+            />
+
+            {/* 유량 — 격자 오른쪽 바깥 */}
+            <text class="lp-flow" x={W + 12} y={m.outputLane.y * PX + PX / 2 + 4}>
+              {m.title}
+            </text>
+            <text class="lp-flow is-in" x={W + 12} y={top * PX + PX / 2 + 4}>
+              ←{' '}
+              {m.inputBreakdown.length
+                ? m.inputBreakdown.map((x) => `${x.itemKo} ${x.perMinute}`).join(' / ')
+                : '원자재'}
+            </text>
+          </g>
+        );
+      })}
 
       {/* 치수 */}
-      <text class="lp-dim" x={W / 2} y={-8} text-anchor="middle">
-        {w * TILE_M} m
+      <text class="lp-dim" x={W / 2} y={-12} text-anchor="middle">
+        {cols * TILE_M} m · 토대 {cols}장
       </text>
-      <text class="lp-dim" x={-8} y={H / 2} text-anchor="middle" transform={`rotate(-90 ${-8} ${H / 2})`}>
-        {h * TILE_M} m
+      <text
+        class="lp-dim"
+        x={-TRUNK - 12}
+        y={H / 2}
+        text-anchor="middle"
+        transform={`rotate(-90 ${-TRUNK - 12} ${H / 2})`}
+      >
+        {rows * TILE_M} m
       </text>
     </svg>
   );
 }
 
-export const _ceil = ceilNum;
+function drawingAlt(plan: LayoutResult): string {
+  const parts = plan.modules.map(
+    (m, i) =>
+      `${i + 1}단계 ${m.title}: ${m.machineKo} ${m.machinesBuilt}대, ${m.widthTiles * TILE_M}×${m.lengthTiles * TILE_M}미터`
+  );
+  return (
+    `공장 전체 배치도. 파운데이션 ${plan.totalWidthTiles}×${plan.totalLengthTiles}장 위에 ` +
+    `${plan.modules.length}개 공정을 원자재에서 완제품 순으로 위에서 아래로 배치합니다. ${parts.join('. ')}. ` +
+    '각 공정은 기계 줄마다 공급 벨트를 따로 두고, 아래쪽 산출 벨트로 다음 공정에 넘깁니다.'
+  );
+}
