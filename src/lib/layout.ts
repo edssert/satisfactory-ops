@@ -106,6 +106,8 @@ export interface ModuleLayout {
   title: string;
   /** 이 공정이 만드는 것 — 연결선을 잇는 기준 */
   producesKo: string;
+  /** 기계 클래스명 — 화면이 치수·전력을 조회할 때 이름 대신 이걸 쓴다 */
+  machineId: string;
   machineKo: string;
   machineEn: string;
   /** 지어야 하는 대수 (올림) */
