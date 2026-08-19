@@ -78,86 +78,121 @@
   margin: var(--s6) 0;
 }
 
-.lp-svg {
+.fd {
   display: block;
   height: auto;
 }
 
-/* 토대 — 모든 배치가 이 위에 선다 */
-.lp-foundation rect {
+/* 축척 평면도 — 파운데이션 격자 */
+.fd-foundation rect {
   fill: var(--surface-2);
   stroke: var(--line);
   stroke-width: 1;
 }
 
-.lp-trunk {
-  stroke: var(--line-strong);
-  stroke-width: 2;
-  stroke-dasharray: 2 4;
-}
-
-.lp-machine-rect {
+/* 기계 */
+.fd-machine {
   fill: var(--bg);
   stroke: var(--ink);
   stroke-width: 1.5;
 }
-.lp-machine-no {
+.fd-mno {
   fill: var(--ink);
   font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 500;
 }
-
-.lp-lane-supply {
-  stroke: var(--accent);
-  stroke-width: 2.5;
-}
-.lp-lane-supply + line,
-marker path {
+/* 입출력 포트 — 연결선이 붙는 지점 */
+.fd-port.is-in {
   fill: var(--accent);
 }
-.lp-lane-output {
-  stroke: var(--ink-2);
-  stroke-width: 2;
-  stroke-dasharray: 6 3;
+.fd-port.is-out {
+  fill: var(--ink-2);
 }
-.lp-branch {
+
+/* 벨트 — 굵기는 유량에 비례한다 (산키 관행) */
+.fd-supply {
+  stroke: var(--accent);
+  stroke-linecap: round;
+}
+.fd-output {
+  stroke: var(--ink-2);
+  stroke-linecap: round;
+}
+.fd-branch {
   stroke: var(--accent);
   stroke-width: 1.25;
   opacity: 0.7;
 }
-.lp-branch.is-out {
+.fd-branch.is-out {
   stroke: var(--ink-2);
-  opacity: 0.55;
+  opacity: 0.5;
 }
 
-/* 글자는 전부 격자 바깥에만 둔다 */
-.lp-band-no {
+/* 공정 간 연결 */
+.fd-conn {
+  stroke: var(--accent-ink);
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+/* 벨트 한 줄로 못 나르는 구간 — 병목 강조 */
+.fd-conn.is-over {
+  stroke: var(--danger);
+}
+.fd-conn-label {
+  fill: var(--ink-2);
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.fd-external line {
+  stroke: var(--line-strong);
+  stroke-linecap: round;
+}
+.fd-external.is-fluid line {
+  stroke: var(--fluid, var(--ink-2));
+  stroke-dasharray: 5 3;
+}
+.fd-external text {
+  fill: var(--ink-2);
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.fd-final line {
+  stroke: var(--accent);
+}
+.fd-final text {
+  fill: var(--accent-ink);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+marker path {
+  fill: var(--accent-ink);
+}
+
+/* 글자는 전부 격자 바깥 */
+.fd-no {
   fill: var(--accent-ink);
   font-family: var(--font-mono);
   font-size: 12px;
   font-weight: 500;
 }
-.lp-band-title {
+.fd-title {
   fill: var(--ink);
   font-family: var(--font-body);
   font-size: 13px;
   font-weight: 600;
 }
-.lp-band-sub {
+.fd-sub {
   fill: var(--ink-2);
   font-family: var(--font-body);
   font-size: 11px;
 }
-.lp-flow {
-  fill: var(--ink-2);
-  font-family: var(--font-mono);
-  font-size: 10.5px;
-}
-.lp-flow.is-in {
-  fill: var(--accent-ink);
-}
-.lp-dim {
+.fd-dim {
   fill: var(--ink-2);
   font-family: var(--font-mono);
   font-size: 11px;

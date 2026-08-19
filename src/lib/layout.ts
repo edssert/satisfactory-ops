@@ -104,6 +104,8 @@ export interface Warning {
 export interface ModuleLayout {
   key: string;
   title: string;
+  /** 이 공정이 만드는 것 — 연결선을 잇는 기준 */
+  producesKo: string;
   machineKo: string;
   machineEn: string;
   /** 지어야 하는 대수 (올림) */
@@ -136,8 +138,44 @@ export interface ModuleLayout {
   warnings: Warning[];
 }
 
+/**
+ * 공정 사이를 잇는 벨트. 이게 없으면 도면은 "쌓여 있는 조각들"이지 공장이 아니다.
+ *
+ * 경로: 생산 공정의 산출 레인 → 왼쪽 간선 채널 → 소비 공정의 공급 레인.
+ * 채널은 서로 겹치지 않는 것끼리 재사용한다(구간 색칠).
+ */
+export interface Connection {
+  fromKey: string;
+  toKey: string;
+  itemKo: string;
+  perMinute: number;
+  /** 이 유량을 나르는 데 필요한 벨트 줄 수 */
+  lines: number;
+  /** 왼쪽 간선 채널 번호 (0이 격자에 가장 가까움) */
+  channel: number;
+  fromY: number;
+  toY: number;
+}
+
+/** 외부에서 들어오는 원자재 — 채굴기에서 오는 벨트 */
+export interface ExternalInput {
+  toKey: string;
+  itemKo: string;
+  perMinute: number;
+  lines: number;
+  isFluid: boolean;
+  y: number;
+  channel: number;
+}
+
 export interface LayoutResult {
   modules: ModuleLayout[];
+  /** 공정 간 벨트 */
+  connections: Connection[];
+  /** 외부 공급 (원자재) */
+  externals: ExternalInput[];
+  /** 간선 채널 총 개수 — 도면 왼쪽에 확보할 폭 */
+  channels: number;
   totalWidthTiles: number;
   totalLengthTiles: number;
   totalPowerMW: number;
@@ -393,6 +431,7 @@ function layoutStage(stage: StageInput, opts: LayoutOptions, originY: number): M
   return {
     key: stage.key,
     title: `${stage.itemKo} ${round(stage.ratePerMinute)}/분`,
+    producesKo: stage.itemKo,
     machineKo: stage.machineKo,
     machineEn: stage.machineEn,
     machinesBuilt: built,
@@ -444,6 +483,65 @@ export function planLayout(rawStages: StageInput[], opts: LayoutOptions): Layout
   const totalPowerMW = modules.reduce((n, m) => n + m.powerMW, 0);
   const totalMachines = modules.reduce((n, m) => n + m.machinesBuilt, 0);
 
+  // ── 공정 간 연결 ─────────────────────────────────────────────
+  // 어떤 공정의 산출을 어떤 공정이 먹는가. 위(원자재)에서 아래(완제품)로 흐른다.
+  const produced = new Map<string, number>(); // itemKo -> module index
+  modules.forEach((m, i) => produced.set(m.producesKo, i));
+
+  const rawConnections: Omit<Connection, 'channel'>[] = [];
+  const rawExternals: Omit<ExternalInput, 'channel'>[] = [];
+
+  modules.forEach((m, i) => {
+    const stage = stages[i]!;
+    const supplyY = m.supplyLanes[0]?.y ?? 0;
+    for (const input of stage.inputs) {
+      const fromIdx = produced.get(input.itemKo);
+      if (fromIdx !== undefined && fromIdx !== i) {
+        rawConnections.push({
+          fromKey: modules[fromIdx]!.key,
+          toKey: m.key,
+          itemKo: input.itemKo,
+          perMinute: round(input.perMinute),
+          lines: input.isFluid ? 1 : ceilEps(input.perMinute / opts.belt.perMinute),
+          fromY: modules[fromIdx]!.outputLane.y,
+          toY: supplyY,
+        });
+      } else {
+        rawExternals.push({
+          toKey: m.key,
+          itemKo: input.itemKo,
+          perMinute: round(input.perMinute),
+          lines: input.isFluid ? 1 : ceilEps(input.perMinute / opts.belt.perMinute),
+          isFluid: input.isFluid,
+          y: supplyY,
+        });
+      }
+    }
+  });
+
+  // 채널 배정 — 세로 구간이 겹치지 않는 연결은 같은 열을 쓴다
+  const channelBottom: number[] = [];
+  const assign = (top: number, bottom: number): number => {
+    const lo = Math.min(top, bottom);
+    const hi = Math.max(top, bottom);
+    for (let c = 0; c < channelBottom.length; c++) {
+      if (channelBottom[c]! < lo) {
+        channelBottom[c] = hi;
+        return c;
+      }
+    }
+    channelBottom.push(hi);
+    return channelBottom.length - 1;
+  };
+
+  const connections: Connection[] = [...rawConnections]
+    .sort((a, b) => Math.min(a.fromY, a.toY) - Math.min(b.fromY, b.toY))
+    .map((c) => ({ ...c, channel: assign(c.fromY, c.toY) }));
+
+  // 외부 공급은 격자 바로 옆 채널에서 들어온다 (세로로 흐르지 않으므로 채널을 점유하지 않는다)
+  const externals: ExternalInput[] = rawExternals.map((e) => ({ ...e, channel: 0 }));
+  const channels = Math.max(1, channelBottom.length);
+
   // 토대 — 배치는 무조건 파운데이션 위에 선다. 도면 면적을 덮는 장수를 센다.
   const cost = new Map<string, number>();
   const add = (itemKo: string, amount: number) => cost.set(itemKo, (cost.get(itemKo) ?? 0) + amount);
@@ -466,6 +564,9 @@ export function planLayout(rawStages: StageInput[], opts: LayoutOptions): Layout
   const all = [...warnings, ...modules.flatMap((m) => m.warnings)];
   return {
     modules,
+    connections,
+    externals,
+    channels,
     totalWidthTiles,
     totalLengthTiles,
     totalPowerMW: round(totalPowerMW),

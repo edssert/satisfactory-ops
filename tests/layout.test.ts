@@ -186,6 +186,44 @@ test('기계 줄마다 공급 레인이 하나씩 있다', () => {
   assert.equal(m.supplyLanes.length, rows, '줄 수와 공급 레인 수가 같아야 분기선이 다른 기계를 가로지르지 않는다');
 });
 
+
+test('공정이 실제로 이어진다 — 연결선이 생성된다', () => {
+  const result = planLayout(
+    [
+      stage({ key: 'ingot', recipeId: 'R_ingot', machineId: 'Build_SmelterMk1_C', machinesExact: 6, itemKo: '철 주괴', ratePerMinute: 180, inputs: [{ itemKo: '철 광석', perMinute: 180, isFluid: false }] }),
+      stage({ key: 'plate', recipeId: 'R_plate', machineId: 'Build_ConstructorMk1_C', machinesExact: 6, itemKo: '철판', ratePerMinute: 120, inputs: [{ itemKo: '철 주괴', perMinute: 180, isFluid: false }] }),
+    ],
+    { belt: beltMk1, betterBelts: belts, designerMk: null }
+  );
+
+  assert.equal(result.connections.length, 1, '철 주괴 → 철판 연결이 도면에 있어야 한다');
+  const c = result.connections[0]!;
+  assert.equal(c.itemKo, '철 주괴');
+  assert.equal(c.perMinute, 180);
+  assert.equal(c.lines, 3, '180/분은 Mk.1 벨트 3줄');
+
+  // 외부에서 들어오는 것은 원자재뿐이어야 한다
+  assert.deepEqual(
+    result.externals.map((e) => e.itemKo),
+    ['철 광석'],
+    '내부에서 만드는 것이 외부 공급으로 잡히면 연결이 끊긴 것이다'
+  );
+});
+
+test('채널은 겹치지 않는 연결끼리 재사용한다', () => {
+  const result = planLayout(
+    [
+      stage({ key: 'a', recipeId: 'R_a', machineId: 'Build_SmelterMk1_C', machinesExact: 2, itemKo: 'A', ratePerMinute: 60, inputs: [] }),
+      stage({ key: 'b', recipeId: 'R_b', machineId: 'Build_ConstructorMk1_C', machinesExact: 2, itemKo: 'B', ratePerMinute: 60, inputs: [{ itemKo: 'A', perMinute: 60, isFluid: false }] }),
+      stage({ key: 'c', recipeId: 'R_c', machineId: 'Build_ConstructorMk1_C', machinesExact: 2, itemKo: 'C', ratePerMinute: 60, inputs: [{ itemKo: 'B', perMinute: 60, isFluid: false }] }),
+    ],
+    { belt: beltMk1, designerMk: null }
+  );
+  assert.equal(result.connections.length, 2);
+  // A→B 와 B→C 는 구간이 겹치지 않으므로 같은 채널을 써도 된다
+  assert.equal(result.channels, 1, `채널이 ${result.channels}개 — 겹치지 않는 연결은 같은 열을 써야 도면이 단순하다`);
+});
+
 // ---------------------------------------------------------------- 블루프린트 경계 (F13-16)
 
 test('입자 가속기는 Mk.1 디자이너에 들어가지 않는다 — 위키와 같은 결론', () => {
