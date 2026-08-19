@@ -1,0 +1,58 @@
+# main 푸시 시 데이터 검증 → 테스트 → 빌드 → GitHub Pages 배포.
+# 게임 원본은 CI에 없으므로 커밋된 src/data/app/*.json 을 신뢰한다 (ADR-0008 완화책).
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      # 앱 데이터가 원본 데이터와 어긋나 있으면 여기서 죽는다 (조용히 틀린 수치를 배포하지 않는다)
+      - name: 데이터 검증
+        run: node scripts/build-app-data.mjs --check
+
+      # 생산 체인 골든 테스트 (TRD 8.1)
+      - name: 단위 테스트
+        run: node --test tests/solver.test.ts
+
+      - name: 타입 검사
+        run: npx astro check --minimumSeverity error
+
+      - run: npm run build
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
