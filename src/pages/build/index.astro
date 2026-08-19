@@ -67,7 +67,20 @@ const extractor: Extractor = {
   unlockTier: minerMk1B.unlockTier ?? 0,
   powerMW: minerMk1B.powerMW ?? null,
 };
-const belt = { ko: beltMk1B.ko, perMinute: beltMk1B.beltItemsPerMinute ?? 60 };
+/*
+ * 이 시점에 **실제로 쓸 수 있는** 벨트를 고른다.
+ *
+ * 조립기와 컨베이어 Mk.2 가 같은 티어 2에 열린다. 그래서 보강된 철판을 자동화하는 시점에는
+ * 이미 Mk.2(120/분)를 쓸 수 있다. Mk.1 로 계획을 세우면 실제보다 절반짜리 공장이 나온다.
+ *
+ * 아직 Mk.1 만 깔았다면 채굴기를 50%로 두면 된다 — 배치는 그대로 두고 벨트만 갈아끼우면
+ * 두 배가 되도록 잡았다. 그 안내를 화면에 적는다.
+ */
+const beltsByTier = [beltMk1B, beltMk2B]
+  .filter((b) => (b.unlockTier ?? 0) <= TIER)
+  .sort((a, b) => (b.beltItemsPerMinute ?? 0) - (a.beltItemsPerMinute ?? 0));
+const beltNow = beltsByTier[0] ?? beltMk1B;
+const belt = { ko: beltNow.ko, perMinute: beltNow.beltItemsPerMinute ?? 60 };
 const futureBelt = {
   ko: beltMk2B.ko,
   perMinute: beltMk2B.beltItemsPerMinute ?? 120,
@@ -121,8 +134,19 @@ const mk = (targetId: string, rawId: string, supply: number) => {
   });
 };
 
-/** 노드 하나(순수 = 노말의 2배)에서 나오는 산출 */
-const pureSupply = (minerMk1B.extraction?.perMinuteAtNormalPurity ?? 60) * 2;
+/*
+ * 노드 하나에서 **실제로 받을 수 있는** 양.
+ *
+ * 순수 노드는 채굴기 Mk.1로 120/분을 낼 수 있지만, 채굴기 출력구는 하나이고 지금 벨트는
+ * Mk.1(60/분)이다. 못 나르는 양은 없는 양이다. 이걸 빼먹고 120으로 계획을 세워
+ * 제작기를 한 대 더 세우는 계획을 냈다 — 못 짓는 계획이었다.
+ *
+ * 티어 2에서 벨트 Mk.2가 열리면 같은 배치로 두 배가 된다. 그래서 배치는 그대로 두고
+ * 채굴기 클럭만 올리면 되도록 잡는다.
+ */
+const nodeYieldPure = (minerMk1B.extraction?.perMinuteAtNormalPurity ?? 60) * 2;
+const pureSupply = Math.min(nodeYieldPure, belt.perMinute);
+const supplyAfterUpgrade = Math.min(nodeYieldPure, futureBelt.perMinute);
 
 const concrete = mk('Desc_Cement_C', 'Desc_Stone_C', pureSupply);
 const iron = mk(RIP, 'Desc_OreIron_C', pureSupply);

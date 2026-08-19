@@ -538,3 +538,63 @@
 .ms-links tr.is-branch td {
   color: var(--ink-muted);
 }
+
+/*
+ * ── 공정 도식 (SchematicSheet)
+ *
+ * 실척 배치도와 다른 물건이다. 축척이 없고, 기계가 크고, 간격이 넉넉하다.
+ * 목적은 "무엇이 무엇을 먹어 무엇을 만드는가"를 한눈에 읽히게 하는 것이다.
+ */
+.sc {
+  margin: 0 0 var(--s8);
+  overflow-x: auto;
+}
+.sc-svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--line-strong);
+}
+.sc-node rect {
+  fill: var(--bp-machine);
+  stroke: var(--bp-machine-line);
+  stroke-width: 2;
+}
+.sc-node.is-source rect {
+  fill: var(--bp-machine);
+  stroke: var(--bp-joint);
+  stroke-width: 2.5;
+  stroke-dasharray: 7 4;
+}
+.sc-nodelabel {
+  fill: var(--bp-ink);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+}
+.sc-tagbg {
+  fill: var(--bp-ink);
+}
+.sc-tag {
+  fill: #fff;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+}
+/* 유량 칩 — 검정 배경에 흰 굵은 글자. 참고 도면의 약속이다 */
+.sc-chip rect {
+  fill: var(--bp-ink);
+}
+.sc-chiptext {
+  fill: #fff;
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 700;
+  font-style: italic;
+}
+.sc-chipnote {
+  fill: var(--bp-ink);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+}

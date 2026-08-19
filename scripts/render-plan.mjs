@@ -89,7 +89,8 @@ function inlineImages(svgText) {
 }
 
 // 도면 SVG 전부 추출 (층 도면이 공정마다 하나씩 나온다)
-const svgs = [...html.matchAll(/<svg class="(?:fps|ms)-svg"[\s\S]*?<\/svg>/g)].map((m) => m[0]);
+const only = process.env.ONLY_SVG || '(?:fps|ms|sc)';
+const svgs = [...html.matchAll(new RegExp('<svg class="' + only + '-svg"[^]*?</svg>', 'g'))].map((m) => m[0]);
 if (svgs.length === 0) {
   console.error(`dist/${page}/index.html 에서 도면 SVG를 찾지 못했습니다. npm run build 먼저 실행하세요.`);
   process.exit(1);

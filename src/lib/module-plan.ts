@@ -22,7 +22,6 @@ import { solve } from './solver.ts';
 import { toNumber } from './rational.ts';
 import { planMining, type MiningPlan, type ResourceNode, type Extractor } from './mining.ts';
 import { packFlow, routeBelt, type Point } from './pack.ts';
-import { splittersFor, mergersFor } from './layout.ts';
 
 /** 토대 한 장 = 8 m (게임 기본 토대) */
 export const TILE_M = 8;
@@ -727,8 +726,12 @@ ${g.itemKo}`,
     return true;
   });
 
-  const splittersCount = groups.filter((g) => g.built > 1).reduce((a, g) => a + splittersFor(g.built), 0);
-  const mergersCount = groups.filter((g) => g.built > 1).reduce((a, g) => a + mergersFor(g.built), 0);
+  /*
+   * 부품 수는 **실제로 놓은 것을 센다.** 공식으로 따로 계산하면 도면과 목록이 다른 구조를
+   * 말하게 된다 — 실제로 목록 3개 vs 배치 4개가 나왔다. 한 곳에서만 센다.
+   */
+  const splittersCount = attaches.filter((a) => a.kind === 'splitter').length;
+  const mergersCount = attaches.filter((a) => a.kind === 'merger').length;
 
   /*
    * 리프트는 **높이가 바뀌는 지점**에만 쓴다.

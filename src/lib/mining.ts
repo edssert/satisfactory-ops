@@ -85,6 +85,8 @@ export interface MinerAssignment {
 }
 
 export interface MiningPlan {
+  /** 아이콘 참조용 클래스 id */
+  itemId: string;
   itemKo: string;
   demandPerMinute: number;
   assignments: MinerAssignment[];
@@ -125,6 +127,7 @@ export function planMining(
 
   if (pool.length === 0) {
     return {
+      itemId,
       itemKo,
       demandPerMinute,
       assignments: [],
@@ -139,7 +142,16 @@ export function planMining(
   let remaining = demandPerMinute;
   for (const n of pool) {
     if (remaining <= 1e-9) break;
-    const full = nodeYield(n, extractor);
+    /*
+     * **채굴기 한 대의 산출은 벨트 한 줄을 넘을 수 없다.**
+     *
+     * 채굴기의 출력구는 하나다. 거기서 나가는 벨트가 못 나르는 양은 존재하지 않는 양이다.
+     * 순수 노드(120/분)에 채굴기를 올려도 컨베이어 Mk.1(60/분)만 있으면 실제로 얻는 것은 60/분이다.
+     *
+     * 이걸 빼먹고 120/분으로 계획을 세웠고, 그 위에 제작기 3대를 얹었다. 못 짓는 계획이었다.
+     * 노드가 아까우면 벨트를 올리거나(티어 2에서 Mk.2) 다른 노드를 더 개발해야 한다.
+     */
+    const full = Math.min(nodeYield(n, extractor), beltPerMinute);
     const take = Math.min(full, remaining);
     const clock = (take / full) * 100;
     assignments.push({
@@ -165,6 +177,19 @@ export function planMining(
         `채굴기 등급을 올리거나(오버클럭·Mk 상향) 다른 군집을 추가로 개발해야 합니다.`
     );
   }
+  // 노드가 벨트보다 굵으면 그 사실을 알린다 — 노드를 못 살리고 있다는 뜻이다
+  for (const n of pool.slice(0, assignments.length)) {
+    const raw = nodeYield(n, extractor);
+    if (raw > beltPerMinute + 1e-9) {
+      notes.push(
+        `${n.cell} ${PURITY_KO[n.purity]} 노드는 ${raw}/분을 낼 수 있지만 지금 벨트가 ${beltPerMinute}/분이라 ` +
+          `${beltPerMinute}/분까지만 씁니다. 채굴기를 ${Math.round((beltPerMinute / raw) * 100)}%로 낮추고, ` +
+          '상위 벨트가 열리면 100%로 올리면 됩니다 — 그때 배치를 뜯지 않아도 되게 잡았습니다.'
+      );
+      break;
+    }
+  }
+
   const last = assignments[assignments.length - 1];
   if (last && last.clockPercent < 100) {
     notes.push(
@@ -180,6 +205,7 @@ export function planMining(
   }
 
   return {
+    itemId,
     itemKo,
     demandPerMinute: round(demandPerMinute),
     assignments,
