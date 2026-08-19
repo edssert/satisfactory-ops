@@ -1,0 +1,123 @@
+/* StartPath 아일랜드 스타일. */
+
+.sp-setup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s6);
+  margin-bottom: var(--s6);
+}
+.sp-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+}
+.sp-legend {
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.sp-opts {
+  display: flex;
+  gap: var(--s1);
+  flex-wrap: wrap;
+}
+.sp-opt {
+  font-family: var(--font-body);
+  font-size: var(--t-body-s);
+  color: var(--ink-2);
+  background: var(--bg);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  padding: var(--s1) var(--s3);
+  min-height: 32px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color var(--dur-color) linear, background-color var(--dur-color) linear,
+    border-color var(--dur-color) linear;
+}
+.sp-opt:hover {
+  color: var(--accent-ink);
+  border-color: var(--accent);
+}
+.sp-opt[aria-pressed='true'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+}
+
+.sp-warn {
+  border-left: 3px solid var(--danger);
+  background: var(--surface);
+  padding: var(--s3) var(--s4);
+  font-size: var(--t-body-s);
+  margin-bottom: var(--s6);
+}
+
+.sp-lede {
+  font-size: var(--t-body-l);
+  color: var(--ink-2);
+  margin-bottom: var(--s6);
+}
+
+.sp-steps {
+  list-style: none;
+  counter-reset: step;
+  margin: 0 0 var(--s8);
+  padding: 0;
+}
+.sp-steps > li {
+  counter-increment: step;
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: var(--s4);
+  border-top: 1px solid var(--line);
+  padding: var(--s4) 0;
+}
+.sp-steps > li::before {
+  content: counter(step, decimal-leading-zero);
+  font-family: var(--font-mono);
+  font-size: var(--t-body-s);
+  font-weight: 500;
+  color: var(--accent-ink);
+  padding-top: 3px;
+}
+.sp-steps h3 {
+  font-size: var(--t-body-l);
+  font-weight: 600;
+  margin-bottom: var(--s2);
+}
+.sp-steps p {
+  font-size: var(--t-body-s);
+  margin-bottom: var(--s2);
+}
+.sp-steps p:last-child {
+  margin-bottom: 0;
+}
+.sp-steps kbd {
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-chip);
+  padding: 0 var(--s1);
+  font-size: 0.9em;
+}
+
+.sp-short {
+  color: var(--danger);
+  font-weight: 600;
+}
+.sp-ok {
+  color: var(--ok);
+  font-weight: 600;
+}
+
+table caption {
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  padding-bottom: var(--s2);
+}

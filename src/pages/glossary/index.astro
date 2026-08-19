@@ -1,0 +1,178 @@
+---
+/**
+ * F4 용어집 — 학습 레이어. JS 0KB 정적 페이지.
+ * `see` 상호참조가 깨지면 **빌드가 실패한다** (ADR-0009 §5).
+ */
+import Base from '../../layouts/Base.astro';
+import glossary from '../../data/glossary.json';
+
+interface Term {
+  id: string;
+  term: string;
+  en: string;
+  tier: number;
+  short: string;
+  why: string;
+  how: string;
+  gotcha: string;
+  see: string[];
+}
+
+const terms = glossary.terms as Term[];
+const ids = new Set(terms.map((t) => t.id));
+
+// 상호참조 무결성 — 런타임에 죽은 링크를 두지 않는다
+const broken = terms.flatMap((t) => t.see.filter((s) => !ids.has(s)).map((s) => `${t.id} → ${s}`));
+if (broken.length) {
+  throw new Error(`용어집 상호참조가 깨졌습니다: ${broken.join(', ')}`);
+}
+
+const byTier = [...new Set(terms.map((t) => t.tier))]
+  .sort((a, b) => a - b)
+  .map((tier) => ({ tier, list: terms.filter((t) => t.tier === tier) }));
+
+const nameOfTerm = (id: string) => terms.find((t) => t.id === id)!.term;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<Base
+  title="용어집 — satisfactory-ops"
+  description="매니폴드, 로드 밸런서, 오버플로 싱크. 규칙만이 아니라 왜 그런지와 무엇을 포기하는지를 같이 설명합니다."
+>
+  <div class="wrap page">
+    <header class="page-head">
+      <p class="section-label"><span class="num">F4</span> 용어집</p>
+      <h1>왜 그런지까지 설명합니다</h1>
+      <p class="prose">
+        용어 <span class="n">{terms.length}</span>개를 "이 개념이 처음 필요해지는 티어" 순으로
+        놓았습니다. 각 항목은 정의만이 아니라 <strong>왜 그렇게 하는지</strong>와{' '}
+        <strong>대신 무엇을 포기하는지</strong>를 같이 적습니다. 규칙만 외우면 응용이 안 됩니다.
+      </p>
+    </header>
+
+    <nav class="toc" aria-label="용어 목록">
+      {
+        byTier.map((g) => (
+          <div>
+            <span class="toc-tier">티어 {g.tier}</span>
+            <ul>
+              {g.list.map((t) => (
+                <li>
+                  <a href={`#${t.id}`}>{t.term}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </nav>
+
+    {
+      byTier.map((g) => (
+        <section class="section">
+          <p class="section-label">
+            <span class="num">티어 {g.tier}</span> 이 시점에 처음 필요해지는 개념
+          </p>
+          {g.list.map((t) => (
+            <article class="term" id={t.id}>
+              <h2>
+                {t.term} <span class="en">{t.en}</span>
+              </h2>
+              <p class="term-short">{t.short}</p>
+              <div class="kv">
+                <div>
+                  <span class="k">왜</span>
+                  <span class="v">{t.why}</span>
+                </div>
+                <div>
+                  <span class="k">어떻게</span>
+                  <span class="v">{t.how}</span>
+                </div>
+                <div>
+                  <span class="k">함정</span>
+                  <span class="v">{t.gotcha}</span>
+                </div>
+                {t.see.length > 0 && (
+                  <div>
+                    <span class="k">같이 보기</span>
+                    <span class="v">
+                      {t.see.map((s, i) => (
+                        <>
+                          {i > 0 && ' · '}
+                          <a href={`#${s}`}>{nameOfTerm(s)}</a>
+                        </>
+                      ))}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </article>
+          ))}
+        </section>
+      ))
+    }
+
+    <p class="footnote">
+      용어 설명은 커뮤니티 합의와 게임 내 동작을 종합한 것입니다. 출처가 갈리는 항목은 양쪽을 적고
+      어느 쪽이 왜 더 믿을 만한지 밝힙니다. 관련 조사는 저장소의{' '}
+      <a href="https://github.com/edssert/satisfactory-ops/tree/main/docs/research">docs/research</a>에
+      있습니다. <a href={`${base}/milestones/`}>마일스톤 체크리스트로 돌아가기</a>
+    </p>
+  </div>
+</Base>
+
+<style>
+  .page {
+    padding-top: var(--s12);
+  }
+  .page-head h1 {
+    margin-bottom: var(--s4);
+  }
+
+  .toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s8);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: var(--s4) 0;
+    margin-top: var(--s8);
+  }
+  .toc-tier {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--t-label);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin-bottom: var(--s1);
+  }
+  .toc ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: var(--t-body-s);
+  }
+
+  .term {
+    padding: var(--s6) 0;
+    border-bottom: 1px solid var(--line);
+    scroll-margin-top: var(--s6);
+  }
+  .term:last-child {
+    border-bottom: 0;
+  }
+  .term h2 {
+    font-size: var(--t-h3);
+    font-family: var(--font-display);
+    font-weight: 700;
+    margin-bottom: var(--s2);
+  }
+  .term-short {
+    font-size: var(--t-body);
+    margin-bottom: var(--s4);
+  }
+</style>

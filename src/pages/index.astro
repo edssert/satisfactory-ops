@@ -1,0 +1,603 @@
+---
+/**
+ * 랜딩 — docs/DESIGN-BRIEF.md §05 사양의 실행본.
+ * 히어로는 라이브 계산기(아일랜드), 나머지 전 섹션은 JS 0KB 정적 HTML.
+ * 섹션 03·04의 미리보기는 스크린샷이 아니라 **실제 데이터로 렌더한 실물**이다 — 낡지 않는다.
+ */
+import { execSync } from 'node:child_process';
+import Base from '../layouts/Base.astro';
+import QuickCalc from '../components/QuickCalc.tsx';
+import {
+  defaultRecipeOf,
+  findBuilding,
+  isRawResource,
+  item,
+  meta,
+  milestonesByTier,
+  nameOf,
+} from '../lib/gamedata';
+import { machineAdvice, solve, type RecipeBook, type SolverRecipe } from '../lib/solver';
+import { ceil, format } from '../lib/rational';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+// ---------------------------------------------------------------- 히어로 데이터 서브셋
+// 목표 아이템에서 도달 가능한 레시피만 모은다. 전체 872개를 브라우저로 보내지 않는다.
+const HERO_TARGETS = [
+  'Desc_IronPlateReinforced_C',
+  'Desc_Rotor_C',
+  'Desc_ModularFrame_C',
+  'Desc_Cable_C',
+  'Desc_Cement_C',
+  'Desc_SteelPlate_C',
+];
+
+const subsetRecipes = new Map<string, SolverRecipe>();
+const subsetNames: Record<string, { ko: string; en: string }> = {};
+const recipeOf: Record<string, string> = {};
+const machineIds = new Set<string>();
+
+function collect(itemId: string, seen = new Set<string>()) {
+  if (seen.has(itemId)) return;
+  seen.add(itemId);
+  subsetNames[itemId] = nameOf(itemId);
+  if (isRawResource(itemId)) return;
+  const r = defaultRecipeOf(itemId);
+  if (!r) return;
+  recipeOf[itemId] = r.id;
+  subsetRecipes.set(r.id, {
+    id: r.id,
+    ko: r.ko,
+    en: r.en,
+    durationSec: r.durationSec,
+    ingredients: r.ingredients,
+    products: r.products,
+    producedIn: r.producedIn,
+  });
+  for (const b of r.producedIn) machineIds.add(b);
+  for (const p of r.products) subsetNames[p.item] = nameOf(p.item);
+  for (const g of r.ingredients) collect(g.item, seen);
+}
+for (const t of HERO_TARGETS) collect(t);
+
+const subsetMachines = [...machineIds].map((id) => {
+  const b = findBuilding(id);
+  return { id, ko: b?.ko ?? id, en: b?.en ?? id, powerMW: b?.powerMW ?? null };
+});
+
+const heroTargets = HERO_TARGETS.map((id) => ({ id, ...nameOf(id) }));
+
+// ---------------------------------------------------------------- 섹션 02: 같은 입력, 다른 출력
+const book: RecipeBook = {
+  recipeFor: (id) => (recipeOf[id] ? subsetRecipes.get(recipeOf[id]!) : undefined),
+  machine: (id) => subsetMachines.find((m) => m.id === id),
+  nameOf: (id) => subsetNames[id] ?? nameOf(id),
+};
+// 히어로 헤드라인과 섹션 02는 같은 계산을 쓴다. 수치를 문장에 타이핑하지 않는다 (ADR-0009).
+const HERO_ITEM = 'Desc_IronPlateReinforced_C';
+const HERO_RATE = 15;
+const demo = solve(HERO_ITEM, HERO_RATE, book);
+if (!demo.ok) throw new Error('랜딩 데모 계산 실패: ' + demo.message);
+
+const demoRows: { ko: string; machineKo: string | null; exact: string; built: number; idle: number; clock: number }[] = [];
+(function walk(n: typeof demo.root) {
+  if (n.machines && n.machineKo) {
+    const a = machineAdvice(n.machines);
+    demoRows.push({
+      ko: n.ko,
+      machineKo: n.machineKo,
+      exact: format(n.machines, 2),
+      built: a.built,
+      idle: a.idlePercent,
+      clock: a.clock,
+    });
+  }
+  n.children.forEach(walk);
+})(demo.root);
+
+const fractional = demoRows.find((r) => r.idle > 0) ?? demoRows[0]!;
+const heroName = nameOf(HERO_ITEM).ko;
+// 소수 대수가 나오는 공정이 있으면 그것을 헤드라인에 쓴다. 없으면 전력으로 후퇴한다.
+const heroHasFraction = fractional.idle > 0;
+
+// ---------------------------------------------------------------- 섹션 03: 마일스톤 미리보기
+const tier2 = milestonesByTier().find((t) => t.tier === 2)!;
+const previewMilestones = tier2.list.slice(0, 3);
+
+// ---------------------------------------------------------------- 섹션 07: 최근 변경
+let commits: { hash: string; subject: string; date: string }[] = [];
+try {
+  const raw = execSync('git log -5 --date=short --format=%h%x09%ad%x09%s', {
+    encoding: 'utf8',
+    cwd: process.cwd(),
+  });
+  commits = raw
+    .trim()
+    .split('\n')
+    .filter(Boolean)
+    .map((line) => {
+      const [hash, date, ...rest] = line.split('\t');
+      return { hash: hash!, date: date!, subject: rest.join('\t') };
+    });
+} catch {
+  commits = [];
+}
+
+const title = 'satisfactory-ops — 다음에 무엇을 지을지 알려주는 Satisfactory 플레이북';
+const description =
+  '보강된 철판 20개/분에 제작기 몇 대인지가 아니라, 지금 무엇을 지어야 하고 이 배치가 나중에 왜 막히는지를 알려줍니다. 게임 배포 데이터에서 직접 생성한 수치.';
+---
+
+<Base title={title} description={description} bare>
+  <!-- ============================================================ 01 히어로 -->
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <a class="hero-mark" href={`${base}/`}>
+        <span class="mark" aria-hidden="true"></span>satisfactory-ops
+      </a>
+      {
+        heroHasFraction ? (
+          <h1>
+            {heroName} {HERO_RATE}개/분. {fractional.machineKo}는{' '}
+            <span class="hl">{fractional.exact}대</span>가 나온다.
+          </h1>
+        ) : (
+          <h1>
+            {heroName} {HERO_RATE}개/분에 <span class="hl">{demo.totalPowerMW} MW</span>. 발전이
+            먼저 막힌다.
+          </h1>
+        )
+      }
+      <p class="hero-sub">
+        {heroHasFraction && (
+          <>
+            {fractional.built}대로 지으면 {fractional.idle}%가 논다.{' '}
+          </>
+        )}
+        다음에 무엇을 지을지와, 지금 이 배치가 나중에 왜 막히는지를 같이 봅니다.
+      </p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href={`${base}/milestones/`}>플레이북 열기</a>
+        <a class="btn" href="https://github.com/edssert/satisfactory-ops">GitHub에서 보기</a>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <div class="hero-widget panel">
+        <p class="widget-label">
+          <span class="n">01</span> 지금 바로 — 네트워크 요청 없이 이 페이지 안에서 계산합니다
+        </p>
+        <QuickCalc
+          client:load
+          targets={heroTargets}
+          recipes={[...subsetRecipes.values()]}
+          machines={subsetMachines}
+          names={subsetNames}
+          recipeOf={recipeOf}
+          defaultTarget={HERO_ITEM}
+          defaultRate={HERO_RATE}
+        />
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <!-- ========================================================== 02 왜 다른가 -->
+    <section class="section" id="why">
+      <p class="section-label"><span class="num">02</span> 왜 다른가</p>
+      <h2>같은 입력, 다른 출력</h2>
+      <p class="prose">
+        {heroName} <span class="n">{HERO_RATE}</span>/분을 넣었을 때, 기존 계산기와 이 앱이 각각
+        무엇을 내놓는지 실제 문장 그대로 비교합니다.
+      </p>
+
+      <div class="compare">
+        <div>
+          <p class="compare-head">기존 계산기의 답</p>
+          <table>
+            <thead>
+              <tr><th>공정</th><th>기계</th><th class="n">대수</th></tr>
+            </thead>
+            <tbody>
+              {demoRows.map((r) => (
+                <tr>
+                  <td>{r.ko}</td>
+                  <td>{r.machineKo}</td>
+                  <td class="n">{r.exact}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p class="caption">정확하다. 그리고 여기서 끝난다.</p>
+        </div>
+
+        <div>
+          <p class="compare-head">이 앱의 답</p>
+          <ol class="answer">
+            <li>
+              <strong>{fractional.machineKo} <span class="n">{fractional.exact}</span>대</strong>가
+              나왔다면 <span class="n">{fractional.built}</span>대로 짓지 마세요 —{' '}
+              <span class="n">{fractional.idle}</span>%가 놉니다.
+            </li>
+            {fractional.built > 1 && (
+              <li>
+                <span class="n">{fractional.built - 1}</span>대 + 오버클럭{' '}
+                <span class="n">{fractional.clock}</span>%가 자리와 벨트를 아낍니다. 전력은 지수적으로
+                늘어나니 발전 여유를 먼저 확인하세요.
+              </li>
+            )}
+            <li>
+              전체 <span class="n">{demo.totalPowerMW}</span> MW. 바이오매스 발전기로 버틸 구간인지,
+              석탄 발전으로 넘어갈 시점인지가 여기서 갈립니다.
+            </li>
+            <li>
+              원자재 {demo.raw.map((r, i) => (
+                <span>{i > 0 && ' · '}{r.ko} <span class="n">{format(r.rate, 1)}</span>/분</span>
+              ))} — 노말 순도 노드 기준 채굴기 몇 대인지까지 이어서 봅니다.
+            </li>
+          </ol>
+          <p class="caption">
+            차이는 계산 정확도가 아니라 <strong>그다음 문장</strong>입니다.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================== 03 마일스톤 -->
+    <section class="section" id="milestones">
+      <p class="section-label"><span class="num">03</span> 마일스톤 체크리스트</p>
+      <h2>지금 어느 티어이고, 다음에 무엇을 해야 하는가</h2>
+      <p class="prose">
+        게임의 마일스톤 <span class="n">{meta.counts.milestones}</span>개를 티어별로 놓고, 체크한
+        진행 상황에서 현재 티어를 판정합니다. 아래는 실제 화면에 쓰이는 것과 같은 데이터입니다 —
+        스크린샷이 아니라 실물이라 낡지 않습니다.
+      </p>
+      <div class="preview">
+        <table>
+          <thead>
+            <tr><th>티어 2 마일스톤</th><th>해금 비용</th></tr>
+          </thead>
+          <tbody>
+            {previewMilestones.map((m) => (
+              <tr>
+                <td>
+                  {m.ko} <span class="en">{m.en}</span>
+                </td>
+                <td>
+                  {m.cost.map((c, i) => (
+                    <span class="chip">
+                      {item(c.item).ko} <span class="n">{c.amount}</span>
+                    </span>
+                  ))}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p><a href={`${base}/milestones/`}>전체 체크리스트 열기 →</a></p>
+    </section>
+
+    <!-- ========================================================== 04 입지 선정 -->
+    <section class="section" id="map">
+      <p class="section-label"><span class="num">04</span> 입지 선정</p>
+      <h2>첫 공장을 어디에 세울 것인가</h2>
+      <p class="prose">
+        시작 지점 4곳은 난이도가 다릅니다. 초반 철·석탄·수원의 거리와 지형을 놓고 비교하고, 노드
+        단위 확인은 외부 인터랙티브 맵으로 넘깁니다. 이 앱은 그 앞단의 판단을 돕습니다.
+      </p>
+      <div class="preview map-preview">
+        <img
+          src={`${base}/assets/map/biome-map.webp`}
+          alt="Satisfactory 월드 바이옴 맵. 그리드 좌표와 시작 지점 4곳이 표시되어 있다."
+          width="1600"
+          height="1600"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+      <p class="caption">
+        맵 이미지 출처: Satisfactory 공식 위키. 그리드 캘리브레이션 값은 ADR-0006에 기록되어 있습니다.
+      </p>
+      <p><a href={`${base}/start/`}>시작 가이드 열기 →</a></p>
+    </section>
+
+    <!-- ========================================================== 05 나머지 도구 -->
+    <section class="section" id="tools">
+      <p class="section-label"><span class="num">05</span> 나머지 도구</p>
+      <h2>계산기 · 용어집 · 레퍼런스</h2>
+      <ul class="tool-list">
+        <li>
+          <a href={`${base}/calc/`}>생산 계산기</a>
+          <p>
+            목표 생산량에서 원광까지 거슬러 올라갑니다. 비율은 유리수로 정확히 계산하고, 순환
+            레시피는 <strong>틀린 값을 내는 대신 계산을 거부</strong>합니다.
+          </p>
+        </li>
+        <li>
+          <a href={`${base}/glossary/`}>용어집</a>
+          <p>
+            매니폴드, 로드 밸런서, 오버클럭 — 처음 만나는 시점에 설명합니다. 규칙만이 아니라 왜
+            그런지와 무엇을 포기하는지를 같이 씁니다.
+          </p>
+        </li>
+        <li>
+          <a href={`${base}/ref/`}>레퍼런스 표</a>
+          <p>
+            벨트·파이프 처리량, 발전기 출력, 채굴기 산출량. 전부 게임 배포 데이터에서 생성했고 손으로
+            옮겨 적은 값이 없습니다.
+          </p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ========================================================== 06 데이터 -->
+    <section class="section" id="data">
+      <p class="section-label"><span class="num">06</span> 이 수치는 어디서 왔는가</p>
+      <h2>게임이 배포하는 데이터에서 직접 생성합니다</h2>
+      <div class="kv">
+        <div>
+          <span class="k">원본</span>
+          <span class="v">
+            게임 설치본의 <code>CommunityResources/Docs</code> — Coffee Stain이 패치마다 갱신하는 공식
+            데이터. 커뮤니티 미러가 아닙니다.
+          </span>
+        </div>
+        <div>
+          <span class="k">기준 빌드</span>
+          <span class="v">
+            Steam build <span class="n">{meta.game.steamBuildId}</span> · 아이템{' '}
+            <span class="n">{meta.counts.items}</span> · 레시피{' '}
+            <span class="n">{meta.counts.recipes}</span> · 건물{' '}
+            <span class="n">{meta.counts.buildings}</span>
+          </span>
+        </div>
+        <div>
+          <span class="k">한국어 표기</span>
+          <span class="v">
+            게임 공식 한국어 로케일을 그대로 씁니다. 게임 화면에 <strong>보강된 철판</strong>이라고
+            적혀 있으면 이 앱도 그렇게 씁니다.
+          </span>
+        </div>
+        <div>
+          <span class="k">검증</span>
+          <span class="v">
+            데이터 빌드에 검증 게이트가 붙어 있습니다. 벨트 속도·전력값·참조 무결성 검사 중 하나라도
+            실패하면 파일을 쓰지 않고 빌드가 죽습니다 — 조용히 틀린 수치가 배포되는 것보다 낫습니다.
+          </span>
+        </div>
+        <div>
+          <span class="k">모르는 것</span>
+          <span class="v">
+            확인하지 못한 값은 비워두고 <code>미확인</code>이라고 적습니다. 그럴듯한 근사치를 채우지
+            않습니다.
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================== 07 만든 사람 -->
+    <section class="section" id="about">
+      <p class="section-label"><span class="num">07</span> 만든 사람과 현재 상태</p>
+      <h2>혼자 만들고 있습니다</h2>
+      <p class="prose">
+        Satisfactory를 혼자 굴리다가 공장을 세 번쯤 갈아엎은 사람이 만들고 있습니다. 계산기는 이미
+        충분히 많은데, "지금 뭘 해야 하는지"와 "이 배치가 왜 나중에 문제가 되는지"를 알려주는 것이
+        없어서 시작했습니다. 공개 저장소이고, 결정의 근거는 전부 문서로 남겨둡니다.
+      </p>
+      <div class="kv">
+        <div>
+          <span class="k">만든 사람</span>
+          <span class="v"><a href="https://github.com/edssert">github.com/edssert</a></span>
+        </div>
+        <div>
+          <span class="k">지금 되는 것</span>
+          <span class="v">마일스톤 체크리스트 · 시작 가이드 · 용어집 · 레퍼런스 표 · 생산 계산기</span>
+        </div>
+        <div>
+          <span class="k">아직 아닌 것</span>
+          <span class="v">
+            공장 성장 단계도 · 하드드라이브 추적 · 세이브 파일 가져오기 · 순환 레시피 정확해(LP)
+          </span>
+        </div>
+        <div>
+          <span class="k">라이선스</span>
+          <span class="v">코드는 MIT. 게임 자산·데이터는 Coffee Stain Studios의 것입니다.</span>
+        </div>
+      </div>
+      {
+        commits.length > 0 && (
+          <>
+            <p class="compare-head" style="margin-top: var(--s6)">최근 변경</p>
+            <ul class="changelog">
+              {commits.map((c) => (
+                <li>
+                  <span class="n">{c.date}</span>
+                  <code>{c.hash}</code>
+                  <span>{c.subject}</span>
+                </li>
+              ))}
+            </ul>
+          </>
+        )
+      }
+    </section>
+
+    <!-- ========================================================== 08 최종 CTA -->
+    <section class="section" id="cta">
+      <p class="section-label"><span class="num">08</span> 시작하기</p>
+      <h2>지금 티어부터 체크하면 됩니다</h2>
+      <p class="prose">
+        진행 상황은 이 브라우저에만 저장됩니다. 계정도, 서버도 없습니다.
+      </p>
+      <p><a class="btn btn-primary" href={`${base}/milestones/`}>플레이북 열기</a></p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .hero {
+    padding-top: var(--s16);
+    border-bottom: 1px solid var(--line);
+    padding-bottom: var(--s12);
+  }
+  /* 히어로만 중앙 정렬. 나머지 전 섹션은 좌측 (브리프 §07-9) */
+  .hero-inner {
+    text-align: center;
+    max-width: 860px;
+  }
+  .hero-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s2);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--t-label);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    text-decoration: none;
+    margin-bottom: var(--s6);
+  }
+  .hero-mark .mark {
+    width: 22px;
+    height: 3px;
+    background: var(--accent);
+  }
+  .hero h1 {
+    font-size: var(--t-display);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    margin-bottom: var(--s4);
+  }
+  .hero h1 .hl {
+    color: var(--accent-ink);
+    font-family: var(--font-mono);
+    font-weight: 500;
+  }
+  .hero-sub {
+    font-size: var(--t-body-l);
+    color: var(--ink-2);
+    margin-inline: auto;
+    margin-bottom: var(--s8);
+  }
+  .hero-cta {
+    display: flex;
+    gap: var(--s3);
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: var(--s12);
+  }
+  .hero-widget {
+    max-width: 1080px;
+    margin-inline: auto;
+    padding: 0;
+  }
+  .widget-label {
+    font-family: var(--font-mono);
+    font-size: var(--t-label);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin: 0;
+    padding: var(--s3) var(--s4);
+    border-bottom: 1px solid var(--line);
+    background: var(--surface-2);
+  }
+  .widget-label .n {
+    color: var(--accent-ink);
+  }
+
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s8);
+    margin-top: var(--s6);
+  }
+  @media (max-width: 800px) {
+    .compare {
+      grid-template-columns: 1fr;
+      gap: var(--s6);
+    }
+  }
+  .compare-head {
+    font-family: var(--font-mono);
+    font-size: var(--t-label);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin-bottom: var(--s2);
+    border-bottom: 1px solid var(--line-strong);
+    padding-bottom: var(--s1);
+  }
+  .answer {
+    margin: 0;
+    padding-left: 1.3em;
+    font-size: var(--t-body-s);
+  }
+  .answer li {
+    margin-bottom: var(--s3);
+  }
+  .answer li::marker {
+    font-family: var(--font-mono);
+    color: var(--accent-ink);
+  }
+
+  .preview {
+    border: 1px solid var(--line);
+    background: var(--surface);
+    padding: var(--s4);
+    margin: var(--s6) 0 var(--s2);
+  }
+  .preview .chip {
+    margin-right: var(--s1);
+  }
+  .map-preview {
+    padding: 0;
+    line-height: 0;
+    max-width: 560px;
+  }
+
+  .tool-list {
+    list-style: none;
+    margin: var(--s6) 0 0;
+    padding: 0;
+  }
+  .tool-list li {
+    border-top: 1px solid var(--line);
+    padding: var(--s4) 0;
+  }
+  .tool-list a {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--t-h3);
+  }
+  .tool-list p {
+    margin: var(--s2) 0 0;
+    font-size: var(--t-body-s);
+    color: var(--ink-2);
+  }
+
+  .changelog {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: var(--t-body-s);
+  }
+  .changelog li {
+    display: grid;
+    grid-template-columns: 92px 68px 1fr;
+    gap: var(--s3);
+    padding: var(--s1) 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .changelog code {
+    color: var(--ink-2);
+  }
+  @media (max-width: 560px) {
+    .changelog li {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+  }
+</style>

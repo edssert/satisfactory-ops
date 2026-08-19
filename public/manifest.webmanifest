@@ -1,0 +1,19 @@
+{
+  "name": "satisfactory-ops — 공장 설계 플레이북",
+  "short_name": "sfops",
+  "description": "마일스톤 단위로 지금 할 일과 지금 남겨둬야 할 것을 알려주는 Satisfactory 진행 플레이북.",
+  "lang": "ko",
+  "start_url": "/satisfactory-ops/",
+  "scope": "/satisfactory-ops/",
+  "display": "standalone",
+  "background_color": "#14161a",
+  "theme_color": "#14161a",
+  "icons": [
+    {
+      "src": "/satisfactory-ops/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

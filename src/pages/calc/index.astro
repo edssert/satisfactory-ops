@@ -1,0 +1,117 @@
+---
+/**
+ * F5 생산 계산기.
+ * 레시피 페이로드는 이 페이지가 만든 서브셋(표준 + 대체, 건물 레시피 제외)을 아일랜드에 인라인한다.
+ * 전체 872개를 브라우저로 보내지 않는다 (ADR-0012).
+ */
+import Base from '../../layouts/Base.astro';
+import ProductionCalc from '../../components/ProductionCalc.tsx';
+import { buildings, findBuilding, index, item, logistics, nameOf, recipes } from '../../lib/gamedata';
+import type { SolverRecipe } from '../../lib/solver';
+
+// 계산에 쓰는 레시피: 기계에서 돌고, 건물을 짓는 레시피가 아닌 것
+const usable = recipes.filter((r) => !r.isBuildingRecipe && r.producedIn.length > 0);
+
+const payload: SolverRecipe[] = usable.map((r) => ({
+  id: r.id,
+  ko: r.ko,
+  en: r.en,
+  durationSec: r.durationSec,
+  ingredients: r.ingredients,
+  products: r.products,
+  producedIn: r.producedIn,
+}));
+
+const isAlternate: Record<string, boolean> = {};
+for (const r of usable) isAlternate[r.id] = r.isAlternate;
+
+// 아이템 → 이 아이템을 만드는 레시피들 (표준 먼저, 그다음 대체)
+const producers: Record<string, string[]> = {};
+for (const r of usable) {
+  for (const p of r.products) (producers[p.item] ??= []).push(r.id);
+}
+for (const key of Object.keys(producers)) {
+  producers[key]!.sort((a, b) => Number(isAlternate[a]) - Number(isAlternate[b]));
+}
+
+// 이름 사전 — 트리에 등장할 수 있는 모든 아이템
+const names: Record<string, { ko: string; en: string }> = {};
+for (const r of usable) {
+  for (const g of [...r.ingredients, ...r.products]) names[g.item] = nameOf(g.item);
+}
+
+const machineIds = new Set(usable.flatMap((r) => r.producedIn));
+const machines = [...machineIds].map((id) => {
+  const b = findBuilding(id);
+  return { id, ko: b?.ko ?? id, en: b?.en ?? id, powerMW: b?.powerMW ?? null };
+});
+
+// 선택 가능한 목표: 만들 수 있는 아이템 전부. 티어 순 → 이름 순으로 정렬한다.
+const targets = Object.keys(producers)
+  .map((id) => {
+    const tier = Math.min(...producers[id]!.map((r) => index.unlockTier[r] ?? 99));
+    return { id, ...nameOf(id), tier };
+  })
+  .sort((a, b) => a.tier - b.tier || a.ko.localeCompare(b.ko, 'ko'))
+  .map(({ id, ko, en }) => ({ id, ko, en }));
+
+const belts = logistics().belts.map((b) => ({
+  id: b.id,
+  ko: b.ko,
+  perMinute: b.beltItemsPerMinute!,
+  unlockTier: b.unlockTier,
+}));
+
+const payloadKb = Math.round(JSON.stringify(payload).length / 1024);
+---
+
+<Base
+  title="생산 계산기 — satisfactory-ops"
+  description="목표 생산량에서 원광까지 역산합니다. 비율은 유리수로 정확히 계산하고, 순환 레시피는 틀린 값을 내는 대신 계산을 거부합니다."
+>
+  <div class="wrap page">
+    <header class="page-head">
+      <p class="section-label"><span class="num">F5</span> 생산 계산기</p>
+      <h1>목표에서 원광까지 거꾸로 계산합니다</h1>
+      <p class="prose">
+        레시피 <span class="n">{usable.length}</span>개(대체 포함)를 이 페이지 안에 담고 있습니다.
+        입력할 때 네트워크를 쓰지 않습니다. 대체 레시피를 바꿔 끼우면 원자재·기계·전력이 어떻게
+        달라지는지 바로 보입니다 — 하드 드라이브로 무엇을 먼저 풀어야 하는지가 그 차이입니다.
+      </p>
+      <p class="caption">
+        비율은 부동소수점이 아니라 유리수로 계산합니다. 순환 레시피(재활용 플라스틱 ↔ 재활용 고무 등)를
+        만나면 그럴듯한 값을 내는 대신 <strong>계산을 거부</strong>합니다. 근거: ADR-0013.
+      </p>
+    </header>
+
+    <ProductionCalc
+      client:load
+      targets={targets}
+      recipes={payload}
+      machines={machines}
+      names={names}
+      producers={producers}
+      isAlternate={isAlternate}
+      belts={belts}
+      defaultTarget="Desc_IronPlateReinforced_C"
+    />
+
+    <p class="footnote">
+      이 페이지가 들고 있는 레시피 데이터는 약 <span class="n">{payloadKb}</span> KB입니다(압축 전).
+      계산 결과의 기계 대수는 클럭 100% 기준이며, 오버클럭 시 전력은 지수적으로 늘어납니다.
+      더 정교한 최적화(순환 레시피 정확해, 노드 배분)는 아직 구현하지 않았습니다.
+    </p>
+  </div>
+</Base>
+
+<style>
+  .page {
+    padding-top: var(--s12);
+  }
+  .page-head {
+    margin-bottom: var(--s8);
+  }
+  .page-head h1 {
+    margin-bottom: var(--s4);
+  }
+</style>

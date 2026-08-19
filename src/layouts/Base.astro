@@ -1,0 +1,276 @@
+---
+/**
+ * Base.astro — 모든 페이지의 껍데기.
+ * 헤더/푸터/테마/메타. 게임 버전 표기는 데이터에서 온다 (ADR-0012 드리프트 대응).
+ */
+import '../styles/tokens.css';
+import '../styles/base.css';
+import { meta } from '../lib/gamedata';
+
+interface Props {
+  title: string;
+  description: string;
+  /** 랜딩은 헤더 내비를 숨기고 자체 히어로를 쓴다 */
+  bare?: boolean;
+}
+
+const { title, description, bare = false } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const nav = [
+  { href: `${base}/milestones/`, label: '마일스톤' },
+  { href: `${base}/start/`, label: '시작 가이드' },
+  { href: `${base}/calc/`, label: '계산기' },
+  { href: `${base}/glossary/`, label: '용어집' },
+  { href: `${base}/ref/`, label: '레퍼런스' },
+];
+const here = Astro.url.pathname;
+const buildId = meta.game.steamBuildId ?? '알 수 없음';
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="light dark" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%2314161A'/><rect x='4' y='20' width='24' height='4' fill='%23FA9549'/><rect x='4' y='10' width='14' height='4' fill='%23E4E1DD'/></svg>"
+    />
+    <link rel="manifest" href={`${base}/manifest.webmanifest`} />
+    <meta name="theme-color" content="#14161a" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <script is:inline>
+      // 테마 깜빡임 방지. localStorage → 없으면 OS 설정.
+      try {
+        var t = localStorage.getItem('sfops.theme');
+        if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main">본문으로 건너뛰기</a>
+
+    {
+      !bare && (
+        <header class="site-head">
+          <div class="wrap head-inner">
+            <a class="wordmark" href={`${base}/`}>
+              <span class="mark" aria-hidden="true" />
+              satisfactory-ops
+            </a>
+            <nav aria-label="주요 화면">
+              <ul>
+                {nav.map((n) => (
+                  <li>
+                    <a href={n.href} aria-current={here.startsWith(n.href) ? 'page' : undefined}>
+                      {n.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+            <button type="button" class="theme-toggle" data-theme-toggle aria-label="밝기 전환">
+              밝기
+            </button>
+          </div>
+        </header>
+      )
+    }
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="site-foot">
+      <div class="wrap">
+        <div class="kv">
+          <div>
+            <span class="k">데이터 기준</span>
+            <span class="v">
+              Satisfactory 게임 배포 데이터 · Steam build <span class="n">{buildId}</span> ·
+              아이템 <span class="n">{meta.counts.items}</span> / 레시피{' '}
+              <span class="n">{meta.counts.recipes}</span> (대체{' '}
+              <span class="n">{meta.counts.alternateRecipes}</span>) / 건물{' '}
+              <span class="n">{meta.counts.buildings}</span>
+            </span>
+          </div>
+          <div>
+            <span class="k">소스</span>
+            <span class="v">
+              <a href="https://github.com/edssert/satisfactory-ops">github.com/edssert/satisfactory-ops</a>
+              · 한국어 표시명은 게임 공식 로케일을 따릅니다
+            </span>
+          </div>
+        </div>
+        <p class="legal">
+          satisfactory-ops는 비공식 팬 제작 프로젝트입니다. Coffee Stain Studios와 제휴·승인 관계가
+          없습니다. Satisfactory 및 관련 상표는 각 소유자의 재산입니다.
+        </p>
+      </div>
+    </footer>
+
+    <!-- 새 버전 알림 (arch-offline §5: 자동 적용하지 않고 사용자에게 알린다) -->
+    <div class="sw-toast" data-sw-toast hidden role="status">
+      <span>새 버전이 배포되었습니다.</span>
+      <button type="button" class="btn" data-sw-reload>새로고침</button>
+    </div>
+
+    <script is:inline define:vars={{ swUrl: `${base}/sw.js`, swScope: `${base}/` }}>
+      // 서비스워커 등록 — 오프라인 전 기능 동작 (TRD C-3)
+      if ('serviceWorker' in navigator && location.protocol === 'https:') {
+        navigator.serviceWorker.register(swUrl, { scope: swScope }).then(function (reg) {
+          var toast = document.querySelector('[data-sw-toast]');
+          var notify = function (worker) {
+            if (!worker || !navigator.serviceWorker.controller) return;
+            worker.addEventListener('statechange', function () {
+              if (worker.state === 'installed' && toast) toast.hidden = false;
+            });
+          };
+          notify(reg.installing);
+          reg.addEventListener('updatefound', function () { notify(reg.installing); });
+          document.querySelector('[data-sw-reload]')?.addEventListener('click', function () {
+            if (reg.waiting) reg.waiting.postMessage('skip-waiting');
+            location.reload();
+          });
+        }).catch(function () { /* 등록 실패해도 앱은 온라인에서 정상 동작한다 */ });
+      }
+    </script>
+
+    <script is:inline>
+      document.querySelector('[data-theme-toggle]')?.addEventListener('click', function () {
+        var root = document.documentElement;
+        var cur =
+          root.dataset.theme ||
+          (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        var next = cur === 'dark' ? 'light' : 'dark';
+        root.dataset.theme = next;
+        try {
+          localStorage.setItem('sfops.theme', next);
+        } catch (e) {}
+      });
+    </script>
+
+    <style>
+      .skip {
+        position: absolute;
+        left: -9999px;
+        top: 0;
+        background: var(--surface);
+        padding: var(--s2) var(--s4);
+        z-index: 10;
+      }
+      .skip:focus {
+        left: var(--s4);
+        top: var(--s2);
+      }
+
+      .site-head {
+        border-bottom: 1px solid var(--line-strong);
+        background: var(--surface-2);
+      }
+      .head-inner {
+        display: flex;
+        align-items: center;
+        gap: var(--s6);
+        min-height: 52px;
+        flex-wrap: wrap;
+      }
+      .wordmark {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--s2);
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: var(--t-body-s);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--ink);
+        text-decoration: none;
+      }
+      .wordmark .mark {
+        width: 22px;
+        height: 3px;
+        background: var(--accent);
+      }
+      .site-head nav ul {
+        display: flex;
+        gap: var(--s4);
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        overflow-x: auto;
+      }
+      .site-head nav a {
+        display: block;
+        padding: var(--s3) 0;
+        font-size: var(--t-body-s);
+        color: var(--ink-2);
+        text-decoration: none;
+        white-space: nowrap;
+        border-bottom: 2px solid transparent;
+      }
+      .site-head nav a:hover {
+        color: var(--ink);
+      }
+      .site-head nav a[aria-current='page'] {
+        color: var(--ink);
+        border-bottom-color: var(--accent);
+      }
+      .theme-toggle {
+        margin-left: auto;
+        font-family: var(--font-mono);
+        font-size: var(--t-label);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink-2);
+        background: transparent;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-chip);
+        padding: var(--s1) var(--s2);
+        cursor: pointer;
+      }
+      .theme-toggle:hover {
+        color: var(--accent-ink);
+        border-color: var(--accent);
+      }
+
+      .site-foot {
+        border-top: 1px solid var(--line);
+        margin-top: var(--s24);
+        padding: var(--s8) 0 var(--s16);
+        font-size: var(--t-body-s);
+        color: var(--ink-2);
+      }
+      .sw-toast {
+        position: fixed;
+        left: var(--s4);
+        bottom: var(--s4);
+        z-index: 30;
+        display: flex;
+        align-items: center;
+        gap: var(--s3);
+        background: var(--surface);
+        border: 1px solid var(--line-strong);
+        border-left: 3px solid var(--accent);
+        border-radius: var(--radius);
+        padding: var(--s3) var(--s4);
+        font-size: var(--t-body-s);
+        box-shadow: 0 2px 12px rgb(0 0 0 / 0.18);
+      }
+      .sw-toast[hidden] {
+        display: none;
+      }
+
+      .legal {
+        margin-top: var(--s6);
+        font-size: var(--t-caption);
+        max-width: var(--measure);
+      }
+    </style>
+  </body>
+</html>

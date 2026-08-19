@@ -1,0 +1,181 @@
+/* ProductionCalc 아일랜드 스타일. */
+
+.calc-controls {
+  display: flex;
+  gap: var(--s6);
+  flex-wrap: wrap;
+  align-items: flex-end;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: var(--s4);
+  margin-bottom: var(--s6);
+}
+.calc-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+}
+.calc-field label {
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.calc-field select,
+.calc-field input {
+  font-family: var(--font-body);
+  font-size: var(--t-body-s);
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  padding: var(--s2) var(--s3);
+  min-height: 38px;
+}
+.calc-field select {
+  max-width: 22rem;
+}
+.calc-field input {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  width: 9ch;
+}
+
+.calc-invalid {
+  color: var(--danger);
+  font-size: var(--t-body-s);
+}
+.calc-reject {
+  border-left: 3px solid var(--danger);
+  background: var(--surface);
+  padding: var(--s3) var(--s4);
+  font-size: var(--t-body-s);
+}
+.calc-cycle {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--t-caption);
+  color: var(--ink-2);
+  margin-top: var(--s1);
+}
+
+.calc-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: var(--s8);
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .calc-body {
+    grid-template-columns: 1fr;
+  }
+}
+
+.calc-h {
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  border-bottom: 1px solid var(--line-strong);
+  padding-bottom: var(--s1);
+  margin-bottom: var(--s3);
+}
+
+.calc-tree {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.calc-tree > li {
+  padding-left: calc(var(--d, 0) * 20px);
+  border-bottom: 1px solid var(--line);
+}
+.calc-node {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--s3);
+  padding: var(--s2) 0;
+  font-size: var(--t-body-s);
+}
+.calc-name {
+  font-weight: 600;
+  min-width: 9ch;
+}
+.calc-mach {
+  color: var(--ink-2);
+}
+.calc-raw,
+.calc-belt {
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.05em;
+  color: var(--ink-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-chip);
+  padding: 0 var(--s2);
+}
+.calc-belt {
+  margin-left: auto;
+}
+/* 벨트 한 줄로 못 나르는 유량 — 이 앱이 잡아주는 대표적 함정 (ADR-0016) */
+.calc-belt.is-over {
+  color: var(--accent-ink);
+  border-color: var(--accent);
+}
+
+.calc-advice,
+.calc-byproduct {
+  margin: 0 0 var(--s2);
+  border-left: 3px solid var(--accent);
+  padding: var(--s1) var(--s3);
+  font-size: var(--t-caption);
+  color: var(--ink-2);
+  max-width: none;
+}
+.calc-advice .n,
+.calc-byproduct .n {
+  color: var(--accent-ink);
+}
+.calc-byproduct {
+  border-left-color: var(--line-strong);
+}
+
+.calc-side section {
+  margin-bottom: var(--s8);
+}
+.calc-side .kv > div {
+  grid-template-columns: 40% 1fr;
+}
+.calc-hint {
+  font-size: var(--t-caption);
+  color: var(--ink-2);
+  margin: var(--s2) 0 0;
+}
+.calc-alts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+  margin-top: var(--s3);
+}
+.calc-alts label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--t-caption);
+  color: var(--ink-2);
+}
+.calc-alts select {
+  font-family: var(--font-body);
+  font-size: var(--t-body-s);
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--s1) var(--s2);
+  min-height: 32px;
+}

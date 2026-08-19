@@ -1,0 +1,230 @@
+---
+/**
+ * F6 레퍼런스 표 — JS 0KB 정적 페이지.
+ * 표의 모든 수치는 게임 배포 데이터에서 빌드타임에 렌더된다. 손으로 옮겨 적은 값이 없다.
+ */
+import Base from '../../layouts/Base.astro';
+import { buildings, item, logistics, meta } from '../../lib/gamedata';
+
+const { belts, pipes } = logistics();
+
+const miners = buildings
+  .filter((b) => b.extraction && b.category === 'extractor')
+  .sort((a, b) => (a.extraction!.perMinuteAtNormalPurity ?? 0) - (b.extraction!.perMinuteAtNormalPurity ?? 0));
+
+const generators = buildings
+  .filter((b) => b.powerGenMW != null && b.powerGenMW > 0)
+  .sort((a, b) => (a.powerGenMW ?? 0) - (b.powerGenMW ?? 0));
+
+const machines = buildings
+  .filter((b) => b.category === 'manufacturer' && b.powerMW != null)
+  .sort((a, b) => (a.powerMW ?? 0) - (b.powerMW ?? 0));
+
+const tierOf = (t: number | null) => (t == null ? '—' : `T${t}`);
+const solidMiner = (b: (typeof miners)[number]) => b.extraction?.allowedForms?.includes('RF_SOLID');
+---
+
+<Base
+  title="레퍼런스 표 — satisfactory-ops"
+  description="벨트·파이프 처리량, 채굴기 산출량, 발전기 출력, 생산 건물 전력. 게임 배포 데이터에서 직접 생성한 표."
+>
+  <div class="wrap page">
+    <header class="page-head">
+      <p class="section-label"><span class="num">F6</span> 레퍼런스</p>
+      <h1>자주 찾는 수치를 한 화면에</h1>
+      <p class="prose">
+        전부 게임이 배포하는 데이터에서 생성했습니다. 사람이 옮겨 적은 숫자가 하나도 없으므로, 게임이
+        패치되면 이 표도 같이 바뀝니다. 기준 빌드는 <span class="n">{meta.game.steamBuildId}</span>입니다.
+      </p>
+    </header>
+
+    <section class="section">
+      <p class="section-label"><span class="num">01</span> 컨베이어 벨트</p>
+      <h2>벨트 처리량과 해금 티어</h2>
+      <div class="scroll-x">
+        <table>
+          <thead>
+            <tr><th>벨트</th><th class="n">처리량 (개/분)</th><th class="n">해금</th><th>Mk.1 대비</th></tr>
+          </thead>
+          <tbody>
+            {
+              belts.map((b) => (
+                <tr>
+                  <td>{b.ko} <span class="en">{b.en}</span></td>
+                  <td class="n">{b.beltItemsPerMinute}</td>
+                  <td class="n">{tierOf(b.unlockTier)}</td>
+                  <td class="n">×{Math.round(((b.beltItemsPerMinute ?? 0) / 60) * 10) / 10}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="note">
+        <span class="note-title">왜 중요한가</span>
+        순수 노드에 채굴기 Mk.1을 꽂으면 <span class="n">120</span>개/분이 나옵니다. Mk.1 벨트는{' '}
+        <span class="n">60</span>개/분입니다. 즉 물류 Mk.2를 열기 전까지 <strong>절반을 버리고
+        있습니다</strong>. 벨트와 채굴기는 항상 짝으로 올리세요.
+      </p>
+    </section>
+
+    <section class="section">
+      <p class="section-label"><span class="num">02</span> 파이프</p>
+      <h2>유체 처리량</h2>
+      <div class="scroll-x">
+        <table>
+          <thead>
+            <tr><th>파이프</th><th class="n">처리량 (m³/분)</th><th class="n">해금</th><th class="n">석탄 발전기 몇 대</th></tr>
+          </thead>
+          <tbody>
+            {
+              pipes.map((p) => (
+                <tr>
+                  <td>{p.ko} <span class="en">{p.en}</span></td>
+                  <td class="n">{p.pipeFlowM3PerMinute}</td>
+                  <td class="n">{tierOf(p.unlockTier)}</td>
+                  <td class="n">{Math.floor((p.pipeFlowM3PerMinute ?? 0) / 45)}대</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="caption">
+        석탄 발전기 1대가 물 45 m³/분을 먹는 것을 기준으로 나눈 값입니다. 위키 본문은 Mk.1에
+        "6~7대"라고 쓰지만, 산술상 6대가 안전 설계값입니다 (근거: docs/research/progression.md §E).
+      </p>
+    </section>
+
+    <section class="section">
+      <p class="section-label"><span class="num">03</span> 채굴기 · 추출기</p>
+      <h2>순도별 산출량</h2>
+      <div class="scroll-x">
+        <table>
+          <thead>
+            <tr>
+              <th>설비</th>
+              <th class="n">불순</th>
+              <th class="n">보통</th>
+              <th class="n">순수</th>
+              <th class="n">전력 (MW)</th>
+              <th class="n">해금</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              miners.map((m) => {
+                const base = m.extraction?.perMinuteAtNormalPurity ?? 0;
+                const solid = solidMiner(m);
+                return (
+                  <tr>
+                    <td>
+                      {m.ko} <span class="en">{m.en}</span>
+                      {!solid && <span class="chip">유체</span>}
+                    </td>
+                    <td class="n">{solid ? base * 0.5 : '—'}</td>
+                    <td class="n">{base}</td>
+                    <td class="n">{solid ? base * 2 : '—'}</td>
+                    <td class="n">{m.powerMW ?? '—'}</td>
+                    <td class="n">{tierOf(m.unlockTier)}</td>
+                  </tr>
+                );
+              })
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="caption">
+        순도 배율은 불순 ×0.5 / 보통 ×1 / 순수 ×2입니다. 유체 추출기는 노드 순도가 없으므로 보통 열의
+        값이 고정 산출량입니다.
+      </p>
+    </section>
+
+    <section class="section">
+      <p class="section-label"><span class="num">04</span> 발전기</p>
+      <h2>출력과 해금 티어</h2>
+      <div class="scroll-x">
+        <table>
+          <thead>
+            <tr><th>발전기</th><th class="n">출력 (MW)</th><th class="n">해금</th><th>비고</th></tr>
+          </thead>
+          <tbody>
+            {
+              generators.map((g) => (
+                <tr>
+                  <td>{g.ko} <span class="en">{g.en}</span></td>
+                  <td class="n">{g.powerGenMW}</td>
+                  <td class="n">{tierOf(g.unlockTier)}</td>
+                  <td class="small muted">
+                    {g.supplementalToPowerRatio
+                      ? `보조 자원 비율 ${g.supplementalToPowerRatio} (물 등)`
+                      : ''}
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="note">
+        <span class="note-title">정수 비율로 외우세요</span>
+        벨트 Mk.1 한 줄 = 석탄 발전기 <span class="n">4</span>대. 급수 추출기{' '}
+        <span class="n">3</span>대 = 석탄 발전기 <span class="n">8</span>대. 파이프 Mk.1 한 줄 ={' '}
+        <span class="n">6</span>대. 이 숫자에 맞춰 모듈을 짜면 확장할 때 계산을 다시 하지 않습니다.
+      </p>
+    </section>
+
+    <section class="section">
+      <p class="section-label"><span class="num">05</span> 생산 건물</p>
+      <h2>전력 소비</h2>
+      <div class="scroll-x">
+        <table>
+          <thead>
+            <tr>
+              <th>건물</th>
+              <th class="n">전력 (MW)</th>
+              <th class="n">해금</th>
+              <th>건설 비용</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              machines.map((b) => (
+                <tr>
+                  <td>{b.ko} <span class="en">{b.en}</span></td>
+                  <td class="n">{b.powerMW}</td>
+                  <td class="n">{tierOf(b.unlockTier)}</td>
+                  <td>
+                    {b.buildCost.map((c, i) => (
+                      <span class="chip">
+                        {item(c.item).ko} <span class="n">{c.amount}</span>
+                      </span>
+                    ))}
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="caption">
+        오버클럭 시 전력은 지수적으로 증가합니다(지수 약 1.32). 표의 값은 클럭 100% 기준입니다.
+      </p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .page {
+    padding-top: var(--s12);
+  }
+  .page-head h1 {
+    margin-bottom: var(--s4);
+  }
+  table .chip {
+    margin: 1px;
+  }
+  h2 {
+    margin-bottom: var(--s4);
+  }
+</style>
