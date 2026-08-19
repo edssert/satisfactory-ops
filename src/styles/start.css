@@ -68,21 +68,32 @@
   margin: 0 0 var(--s8);
   padding: 0;
 }
+/*
+ * 번호는 절대 배치한다. grid 2열로 짰다가 <li>의 자식이 번호·제목·문단 여러 개가 되면서
+ * 두 번째 문단부터 34px짜리 첫 칸으로 떨어져 글자가 세로 한 줄로 흘렀다.
+ * 자식 개수에 영향받지 않는 배치라야 안전하다.
+ */
 .sp-steps > li {
   counter-increment: step;
-  display: grid;
-  grid-template-columns: 34px 1fr;
-  gap: var(--s4);
+  position: relative;
+  padding: var(--s4) 0 var(--s4) 50px;
   border-top: 1px solid var(--line);
-  padding: var(--s4) 0;
 }
 .sp-steps > li::before {
   content: counter(step, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: calc(var(--s4) + 3px);
+  width: 34px;
   font-family: var(--font-mono);
   font-size: var(--t-body-s);
   font-weight: 500;
   color: var(--accent-ink);
-  padding-top: 3px;
+}
+@media (max-width: 480px) {
+  .sp-steps > li {
+    padding-left: 34px;
+  }
 }
 .sp-steps h3 {
   font-size: var(--t-body-l);
