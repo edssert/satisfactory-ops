@@ -18,7 +18,7 @@
     "build": "npm run data:check && astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "test": "node --test tests/solver.test.ts",
+    "test": "node --test tests/solver.test.ts tests/sw.test.ts",
     "verify": "npm run data:check && npm test && astro check --minimumSeverity error"
   },
   "dependencies": {

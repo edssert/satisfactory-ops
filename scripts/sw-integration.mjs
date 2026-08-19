@@ -16,6 +16,19 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 
+/**
+ * 네비게이션 URL을 프리캐시 키로 바꾼다.
+ *
+ * 프리캐시 목록은 빌드 산출물 경로(`.../milestones/index.html`)인데 브라우저는
+ * 디렉터리 URL(`.../milestones/`)로 네비게이션한다. 이 변환이 없으면 캐시가 항상 빗나가고
+ * 폴백으로 랜딩 페이지가 나온다 — 내부 링크가 전부 "안 열리는" 것처럼 보인다.
+ */
+export function navigationCacheKey(pathname) {
+  if (pathname.endsWith('/')) return pathname + 'index.html';
+  if (!pathname.split('/').pop().includes('.')) return pathname + '/index.html';
+  return pathname;
+}
+
 /** 프리캐시에서 제외할 것: 소스맵, 라이선스 텍스트 등 런타임에 필요 없는 파일 */
 const EXCLUDE = [/\.map$/i, /LICENSE/i, /\.txt$/i];
 
@@ -73,6 +86,29 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+// 프리캐시 키는 .../index.html 인데 네비게이션은 .../ 로 온다. 이 변환이 없으면 전부 빗나간다.
+${navigationCacheKey.toString()}
+
+async function handleNavigate(req) {
+  const cache = await caches.open(CACHE);
+  const url = new URL(req.url);
+  const key = navigationCacheKey(url.pathname);
+
+  const exact = await cache.match(key);
+  if (exact) return exact;
+
+  const asIs = await cache.match(req, { ignoreSearch: true });
+  if (asIs) return asIs;
+
+  // 캐시에 없는 경로 — 네트워크를 먼저 시도하고, 실패하면 셸로 폴백한다.
+  try {
+    const res = await fetch(req);
+    if (res && res.ok) return res;
+  } catch (e) { /* 오프라인 */ }
+
+  return (await cache.match(SHELL)) || Response.error();
+}
+
 // fetch — 캐시 우선. 오프라인에서 네트워크를 한 번도 쓰지 않는다.
 self.addEventListener('fetch', (event) => {
   const req = event.request;
@@ -81,11 +117,7 @@ self.addEventListener('fetch', (event) => {
   if (url.origin !== self.location.origin) return;
 
   if (req.mode === 'navigate') {
-    event.respondWith(
-      caches.match(req, { ignoreSearch: true })
-        .then((hit) => hit || caches.match(SHELL))
-        .then((hit) => hit || fetch(req))
-    );
+    event.respondWith(handleNavigate(req));
     return;
   }
 
