@@ -172,6 +172,27 @@ function parseClassList(raw) {
   return out;
 }
 
+/**
+ * mClearanceData -> 건물이 차지하는 공간 (m).
+ *
+ * 충돌 박스가 **여러 개인 건물이 많다**(입자 가속기는 24개). 첫 박스만 읽으면 조립기 높이가
+ * 5m가 아니라 3m로 나온다. 전부의 합집합을 잡아야 배치 계산이 맞는다.
+ * 단위는 cm이므로 100으로 나눈다. 도면 생성(FRD F13)의 기준 치수다.
+ */
+function parseClearance(raw) {
+  const re = /ClearanceBox=\(Min=\(X=(-?[\d.]+),Y=(-?[\d.]+),Z=(-?[\d.]+)\),Max=\(X=(-?[\d.]+),Y=(-?[\d.]+),Z=(-?[\d.]+)\)/g;
+  const boxes = [...String(raw ?? '').matchAll(re)].map((m) => m.slice(1).map(Number));
+  if (!boxes.length) return null;
+  const min = (i) => Math.min(...boxes.map((b) => b[i]));
+  const max = (i) => Math.max(...boxes.map((b) => b[i]));
+  return {
+    widthM: round((max(3) - min(0)) / 100),
+    lengthM: round((max(4) - min(1)) / 100),
+    heightM: round((max(5) - min(2)) / 100),
+    boxes: boxes.length,
+  };
+}
+
 /** (GameplayTags=((TagName="Recipe.Part"))) -> ["Recipe.Part"] */
 const parseTags = (raw) =>
   [...String(raw ?? '').matchAll(/TagName\s*=\s*"([^"]+)"/g)].map((m) => m[1]);
@@ -352,6 +373,10 @@ function buildBuildings(groups, itemIndex, recipes) {
         manufacturingSpeed: c.mManufacturingSpeed !== undefined ? num(c.mManufacturingSpeed) : null,
         somersloopSlots: c.mProductionShardSlotSize !== undefined ? num(c.mProductionShardSlotSize) : null,
         powerShardSlots: c.mPotentialShardSlots !== undefined ? num(c.mPotentialShardSlots) : null,
+        // 배치 도면용 실제 점유 공간 (FRD F13-2)
+        footprint: parseClearance(c.mClearanceData),
+        productionBoostPowerExponent: c.mProductionBoostPowerConsumptionExponent !== undefined
+          ? num(c.mProductionBoostPowerConsumptionExponent) : null,
       };
 
       // 채취기: 사이클당 산출 -> 분당 산출 (노멀 순도 기준)
@@ -554,6 +579,18 @@ function main() {
       !!wetConcrete && wetConcrete.ingredients.some((i) => i.item === 'Desc_Water_C' && i.amount === 5)],
     ['제조소 전력값 (Constructor 4 MW)', !!constructor && constructor.power.consumptionMW === 4],
     ['벨트 속도 (Mk.1 60 items/min)', !!beltMk1 && beltMk1.beltItemsPerMinute === 60],
+    ['건물 치수 — 제작기 8×10×6 m (충돌 박스 합집합)', (() => {
+      const f = buildings.find((b) => b.className === 'Build_ConstructorMk1_C')?.footprint;
+      return !!f && f.widthM === 8 && f.lengthM === 10 && f.heightM === 6;
+    })()],
+    ['건물 치수 — 입자 가속기 폭 52 m (Mk.1 블루프린트 32m 초과, 위키와 일치)', (() => {
+      const f = buildings.find((b) => b.className === 'Build_HadronCollider_C')?.footprint;
+      return !!f && f.widthM === 52;
+    })()],
+    ['소머슬룹 전력 지수 = 2', (() => {
+      const b = buildings.find((x) => x.className === 'Build_ConstructorMk1_C');
+      return b?.productionBoostPowerExponent === 2;
+    })()],
     // 표시명은 로케일마다 번역되므로 검사에 쓰지 않는다. 클래스명은 로케일 독립이다.
     ['1.2 콘텐츠 포함 (Build_FluidTruckStation_C)',
       buildings.some((b) => b.className === 'Build_FluidTruckStation_C')],
@@ -610,6 +647,7 @@ function main() {
       fluidUnits: '액체/기체 수치는 원본의 1/1000 (리터 -> m3)로 환산됨',
       rates: 'perMinute = amount * 60 / durationSec (클록 100%, 소머슬룹 미사용 기준)',
       belt: 'beltItemsPerMinute = mSpeed / 2',
+      footprint: 'mClearanceData의 모든 충돌 박스 합집합, cm -> m',
       pipe: 'pipeFlowM3PerMinute = mFlowLimit * 60',
       extraction: 'perMinuteAtNormalPurity = itemsPerCycle * 60 / cycleTimeSec (순도 배율 미적용)',
     },

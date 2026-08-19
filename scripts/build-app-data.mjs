@@ -127,6 +127,11 @@ const buildings = en.buildings.map((x) => ({
     : null,
   supplementalToPowerRatio: round(x.supplementalToPowerRatio),
   storageSlots: x.storageSlots ?? null,
+  // 배치 도면용 (FRD F13). 게임 충돌 박스 합집합, m 단위
+  footprint: x.footprint
+    ? { widthM: x.footprint.widthM, lengthM: x.footprint.lengthM, heightM: x.footprint.heightM }
+    : null,
+  productionBoostPowerExponent: x.productionBoostPowerExponent ?? null,
 }));
 
 const milestones = en.milestones.map((x) => ({
@@ -280,6 +285,10 @@ const checks = [
   ['회귀 표본 — Constructor 4 MW', !!constructor && constructor.powerMW === 4],
   ['회귀 표본 — 벨트 Mk.1 60/min', !!beltMk1 && beltMk1.beltItemsPerMinute === 60],
   ['티어 인덱스에 8개 이상 티어 존재', Object.keys(tiers).length >= 8],
+  ['생산 건물에 치수가 있음 (도면 생성 전제)', (() => {
+    const machines = buildings.filter((b) => b.category === 'manufacturer');
+    return machines.length > 0 && machines.every((b) => b.footprint && b.footprint.widthM > 0);
+  })()],
   ['HUB 업그레이드 5개 이상 + 비용 있음',
     hub.length >= 5 && hub.every((h) => h.cost.length > 0)],
   ['회귀 표본 — 벨트 Mk.2 해금 티어 2 (progression#F)',

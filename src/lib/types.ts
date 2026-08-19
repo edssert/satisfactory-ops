@@ -50,6 +50,10 @@ export interface Building {
   storageSlots: number | null;
   /** 이 건물이 처음 해금되는 티어. 모르면 null. */
   unlockTier: number | null;
+  /** 게임 충돌 박스 합집합에서 계산한 실제 점유 공간 (m). 도면 생성의 기준 치수. */
+  footprint: { widthM: number; lengthM: number; heightM: number } | null;
+  /** 소머슬룹 전력 지수 (보통 2). 전력 = 기본 × (1+채운/전체)^지수 × (클럭)^powerExponent */
+  productionBoostPowerExponent: number | null;
 }
 
 export interface Milestone {

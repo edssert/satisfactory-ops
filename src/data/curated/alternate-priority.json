@@ -1,0 +1,225 @@
+{
+  "$comment": "대체 레시피 우선순위. 근거는 docs/research/recipes.md의 '권장 분류(근거 기반)'. 게임 객체는 클래스명으로만 참조하므로, 레시피가 사라지거나 개명되면 빌드가 실패한다.",
+  "$source": "docs/research/recipes.md",
+  "$note": "대체 레시피는 하드드라이브(MAM) 해금이라 티어 게이트가 데이터상 신뢰할 수 없다(대부분 techTier 0). 따라서 여기서는 '언제 쓸모가 생기는가'를 hunt 필드로 따로 적는다.",
+  "confidence": "consensus",
+  "verdicts": {
+    "must": "반드시 잡을 것 — 복수 출처가 일치하고 효과가 크다",
+    "conditional": "조건부 — 특정 병목이 있을 때만 이득",
+    "trap": "함정 — 신규 플레이어가 잘 집는데 실제로는 손해"
+  },
+  "recipes": [
+    {
+      "id": "Recipe_Alternate_ModularFrameHeavy_C",
+      "verdict": "must",
+      "hunt": "중반 (고중량 모듈식 골조가 필요해지는 시점)",
+      "reason": "모듈식 골조 -47%, 나사 -100%, 파이프 -40%. 조사한 전 출처가 만장일치로 최우선."
+    },
+    {
+      "id": "Recipe_Alternate_ReinforcedIronPlate_2_C",
+      "verdict": "must",
+      "hunt": "초반 (티어 2에 획득 가능)",
+      "reason": "보강된 철판의 총 원자재 -31%이고 나사를 아예 쓰지 않는다. 초반 나사 병목을 끊는 가장 빠른 수단."
+    },
+    {
+      "id": "Recipe_Alternate_ModularFrame_C",
+      "verdict": "must",
+      "hunt": "초중반",
+      "reason": "모듈식 골조당 보강된 철판 -56%, 철봉 제거."
+    },
+    {
+      "id": "Recipe_Alternate_IngotSteel_1_C",
+      "verdict": "must",
+      "hunt": "티어 3 강철 진입 직후",
+      "reason": "강철 주괴 45 → 60/분, 총 원자재 2.0 → 1.333 (-33%). 주조소 대수는 그대로."
+    },
+    {
+      "id": "Recipe_Alternate_Screw_2_C",
+      "verdict": "must",
+      "hunt": "나사 라인이 아직 남아 있다면",
+      "reason": "나사당 철광석 -79%. 나사를 없애지 못하는 구간에서 가장 큰 절감."
+    },
+    {
+      "id": "Recipe_Alternate_CopperAlloyIngot_C",
+      "verdict": "must",
+      "hunt": "구리 노드가 부족할 때",
+      "reason": "구리광석 -50%. 주조소 1대로 100/분 — 제련소 3.33대를 대체한다."
+    },
+    {
+      "id": "Recipe_Alternate_Computer_2_C",
+      "verdict": "must",
+      "hunt": "컴퓨터 대량 생산 직전",
+      "reason": "컴퓨터당 회로 기판 -62.5%. 제조기(55MW) 대신 조립기(15MW)를 쓴다 — 전력도 크게 준다."
+    },
+    {
+      "id": "Recipe_Alternate_HeavyOilResidue_C",
+      "verdict": "must",
+      "hunt": "석유 진입 시점",
+      "reason": "희석 연료·재활용 계열의 입력원. 원유 30 → 중유 잔여물 40."
+    },
+    {
+      "id": "Recipe_Alternate_DilutedFuel_C",
+      "verdict": "must",
+      "hunt": "연료 발전 전환 시점",
+      "reason": "원유당 발전량 4배. 후반 전력의 전제 조건이다."
+    },
+
+    {
+      "id": "Recipe_Alternate_PureIronIngot_C",
+      "verdict": "conditional",
+      "hunt": "광석이 병목이고 전력이 남을 때",
+      "reason": "광석 효율은 최상급이지만 전력을 6배 각오해야 한다. 초반 전력 상황에서는 오히려 독."
+    },
+    {
+      "id": "Recipe_Alternate_PureCopperIngot_C",
+      "verdict": "conditional",
+      "hunt": "구리광이 병목이고 전력이 남을 때",
+      "reason": "위와 같은 트레이드오프."
+    },
+    {
+      "id": "Recipe_Alternate_CokeSteelIngot_C",
+      "verdict": "conditional",
+      "hunt": "석탄이 부족하고 원유가 남을 때",
+      "reason": "주조소당 100/분으로 처리량이 가장 높다. 석유 라인이 이미 있어야 성립."
+    },
+    {
+      "id": "Recipe_Alternate_Computer_1_C",
+      "verdict": "conditional",
+      "hunt": "플라스틱이 병목일 때",
+      "reason": "카테리움 노드 확보가 전제. 플라스틱 라인을 우회한다."
+    },
+    {
+      "id": "Recipe_Alternate_CircuitBoard_2_C",
+      "verdict": "conditional",
+      "hunt": "플라스틱이 병목일 때",
+      "reason": "위와 같은 조건."
+    },
+    {
+      "id": "Recipe_Alternate_Motor_1_C",
+      "verdict": "conditional",
+      "hunt": "석영 라인이 이미 있을 때",
+      "reason": "로터·스테이터 -75%."
+    },
+    {
+      "id": "Recipe_Alternate_InstantScrap_C",
+      "verdict": "conditional",
+      "hunt": "알루미나 배관을 피하고 싶을 때",
+      "reason": "황산과 혼합기가 필요하다."
+    },
+    {
+      "id": "Recipe_Alternate_Wire_2_C",
+      "verdict": "conditional",
+      "hunt": "전선을 대량으로 쓰는 구간",
+      "reason": "구리 라인을 카테리움으로 대체한다."
+    },
+    {
+      "id": "Recipe_Alternate_FusedWire_C",
+      "verdict": "conditional",
+      "hunt": "전선을 대량으로 쓰는 구간",
+      "reason": "위와 같은 목적."
+    },
+    {
+      "id": "Recipe_Alternate_CoatedIronPlate_C",
+      "verdict": "conditional",
+      "hunt": "플라스틱을 소량 확보한 뒤",
+      "reason": "제작기당 75/분 (표준 20/분의 3.75배). 처리량 개선폭이 크다."
+    },
+    {
+      "id": "Recipe_Alternate_EncasedIndustrialBeam_C",
+      "verdict": "conditional",
+      "hunt": "강철이 병목일 때",
+      "reason": "강철 -25%. 단 피복 산업용 빔 처리량이 6 → 4/분으로 떨어진다."
+    },
+    {
+      "id": "Recipe_Alternate_WetConcrete_C",
+      "verdict": "conditional",
+      "hunt": "티어 3 (석탄 발전으로 물이 이미 있을 때)",
+      "reason": "콘크리트 대량 소비 구간에서 유효. 물 라인이 전제."
+    },
+    {
+      "id": "Recipe_Alternate_RubberConcrete_C",
+      "verdict": "conditional",
+      "hunt": "고무 라인이 있을 때",
+      "reason": "콘크리트 대량 소비 구간."
+    },
+    {
+      "id": "Recipe_Alternate_SteelBeam_Molded_C",
+      "verdict": "conditional",
+      "hunt": "콘크리트가 남을 때",
+      "reason": "제작기 대신 주조소 1대로 45/분. 콘크리트로 강철을 아낀다."
+    },
+
+    {
+      "id": "Recipe_Alternate_ReinforcedIronPlate_1_C",
+      "verdict": "trap",
+      "hunt": "-",
+      "reason": "철 +9.7%에 나사 250/분을 요구한다. 처리량만 오르고 나사 지옥이 심해진다."
+    },
+    {
+      "id": "Recipe_Alternate_BoltedFrame_C",
+      "verdict": "trap",
+      "hunt": "-",
+      "reason": "나사 140/분. 강철 골조를 얻는 즉시 폐기 대상."
+    },
+    {
+      "id": "Recipe_Alternate_CopperRotor_C",
+      "verdict": "trap",
+      "hunt": "-",
+      "reason": "나사 195/분 + 구리 시트. 강철 회전자의 완전 하위 호환."
+    },
+    {
+      "id": "Recipe_Alternate_HeavyFlexibleFrame_C",
+      "verdict": "trap",
+      "hunt": "-",
+      "reason": "나사 390/분 + 고무 75/분. 포장된 고중량 골조에 전면 열세."
+    },
+    {
+      "id": "Recipe_Alternate_IronIngot_Basic_C",
+      "verdict": "trap",
+      "hunt": "-",
+      "reason": "철광석은 -50%지만 총 원자재가 +30%다(석회석 40). 석회석이 진짜로 남을 때만."
+    },
+    {
+      "id": "Recipe_Alternate_IngotSteel_2_C",
+      "verdict": "trap",
+      "hunt": "-",
+      "reason": "원자재 효율은 최상이지만 주조소당 10/분. 코크스 강철 대비 기계·전력이 10배이고 유황도 먹는다."
+    },
+    {
+      "id": "Recipe_Alternate_Screw_C",
+      "verdict": "trap",
+      "hunt": "-",
+      "reason": "나사당 철 소모가 표준과 동일하다. 제작기 한 단계를 생략하는 것이 전부."
+    },
+    {
+      "id": "Recipe_Alternate_CopperIngot_Tempered_C",
+      "verdict": "trap",
+      "hunt": "-",
+      "reason": "구리광 효율은 좋지만 석유 코크스 40/분이 석유 라인을 잠식한다."
+    },
+    {
+      "id": "Recipe_Alternate_ElectrodeCircuitBoard_C",
+      "verdict": "trap",
+      "hunt": "-",
+      "reason": "조립기당 5/분 (표준 7.5/분). 처리량·원자재 모두 열세."
+    },
+    {
+      "id": "Recipe_Alternate_Wire_1_C",
+      "verdict": "trap",
+      "hunt": "-",
+      "reason": "제작기당 22.5/분 (표준 30/분). 구리가 정말 없을 때만."
+    },
+    {
+      "id": "Recipe_Alternate_TurboHeavyFuel_C",
+      "verdict": "trap",
+      "hunt": "-",
+      "reason": "원유 효율은 희석 연료와 비슷한데 유황(노드 16개)을 대량 소모한다."
+    },
+    {
+      "id": "Recipe_Alternate_TurboBlendFuel_C",
+      "verdict": "trap",
+      "hunt": "-",
+      "reason": "위와 같다. 물류 밀도가 꼭 필요할 때만."
+    }
+  ]
+}
