@@ -554,8 +554,9 @@ function main() {
       !!wetConcrete && wetConcrete.ingredients.some((i) => i.item === 'Desc_Water_C' && i.amount === 5)],
     ['제조소 전력값 (Constructor 4 MW)', !!constructor && constructor.power.consumptionMW === 4],
     ['벨트 속도 (Mk.1 60 items/min)', !!beltMk1 && beltMk1.beltItemsPerMinute === 60],
-    ['1.2 콘텐츠 포함 (Fluid Truck Station)',
-      buildings.some((b) => /Fluid Truck Station/i.test(b.name)) || items.some((i) => /Fluid Truck Station/i.test(i.name))],
+    // 표시명은 로케일마다 번역되므로 검사에 쓰지 않는다. 클래스명은 로케일 독립이다.
+    ['1.2 콘텐츠 포함 (Build_FluidTruckStation_C)',
+      buildings.some((b) => b.className === 'Build_FluidTruckStation_C')],
     ['마일스톤에 레시피 언락이 연결됨', milestones.some((m) => m.unlocks.recipes.length > 0)],
     ['레시피 producedIn이 실제 건물과 매칭됨', (() => {
       const known = new Set(buildings.map((b) => b.className));

@@ -1,0 +1,107 @@
+{
+  "$comment": "추천 부지. 좌표는 ADR-0006의 그리드 캘리브레이션(X0Y0~X6Y5)을 따른다. 노드 거리·순도는 이 파일이 아니라 resource-nodes.json에서 계산한다 — 여기에는 판단만 적는다.",
+  "$sourceNote": "이 6곳의 강점·약점 서술은 이전 세션에서 커뮤니티 공략을 종합해 작성한 것이나, 출처 목록이 기록되지 않았습니다. 그래서 confidence를 consensus가 아니라 unsourced로 둡니다 — 노드 위치·거리·순도는 좌표 데이터에서 계산한 값이라 별개로 신뢰할 수 있습니다.",
+  "confidence": "unsourced",
+  "openQuestion": "시작 지점 6곳 비교의 1차 출처를 재수집해 docs/research/에 남길 것. 그 전까지 이 서술은 '검증되지 않은 커뮤니티 종합'으로 표기한다.",
+  "sites": [
+    {
+      "n": 1,
+      "cell": {
+        "X": 2,
+        "Y": 0
+      },
+      "name": "중앙 잔디 평야",
+      "en": "Central Grass Fields",
+      "good": "최대 평지 · 정지작업 거의 불필요 · 순수 석회석",
+      "bad": "물 부족 — 석탄·원자력 발전에 치명적",
+      "who": "평지가 최우선일 때"
+    },
+    {
+      "n": 2,
+      "cell": {
+        "X": 1,
+        "Y": 1
+      },
+      "name": "서부 첨탑 해안",
+      "en": "West Spires Shore",
+      "good": "순수 철·구리·석회석 + 물 무제한 + 원유 노드",
+      "bad": "지형 굴곡 — 정지작업 필요",
+      "who": "잔디 평야의 물 문제를 보완할 때"
+    },
+    {
+      "n": 3,
+      "cell": {
+        "X": 0,
+        "Y": 4
+      },
+      "name": "북서 바위 사막",
+      "en": "NW Rocky Desert",
+      "good": "비교적 평탄 · 철·구리·석회석·캐터리움·황·석영 집결",
+      "bad": "바이오매스 부족 — 초반 전력이 빡빡",
+      "who": "처음이라면 여기"
+    },
+    {
+      "n": 4,
+      "cell": {
+        "X": 2,
+        "Y": 3
+      },
+      "name": "북서 북부 숲",
+      "en": "NW Northern Forest",
+      "good": "순수 철·석회석·구리 + 북동쪽 원유 다수",
+      "bad": "1.0에서 석탄·캐터리움·황이 멀어짐",
+      "who": "바위 사막과 북부 숲 사이를 노릴 때"
+    },
+    {
+      "n": 5,
+      "cell": {
+        "X": 3,
+        "Y": 3
+      },
+      "name": "중앙 북부 숲",
+      "en": "Central Northern Forest",
+      "recommended": true,
+      "good": "순수 철 다수 + 순수 석탄이 동서 양쪽 + 캐터리움 + 이 구역만 평탄",
+      "bad": "불순 황만 있음 · 주변 생물 위험",
+      "who": "자원 효율 최적해. 자리를 찾을 자신이 있을 때"
+    },
+    {
+      "n": 6,
+      "cell": {
+        "X": 5,
+        "Y": 4
+      },
+      "name": "서부 사구 사막",
+      "en": "West Dune Desert",
+      "good": "광활한 평지 + 물 즉시 접근 + 순수 캐터리움·황 각 2",
+      "bad": "대부분 일반(Normal) 순도 · 바이오매스 극빈",
+      "who": "메가베이스 부지를 원할 때"
+    }
+  ],
+  "startPoints": [
+    {
+      "id": "grass-fields",
+      "name": "잔디 평야",
+      "en": "Grass Fields",
+      "pin": 1
+    },
+    {
+      "id": "rocky-desert",
+      "name": "바위 사막",
+      "en": "Rocky Desert",
+      "pin": 3
+    },
+    {
+      "id": "northern-forest",
+      "name": "북부 숲",
+      "en": "Northern Forest",
+      "pin": 5
+    },
+    {
+      "id": "dune-desert",
+      "name": "사구 사막",
+      "en": "Dune Desert",
+      "pin": 6
+    }
+  ]
+}
