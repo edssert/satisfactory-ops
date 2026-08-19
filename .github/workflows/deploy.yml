@@ -42,6 +42,10 @@ jobs:
 
       - run: npm run build
 
+      # 서비스워커 캐시 키 검증은 dist/ 가 있어야 의미가 있다
+      - name: 서비스워커 검증
+        run: node --test tests/sw.test.ts
+
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
