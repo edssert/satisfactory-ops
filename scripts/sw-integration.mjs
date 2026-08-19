@@ -71,9 +71,13 @@ const SHELL = ${JSON.stringify(prefix + 'index.html')};
 const ASSETS = ${JSON.stringify(urls)};
 
 // install — 전량을 원자적으로 받는다. 하나라도 실패하면 이 버전은 설치되지 않는다.
+// 설치에 성공하면 즉시 대기 상태를 건너뛴다: 이전 버전이 고장난 경우 사용자가 탭을 전부 닫기 전까지
+// 영원히 교체되지 않는 문제가 실제로 발생했다 (arch-offline §5의 prompt 전략에서 의도적으로 이탈).
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE).then((cache) => cache.addAll(ASSETS))
+    caches.open(CACHE)
+      .then((cache) => cache.addAll(ASSETS))
+      .then(() => self.skipWaiting())
   );
 });
 
