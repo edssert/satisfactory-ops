@@ -24,7 +24,8 @@ import { Resvg } from '@resvg/resvg-js';
 
 const ROOT = path.resolve(fileURLToPath(new URL('.', import.meta.url)), '..');
 const out = process.argv[2] ?? path.join(ROOT, 'dist', 'plan-preview.png');
-const html = fs.readFileSync(path.join(ROOT, 'dist/design/index.html'), 'utf8');
+const page = process.argv[3] ?? 'build';
+const html = fs.readFileSync(path.join(ROOT, `dist/${page}/index.html`), 'utf8');
 
 /** tokens.css 에서 :root 라이트 값을 뽑는다 */
 function readTokens() {
@@ -53,7 +54,7 @@ function resolveVars(text, tokens) {
 }
 
 function styleBlock(tokens) {
-  const files = ['src/styles/layout-plan.css'];
+  const files = ['src/styles/layout-plan.css', 'src/styles/module-sheet.css'];
   const css = files.map((f) => fs.readFileSync(path.join(ROOT, f), 'utf8')).join('\n');
   // 미디어쿼리는 렌더에 필요 없다
   const flat = css.replace(/@media[^{]+\{(?:[^{}]*\{[^{}]*\})*[^{}]*\}/g, '');
@@ -63,9 +64,9 @@ function styleBlock(tokens) {
 const tokens = readTokens();
 
 // 도면 SVG 전부 추출 (층 도면이 공정마다 하나씩 나온다)
-const svgs = [...html.matchAll(/<svg class="fps-svg"[\s\S]*?<\/svg>/g)].map((m) => m[0]);
+const svgs = [...html.matchAll(/<svg class="(?:fps|ms)-svg"[\s\S]*?<\/svg>/g)].map((m) => m[0]);
 if (svgs.length === 0) {
-  console.error('dist/design/index.html 에서 도면 SVG를 찾지 못했습니다. npm run build 먼저 실행하세요.');
+  console.error(`dist/${page}/index.html 에서 도면 SVG를 찾지 못했습니다. npm run build 먼저 실행하세요.`);
   process.exit(1);
 }
 

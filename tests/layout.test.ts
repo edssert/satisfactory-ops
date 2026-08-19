@@ -68,13 +68,21 @@ test('건물 치수가 게임 데이터에서 온다 — 제작기 8×10×6 m', 
   assert.equal(f.heightM, 6);
 });
 
-test('타일 환산 — 제련소는 1×2, 제조기는 3×2', () => {
+test('타일 환산 — 제련기는 1×2, 제조기는 3×3', () => {
+  /*
+   * 제조기가 3×2 였다가 3×3 이 됐다. 치수가 바뀐 게 아니라 **파싱이 틀렸던 것**이다:
+   * mClearanceData 박스의 RelativeTransform 을 무시하고 있었다. 제조기의 하드 박스는
+   * y = -11..-3 과 y = -3..9 두 개라 실제 길이가 20 m다. 예전에는 12 m로 읽었다.
+   * 같은 버그로 제련기 높이를 4.5 m로 읽었는데, 공식 위키가 8.5 m로 적고 있어 드러났다.
+   */
   const smelter = byId.get('Build_SmelterMk1_C')!.footprint!;
   const manu = byId.get('Build_ManufacturerMk1_C')!.footprint!;
   assert.equal(Math.ceil(smelter.widthM / TILE_M), 1);
   assert.equal(Math.ceil(smelter.lengthM / TILE_M), 2);
+  assert.equal(smelter.heightM, 8.5, '제련기 높이 8.5 m — 위키와 일치');
   assert.equal(Math.ceil(manu.widthM / TILE_M), 3);
-  assert.equal(Math.ceil(manu.lengthM / TILE_M), 2);
+  assert.equal(Math.ceil(manu.lengthM / TILE_M), 3);
+  assert.equal(manu.lengthM, 20, '제조기 길이 20 m — 하드 박스 두 개의 합집합');
 });
 
 // ---------------------------------------------------------------- 분배 방식 (F13-J)

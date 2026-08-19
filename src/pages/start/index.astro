@@ -23,7 +23,8 @@ import { ceil, ceilNum, format, toNumber } from '../../lib/rational';
 import hub from '../../data/app/hub.json';
 import sitesData from '../../data/curated/sites.json';
 import startInventory from '../../data/curated/start-inventory.json';
-import resourceNodes from '../../data/resource-nodes.json';
+// 이름이 게임 데이터 기준으로 정규화된 산출물을 쓴다 (원본은 외부 출처라 이름이 다르다)
+import resourceNodes from '../../data/app/resource-nodes.json';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -120,7 +121,7 @@ const machineRows = [...machineTotals.entries()]
   .sort((a, b) => b.built - a.built);
 
 const rawRows = [...rawTotals.entries()]
-  .map(([id, rate]) => ({ ...nameOf(id), rate }))
+  .map(([id, rate]) => ({ id, ...nameOf(id), rate }))
   .sort((a, b) => b.rate - a.rate);
 
 // 벨트 상한 검사 (ADR-0016)
@@ -129,9 +130,10 @@ const minerMk1Base = building('Build_MinerMk1_C').extraction?.perMinuteAtNormalP
 const minerMk1 = { impure: minerMk1Base / 2, normal: minerMk1Base, pure: minerMk1Base * 2 };
 
 // ---------------------------------------------------------------- 입지 지도 데이터
-const nodeList = (resourceNodes as { nodes: { ko: string; purity: string; type: string; fx: number; fy: number; cell: string }[] }).nodes
-  .filter((n) => n.ko && !n.ko.startsWith('Desc_'))
+const nodeList = (resourceNodes as { nodes: { res: string; ko: string; isItem: boolean; purity: string; type: string; fx: number; fy: number; cell: string }[] }).nodes
+  .filter((n) => n.isItem)
   .map((n) => ({
+    res: n.res,
     ko: n.ko,
     purity: (n.purity ?? 'normal') as 'impure' | 'normal' | 'pure',
     type: n.type,
@@ -140,16 +142,15 @@ const nodeList = (resourceNodes as { nodes: { ko: string; purity: string; type: 
     cell: n.cell,
   }));
 
-const oreKo: Record<string, string> = {
-  Desc_OreIron_C: '철광석',
-  Desc_OreCopper_C: '구리광석',
-  Desc_Stone_C: '석회석',
-  Desc_Coal_C: '석탄',
-};
-
+/*
+ * 노드와의 연결은 **클래스 id**로 한다. 예전에는 여기 한글 이름 표를 손으로 적어
+ * 노드의 '철광석'과 맞췄는데, 파이프라인이 이름을 게임 이름('철 광석')으로 정규화한
+ * 순간 조인이 조용히 0건이 되어 화면에 "근처에 노드 없음"이 떴다. 표를 없앤다.
+ */
+const nodeResIds = new Set(nodeList.map((n) => n.res));
 const demand = rawRows
-  .filter((r) => oreKo[(r as { itemId?: string }).itemId ?? ''] || oreKo[Object.keys(oreKo).find((k) => nameOf(k).ko === r.ko) ?? ''])
-  .map((r) => ({ ko: r.ko, need: ceilNum(r.rate), why: '' }));
+  .filter((r) => nodeResIds.has(r.id))
+  .map((r) => ({ res: r.id, ko: r.ko, need: ceilNum(r.rate), why: '' }));
 
 // why 문구는 계산된 소비처에서 만든다 (손으로 적지 않는다)
 const consumerOf: Record<string, string[]> = {};

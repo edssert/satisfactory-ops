@@ -9,7 +9,8 @@
  *  - 부산물로 나오는 레시피를 기본값으로 골라 압축 석탄을 로켓 연료 라인에서 뽑으려 함
  */
 
-import type { Recipe } from './types.ts';
+import type { Recipe, Item, Building } from './types.ts';
+import type { RecipeBook } from './solver.ts';
 
 /** 개봉은 생산이 아니라 되돌리기다. 기본 경로로 쓰면 포장/개봉 순환이 생긴다. */
 export const isUnpackaging = (r: Pick<Recipe, 'id'>): boolean => /^Recipe_Unpackage/i.test(r.id);
@@ -67,4 +68,49 @@ export function producerIndex(list: Recipe[]): Record<string, string[]> {
     });
   }
   return out;
+}
+
+/**
+ * 솔버가 쓸 레시피 장부를 만든다.
+ *
+ * 화면과 테스트가 **같은 규칙**을 쓰게 하려고 여기 둔다. 페이지 쪽에서 따로 조립하면
+ * 테스트가 통과해도 화면은 다른 레시피를 골라 버린다 — 그런 어긋남이 실제로 있었다.
+ */
+export function makeRecipeBook(items: Item[], recipes: Recipe[], buildings: Building[]): RecipeBook {
+  const itemById = new Map(items.map((i) => [i.id, i]));
+  const buildingById = new Map(buildings.map((b) => [b.id, b]));
+  const producersOf = new Map<string, Recipe[]>();
+  for (const r of recipes) {
+    if (r.isBuildingRecipe || r.producedIn.length === 0) continue;
+    for (const p of r.products) {
+      const list = producersOf.get(p.item) ?? [];
+      list.push(r);
+      producersOf.set(p.item, list);
+    }
+  }
+  const isRaw = (itemId: string): boolean => {
+    const it = itemById.get(itemId);
+    if (!it) return true;
+    if (it.kind === 'resource') return true;
+    return !pick(itemId);
+  };
+  const selected = selectCalculatorRecipes(recipes, (id) => itemById.get(id)?.kind === 'resource');
+  const index = producerIndex(selected);
+  const byId = new Map(selected.map((r) => [r.id, r]));
+  function pick(itemId: string): Recipe | undefined {
+    const first = index[itemId]?.[0];
+    return first ? byId.get(first) : undefined;
+  }
+  return {
+    recipeFor: (id) => pick(id),
+    machine: (id) => {
+      const b = buildingById.get(id);
+      return b ? { id, ko: b.ko, en: b.en, powerMW: b.powerMW ?? null } : undefined;
+    },
+    nameOf: (id) => {
+      const it = itemById.get(id);
+      return it ? { ko: it.ko, en: it.en } : { ko: id, en: id };
+    },
+    isRawResource: isRaw,
+  } as RecipeBook & { isRawResource: (id: string) => boolean };
 }

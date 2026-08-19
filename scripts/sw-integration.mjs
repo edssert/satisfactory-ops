@@ -93,27 +93,36 @@ self.addEventListener('activate', (event) => {
 // 프리캐시 키는 .../index.html 인데 네비게이션은 .../ 로 온다. 이 변환이 없으면 전부 빗나간다.
 ${navigationCacheKey.toString()}
 
+/**
+ * 문서(HTML)는 **네트워크 우선**이다.
+ *
+ * 캐시 우선으로 두었더니 낡은 HTML이 새로 배포된 JS와 만나는 상태가 생겼다.
+ * 그러면 하이드레이션이 어긋나 옛 내용과 새 내용이 같은 자리에 겹쳐 그려진다 —
+ * 실제로 글자가 두 겹으로 나오는 화면이 나왔다. HTML은 항상 새 것을 받아야 한다.
+ * 오프라인에서는 캐시로 떨어지므로 오프라인 동작은 그대로다.
+ */
 async function handleNavigate(req) {
   const cache = await caches.open(CACHE);
   const url = new URL(req.url);
   const key = navigationCacheKey(url.pathname);
 
-  const exact = await cache.match(key);
-  if (exact) return exact;
-
-  const asIs = await cache.match(req, { ignoreSearch: true });
-  if (asIs) return asIs;
-
-  // 캐시에 없는 경로 — 네트워크를 먼저 시도하고, 실패하면 셸로 폴백한다.
   try {
     const res = await fetch(req);
-    if (res && res.ok) return res;
-  } catch (e) { /* 오프라인 */ }
+    if (res && res.ok) {
+      cache.put(key, res.clone());
+      return res;
+    }
+  } catch (e) { /* 오프라인 — 아래에서 캐시로 떨어진다 */ }
 
-  return (await cache.match(SHELL)) || Response.error();
+  return (
+    (await cache.match(key)) ||
+    (await cache.match(req, { ignoreSearch: true })) ||
+    (await cache.match(SHELL)) ||
+    Response.error()
+  );
 }
 
-// fetch — 캐시 우선. 오프라인에서 네트워크를 한 번도 쓰지 않는다.
+// fetch — 해시가 붙은 자산은 캐시 우선, 문서는 위에서 네트워크 우선.
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;
