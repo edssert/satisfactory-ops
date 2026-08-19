@@ -11,7 +11,7 @@
  * 상호작용이 없으므로 Astro 컴포넌트다. 브라우저로 JS를 보내지 않는다.
  */
 import type { ModulePlan } from '../lib/module-plan.ts';
-import { symbolFor, drawSymbol } from '../lib/machine-symbol.ts';
+import { symbolFor, drawSymbol, iconOf } from '../lib/machine-symbol.ts';
 
 interface Props {
   plan: ModulePlan;
@@ -22,6 +22,44 @@ interface Props {
   index?: number;
 }
 const { plan, subtitle, where, index = 1 } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const iconBase = `${base}/assets/buildings-png`;
+const itemIconBase = `${base}/assets/items`;
+
+/**
+ * 직각 경로에 둥근 모서리를 넣는다.
+ *
+ * 커뮤니티의 잘 만든 도면들은 벨트를 각진 꺾임이 아니라 둥근 곡선으로 그린다 — 실제 벨트가
+ * 그렇게 휘고, 눈으로 따라가기도 쉽다. 라우터가 낸 꺾임점을 그대로 이으면 딱딱하다.
+ */
+const roundedPath = (pts: { x: number; y: number }[], r: number): string => {
+  if (pts.length < 2) return '';
+  const P = pts.map((p) => ({ x: p.x * PX, y: p.y * PX }));
+  let d = `M ${P[0]!.x} ${P[0]!.y}`;
+  for (let i = 1; i < P.length - 1; i++) {
+    const prev = P[i - 1]!;
+    const cur = P[i]!;
+    const next = P[i + 1]!;
+    const len1 = Math.hypot(cur.x - prev.x, cur.y - prev.y);
+    const len2 = Math.hypot(next.x - cur.x, next.y - cur.y);
+    const rr = Math.min(r, len1 / 2, len2 / 2);
+    const a = { x: cur.x + ((prev.x - cur.x) / (len1 || 1)) * rr, y: cur.y + ((prev.y - cur.y) / (len1 || 1)) * rr };
+    const b = { x: cur.x + ((next.x - cur.x) / (len2 || 1)) * rr, y: cur.y + ((next.y - cur.y) / (len2 || 1)) * rr };
+    d += ` L ${a.x} ${a.y} Q ${cur.x} ${cur.y} ${b.x} ${b.y}`;
+  }
+  const last = P[P.length - 1]!;
+  d += ` L ${last.x} ${last.y}`;
+  return d;
+};
+
+/** 팔각형 — 분배기·병합기 허브 */
+const octagon = (cx: number, cy: number, r: number): string => {
+  const k = r * 0.4142;
+  return (
+    `M ${cx - k} ${cy - r} L ${cx + k} ${cy - r} L ${cx + r} ${cy - k} L ${cx + r} ${cy + k}` +
+    ` L ${cx + k} ${cy + r} L ${cx - k} ${cy + r} L ${cx - r} ${cy + k} L ${cx - r} ${cy - k} Z`
+  );
+};
 
 const fmt = (n: number) => (Number.isInteger(n) ? String(n) : String(Math.round(n * 100) / 100));
 
@@ -211,6 +249,107 @@ const schedule = minerRows.concat(tagged.map((t) => {
             예전에는 행마다 입력·출력 벨트를 따로 그려 같은 통로에 선과 라벨이 두 겹으로 겹쳤다.
           */}
           {/*
+            기계 — **종류마다 다른 실루엣**을 그린다.
+            사각형 + 번호로만 그렸더니 "2D로 흩뿌려놓은 도면"이 됐다. 사각형 열두 개가 놓인
+            그림에서는 어느 것이 제련기고 어느 것이 조립기인지 알 수 없다. 실제 공정 도면은
+            설비 종류마다 실루엣이 다르다 (docs/research/drawing-tools-visual.md).
+
+            심볼은 0..1 정규화 좌표라 transform 으로 실제 치수에 얹는다. 비균등 스케일이므로
+            선 굵기가 찌그러지지 않게 vector-effect="non-scaling-stroke" 를 붙인다.
+
+            클럭 퍼센트는 도형에 적지 않는다 — 8 m짜리 기계가 나란히 서면
+            "88.89%88.89%88.89%"로 겹쳤다. 수치는 옆 표에 있다.
+          */}
+          {tagged.map((t) => {
+            const sym = symbolFor(t.machineId ?? '');
+            const icon = iconOf(t.machineId ?? '');
+            const bx = t.x * PX;
+            const by = t.y * PX;
+            const bw = t.wTiles * PX;
+            const bh = t.hTiles * PX;
+            // 아이콘은 도형 안에 여백을 두고 넣는다 — 꽉 채우면 번호와 겹친다
+            // 건물 아이콘은 블록을 채운다 — 무슨 기계인지가 첫 정보다
+            const iconSize = Math.max(22, Math.min(bw, bh) * 0.78);
+            // 산출 배지는 모서리에 작게
+            const badge = Math.max(14, Math.min(bw, bh) * 0.26);
+            /*
+              포트 표식은 **계획이 계산한 좌표**를 쓴다. 도면이 따로 계산하면 벨트가 닿는 자리와
+              삼각형이 그려진 자리가 어긋난다. 위치는 추정값이다 (게임 데이터에 포트 좌표가 없다).
+            */
+            const ports = (t.ports ?? []).map((pt) => ({
+              x: pt.x * PX,
+              y: pt.y * PX,
+              role: pt.role,
+            }));
+            return (
+              <g class="ms-machine">
+                {/*
+                  아이콘이 있으면 아이콘을 쓴다. 저장소에 이미 있는 위키 자산이고,
+                  직접 그린 실루엣보다 훨씬 잘 읽힌다. 없는 건물만 실루엣으로 떨어진다.
+                */}
+                <rect x={bx + 1} y={by + 1} width={bw - 2} height={bh - 2} rx="2"
+                  fill="var(--surface)" stroke="var(--ink)" stroke-width="1.6" />
+                {icon && (
+                  <image
+                    href={`${iconBase}/${t.machineId}.png`}
+                    x={bx + (bw - iconSize) / 2}
+                    y={by + (bh - iconSize) / 2}
+                    width={iconSize}
+                    height={iconSize}
+                    preserveAspectRatio="xMidYMid meet"
+                  />
+                )}
+                {!icon && drawSymbol(sym, bx, by, bw, bh, t.rotated ?? false).map((pa) => (
+                  <path
+                    d={pa.d}
+                    class={`ms-sym is-${pa.kind}`}
+                    fill={pa.kind === 'outline' ? 'var(--surface)' : 'none'}
+                    stroke="var(--ink)"
+                    stroke-width={pa.kind === 'outline' ? 1.6 : pa.kind === 'detail' ? 1.1 : 1}
+                    stroke-dasharray={pa.kind === 'hint' ? '3 2' : undefined}
+                    stroke-linejoin="round"
+                  />
+                ))}
+                {/* 포트 — 방향이 보이는 작은 삼각형. 위치는 추정값이라 점선으로 둔다 */}
+                {ports.map((pt) => (
+                  <path
+                    d={`M ${pt.x - 4} ${pt.y - 4} L ${pt.x + 4} ${pt.y - 4} L ${pt.x} ${pt.y + 4} Z`}
+                    class={`ms-port is-${pt.role}`}
+                    fill={pt.role === 'out' ? 'var(--accent)' : 'var(--bg)'}
+                    stroke="var(--accent)"
+                    stroke-width="1.2"
+                  />
+                ))}
+                {/*
+                  **이 기계가 무엇을 분당 몇 개 만드는가**를 아이템 아이콘 + 수량 배지로 보여준다.
+                  글자로 적으면 도면이 글자로 덮인다. 좋은 커뮤니티 도면들이 쓰는 방식이다.
+                */}
+                {t.itemId && (() => {
+                  const label = `×${fmt(t.perMachinePerMinute ?? 0)}`;
+                  const tw = 7 * label.length + 8;
+                  const gx = bx + bw - 3 - badge - tw;
+                  const gy = by + bh - 3 - badge;
+                  return (
+                    <g class="ms-outbadge">
+                      <rect x={gx} y={gy} width={badge + tw} height={badge} rx="3" class="ms-badge-bg" />
+                      <image href={`${itemIconBase}/${t.itemId}.png`} x={gx + 1} y={gy + 1} width={badge - 2} height={badge - 2} />
+                      <text x={gx + badge + 4} y={gy + badge / 2 + 4} class="ms-badge-text">{label}</text>
+                    </g>
+                  );
+                })()}
+                {/* 번호는 왼쪽 위 모서리로 — 가운데 두면 아이콘과 겹친다 */}
+                <circle cx={bx + 13} cy={by + 13} r="10" class="ms-tag-bg" />
+                <text x={bx + 13} y={by + 17} text-anchor="middle" class="ms-tag">
+                  {t.tag}
+                </text>
+              </g>
+            );
+          })}
+          {/*
+            벨트를 **기계보다 나중에** 그린다. 먼저 그렸더니 기계 블록이 벨트를 덮어
+            "건물 입구로 컨베이어가 하나도 안 들어간다"는 그림이 됐다.
+          */}
+          {/*
             벨트 — pack.ts의 A* 라우터가 낸 **실제 경로**를 그린다. 기계를 관통하지 않는다.
             앞서는 통로마다 가로선 하나를 그어 눈속임했는데, 어느 기계의 어느 면에서 나와
             어디로 들어가는지가 보이지 않았다.
@@ -219,16 +358,40 @@ const schedule = minerRows.concat(tagged.map((t) => {
             벨트 — pack.ts 의 A* 라우터가 낸 **실제 경로**를 그린다. 기계를 관통하지 않는다.
             분기 벨트는 가늘게 그리고 라벨을 붙이지 않는다.
           */}
-          {plan.belts.map((b, bi) => (
-            <polyline
-              points={b.path.map((pt) => `${pt.x * PX},${pt.y * PX}`).join(' ')}
-              class={`ms-belt${b.branch ? ' is-branch' : ''}${b.overCurrentBelt ? ' is-over' : ''}`}
-              fill="none"
-              stroke="var(--accent)"
-              stroke-width={b.branch ? 1.5 : 2.5}
-              stroke-dasharray={b.overCurrentBelt ? '6 3' : undefined}
-              marker-end={`url(#ms-arrow-${index})`}
-            />
+          {plan.belts.filter((b) => b.path.length >= 2).map((b, bi) => (
+            <>
+              {/*
+                벨트 — 참고 도면의 시각 언어를 따른다: 굵은 진회색 몸통에 밝은 테두리,
+                둥근 모서리, 그리고 흐름 방향을 **초록 삼각 표식**으로 찍는다.
+                가는 선 하나로 그렸을 때는 벨트인지 지시선인지 구분되지 않았다.
+              */}
+              <path
+                d={roundedPath(b.path, 12)}
+                fill="none"
+                stroke="var(--bp-belt-edge)"
+                stroke-width={b.branch ? 13 : 17}
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d={roundedPath(b.path, 12)}
+                fill="none"
+                stroke="var(--bp-belt)"
+                stroke-width={b.branch ? 10 : 14}
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              {/* 흐름 방향 — 벨트 위에 찍는 표식 */}
+              <path
+                d={roundedPath(b.path, 12)}
+                fill="none"
+                stroke="var(--bp-flow)"
+                stroke-width={b.branch ? 3 : 4}
+                stroke-linecap="butt"
+                stroke-dasharray="5 13"
+                marker-end={`url(#ms-arrow-${index})`}
+              />
+            </>
           ))}
 
           {/*
@@ -253,79 +416,40 @@ const schedule = minerRows.concat(tagged.map((t) => {
           })()}
 
           {/*
-            기계 — **종류마다 다른 실루엣**을 그린다.
-            사각형 + 번호로만 그렸더니 "2D로 흩뿌려놓은 도면"이 됐다. 사각형 열두 개가 놓인
-            그림에서는 어느 것이 제련기고 어느 것이 조립기인지 알 수 없다. 실제 공정 도면은
-            설비 종류마다 실루엣이 다르다 (docs/research/drawing-tools-visual.md).
-
-            심볼은 0..1 정규화 좌표라 transform 으로 실제 치수에 얹는다. 비균등 스케일이므로
-            선 굵기가 찌그러지지 않게 vector-effect="non-scaling-stroke" 를 붙인다.
-
-            클럭 퍼센트는 도형에 적지 않는다 — 8 m짜리 기계가 나란히 서면
-            "88.89%88.89%88.89%"로 겹쳤다. 수치는 옆 표에 있다.
-          */}
-          {tagged.map((t) => {
-            const sym = symbolFor(t.machineId ?? '');
-            const bx = t.x * PX;
-            const by = t.y * PX;
-            const bw = t.wTiles * PX;
-            const bh = t.hTiles * PX;
-            /*
-              포트 표식은 **계획이 계산한 좌표**를 쓴다. 도면이 따로 계산하면 벨트가 닿는 자리와
-              삼각형이 그려진 자리가 어긋난다. 위치는 추정값이다 (게임 데이터에 포트 좌표가 없다).
-            */
-            const ports = (t.ports ?? []).map((pt) => ({
-              x: pt.x * PX,
-              y: pt.y * PX,
-              role: pt.role,
-            }));
-            return (
-              <g class="ms-machine">
-                {drawSymbol(sym, bx, by, bw, bh, t.rotated ?? false).map((pa) => (
-                  <path
-                    d={pa.d}
-                    class={`ms-sym is-${pa.kind}`}
-                    fill={pa.kind === 'outline' ? 'var(--surface)' : 'none'}
-                    stroke="var(--ink)"
-                    stroke-width={pa.kind === 'outline' ? 1.6 : pa.kind === 'detail' ? 1.1 : 1}
-                    stroke-dasharray={pa.kind === 'hint' ? '3 2' : undefined}
-                    stroke-linejoin="round"
-                  />
-                ))}
-                {/* 포트 — 방향이 보이는 작은 삼각형. 위치는 추정값이라 점선으로 둔다 */}
-                {ports.map((pt) => (
-                  <path
-                    d={`M ${pt.x - 4} ${pt.y - 4} L ${pt.x + 4} ${pt.y - 4} L ${pt.x} ${pt.y + 4} Z`}
-                    class={`ms-port is-${pt.role}`}
-                    fill={pt.role === 'out' ? 'var(--accent)' : 'var(--bg)'}
-                    stroke="var(--accent)"
-                    stroke-width="1.2"
-                  />
-                ))}
-                <circle cx={bx + bw / 2} cy={by + bh / 2} r="11" class="ms-tag-bg" />
-                <text x={bx + bw / 2} y={by + bh / 2 + 4} text-anchor="middle" class="ms-tag">
-                  {t.tag}
-                </text>
-              </g>
-            );
-          })}
-          {/*
             부속을 **기계보다 나중에** 그린다. 먼저 그렸더니 기계 실루엣이 위에 덮여
             '병합' 글자가 잘렸다. 실제로도 부속은 기계 옆·위에 얹히는 물건이다.
           */}
           {/* 부속 — 분배기·병합기. 글자로 적는다. 좌우 대칭 기호로는 구분이 안 된다. */}
-          {attachments.map((a) => (
-            <g class={`ms-attach is-${a.kind}`}>
-              <rect x={a.x * PX} y={a.y * PX} width={a.wTiles * PX} height={a.hTiles * PX} rx="2" />
-              <text
-                x={a.x * PX + (a.wTiles * PX) / 2}
-                y={a.y * PX + (a.hTiles * PX) / 2 + 4}
-                text-anchor="middle"
-              >
-                {a.kind === 'splitter' ? '분배' : '병합'}
-              </text>
-            </g>
-          ))}
+          {/*
+            분배기·병합기는 **팔각형 허브**로 그린다. 게임 안에서도 팔각형이고, 사각형 기계와
+            형태가 달라 한눈에 구분된다. 예전에는 글자로 적었는데 도형이 작아 잘렸다.
+            분배(1→3)는 채운 삼각형, 병합(3→1)은 빈 삼각형으로 방향을 표시한다.
+          */}
+          {attachments.map((a) => {
+            const cx = a.x * PX + (a.wTiles * PX) / 2;
+            const cy = a.y * PX + (a.hTiles * PX) / 2;
+            // 부속은 기계보다 작게 — 크게 그리면 기계를 삼킨다
+            const r = (Math.min(a.wTiles, a.hTiles) * PX) / 2.6;
+            return (
+              <g class={`ms-attach is-${a.kind}`}>
+                {/* 바깥 팔각형 — 분배기는 파랑, 병합기는 주황 (참고 도면의 약속) */}
+                <path
+                  d={octagon(cx, cy, r)}
+                  fill={a.kind === 'splitter' ? 'var(--bp-splitter)' : 'var(--bp-merger)'}
+                  stroke={a.kind === 'splitter' ? 'var(--bp-splitter-line)' : 'var(--bp-merger-line)'}
+                  stroke-width="2"
+                />
+                {/* 안쪽 판 — 형태만으로도 구분되게 (색만으로 구분하지 않는다) */}
+                <path
+                  d={octagon(cx, cy, r * 0.55)}
+                  fill="none"
+                  stroke={a.kind === 'splitter' ? 'var(--bp-splitter-line)' : 'var(--bp-merger-line)'}
+                  stroke-width="1.5"
+                  stroke-dasharray={a.kind === 'merger' ? '3 2' : undefined}
+                />
+              </g>
+            );
+          })}
 
         </g>
 

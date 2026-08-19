@@ -1,0 +1,157 @@
+{
+  "$comment": "아이템 아이콘. Coffee Stain Studios 자산이며 공식 위키(satisfactory.wiki.gg)에서 가져왔습니다. MIT 라이선스 대상이 아닙니다. 상업적 사용·게임사 사칭을 하지 않습니다. (CLAUDE.md §4)",
+  "source": "https://satisfactory.wiki.gg/",
+  "fetchedBy": "scripts/fetch-icons.mjs",
+  "items": [
+    {
+      "id": "Desc_LiquidOil_C",
+      "en": "Crude Oil",
+      "file": "Desc_LiquidOil_C.png"
+    },
+    {
+      "id": "Desc_Water_C",
+      "en": "Water",
+      "file": "Desc_Water_C.png"
+    },
+    {
+      "id": "Desc_NitrogenGas_C",
+      "en": "Nitrogen Gas",
+      "file": "Desc_NitrogenGas_C.png"
+    },
+    {
+      "id": "Desc_OreIron_C",
+      "en": "Iron Ore",
+      "file": "Desc_OreIron_C.png"
+    },
+    {
+      "id": "Desc_Coal_C",
+      "en": "Coal",
+      "file": "Desc_Coal_C.png"
+    },
+    {
+      "id": "Desc_OreCopper_C",
+      "en": "Copper Ore",
+      "file": "Desc_OreCopper_C.png"
+    },
+    {
+      "id": "Desc_Stone_C",
+      "en": "Limestone",
+      "file": "Desc_Stone_C.png"
+    },
+    {
+      "id": "Desc_RawQuartz_C",
+      "en": "Raw Quartz",
+      "file": "Desc_RawQuartz_C.png"
+    },
+    {
+      "id": "Desc_SAM_C",
+      "en": "SAM",
+      "file": "Desc_SAM_C.png"
+    },
+    {
+      "id": "Desc_OreBauxite_C",
+      "en": "Bauxite",
+      "file": "Desc_OreBauxite_C.png"
+    },
+    {
+      "id": "Desc_OreGold_C",
+      "en": "Caterium Ore",
+      "file": "Desc_OreGold_C.png"
+    },
+    {
+      "id": "Desc_Sulfur_C",
+      "en": "Sulfur",
+      "file": "Desc_Sulfur_C.png"
+    },
+    {
+      "id": "Desc_OreUranium_C",
+      "en": "Uranium",
+      "file": "Desc_OreUranium_C.png"
+    },
+    {
+      "id": "Desc_IronPlate_C",
+      "en": "Iron Plate",
+      "file": "Desc_IronPlate_C.png"
+    },
+    {
+      "id": "Desc_IronRod_C",
+      "en": "Iron Rod",
+      "file": "Desc_IronRod_C.png"
+    },
+    {
+      "id": "Desc_Cable_C",
+      "en": "Cable",
+      "file": "Desc_Cable_C.png"
+    },
+    {
+      "id": "Desc_IronPlateReinforced_C",
+      "en": "Reinforced Iron Plate",
+      "file": "Desc_IronPlateReinforced_C.png"
+    },
+    {
+      "id": "Desc_Wire_C",
+      "en": "Wire",
+      "file": "Desc_Wire_C.png"
+    },
+    {
+      "id": "Desc_IronIngot_C",
+      "en": "Iron Ingot",
+      "file": "Desc_IronIngot_C.png"
+    },
+    {
+      "id": "Desc_SteelIngot_C",
+      "en": "Steel Ingot",
+      "file": "Desc_SteelIngot_C.png"
+    },
+    {
+      "id": "Desc_CopperIngot_C",
+      "en": "Copper Ingot",
+      "file": "Desc_CopperIngot_C.png"
+    },
+    {
+      "id": "Desc_CopperSheet_C",
+      "en": "Copper Sheet",
+      "file": "Desc_CopperSheet_C.png"
+    },
+    {
+      "id": "Desc_ModularFrame_C",
+      "en": "Modular Frame",
+      "file": "Desc_ModularFrame_C.png"
+    },
+    {
+      "id": "Desc_Rotor_C",
+      "en": "Rotor",
+      "file": "Desc_Rotor_C.png"
+    },
+    {
+      "id": "Desc_SteelPipe_C",
+      "en": "Steel Pipe",
+      "file": "Desc_SteelPipe_C.png"
+    },
+    {
+      "id": "Desc_SteelPlate_C",
+      "en": "Steel Beam",
+      "file": "Desc_SteelPlate_C.png"
+    },
+    {
+      "id": "Desc_SteelPlateReinforced_C",
+      "en": "Encased Industrial Beam",
+      "file": "Desc_SteelPlateReinforced_C.png"
+    },
+    {
+      "id": "Desc_Cement_C",
+      "en": "Concrete",
+      "file": "Desc_Cement_C.png"
+    },
+    {
+      "id": "Desc_IronScrew_C",
+      "en": "Screws",
+      "file": "Desc_IronScrew_C.png"
+    },
+    {
+      "id": "Desc_SAMIngot_C",
+      "en": "Reanimated SAM",
+      "file": "Desc_SAMIngot_C.png"
+    }
+  ]
+}

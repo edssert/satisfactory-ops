@@ -12,7 +12,7 @@
  * 화면에 그렇게 표기한다. (지형 비용 모델은 아직 근거가 없다 — docs/research 미비 항목)
  */
 
-import { distanceM, nodeYield, type Extractor, type ResourceNode } from './mining.ts';
+import { distanceM, nodeYield, WORLD_SPAN_M, type Extractor, type ResourceNode } from './mining.ts';
 
 export interface ResourceWant {
   res: string;
@@ -69,10 +69,10 @@ export function findSites(
   const minable = nodes.filter((n) => n.type !== 'deposit');
   const primary = wants[0];
   if (!primary) return [];
-  const centers = minable.filter((n) => n.res === primary.res);
 
-  const candidates: SiteCandidate[] = centers.map((center) => {
-    const resources: SitedResource[] = wants.map((want) => {
+  /** 중심에서 각 자원의 필요량을 채우는 노드를 가까운 것부터 고른다 */
+  const pickFor = (center: { fx: number; fy: number }): SitedResource[] =>
+    wants.map((want) => {
       const sorted = minable
         .filter((n) => n.res === want.res)
         .map((n) => ({ n, d: distanceM(center, n) }))
@@ -105,17 +105,76 @@ export function findSites(
       };
     });
 
+  const maxHaulOf = (center: { fx: number; fy: number }, picked: SitedResource[]) =>
+    picked.reduce(
+      (m, r) => Math.max(m, r.nodes.reduce((q, n) => Math.max(q, distanceM(center, n)), 0)),
+      0
+    );
+
+  /**
+   * **공장 자리를 자원들 사이로 옮긴다.**
+   *
+   * 처음에는 후보 중심을 주 자원(철 광석) 노드 위로만 잡았다. 그러면 철은 0 m지만 구리가
+   * 107 m가 되어 최대 운반이 107 m로 잡힌다. 공장을 세 자원 사이로 옮기면 그 최대값이 줄어든다.
+   * 공장은 노드 위에 지을 필요가 없다 — 채굴기만 노드 위에 서면 된다.
+   *
+   * 최소 최대거리(1-center) 문제이고, 노드가 몇 개뿐이라 굵은 격자에서 고운 격자로 좁히는
+   * 국소 탐색으로 충분하다.
+   */
+  const refine = (start: { fx: number; fy: number }, picked: SitedResource[]) => {
+    let best = { fx: start.fx, fy: start.fy };
+    let bestMax = maxHaulOf(best, picked);
+    // 400 m 범위에서 시작해 절반씩 좁힌다
+    for (let stepM = 200; stepM >= 5; stepM /= 2) {
+      const step = stepM / WORLD_SPAN_M;
+      let improved = true;
+      let guard = 0;
+      while (improved && guard++ < 40) {
+        improved = false;
+        for (const [dx, dy] of [
+          [1, 0], [-1, 0], [0, 1], [0, -1],
+          [1, 1], [1, -1], [-1, 1], [-1, -1],
+        ]) {
+          const cand = { fx: best.fx + dx * step, fy: best.fy + dy * step };
+          const m = maxHaulOf(cand, picked);
+          if (m < bestMax - 0.5) {
+            best = cand;
+            bestMax = m;
+            improved = true;
+          }
+        }
+      }
+    }
+    return best;
+  };
+
+  /**
+   * 후보 자리는 **모든 자원의 노드**에서 시작한다. 주 자원 노드만 후보로 두면
+   * 자원 하나에 붙은 자리만 보게 된다.
+   */
+  const seeds = minable.filter((n) => wants.some((w) => w.res === n.res));
+
+  const candidates: SiteCandidate[] = seeds.map((seed) => {
+    // 1) 씨앗 주변에서 노드를 고르고 2) 그 노드들 사이로 자리를 옮기고 3) 다시 고른다
+    let center = { fx: seed.fx, fy: seed.fy };
+    let picked = pickFor(center);
+    center = refine(center, picked);
+    picked = pickFor(center);
+    center = refine(center, picked);
+
+    const cellNode = minable.reduce((a, b) =>
+      distanceM(center, b) < distanceM(center, a) ? b : a
+    );
+
     return {
       fx: center.fx,
       fy: center.fy,
-      cell: center.cell,
-      resources,
-      maxHaulM: resources.reduce((m, r) => Math.max(m, r.maxDistanceM), 0),
-      complete: resources.every((r) => r.shortfallPerMinute === 0),
-      pureCount: resources.reduce(
-        (c, r) => c + r.nodes.filter((n) => n.purity === 'pure').length,
-        0
-      ),
+      // 부지 자체의 그리드 칸 — 가장 가까운 노드의 칸으로 표기한다
+      cell: cellNode.cell,
+      resources: picked,
+      maxHaulM: maxHaulOf(center, picked),
+      complete: picked.every((r) => r.shortfallPerMinute === 0),
+      pureCount: picked.reduce((c, r) => c + r.nodes.filter((n) => n.purity === 'pure').length, 0),
     };
   });
 
@@ -126,8 +185,8 @@ export function findSites(
         a.maxHaulM - b.maxHaulM ||
         b.pureCount - a.pureCount
     )
-    // 같은 자리를 여러 번 추천하지 않는다 — 200 m 안이면 같은 부지로 본다
-    .filter((c, i, arr) => arr.findIndex((o) => distanceM(o, c) < 200) === i)
+    // 같은 자리를 여러 번 추천하지 않는다 — 300 m 안이면 같은 부지로 본다
+    .filter((c, i, arr) => arr.findIndex((o) => distanceM(o, c) < 300) === i)
     .slice(0, topN);
 }
 

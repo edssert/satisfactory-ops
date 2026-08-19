@@ -158,12 +158,18 @@ test('다운클럭이 전력을 실제로 줄인다 — 지수 1.32', () => {
   assert.ok(plan.power.savedMW > 0);
 });
 
-test('발행 모듈 시트의 크기를 재현한다 — 토대 4×4 (32×32 m)', () => {
-  // 참고 시트("앤디스 팩토리 설계 연구소", 보강된 철판 v1)는 4×4 토대 영역에 들어간다고 적고 있다.
-  // 우리 배치기가 같은 크기를 내야 한다. 이 값이 커지면 배치 최적화가 퇴화한 것이다.
-  //
-  // 이력: 탐욕적 줄 채우기였을 때 4×9(32×72 m), 기계 단위 배치일 때 3×5(24×40 m)였다.
-  // 24×40은 면적은 작지만 청사진 설계소 Mk.1(32×32)에 들어가지 않아 실전에서 더 나쁘다.
+test('폭은 청사진 규격(32 m)을 지키고, 길이는 흐름 배치의 대가로 늘어난다', () => {
+  /*
+   * 배치 목적을 바꾼 결과를 여기에 기록한다.
+   *
+   * 면적만 최소화했을 때는 4×4(32×32 m)가 나왔다. 발행 참고 도면과 같은 크기였지만,
+   * 같은 공정이 흩어지고 벨트가 바깥을 도는 **창고 같은 배치**였다. 사람이 보고 따라 지을 수 없다.
+   *
+   * 지금은 공정 순서대로 위에서 아래로 놓는다. 재료가 한 방향으로 흐르고 벨트가 짧고 곧다.
+   * 대신 길이가 늘어난다. 그 대가를 숫자로 남긴다 — 몰래 커지면 안 되므로 상한을 둔다.
+   *
+   * 폭 4칸(32 m)은 계속 지킨다. 청사진 설계소 Mk.1 폭이고, 길이만 잘라 여러 장으로 뜰 수 있다.
+   */
   const plan = planModule({
     targetItemId: RIP,
     targetPerMinute: rateFromSupply(RIP, IRON_ORE, 60, book, isRaw),
@@ -176,10 +182,35 @@ test('발행 모듈 시트의 크기를 재현한다 — 토대 4×4 (32×32 m)'
     extractor: minerMk1,
     isRaw,
   });
-  assert.equal(plan.foundation.wTiles, 4, `폭 ${plan.foundation.wTiles}칸`);
-  assert.equal(plan.foundation.hTiles, 4, `길이 ${plan.foundation.hTiles}칸`);
-  assert.ok(plan.foundation.fitsBlueprintMk1, '청사진 설계소 Mk.1에 들어가야 한다');
+  assert.equal(plan.foundation.wTiles, 4, `폭 ${plan.foundation.wTiles}칸 — 청사진 폭을 지켜야 한다`);
+  assert.ok(
+    plan.foundation.hTiles <= 10,
+    `길이 ${plan.foundation.hTiles}칸 — 흐름 배치라도 이보다 길어지면 배치가 퇴화한 것이다`
+  );
   assert.deepEqual(validateModule(plan), []);
+});
+
+test('공정이 흐름 순서대로 놓인다 — 재료가 한 방향으로 흐른다', () => {
+  // 공장은 창고가 아니다. 원자재에 가까운 공정이 위에, 완제품이 아래에 있어야 한다.
+  const plan = planModule({
+    targetItemId: RIP,
+    targetPerMinute: rateFromSupply(RIP, IRON_ORE, 60, book, isRaw),
+    tier: 2,
+    book,
+    machines,
+    belt: beltMk1,
+    futureBelt: beltMk2,
+    nodes,
+    extractor: minerMk1,
+    isRaw,
+  });
+  const yOf = (itemKo: string) => {
+    const gi = plan.groups.findIndex((g) => g.itemKo === itemKo);
+    const ms = plan.placements.filter((p) => p.kind === 'machine' && p.group === gi);
+    return Math.min(...ms.map((m) => m.y));
+  };
+  assert.ok(yOf('철 주괴') < yOf('보강된 철판'), '제련이 조립보다 위에 있어야 한다');
+  assert.ok(yOf('철봉') < yOf('나사'), '철봉이 나사보다 위에 있어야 한다 (나사가 철봉을 먹는다)');
 });
 
 test('같은 공정의 기계는 서로 붙인다 — 사이에 통로를 두지 않는다', () => {

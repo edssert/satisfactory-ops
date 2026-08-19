@@ -290,6 +290,43 @@ export const FALLBACK: MachineSymbol = {
 
 export const symbolFor = (buildingId: string): MachineSymbol => SYMBOLS[buildingId] ?? FALLBACK;
 
+/**
+ * 건물 아이콘 파일명.
+ *
+ * `public/assets/buildings/` 에 이미 들어 있는 자산이다. 공식 위키에서 가져온
+ * Coffee Stain Studios 자산이며 출처 표기를 유지한다 (CLAUDE.md §4).
+ *
+ * 직접 그린 실루엣보다 이쪽이 훨씬 잘 읽힌다. 자산이 저장소에 있는데도 도면에서
+ * 쓰지 않고 도형을 그리고 있었다 — 그럴 이유가 없었다.
+ * 아이콘이 없는 건물만 실루엣으로 떨어진다.
+ */
+export const ICONS: Record<string, string> = {
+  Build_SmelterMk1_C: 'smelter',
+  Build_ConstructorMk1_C: 'constructor',
+  Build_AssemblerMk1_C: 'assembler',
+  Build_ManufacturerMk1_C: 'manufacturer',
+  Build_FoundryMk1_C: 'foundry',
+  Build_OilRefinery_C: 'refinery',
+  Build_Packager_C: 'packager',
+  Build_MinerMk1_C: 'miner-mk.1',
+  Build_MinerMk2_C: 'miner-mk.1',
+  Build_MinerMk3_C: 'miner-mk.1',
+  Build_WaterPump_C: 'water-extractor',
+  Build_OilPump_C: 'oil-extractor',
+  Build_ConveyorAttachmentSplitter_C: 'conveyor-splitter',
+  Build_ConveyorAttachmentMerger_C: 'conveyor-merger',
+  Build_StorageContainerMk1_C: 'storage-container',
+  Build_AwesomeSink_C: 'awesome-sink',
+  Build_GeneratorCoal_C: 'coal-powered-generator',
+  Build_GeneratorFuel_C: 'fuel-powered-generator',
+  Build_GeneratorBiomass_C: 'biomass-burner',
+  Build_PowerStorageMk1_C: 'power-storage',
+  Build_TrainStation_C: 'train-station',
+  Build_BlueprintDesigner_C: 'blueprint-designer-mk.1',
+};
+
+export const iconOf = (buildingId: string): string | null => ICONS[buildingId] ?? null;
+
 const n2 = (v: number) => Math.round(v * 100) / 100;
 
 /**

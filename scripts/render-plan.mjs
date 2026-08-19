@@ -63,6 +63,31 @@ function styleBlock(tokens) {
 
 const tokens = readTokens();
 
+/**
+ * <image href="/base/assets/..."> 를 data URI 로 바꾼다.
+ *
+ * 렌더러는 외부 파일 참조를 따라가지 않는다. 그대로 두면 아이콘이 통째로 빠진 그림이 나오고,
+ * **브라우저와 다른 것을 보게 된다** — 그러면 이 렌더 루프가 검증 도구 구실을 못 한다.
+ */
+function inlineImages(svgText) {
+  return svgText.replace(/href="([^"]+\.(?:webp|png|jpg|svg))"/g, (m, url) => {
+    const rel = url.replace(/^[^/]*\/*/, '').replace(/^satisfactory-ops\//, '');
+    const candidates = [
+      path.join(ROOT, 'public', rel),
+      path.join(ROOT, 'dist', rel),
+      path.join(ROOT, 'public', url.replace(/^\//, '')),
+    ];
+    const hit = candidates.find((c) => fs.existsSync(c));
+    if (!hit) {
+      console.warn('  이미지를 못 찾음:', url);
+      return m;
+    }
+    const ext = path.extname(hit).slice(1);
+    const mime = ext === 'svg' ? 'image/svg+xml' : `image/${ext}`;
+    return `href="data:${mime};base64,${fs.readFileSync(hit).toString('base64')}"`;
+  });
+}
+
 // 도면 SVG 전부 추출 (층 도면이 공정마다 하나씩 나온다)
 const svgs = [...html.matchAll(/<svg class="(?:fps|ms)-svg"[\s\S]*?<\/svg>/g)].map((m) => m[0]);
 if (svgs.length === 0) {
@@ -93,7 +118,9 @@ ${style}
 ${parts.join('\n')}
 </svg>`;
 
-const png = new Resvg(resolveVars(svg, tokens), {
+const finalSvg = inlineImages(resolveVars(svg, tokens));
+if (process.env.DUMP_SVG) fs.writeFileSync(process.env.DUMP_SVG, finalSvg);
+const png = new Resvg(finalSvg, {
   font: { loadSystemFonts: true, defaultFontFamily: 'Malgun Gothic' },
   background: tokens.get('--bg'),
 }).render().asPng();

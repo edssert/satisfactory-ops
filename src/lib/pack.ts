@@ -499,6 +499,12 @@ export interface GroupBlockInput {
   count: number;
   widthM: number;
   lengthM: number;
+  /**
+   * 원자재에서 몇 단계 떨어졌는가. **같은 단계의 공정은 나란히 놓을 수 있다** —
+   * 서로 먹이지 않는 평행 갈래이기 때문이다 (철판과 나사처럼).
+   * 이걸 안 쓰면 공정마다 한 줄씩 차지해 도면이 세로로 길어진다.
+   */
+  rank?: number;
 }
 
 export interface GroupBlock {
@@ -607,4 +613,130 @@ export function packGroups(
   if (!best) throw new Error(`폭 ${maxWidthM} m 안에 들어가지 않는 공정이 있습니다`);
   best.tried = tried;
   return best;
+}
+
+
+// ---------------------------------------------------------------- 흐름 순서 배치
+
+/**
+ * **흐름 순서 배치.** 공장은 창고가 아니다.
+ *
+ * 왜 새로 쓰는가: 앞의 패커는 **면적**을 최소화했다. 측정하기 쉬운 값이라 그것을 목적으로 삼았는데,
+ * 정작 중요한 것(재료가 한 방향으로 흐르는가)은 목적 함수에 없었다. 그래서 같은 공정이 여기저기
+ * 흩어지고 벨트가 바깥을 빙 도는, 공장이 아니라 창고 선반 같은 배치가 나왔다.
+ *
+ * 실제 도면은 예외 없이 이렇게 생겼다:
+ *   제련 → 제작 → 조립 이 **한 방향으로 줄지어** 놓이고,
+ *   한 공정의 기계는 흐름에 **직각으로 나란히** 선다.
+ * 그러면 벨트가 짧고 곧고, 어디서 어디로 가는지 그림만 봐도 읽힌다.
+ *
+ * 면적은 이 방식이 조금 더 크다. 그 대가로 읽히는 도면과 짧은 벨트를 얻는다.
+ * 발행된 4×4 모듈들은 사람이 손으로 촘촘히 끼워 넣은 결과이고, 그것은 읽기가 아니라 밀도를
+ * 목적으로 한 배치다. 우리는 읽기를 택한다 — 사람이 보고 따라 지어야 하기 때문이다.
+ */
+export function packFlow(
+  groups: GroupBlockInput[],
+  maxWidthM: number,
+  /**
+   * 공정 사이 통로. 여기에 간선 벨트와 분배기·병합기(4×4 m)가 들어간다.
+   * 4 m로 두었더니 부속이 기계 줄에 겹쳐 그려졌다 — 부속 자체가 4 m라 여유가 없다.
+   */
+  aisleM = 6
+): PackResult & { blocks: GroupBlock[]; rows: { group: number; yM: number; heightM: number }[] } {
+  const blocks: GroupBlock[] = [];
+  const items: PackedItem[] = [];
+  const rows: { group: number; yM: number; heightM: number }[] = [];
+
+  /*
+   * 같은 단계(rank)의 공정을 한 띠에 나란히 놓는다. 폭이 넘치면 띠를 나눈다.
+   * 발행 도면이 폭을 쓰는 방식이 이것이다 — 철판 옆에 나사를 놓아 세로 길이를 줄인다.
+   */
+  const bands: GroupBlockInput[][] = [];
+  {
+    const byRank = new Map<number, GroupBlockInput[]>();
+    groups.forEach((g, i) => {
+      const k = g.rank ?? -i; // rank 가 없으면 순서대로 각자 한 띠
+      byRank.set(k, [...(byRank.get(k) ?? []), g]);
+    });
+    // 원자재에 가까운 단계(rank 큰 값)부터 — 재료가 위에서 아래로 흐른다
+    const ranks = [...byRank.keys()].sort((x, y) => y - x);
+    for (const k of ranks) {
+      let cur: GroupBlockInput[] = [];
+      let curW = 0;
+      for (const g of byRank.get(k)!) {
+        const perRow = Math.max(1, Math.floor(maxWidthM / g.widthM));
+        const w = Math.min(maxWidthM, Math.min(g.count, perRow) * g.widthM);
+        if (cur.length && curW + w > maxWidthM) {
+          bands.push(cur);
+          cur = [];
+          curW = 0;
+        }
+        cur.push(g);
+        curW += w;
+      }
+      if (cur.length) bands.push(cur);
+    }
+  }
+
+  let yM = aisleM;
+  for (const band of bands) {
+    // 이 띠에 들어가는 공정들의 폭을 먼저 재고, 가로 가운데 정렬로 늘어놓는다
+    const sized = band.map((g) => {
+      const perRow = Math.max(1, Math.floor(maxWidthM / g.widthM));
+      const cols = Math.min(g.count, perRow);
+      const rowCount = Math.ceil(g.count / cols);
+      return { g, cols, rowCount, widthM: cols * g.widthM, lengthM: rowCount * g.lengthM };
+    });
+    const totalW = sized.reduce((a2, b2) => a2 + b2.widthM, 0);
+    const bandH = Math.max(...sized.map((x) => x.lengthM));
+    let xCursor = (maxWidthM - totalW) / 2;
+
+    for (const sz of sized) {
+      const cells: GroupBlock['cells'] = [];
+      for (let i = 0; i < sz.g.count; i++) {
+        const r = Math.floor(i / sz.cols);
+        const c = i % sz.cols;
+        cells.push({
+          xM: c * sz.g.widthM,
+          yM: r * sz.g.lengthM,
+          widthM: sz.g.widthM,
+          lengthM: sz.g.lengthM,
+        });
+      }
+      blocks.push({
+        group: sz.g.group,
+        cols: sz.cols,
+        rows: sz.rowCount,
+        widthM: sz.widthM,
+        lengthM: sz.lengthM,
+        cells,
+      });
+      items.push({
+        id: String(sz.g.group),
+        group: sz.g.group,
+        xM: xCursor,
+        yM,
+        widthM: sz.widthM,
+        lengthM: sz.lengthM,
+        rotated: false,
+      });
+      rows.push({ group: sz.g.group, yM, heightM: sz.lengthM });
+      xCursor += sz.widthM;
+    }
+    yM += bandH + aisleM;
+  }
+
+  const widthM = maxWidthM;
+  const heightM = yM;
+  return {
+    items,
+    blocks,
+    rows,
+    widthM,
+    heightM,
+    areaM2: widthM * heightM,
+    beltLengthM: Math.round(heightM),
+    cost: widthM * heightM,
+    tried: 1,
+  };
 }

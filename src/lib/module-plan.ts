@@ -21,7 +21,7 @@ import type { RecipeBook, SolveNode } from './solver.ts';
 import { solve } from './solver.ts';
 import { toNumber } from './rational.ts';
 import { planMining, type MiningPlan, type ResourceNode, type Extractor } from './mining.ts';
-import { packGroups, routeBelt, type Point } from './pack.ts';
+import { packFlow, routeBelt, type Point } from './pack.ts';
 import { splittersFor, mergersFor } from './layout.ts';
 
 /** 토대 한 장 = 8 m (게임 기본 토대) */
@@ -84,8 +84,12 @@ export interface Placement {
   hTiles: number;
   /** 기계일 때 소속 그룹 */
   group?: number;
-  /** 어떤 건물인가 — 도면에서 실루엣을 고르는 키 */
+  /** 어떤 건물인가 — 도면에서 아이콘·실루엣을 고르는 키 */
   machineId?: string;
+  /** 이 기계가 만드는 아이템 (아이콘 배지에 쓴다) */
+  itemId?: string;
+  /** 한 대가 분당 내는 수량 — 아이콘 옆 배지 */
+  perMachinePerMinute?: number;
   clockPercent?: number;
   /** 90도 돌려 놓았는가 */
   rotated?: boolean;
@@ -106,6 +110,8 @@ export interface Placement {
  */
 export interface BeltRun {
   itemKo: string;
+  /** 아이콘 참조용 */
+  itemId?: string;
   perMinute: number;
   /** 실제 경로 (타일 좌표, 직각으로 꺾인다). 기계를 관통하지 않는다. */
   path: { x: number; y: number }[];
@@ -361,10 +367,15 @@ export function planModule(input: ModuleInput): ModulePlan {
   const TARGET_WIDTH_M = 32;
 
   // 공정 단위로 블록을 만들어 배치한다. 같은 공정의 기계는 서로 붙이고, 통로는 공정 사이에만.
-  const packed = packGroups(
+  /*
+   * 공정 순서대로 위에서 아래로 쌓는다. 면적 최소화가 아니라 **흐름**이 기준이다.
+   * 면적만 보고 배치했더니 같은 공정이 흩어지고 벨트가 바깥을 도는, 공장이 아니라 창고 같은
+   * 그림이 나왔다.
+   */
+  const packed = packFlow(
     groups.map((g, gi) => {
       const fp = g.footprint ?? { widthM: 8, lengthM: 10, heightM: 8 };
-      return { group: gi, count: g.built, widthM: fp.widthM, lengthM: fp.lengthM };
+      return { group: gi, count: g.built, widthM: fp.widthM, lengthM: fp.lengthM, rank: g.rank };
     }),
     TARGET_WIDTH_M
   );
@@ -393,6 +404,8 @@ export function planModule(input: ModuleInput): ModulePlan {
       label: `${g.machineKo}
 ${g.itemKo}`,
       machineId: g.machineId,
+      itemId: g.itemId,
+      perMachinePerMinute: g.outPerMachinePerMinute,
       x: mb.xM / TILE_M,
       y: mb.yM / TILE_M,
       wTiles: mb.widthM / TILE_M,
@@ -490,6 +503,17 @@ ${g.itemKo}`,
    * 부속의 치수는 4×4 m인데 통로는 2 m다. 그래도 놓을 수 있다 — 게임 데이터상 이 부속들은
    * 하드 클리어런스가 없고 소프트만 있어서(hardBoxes 0) 기계와 겹쳐 지을 수 있다.
    */
+  /*
+   * 분배기·병합기 배치 — **기계마다 바로 위(아래)에 하나씩.**
+   *
+   * 앞서는 공정마다 분배기 한두 개를 통로에 흩어 놓고 거기서 각 기계로 벨트를 뻗었다.
+   * 기계를 빈틈없이 붙여 놓았으므로 그 벨트가 다른 기계 위를 가로질렀다 — 지을 수 없는 그림이다.
+   *
+   * 실제 매니폴드는 이렇게 생겼다: 간선이 기계 줄을 따라 **통로**를 지나가고, 기계마다 그 앞에
+   * 분배기가 하나 붙어 짧게 떨어뜨린다. 마지막 기계는 간선 끝을 그대로 받는다.
+   * 그래서 필요한 분배기는 줄당 (기계 수 − 1)개이고, 병합기도 같다.
+   * 사용자가 "이 도면대로면 분배기가 최소 2개는 있어야 하는 것 아니냐"고 한 지적이 이것이다.
+   */
   const ATT_M = 4;
   interface Attach {
     kind: 'splitter' | 'merger';
@@ -502,66 +526,33 @@ ${g.itemKo}`,
   groups.forEach((g, gi) => {
     const mine = machineBoxes.filter((m) => m.gi === gi);
     if (mine.length <= 1) return;
-
-    const nSplit = Math.max(1, splittersFor(mine.length));
-    const nMerge = Math.max(1, mergersFor(mine.length));
-
-    // 입력 면(블록 위쪽)과 출력 면(아래쪽)을 등분해 부속을 놓고, 기계를 가까운 것에 배정한다
-    const minX = Math.min(...mine.map((m) => m.xM));
-    const maxX = Math.max(...mine.map((m) => m.xM + m.widthM));
-    const minY = Math.min(...mine.map((m) => m.yM));
-    const maxY = Math.max(...mine.map((m) => m.yM + m.lengthM));
-
-    const spread = (n: number, y: number): Point[] =>
-      Array.from({ length: n }, (_, k) => ({
-        x: Math.max(0, Math.min(GW - 1, Math.round(minX + ((k + 1) * (maxX - minX)) / (n + 1)))),
-        y: Math.max(0, Math.min(GH - 1, y)),
-      }));
-
-    /*
-     * 부속은 **토대 안**에 둔다. 블록 위 통로에 놓되, 그 통로가 토대 밖으로 나가면
-     * 기계 첫 줄에 겹쳐 놓는다 — 분배기·병합기는 하드 클리어런스가 없어서 겹쳐 지을 수 있다.
-     * 밖에 두었더니 도면에서 분배기가 토대 위에 떠 있고 분기 벨트가 모듈 바깥을 돌았다.
-     */
-    const inLaneY = Math.max(ATT_M / 2, Math.round(minY) - 1);
-    const outLaneY = Math.min(GH - 1 - ATT_M / 2, Math.round(maxY));
-    const splitPts = spread(nSplit, inLaneY);
-    const mergePts = spread(nMerge, outLaneY);
-
-    const nearest = (pts: Point[], p: Point) =>
-      pts.reduce((a, b) => (Math.abs(b.x - p.x) < Math.abs(a.x - p.x) ? b : a));
-
-    for (const pt of splitPts) {
-      attaches.push({ kind: 'splitter', pt, group: gi, serves: [] });
-    }
-    for (const pt of mergePts) {
-      attaches.push({ kind: 'merger', pt, group: gi, serves: [] });
-    }
+    // 같은 줄(y가 같은 것)끼리 묶는다 — 줄마다 간선이 하나씩 지나간다
+    const byRow = new Map<number, typeof mine>();
     for (const m of mine) {
-      const ip = portOf(m, 'in');
-      const op = portOf(m, 'out');
-      const sp = nearest(splitPts, ip);
-      const mp = nearest(mergePts, op);
-      attaches.find((a) => a.kind === 'splitter' && a.pt === sp)!.serves.push(m);
-      attaches.find((a) => a.kind === 'merger' && a.pt === mp)!.serves.push(m);
+      const key = Math.round(m.yM);
+      byRow.set(key, [...(byRow.get(key) ?? []), m]);
+    }
+    for (const [, row] of byRow) {
+      const sorted = [...row].sort((a2, b2) => a2.xM - b2.xM);
+      // 마지막 기계는 간선 끝을 그대로 받는다 — 부속이 필요 없다
+      sorted.slice(0, -1).forEach((m) => {
+        const ip = portOf(m, 'in');
+        const op = portOf(m, 'out');
+        attaches.push({
+          kind: 'splitter',
+          pt: { x: ip.x, y: Math.max(ATT_M / 2, ip.y) },
+          group: gi,
+          serves: [m],
+        });
+        attaches.push({
+          kind: 'merger',
+          pt: { x: op.x, y: Math.min(GH - 1 - ATT_M / 2, op.y) },
+          group: gi,
+          serves: [m],
+        });
+      });
     }
   });
-
-  /*
-   * 부속끼리 겹치면 글자가 서로를 덮는다 — 앞 공정의 병합기와 다음 공정의 분배기가 같은
-   * 통로에 놓이면서 실제로 겹쳤다. 겹치는 것은 옆으로 민다.
-   */
-  const placed: Point[] = [];
-  for (const a of attaches) {
-    let guard = 0;
-    while (
-      guard++ < 20 &&
-      placed.some((q) => Math.abs(q.x - a.pt.x) < ATT_M && Math.abs(q.y - a.pt.y) < ATT_M)
-    ) {
-      a.pt = { x: Math.min(GW - ATT_M, a.pt.x + ATT_M), y: a.pt.y };
-    }
-    placed.push(a.pt);
-  }
 
   for (const a of attaches) {
     placements.push({
@@ -576,6 +567,9 @@ ${g.itemKo}`,
   }
 
   const routeFailures: string[] = [];
+  /** 점이 2개 미만인 경로는 벨트가 아니다 — 그리면 빈 path 가 되어 SVG 가 깨진다 */
+  const usablePath = (pts: Point[]) => pts.length >= 2;
+
   const pushBelt = (
     itemKo: string,
     perMinute: number,
@@ -588,6 +582,10 @@ ${g.itemKo}`,
     labels?: { from: string; to: string }
   ) => {
     const path = routeBelt(from, to, blocked, { w: GW, h: GH });
+    if (!usablePath(path)) {
+      // 출발점과 도착점이 같은 칸이면 벨트가 없다. 그리지 않는다.
+      return;
+    }
     if (path.length <= 2 && (Math.abs(from.x - to.x) > 1 && Math.abs(from.y - to.y) > 1)) {
       routeFailures.push(itemKo);
     }
@@ -788,8 +786,8 @@ ${g.itemKo}`,
   const features: string[] = [];
   features.push(
     `토대 ${wTiles}×${hTiles}칸(${wTiles * TILE_M}×${hTiles * TILE_M} m). ` +
-      `배치 ${packed.tried}가지를 비교해 면적과 벨트 길이가 가장 작은 것을 골랐습니다 ` +
-      (packed.beltLengthM > 0 ? `(공정 사이 거리 합 ${packed.beltLengthM} m).` : '(공정이 하나뿐이라 공정 간 벨트가 없습니다).')
+      '공정 순서대로 위에서 아래로 놓았습니다 — 재료가 한 방향으로 흐릅니다. ' +
+      `흐름 길이 ${packed.beltLengthM} m.`
   );
   if (wTiles <= 4 && hTiles <= 4) {
     features.push(
