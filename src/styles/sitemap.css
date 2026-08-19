@@ -55,21 +55,25 @@
 }
 
 /* 게임 텍스처 유래값이 확인된 자원 (브리프 §03 자원 색상 표) */
-[data-res='철광석'] { background: #989fa9 !important; }
-[data-res='석탄'] { background: #5a5a78 !important; }
-[data-res='원유'] { background: #6a6e73 !important; }
-[data-res='석영'] { background: #8e8e8e !important; }
-[data-res='황'] { background: #9c9491 !important; }
-[data-res='물'] { background: #4b93de !important; }
-[data-res='우라늄'] { background: #88d288 !important; }
-/* 아래는 게임 텍스처 유래값을 확보하지 못했다. UI 구분용 색이며 화면에 그렇게 표기한다. */
-[data-res='구리광석'] { background: #c87a45 !important; }
-[data-res='석회석'] { background: #c9b98a !important; }
-[data-res='캐터리움'] { background: #d8a62b !important; }
-[data-res='보크사이트'] { background: #b96a45 !important; }
-[data-res='SAM'] { background: #8e7bd8 !important; }
-[data-res='질소가스'] { background: #63a9c4 !important; }
-[data-res='간헐천'] { background: #4fbfa8 !important; }
+[data-res='Desc_OreIron_C'] { background: #989fa9 !important; }
+[data-res='Desc_Coal_C'] { background: #5a5a78 !important; }
+[data-res='Desc_LiquidOil_C'] { background: #6a6e73 !important; }
+[data-res='Desc_RawQuartz_C'] { background: #8e8e8e !important; }
+[data-res='Desc_Sulfur_C'] { background: #9c9491 !important; }
+[data-res='Desc_Water_C'] { background: #4b93de !important; }
+[data-res='Desc_OreUranium_C'] { background: #88d288 !important; }
+/*
+ * 선택자는 **클래스 id**를 쓴다. 한글 표시명으로 두었더니 파이프라인이 이름을
+ * 게임 이름으로 정규화한 순간('구리광석' → '구리 광석') 색이 전부 빠졌다.
+ * 아래는 게임 텍스처 유래값을 확보하지 못했다. UI 구분용 색이며 화면에 그렇게 표기한다.
+ */
+[data-res='Desc_OreCopper_C'] { background: #c87a45 !important; }
+[data-res='Desc_Stone_C'] { background: #c9b98a !important; }
+[data-res='Desc_OreGold_C'] { background: #d8a62b !important; }
+[data-res='Desc_OreBauxite_C'] { background: #b96a45 !important; }
+[data-res='Desc_SAM_C'] { background: #8e7bd8 !important; }
+[data-res='Desc_NitrogenGas_C'] { background: #63a9c4 !important; }
+[data-res='Desc_GeothermalEnergy_C'] { background: #4fbfa8 !important; }
 
 .sm-box {
   position: relative;

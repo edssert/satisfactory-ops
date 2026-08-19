@@ -1,0 +1,569 @@
+/**
+ * module-plan.ts — **모듈 도면**. 채굴기 한 대에서 완제품까지, 한 장에 들어가는 공장 하나.
+ *
+ * 형식의 근거: 커뮤니티에서 널리 쓰이는 "모듈 시트" 방식이다 (앤디스 팩토리 설계 연구소 등).
+ * 한 장에 다음이 다 들어간다 —
+ *   · 정사각에 가까운 배치 (토대 N×M 영역)
+ *   · **채굴기부터** 그린 전체 공정 (허공에서 재료가 들어오지 않는다)
+ *   · 건물 목록 (그대로 사면 되는 자재표)
+ *   · 특징 (모듈 복제·대칭 확장 가능 여부)
+ *
+ * 계산기와 다른 점: 목표를 입력받아 숫자를 뱉는 게 아니라, **지금 티어에서 지을 수 있는
+ * 한 덩어리의 공장**을 만든다. 그래서 해금 티어와 벨트 등급이 입력에 들어간다.
+ *
+ * 검증 기준값 (tests/module-plan.test.ts):
+ *   보강된 철판 5/분 모듈 = 채굴기 1 · 제련기 2 · 제작기 5 · 조립기 1
+ *   제작기 5대의 근거: 철판 1.5 + 나사 1.5 + 철봉 1 = 4대가 정확값이지만 반 대는 못 짓는다.
+ *   2 + 2 + 1 로 짓고 남는 만큼 다운클럭한다.
+ */
+
+import type { RecipeBook, SolveNode } from './solver.ts';
+import { solve } from './solver.ts';
+import { toNumber } from './rational.ts';
+import { planMining, type MiningPlan, type ResourceNode, type Extractor } from './mining.ts';
+import { packModule, routeBelt, type PackItem, type Point } from './pack.ts';
+import { splittersFor, mergersFor } from './layout.ts';
+
+/** 토대 한 장 = 8 m (게임 기본 토대) */
+export const TILE_M = 8;
+
+export interface Footprint {
+  widthM: number;
+  lengthM: number;
+  heightM: number;
+}
+
+export interface MachineSpec {
+  id: string;
+  ko: string;
+  footprint: Footprint | null;
+  powerMW: number | null;
+  /** 전력 = 기본 × 클럭^지수. 게임 데이터의 mPowerConsumptionExponent */
+  powerExponent: number | null;
+}
+
+export interface MachineGroup {
+  /** 이 그룹이 만드는 것 */
+  itemKo: string;
+  itemId: string;
+  machineId: string;
+  machineKo: string;
+  /** 비율상 정확한 대수 (1.5 같은 값이 나온다) */
+  exact: number;
+  /** 실제로 짓는 대수 — 반 대는 못 짓는다 */
+  built: number;
+  /** 지은 대수를 이 클럭으로 돌리면 정확값과 같아진다 */
+  clockPercent: number;
+  /** 이 그룹 전체가 분당 내는 산출 */
+  outPerMinute: number;
+  /**
+   * 기계 **한 대**가 분당 내야 하는 산출.
+   *
+   * 1.0부터 기계 UI에서 클럭 %가 아니라 목표 산출을 개/분으로 바로 넣을 수 있다.
+   * 그쪽이 반올림 없이 정확하다 — 75%를 손으로 맞추는 것보다 '15/분'을 적는 게 쉽다.
+   */
+  outPerMachinePerMinute: number;
+  /** 이 그룹 전체가 분당 먹는 재료 */
+  inputs: { itemKo: string; perMinute: number; fromGroup: number | null }[];
+  /** 다운클럭을 반영한 전력 */
+  powerMW: number;
+  /** 100%로 그냥 돌렸을 때의 전력 — 다운클럭 이득을 보여주기 위해 */
+  powerAt100MW: number;
+  footprint: Footprint | null;
+  /** 원자재에서 몇 단계 떨어졌나 (0 = 원자재 직후) */
+  rank: number;
+}
+
+export interface Placement {
+  kind: 'machine' | 'extractor' | 'splitter' | 'merger';
+  label: string;
+  /** 8m 타일 좌표 */
+  x: number;
+  y: number;
+  wTiles: number;
+  hTiles: number;
+  /** 기계일 때 소속 그룹 */
+  group?: number;
+  clockPercent?: number;
+  /** 90도 돌려 놓았는가 */
+  rotated?: boolean;
+}
+
+/**
+ * 통로 하나를 지나는 흐름.
+ *
+ * 행 사이의 통로는 **앞 행의 산출이자 다음 행의 공급**이다. 처음에는 행마다 '입력 벨트'와
+ * '출력 벨트'를 따로 만들었는데, 그러면 같은 통로에 두 개의 선과 두 개의 라벨이 겹쳐 그려진다.
+ * 통로를 단위로 잡으면 겹칠 것이 없다.
+ */
+export interface BeltRun {
+  itemKo: string;
+  perMinute: number;
+  /** 실제 경로 (타일 좌표, 직각으로 꺾인다). 기계를 관통하지 않는다. */
+  path: { x: number; y: number }[];
+  /** 이 유량을 나르는 데 필요한 벨트 줄 수 */
+  lines: number;
+  /** 현재 벨트 한 줄로 부족한가 */
+  overCurrentBelt: boolean;
+  /** 어디서 어디로 — null 은 모듈 밖(채굴기 / 완제품 반출) */
+  fromGroup: number | null;
+  toGroup: number | null;
+}
+
+export interface ModulePlan {
+  targetKo: string;
+  targetId: string;
+  targetPerMinute: number;
+  tier: number;
+  belt: { ko: string; perMinute: number };
+  /** 곧 해금될 상위 벨트 — 배치를 이 처리량에 맞춰 잡는다 */
+  futureBelt: { ko: string; perMinute: number; tier: number } | null;
+  mining: MiningPlan[];
+  groups: MachineGroup[];
+  placements: Placement[];
+  belts: BeltRun[];
+  /** 토대 영역 */
+  foundation: {
+    wTiles: number;
+    hTiles: number;
+    count: number;
+    sideM: number;
+    fitsBlueprintMk1: boolean;
+  };
+  /** 건물 목록 — 이대로 사면 된다 */
+  bom: { ko: string; count: number; note?: string }[];
+  /** 특징 */
+  features: string[];
+  power: { totalMW: number; at100MW: number; savedMW: number };
+  splitters: number;
+  mergers: number;
+  lifts: number;
+  notes: string[];
+}
+
+const r2 = (n: number): number => Math.round(n * 100) / 100;
+const ceilEps = (x: number, eps = 1e-6): number => Math.ceil(x - eps);
+const tiles = (m: number): number => Math.max(1, ceilEps(m / TILE_M));
+
+/** 클럭을 반영한 전력. 게임: 소비 = 기본 × 클럭^지수 (지수는 데이터에서, 통상 1.321928) */
+export function powerAtClock(baseMW: number, clockPercent: number, exponent: number): number {
+  return baseMW * Math.pow(clockPercent / 100, exponent);
+}
+
+/**
+ * **규모를 공급에서 거꾸로 정한다.**
+ *
+ * 왜 이게 중요한가: 목표 생산량을 사람이 입력하게 두면 티어 1에서 "보강된 철판 60/분" 같은
+ * 값이 기본값으로 앉는다. 그건 조립기 12대에 철 광석 720/분 — 채굴기 12대가 필요한 규모다.
+ * 초반에 지을 수 없는 계획이고, 그런 숫자는 안내서가 아니라 산수다.
+ *
+ * 실제 제약은 항상 **노드 하나에 올린 채굴기 하나의 산출**이다. 그래서 그 산출을 넣고
+ * 거기서 나오는 완제품 생산율을 계산한다. 참고 도면의 모듈들이 정확히 이 방식이다 —
+ * 노말 철 광석 노드 1개(60/분)에서 보강된 철판 5/분이 나온다.
+ *
+ * 체인은 선형이므로 1/분에 대한 원자재 소요를 구해 비례로 환산한다.
+ */
+export function rateFromSupply(
+  targetItemId: string,
+  rawItemId: string,
+  supplyPerMinute: number,
+  book: RecipeBook,
+  isRaw: (itemId: string) => boolean
+): number {
+  const probe = solve(targetItemId, 1, book);
+  if (!probe.ok) throw new Error(`규모 산정 실패: ${probe.message}`);
+  let per = 0;
+  const walk = (n: SolveNode) => {
+    if (!n.recipeId && isRaw(n.itemId) && n.itemId === rawItemId) per += toNumber(n.rate);
+    n.children.forEach(walk);
+  };
+  walk(probe.root);
+  if (per <= 0) throw new Error(`${targetItemId}는 ${rawItemId}를 쓰지 않습니다`);
+  return supplyPerMinute / per;
+}
+
+export interface ModuleInput {
+  targetItemId: string;
+  targetPerMinute: number;
+  tier: number;
+  book: RecipeBook;
+  machines: Map<string, MachineSpec>;
+  belt: { ko: string; perMinute: number };
+  futureBelt: { ko: string; perMinute: number; tier: number } | null;
+  nodes: ResourceNode[];
+  extractor: Extractor;
+  /** 원자재 판정 — 노드에서 캐는 것 */
+  isRaw: (itemId: string) => boolean;
+  /** 지금 티어에서 쓸 수 있는 컨베이어 리프트 이름 */
+  liftKo?: string;
+}
+
+/**
+ * 모듈 하나를 만든다.
+ *
+ * 흐름: 솔버로 체인을 펼치고 → 공정별로 묶어 지을 대수와 클럭을 정하고 →
+ * 원자재는 채굴기 배정으로 바꾸고 → 왼쪽(채굴)에서 오른쪽(완제품)으로 열을 놓는다.
+ */
+export function planModule(input: ModuleInput): ModulePlan {
+  const notes: string[] = [];
+  const solved = solve(input.targetItemId, input.targetPerMinute, input.book);
+  if (!solved.ok) {
+    throw new Error(`모듈 계획 실패: ${solved.message}`);
+  }
+
+  // 1) 공정별 집계 — 같은 부품을 두 곳에서 쓰면 한 그룹으로 합친다
+  interface Acc {
+    itemId: string;
+    itemKo: string;
+    machineId: string;
+    machineKo: string;
+    exact: number;
+    out: number;
+    rank: number;
+    inputs: Map<string, number>;
+  }
+  const acc = new Map<string, Acc>();
+  const rawDemand = new Map<string, { itemId: string; itemKo: string; perMinute: number }>();
+
+  const walk = (n: SolveNode) => {
+    if (n.recipeId && n.machineId) {
+      const hit = acc.get(n.itemId);
+      const machines = n.machines ? toNumber(n.machines) : 0;
+      const rate = toNumber(n.rate);
+      if (hit) {
+        hit.exact += machines;
+        hit.out += rate;
+        hit.rank = Math.max(hit.rank, n.depth);
+      } else {
+        acc.set(n.itemId, {
+          itemId: n.itemId,
+          itemKo: n.ko,
+          machineId: n.machineId,
+          machineKo: n.machineKo ?? n.machineId,
+          exact: machines,
+          out: rate,
+          rank: n.depth,
+          inputs: new Map(),
+        });
+      }
+      const cur = acc.get(n.itemId)!;
+      for (const c of n.children) {
+        cur.inputs.set(c.ko, (cur.inputs.get(c.ko) ?? 0) + toNumber(c.rate));
+      }
+    } else if (input.isRaw(n.itemId)) {
+      const prev = rawDemand.get(n.itemId);
+      const add = toNumber(n.rate);
+      if (prev) prev.perMinute += add;
+      else rawDemand.set(n.itemId, { itemId: n.itemId, itemKo: n.ko, perMinute: add });
+    }
+    n.children.forEach(walk);
+  };
+  walk(solved.root);
+
+  // 2) 원자재 → 채굴 계획. 도면은 채굴기에서 시작한다.
+  //    단, 채굴기는 노드 위에 있고 부지에서 수십~수백 m 떨어져 있을 수 있다.
+  //    그래서 토대 안에 그리지 않고 **바깥 스트립**으로 빼서 운반 거리를 함께 적는다.
+  const mining: MiningPlan[] = [...rawDemand.values()].map((d) =>
+    planMining(d.itemId, d.itemKo, d.perMinute, input.nodes, input.extractor, input.belt.perMinute)
+  );
+  for (const m of mining) notes.push(...m.notes);
+  const minerAssignments = mining.flatMap((m) => m.assignments);
+
+  // 3) 지을 대수와 클럭
+  //    정확값이 1.5면 2대를 짓고 75%로 돌린다. 1대 100% + 0.5대는 만들 수 없다.
+  const orderedAcc = [...acc.values()].sort((a, b) => b.rank - a.rank || a.itemKo.localeCompare(b.itemKo, 'ko'));
+  const groupIndexByItem = new Map<string, number>();
+  orderedAcc.forEach((a, i) => groupIndexByItem.set(a.itemKo, i));
+
+  const groups: MachineGroup[] = orderedAcc.map((a, i) => {
+    const spec = input.machines.get(a.machineId);
+    const built = ceilEps(a.exact);
+    const clock = built > 0 ? (a.exact / built) * 100 : 100;
+    const base = spec?.powerMW ?? 0;
+    const exp = spec?.powerExponent ?? 1.321928;
+    return {
+      itemKo: a.itemKo,
+      itemId: a.itemId,
+      machineId: a.machineId,
+      machineKo: a.machineKo,
+      exact: r2(a.exact),
+      built,
+      clockPercent: r2(clock),
+      outPerMinute: r2(a.out),
+      outPerMachinePerMinute: built > 0 ? Math.round((a.out / built) * 1000) / 1000 : 0,
+      inputs: [...a.inputs.entries()].map(([itemKo, perMinute]) => ({
+        itemKo,
+        perMinute: r2(perMinute),
+        fromGroup: groupIndexByItem.get(itemKo) ?? null,
+      })),
+      powerMW: r2(powerAtClock(base, clock, exp) * built),
+      powerAt100MW: r2(base * built),
+      footprint: spec?.footprint ?? null,
+      rank: a.rank,
+      _i: i,
+    } as MachineGroup;
+  });
+
+  // 4) 배치 — **최적화한다.**
+  //
+  //    폭 상한은 32 m = 토대 4칸이다. 청사진 설계소 Mk.1의 내부 치수가 정확히 32 m라서,
+  //    지금(티어 4 이전) 그 폭에 맞춰 지어 두면 티어 4에 그대로 청사진으로 떠서 복제할 수 있다.
+  //
+  //    앞서는 "32 m까지 채우고 공정이 바뀌면 줄을 끊는다"는 탐욕적 규칙이었다. 목적 함수가
+  //    없었고, 그 결과 보강된 철판 모듈이 32×72 m로 나왔다 — 발행된 같은 모듈은 32×32 m다.
+  //    지금은 pack.ts의 패커가 면적과 벨트 길이를 목적 함수로 두고 수백 가지 배치를 비교한다.
+  const placements: Placement[] = [];
+  const belts: BeltRun[] = [];
+  const TARGET_WIDTH_M = 32;
+
+  const packItems: PackItem[] = [];
+  groups.forEach((g, gi) => {
+    const fp = g.footprint ?? { widthM: 8, lengthM: 10, heightM: 8 };
+    for (let k = 0; k < g.built; k++) {
+      packItems.push({
+        id: `${gi}:${k}`,
+        widthM: fp.widthM,
+        lengthM: fp.lengthM,
+        group: gi,
+        canRotate: true,
+      });
+    }
+  });
+
+  const packed = packModule(packItems, TARGET_WIDTH_M);
+
+  for (const it of packed.items) {
+    const gi = Number(it.id.split(':')[0]);
+    const g = groups[gi]!;
+    placements.push({
+      kind: 'machine',
+      label: `${g.machineKo}
+${g.itemKo}`,
+      x: it.xM / TILE_M,
+      y: it.yM / TILE_M,
+      wTiles: it.widthM / TILE_M,
+      hTiles: it.lengthM / TILE_M,
+      group: gi,
+      clockPercent: g.clockPercent,
+      rotated: it.rotated,
+    });
+  }
+
+  const widthM = packed.widthM;
+  const heightM = packed.heightM;
+  const wTiles = ceilEps(widthM / TILE_M);
+  const hTiles = ceilEps(heightM / TILE_M);
+
+  // ── 벨트 라우팅: 기계를 피해 직각으로 잇는다
+  const GW = wTiles * TILE_M;
+  const GH = hTiles * TILE_M;
+  const occupied = new Uint8Array(GW * GH);
+  for (const it of packed.items) {
+    for (let y = Math.floor(it.yM); y < Math.ceil(it.yM + it.lengthM); y++) {
+      for (let x = Math.floor(it.xM); x < Math.ceil(it.xM + it.widthM); x++) {
+        if (x >= 0 && y >= 0 && x < GW && y < GH) occupied[y * GW + x] = 1;
+      }
+    }
+  }
+  const blocked = (x: number, y: number) => occupied[y * GW + x] === 1;
+
+  /** 공정의 출력 면 — 그 공정 기계들 중 가장 아래 기계의 아래쪽 바로 밖 */
+  const exitOf = (gi: number): Point => {
+    const mine = packed.items.filter((i2) => Number(i2.id.split(':')[0]) === gi);
+    const low = mine.reduce((a, b) => (b.yM + b.lengthM > a.yM + a.lengthM ? b : a));
+    return { x: Math.round(low.xM + low.widthM / 2), y: Math.min(GH - 1, Math.round(low.yM + low.lengthM)) };
+  };
+  /** 공정의 입력 면 — 그 공정 기계들 중 가장 위 기계의 위쪽 바로 밖 */
+  const entryOf = (gi: number): Point => {
+    const mine = packed.items.filter((i2) => Number(i2.id.split(':')[0]) === gi);
+    const high = mine.reduce((a, b) => (b.yM < a.yM ? b : a));
+    return { x: Math.round(high.xM + high.widthM / 2), y: Math.max(0, Math.round(high.yM) - 1) };
+  };
+
+  const routeFailures: string[] = [];
+  const pushBelt = (itemKo: string, perMinute: number, from: Point, to: Point, fromGroup: number | null, toGroup: number | null) => {
+    const path = routeBelt(from, to, blocked, { w: GW, h: GH });
+    if (path.length <= 2 && (Math.abs(from.x - to.x) > 1 && Math.abs(from.y - to.y) > 1)) {
+      routeFailures.push(itemKo);
+    }
+    belts.push({
+      itemKo,
+      perMinute: r2(perMinute),
+      path: path.map((pt) => ({ x: pt.x / TILE_M, y: pt.y / TILE_M })),
+      lines: ceilEps(perMinute / input.belt.perMinute),
+      overCurrentBelt: perMinute > input.belt.perMinute,
+      fromGroup,
+      toGroup,
+    });
+  };
+
+  // 원자재: 토대 왼쪽 위에서 들어와 첫 공정으로
+  for (const m of mining) {
+    const consumer = groups.findIndex((g) => g.inputs.some((i2) => i2.itemKo === m.itemKo));
+    if (consumer < 0) continue;
+    pushBelt(m.itemKo, m.suppliedPerMinute, { x: 0, y: 0 }, entryOf(consumer), null, consumer);
+  }
+  // 공정 사이
+  groups.forEach((g, gi) => {
+    for (const inp of g.inputs) {
+      if (inp.fromGroup == null) continue;
+      pushBelt(inp.itemKo, inp.perMinute, exitOf(inp.fromGroup), entryOf(gi), inp.fromGroup, gi);
+    }
+  });
+  // 완제품 반출 — 마지막 공정에서 토대 밖으로
+  const lastGroup = groups.length - 1;
+  if (lastGroup >= 0) {
+    const e = exitOf(lastGroup);
+    pushBelt(groups[lastGroup]!.itemKo, groups[lastGroup]!.outPerMinute, e, { x: GW - 1, y: GH - 1 }, lastGroup, null);
+  }
+  if (routeFailures.length) {
+    notes.push(
+      `${[...new Set(routeFailures)].join('·')} 벨트 경로를 기계를 피해 찾지 못했습니다 — ` +
+        '도면에는 직선으로 표시했습니다. 실제로는 리프트로 위/아래를 지나가야 합니다.'
+    );
+  }
+
+  const splittersCount = groups.filter((g) => g.built > 1).reduce((a, g) => a + splittersFor(g.built), 0);
+  const mergersCount = groups.filter((g) => g.built > 1).reduce((a, g) => a + mergersFor(g.built), 0);
+
+  /*
+   * 리프트는 **높이가 바뀌는 지점**에만 쓴다.
+   * 처음에는 기계마다 한 개씩 셌더니 14대짜리 모듈에 리프트 15개가 나왔다 — 과다 계산이다.
+   * 실제로 필요한 곳은 채굴기 출력구(지면에서 높이가 있다)와, 벨트가 기계를 넘어가는 지점이다.
+   */
+  const lifts = minerAssignments.length + routeFailures.length;
+
+  // 5) 건물 목록
+  const bomMap = new Map<string, { count: number; note?: string }>();
+  const bump = (ko: string, n: number, note?: string) => {
+    const cur = bomMap.get(ko) ?? { count: 0, note };
+    cur.count += n;
+    if (note) cur.note = note;
+    bomMap.set(ko, cur);
+  };
+  for (const m of mining) {
+    for (const a of m.assignments) {
+      bump(a.extractorKo, 1, a.clockPercent < 100 ? `${a.clockPercent}% 다운클럭 포함` : undefined);
+    }
+  }
+  for (const g of groups) {
+    bump(g.machineKo, g.built, g.clockPercent < 100 ? `${g.clockPercent}%로 다운클럭` : undefined);
+  }
+  const splitters = splittersCount;
+  const mergers = mergersCount;
+  if (splitters) bump('분배기', splitters);
+  if (mergers) bump('병합기', mergers);
+  bump(input.belt.ko, 0, '기계 사이 연결 전부');
+  // 컨베이어 리프트 — 높이가 바뀌는 지점마다 필요하다. 지금까지 이걸 아예 빼먹고 있었다.
+  //   · 채굴기 출력구는 지면에서 높이가 있어 제련기 입력구 높이와 맞지 않는다
+  //   · 매니폴드를 기계 위로 지나가게 하면 각 기계로 내리는 데 리프트가 하나씩 든다
+  if (lifts > 0) {
+    bump(input.liftKo ?? '컨베이어 리프트 Mk.1', lifts, '높이가 바뀌는 지점 — 채굴기 출력구와 기계 입력구 높이가 다릅니다');
+  }
+
+  // 6) 전력
+  const totalMW = r2(groups.reduce((s, g) => s + g.powerMW, 0));
+  const at100 = r2(groups.reduce((s, g) => s + g.powerAt100MW, 0));
+
+  // 7) 특징 — 이 모듈을 어떻게 늘릴 수 있는가
+  const features: string[] = [];
+  features.push(
+    `토대 ${wTiles}×${hTiles}칸(${wTiles * TILE_M}×${hTiles * TILE_M} m). ` +
+      `배치 ${packed.tried}가지를 비교해 면적과 벨트 길이가 가장 작은 것을 골랐습니다 ` +
+      `(벨트 총 ${packed.beltLengthM} m).`
+  );
+  if (wTiles <= 4 && hTiles <= 4) {
+    features.push(
+      '청사진 설계소 Mk.1(내부 32 m = 토대 4×4)에 그대로 들어갑니다 — 티어 4에서 이 모듈을 ' +
+        '청사진으로 떠서 도장 찍듯 복제할 수 있습니다. 지금 이 폭을 지키는 이유가 그것입니다.'
+    );
+  } else {
+    features.push(
+      `폭은 32 m(토대 4칸)로 맞췄지만 길이가 ${hTiles * TILE_M} m라 청사진 설계소 Mk.1(32×32 m)에는 ` +
+        '한 번에 안 들어갑니다. 공정 단위로 잘라 두 개의 청사진으로 뜨면 됩니다. ' +
+        '발행된 4×4 모듈들은 기계를 손으로 촘촘히 끼워 넣고 토대 밖으로 일부 걸치게 두어 맞춘 것입니다.'
+    );
+  }
+  features.push(
+    '좌우 대칭으로 붙여 복제할 수 있습니다 — 채굴량이 늘면 같은 모듈을 하나 더 짓는 쪽이 ' +
+      '기존 라인을 뜯어 늘리는 것보다 항상 쉽습니다.'
+  );
+  if (groups.some((g) => g.clockPercent < 100)) {
+    const saved = r2(at100 - totalMW);
+    features.push(
+      `다운클럭으로 전력 ${saved} MW를 아낍니다 (${at100} → ${totalMW} MW). ` +
+        '전력은 클럭의 약 1.32제곱이라 100%로 두면 그만큼 더 먹습니다.'
+    );
+  }
+  if (input.futureBelt) {
+    const maxFlow = Math.max(...belts.map((b) => b.perMinute), 0);
+    if (maxFlow > input.belt.perMinute) {
+      features.push(
+        `지금 벨트(${input.belt.ko} ${input.belt.perMinute}/분)로는 최대 유량 ${maxFlow}/분을 한 줄로 못 나릅니다. ` +
+          `티어 ${input.futureBelt.tier}에서 ${input.futureBelt.ko}(${input.futureBelt.perMinute}/분)가 열리므로, ` +
+          '배치는 지금 그대로 두고 벨트만 갈아끼우면 됩니다 — 그래서 기계 간격을 상위 벨트 기준으로 잡았습니다.'
+      );
+    } else {
+      features.push(
+        `${input.futureBelt.ko}(티어 ${input.futureBelt.tier})로 갈아끼우면 이 배치 그대로 처리량을 ` +
+          `${r2(input.futureBelt.perMinute / input.belt.perMinute)}배까지 올릴 수 있습니다.`
+      );
+    }
+  }
+
+  return {
+    targetKo: solved.root.ko,
+    targetId: input.targetItemId,
+    targetPerMinute: r2(input.targetPerMinute),
+    tier: input.tier,
+    belt: input.belt,
+    futureBelt: input.futureBelt,
+    mining,
+    groups,
+    placements,
+    belts,
+    foundation: {
+      wTiles,
+      hTiles,
+      count: wTiles * hTiles,
+      sideM: TILE_M,
+      /** 청사진 설계소 Mk.1(내부 32 m = 4×4)에 들어가는가 — 티어 4에 그대로 청사진으로 뜰 수 있다 */
+      fitsBlueprintMk1: wTiles <= 4 && hTiles <= 4,
+    },
+    bom: [...bomMap.entries()]
+      .filter(([, v]) => v.count > 0 || v.note)
+      .map(([ko, v]) => ({ ko, count: v.count, note: v.note })),
+    features,
+    power: { totalMW, at100MW: at100, savedMW: r2(at100 - totalMW) },
+    splitters,
+    mergers,
+    lifts,
+    notes,
+  };
+}
+
+/** 배치가 성립하는지 — 겹치는 것이 있으면 도면이 아니다 */
+export function validateModule(plan: ModulePlan): string[] {
+  const errs: string[] = [];
+  const boxes = plan.placements;
+  for (let i = 0; i < boxes.length; i++) {
+    for (let j = i + 1; j < boxes.length; j++) {
+      const a = boxes[i]!;
+      const b = boxes[j]!;
+      const overlap =
+        a.x < b.x + b.wTiles && b.x < a.x + a.wTiles && a.y < b.y + b.hTiles && b.y < a.y + a.hTiles;
+      if (overlap) errs.push(`겹침: ${a.label.split('\n')[0]}(${a.x},${a.y}) ↔ ${b.label.split('\n')[0]}(${b.x},${b.y})`);
+    }
+  }
+  for (const p of boxes) {
+    if (p.x < 0 || p.y < 0) errs.push(`토대 밖: ${p.label.split('\n')[0]}`);
+    if (p.x + p.wTiles > plan.foundation.wTiles + 1) {
+      errs.push(`폭 초과: ${p.label.split('\n')[0]} → x=${p.x + p.wTiles} > ${plan.foundation.wTiles}`);
+    }
+  }
+  for (const g of plan.groups) {
+    if (g.built < g.exact - 1e-9) errs.push(`${g.itemKo}: 지은 대수(${g.built})가 필요량(${g.exact})보다 적다`);
+    if (g.clockPercent > 100.0001) errs.push(`${g.itemKo}: 클럭 ${g.clockPercent}% — 파워 슈미기 없이 100%를 넘을 수 없다`);
+  }
+  return errs;
+}

@@ -100,8 +100,13 @@ function StageSheet({
             </marker>
           </defs>
 
-          {/* 청사진 격자 (토대) */}
-          <rect x={0} y={0} width={W} height={H} fill={`url(#bp-${index})`} class="fps-floor" />
+          {/*
+            토대 — 바탕색 rect와 격자 패턴 rect를 **분리**한다.
+            한 rect에 class="fps-floor"(fill 지정)와 fill="url(#pattern)"을 같이 주면
+            CSS가 presentation attribute를 이겨서 패턴이 아예 그려지지 않는다. 실제로 격자가 사라졌다.
+          */}
+          <rect x={0} y={0} width={W} height={H} class="fps-floor" />
+          <rect x={0} y={0} width={W} height={H} fill={`url(#bp-${index})`} stroke="none" />
           <rect x={0} y={0} width={W} height={H} rx="4" class="fps-boundary" />
 
           {/* 벨트 — 스파인은 머저 박스 위를 지나가지 않게 아래쪽만 그린다 */}
@@ -140,22 +145,16 @@ function StageSheet({
             분배기·머저 — 라벨을 세로로 돌리면 좁은 칸에서 잘린다(실제로 "배기"만 보였다).
             기호로 표시하고 도면 아래 범례에서 풀어 쓴다.
           */}
+          {/*
+            분배기·머저는 **글자로 적는다**. 좌우 대칭 기호를 그렸다가 작은 크기에서
+            둘이 구분되지 않았다. 참고 도면들도 전부 "Splitter"/"Merger"라고 글자로 쓴다.
+          */}
           {s.attachments.map((a, k) => (
             <g key={`a${k}`} class={`fps-attach is-${a.kind}`}>
-              <rect x={a.x * PX + 7} y={a.y * PX + 7} width={PX - 14} height={PX - 14} rx="2" />
-              {a.kind === 'splitter' ? (
-                <>
-                  <line x1={a.x * PX + 13} y1={a.y * PX + PX / 2} x2={a.x * PX + PX / 2} y2={a.y * PX + PX / 2} />
-                  <line x1={a.x * PX + PX / 2} y1={a.y * PX + PX / 2} x2={a.x * PX + PX - 15} y2={a.y * PX + 15} />
-                  <line x1={a.x * PX + PX / 2} y1={a.y * PX + PX / 2} x2={a.x * PX + PX - 15} y2={a.y * PX + PX - 15} />
-                </>
-              ) : (
-                <>
-                  <line x1={a.x * PX + 15} y1={a.y * PX + 15} x2={a.x * PX + PX / 2} y2={a.y * PX + PX / 2} />
-                  <line x1={a.x * PX + 15} y1={a.y * PX + PX - 15} x2={a.x * PX + PX / 2} y2={a.y * PX + PX / 2} />
-                  <line x1={a.x * PX + PX / 2} y1={a.y * PX + PX / 2} x2={a.x * PX + PX - 13} y2={a.y * PX + PX / 2} />
-                </>
-              )}
+              <rect x={a.x * PX + 5} y={a.y * PX + 14} width={PX - 10} height={PX - 28} rx="2" />
+              <text x={a.x * PX + PX / 2} y={a.y * PX + PX / 2 + 4} text-anchor="middle">
+                {a.kind === 'splitter' ? '분배' : '병합'}
+              </text>
             </g>
           ))}
 

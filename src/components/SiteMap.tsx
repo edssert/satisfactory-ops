@@ -30,6 +30,8 @@ export interface SiteView {
 }
 
 export interface NodeView {
+  /** 자원 클래스 id — 색·필터·조인의 키 */
+  res: string;
   ko: string;
   purity: 'impure' | 'normal' | 'pure';
   type: string;
@@ -39,6 +41,8 @@ export interface NodeView {
 }
 
 export interface DemandView {
+  /** 자원 클래스 id — 노드와의 조인 키. 한글 이름으로 조인하지 않는다 */
+  res: string;
   ko: string;
   /** 티어 1 자동화에 필요한 분당 수량 (데이터에서 계산된 값) */
   need: number;
@@ -69,8 +73,9 @@ const PURITY_LABEL: Record<string, string> = { impure: '불순', normal: '보통
 
 export default function SiteMap({ mapSrc, sites, nodes, demand, minerMk1, sourceNote }: Props) {
   const [selected, setSelected] = useState(sites.find((s) => s.recommended)?.n ?? sites[0]!.n);
+  // 기본으로 켜 두는 자원 — 초반에 쓰는 네 가지. 키는 클래스 id다.
   const [visible, setVisible] = useState<Set<string>>(
-    () => new Set(['철광석', '구리광석', '석회석', '석탄'])
+    () => new Set(['Desc_OreIron_C', 'Desc_OreCopper_C', 'Desc_Stone_C', 'Desc_Coal_C'])
   );
   const [zoom, setZoom] = useState(1);
   const [showGrid, setShowGrid] = useState(true);
@@ -80,10 +85,19 @@ export default function SiteMap({ mapSrc, sites, nodes, demand, minerMk1, source
 
   const site = sites.find((s) => s.n === selected)!;
 
+  /*
+   * 집계·필터·색상 모두 **클래스 id**를 키로 쓴다. 한글 표시명을 키로 두었다가
+   * 파이프라인이 이름을 게임 이름으로 정규화한 순간 색과 필터가 전부 빠졌다.
+   */
   const counts = useMemo(() => {
     const c: Record<string, number> = {};
-    for (const n of nodes) c[n.ko] = (c[n.ko] ?? 0) + 1;
+    for (const n of nodes) c[n.res] = (c[n.res] ?? 0) + 1;
     return c;
+  }, [nodes]);
+  const resKo = useMemo(() => {
+    const m: Record<string, string> = {};
+    for (const n of nodes) m[n.res] = n.ko;
+    return m;
   }, [nodes]);
 
   /** 선택한 부지 기준, 각 자원의 필요량을 채우는 최소 노드 조합 */
@@ -92,7 +106,7 @@ export default function SiteMap({ mapSrc, sites, nodes, demand, minerMk1, source
     const origin = world(p.x, p.y);
     return demand.map((d) => {
       const near = nodes
-        .filter((n) => n.ko === d.ko && n.type === 'node')
+        .filter((n) => n.res === d.res && n.type === 'node')
         .map((n) => ({ ...n, distance: metersBetween(world(n.fx, n.fy), origin) }))
         .sort((a, b) => a.distance - b.distance);
 
@@ -193,7 +207,7 @@ export default function SiteMap({ mapSrc, sites, nodes, demand, minerMk1, source
                 onClick={() => toggleRes(k)}
               >
                 <i data-res={k} aria-hidden="true" />
-                {k} <span class="n">{counts[k]}</span>
+                {resKo[k] ?? k} <span class="n">{counts[k]}</span>
               </button>
             ))}
         </div>
@@ -258,12 +272,12 @@ export default function SiteMap({ mapSrc, sites, nodes, demand, minerMk1, source
           )}
 
           {nodes
-            .filter((n) => visible.has(n.ko))
+            .filter((n) => visible.has(n.res))
             .map((n, i) => (
               <span
                 key={i}
                 class={`sm-node is-${n.purity}`}
-                data-res={n.ko}
+                data-res={n.res}
                 style={{ left: `${n.fx * 100}%`, top: `${n.fy * 100}%` }}
                 title={`${n.ko} · ${PURITY_LABEL[n.purity] ?? n.purity} · ${n.cell}`}
               />

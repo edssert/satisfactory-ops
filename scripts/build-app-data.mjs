@@ -241,6 +241,46 @@ const drift = !!(liveSha && recordedSha && liveSha !== recordedSha);
 // ---------------------------------------------------------------- 검증
 
 const itemIds = new Set(items.map((x) => x.id));
+// ---------------------------------------------------------------- 자원 노드
+//
+// 노드 좌표 데이터(src/data/resource-nodes.json)는 외부 출처(rockfactory, MIT)이고
+// 한글 이름이 게임 이름과 다르다 — '철광석' vs 게임 '철 광석', '캐터리움' vs '카테리움 광석' 등.
+// 한글 이름으로 조인하면 조용히 0건이 되어 화면에 "근처에 노드 없음"이 뜬다. 실제로 그랬다.
+// 그래서 여기서 **클래스 id(res)로 게임 이름을 다시 붙여** app 산출물을 만든다.
+// 아래 검증이 조인 실패를 빌드에서 잡는다.
+const rawNodes = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/data/resource-nodes.json'), 'utf8'));
+const itemById = new Map(items.map((i) => [i.id, i]));
+// 지열은 아이템이 아니라 발전 자원이라 items.json에 없다. 이름만 별도로 준다.
+const NON_ITEM_RESOURCE_KO = { Desc_GeothermalEnergy_C: '지열' };
+const nodeJoinFailures = [];
+const resourceNodes = rawNodes.nodes.map((n) => {
+  const item = itemById.get(n.res);
+  const ko = item?.ko ?? NON_ITEM_RESOURCE_KO[n.res] ?? null;
+  if (!ko) nodeJoinFailures.push(n.res);
+  return {
+    id: n.id,
+    res: n.res,
+    ko: ko ?? n.res,
+    en: item?.en ?? n.res,
+    purity: n.purity,
+    type: n.type,
+    fx: n.fx,
+    fy: n.fy,
+    cell: n.cell,
+    /** items.json에 없는 자원(지열)은 생산 계획에 쓰지 않는다 */
+    isItem: !!item,
+  };
+});
+const nodesByRes = {};
+for (const n of resourceNodes) {
+  (nodesByRes[n.res] ??= { ko: n.ko, total: 0, impure: 0, normal: 0, pure: 0, minable: 0 });
+  const g = nodesByRes[n.res];
+  g.total++;
+  g[n.purity]++;
+  // deposit(광석 무더기)은 채굴기를 올릴 수 없다 — 자동화 계획에서 제외한다
+  if (n.type !== 'deposit') g.minable++;
+}
+
 const buildingIds = new Set(buildings.map((x) => x.id));
 const recipeIds = new Set(recipes.map((x) => x.id));
 const knownIds = new Set([...itemIds, ...buildingIds, ...recipeIds, ...en.schematics.map((s) => s.className)]);
@@ -299,6 +339,28 @@ const checks = [
     buildings.filter((b) => b.unlockTier !== null).length > buildings.length * 0.5],
 ];
 
+// 자원 노드 조인 검증 — 이름 불일치로 조용히 0건이 되는 사고를 빌드에서 막는다
+checks.push(
+  ['자원 노드 좌표가 로드됨', resourceNodes.length > 500,
+    () => '노드 ' + resourceNodes.length + '개'],
+  ['모든 노드가 게임 자원에 연결됨', nodeJoinFailures.length === 0,
+    () => '연결 실패: ' + [...new Set(nodeJoinFailures)].join(', ')],
+  ['철 광석 노드 이름이 게임 이름과 일치', nodesByRes['Desc_OreIron_C']?.ko === itemById.get('Desc_OreIron_C')?.ko,
+    () => '노드 ' + nodesByRes['Desc_OreIron_C']?.ko + ' vs 게임 ' + itemById.get('Desc_OreIron_C')?.ko],
+  ['채굴 가능한 철 광석 노드 70개 이상', (nodesByRes['Desc_OreIron_C']?.minable ?? 0) >= 70,
+    () => String(nodesByRes['Desc_OreIron_C']?.minable)],
+  ['구리·석회석 노드도 연결됨',
+    (nodesByRes['Desc_OreCopper_C']?.minable ?? 0) >= 30 && (nodesByRes['Desc_Stone_C']?.minable ?? 0) >= 60,
+    () => '구리 ' + nodesByRes['Desc_OreCopper_C']?.minable + ' 석회석 ' + nodesByRes['Desc_Stone_C']?.minable],
+  // 채굴기 산출은 도면의 시작점이다. 게임 데이터에서 온 값이 맞는지 못 박는다.
+  ['채굴기 Mk.1 60/분 · Mk.2 120/분 · Mk.3 240/분',
+    buildings.find((b) => b.id === 'Build_MinerMk1_C')?.extraction?.perMinuteAtNormalPurity === 60 &&
+    buildings.find((b) => b.id === 'Build_MinerMk2_C')?.extraction?.perMinuteAtNormalPurity === 120 &&
+    buildings.find((b) => b.id === 'Build_MinerMk3_C')?.extraction?.perMinuteAtNormalPurity === 240],
+  ['물 추출기 120 m³/분',
+    buildings.find((b) => b.id === 'Build_WaterPump_C')?.extraction?.perMinuteAtNormalPurity === 120]
+);
+
 log('검증:');
 let failed = 0;
 for (const [name, ok, detail] of checks) {
@@ -339,6 +401,7 @@ const meta = {
     milestones: milestones.length,
     hubUpgrades: hub.length,
     curatedFiles: curatedFiles.length,
+    resourceNodes: resourceNodes.length,
   },
   conventions: en.meta?.conventions ?? {},
 };
@@ -351,6 +414,7 @@ const outputs = {
   'milestones.json': milestones,
   'hub.json': hub,
   'index.json': index,
+  'resource-nodes.json': { $source: rawNodes.$source, $transform: rawNodes.$transform, $counts: nodesByRes, nodes: resourceNodes },
 };
 
 // meta는 생성 시각이 매번 바뀌므로 최신성 비교에서 제외한다.

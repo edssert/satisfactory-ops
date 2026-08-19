@@ -490,8 +490,9 @@ marker path {
   fill: var(--surface-2);
 }
 .fps-grid-line {
-  stroke: var(--line);
+  stroke: var(--line-strong);
   stroke-width: 1;
+  opacity: 0.5;
 }
 .fps-boundary {
   fill: none;
@@ -525,8 +526,22 @@ marker path {
 .fps-attach text {
   fill: var(--ink);
   font-family: var(--font-body);
-  font-size: 9.5px;
+  font-size: 11px;
   font-weight: 600;
+}
+.fps-attach.is-splitter rect {
+  fill: var(--bg);
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+.fps-attach.is-merger rect {
+  fill: var(--surface-2);
+  stroke: var(--ink);
+  stroke-width: 2;
+  stroke-dasharray: 3 2;
+}
+.fps-attach.is-splitter text {
+  fill: var(--accent-ink);
 }
 .fps-attach.is-merger rect {
   stroke: var(--ink);
