@@ -35,7 +35,7 @@ jobs:
 
       # 생산 체인 골든 테스트 (TRD 8.1)
       - name: 단위 테스트
-        run: node --test tests/solver.test.ts
+        run: node --test tests/solver.test.ts tests/recipe-select.test.ts
 
       - name: 타입 검사
         run: npx astro check --minimumSeverity error
