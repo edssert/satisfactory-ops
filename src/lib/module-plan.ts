@@ -89,6 +89,12 @@ export interface Placement {
   clockPercent?: number;
   /** 90도 돌려 놓았는가 */
   rotated?: boolean;
+  /**
+   * 이 기계의 접속부 (타일 좌표).
+   * **계획이 계산하고 도면은 그리기만 한다** — 도면이 따로 계산하면 벨트가 닿는 자리와
+   * 삼각형이 그려진 자리가 어긋난다. 위치는 추정값이다 (게임 데이터에 포트 좌표가 없다).
+   */
+  ports?: { x: number; y: number; role: 'in' | 'out' }[];
 }
 
 /**
@@ -110,6 +116,8 @@ export interface BeltRun {
   /** 어디서 어디로 — null 은 모듈 밖(채굴기 / 완제품 반출) */
   fromGroup: number | null;
   toGroup: number | null;
+  /** 분배기·병합기와 기계를 잇는 짧은 분기. 라벨을 붙이지 않는다 */
+  branch?: boolean;
 }
 
 export interface ModulePlan {
@@ -402,33 +410,150 @@ ${g.itemKo}`,
    * 경고만 뜬다. 촘촘한 설계가 가능한 이유 중 하나다.
    * 그래서 겹침 검증에서도 부속은 제외한다.
    */
+  /*
+   * 기계 접속부 좌표.
+   *
+   * 입력은 뒷면, 출력은 앞면이다 (위키 근거 — 제조기만 반대). 기계를 90도 돌려 놓으면
+   * 뒷면은 왼쪽 면이 된다. 이 좌표를 계획에서 한 번만 계산해 도면과 벨트 배선이 같은 값을 쓴다.
+   */
+  const portOf = (mb: (typeof machineBoxes)[number], role: 'in' | 'out'): Point => {
+    const cx = Math.round(mb.xM + mb.widthM / 2);
+    const cy = Math.round(mb.yM + mb.lengthM / 2);
+    const clamp = (v: number, hi: number) => Math.max(0, Math.min(hi - 1, v));
+    if (mb.rotated) {
+      return role === 'in'
+        ? { x: clamp(Math.round(mb.xM) - 1, GW), y: clamp(cy, GH) }
+        : { x: clamp(Math.round(mb.xM + mb.widthM), GW), y: clamp(cy, GH) };
+    }
+    return role === 'in'
+      ? { x: clamp(cx, GW), y: clamp(Math.round(mb.yM) - 1, GH) }
+      : { x: clamp(cx, GW), y: clamp(Math.round(mb.yM + mb.lengthM), GH) };
+  };
+
+  // 배치된 기계에 포트 좌표를 붙인다
+  for (const p of placements) {
+    if (p.kind !== 'machine') continue;
+    const mb = machineBoxes.find(
+      (m) => Math.abs(m.xM / TILE_M - p.x) < 1e-9 && Math.abs(m.yM / TILE_M - p.y) < 1e-9
+    );
+    if (!mb) continue;
+    const i = portOf(mb, 'in');
+    const o = portOf(mb, 'out');
+    p.ports = [
+      { x: i.x / TILE_M, y: i.y / TILE_M, role: 'in' },
+      { x: o.x / TILE_M, y: o.y / TILE_M, role: 'out' },
+    ];
+  }
+
+  /*
+   * 분배기·병합기 배치와 **분기 벨트**.
+   *
+   * 앞서는 분배기를 공정의 맨 앞, 병합기를 맨 뒤에 하나씩 놓고 끝냈다. 그래서 도면에서
+   * 기계 세 대가 아무 데도 연결되지 않은 채 떠 있었다 — 도면이라고 할 수 없는 그림이었다.
+   *
+   * 실제 매니폴드는 이렇게 생겼다: 분배기 한 대의 출력이 3개이므로 기계 3대까지 직접 먹인다.
+   * 그래서 필요한 분배기 수는 ceil((n-1)/2) 이고(발행 도면의 부품 수와 일치),
+   * **각 분배기에서 자기가 맡은 기계의 입력구까지 벨트가 하나씩 나간다.** 그 분기를 그린다.
+   *
+   * 부속의 치수는 4×4 m인데 통로는 2 m다. 그래도 놓을 수 있다 — 게임 데이터상 이 부속들은
+   * 하드 클리어런스가 없고 소프트만 있어서(hardBoxes 0) 기계와 겹쳐 지을 수 있다.
+   */
   const ATT_M = 4;
+  interface Attach {
+    kind: 'splitter' | 'merger';
+    pt: Point;
+    group: number;
+    serves: (typeof machineBoxes)[number][];
+  }
+  const attaches: Attach[] = [];
+
   groups.forEach((g, gi) => {
-    if (g.built <= 1) return;
-    const inPt = entryOf(gi);
-    const outPt = exitOf(gi);
-    placements.push({
-      kind: 'splitter',
-      label: '분배기',
-      x: (inPt.x - ATT_M / 2) / TILE_M,
-      y: (inPt.y - ATT_M / 2) / TILE_M,
-      wTiles: ATT_M / TILE_M,
-      hTiles: ATT_M / TILE_M,
-      group: gi,
-    });
-    placements.push({
-      kind: 'merger',
-      label: '병합기',
-      x: (outPt.x - ATT_M / 2) / TILE_M,
-      y: (outPt.y - ATT_M / 2) / TILE_M,
-      wTiles: ATT_M / TILE_M,
-      hTiles: ATT_M / TILE_M,
-      group: gi,
-    });
+    const mine = machineBoxes.filter((m) => m.gi === gi);
+    if (mine.length <= 1) return;
+
+    const nSplit = Math.max(1, splittersFor(mine.length));
+    const nMerge = Math.max(1, mergersFor(mine.length));
+
+    // 입력 면(블록 위쪽)과 출력 면(아래쪽)을 등분해 부속을 놓고, 기계를 가까운 것에 배정한다
+    const minX = Math.min(...mine.map((m) => m.xM));
+    const maxX = Math.max(...mine.map((m) => m.xM + m.widthM));
+    const minY = Math.min(...mine.map((m) => m.yM));
+    const maxY = Math.max(...mine.map((m) => m.yM + m.lengthM));
+
+    const spread = (n: number, y: number): Point[] =>
+      Array.from({ length: n }, (_, k) => ({
+        x: Math.max(0, Math.min(GW - 1, Math.round(minX + ((k + 1) * (maxX - minX)) / (n + 1)))),
+        y: Math.max(0, Math.min(GH - 1, y)),
+      }));
+
+    /*
+     * 부속은 **토대 안**에 둔다. 블록 위 통로에 놓되, 그 통로가 토대 밖으로 나가면
+     * 기계 첫 줄에 겹쳐 놓는다 — 분배기·병합기는 하드 클리어런스가 없어서 겹쳐 지을 수 있다.
+     * 밖에 두었더니 도면에서 분배기가 토대 위에 떠 있고 분기 벨트가 모듈 바깥을 돌았다.
+     */
+    const inLaneY = Math.max(ATT_M / 2, Math.round(minY) - 1);
+    const outLaneY = Math.min(GH - 1 - ATT_M / 2, Math.round(maxY));
+    const splitPts = spread(nSplit, inLaneY);
+    const mergePts = spread(nMerge, outLaneY);
+
+    const nearest = (pts: Point[], p: Point) =>
+      pts.reduce((a, b) => (Math.abs(b.x - p.x) < Math.abs(a.x - p.x) ? b : a));
+
+    for (const pt of splitPts) {
+      attaches.push({ kind: 'splitter', pt, group: gi, serves: [] });
+    }
+    for (const pt of mergePts) {
+      attaches.push({ kind: 'merger', pt, group: gi, serves: [] });
+    }
+    for (const m of mine) {
+      const ip = portOf(m, 'in');
+      const op = portOf(m, 'out');
+      const sp = nearest(splitPts, ip);
+      const mp = nearest(mergePts, op);
+      attaches.find((a) => a.kind === 'splitter' && a.pt === sp)!.serves.push(m);
+      attaches.find((a) => a.kind === 'merger' && a.pt === mp)!.serves.push(m);
+    }
   });
 
+  /*
+   * 부속끼리 겹치면 글자가 서로를 덮는다 — 앞 공정의 병합기와 다음 공정의 분배기가 같은
+   * 통로에 놓이면서 실제로 겹쳤다. 겹치는 것은 옆으로 민다.
+   */
+  const placed: Point[] = [];
+  for (const a of attaches) {
+    let guard = 0;
+    while (
+      guard++ < 20 &&
+      placed.some((q) => Math.abs(q.x - a.pt.x) < ATT_M && Math.abs(q.y - a.pt.y) < ATT_M)
+    ) {
+      a.pt = { x: Math.min(GW - ATT_M, a.pt.x + ATT_M), y: a.pt.y };
+    }
+    placed.push(a.pt);
+  }
+
+  for (const a of attaches) {
+    placements.push({
+      kind: a.kind,
+      label: a.kind === 'splitter' ? '분배기' : '병합기',
+      x: (a.pt.x - ATT_M / 2) / TILE_M,
+      y: (a.pt.y - ATT_M / 2) / TILE_M,
+      wTiles: ATT_M / TILE_M,
+      hTiles: ATT_M / TILE_M,
+      group: a.group,
+    });
+  }
+
   const routeFailures: string[] = [];
-  const pushBelt = (itemKo: string, perMinute: number, from: Point, to: Point, fromGroup: number | null, toGroup: number | null) => {
+  const pushBelt = (
+    itemKo: string,
+    perMinute: number,
+    from: Point,
+    to: Point,
+    fromGroup: number | null,
+    toGroup: number | null,
+    /** 분기 벨트는 라벨을 붙이지 않는다 — 기계마다 붙이면 도면이 글자로 덮인다 */
+    branch = false
+  ) => {
     const path = routeBelt(from, to, blocked, { w: GW, h: GH });
     if (path.length <= 2 && (Math.abs(from.x - to.x) > 1 && Math.abs(from.y - to.y) > 1)) {
       routeFailures.push(itemKo);
@@ -441,8 +566,26 @@ ${g.itemKo}`,
       overCurrentBelt: perMinute > input.belt.perMinute,
       fromGroup,
       toGroup,
+      branch,
     });
   };
+
+  /*
+   * 분기 벨트 — 분배기에서 각 기계 입력구로, 각 기계 출력구에서 병합기로.
+   * 이게 없으면 기계가 도면에서 아무 데도 연결되지 않은 채 떠 있게 된다.
+   */
+  for (const a of attaches) {
+    const g = groups[a.group]!;
+    for (const m of a.serves) {
+      const perMachine = g.outPerMinute / Math.max(1, g.built);
+      if (a.kind === 'splitter') {
+        const inFlow = g.inputs.reduce((s2, i2) => s2 + i2.perMinute, 0) / Math.max(1, g.built);
+        pushBelt(g.inputs[0]?.itemKo ?? '재료', inFlow, a.pt, portOf(m, 'in'), null, a.group, true);
+      } else {
+        pushBelt(g.itemKo, perMachine, portOf(m, 'out'), a.pt, a.group, null, true);
+      }
+    }
+  }
 
   // 원자재: 토대 왼쪽 위에서 들어와 첫 공정으로
   for (const m of mining) {

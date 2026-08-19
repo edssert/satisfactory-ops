@@ -279,18 +279,14 @@
   font-size: 10px;
 }
 
-/* ── 벨트 */
-.ms-belt {
-  stroke: var(--accent);
-  stroke-width: 2.5;
-  fill: none;
-}
+/*
+ * 벨트. stroke·stroke-width 는 컴포넌트가 속성으로 준다 (렌더러 호환).
+ * 분기는 가늘게 그려 간선과 구분한다 — 굵기로 구분하므로 색이 없어도 읽힌다.
+ */
 .ms-arrowhead {
   fill: var(--accent);
 }
-.ms-beltrun.is-over .ms-belt {
-  stroke-dasharray: 6 3;
-}
+
 .ms-beltlabel-bg {
   fill: var(--bg);
   stroke: var(--line-strong);
@@ -324,5 +320,141 @@
 .ms-assume {
   border-left: 2px solid var(--accent);
   padding-left: var(--s3);
+  line-height: 1.6;
+}
+
+/* ── 부지 지도 + 노드 확대도 */
+.sp2 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--s6);
+  margin: var(--s6) 0 var(--s10);
+}
+@media (max-width: 860px) {
+  .sp2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.sp2 figure {
+  margin: 0;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  padding: var(--s4);
+}
+.sp2 figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+  align-items: baseline;
+  margin-bottom: var(--s3);
+  font-size: var(--t-body-s);
+}
+.sp2 figcaption .muted {
+  font-size: var(--t-caption);
+  color: var(--ink-muted);
+}
+.sp2-mapbox {
+  position: relative;
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+.sp2-mapbox img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.sp2-pin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  pointer-events: none;
+}
+.sp2-pin b {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.sp2-pin.is-sel b {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+}
+.sp2-pin i {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 1px 4px;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  color: var(--ink);
+}
+.sp2-svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+}
+.sp2-ring {
+  fill: none;
+  stroke: var(--line-strong);
+  stroke-dasharray: 4 4;
+}
+.sp2-ringlabel,
+.sp2-centerlabel {
+  fill: var(--ink-muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+.sp2-center {
+  fill: var(--accent);
+  stroke: var(--ink);
+  stroke-width: 1;
+}
+.sp2-node path {
+  fill: var(--surface);
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+/* 순도는 채움으로 — 색만으로 구분하지 않는다 */
+.sp2-node.is-pure path {
+  fill: var(--ink);
+}
+.sp2-node text {
+  fill: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+.sp2-legend {
+  list-style: none;
+  margin: var(--s3) 0 0;
+  padding: 0;
+  font-size: var(--t-body-s);
+}
+.sp2-legend li {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  padding: var(--s1) 0;
+  border-bottom: 1px solid var(--line);
+}
+.sp2-legendmark {
+  fill: var(--ink);
+}
+.sp2-note {
+  margin: var(--s3) 0 0;
+  font-size: var(--t-caption);
+  color: var(--ink-muted);
   line-height: 1.6;
 }

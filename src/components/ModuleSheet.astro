@@ -44,12 +44,20 @@ const PAD_L = 132; // 왼쪽: 채굴기 스트립 자리 (모듈 밖, 노드 위
  * 라벨을 토대 안 오른쪽 끝에 붙였더니 폭을 넘겨 '콘크리트 40/분'이 '리트 40/분'으로,
  * '철 주괴'가 '주괴'로 잘렸다. 도면 관행대로 라벨은 도면 밖에 두고 지시선으로 잇는다.
  */
-const beltLabels = plan.belts.map(
-  (b) => `${b.itemKo} ${fmt(b.perMinute)}/분${b.lines > 1 ? ` ×${b.lines}줄` : ''}`
+/*
+ * 라벨은 **간선 벨트에만** 붙인다.
+ * 분기(분배기 → 각 기계)까지 라벨을 달았더니 같은 문구가 기계 수만큼 반복되면서
+ * 도면이 글자로 덮이고 서로 겹쳤다. 분기의 유량은 옆 표의 '대당 산출'로 알 수 있다.
+ */
+const trunkBelts = plan.belts
+  .map((b, i) => ({ b, i }))
+  .filter(({ b }) => !b.branch);
+const beltLabels = new Map<number, string>(
+  trunkBelts.map(({ b, i }) => [i, `${b.itemKo} ${fmt(b.perMinute)}/분${b.lines > 1 ? ` ×${b.lines}줄` : ''}`])
 );
 const PAD_T = 20;
 const PAD_B = 46; // 축척 자리
-const LANE_W = Math.max(90, ...beltLabels.map(labelWidth)) + 26;
+const LANE_W = Math.max(90, ...[...beltLabels.values()].map(labelWidth)) + 26;
 const FLOOR_W = plan.foundation.wTiles * PX;
 const FLOOR_H = plan.foundation.hTiles * PX;
 const W = FLOOR_W + PAD_L + LANE_W;
@@ -158,10 +166,12 @@ const schedule = minerRows.concat(tagged.map((t) => {
                 <text x="22" y={y + 20} text-anchor="middle" class="ms-tag">
                   {minerTagBase + i}
                 </text>
-                <text x="38" y={y + 20} class="ms-minerlabel">{m.cell} {m.purityKo}</text>
-                <text x="12" y={y + 38} class="ms-minerrate">{fmt(m.ratePerMinute)}/분</text>
-                <text x="12" y={y + 52} class="ms-minerrate is-muted">
-                  {m.clockPercent < 100 ? `${fmt(m.clockPercent)}%` : '100%'}
+                {/* 무엇을 캐는지가 먼저다. 좌표와 순도만 적어 두었더니 어느 광석인지 알 수 없었다. */}
+                <text x="38" y={y + 20} class="ms-minerlabel">{m.itemKo}</text>
+                <text x="12" y={y + 36} class="ms-minerrate">{fmt(m.ratePerMinute)}/분</text>
+                <text x="12" y={y + 50} class="ms-minerrate is-muted">
+                  {m.purityKo} · {m.cell}
+                  {m.clockPercent < 100 ? ` · ${fmt(m.clockPercent)}%` : ''}
                 </text>
                 {/* 노드에서 토대로 들어오는 벨트 */}
                 <line
@@ -205,25 +215,42 @@ const schedule = minerRows.concat(tagged.map((t) => {
             앞서는 통로마다 가로선 하나를 그어 눈속임했는데, 어느 기계의 어느 면에서 나와
             어디로 들어가는지가 보이지 않았다.
           */}
-          {plan.belts.map((b, bi) => {
-            const text = beltLabels[bi]!;
-            const lw = labelWidth(text);
-            const pts = b.path.map((pt) => `${pt.x * PX},${pt.y * PX}`).join(' ');
-            const last = b.path[b.path.length - 1]!;
-            return (
-              <g class={`ms-beltrun${b.overCurrentBelt ? ' is-over' : ''}`}>
-                <polyline
-                  points={pts}
-                  class="ms-belt"
-                  fill="none"
-                  marker-end={`url(#ms-arrow-${index})`}
-                />
-                <line x1={last.x * PX} y1={last.y * PX} x2={FLOOR_W + 12} y2={last.y * PX} class="ms-leader" />
-                <rect x={FLOOR_W + 12} y={last.y * PX - 9} width={lw} height="18" rx="2" class="ms-beltlabel-bg" />
-                <text x={FLOOR_W + 18} y={last.y * PX + 4} class="ms-beltlabel">{text}</text>
-              </g>
-            );
-          })}
+          {/*
+            벨트 — pack.ts 의 A* 라우터가 낸 **실제 경로**를 그린다. 기계를 관통하지 않는다.
+            분기 벨트는 가늘게 그리고 라벨을 붙이지 않는다.
+          */}
+          {plan.belts.map((b, bi) => (
+            <polyline
+              points={b.path.map((pt) => `${pt.x * PX},${pt.y * PX}`).join(' ')}
+              class={`ms-belt${b.branch ? ' is-branch' : ''}${b.overCurrentBelt ? ' is-over' : ''}`}
+              fill="none"
+              stroke="var(--accent)"
+              stroke-width={b.branch ? 1.5 : 2.5}
+              stroke-dasharray={b.overCurrentBelt ? '6 3' : undefined}
+              marker-end={`url(#ms-arrow-${index})`}
+            />
+          ))}
+
+          {/*
+            간선 라벨. y 가 겹치면 아래로 밀어 쌓는다 — 라벨이 겹쳐 읽히지 않는 사고를 막는다.
+          */}
+          {(() => {
+            let lastY = -999;
+            return trunkBelts.map(({ b, i }) => {
+              const raw = b.path[b.path.length - 1]!.y * PX;
+              const y = Math.max(raw, lastY + 20);
+              lastY = y;
+              const text = beltLabels.get(i)!;
+              const lw = labelWidth(text);
+              return (
+                <g class="ms-beltlabelgroup">
+                  <line x1={FLOOR_W} y1={raw} x2={FLOOR_W + 12} y2={y} class="ms-leader" />
+                  <rect x={FLOOR_W + 12} y={y - 9} width={lw} height="18" rx="2" class="ms-beltlabel-bg" />
+                  <text x={FLOOR_W + 18} y={y + 4} class="ms-beltlabel">{text}</text>
+                </g>
+              );
+            });
+          })()}
 
           {/*
             기계 — **종류마다 다른 실루엣**을 그린다.
@@ -243,21 +270,15 @@ const schedule = minerRows.concat(tagged.map((t) => {
             const by = t.y * PX;
             const bw = t.wTiles * PX;
             const bh = t.hTiles * PX;
-            // 포트 표식 — 입력은 뒷면, 출력은 앞면. 제조기만 반대다 (위키 근거).
-            const inY = sym.inputsOnFront ? by + bh : by;
-            const outY = sym.inputsOnFront ? by : by + bh;
-            const ports = [
-              ...Array.from({ length: sym.inputs }, (_, k) => ({
-                x: bx + (bw * (k + 1)) / (sym.inputs + 1),
-                y: inY,
-                role: 'in' as const,
-              })),
-              ...Array.from({ length: sym.outputs }, (_, k) => ({
-                x: bx + (bw * (k + 1)) / (sym.outputs + 1),
-                y: outY,
-                role: 'out' as const,
-              })),
-            ];
+            /*
+              포트 표식은 **계획이 계산한 좌표**를 쓴다. 도면이 따로 계산하면 벨트가 닿는 자리와
+              삼각형이 그려진 자리가 어긋난다. 위치는 추정값이다 (게임 데이터에 포트 좌표가 없다).
+            */
+            const ports = (t.ports ?? []).map((pt) => ({
+              x: pt.x * PX,
+              y: pt.y * PX,
+              role: pt.role,
+            }));
             return (
               <g class="ms-machine">
                 {drawSymbol(sym, bx, by, bw, bh, t.rotated ?? false).map((pa) => (
