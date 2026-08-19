@@ -158,6 +158,58 @@ test('다운클럭이 전력을 실제로 줄인다 — 지수 1.32', () => {
   assert.ok(plan.power.savedMW > 0);
 });
 
+test('발행 모듈 시트의 크기를 재현한다 — 토대 4×4 (32×32 m)', () => {
+  // 참고 시트("앤디스 팩토리 설계 연구소", 보강된 철판 v1)는 4×4 토대 영역에 들어간다고 적고 있다.
+  // 우리 배치기가 같은 크기를 내야 한다. 이 값이 커지면 배치 최적화가 퇴화한 것이다.
+  //
+  // 이력: 탐욕적 줄 채우기였을 때 4×9(32×72 m), 기계 단위 배치일 때 3×5(24×40 m)였다.
+  // 24×40은 면적은 작지만 청사진 설계소 Mk.1(32×32)에 들어가지 않아 실전에서 더 나쁘다.
+  const plan = planModule({
+    targetItemId: RIP,
+    targetPerMinute: rateFromSupply(RIP, IRON_ORE, 60, book, isRaw),
+    tier: 2,
+    book,
+    machines,
+    belt: beltMk1,
+    futureBelt: beltMk2,
+    nodes: nodes.filter((n) => n.purity === 'normal'),
+    extractor: minerMk1,
+    isRaw,
+  });
+  assert.equal(plan.foundation.wTiles, 4, `폭 ${plan.foundation.wTiles}칸`);
+  assert.equal(plan.foundation.hTiles, 4, `길이 ${plan.foundation.hTiles}칸`);
+  assert.ok(plan.foundation.fitsBlueprintMk1, '청사진 설계소 Mk.1에 들어가야 한다');
+  assert.deepEqual(validateModule(plan), []);
+});
+
+test('같은 공정의 기계는 서로 붙인다 — 사이에 통로를 두지 않는다', () => {
+  // 같은 매니폴드가 먹이므로 기계 사이로 벨트가 지나갈 일이 없다.
+  // 사방 2 m를 비우면 밀도가 무너진다 — 실제로 그렇게 만들었다가 24×40 m가 나왔다.
+  const plan = planModule({
+    targetItemId: RIP,
+    targetPerMinute: rateFromSupply(RIP, IRON_ORE, 60, book, isRaw),
+    tier: 2,
+    book,
+    machines,
+    belt: beltMk1,
+    futureBelt: beltMk2,
+    nodes,
+    extractor: minerMk1,
+    isRaw,
+  });
+  const smelterGroup = plan.groups.findIndex((g) => g.machineId === 'Build_SmelterMk1_C');
+  // 분배기·병합기도 group 을 갖는다 — 기계만 센다
+  const smelters = plan.placements.filter((p) => p.kind === 'machine' && p.group === smelterGroup);
+  assert.equal(smelters.length, 2, '제련기 2대');
+  const [a, b] = smelters as [typeof smelters[0], typeof smelters[0]];
+  const touching =
+    Math.abs(a.x + a.wTiles - b.x) < 1e-9 ||
+    Math.abs(b.x + b.wTiles - a.x) < 1e-9 ||
+    Math.abs(a.y + a.hTiles - b.y) < 1e-9 ||
+    Math.abs(b.y + b.hTiles - a.y) < 1e-9;
+  assert.ok(touching, `제련기 두 대가 붙어 있어야 한다 — a(${a.x},${a.y}) b(${b.x},${b.y})`);
+});
+
 test('배치가 겹치지 않는다', () => {
   for (const rate of [5, 10, 20]) {
     const plan = planModule({

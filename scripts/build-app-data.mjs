@@ -129,7 +129,18 @@ const buildings = en.buildings.map((x) => ({
   storageSlots: x.storageSlots ?? null,
   // 배치 도면용 (FRD F13). 게임 충돌 박스 합집합, m 단위
   footprint: x.footprint
-    ? { widthM: x.footprint.widthM, lengthM: x.footprint.lengthM, heightM: x.footprint.heightM }
+    ? {
+        // 배치용 = 하드 클리어런스(CT_Default) 합집합. 소프트(굴뚝·안테나)는 건설을 막지 않는다.
+        widthM: x.footprint.widthM,
+        lengthM: x.footprint.lengthM,
+        heightM: x.footprint.heightM,
+        // 층고 판단용 = 굴뚝까지 포함한 실제 높이. 기계 위로 벨트를 지나가게 할 때 걸린다.
+        visualHeightM: x.footprint.visualHeightM,
+        hardBoxes: x.footprint.hardBoxes,
+        softBoxes: x.footprint.softBoxes,
+        // 복합 클리어런스 건물은 박스 사이가 비어 있다 — 촘촘한 배치에 쓴다
+        boxes: x.footprint.boxes,
+      }
     : null,
   productionBoostPowerExponent: x.productionBoostPowerExponent ?? null,
 }));
@@ -357,6 +368,16 @@ checks.push(
     buildings.find((b) => b.id === 'Build_MinerMk1_C')?.extraction?.perMinuteAtNormalPurity === 60 &&
     buildings.find((b) => b.id === 'Build_MinerMk2_C')?.extraction?.perMinuteAtNormalPurity === 120 &&
     buildings.find((b) => b.id === 'Build_MinerMk3_C')?.extraction?.perMinuteAtNormalPurity === 240],
+  // 클리어런스 파서 회귀 — Z 오프셋을 무시해 제련기 높이를 4.5로 계산한 버그가 있었다.
+  // 공식 위키가 8.5 m로 적고 있어 교차 검증된다.
+  ['제련기 높이 8.5 m (박스 Z 오프셋 반영 · 위키와 일치)',
+    buildings.find((b) => b.id === 'Build_SmelterMk1_C')?.footprint?.heightM === 8.5,
+    () => String(buildings.find((b) => b.id === 'Build_SmelterMk1_C')?.footprint?.heightM)],
+  ['제작기 하드 높이 6 m · 굴뚝 포함 8.5 m (소프트 박스는 배치에서 제외)',
+    buildings.find((b) => b.id === 'Build_ConstructorMk1_C')?.footprint?.heightM === 6 &&
+    buildings.find((b) => b.id === 'Build_ConstructorMk1_C')?.footprint?.visualHeightM === 8.5],
+  ['복합 클리어런스 건물의 개별 박스가 보존됨 (정제소)',
+    (buildings.find((b) => b.id === 'Build_OilRefinery_C')?.footprint?.boxes?.length ?? 0) >= 2],
   ['물 추출기 120 m³/분',
     buildings.find((b) => b.id === 'Build_WaterPump_C')?.extraction?.perMinuteAtNormalPurity === 120]
 );

@@ -58,14 +58,16 @@ function build() {
 
   const bIns = ins(
     `INSERT INTO building (id,ko,en,category,power_mw,power_gen_mw,power_exp,unlock_tier,
-      width_m,length_m,height_m,belt_per_min,pipe_m3_per_min,extract_per_min,somersloop_slots,power_shard_slots)
-     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
+      width_m,length_m,height_m,visual_height_m,hard_boxes,soft_boxes,
+      belt_per_min,pipe_m3_per_min,extract_per_min,somersloop_slots,power_shard_slots)
+     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
   );
   for (const b of buildings) {
     bIns.run(
       b.id, b.ko, b.en, b.category ?? null, b.powerMW ?? null, b.powerGenMW ?? null,
       b.powerExponent ?? null, b.unlockTier ?? null,
       b.footprint?.widthM ?? null, b.footprint?.lengthM ?? null, b.footprint?.heightM ?? null,
+      b.footprint?.visualHeightM ?? null, b.footprint?.hardBoxes ?? null, b.footprint?.softBoxes ?? null,
       b.beltItemsPerMinute ?? null, b.pipeFlowM3PerMinute ?? null,
       b.extraction?.perMinuteAtNormalPurity ?? null,
       b.somersloopSlots ?? null, b.powerShardSlots ?? null
@@ -110,9 +112,9 @@ function build() {
   const rulesFile = path.join(CURATED, 'layout-rules.json');
   if (fs.existsSync(rulesFile)) {
     const doc = read(CURATED, 'layout-rules.json');
-    const lIns = ins('INSERT INTO layout_rule (key,value_num,value_text,unit,why,source,confidence) VALUES (?,?,?,?,?,?,?)');
+    const lIns = ins('INSERT INTO layout_rule (key,value_num,value_text,unit,why,source,confidence,note) VALUES (?,?,?,?,?,?,?,?)');
     for (const r of doc.rules) {
-      lIns.run(r.key, r.valueNum ?? null, r.valueText ?? null, r.unit ?? null, r.why, r.source, r.confidence);
+      lIns.run(r.key, r.valueNum ?? null, r.valueText ?? null, r.unit ?? null, r.why, r.source, r.confidence, r.note ?? null);
     }
   }
 
@@ -146,9 +148,32 @@ const CHECKS = [
   ['포트 표가 존재하지 않는 건물을 가리킨다',
     `SELECT p.building_id FROM building_port p
      LEFT JOIN building b ON b.id = p.building_id WHERE b.id IS NULL`],
-  ['같은 건물에 같은 역할·같은 면의 포트가 중복 정의됐다',
-    `SELECT building_id, role, face, COUNT(*) c FROM building_port
-     GROUP BY building_id, role, face, offset_x_m HAVING c > 1`],
+  // 같은 면에 입력이 여러 개인 것은 정상이다 (조립기 2입력, 제조기 4입력).
+  // 잡아야 하는 것은 포트가 **모자라는** 경우다 — 그 기계가 돌리는 레시피의 최대 재료 수보다 적으면
+  // 벨트를 다 그릴 수 없다.
+  ['입력 포트 수가 그 기계 레시피의 최대 재료 수보다 적다',
+    `WITH need AS (
+       SELECT rm.building_id AS bid, MAX(cnt) AS need_in FROM (
+         SELECT recipe_id, COUNT(*) cnt FROM recipe_io WHERE role='in' GROUP BY recipe_id
+       ) c JOIN recipe_machine rm ON rm.recipe_id = c.recipe_id
+       GROUP BY rm.building_id
+     ), have AS (
+       SELECT building_id AS bid, COUNT(*) AS have_in FROM building_port WHERE role='in' GROUP BY building_id
+     )
+     SELECT h.bid, h.have_in, n.need_in FROM have h
+     JOIN need n ON n.bid = h.bid
+     WHERE h.have_in < n.need_in`],
+  ['출력 포트가 없는 생산 기계가 포트 표에 있다',
+    `SELECT DISTINCT p.building_id FROM building_port p
+     WHERE NOT EXISTS (SELECT 1 FROM building_port q WHERE q.building_id = p.building_id AND q.role='out')`],
+  ['포트 높이가 없는데 confidence가 verified로 표기됐다 (모르는 값을 확인된 값처럼 쓰면 안 된다)',
+    `SELECT building_id, port_index FROM building_port
+     WHERE height_m IS NULL AND confidence = 'verified'`],
+  ['생산 기계에 입력 포트가 없다',
+    `SELECT b.id, b.ko FROM building b
+     WHERE b.category = 'manufacturer'
+       AND b.id IN (SELECT DISTINCT building_id FROM building_port)
+       AND NOT EXISTS (SELECT 1 FROM building_port p WHERE p.building_id = b.id AND p.role = 'in')`],
   ['레시피에 산출물이 없다',
     `SELECT r.id, r.ko FROM recipe r
      LEFT JOIN recipe_io io ON io.recipe_id = r.id AND io.role = 'out'
@@ -159,10 +184,13 @@ const CHECKS = [
 const SAMPLES = [
   ['제작기 치수 8×10×6 m',
     `SELECT width_m, length_m, height_m FROM building WHERE id='Build_ConstructorMk1_C'`, [8, 10, 6]],
-  ['제련기 치수 5×10×4.5 m',
-    `SELECT width_m, length_m, height_m FROM building WHERE id='Build_SmelterMk1_C'`, [5, 10, 4.5]],
-  ['조립기 치수 9×16×5 m',
-    `SELECT width_m, length_m, height_m FROM building WHERE id='Build_AssemblerMk1_C'`, [9, 16, 5]],
+  // 제련기 8.5 m는 위키와 일치한다. 4.5 m로 나오면 클리어런스 파서가 Z 오프셋을 다시 무시한 것이다.
+  ['제련기 치수 5×10×8.5 m (Z 오프셋 반영)',
+    `SELECT width_m, length_m, height_m FROM building WHERE id='Build_SmelterMk1_C'`, [5, 10, 8.5]],
+  ['조립기 치수 9×16×8 m · 굴뚝 포함 10.75 m',
+    `SELECT width_m, length_m, height_m, visual_height_m FROM building WHERE id='Build_AssemblerMk1_C'`, [9, 16, 8, 10.75]],
+  ['제작기 하드 6 m · 굴뚝 포함 8.5 m',
+    `SELECT height_m, visual_height_m FROM building WHERE id='Build_ConstructorMk1_C'`, [6, 8.5]],
   ['채굴기 Mk.1 60/분',
     `SELECT extract_per_min FROM building WHERE id='Build_MinerMk1_C'`, [60]],
   ['벨트 Mk.1 60/분 · 티어 0',

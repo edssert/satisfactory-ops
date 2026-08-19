@@ -21,7 +21,7 @@ import type { RecipeBook, SolveNode } from './solver.ts';
 import { solve } from './solver.ts';
 import { toNumber } from './rational.ts';
 import { planMining, type MiningPlan, type ResourceNode, type Extractor } from './mining.ts';
-import { packModule, routeBelt, type PackItem, type Point } from './pack.ts';
+import { packGroups, routeBelt, type Point } from './pack.ts';
 import { splittersFor, mergersFor } from './layout.ts';
 
 /** 토대 한 장 = 8 m (게임 기본 토대) */
@@ -84,6 +84,8 @@ export interface Placement {
   hTiles: number;
   /** 기계일 때 소속 그룹 */
   group?: number;
+  /** 어떤 건물인가 — 도면에서 실루엣을 고르는 키 */
+  machineId?: string;
   clockPercent?: number;
   /** 90도 돌려 놓았는가 */
   rotated?: boolean;
@@ -138,6 +140,8 @@ export interface ModulePlan {
   splitters: number;
   mergers: number;
   lifts: number;
+  /** 바닥에서 손이 닿지 않는 기계 수 — 캣워크로 접근해야 한다 */
+  unreachableMachines: number;
   notes: string[];
 }
 
@@ -316,36 +320,46 @@ export function planModule(input: ModuleInput): ModulePlan {
   const belts: BeltRun[] = [];
   const TARGET_WIDTH_M = 32;
 
-  const packItems: PackItem[] = [];
-  groups.forEach((g, gi) => {
-    const fp = g.footprint ?? { widthM: 8, lengthM: 10, heightM: 8 };
-    for (let k = 0; k < g.built; k++) {
-      packItems.push({
-        id: `${gi}:${k}`,
-        widthM: fp.widthM,
-        lengthM: fp.lengthM,
-        group: gi,
-        canRotate: true,
+  // 공정 단위로 블록을 만들어 배치한다. 같은 공정의 기계는 서로 붙이고, 통로는 공정 사이에만.
+  const packed = packGroups(
+    groups.map((g, gi) => {
+      const fp = g.footprint ?? { widthM: 8, lengthM: 10, heightM: 8 };
+      return { group: gi, count: g.built, widthM: fp.widthM, lengthM: fp.lengthM };
+    }),
+    TARGET_WIDTH_M
+  );
+
+  // 블록 안의 기계 좌표를 블록 위치에 더해 실제 배치로 펼친다
+  const machineBoxes: { gi: number; xM: number; yM: number; widthM: number; lengthM: number; rotated: boolean }[] = [];
+  for (const placedBlock of packed.items) {
+    const gi = Number(placedBlock.id);
+    const block = packed.blocks.find((b) => b.group === gi)!;
+    for (const cell of block.cells) {
+      machineBoxes.push({
+        gi,
+        xM: placedBlock.xM + cell.xM,
+        yM: placedBlock.yM + cell.yM,
+        widthM: cell.widthM,
+        lengthM: cell.lengthM,
+        rotated: cell.widthM !== (groups[gi]!.footprint?.widthM ?? cell.widthM),
       });
     }
-  });
+  }
 
-  const packed = packModule(packItems, TARGET_WIDTH_M);
-
-  for (const it of packed.items) {
-    const gi = Number(it.id.split(':')[0]);
-    const g = groups[gi]!;
+  for (const mb of machineBoxes) {
+    const g = groups[mb.gi]!;
     placements.push({
       kind: 'machine',
       label: `${g.machineKo}
 ${g.itemKo}`,
-      x: it.xM / TILE_M,
-      y: it.yM / TILE_M,
-      wTiles: it.widthM / TILE_M,
-      hTiles: it.lengthM / TILE_M,
-      group: gi,
+      machineId: g.machineId,
+      x: mb.xM / TILE_M,
+      y: mb.yM / TILE_M,
+      wTiles: mb.widthM / TILE_M,
+      hTiles: mb.lengthM / TILE_M,
+      group: mb.gi,
       clockPercent: g.clockPercent,
-      rotated: it.rotated,
+      rotated: mb.rotated,
     });
   }
 
@@ -358,7 +372,7 @@ ${g.itemKo}`,
   const GW = wTiles * TILE_M;
   const GH = hTiles * TILE_M;
   const occupied = new Uint8Array(GW * GH);
-  for (const it of packed.items) {
+  for (const it of machineBoxes) {
     for (let y = Math.floor(it.yM); y < Math.ceil(it.yM + it.lengthM); y++) {
       for (let x = Math.floor(it.xM); x < Math.ceil(it.xM + it.widthM); x++) {
         if (x >= 0 && y >= 0 && x < GW && y < GH) occupied[y * GW + x] = 1;
@@ -369,16 +383,49 @@ ${g.itemKo}`,
 
   /** 공정의 출력 면 — 그 공정 기계들 중 가장 아래 기계의 아래쪽 바로 밖 */
   const exitOf = (gi: number): Point => {
-    const mine = packed.items.filter((i2) => Number(i2.id.split(':')[0]) === gi);
+    const mine = machineBoxes.filter((i2) => i2.gi === gi);
     const low = mine.reduce((a, b) => (b.yM + b.lengthM > a.yM + a.lengthM ? b : a));
     return { x: Math.round(low.xM + low.widthM / 2), y: Math.min(GH - 1, Math.round(low.yM + low.lengthM)) };
   };
   /** 공정의 입력 면 — 그 공정 기계들 중 가장 위 기계의 위쪽 바로 밖 */
   const entryOf = (gi: number): Point => {
-    const mine = packed.items.filter((i2) => Number(i2.id.split(':')[0]) === gi);
+    const mine = machineBoxes.filter((i2) => i2.gi === gi);
     const high = mine.reduce((a, b) => (b.yM < a.yM ? b : a));
     return { x: Math.round(high.xM + high.widthM / 2), y: Math.max(0, Math.round(high.yM) - 1) };
   };
+
+  /*
+   * 분배기·병합기 배치.
+   *
+   * 치수는 4×4 m인데 통로는 2 m다. 그래도 놓을 수 있다 — 게임 데이터를 보면 이 부속들은
+   * **하드 클리어런스가 없고 소프트만 있다**(hardBoxes 0). 즉 기계와 겹쳐 지을 수 있고
+   * 경고만 뜬다. 촘촘한 설계가 가능한 이유 중 하나다.
+   * 그래서 겹침 검증에서도 부속은 제외한다.
+   */
+  const ATT_M = 4;
+  groups.forEach((g, gi) => {
+    if (g.built <= 1) return;
+    const inPt = entryOf(gi);
+    const outPt = exitOf(gi);
+    placements.push({
+      kind: 'splitter',
+      label: '분배기',
+      x: (inPt.x - ATT_M / 2) / TILE_M,
+      y: (inPt.y - ATT_M / 2) / TILE_M,
+      wTiles: ATT_M / TILE_M,
+      hTiles: ATT_M / TILE_M,
+      group: gi,
+    });
+    placements.push({
+      kind: 'merger',
+      label: '병합기',
+      x: (outPt.x - ATT_M / 2) / TILE_M,
+      y: (outPt.y - ATT_M / 2) / TILE_M,
+      wTiles: ATT_M / TILE_M,
+      hTiles: ATT_M / TILE_M,
+      group: gi,
+    });
+  });
 
   const routeFailures: string[] = [];
   const pushBelt = (itemKo: string, perMinute: number, from: Point, to: Point, fromGroup: number | null, toGroup: number | null) => {
@@ -423,6 +470,64 @@ ${g.itemKo}`,
     );
   }
 
+  /*
+   * 접근 가능성 검사 — **손댈 수 없는 기계가 있는가.**
+   *
+   * 기계를 붙여 놓는 것은 게임이 허용하지만, 클럭을 설정하거나 상태를 보려면 사람이 직접
+   * 걸어가야 한다. 사방이 막힌 기계는 도면상으로는 예뻐도 실제로는 만질 수 없다.
+   *
+   * 바닥에서 닿지 않는 기계는 **공중 캣워크**로 접근한다 — 캣워크는 허공에 설치할 수 있고
+   * 사다리로 오른다(둘 다 티어 1, 철봉 2 + 철판 1). 바닥 틈을 벌려 접근을 확보하는 것보다
+   * 훨씬 싸고 밀도를 해치지 않는다.
+   */
+  const reachable = new Uint8Array(GW * GH);
+  {
+    const queue: number[] = [];
+    const push = (x: number, y: number) => {
+      if (x < 0 || y < 0 || x >= GW || y >= GH) return;
+      const i = y * GW + x;
+      if (reachable[i] || occupied[i]) return;
+      reachable[i] = 1;
+      queue.push(i);
+    };
+    // 모듈 테두리에서 시작한다 — 사람은 밖에서 들어온다
+    for (let x = 0; x < GW; x++) {
+      push(x, 0);
+      push(x, GH - 1);
+    }
+    for (let y = 0; y < GH; y++) {
+      push(0, y);
+      push(GW - 1, y);
+    }
+    while (queue.length) {
+      const i = queue.pop()!;
+      const x = i % GW;
+      const y = (i - x) / GW;
+      push(x + 1, y);
+      push(x - 1, y);
+      push(x, y + 1);
+      push(x, y - 1);
+    }
+  }
+  const unreachable = machineBoxes.filter((mb) => {
+    // 기계 둘레에 걸어서 닿는 칸이 하나라도 있으면 접근 가능
+    const x0 = Math.floor(mb.xM);
+    const y0 = Math.floor(mb.yM);
+    const x1 = Math.ceil(mb.xM + mb.widthM);
+    const y1 = Math.ceil(mb.yM + mb.lengthM);
+    for (let x = x0 - 1; x <= x1; x++) {
+      for (const y of [y0 - 1, y1]) {
+        if (x >= 0 && y >= 0 && x < GW && y < GH && reachable[y * GW + x]) return false;
+      }
+    }
+    for (let y = y0 - 1; y <= y1; y++) {
+      for (const x of [x0 - 1, x1]) {
+        if (x >= 0 && y >= 0 && x < GW && y < GH && reachable[y * GW + x]) return false;
+      }
+    }
+    return true;
+  });
+
   const splittersCount = groups.filter((g) => g.built > 1).reduce((a, g) => a + splittersFor(g.built), 0);
   const mergersCount = groups.filter((g) => g.built > 1).reduce((a, g) => a + mergersFor(g.built), 0);
 
@@ -460,6 +565,19 @@ ${g.itemKo}`,
   if (lifts > 0) {
     bump(input.liftKo ?? '컨베이어 리프트 Mk.1', lifts, '높이가 바뀌는 지점 — 채굴기 출력구와 기계 입력구 높이가 다릅니다');
   }
+  /*
+   * 캣워크와 사다리.
+   *
+   * 왜 필요한가: 기계를 붙여 놓으면 바닥에서 닿지 않는 기계가 생긴다. 클럭을 설정하거나
+   * 상태를 보려면 직접 걸어가야 하므로, 닿지 않는 기계에는 접근 수단이 있어야 한다.
+   * 캣워크는 허공에 설치할 수 있어서 바닥을 비우지 않고 해결된다 (4×4 m 조각, 티어 1).
+   */
+  if (unreachable.length > 0) {
+    // 캣워크 조각은 4×4 m다. 닿지 않는 기계 위를 지나가는 데 기계당 대략 그 기계 길이만큼 든다.
+    const pieces = unreachable.reduce((a, mb) => a + ceilEps(mb.lengthM / 4), 0);
+    bump('직선 캣워크', pieces, `바닥에서 닿지 않는 기계 ${unreachable.length}대 위로 지나갑니다`);
+    bump('사다리', 1, '캣워크로 올라가는 수단');
+  }
 
   // 6) 전력
   const totalMW = r2(groups.reduce((s, g) => s + g.powerMW, 0));
@@ -494,6 +612,15 @@ ${g.itemKo}`,
       `다운클럭으로 전력 ${saved} MW를 아낍니다 (${at100} → ${totalMW} MW). ` +
         '전력은 클럭의 약 1.32제곱이라 100%로 두면 그만큼 더 먹습니다.'
     );
+  }
+  if (unreachable.length > 0) {
+    features.push(
+      `기계 ${unreachable.length}대는 바닥에서 손이 닿지 않습니다 — 기계를 붙여 밀도를 얻은 대가입니다. ` +
+        '캣워크를 공중에 깔고 사다리로 올라가면 됩니다. 바닥을 벌려 통로를 만드는 것보다 ' +
+        '싸고(철봉 2 + 철판 1 / 조각) 배치도 안 망칩니다.'
+    );
+  } else {
+    features.push('모든 기계에 바닥에서 걸어서 닿습니다 — 캣워크가 필요 없습니다.');
   }
   if (input.futureBelt) {
     const maxFlow = Math.max(...belts.map((b) => b.perMinute), 0);
@@ -538,6 +665,7 @@ ${g.itemKo}`,
     splitters,
     mergers,
     lifts,
+    unreachableMachines: unreachable.length,
     notes,
   };
 }
@@ -545,7 +673,12 @@ ${g.itemKo}`,
 /** 배치가 성립하는지 — 겹치는 것이 있으면 도면이 아니다 */
 export function validateModule(plan: ModulePlan): string[] {
   const errs: string[] = [];
-  const boxes = plan.placements;
+  /*
+   * 겹침 검사는 **기계만** 본다. 분배기·병합기는 게임 데이터상 하드 클리어런스가 없어서
+   * (hardBoxes 0) 기계와 겹쳐 지을 수 있다. 그걸 오류로 잡으면 실제로 지을 수 있는 배치를
+   * 거부하게 된다.
+   */
+  const boxes = plan.placements.filter((p) => p.kind === 'machine' || p.kind === 'extractor');
   for (let i = 0; i < boxes.length; i++) {
     for (let j = i + 1; j < boxes.length; j++) {
       const a = boxes[i]!;

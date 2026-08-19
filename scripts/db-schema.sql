@@ -34,7 +34,12 @@ CREATE TABLE building (
   -- 배치에 쓰는 실제 치수. mClearanceData 충돌 박스 **합집합** (첫 박스만 읽으면 높이가 틀린다)
   width_m       REAL,
   length_m      REAL,
+  -- 하드 클리어런스(CT_Default) 합집합 높이. 배치·층고 계산에 쓴다.
   height_m      REAL,
+  -- 굴뚝·안테나(CT_Soft)까지 포함한 실제 높이. 기계 위로 벨트를 지나가게 할 때 걸린다.
+  visual_height_m REAL,
+  hard_boxes    INTEGER,
+  soft_boxes    INTEGER,
   belt_per_min  REAL,
   pipe_m3_per_min REAL,
   extract_per_min REAL,
@@ -127,7 +132,9 @@ CREATE TABLE layout_rule (
   unit       TEXT,
   why        TEXT NOT NULL,
   source     TEXT NOT NULL,
-  confidence TEXT NOT NULL CHECK (confidence IN ('verified', 'consensus', 'disputed', 'assumed', 'unsourced'))
+  confidence TEXT NOT NULL CHECK (confidence IN ('verified', 'consensus', 'disputed', 'assumed', 'unsourced')),
+  -- 값이 바뀐 이유(정정 이력). 틀린 값을 조용히 덮지 않는다.
+  note       TEXT
 );
 
 CREATE INDEX idx_recipe_io_item ON recipe_io(item_id, role);

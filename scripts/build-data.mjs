@@ -179,17 +179,75 @@ function parseClassList(raw) {
  * 5m가 아니라 3m로 나온다. 전부의 합집합을 잡아야 배치 계산이 맞는다.
  * 단위는 cm이므로 100으로 나눈다. 도면 생성(FRD F13)의 기준 치수다.
  */
+/**
+ * mClearanceData -> 배치에 쓸 기하.
+ *
+ * 두 가지를 조사로 확정하고 이 함수를 다시 썼다 (docs/research/clearance-rules.md):
+ *
+ *  1. **CT_Soft는 건설을 막지 않는다.** 굴뚝·안테나 같은 얇은 기둥이 CT_Soft로 들어 있는데,
+ *     그것을 점유 공간에 넣으면 배치가 과도하게 보수적이 된다. 하드(CT_Default)만 센다.
+ *     다만 층고를 정할 때는 소프트까지 포함한 높이가 필요하다 (기계 위로 벨트를 지나가게 할 때
+ *     굴뚝에 걸린다) — 그래서 visualHeightM 을 따로 낸다.
+ *
+ *  2. **박스의 Z 오프셋을 반영해야 한다.** 제련기는 4.5 m 박스 위에 z=4.5에서 시작하는 4 m 박스가
+ *     얹혀 총 8.5 m다. 앞서는 RelativeTransform 을 무시하고 max(4.5, 4) = 4.5 로 계산했다.
+ *     공식 위키가 제련기 높이를 8.5 m로 적고 있어 교차 검증된다.
+ *
+ * 하드 박스가 여러 개인 건물은 "복합 클리어런스"이고, 박스 사이 빈 공간은 실제로 비어 있다.
+ * 그래서 합집합 하나만 내지 않고 개별 박스도 함께 낸다.
+ */
 function parseClearance(raw) {
-  const re = /ClearanceBox=\(Min=\(X=(-?[\d.]+),Y=(-?[\d.]+),Z=(-?[\d.]+)\),Max=\(X=(-?[\d.]+),Y=(-?[\d.]+),Z=(-?[\d.]+)\)/g;
-  const boxes = [...String(raw ?? '').matchAll(re)].map((m) => m.slice(1).map(Number));
-  if (!boxes.length) return null;
-  const min = (i) => Math.min(...boxes.map((b) => b[i]));
-  const max = (i) => Math.max(...boxes.map((b) => b[i]));
+  const text = String(raw ?? '');
+  if (!text) return null;
+
+  // 항목 하나 = (Type=..., ClearanceBox=(Min=..,Max=..), RelativeTransform=(Translation=..))
+  const re =
+    /(?:Type=(\w+),)?ClearanceBox=\(Min=\(X=(-?[\d.]+),Y=(-?[\d.]+),Z=(-?[\d.]+)\),Max=\(X=(-?[\d.]+),Y=(-?[\d.]+),Z=(-?[\d.]+)\)[^)]*\)(?:,RelativeTransform=\(Translation=\(X=(-?[\d.]+),Y=(-?[\d.]+),Z=(-?[\d.]+)\))?/g;
+
+  const all = [];
+  for (const m of text.matchAll(re)) {
+    const type = m[1] ?? 'CT_Default';
+    const t = [m[8] ? Number(m[8]) : 0, m[9] ? Number(m[9]) : 0, m[10] ? Number(m[10]) : 0];
+    all.push({
+      type,
+      min: [Number(m[2]) + t[0], Number(m[3]) + t[1], Number(m[4]) + t[2]],
+      max: [Number(m[5]) + t[0], Number(m[6]) + t[1], Number(m[7]) + t[2]],
+    });
+  }
+  if (!all.length) return null;
+
+  const hard = all.filter((b) => b.type !== 'CT_Soft');
+  const soft = all.filter((b) => b.type === 'CT_Soft');
+  const pool = hard.length ? hard : all; // 하드가 없으면(벨트 등) 있는 것으로
+
+  const span = (list, i) => ({
+    min: Math.min(...list.map((b) => b.min[i])),
+    max: Math.max(...list.map((b) => b.max[i])),
+  });
+  const m = (v) => round(v / 100);
+  const x = span(pool, 0);
+  const y = span(pool, 1);
+  const z = span(pool, 2);
+  const zAll = span(all, 2);
+
   return {
-    widthM: round((max(3) - min(0)) / 100),
-    lengthM: round((max(4) - min(1)) / 100),
-    heightM: round((max(5) - min(2)) / 100),
-    boxes: boxes.length,
+    // 배치에 쓰는 값 — 하드 클리어런스 합집합
+    widthM: m(x.max - x.min),
+    lengthM: m(y.max - y.min),
+    heightM: m(z.max - z.min),
+    // 층고·오버헤드 벨트 판단용 — 굴뚝·안테나까지 포함한 실제 높이
+    visualHeightM: m(zAll.max - zAll.min),
+    hardBoxes: hard.length,
+    softBoxes: soft.length,
+    // 복합 클리어런스 건물은 박스 사이가 비어 있다. 개별 박스를 남겨 촘촘한 배치에 쓴다.
+    boxes: pool.map((b) => ({
+      xM: m(b.min[0]),
+      yM: m(b.min[1]),
+      zM: m(b.min[2]),
+      widthM: m(b.max[0] - b.min[0]),
+      lengthM: m(b.max[1] - b.min[1]),
+      heightM: m(b.max[2] - b.min[2]),
+    })),
   };
 }
 

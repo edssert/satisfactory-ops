@@ -1,0 +1,45 @@
+{
+  "$comment": "기계의 벨트·파이프 접속부 위치. 게임 데이터에 없어서(mFactoryInputConnections가 빈 문자열) 조사·가정으로 채운 표다. 근거는 docs/research/machine-ports.md.",
+  "$warning": "높이(heightM)와 좌우 오프셋(offsetXM)은 어떤 출처에도 없다. 위키·SCIM·GitHub·Reddit을 전부 확인했다. 그래서 이 표는 **면(face)만** 채우고 높이는 비워 둔다. 도면에는 '추정'으로 표기해야 한다.",
+  "source": "satisfactory.wiki.gg Manufacturer 문서 Trivia: 'The Manufacturer is the only production machine which has the inputs on the front. All other machines have the input on the back.'",
+  "confidence": "consensus",
+  "ports": [
+    { "building": "Build_SmelterMk1_C", "index": 0, "role": "in", "kind": "belt", "face": "back" },
+    { "building": "Build_SmelterMk1_C", "index": 1, "role": "out", "kind": "belt", "face": "front" },
+
+    { "building": "Build_ConstructorMk1_C", "index": 0, "role": "in", "kind": "belt", "face": "back" },
+    { "building": "Build_ConstructorMk1_C", "index": 1, "role": "out", "kind": "belt", "face": "front" },
+
+    { "building": "Build_AssemblerMk1_C", "index": 0, "role": "in", "kind": "belt", "face": "back",
+      "note": "입력 2개가 같은 뒷면에 나란히 있다고 가정한다 — 좌우 오프셋은 확인 못 함" },
+    { "building": "Build_AssemblerMk1_C", "index": 1, "role": "in", "kind": "belt", "face": "back" },
+    { "building": "Build_AssemblerMk1_C", "index": 2, "role": "out", "kind": "belt", "face": "front" },
+
+    { "building": "Build_ManufacturerMk1_C", "index": 0, "role": "in", "kind": "belt", "face": "front",
+      "note": "제조기만 입력이 앞면이다 — 이 표에서 유일하게 출처가 있는 항목" },
+    { "building": "Build_ManufacturerMk1_C", "index": 1, "role": "in", "kind": "belt", "face": "front" },
+    { "building": "Build_ManufacturerMk1_C", "index": 2, "role": "in", "kind": "belt", "face": "front" },
+    { "building": "Build_ManufacturerMk1_C", "index": 3, "role": "in", "kind": "belt", "face": "front" },
+    { "building": "Build_ManufacturerMk1_C", "index": 4, "role": "out", "kind": "belt", "face": "back" },
+
+    { "building": "Build_FoundryMk1_C", "index": 0, "role": "in", "kind": "belt", "face": "back" },
+    { "building": "Build_FoundryMk1_C", "index": 1, "role": "in", "kind": "belt", "face": "back" },
+    { "building": "Build_FoundryMk1_C", "index": 2, "role": "out", "kind": "belt", "face": "front" },
+
+    { "building": "Build_OilRefinery_C", "index": 0, "role": "in", "kind": "belt", "face": "back" },
+    { "building": "Build_OilRefinery_C", "index": 1, "role": "in", "kind": "pipe", "face": "back" },
+    { "building": "Build_OilRefinery_C", "index": 2, "role": "out", "kind": "belt", "face": "front" },
+    { "building": "Build_OilRefinery_C", "index": 3, "role": "out", "kind": "pipe", "face": "front" },
+
+    { "building": "Build_Packager_C", "index": 0, "role": "in", "kind": "belt", "face": "back" },
+    { "building": "Build_Packager_C", "index": 1, "role": "in", "kind": "pipe", "face": "back" },
+    { "building": "Build_Packager_C", "index": 2, "role": "out", "kind": "belt", "face": "front" },
+    { "building": "Build_Packager_C", "index": 3, "role": "out", "kind": "pipe", "face": "front" },
+
+    { "building": "Build_MinerMk1_C", "index": 0, "role": "out", "kind": "belt", "face": "front",
+      "note": "채굴기 출력구 높이가 도면에서 가장 중요한데(리프트 필요 여부를 결정) 확인 못 함" },
+    { "building": "Build_MinerMk2_C", "index": 0, "role": "out", "kind": "belt", "face": "front" },
+    { "building": "Build_MinerMk3_C", "index": 0, "role": "out", "kind": "belt", "face": "front" },
+    { "building": "Build_WaterPump_C", "index": 0, "role": "out", "kind": "pipe", "face": "front" }
+  ]
+}
