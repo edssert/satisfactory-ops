@@ -456,6 +456,58 @@ const schedule = minerRows.concat(tagged.map((t) => {
         </ul>
       </section>
 
+      <section class="ms-build">
+        <h4>손으로 짓는 순서</h4>
+        <p class="ms-note">
+          청사진 설계소는 티어 <span class="n">4</span>에 열립니다. 그 전에는 아래대로 하나씩 세웁니다.
+          위치는 <strong>토대 왼쪽 위 모서리</strong>가 기준입니다. 도면이 흐릿해도 이 표만 정확하면
+          지어집니다.
+        </p>
+        <ol class="ms-steps">
+          {plan.buildSteps.map((st) => (
+            <li>
+              <div class="ms-step-head">
+                <span class="ms-step-what">{st.what}</span>
+                {st.count > 1 && <span class="n">×{st.count}</span>}
+              </div>
+              <div class="ms-step-where">{st.where}</div>
+              {st.facing && <div class="ms-step-facing">{st.facing}</div>}
+              {st.setting && st.setting !== '100%' && (
+                <div class="ms-step-setting">{st.setting}</div>
+              )}
+              {st.why && <p class="ms-step-why">{st.why}</p>}
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section>
+        <h4>벨트 연결 목록</h4>
+        <p class="ms-note">
+          번호는 도면의 번호와 같습니다. 접속부의 정확한 높이·좌우 위치는 게임 데이터에 없어서
+          <strong>어느 기계에서 어느 기계로</strong>만 적습니다 — 실제로 벨트를 놓을 때는 게임이
+          접속부에 붙여 주므로 이 정보로 충분합니다.
+        </p>
+        <table class="ms-links">
+          <thead>
+            <tr><th>품목</th><th class="n">유량</th><th>어디서</th><th>어디로</th></tr>
+          </thead>
+          <tbody>
+            {plan.belts.map((b) => (
+              <tr class={b.branch ? 'is-branch' : undefined}>
+                <td>{b.itemKo}{b.branch && <span class="muted"> (분기)</span>}</td>
+                <td class="n">
+                  {fmt(b.perMinute)}/분
+                  {b.lines > 1 && <span class="muted"> ×{b.lines}줄</span>}
+                </td>
+                <td>{b.fromLabel}</td>
+                <td>{b.toLabel}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+
       <section>
         <h4>특징</h4>
         <ul class="ms-features">

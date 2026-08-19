@@ -116,8 +116,34 @@ export interface BeltRun {
   /** 어디서 어디로 — null 은 모듈 밖(채굴기 / 완제품 반출) */
   fromGroup: number | null;
   toGroup: number | null;
-  /** 분배기·병합기와 기계를 잇는 짧은 분기. 라벨을 붙이지 않는다 */
+  /** 분배기·병합기와 기계를 잇는 짧은 분기. 도면에 라벨을 붙이지 않는다 */
   branch?: boolean;
+  /**
+   * 사람이 읽는 양 끝 이름. 연결 목록에 그대로 쓴다.
+   * fromGroup/toGroup 만으로는 분기의 끝이 분배기인지 채굴기인지 구분되지 않아
+   * "채굴기 → 제작기"라고 잘못 적혔다.
+   */
+  fromLabel: string;
+  toLabel: string;
+}
+
+export interface BuildStep {
+  no: number;
+  /** 무엇을 */
+  what: string;
+  /** 몇 개 */
+  count: number;
+  /**
+   * 어디에 — 토대 **왼쪽 위 모서리**를 원점으로 한 위치.
+   * 칸은 토대 한 장(8 m) 단위, 미터는 그 안에서의 오프셋이다.
+   */
+  where: string;
+  /** 어느 방향으로 놓는가 */
+  facing?: string;
+  /** 설정할 것 (클럭 등) */
+  setting?: string;
+  /** 왜 이 순서인가 */
+  why?: string;
 }
 
 export interface ModulePlan {
@@ -150,6 +176,12 @@ export interface ModulePlan {
   lifts: number;
   /** 바닥에서 손이 닿지 않는 기계 수 — 캣워크로 접근해야 한다 */
   unreachableMachines: number;
+  /**
+   * **손으로 지을 때의 순서표.**
+   * 청사진 설계소는 티어 4에 열린다. 그 전에는 이 표를 보고 하나씩 세워야 한다.
+   * 그림 없이도 지을 수 있을 만큼 좌표와 방향이 명확해야 한다.
+   */
+  buildSteps: BuildStep[];
   notes: string[];
 }
 
@@ -551,8 +583,9 @@ ${g.itemKo}`,
     to: Point,
     fromGroup: number | null,
     toGroup: number | null,
-    /** 분기 벨트는 라벨을 붙이지 않는다 — 기계마다 붙이면 도면이 글자로 덮인다 */
-    branch = false
+    /** 분기 벨트는 도면에 라벨을 붙이지 않는다 — 기계마다 붙이면 도면이 글자로 덮인다 */
+    branch = false,
+    labels?: { from: string; to: string }
   ) => {
     const path = routeBelt(from, to, blocked, { w: GW, h: GH });
     if (path.length <= 2 && (Math.abs(from.x - to.x) > 1 && Math.abs(from.y - to.y) > 1)) {
@@ -567,6 +600,12 @@ ${g.itemKo}`,
       fromGroup,
       toGroup,
       branch,
+      fromLabel:
+        labels?.from ??
+        (fromGroup == null ? '채굴기 / 외부' : `${groups[fromGroup]!.machineKo} · ${groups[fromGroup]!.itemKo}`),
+      toLabel:
+        labels?.to ??
+        (toGroup == null ? '반출 / 다음 모듈' : `${groups[toGroup]!.machineKo} · ${groups[toGroup]!.itemKo}`),
     });
   };
 
@@ -580,9 +619,15 @@ ${g.itemKo}`,
       const perMachine = g.outPerMinute / Math.max(1, g.built);
       if (a.kind === 'splitter') {
         const inFlow = g.inputs.reduce((s2, i2) => s2 + i2.perMinute, 0) / Math.max(1, g.built);
-        pushBelt(g.inputs[0]?.itemKo ?? '재료', inFlow, a.pt, portOf(m, 'in'), null, a.group, true);
+        pushBelt(g.inputs[0]?.itemKo ?? '재료', inFlow, a.pt, portOf(m, 'in'), null, a.group, true, {
+          from: '분배기',
+          to: `${g.machineKo} · ${g.itemKo}`,
+        });
       } else {
-        pushBelt(g.itemKo, perMachine, portOf(m, 'out'), a.pt, a.group, null, true);
+        pushBelt(g.itemKo, perMachine, portOf(m, 'out'), a.pt, a.group, null, true, {
+          from: `${g.machineKo} · ${g.itemKo}`,
+          to: '병합기',
+        });
       }
     }
   }
@@ -591,20 +636,33 @@ ${g.itemKo}`,
   for (const m of mining) {
     const consumer = groups.findIndex((g) => g.inputs.some((i2) => i2.itemKo === m.itemKo));
     if (consumer < 0) continue;
-    pushBelt(m.itemKo, m.suppliedPerMinute, { x: 0, y: 0 }, entryOf(consumer), null, consumer);
+    // 간선은 분배기까지 간다. 기계가 한 대뿐이면 그 기계로 바로 들어간다.
+    const g = groups[consumer]!;
+    pushBelt(m.itemKo, m.suppliedPerMinute, { x: 0, y: 0 }, entryOf(consumer), null, consumer, false, {
+      from: `${m.assignments[0]?.extractorKo ?? '채굴기'} (${m.assignments.map((a) => a.cell).join(', ')})`,
+      to: g.built > 1 ? '분배기' : `${g.machineKo} · ${g.itemKo}`,
+    });
   }
   // 공정 사이
   groups.forEach((g, gi) => {
     for (const inp of g.inputs) {
       if (inp.fromGroup == null) continue;
-      pushBelt(inp.itemKo, inp.perMinute, exitOf(inp.fromGroup), entryOf(gi), inp.fromGroup, gi);
+      const src = groups[inp.fromGroup]!;
+      pushBelt(inp.itemKo, inp.perMinute, exitOf(inp.fromGroup), entryOf(gi), inp.fromGroup, gi, false, {
+        from: src.built > 1 ? '병합기' : `${src.machineKo} · ${src.itemKo}`,
+        to: g.built > 1 ? '분배기' : `${g.machineKo} · ${g.itemKo}`,
+      });
     }
   });
   // 완제품 반출 — 마지막 공정에서 토대 밖으로
   const lastGroup = groups.length - 1;
   if (lastGroup >= 0) {
     const e = exitOf(lastGroup);
-    pushBelt(groups[lastGroup]!.itemKo, groups[lastGroup]!.outPerMinute, e, { x: GW - 1, y: GH - 1 }, lastGroup, null);
+    const last = groups[lastGroup]!;
+    pushBelt(last.itemKo, last.outPerMinute, e, { x: GW - 1, y: GH - 1 }, lastGroup, null, false, {
+      from: last.built > 1 ? '병합기' : `${last.machineKo} · ${last.itemKo}`,
+      to: '반출 / 다음 모듈',
+    });
   }
   if (routeFailures.length) {
     notes.push(
@@ -731,7 +789,7 @@ ${g.itemKo}`,
   features.push(
     `토대 ${wTiles}×${hTiles}칸(${wTiles * TILE_M}×${hTiles * TILE_M} m). ` +
       `배치 ${packed.tried}가지를 비교해 면적과 벨트 길이가 가장 작은 것을 골랐습니다 ` +
-      `(벨트 총 ${packed.beltLengthM} m).`
+      (packed.beltLengthM > 0 ? `(공정 사이 거리 합 ${packed.beltLengthM} m).` : '(공정이 하나뿐이라 공정 간 벨트가 없습니다).')
   );
   if (wTiles <= 4 && hTiles <= 4) {
     features.push(
@@ -781,6 +839,114 @@ ${g.itemKo}`,
     }
   }
 
+  /*
+   * 손으로 짓는 순서.
+   *
+   * 청사진 설계소는 티어 4에 열린다. 그 전(그리고 그 뒤에도 처음 한 번은)에는 사람이 하나씩
+   * 세운다. 그래서 그림과 별개로 **좌표와 방향이 적힌 순서표**가 있어야 한다.
+   * 그림 품질이 아무리 나빠도 이 표만 정확하면 지어진다.
+   *
+   * 원점은 토대 **왼쪽 위 모서리**다. 게임에서 토대를 깔 때 한 모서리를 기준으로 삼는 것이
+   * 가장 헷갈리지 않는다.
+   */
+  const buildSteps: BuildStep[] = [];
+  let stepNo = 0;
+  const step = (b: Omit<BuildStep, 'no'>) => buildSteps.push({ no: ++stepNo, ...b });
+
+  const pos = (xM: number, yM: number): string => {
+    const cx = Math.floor(xM / TILE_M);
+    const cy = Math.floor(yM / TILE_M);
+    const ox = Math.round(xM - cx * TILE_M);
+    const oy = Math.round(yM - cy * TILE_M);
+    const cell = `오른쪽 ${cx}칸 · 아래 ${cy}칸`;
+    return ox || oy ? `${cell} (칸 안에서 +${ox}m, +${oy}m)` : cell;
+  };
+
+  step({
+    what: '토대',
+    count: wTiles * hTiles,
+    where: `${wTiles}×${hTiles}칸 (${wTiles * TILE_M}×${hTiles * TILE_M} m)`,
+    why:
+      '먼저 바닥을 만든다. 지형 위에 바로 지으면 기계 높이가 제각각이 되어 벨트가 안 맞는다. ' +
+      (wTiles <= 4 && hTiles <= 4
+        ? '4×4를 지키면 티어 4에서 이 모듈을 그대로 청사진으로 뜰 수 있다.'
+        : '폭 4칸(32 m)을 지켰으므로 길이만 잘라 청사진 두 장으로 뜰 수 있다.'),
+  });
+
+  for (const m of mining) {
+    for (const a of m.assignments) {
+      step({
+        what: `${a.extractorKo} — ${m.itemKo}`,
+        count: 1,
+        where: `${a.cell} 노드 위 (${a.purityKo})`,
+        setting:
+          a.clockPercent < 100
+            ? `클럭 ${a.clockPercent}% 또는 목표 산출 ${a.ratePerMinute}/분`
+            : '100%',
+        why: '채굴기가 모듈 밖 노드 위에 선다. 여기서 나온 벨트가 토대로 들어온다.',
+      });
+    }
+  }
+
+  // 기계 — 공정 순서대로
+  const byGroup = new Map<number, typeof machineBoxes>();
+  for (const mb of machineBoxes) {
+    const list = byGroup.get(mb.gi) ?? [];
+    list.push(mb);
+    byGroup.set(mb.gi, list);
+  }
+  groups.forEach((g, gi) => {
+    const list = (byGroup.get(gi) ?? []).sort((a, b) => a.yM - b.yM || a.xM - b.xM);
+    list.forEach((mb, k) => {
+      step({
+        what: `${g.machineKo} — ${g.itemKo}${list.length > 1 ? ` (${k + 1}/${list.length})` : ''}`,
+        count: 1,
+        where: pos(mb.xM, mb.yM),
+        facing: mb.rotated ? '90도 돌려서 — 입력이 왼쪽을 향하게' : '입력이 위를 향하게',
+        setting:
+          g.clockPercent < 100
+            ? `목표 산출 ${g.outPerMachinePerMinute}/분 (클럭 ${g.clockPercent}%)`
+            : '100%',
+        why:
+          k === 0
+            ? `${g.itemKo}를 만드는 공정. ${g.built}대를 붙여 세운다 — 같은 매니폴드가 먹이므로 사이를 띄우지 않는다.`
+            : undefined,
+      });
+    });
+  });
+
+  const splitterPlacements = placements.filter((p) => p.kind === 'splitter');
+  const mergerPlacements = placements.filter((p) => p.kind === 'merger');
+  for (const a of splitterPlacements) {
+    step({
+      what: '분배기',
+      count: 1,
+      where: pos(a.x * TILE_M, a.y * TILE_M),
+      why: '분배기 하나가 출력 3개로 기계 3대까지 먹인다. 기계와 겹쳐 놓아도 지어진다.',
+    });
+  }
+  for (const a of mergerPlacements) {
+    step({ what: '병합기', count: 1, where: pos(a.x * TILE_M, a.y * TILE_M) });
+  }
+
+  step({
+    what: `${input.belt.ko} — 연결`,
+    count: belts.length,
+    where: '아래 연결 목록대로',
+    why:
+      '기계를 다 세운 뒤 벨트를 잇는다. 먼저 이으면 기계 자리를 잡을 때 걸린다. ' +
+      '매니폴드는 처음에 뒤쪽 기계가 굶는다 — 고장이 아니라 버퍼가 차는 중이다.',
+  });
+
+  if (unreachable.length > 0) {
+    step({
+      what: '직선 캣워크 + 사다리',
+      count: unreachable.length + 1,
+      where: '손이 닿지 않는 기계 위',
+      why: '기계를 붙여 세웠으므로 바닥에서 못 닿는 기계가 있다. 캣워크는 공중에 설치된다.',
+    });
+  }
+
   return {
     targetKo: solved.root.ko,
     targetId: input.targetItemId,
@@ -809,6 +975,7 @@ ${g.itemKo}`,
     mergers,
     lifts,
     unreachableMachines: unreachable.length,
+    buildSteps,
     notes,
   };
 }

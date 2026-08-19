@@ -458,3 +458,55 @@
   color: var(--ink-muted);
   line-height: 1.6;
 }
+
+/* ── 손으로 짓는 순서 */
+.ms-steps {
+  list-style: none;
+  counter-reset: bstep;
+  margin: var(--s3) 0 0;
+  padding: 0;
+}
+.ms-steps > li {
+  counter-increment: bstep;
+  position: relative;
+  padding: var(--s2) 0 var(--s2) 34px;
+  border-top: 1px solid var(--line);
+  font-size: var(--t-body-s);
+}
+.ms-steps > li::before {
+  content: counter(bstep, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: calc(var(--s2) + 2px);
+  width: 26px;
+  font-family: var(--font-mono);
+  font-size: var(--t-caption);
+  color: var(--accent-ink);
+}
+.ms-step-head {
+  display: flex;
+  gap: var(--s2);
+  align-items: baseline;
+}
+.ms-step-what {
+  font-weight: 600;
+}
+.ms-step-where {
+  font-family: var(--font-mono);
+  font-size: var(--t-caption);
+  color: var(--ink);
+}
+.ms-step-facing,
+.ms-step-setting {
+  font-size: var(--t-caption);
+  color: var(--accent-ink);
+}
+.ms-step-why {
+  margin: var(--s1) 0 0;
+  font-size: var(--t-caption);
+  color: var(--ink-muted);
+  line-height: 1.55;
+}
+.ms-links tr.is-branch td {
+  color: var(--ink-muted);
+}
