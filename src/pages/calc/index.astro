@@ -6,11 +6,18 @@
  */
 import Base from '../../layouts/Base.astro';
 import ProductionCalc from '../../components/ProductionCalc.tsx';
-import { buildings, findBuilding, index, item, logistics, nameOf, recipes } from '../../lib/gamedata';
+import {
+  calculatorRecipes,
+  findBuilding,
+  index,
+  logistics,
+  nameOf,
+  producerIndexOf,
+} from '../../lib/gamedata';
 import type { SolverRecipe } from '../../lib/solver';
 
-// 계산에 쓰는 레시피: 기계에서 돌고, 건물을 짓는 레시피가 아닌 것
-const usable = recipes.filter((r) => !r.isBuildingRecipe && r.producedIn.length > 0);
+// 계산에 쓰는 레시피 (원광 변환 레시피 제외 — 자세한 이유는 calculatorRecipes 주석)
+const usable = calculatorRecipes();
 
 const payload: SolverRecipe[] = usable.map((r) => ({
   id: r.id,
@@ -26,13 +33,7 @@ const isAlternate: Record<string, boolean> = {};
 for (const r of usable) isAlternate[r.id] = r.isAlternate;
 
 // 아이템 → 이 아이템을 만드는 레시피들 (표준 먼저, 그다음 대체)
-const producers: Record<string, string[]> = {};
-for (const r of usable) {
-  for (const p of r.products) (producers[p.item] ??= []).push(r.id);
-}
-for (const key of Object.keys(producers)) {
-  producers[key]!.sort((a, b) => Number(isAlternate[a]) - Number(isAlternate[b]));
-}
+const producers = producerIndexOf(usable);
 
 // 이름 사전 — 트리에 등장할 수 있는 모든 아이템
 const names: Record<string, { ko: string; en: string }> = {};

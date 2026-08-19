@@ -12,6 +12,7 @@ import milestonesJson from '../data/app/milestones.json';
 import indexJson from '../data/app/index.json';
 import metaJson from '../data/app/meta.json';
 import type { AppMeta, Building, DataIndex, Item, Milestone, Recipe } from './types.ts';
+import { producerIndex, selectCalculatorRecipes } from './recipe-select.ts';
 
 export const items = itemsJson as Item[];
 export const recipes = recipesJson as Recipe[];
@@ -96,3 +97,10 @@ export function logistics(): { belts: Building[]; pipes: Building[] } {
     .sort((a, b) => (a.pipeFlowM3PerMinute ?? 0) - (b.pipeFlowM3PerMinute ?? 0));
   return { belts, pipes };
 }
+
+/** 계산기가 쓸 레시피 집합 — 규칙과 근거는 recipe-select.ts 참조. */
+export const calculatorRecipes = (): Recipe[] =>
+  selectCalculatorRecipes(recipes, (id) => itemById.get(id)?.kind === 'resource');
+
+/** 아이템 → 기본 레시피가 맨 앞인 레시피 목록. */
+export const producerIndexOf = (list: Recipe[]): Record<string, string[]> => producerIndex(list);
