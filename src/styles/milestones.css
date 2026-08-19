@@ -1,0 +1,182 @@
+/* MilestoneChecklist 아일랜드 스타일. */
+
+.ms-recovered {
+  border-left: 3px solid var(--danger);
+  background: var(--surface);
+  padding: var(--s3) var(--s4);
+  font-size: var(--t-body-s);
+  margin: 0 0 var(--s6);
+}
+
+.ms-now {
+  border-color: var(--accent);
+  margin-bottom: var(--s12);
+}
+.ms-now-label {
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin: 0 0 var(--s2);
+}
+.ms-now-label .n:first-child {
+  color: var(--accent-ink);
+}
+.ms-now-title {
+  font-size: var(--t-h3);
+  font-family: var(--font-body);
+  font-weight: 600;
+  margin-bottom: var(--s3);
+}
+.ms-next {
+  margin: 0;
+  padding-left: 1.4em;
+  font-size: var(--t-body-s);
+}
+.ms-next li {
+  padding: var(--s1) 0;
+}
+.ms-next li::marker {
+  font-family: var(--font-mono);
+  color: var(--accent-ink);
+}
+.ms-next-cost {
+  display: block;
+  color: var(--ink-2);
+  font-size: var(--t-caption);
+}
+
+.ms-tier {
+  margin-bottom: var(--s16);
+  scroll-margin-top: var(--s16);
+}
+.ms-tier-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s4);
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: var(--s2);
+  margin-bottom: var(--s4);
+  flex-wrap: wrap;
+}
+.ms-tier-head h2 {
+  font-size: var(--t-h2);
+}
+.ms-progress {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  font-family: var(--font-mono);
+  font-size: var(--t-caption);
+  color: var(--ink-2);
+}
+.ms-track {
+  display: block;
+  width: 110px;
+  height: 6px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+}
+.ms-fill {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transition: width var(--dur-toggle) ease-out;
+}
+
+.ms-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.ms-list > li {
+  border-bottom: 1px solid var(--line);
+  padding: var(--s3) 0;
+}
+.ms-list > li.is-done .ms-name {
+  color: var(--ink-2);
+  text-decoration: line-through;
+  text-decoration-color: var(--line-strong);
+}
+
+.ms-list label {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s3);
+  cursor: pointer;
+}
+.ms-list input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+  flex: none;
+  cursor: pointer;
+  transition: none;
+}
+.ms-name {
+  font-weight: 600;
+  font-size: var(--t-body);
+}
+
+.ms-cost {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s1);
+  margin: var(--s2) 0 0 30px;
+  align-items: center;
+}
+.ms-unlock {
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.06em;
+  color: var(--ink-2);
+  margin-left: var(--s2);
+}
+
+.ms-advice {
+  margin: var(--s3) 0 0 30px;
+  border-left: 3px solid var(--accent);
+  padding: var(--s2) var(--s4);
+  background: var(--surface);
+}
+.ms-advice p {
+  margin: 0 0 var(--s2);
+  font-size: var(--t-body-s);
+  max-width: var(--measure);
+}
+.ms-advice p:last-child {
+  margin-bottom: 0;
+}
+.ms-why {
+  color: var(--ink-2);
+}
+.ms-dispute {
+  color: var(--ink-2);
+}
+.ms-dispute .note-title {
+  color: var(--danger);
+}
+.ms-src {
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.04em;
+  color: var(--ink-2);
+}
+
+.ms-tier-note {
+  border-left: 3px solid var(--line-strong);
+  padding: var(--s2) var(--s4);
+  font-size: var(--t-body-s);
+  color: var(--ink-2);
+  margin: var(--s4) 0 0;
+  max-width: var(--measure);
+}
+
+@media (max-width: 560px) {
+  .ms-cost,
+  .ms-advice {
+    margin-left: 0;
+  }
+}

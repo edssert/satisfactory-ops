@@ -1,0 +1,138 @@
+/*
+ * tokens.css — docs/DESIGN-BRIEF.md §03(팔레트) · §04(타이포) · §04-간격 의 실행본.
+ *
+ * 이 파일의 값은 브리프에서 그대로 옮긴 것이다. 여기서 임의로 바꾸지 않는다.
+ * 브리프와 어긋나야 할 이유가 생기면 ADR을 쓰고 브리프를 개정한 뒤 여기를 고친다.
+ * 예외 1건: 폰트 역할 배정 — docs/adr/0018-typography-system-fonts.md 참조.
+ */
+
+/* ---------------------------------------------------------------- 폰트 */
+/* 수치용만 자체 호스팅한다(라틴 서브셋). 표시·본문은 시스템 스택. ADR-0018 */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/ibm-plex-mono-latin-400-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../fonts/ibm-plex-mono-latin-500-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  /* 팔레트 — 라이트(문서: 콘크리트 웜 뉴트럴). 브리프 §03 */
+  --bg: #f7f5f3;
+  --surface: #ffffff;
+  --surface-2: #eeebea;
+  --ink: #1a1c20;
+  --ink-2: #5a6069;
+  --accent: #c25e1e;
+  --accent-ink: #8f4415;
+  --line: #d8d3ce;
+  --line-strong: #8b857d;
+  --danger: #b3261e;
+  --ok: #2e7d1e;
+  /* 경고색을 따로 만들지 않는다 — 경고가 곧 브랜드다. 브리프 §03 기능색 */
+  --warn: var(--accent);
+  /* 오렌지 채움 위의 글자색 */
+  --on-accent: #ffffff;
+  /* 미확정 자원 색 (브리프 §03 규칙 R2) */
+  --res-unverified: #7a7a7a;
+
+  /* 타이포 — 브리프 §04 + ADR-0018 */
+  --font-display: 'Bahnschrift', 'DIN Alternate', 'Pretendard Variable', Pretendard,
+    -apple-system, 'Segoe UI', 'Malgun Gothic', sans-serif;
+  --font-body: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont,
+    'Segoe UI Variable Text', 'Segoe UI', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Consolas, D2Coding, monospace;
+
+  /* 스케일 — 브리프 §04 (PC / 모바일) */
+  --t-display: clamp(40px, 6vw, 60px);
+  --t-h1: clamp(28px, 4.2vw, 40px);
+  --t-h2: clamp(24px, 3vw, 32px);
+  --t-h3: clamp(22px, 2vw, 24px);
+  --t-body-l: 19px;
+  --t-body: 17px;
+  --t-body-s: 15px;
+  --t-caption: 13px;
+  --t-label: 12px;
+
+  /* 간격 — 4px 배수. 이 밖의 값 금지. 브리프 §04 */
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s6: 24px;
+  --s8: 32px;
+  --s12: 48px;
+  --s16: 64px;
+  --s24: 96px;
+
+  /* 형태 — 브리프 §07-5 */
+  --radius: 4px;
+  --radius-chip: 2px;
+  --container: 1200px;
+  --measure: 42em;
+
+  /* 모션 — 브리프 §06 화이트리스트 */
+  --dur-color: 90ms;
+  --dur-toggle: 120ms;
+  --dur-disclosure: 180ms;
+  --dur-result: 200ms;
+  --dur-stage: 300ms;
+
+  color-scheme: light dark;
+}
+
+/* 다크(현장 HUD: 청색 편향 차콜). 라이트의 반전이 아니라 독립 정의. 브리프 §07-10 */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #14161a;
+    --surface: #1c1f24;
+    --surface-2: #23272e;
+    --ink: #e4e1dd;
+    --ink-2: #9aa1ab;
+    --accent: #fa9549;
+    --accent-ink: #ffb877;
+    --line: #2e333b;
+    --line-strong: #69717c;
+    --danger: #ff6b5a;
+    --ok: #7bd455;
+    --on-accent: #14161a;
+    --res-unverified: #8b8b8b;
+  }
+}
+
+:root[data-theme='dark'] {
+  --bg: #14161a;
+  --surface: #1c1f24;
+  --surface-2: #23272e;
+  --ink: #e4e1dd;
+  --ink-2: #9aa1ab;
+  --accent: #fa9549;
+  --accent-ink: #ffb877;
+  --line: #2e333b;
+  --line-strong: #69717c;
+  --danger: #ff6b5a;
+  --ok: #7bd455;
+  --on-accent: #14161a;
+  --res-unverified: #8b8b8b;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-color: 0.01ms;
+    --dur-toggle: 0.01ms;
+    --dur-disclosure: 0.01ms;
+    --dur-result: 0.01ms;
+    --dur-stage: 0.01ms;
+  }
+}

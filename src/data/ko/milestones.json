@@ -1,0 +1,1952 @@
+[
+  {
+    "className": "Schematic_1-1_C",
+    "name": "기초 건축물",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 1,
+    "cost": [
+      {
+        "item": "Desc_Cement_C",
+        "name": "콘크리트",
+        "amount": 200
+      },
+      {
+        "item": "Desc_IronPlate_C",
+        "name": "철판",
+        "amount": 100
+      },
+      {
+        "item": "Desc_IronRod_C",
+        "name": "철봉",
+        "amount": 100
+      }
+    ],
+    "timeToCompleteSec": 120,
+    "menuPriority": 1,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_LookoutTower_C",
+        "Recipe_Foundation_8x1_01_C",
+        "Recipe_Foundation_8x2_01_C",
+        "Recipe_Foundation_8x4_01_C",
+        "Recipe_Ramp_8x1_01_C",
+        "Recipe_Ramp_8x2_01_C",
+        "Recipe_Ramp_8x4_01_C",
+        "Recipe_Wall_8x4_01_C",
+        "Recipe_Wall_Orange_8x1_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_1-2_C",
+    "name": "물류",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 1,
+    "cost": [
+      {
+        "item": "Desc_IronPlate_C",
+        "name": "철판",
+        "amount": 150
+      },
+      {
+        "item": "Desc_IronRod_C",
+        "name": "철봉",
+        "amount": 150
+      },
+      {
+        "item": "Desc_Wire_C",
+        "name": "전선",
+        "amount": 300
+      }
+    ],
+    "timeToCompleteSec": 240,
+    "menuPriority": 2,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_ConveyorAttachmentSplitter_C",
+        "Recipe_ConveyorAttachmentMerger_C",
+        "Recipe_ConveyorLiftMk1_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": [
+        "BP_UnlockBuildEfficiency_C"
+      ]
+    }
+  },
+  {
+    "className": "Schematic_1-3_C",
+    "name": "현장 연구",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 1,
+    "cost": [
+      {
+        "item": "Desc_Wire_C",
+        "name": "전선",
+        "amount": 300
+      },
+      {
+        "item": "Desc_IronScrew_C",
+        "name": "나사",
+        "amount": 300
+      },
+      {
+        "item": "Desc_IronPlate_C",
+        "name": "철판",
+        "amount": 100
+      }
+    ],
+    "timeToCompleteSec": 180,
+    "menuPriority": 3,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_Mam_C",
+        "Recipe_ObjectScanner_C",
+        "Recipe_StoragePlayer_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 3,
+      "armSlots": 0,
+      "other": [
+        "BP_UnlockMap_C"
+      ]
+    }
+  },
+  {
+    "className": "Schematic_2-1_C",
+    "name": "부품 조립",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 2,
+    "cost": [
+      {
+        "item": "Desc_Cable_C",
+        "name": "케이블",
+        "amount": 200
+      },
+      {
+        "item": "Desc_IronRod_C",
+        "name": "철봉",
+        "amount": 200
+      },
+      {
+        "item": "Desc_IronScrew_C",
+        "name": "나사",
+        "amount": 500
+      },
+      {
+        "item": "Desc_IronPlate_C",
+        "name": "철판",
+        "amount": 300
+      }
+    ],
+    "timeToCompleteSec": 360,
+    "menuPriority": 1,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_AssemblerMk1_C",
+        "Recipe_CopperSheet_C",
+        "Recipe_Rotor_C",
+        "Recipe_ModularFrame_C",
+        "Recipe_SpaceElevatorPart_1_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_2-2_C",
+    "name": "장애물 제거",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 2,
+    "cost": [
+      {
+        "item": "Desc_IronScrew_C",
+        "name": "나사",
+        "amount": 500
+      },
+      {
+        "item": "Desc_Cable_C",
+        "name": "케이블",
+        "amount": 100
+      },
+      {
+        "item": "Desc_Cement_C",
+        "name": "콘크리트",
+        "amount": 100
+      }
+    ],
+    "timeToCompleteSec": 180,
+    "menuPriority": 2,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_Chainsaw_C",
+        "Recipe_Biofuel_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 3,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_2-3_C",
+    "name": "점프 패드",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 2,
+    "cost": [
+      {
+        "item": "Desc_Rotor_C",
+        "name": "회전자",
+        "amount": 50
+      },
+      {
+        "item": "Desc_IronPlate_C",
+        "name": "철판",
+        "amount": 300
+      },
+      {
+        "item": "Desc_Cable_C",
+        "name": "케이블",
+        "amount": 150
+      }
+    ],
+    "timeToCompleteSec": 240,
+    "menuPriority": 3,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_JumpPadAdjustable_C",
+        "Recipe_UJellyLandingPad_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_2-5_C",
+    "name": "자원 싱크 보너스 프로그램",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 2,
+    "cost": [
+      {
+        "item": "Desc_Cement_C",
+        "name": "콘크리트",
+        "amount": 400
+      },
+      {
+        "item": "Desc_Wire_C",
+        "name": "전선",
+        "amount": 500
+      },
+      {
+        "item": "Desc_IronRod_C",
+        "name": "철봉",
+        "amount": 200
+      },
+      {
+        "item": "Desc_IronPlate_C",
+        "name": "철판",
+        "amount": 200
+      }
+    ],
+    "timeToCompleteSec": 300,
+    "menuPriority": 4,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_ResourceSink_C",
+        "Recipe_ResourceSinkShop_C"
+      ],
+      "schematics": [
+        "CustomizerUnlock_ColourSwatches_C",
+        "CustomizerUnlock_PipelineSwatch_C"
+      ],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": [
+        "BP_UnlockInfoOnly_C"
+      ]
+    }
+  },
+  {
+    "className": "Schematic_3-2_C",
+    "name": "물류 Mk.2",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 2,
+    "cost": [
+      {
+        "item": "Desc_IronPlateReinforced_C",
+        "name": "보강된 철판",
+        "amount": 50
+      },
+      {
+        "item": "Desc_Cement_C",
+        "name": "콘크리트",
+        "amount": 200
+      },
+      {
+        "item": "Desc_IronRod_C",
+        "name": "철봉",
+        "amount": 300
+      },
+      {
+        "item": "Desc_IronPlate_C",
+        "name": "철판",
+        "amount": 300
+      }
+    ],
+    "timeToCompleteSec": 360,
+    "menuPriority": 5,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_ConveyorBeltMk2_C",
+        "Recipe_ConveyorPoleStackable_C",
+        "Recipe_ConveyorLiftMk2_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_3-1_C",
+    "name": "석탄 동력",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 3,
+    "cost": [
+      {
+        "item": "Desc_IronPlateReinforced_C",
+        "name": "보강된 철판",
+        "amount": 150
+      },
+      {
+        "item": "Desc_Rotor_C",
+        "name": "회전자",
+        "amount": 50
+      },
+      {
+        "item": "Desc_Cable_C",
+        "name": "케이블",
+        "amount": 500
+      }
+    ],
+    "timeToCompleteSec": 480,
+    "menuPriority": 1,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_GeneratorCoal_C",
+        "Recipe_WaterPump_C",
+        "Recipe_Pipeline_C",
+        "Recipe_PipeSupport_C",
+        "Recipe_PipelineJunction_Cross_C",
+        "Recipe_PipelineJunction_T_C",
+        "Recipe_PipelinePump_C",
+        "Recipe_PipeStorageTank_C"
+      ],
+      "schematics": [
+        "CustomizerUnlock_PipelineSwatch_C"
+      ],
+      "items": [],
+      "scannables": [
+        "Desc_Coal_C"
+      ],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_3-3_C",
+    "name": "차량 운송",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 3,
+    "cost": [
+      {
+        "item": "Desc_ModularFrame_C",
+        "name": "모듈식 골조",
+        "amount": 25
+      },
+      {
+        "item": "Desc_Rotor_C",
+        "name": "회전자",
+        "amount": 100
+      },
+      {
+        "item": "Desc_Cable_C",
+        "name": "케이블",
+        "amount": 200
+      },
+      {
+        "item": "Desc_IronPlate_C",
+        "name": "철판",
+        "amount": 400
+      }
+    ],
+    "timeToCompleteSec": 240,
+    "menuPriority": 2,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_Tractor_C",
+        "Recipe_TruckStation_C",
+        "Recipe_VehiclePath_Tractor_C",
+        "Recipe_VehiclePath_Universal_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 3,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_3-4_C",
+    "name": "기본 철강 생산",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 3,
+    "cost": [
+      {
+        "item": "Desc_ModularFrame_C",
+        "name": "모듈식 골조",
+        "amount": 50
+      },
+      {
+        "item": "Desc_Rotor_C",
+        "name": "회전자",
+        "amount": 150
+      },
+      {
+        "item": "Desc_Cement_C",
+        "name": "콘크리트",
+        "amount": 500
+      },
+      {
+        "item": "Desc_Wire_C",
+        "name": "전선",
+        "amount": 1000
+      }
+    ],
+    "timeToCompleteSec": 480,
+    "menuPriority": 3,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_SmelterMk1_C",
+        "Recipe_IngotSteel_C",
+        "Recipe_SteelBeam_C",
+        "Recipe_SteelPipe_C",
+        "Recipe_SpaceElevatorPart_2_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": [
+        "BP_UnlockInfoOnly_C"
+      ]
+    }
+  },
+  {
+    "className": "Schematic_4-2_C",
+    "name": "강화된 에셋 보안",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 3,
+    "cost": [
+      {
+        "item": "Desc_IronPlateReinforced_C",
+        "name": "보강된 철판",
+        "amount": 100
+      },
+      {
+        "item": "Desc_IronRod_C",
+        "name": "철봉",
+        "amount": 600
+      },
+      {
+        "item": "Desc_Wire_C",
+        "name": "전선",
+        "amount": 1500
+      }
+    ],
+    "timeToCompleteSec": 180,
+    "menuPriority": 4,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_XenoBasher_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 3,
+      "armSlots": 1,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_4-5_C",
+    "name": "FICSIT 청사진",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 4,
+    "cost": [
+      {
+        "item": "Desc_ModularFrame_C",
+        "name": "모듈식 골조",
+        "amount": 100
+      },
+      {
+        "item": "Desc_SteelPlate_C",
+        "name": "강철 빔",
+        "amount": 200
+      },
+      {
+        "item": "Desc_Cable_C",
+        "name": "케이블",
+        "amount": 500
+      },
+      {
+        "item": "Desc_Cement_C",
+        "name": "콘크리트",
+        "amount": 1000
+      }
+    ],
+    "timeToCompleteSec": 300,
+    "menuPriority": 1,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_BlueprintDesigner_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": [
+        "BP_UnlockInfoOnly_C",
+        "BP_UnlockBlueprints_C"
+      ]
+    }
+  },
+  {
+    "className": "Schematic_5-3_C",
+    "name": "물류 Mk.3",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 4,
+    "cost": [
+      {
+        "item": "Desc_SteelPlate_C",
+        "name": "강철 빔",
+        "amount": 200
+      },
+      {
+        "item": "Desc_SteelPipe_C",
+        "name": "강철 파이프",
+        "amount": 200
+      },
+      {
+        "item": "Desc_IronPlateReinforced_C",
+        "name": "보강된 철판",
+        "amount": 400
+      }
+    ],
+    "timeToCompleteSec": 300,
+    "menuPriority": 2,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_StorageContainerMk2_C",
+        "Recipe_ConveyorBeltMk3_C",
+        "Recipe_ConveyorLiftMk3_C",
+        "Recipe_PipeSupportStackable_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_4-1_C",
+    "name": "고급 철강 생산",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 4,
+    "cost": [
+      {
+        "item": "Desc_SteelPipe_C",
+        "name": "강철 파이프",
+        "amount": 100
+      },
+      {
+        "item": "Desc_ModularFrame_C",
+        "name": "모듈식 골조",
+        "amount": 100
+      },
+      {
+        "item": "Desc_Rotor_C",
+        "name": "회전자",
+        "amount": 200
+      },
+      {
+        "item": "Desc_Cement_C",
+        "name": "콘크리트",
+        "amount": 500
+      }
+    ],
+    "timeToCompleteSec": 600,
+    "menuPriority": 3,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_MinerMk2_C",
+        "Recipe_EncasedIndustrialBeam_C",
+        "Recipe_Stator_C",
+        "Recipe_Motor_C",
+        "Recipe_SpaceElevatorPart_3_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_4-3_C",
+    "name": "확장 동력 인프라",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 4,
+    "cost": [
+      {
+        "item": "Desc_SteelPlateReinforced_C",
+        "name": "포장된 산업용 빔",
+        "amount": 50
+      },
+      {
+        "item": "Desc_SteelPlate_C",
+        "name": "강철 빔",
+        "amount": 100
+      },
+      {
+        "item": "Desc_ModularFrame_C",
+        "name": "모듈식 골조",
+        "amount": 200
+      },
+      {
+        "item": "Desc_Wire_C",
+        "name": "전선",
+        "amount": 2000
+      }
+    ],
+    "timeToCompleteSec": 300,
+    "menuPriority": 4,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_PowerStorageMk1_C",
+        "Recipe_PowerTower_C",
+        "Recipe_PowerTowerPlatform_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_4-4_C",
+    "name": "하이퍼튜브",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 4,
+    "cost": [
+      {
+        "item": "Desc_SteelPlateReinforced_C",
+        "name": "포장된 산업용 빔",
+        "amount": 50
+      },
+      {
+        "item": "Desc_SteelPipe_C",
+        "name": "강철 파이프",
+        "amount": 300
+      },
+      {
+        "item": "Desc_CopperSheet_C",
+        "name": "구리판",
+        "amount": 500
+      }
+    ],
+    "timeToCompleteSec": 600,
+    "menuPriority": 5,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_PipeHyperStart_C",
+        "Recipe_PipeHyper_C",
+        "Recipe_PipeHyperSupport_C",
+        "Recipe_HyperPoleStackable_C",
+        "Recipe_HyperTubeJunction_C",
+        "Recipe_HyperTubeTJunction_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_6-2_C",
+    "name": "제트팩",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 5,
+    "cost": [
+      {
+        "item": "Desc_Motor_C",
+        "name": "모터",
+        "amount": 50
+      },
+      {
+        "item": "Desc_Cable_C",
+        "name": "케이블",
+        "amount": 1000
+      },
+      {
+        "item": "Desc_IronPlate_C",
+        "name": "철판",
+        "amount": 1000
+      }
+    ],
+    "timeToCompleteSec": 300,
+    "menuPriority": 1,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_JetPack_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 3,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_5-1_C",
+    "name": "원유 처리",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 5,
+    "cost": [
+      {
+        "item": "Desc_Motor_C",
+        "name": "모터",
+        "amount": 50
+      },
+      {
+        "item": "Desc_SteelPlateReinforced_C",
+        "name": "포장된 산업용 빔",
+        "amount": 100
+      },
+      {
+        "item": "Desc_SteelPipe_C",
+        "name": "강철 파이프",
+        "amount": 500
+      },
+      {
+        "item": "Desc_CopperSheet_C",
+        "name": "구리판",
+        "amount": 500
+      }
+    ],
+    "timeToCompleteSec": 600,
+    "menuPriority": 2,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_PetroleumCoke_C",
+        "Recipe_CircuitBoard_C",
+        "Recipe_OilPump_C",
+        "Recipe_OilRefinery_C",
+        "Recipe_Valve_C",
+        "Recipe_Plastic_C",
+        "Recipe_Rubber_C",
+        "Recipe_LiquidFuel_C"
+      ],
+      "schematics": [
+        "Schematic_5-1-1_C"
+      ],
+      "items": [],
+      "scannables": [
+        "Desc_LiquidOil_C"
+      ],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": [
+        "BP_UnlockInfoOnly_C",
+        "BP_UnlockInfoOnly_C",
+        "BP_UnlockInfoOnly_C"
+      ]
+    }
+  },
+  {
+    "className": "Schematic_6-1_C",
+    "name": "물류 Mk.4",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 5,
+    "cost": [
+      {
+        "item": "Desc_Rubber_C",
+        "name": "고무",
+        "amount": 200
+      },
+      {
+        "item": "Desc_SteelPlateReinforced_C",
+        "name": "포장된 산업용 빔",
+        "amount": 300
+      },
+      {
+        "item": "Desc_ModularFrame_C",
+        "name": "모듈식 골조",
+        "amount": 400
+      }
+    ],
+    "timeToCompleteSec": 300,
+    "menuPriority": 3,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_ConveyorBeltMk4_C",
+        "Recipe_ConveyorLiftMk4_C",
+        "Recipe_Truck_C",
+        "Recipe_FluidTruck_C",
+        "Recipe_FluidTruckStation_C",
+        "Recipe_VehiclePath_Truck_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_5-4_C",
+    "name": "유체 포장",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 5,
+    "cost": [
+      {
+        "item": "Desc_Plastic_C",
+        "name": "플라스틱",
+        "amount": 200
+      },
+      {
+        "item": "Desc_SteelPlate_C",
+        "name": "강철 빔",
+        "amount": 400
+      },
+      {
+        "item": "Desc_CopperSheet_C",
+        "name": "구리판",
+        "amount": 1000
+      }
+    ],
+    "timeToCompleteSec": 300,
+    "menuPriority": 4,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_Packager_C",
+        "Recipe_FluidCanister_C",
+        "Recipe_PackagedWater_C",
+        "Recipe_PackagedCrudeOil_C",
+        "Recipe_Fuel_C",
+        "Recipe_PackagedOilResidue_C",
+        "Recipe_PackagedBiofuel_C",
+        "Recipe_LiquidBiofuel_C"
+      ],
+      "schematics": [
+        "Schematic_5-4-1_C"
+      ],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_5-5_C",
+    "name": "석유 발전",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 5,
+    "cost": [
+      {
+        "item": "Desc_Motor_C",
+        "name": "모터",
+        "amount": 100
+      },
+      {
+        "item": "Desc_SteelPlateReinforced_C",
+        "name": "포장된 산업용 빔",
+        "amount": 100
+      },
+      {
+        "item": "Desc_Rubber_C",
+        "name": "고무",
+        "amount": 200
+      },
+      {
+        "item": "Desc_Plastic_C",
+        "name": "플라스틱",
+        "amount": 200
+      }
+    ],
+    "timeToCompleteSec": 600,
+    "menuPriority": 5,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_GeneratorFuel_C",
+        "Recipe_IndustrialTank_C"
+      ],
+      "schematics": [
+        "Schematic_5-5-1_C"
+      ],
+      "items": [],
+      "scannables": [
+        "Desc_OreGold_C"
+      ],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_5-2_C",
+    "name": "산업용 제조",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 6,
+    "cost": [
+      {
+        "item": "Desc_Motor_C",
+        "name": "모터",
+        "amount": 200
+      },
+      {
+        "item": "Desc_ModularFrame_C",
+        "name": "모듈식 골조",
+        "amount": 200
+      },
+      {
+        "item": "Desc_Plastic_C",
+        "name": "플라스틱",
+        "amount": 400
+      },
+      {
+        "item": "Desc_Cable_C",
+        "name": "케이블",
+        "amount": 1000
+      }
+    ],
+    "timeToCompleteSec": 900,
+    "menuPriority": 1,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_ManufacturerMk1_C",
+        "Recipe_Computer_C",
+        "Recipe_ModularFrameHeavy_C",
+        "Recipe_SpaceElevatorPart_4_C",
+        "Recipe_SpaceElevatorPart_5_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_6-3_C",
+    "name": "모노레일 열차 기술",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 6,
+    "cost": [
+      {
+        "item": "Desc_Motor_C",
+        "name": "모터",
+        "amount": 250
+      },
+      {
+        "item": "Desc_SteelPlateReinforced_C",
+        "name": "포장된 산업용 빔",
+        "amount": 500
+      },
+      {
+        "item": "Desc_SteelPlate_C",
+        "name": "강철 빔",
+        "amount": 1000
+      },
+      {
+        "item": "Desc_SteelPipe_C",
+        "name": "강철 파이프",
+        "amount": 1000
+      }
+    ],
+    "timeToCompleteSec": 600,
+    "menuPriority": 2,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_Locomotive_C",
+        "Recipe_FreightWagon_C",
+        "Recipe_RailroadTrack_C",
+        "Recipe_TrainStation_C",
+        "Recipe_TrainDockingStation_C",
+        "Recipe_TrainDockingStationLiquid_C",
+        "Recipe_TrainPlatformEmpty_C",
+        "Recipe_TrainPlatformEmpty_02_C",
+        "Recipe_RailroadEndStop_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_6-7_C",
+    "name": "철도 신호",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 6,
+    "cost": [
+      {
+        "item": "Desc_Computer_C",
+        "name": "컴퓨터",
+        "amount": 50
+      },
+      {
+        "item": "Desc_SteelPipe_C",
+        "name": "강철 파이프",
+        "amount": 400
+      },
+      {
+        "item": "Desc_CopperSheet_C",
+        "name": "구리판",
+        "amount": 1000
+      }
+    ],
+    "timeToCompleteSec": 300,
+    "menuPriority": 3,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_RailroadBlockSignal_C",
+        "Recipe_RailroadPathSignal_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_6-5_C",
+    "name": "파이프라인 공학 Mk.2",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 6,
+    "cost": [
+      {
+        "item": "Desc_ModularFrameHeavy_C",
+        "name": "고중량 모듈식 골조",
+        "amount": 50
+      },
+      {
+        "item": "Desc_Plastic_C",
+        "name": "플라스틱",
+        "amount": 1000
+      },
+      {
+        "item": "Desc_Rubber_C",
+        "name": "고무",
+        "amount": 1000
+      }
+    ],
+    "timeToCompleteSec": 300,
+    "menuPriority": 4,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_PipelineMK2_C",
+        "Recipe_PipelinePumpMK2_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_6-6_C",
+    "name": "FICSIT 청사진 Mk.2",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 6,
+    "cost": [
+      {
+        "item": "Desc_ModularFrameHeavy_C",
+        "name": "고중량 모듈식 골조",
+        "amount": 100
+      },
+      {
+        "item": "Desc_Computer_C",
+        "name": "컴퓨터",
+        "amount": 100
+      },
+      {
+        "item": "Desc_Rubber_C",
+        "name": "고무",
+        "amount": 400
+      },
+      {
+        "item": "Desc_Cement_C",
+        "name": "콘크리트",
+        "amount": 1500
+      }
+    ],
+    "timeToCompleteSec": 600,
+    "menuPriority": 5,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_BlueprintDesigner_Mk2_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_7-1_C",
+    "name": "보크사이트 정제",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 7,
+    "cost": [
+      {
+        "item": "Desc_Computer_C",
+        "name": "컴퓨터",
+        "amount": 100
+      },
+      {
+        "item": "Desc_ModularFrameHeavy_C",
+        "name": "고중량 모듈식 골조",
+        "amount": 100
+      },
+      {
+        "item": "Desc_Motor_C",
+        "name": "모터",
+        "amount": 250
+      },
+      {
+        "item": "Desc_Rubber_C",
+        "name": "고무",
+        "amount": 500
+      }
+    ],
+    "timeToCompleteSec": 600,
+    "menuPriority": 1,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_AluminaSolution_C",
+        "Recipe_PackagedAlumina_C",
+        "Recipe_AluminumScrap_C",
+        "Recipe_IngotAluminum_C",
+        "Recipe_AluminumSheet_C",
+        "Recipe_AluminumCasing_C"
+      ],
+      "schematics": [
+        "Schematic_7-1-1_C"
+      ],
+      "items": [],
+      "scannables": [
+        "Desc_OreBauxite_C",
+        "Desc_RawQuartz_C"
+      ],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_8-3_C",
+    "name": "호버팩",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 7,
+    "cost": [
+      {
+        "item": "Desc_AluminumPlate_C",
+        "name": "알클래드 알루미늄 판",
+        "amount": 100
+      },
+      {
+        "item": "Desc_ModularFrameHeavy_C",
+        "name": "고중량 모듈식 골조",
+        "amount": 100
+      },
+      {
+        "item": "Desc_Computer_C",
+        "name": "컴퓨터",
+        "amount": 100
+      },
+      {
+        "item": "Desc_Motor_C",
+        "name": "모터",
+        "amount": 250
+      }
+    ],
+    "timeToCompleteSec": 300,
+    "menuPriority": 2,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_Hoverpack_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 3,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_7-2_C",
+    "name": "물류 Mk.5",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 7,
+    "cost": [
+      {
+        "item": "Desc_AluminumPlate_C",
+        "name": "알클래드 알루미늄 판",
+        "amount": 200
+      },
+      {
+        "item": "Desc_SteelPlateReinforced_C",
+        "name": "포장된 산업용 빔",
+        "amount": 400
+      },
+      {
+        "item": "Desc_IronPlateReinforced_C",
+        "name": "보강된 철판",
+        "amount": 600
+      }
+    ],
+    "timeToCompleteSec": 300,
+    "menuPriority": 3,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_ConveyorBeltMk5_C",
+        "Recipe_ConveyorLiftMk5_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_7-3_C",
+    "name": "방호복",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 7,
+    "cost": [
+      {
+        "item": "Desc_Filter_C",
+        "name": "가스 필터",
+        "amount": 50
+      },
+      {
+        "item": "Desc_AluminumCasing_C",
+        "name": "알루미늄 케이스",
+        "amount": 100
+      },
+      {
+        "item": "Desc_HighSpeedWire_C",
+        "name": "고속 전선",
+        "amount": 500
+      }
+    ],
+    "timeToCompleteSec": 300,
+    "menuPriority": 4,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_HazmatSuit_C",
+        "Recipe_FilterHazmat_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 3,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_7-5_C",
+    "name": "제어 시스템 개발",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 7,
+    "cost": [
+      {
+        "item": "Desc_AluminumPlate_C",
+        "name": "알클래드 알루미늄 판",
+        "amount": 200
+      },
+      {
+        "item": "Desc_AluminumCasing_C",
+        "name": "알루미늄 케이스",
+        "amount": 400
+      },
+      {
+        "item": "Desc_Computer_C",
+        "name": "컴퓨터",
+        "amount": 200
+      },
+      {
+        "item": "Desc_Plastic_C",
+        "name": "플라스틱",
+        "amount": 1000
+      }
+    ],
+    "timeToCompleteSec": 900,
+    "menuPriority": 5,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_SulfuricAcid_C",
+        "Recipe_PackagedSulfuricAcid_C",
+        "Recipe_Battery_C",
+        "Recipe_RadioControlUnit_C",
+        "Recipe_ComputerSuper_C",
+        "Recipe_SpaceElevatorPart_7_C",
+        "Recipe_Blender_C"
+      ],
+      "schematics": [
+        "Schematic_7-4-1_C"
+      ],
+      "items": [],
+      "scannables": [
+        "Desc_Sulfur_C"
+      ],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_7-4_C",
+    "name": "항공 공학",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 8,
+    "cost": [
+      {
+        "item": "Desc_ModularFrameLightweight_C",
+        "name": "무선 제어 장치",
+        "amount": 50
+      },
+      {
+        "item": "Desc_AluminumPlate_C",
+        "name": "알클래드 알루미늄 판",
+        "amount": 100
+      },
+      {
+        "item": "Desc_AluminumCasing_C",
+        "name": "알루미늄 케이스",
+        "amount": 200
+      },
+      {
+        "item": "Desc_Motor_C",
+        "name": "모터",
+        "amount": 300
+      }
+    ],
+    "timeToCompleteSec": 600,
+    "menuPriority": 1,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_DroneTransport_C",
+        "Recipe_DroneStation_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_8-1_C",
+    "name": "원자력",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 8,
+    "cost": [
+      {
+        "item": "Desc_ComputerSuper_C",
+        "name": "슈퍼컴퓨터",
+        "amount": 50
+      },
+      {
+        "item": "Desc_ModularFrameHeavy_C",
+        "name": "고중량 모듈식 골조",
+        "amount": 200
+      },
+      {
+        "item": "Desc_Cable_C",
+        "name": "케이블",
+        "amount": 1000
+      },
+      {
+        "item": "Desc_Cement_C",
+        "name": "콘크리트",
+        "amount": 2000
+      }
+    ],
+    "timeToCompleteSec": 900,
+    "menuPriority": 2,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_UraniumCell_C",
+        "Recipe_ElectromagneticControlRod_C",
+        "Recipe_NuclearFuelRod_C",
+        "Recipe_GeneratorNuclear_C",
+        "Recipe_SpaceElevatorPart_6_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [
+        "Desc_OreUranium_C"
+      ],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_8-2_C",
+    "name": "고급 알루미늄 생산",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 8,
+    "cost": [
+      {
+        "item": "Desc_ModularFrameLightweight_C",
+        "name": "무선 제어 장치",
+        "amount": 50
+      },
+      {
+        "item": "Desc_AluminumCasing_C",
+        "name": "알루미늄 케이스",
+        "amount": 200
+      },
+      {
+        "item": "Desc_AluminumPlate_C",
+        "name": "알클래드 알루미늄 판",
+        "amount": 400
+      },
+      {
+        "item": "Desc_Wire_C",
+        "name": "전선",
+        "amount": 3000
+      }
+    ],
+    "timeToCompleteSec": 900,
+    "menuPriority": 3,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_FrackingSmasher_C",
+        "Recipe_FrackingExtractor_C",
+        "Recipe_GasTank_C",
+        "Recipe_PackagedNitrogen_C",
+        "Recipe_HeatSink_C",
+        "Recipe_CoolingSystem_C",
+        "Recipe_FusedModularFrame_C"
+      ],
+      "schematics": [
+        "Schematic_8-2-1_C"
+      ],
+      "items": [],
+      "scannables": [
+        "Desc_Water_C",
+        "Desc_LiquidOil_C",
+        "Desc_NitrogenGas_C"
+      ],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_8-4_C",
+    "name": "최첨단 생산",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 8,
+    "cost": [
+      {
+        "item": "Desc_ModularFrameFused_C",
+        "name": "융합된 모듈식 골조",
+        "amount": 50
+      },
+      {
+        "item": "Desc_ComputerSuper_C",
+        "name": "슈퍼컴퓨터",
+        "amount": 100
+      },
+      {
+        "item": "Desc_SteelPipe_C",
+        "name": "강철 파이프",
+        "amount": 1000
+      }
+    ],
+    "timeToCompleteSec": 300,
+    "menuPriority": 4,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_MotorTurbo_C",
+        "Recipe_MinerMk3_C",
+        "Recipe_SpaceElevatorPart_8_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_8-5_C",
+    "name": "입자 농축",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 8,
+    "cost": [
+      {
+        "item": "Desc_MotorLightweight_C",
+        "name": "터보 모터",
+        "amount": 50
+      },
+      {
+        "item": "Desc_ModularFrameFused_C",
+        "name": "융합된 모듈식 골조",
+        "amount": 100
+      },
+      {
+        "item": "Desc_CoolingSystem_C",
+        "name": "냉각 시스템",
+        "amount": 200
+      },
+      {
+        "item": "Desc_HighSpeedWire_C",
+        "name": "고속 전선",
+        "amount": 2500
+      }
+    ],
+    "timeToCompleteSec": 1200,
+    "menuPriority": 5,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_NitricAcid_C",
+        "Recipe_PackagedNitricAcid_C",
+        "Recipe_NonFissileUranium_C",
+        "Recipe_Plutonium_C",
+        "Recipe_PlutoniumCell_C",
+        "Recipe_PlutoniumFuelRod_C",
+        "Recipe_HadronCollider_C",
+        "Recipe_CopperDust_C",
+        "Recipe_PressureConversionCube_C",
+        "Recipe_SpaceElevatorPart_9_C"
+      ],
+      "schematics": [
+        "Schematic_8-5-1_C"
+      ],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_9-1_C",
+    "name": "물질 변환",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 9,
+    "cost": [
+      {
+        "item": "Desc_ModularFrameFused_C",
+        "name": "융합된 모듈식 골조",
+        "amount": 100
+      },
+      {
+        "item": "Desc_ModularFrameLightweight_C",
+        "name": "무선 제어 장치",
+        "amount": 250
+      },
+      {
+        "item": "Desc_CoolingSystem_C",
+        "name": "냉각 시스템",
+        "amount": 500
+      }
+    ],
+    "timeToCompleteSec": 900,
+    "menuPriority": 1,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_Converter_C",
+        "Recipe_FicsiteIngot_Iron_C",
+        "Recipe_FicsiteMesh_C",
+        "Recipe_Diamond_C",
+        "Recipe_TimeCrystal_C",
+        "Recipe_SpaceElevatorPart_10_C",
+        "Recipe_IngotSAM_C",
+        "Recipe_SAMFluctuator_C"
+      ],
+      "schematics": [
+        "Schematic_9-1-1_C"
+      ],
+      "items": [],
+      "scannables": [
+        "Desc_SAM_C"
+      ],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_9-2_C",
+    "name": "양자 인코딩",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 9,
+    "cost": [
+      {
+        "item": "Desc_TimeCrystal_C",
+        "name": "시간 수정",
+        "amount": 50
+      },
+      {
+        "item": "Desc_FicsiteMesh_C",
+        "name": "픽사이트 삼각판",
+        "amount": 100
+      },
+      {
+        "item": "Desc_MotorLightweight_C",
+        "name": "터보 모터",
+        "amount": 200
+      },
+      {
+        "item": "Desc_ComputerSuper_C",
+        "name": "슈퍼컴퓨터",
+        "amount": 400
+      }
+    ],
+    "timeToCompleteSec": 1200,
+    "menuPriority": 2,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_QuantumEncoder_C",
+        "Recipe_QuantumEnergy_C",
+        "Recipe_DarkEnergy_C",
+        "Recipe_DarkMatter_C",
+        "Recipe_SuperpositionOscillator_C",
+        "Recipe_TemporalProcessor_C",
+        "Recipe_SpaceElevatorPart_12_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_9-3_C",
+    "name": "FICSIT 청사진 Mk.3",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 9,
+    "cost": [
+      {
+        "item": "Desc_TemporalProcessor_C",
+        "name": "신경 양자 처리기",
+        "amount": 100
+      },
+      {
+        "item": "Desc_TimeCrystal_C",
+        "name": "시간 수정",
+        "amount": 250
+      },
+      {
+        "item": "Desc_FicsiteMesh_C",
+        "name": "픽사이트 삼각판",
+        "amount": 500
+      },
+      {
+        "item": "Desc_ModularFrameFused_C",
+        "name": "융합된 모듈식 골조",
+        "amount": 500
+      }
+    ],
+    "timeToCompleteSec": 900,
+    "menuPriority": 3,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_BlueprintDesigner_Mk3_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_9-4_C",
+    "name": "공간 에너지 제어",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 9,
+    "cost": [
+      {
+        "item": "Desc_QuantumOscillator_C",
+        "name": "중첩 발진기",
+        "amount": 100
+      },
+      {
+        "item": "Desc_MotorLightweight_C",
+        "name": "터보 모터",
+        "amount": 250
+      },
+      {
+        "item": "Desc_ModularFrameLightweight_C",
+        "name": "무선 제어 장치",
+        "amount": 500
+      },
+      {
+        "item": "Desc_SAMFluctuator_C",
+        "name": "S.A.M. 변동기",
+        "amount": 1000
+      }
+    ],
+    "timeToCompleteSec": 600,
+    "menuPriority": 4,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_Portal_C",
+        "Recipe_PortalSatellite_C",
+        "Recipe_SingularityCell_C",
+        "Recipe_SpaceElevatorPart_11_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  },
+  {
+    "className": "Schematic_9-5_C",
+    "name": "극한의 효율",
+    "description": "",
+    "type": "milestone",
+    "rawType": "EST_Milestone",
+    "techTier": 9,
+    "cost": [
+      {
+        "item": "Desc_TimeCrystal_C",
+        "name": "시간 수정",
+        "amount": 250
+      },
+      {
+        "item": "Desc_FicsiteMesh_C",
+        "name": "픽사이트 삼각판",
+        "amount": 250
+      },
+      {
+        "item": "Desc_AluminumPlate_C",
+        "name": "알클래드 알루미늄 판",
+        "amount": 5000
+      },
+      {
+        "item": "Desc_IronPlate_C",
+        "name": "철판",
+        "amount": 10000
+      }
+    ],
+    "timeToCompleteSec": 600,
+    "menuPriority": 5,
+    "dependencies": [],
+    "unlocks": {
+      "recipes": [
+        "Recipe_ConveyorBeltMk6_C",
+        "Recipe_ConveyorLiftMk6_C",
+        "Recipe_Ficsonium_C",
+        "Recipe_FicsoniumFuelRod_C"
+      ],
+      "schematics": [],
+      "items": [],
+      "scannables": [],
+      "inventorySlots": 0,
+      "armSlots": 0,
+      "other": []
+    }
+  }
+]

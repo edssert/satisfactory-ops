@@ -1,0 +1,31 @@
+{
+  "$comment": "이 폴더의 items/recipes/buildings/schematics/milestones.json은 scripts/build-data.mjs가 게임 원본에서 생성합니다. 직접 수정하지 마세요.",
+  "generatedAt": "2026-08-19T04:25:20.345Z",
+  "generator": "scripts/build-data.mjs",
+  "source": {
+    "kind": "local-game-install",
+    "file": "C:/Program Files (x86)/Steam/steamapps/common/Satisfactory/CommunityResources/Docs/ko.json",
+    "locale": "ko",
+    "encoding": "utf-16le",
+    "bytes": 10483636,
+    "sha256": "c139b9d69a14bf186206344567995cbf31fd5499491ef21ec9acc4ad91f240bf",
+    "steamBuildId": "24656030",
+    "nativeClassGroups": 114,
+    "totalClasses": 2868
+  },
+  "counts": {
+    "items": 750,
+    "recipes": 872,
+    "alternateRecipes": 110,
+    "buildings": 539,
+    "schematics": 574,
+    "milestones": 42
+  },
+  "conventions": {
+    "fluidUnits": "액체/기체 수치는 원본의 1/1000 (리터 -> m3)로 환산됨",
+    "rates": "perMinute = amount * 60 / durationSec (클록 100%, 소머슬룹 미사용 기준)",
+    "belt": "beltItemsPerMinute = mSpeed / 2",
+    "pipe": "pipeFlowM3PerMinute = mFlowLimit * 60",
+    "extraction": "perMinuteAtNormalPurity = itemsPerCycle * 60 / cycleTimeSec (순도 배율 미적용)"
+  }
+}

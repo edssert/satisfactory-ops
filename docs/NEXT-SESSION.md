@@ -1,111 +1,84 @@
 # 이어받기 — 다음 세션 시작점
 
-작성: 2026-08-19 (세션 한도로 중단)
+갱신: 2026-08-19 (프론트엔드 재구축 세션)
 
 ## 지금 상태
 
-저장소: https://github.com/edssert/satisfactory-ops (public, main, 푸시 완료)
+저장소: https://github.com/edssert/satisfactory-ops (public, main)
 로컬: `C:\Dev\satisfactory-ops`
+사이트: https://edssert.github.io/satisfactory-ops/ — **아직 구버전이 떠 있다** (아래 "배포" 참조)
 
-### 끝난 것
-- 문서 체계: `PRD.md` / `FRD.md` / `TRD.md` / `CLAUDE.md` / ADR 0001~0008
-- 리서치 근거 28건: `docs/research/`
-- 디자인 지시서: `docs/DESIGN-BRIEF.md`
-- 게임 자산: 월드맵 2 + 건물 아이콘 27 (WebP, 648KB)
-- **데이터 파이프라인 완성** — 아래 참조
-- 스킬 3개 생성: `~/.claude/skills/{game-guide-app, landing-page-craft, modern-web-baseline}`
+### 이번 세션에서 끝난 것
 
-### 데이터 (가장 중요)
-`scripts/build-data.mjs`가 로컬 게임 설치본의 공식 데이터 덤프에서 생성했다.
-손으로 타이핑한 수치가 아니다.
+**중단됐던 아키텍처 심사를 완주했다.** 제안서 4건을 TRD 제약으로 채점(만점 80): Astro+아일랜드 65 /
+무빌드 바닐라 56 / Vite+Svelte SPA 52. 판정을 가른 것은 이 저장소가 실제로 겪은 버그 4건이었다
+(`de36c39` 백지 화면, `bd981f4`·`2b5cdad` 손으로 적은 수치의 불일치, `5260767` 핸들러 누락).
 
-    소스: Steam/.../CommunityResources/Docs/en-US.json (10.6MB, UTF-16LE)
-    빌드: steamBuildId 24656030
-    산출: items 750 / recipes 872 (대체 110) / buildings 539 / schematics 574 / milestones 42
+- ADR 7건 작성: 0009(프론트엔드) 0010(백엔드 없음) 0011(상태·영속) 0012(데이터 계층)
+  0013(솔버) 0015(노드 데이터) 0017(한국어 표기) 0018(타이포)
+- `docs/ARCHITECTURE.md`, `docs/DATA-MODEL.md` 신규 · `TRD.md` §2 확정 · `README.md` 갱신
+- **2단 데이터 파이프라인**: `build-data.mjs`(원본 정규화, 검증 13건) →
+  `build-app-data.mjs`(조인·역인덱스·검증 18건) → `src/data/app/*.json`
+- **공식 한국어 로케일 도입** — `ko.json`에서 표시명 생성. 사람이 아이템 이름을 타이핑하지 않는다
+- **화면 5개**: 랜딩 · 마일스톤(F1) · 시작 가이드(F2) · 계산기(F5) · 용어집(F4) · 레퍼런스(F6)
+- 골든 테스트 12건 (`node --test tests/solver.test.ts`), 타입 검사 0 오류
+- 서비스워커 자체 생성(Workbox 없음), 배포 워크플로 작성
 
-게임 업데이트 시 `node scripts/build-data.mjs` 재실행으로 갱신 끝.
+### 검증된 수치 (위키 공표값과 일치)
 
-## 남은 것
-
-### 1순위 — 결정 문서화 (리서치는 이미 있음, 쓰기만 하면 됨)
-| 문서 | 근거 파일 |
-|---|---|
-| `adr/0009-frontend-architecture.md` | `research/arch-{zero-build,islands,spa,offline}.md` |
-| `adr/0010-no-backend.md` | `research/arch-scope-backend.md` |
-| `adr/0011-state-and-persistence.md` | `research/arch-scope-quality.md`, `data-clientside.md` |
-| `adr/0012-data-storage.md` | `research/data-{browser-db,modeling,clientside,server-sql}.md` |
-| `adr/0013-production-solver.md` | `research/data-modeling.md` (재귀 CTE / 순환 처리) |
-| `adr/0014-save-file-import.md` | `research/save-{format,parsers,perf,extract}.md` |
-| `ARCHITECTURE.md` | 위 결정들 종합 |
-| `DATA-MODEL.md` | `research/data-modeling.md` |
-
-**주의**: 아키텍처 심사위원 패널이 완주하지 못했다. 4개 제안서(`arch-*.md`)는 있으나
-비교·채점이 없다. 직접 읽고 판단하거나, 심사 단계만 다시 돌린다.
-
-### 2순위 — 구현
-1. `index.html` + 앱 셸 + 라우팅
-2. **F1 마일스톤 체크리스트** (중심 기능, `src/data/milestones.json` 이미 있음)
-3. F2 입지 선정 — 맵 오버레이. 캘리브레이션 값은 `adr/0006`에 있음
-4. F4 용어집 (`src/data/glossary.json` 이미 있음)
-5. F5 계산기 (`src/data/recipes.json` 이미 있음)
-6. GitHub Pages 활성화 — **`index.html`이 생긴 뒤에** 켤 것 (지금 켜면 404 배포)
-
-### 3순위
-F3 단계도 / F7 대체레시피 / F8 하드드라이브 / F9 공장상태 / F10 세이브파서 / F11 랜딩
-
-## 미완료 리서치 (필요하면 재실행)
-- 게임 진행/레시피/배치/전력/유체/물류/탐험/벤치마킹 8개 스코프 → 일부만 도착
-- Reddit 커뮤니티 지식, GitHub 생태계 → 미도착
-- `DIFFERENTIATION.md`, `RESEARCH-SUMMARY.md` → 미작성
-
-워크플로 스크립트는 세션 디렉터리에 남아 있으나 **다른 세션에서 resume 불가**하다.
-필요하면 새로 띄운다. 다만 `docs/research/`에 이미 근거가 많으니 재조사 범위를 좁힐 것.
-
-## 확정된 제품 결정 (변경 시 PRD §6 갱신)
-- 대상: 공개 제품 + 개인 진행 추적 1급
-- 세이브 파서: 구현한다 (범위는 ADR-0014에서 조정 가능)
-- 진행 추적: 공장 상태까지
-- 언어: 한국어 + 게임용어 영문 병기
-
-## 첫 명령 제안
-```
-docs/NEXT-SESSION.md 읽고 이어서 진행해줘.
-1순위 ADR부터 쓰고 마일스톤 체크리스트 화면을 만들자.
-```
+보강된 철판 15/분 → 조립기 3 · 제작기 4.5 · 제련기 4.5 · 철광석 180/분.
+티어 1 전체 요구(콘크리트 200 / 철판 350 / 철봉 250 / 전선 600 / 나사 300)는 마일스톤 데이터에서 계산된다.
 
 ---
 
-## 추가 조사 결과 — 자원 노드 좌표 (2026-08-19)
+## 다음에 할 일
 
-### 목표
-"어느 노드를 쓸지"까지 계획하려면 노드의 월드 좌표·순도 데이터셋이 필요하다.
-`Docs.json`에는 **없다** (아이템/레시피/건물/스키매틱만 있고 맵 배치는 미포함).
+### 1. 배포 전환 (가장 먼저)
 
-### 찾은 것
-`gh search`로 탐색 (WebSearch 예산과 무관하게 동작하므로 다음에도 이 경로를 쓸 것):
+지금 GitHub Pages는 **legacy 모드**(main 브랜치 루트를 그대로 서빙)다. 빌드 산출물을 올리려면
+Actions 워크플로 배포로 바꿔야 한다.
 
-| 저장소 | 파일 | 크기 | 라이선스 |
-|---|---|---|---|
-| `lukszi/SatisfactoryMCP` | `data/world_resource_nodes.json` | 133 KB | **NOASSERTION** |
-| | `data/resource_nodes.json` | 153 KB | 〃 |
-| | `data/world_collectibles.json` | 1.88 MB | 〃 |
-| | `data/region_names.json` | 61 KB | 〃 |
+```bash
+gh api -X PUT repos/edssert/satisfactory-ops/pages -f build_type=workflow
+git push        # .github/workflows/deploy.yml 이 돈다
+```
 
-### 판단 — 지금은 채택하지 않는다
-라이선스가 **없다**(NOASSERTION). 라이선스 미표기 저장소의 법적 기본값은 저작권자 전권이며,
-우리 저장소는 public + MIT다. 번들하면 ADR-0003에서 스스로 정한 원칙을 어긴다.
-별 2개, 최근 커밋 2026-08-09으로 활발하긴 하나 그것이 사용 권한을 주지는 않는다.
+전환 순간 잠깐 배포 공백이 있다. 확인: 배포 후 오프라인(비행기 모드)에서 재접속되는지 실측할 것.
 
-### 다음 세션의 선택지
-1. **저자에게 라이선스 문의** — 이슈를 열어 MIT/CC0 부여를 요청. 가장 깔끔하나 응답 대기
-2. **라이선스 있는 대안 탐색** — `gh search code`로 계속. 검색어 후보:
-   `Desc_OreIron` + 좌표, `BP_ResourceNode` + json, `satisfactory` + `purity` + `location`
-3. **직접 추출** — 게임 설치본에서 맵 데이터를 뽑는다. `.pak` 언팩이 필요해 난이도 높음
-4. **런타임 fetch** — 외부에서 받아 쓰기. **TRD S-3(외부 리소스 런타임 로드 금지)과 C-3(오프라인 동작) 위반**이라 부적합
-5. **세이브에서 점유 노드만** — 세이브에는 채굴기를 이미 꽂은 노드만 나온다.
-   "아직 안 쓴 노드를 계획"하는 목적에는 부적합 (`docs/research/save-extract.md` 참조)
+### 2. 미구현 화면
 
-권장: 1번을 먼저 열어두고 2번을 병행.
+| 화면 | 메모 |
+|---|---|
+| F3 공장 성장 단계도 | `legacy/start.html`에 SVG 2개가 남아 있으나 **수치가 하드코딩**되어 있다. 데이터에서 생성하는 방식으로 다시 그릴 것 |
+| F7 대체 레시피 추천 | 계산기에 토글은 이미 있다. "무엇을 먼저 풀어야 하나"의 순위 매기기가 없다 |
+| F8 하드드라이브 추적 | `docs/research/exploration.md`에 크래시 사이트 데이터 있음 |
+| F9 공장 상태 · F10 세이브 파서 | ADR-0014 미작성 |
 
-### 이 결정을 ADR로 남길 것
-채택하든 안 하든 `docs/adr/0015-resource-node-dataset.md`를 써서 근거를 남긴다.
+### 3. 미해결 데이터 (화면에 `unsourced`로 표기 중)
+
+- 시작 부지 6곳의 강점·약점 서술 — 1차 출처 미기록 (`src/data/curated/sites.json`)
+- 튜토리얼 스킵 시작 인벤토리 — 인게임 재확인 필요 (`src/data/curated/start-inventory.json`)
+- 게임 데이터 재배포 라이선스 — ADR-0008 후속 작업으로 남아 있음
+
+### 4. 아직 안 한 품질 작업
+
+- 실제 브라우저에서 아일랜드 동작 확인(체크박스 영속, 맵 팬/줌, 계산기 대체 레시피 토글)
+- Lighthouse 실측 (TRD P-1 LCP < 1.5s, P-3 초기 JS < 150KB)
+- 접근성 수동 확인 (키보드만으로 전 화면 조작)
+- 사용자 데이터 마이그레이션 테스트 (TRD 8.1 MUST인데 아직 없음 — 스키마가 v1뿐이라 미룸)
+
+---
+
+## 이 프로젝트에서 지켜야 할 것
+
+1. **마크업에 게임 수치를 타이핑하지 않는다.** 이 규칙이 이번 재구축의 존재 이유다
+2. 아일랜드는 상태를 소유하는 최소 단위만. 문서 화면은 JS 0KB
+3. 큐레이션 콘텐츠는 클래스명으로 참조하고 `confidence` + `sources`를 붙인다
+4. 출처를 못 찾았으면 지어내지 말고 `unsourced`로 적고 화면에도 그렇게 표기한다
+
+## 첫 명령 제안
+
+```
+docs/NEXT-SESSION.md 읽고 이어서 진행해줘.
+배포 전환부터 하고, F3 성장 단계도를 데이터에서 생성하는 방식으로 만들자.
+```

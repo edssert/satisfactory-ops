@@ -1,0 +1,40 @@
+{
+  "name": "satisfactory-ops",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Satisfactory 공장 설계 플레이북 — 마일스톤 단위로 지금 할 일을 알려주는 진행형 가이드",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "data:game": "node scripts/build-data.mjs",
+    "data:game:ko": "node scripts/build-data.mjs --locale=ko --out=src/data/ko",
+    "data:app": "node scripts/build-app-data.mjs",
+    "data": "npm run data:game && npm run data:game:ko && npm run data:app",
+    "data:check": "node scripts/build-app-data.mjs --check",
+    "dev": "astro dev",
+    "build": "npm run data:check && astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test": "node --test tests/solver.test.ts",
+    "verify": "npm run data:check && npm test && astro check --minimumSeverity error"
+  },
+  "dependencies": {
+    "@astrojs/preact": "6.0.3",
+    "@preact/signals": "2.11.1",
+    "astro": "7.2.3",
+    "preact": "10.29.8"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@types/node": "^24.13.3",
+    "typescript": "5.9.2",
+    "zod": "4.4.3"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true
+  }
+}
