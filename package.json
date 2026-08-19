@@ -19,7 +19,8 @@
     "preview": "astro preview",
     "check": "astro check",
     "test": "node --test tests/solver.test.ts tests/sw.test.ts",
-    "verify": "npm run data:check && npm test && astro check --minimumSeverity error"
+    "verify": "npm run data:check && npm test && astro check --minimumSeverity error",
+    "test:sw": "node --test tests/sw-runtime.test.ts"
   },
   "dependencies": {
     "@astrojs/preact": "6.0.3",

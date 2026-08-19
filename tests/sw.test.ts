@@ -49,6 +49,10 @@ test('생성된 sw.js 가 모든 라우트를 캐시에서 찾을 수 있다', {
   // 네비게이션 변환이 실제로 주입되었는가
   assert.ok(sw.includes('function navigationCacheKey'), 'sw.js 에 키 변환이 없다');
 
+  // 고장난 이전 버전에 갇히지 않도록 설치 즉시 교체되어야 한다
+  assert.ok(sw.includes('self.skipWaiting()'), '설치 후 skipWaiting 이 없으면 구버전이 계속 산다');
+  assert.ok(sw.includes('self.clients.claim()'), 'activate 에서 clients.claim 이 없다');
+
   // 모든 페이지 라우트가 변환 후 캐시에서 찾아져야 한다
   const routes = assets
     .filter((a) => a.endsWith('/index.html'))

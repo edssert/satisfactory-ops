@@ -42,9 +42,10 @@ jobs:
 
       - run: npm run build
 
-      # 서비스워커 캐시 키 검증은 dist/ 가 있어야 의미가 있다
+      # 서비스워커 검증은 dist/ 가 있어야 의미가 있다. 런타임 테스트는 sw.js 를 실제로 실행해
+      # 각 라우트가 자기 문서를 돌려주는지 본문으로 확인한다.
       - name: 서비스워커 검증
-        run: node --test tests/sw.test.ts
+        run: node --test tests/sw.test.ts tests/sw-runtime.test.ts
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
