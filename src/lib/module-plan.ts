@@ -89,6 +89,12 @@ export interface Placement {
   clockPercent?: number;
   /** 90도 돌려 놓았는가 */
   rotated?: boolean;
+  /**
+   * 이 기계의 접속부 (타일 좌표).
+   * **계획이 계산하고 도면은 그리기만 한다** — 도면이 따로 계산하면 벨트가 닿는 자리와
+   * 삼각형이 그려진 자리가 어긋난다. 위치는 추정값이다 (게임 데이터에 포트 좌표가 없다).
+   */
+  ports?: { x: number; y: number; role: 'in' | 'out' }[];
 }
 
 /**
@@ -110,6 +116,34 @@ export interface BeltRun {
   /** 어디서 어디로 — null 은 모듈 밖(채굴기 / 완제품 반출) */
   fromGroup: number | null;
   toGroup: number | null;
+  /** 분배기·병합기와 기계를 잇는 짧은 분기. 도면에 라벨을 붙이지 않는다 */
+  branch?: boolean;
+  /**
+   * 사람이 읽는 양 끝 이름. 연결 목록에 그대로 쓴다.
+   * fromGroup/toGroup 만으로는 분기의 끝이 분배기인지 채굴기인지 구분되지 않아
+   * "채굴기 → 제작기"라고 잘못 적혔다.
+   */
+  fromLabel: string;
+  toLabel: string;
+}
+
+export interface BuildStep {
+  no: number;
+  /** 무엇을 */
+  what: string;
+  /** 몇 개 */
+  count: number;
+  /**
+   * 어디에 — 토대 **왼쪽 위 모서리**를 원점으로 한 위치.
+   * 칸은 토대 한 장(8 m) 단위, 미터는 그 안에서의 오프셋이다.
+   */
+  where: string;
+  /** 어느 방향으로 놓는가 */
+  facing?: string;
+  /** 설정할 것 (클럭 등) */
+  setting?: string;
+  /** 왜 이 순서인가 */
+  why?: string;
 }
 
 export interface ModulePlan {
@@ -142,6 +176,12 @@ export interface ModulePlan {
   lifts: number;
   /** 바닥에서 손이 닿지 않는 기계 수 — 캣워크로 접근해야 한다 */
   unreachableMachines: number;
+  /**
+   * **손으로 지을 때의 순서표.**
+   * 청사진 설계소는 티어 4에 열린다. 그 전에는 이 표를 보고 하나씩 세워야 한다.
+   * 그림 없이도 지을 수 있을 만큼 좌표와 방향이 명확해야 한다.
+   */
+  buildSteps: BuildStep[];
   notes: string[];
 }
 
@@ -402,33 +442,151 @@ ${g.itemKo}`,
    * 경고만 뜬다. 촘촘한 설계가 가능한 이유 중 하나다.
    * 그래서 겹침 검증에서도 부속은 제외한다.
    */
+  /*
+   * 기계 접속부 좌표.
+   *
+   * 입력은 뒷면, 출력은 앞면이다 (위키 근거 — 제조기만 반대). 기계를 90도 돌려 놓으면
+   * 뒷면은 왼쪽 면이 된다. 이 좌표를 계획에서 한 번만 계산해 도면과 벨트 배선이 같은 값을 쓴다.
+   */
+  const portOf = (mb: (typeof machineBoxes)[number], role: 'in' | 'out'): Point => {
+    const cx = Math.round(mb.xM + mb.widthM / 2);
+    const cy = Math.round(mb.yM + mb.lengthM / 2);
+    const clamp = (v: number, hi: number) => Math.max(0, Math.min(hi - 1, v));
+    if (mb.rotated) {
+      return role === 'in'
+        ? { x: clamp(Math.round(mb.xM) - 1, GW), y: clamp(cy, GH) }
+        : { x: clamp(Math.round(mb.xM + mb.widthM), GW), y: clamp(cy, GH) };
+    }
+    return role === 'in'
+      ? { x: clamp(cx, GW), y: clamp(Math.round(mb.yM) - 1, GH) }
+      : { x: clamp(cx, GW), y: clamp(Math.round(mb.yM + mb.lengthM), GH) };
+  };
+
+  // 배치된 기계에 포트 좌표를 붙인다
+  for (const p of placements) {
+    if (p.kind !== 'machine') continue;
+    const mb = machineBoxes.find(
+      (m) => Math.abs(m.xM / TILE_M - p.x) < 1e-9 && Math.abs(m.yM / TILE_M - p.y) < 1e-9
+    );
+    if (!mb) continue;
+    const i = portOf(mb, 'in');
+    const o = portOf(mb, 'out');
+    p.ports = [
+      { x: i.x / TILE_M, y: i.y / TILE_M, role: 'in' },
+      { x: o.x / TILE_M, y: o.y / TILE_M, role: 'out' },
+    ];
+  }
+
+  /*
+   * 분배기·병합기 배치와 **분기 벨트**.
+   *
+   * 앞서는 분배기를 공정의 맨 앞, 병합기를 맨 뒤에 하나씩 놓고 끝냈다. 그래서 도면에서
+   * 기계 세 대가 아무 데도 연결되지 않은 채 떠 있었다 — 도면이라고 할 수 없는 그림이었다.
+   *
+   * 실제 매니폴드는 이렇게 생겼다: 분배기 한 대의 출력이 3개이므로 기계 3대까지 직접 먹인다.
+   * 그래서 필요한 분배기 수는 ceil((n-1)/2) 이고(발행 도면의 부품 수와 일치),
+   * **각 분배기에서 자기가 맡은 기계의 입력구까지 벨트가 하나씩 나간다.** 그 분기를 그린다.
+   *
+   * 부속의 치수는 4×4 m인데 통로는 2 m다. 그래도 놓을 수 있다 — 게임 데이터상 이 부속들은
+   * 하드 클리어런스가 없고 소프트만 있어서(hardBoxes 0) 기계와 겹쳐 지을 수 있다.
+   */
   const ATT_M = 4;
+  interface Attach {
+    kind: 'splitter' | 'merger';
+    pt: Point;
+    group: number;
+    serves: (typeof machineBoxes)[number][];
+  }
+  const attaches: Attach[] = [];
+
   groups.forEach((g, gi) => {
-    if (g.built <= 1) return;
-    const inPt = entryOf(gi);
-    const outPt = exitOf(gi);
-    placements.push({
-      kind: 'splitter',
-      label: '분배기',
-      x: (inPt.x - ATT_M / 2) / TILE_M,
-      y: (inPt.y - ATT_M / 2) / TILE_M,
-      wTiles: ATT_M / TILE_M,
-      hTiles: ATT_M / TILE_M,
-      group: gi,
-    });
-    placements.push({
-      kind: 'merger',
-      label: '병합기',
-      x: (outPt.x - ATT_M / 2) / TILE_M,
-      y: (outPt.y - ATT_M / 2) / TILE_M,
-      wTiles: ATT_M / TILE_M,
-      hTiles: ATT_M / TILE_M,
-      group: gi,
-    });
+    const mine = machineBoxes.filter((m) => m.gi === gi);
+    if (mine.length <= 1) return;
+
+    const nSplit = Math.max(1, splittersFor(mine.length));
+    const nMerge = Math.max(1, mergersFor(mine.length));
+
+    // 입력 면(블록 위쪽)과 출력 면(아래쪽)을 등분해 부속을 놓고, 기계를 가까운 것에 배정한다
+    const minX = Math.min(...mine.map((m) => m.xM));
+    const maxX = Math.max(...mine.map((m) => m.xM + m.widthM));
+    const minY = Math.min(...mine.map((m) => m.yM));
+    const maxY = Math.max(...mine.map((m) => m.yM + m.lengthM));
+
+    const spread = (n: number, y: number): Point[] =>
+      Array.from({ length: n }, (_, k) => ({
+        x: Math.max(0, Math.min(GW - 1, Math.round(minX + ((k + 1) * (maxX - minX)) / (n + 1)))),
+        y: Math.max(0, Math.min(GH - 1, y)),
+      }));
+
+    /*
+     * 부속은 **토대 안**에 둔다. 블록 위 통로에 놓되, 그 통로가 토대 밖으로 나가면
+     * 기계 첫 줄에 겹쳐 놓는다 — 분배기·병합기는 하드 클리어런스가 없어서 겹쳐 지을 수 있다.
+     * 밖에 두었더니 도면에서 분배기가 토대 위에 떠 있고 분기 벨트가 모듈 바깥을 돌았다.
+     */
+    const inLaneY = Math.max(ATT_M / 2, Math.round(minY) - 1);
+    const outLaneY = Math.min(GH - 1 - ATT_M / 2, Math.round(maxY));
+    const splitPts = spread(nSplit, inLaneY);
+    const mergePts = spread(nMerge, outLaneY);
+
+    const nearest = (pts: Point[], p: Point) =>
+      pts.reduce((a, b) => (Math.abs(b.x - p.x) < Math.abs(a.x - p.x) ? b : a));
+
+    for (const pt of splitPts) {
+      attaches.push({ kind: 'splitter', pt, group: gi, serves: [] });
+    }
+    for (const pt of mergePts) {
+      attaches.push({ kind: 'merger', pt, group: gi, serves: [] });
+    }
+    for (const m of mine) {
+      const ip = portOf(m, 'in');
+      const op = portOf(m, 'out');
+      const sp = nearest(splitPts, ip);
+      const mp = nearest(mergePts, op);
+      attaches.find((a) => a.kind === 'splitter' && a.pt === sp)!.serves.push(m);
+      attaches.find((a) => a.kind === 'merger' && a.pt === mp)!.serves.push(m);
+    }
   });
 
+  /*
+   * 부속끼리 겹치면 글자가 서로를 덮는다 — 앞 공정의 병합기와 다음 공정의 분배기가 같은
+   * 통로에 놓이면서 실제로 겹쳤다. 겹치는 것은 옆으로 민다.
+   */
+  const placed: Point[] = [];
+  for (const a of attaches) {
+    let guard = 0;
+    while (
+      guard++ < 20 &&
+      placed.some((q) => Math.abs(q.x - a.pt.x) < ATT_M && Math.abs(q.y - a.pt.y) < ATT_M)
+    ) {
+      a.pt = { x: Math.min(GW - ATT_M, a.pt.x + ATT_M), y: a.pt.y };
+    }
+    placed.push(a.pt);
+  }
+
+  for (const a of attaches) {
+    placements.push({
+      kind: a.kind,
+      label: a.kind === 'splitter' ? '분배기' : '병합기',
+      x: (a.pt.x - ATT_M / 2) / TILE_M,
+      y: (a.pt.y - ATT_M / 2) / TILE_M,
+      wTiles: ATT_M / TILE_M,
+      hTiles: ATT_M / TILE_M,
+      group: a.group,
+    });
+  }
+
   const routeFailures: string[] = [];
-  const pushBelt = (itemKo: string, perMinute: number, from: Point, to: Point, fromGroup: number | null, toGroup: number | null) => {
+  const pushBelt = (
+    itemKo: string,
+    perMinute: number,
+    from: Point,
+    to: Point,
+    fromGroup: number | null,
+    toGroup: number | null,
+    /** 분기 벨트는 도면에 라벨을 붙이지 않는다 — 기계마다 붙이면 도면이 글자로 덮인다 */
+    branch = false,
+    labels?: { from: string; to: string }
+  ) => {
     const path = routeBelt(from, to, blocked, { w: GW, h: GH });
     if (path.length <= 2 && (Math.abs(from.x - to.x) > 1 && Math.abs(from.y - to.y) > 1)) {
       routeFailures.push(itemKo);
@@ -441,27 +599,70 @@ ${g.itemKo}`,
       overCurrentBelt: perMinute > input.belt.perMinute,
       fromGroup,
       toGroup,
+      branch,
+      fromLabel:
+        labels?.from ??
+        (fromGroup == null ? '채굴기 / 외부' : `${groups[fromGroup]!.machineKo} · ${groups[fromGroup]!.itemKo}`),
+      toLabel:
+        labels?.to ??
+        (toGroup == null ? '반출 / 다음 모듈' : `${groups[toGroup]!.machineKo} · ${groups[toGroup]!.itemKo}`),
     });
   };
+
+  /*
+   * 분기 벨트 — 분배기에서 각 기계 입력구로, 각 기계 출력구에서 병합기로.
+   * 이게 없으면 기계가 도면에서 아무 데도 연결되지 않은 채 떠 있게 된다.
+   */
+  for (const a of attaches) {
+    const g = groups[a.group]!;
+    for (const m of a.serves) {
+      const perMachine = g.outPerMinute / Math.max(1, g.built);
+      if (a.kind === 'splitter') {
+        const inFlow = g.inputs.reduce((s2, i2) => s2 + i2.perMinute, 0) / Math.max(1, g.built);
+        pushBelt(g.inputs[0]?.itemKo ?? '재료', inFlow, a.pt, portOf(m, 'in'), null, a.group, true, {
+          from: '분배기',
+          to: `${g.machineKo} · ${g.itemKo}`,
+        });
+      } else {
+        pushBelt(g.itemKo, perMachine, portOf(m, 'out'), a.pt, a.group, null, true, {
+          from: `${g.machineKo} · ${g.itemKo}`,
+          to: '병합기',
+        });
+      }
+    }
+  }
 
   // 원자재: 토대 왼쪽 위에서 들어와 첫 공정으로
   for (const m of mining) {
     const consumer = groups.findIndex((g) => g.inputs.some((i2) => i2.itemKo === m.itemKo));
     if (consumer < 0) continue;
-    pushBelt(m.itemKo, m.suppliedPerMinute, { x: 0, y: 0 }, entryOf(consumer), null, consumer);
+    // 간선은 분배기까지 간다. 기계가 한 대뿐이면 그 기계로 바로 들어간다.
+    const g = groups[consumer]!;
+    pushBelt(m.itemKo, m.suppliedPerMinute, { x: 0, y: 0 }, entryOf(consumer), null, consumer, false, {
+      from: `${m.assignments[0]?.extractorKo ?? '채굴기'} (${m.assignments.map((a) => a.cell).join(', ')})`,
+      to: g.built > 1 ? '분배기' : `${g.machineKo} · ${g.itemKo}`,
+    });
   }
   // 공정 사이
   groups.forEach((g, gi) => {
     for (const inp of g.inputs) {
       if (inp.fromGroup == null) continue;
-      pushBelt(inp.itemKo, inp.perMinute, exitOf(inp.fromGroup), entryOf(gi), inp.fromGroup, gi);
+      const src = groups[inp.fromGroup]!;
+      pushBelt(inp.itemKo, inp.perMinute, exitOf(inp.fromGroup), entryOf(gi), inp.fromGroup, gi, false, {
+        from: src.built > 1 ? '병합기' : `${src.machineKo} · ${src.itemKo}`,
+        to: g.built > 1 ? '분배기' : `${g.machineKo} · ${g.itemKo}`,
+      });
     }
   });
   // 완제품 반출 — 마지막 공정에서 토대 밖으로
   const lastGroup = groups.length - 1;
   if (lastGroup >= 0) {
     const e = exitOf(lastGroup);
-    pushBelt(groups[lastGroup]!.itemKo, groups[lastGroup]!.outPerMinute, e, { x: GW - 1, y: GH - 1 }, lastGroup, null);
+    const last = groups[lastGroup]!;
+    pushBelt(last.itemKo, last.outPerMinute, e, { x: GW - 1, y: GH - 1 }, lastGroup, null, false, {
+      from: last.built > 1 ? '병합기' : `${last.machineKo} · ${last.itemKo}`,
+      to: '반출 / 다음 모듈',
+    });
   }
   if (routeFailures.length) {
     notes.push(
@@ -588,7 +789,7 @@ ${g.itemKo}`,
   features.push(
     `토대 ${wTiles}×${hTiles}칸(${wTiles * TILE_M}×${hTiles * TILE_M} m). ` +
       `배치 ${packed.tried}가지를 비교해 면적과 벨트 길이가 가장 작은 것을 골랐습니다 ` +
-      `(벨트 총 ${packed.beltLengthM} m).`
+      (packed.beltLengthM > 0 ? `(공정 사이 거리 합 ${packed.beltLengthM} m).` : '(공정이 하나뿐이라 공정 간 벨트가 없습니다).')
   );
   if (wTiles <= 4 && hTiles <= 4) {
     features.push(
@@ -638,6 +839,114 @@ ${g.itemKo}`,
     }
   }
 
+  /*
+   * 손으로 짓는 순서.
+   *
+   * 청사진 설계소는 티어 4에 열린다. 그 전(그리고 그 뒤에도 처음 한 번은)에는 사람이 하나씩
+   * 세운다. 그래서 그림과 별개로 **좌표와 방향이 적힌 순서표**가 있어야 한다.
+   * 그림 품질이 아무리 나빠도 이 표만 정확하면 지어진다.
+   *
+   * 원점은 토대 **왼쪽 위 모서리**다. 게임에서 토대를 깔 때 한 모서리를 기준으로 삼는 것이
+   * 가장 헷갈리지 않는다.
+   */
+  const buildSteps: BuildStep[] = [];
+  let stepNo = 0;
+  const step = (b: Omit<BuildStep, 'no'>) => buildSteps.push({ no: ++stepNo, ...b });
+
+  const pos = (xM: number, yM: number): string => {
+    const cx = Math.floor(xM / TILE_M);
+    const cy = Math.floor(yM / TILE_M);
+    const ox = Math.round(xM - cx * TILE_M);
+    const oy = Math.round(yM - cy * TILE_M);
+    const cell = `오른쪽 ${cx}칸 · 아래 ${cy}칸`;
+    return ox || oy ? `${cell} (칸 안에서 +${ox}m, +${oy}m)` : cell;
+  };
+
+  step({
+    what: '토대',
+    count: wTiles * hTiles,
+    where: `${wTiles}×${hTiles}칸 (${wTiles * TILE_M}×${hTiles * TILE_M} m)`,
+    why:
+      '먼저 바닥을 만든다. 지형 위에 바로 지으면 기계 높이가 제각각이 되어 벨트가 안 맞는다. ' +
+      (wTiles <= 4 && hTiles <= 4
+        ? '4×4를 지키면 티어 4에서 이 모듈을 그대로 청사진으로 뜰 수 있다.'
+        : '폭 4칸(32 m)을 지켰으므로 길이만 잘라 청사진 두 장으로 뜰 수 있다.'),
+  });
+
+  for (const m of mining) {
+    for (const a of m.assignments) {
+      step({
+        what: `${a.extractorKo} — ${m.itemKo}`,
+        count: 1,
+        where: `${a.cell} 노드 위 (${a.purityKo})`,
+        setting:
+          a.clockPercent < 100
+            ? `클럭 ${a.clockPercent}% 또는 목표 산출 ${a.ratePerMinute}/분`
+            : '100%',
+        why: '채굴기가 모듈 밖 노드 위에 선다. 여기서 나온 벨트가 토대로 들어온다.',
+      });
+    }
+  }
+
+  // 기계 — 공정 순서대로
+  const byGroup = new Map<number, typeof machineBoxes>();
+  for (const mb of machineBoxes) {
+    const list = byGroup.get(mb.gi) ?? [];
+    list.push(mb);
+    byGroup.set(mb.gi, list);
+  }
+  groups.forEach((g, gi) => {
+    const list = (byGroup.get(gi) ?? []).sort((a, b) => a.yM - b.yM || a.xM - b.xM);
+    list.forEach((mb, k) => {
+      step({
+        what: `${g.machineKo} — ${g.itemKo}${list.length > 1 ? ` (${k + 1}/${list.length})` : ''}`,
+        count: 1,
+        where: pos(mb.xM, mb.yM),
+        facing: mb.rotated ? '90도 돌려서 — 입력이 왼쪽을 향하게' : '입력이 위를 향하게',
+        setting:
+          g.clockPercent < 100
+            ? `목표 산출 ${g.outPerMachinePerMinute}/분 (클럭 ${g.clockPercent}%)`
+            : '100%',
+        why:
+          k === 0
+            ? `${g.itemKo}를 만드는 공정. ${g.built}대를 붙여 세운다 — 같은 매니폴드가 먹이므로 사이를 띄우지 않는다.`
+            : undefined,
+      });
+    });
+  });
+
+  const splitterPlacements = placements.filter((p) => p.kind === 'splitter');
+  const mergerPlacements = placements.filter((p) => p.kind === 'merger');
+  for (const a of splitterPlacements) {
+    step({
+      what: '분배기',
+      count: 1,
+      where: pos(a.x * TILE_M, a.y * TILE_M),
+      why: '분배기 하나가 출력 3개로 기계 3대까지 먹인다. 기계와 겹쳐 놓아도 지어진다.',
+    });
+  }
+  for (const a of mergerPlacements) {
+    step({ what: '병합기', count: 1, where: pos(a.x * TILE_M, a.y * TILE_M) });
+  }
+
+  step({
+    what: `${input.belt.ko} — 연결`,
+    count: belts.length,
+    where: '아래 연결 목록대로',
+    why:
+      '기계를 다 세운 뒤 벨트를 잇는다. 먼저 이으면 기계 자리를 잡을 때 걸린다. ' +
+      '매니폴드는 처음에 뒤쪽 기계가 굶는다 — 고장이 아니라 버퍼가 차는 중이다.',
+  });
+
+  if (unreachable.length > 0) {
+    step({
+      what: '직선 캣워크 + 사다리',
+      count: unreachable.length + 1,
+      where: '손이 닿지 않는 기계 위',
+      why: '기계를 붙여 세웠으므로 바닥에서 못 닿는 기계가 있다. 캣워크는 공중에 설치된다.',
+    });
+  }
+
   return {
     targetKo: solved.root.ko,
     targetId: input.targetItemId,
@@ -666,6 +975,7 @@ ${g.itemKo}`,
     mergers,
     lifts,
     unreachableMachines: unreachable.length,
+    buildSteps,
     notes,
   };
 }

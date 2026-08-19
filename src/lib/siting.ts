@@ -30,6 +30,9 @@ export interface SitedResource {
     purity: ResourceNode['purity'];
     perMinute: number;
     distanceM: number;
+    /** 지도 좌표 — 확대도에서 방향을 그리는 데 쓴다. 거리만으로는 배치를 못 그린다. */
+    fx: number;
+    fy: number;
   }[];
   suppliedPerMinute: number;
   shortfallPerMinute: number;
@@ -81,7 +84,15 @@ export function findSites(
       for (const { n, d } of sorted) {
         if (sum >= want.minPerMinute - 1e-9) break;
         const y = nodeYield(n, extractor);
-        picked.push({ id: n.id, cell: n.cell, purity: n.purity, perMinute: y, distanceM: d });
+        picked.push({
+          id: n.id,
+          cell: n.cell,
+          purity: n.purity,
+          perMinute: y,
+          distanceM: d,
+          fx: n.fx,
+          fy: n.fy,
+        });
         sum += y;
       }
       return {

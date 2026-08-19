@@ -1,0 +1,144 @@
+---
+/**
+ * SitePlan — 부지를 **지도 위에** 찍고, 노드 배치를 확대해 보여준다.
+ *
+ * 왜 두 장인가:
+ *   · 월드 지도는 1600×1600 픽셀이고 월드는 7500 m다 — 1 픽셀이 4.7 m다.
+ *     부지 주변 100 m는 21 픽셀이라 래스터로는 아무것도 안 보인다. 확대하면 뭉갠다.
+ *   · 그래서 "어디쯤인가"는 지도로, "노드가 서로 어떻게 놓였는가"는 **벡터 확대도**로 낸다.
+ *     노드 좌표는 정확한 수치라 몇 배로 키워도 선명하다.
+ *
+ * 상호작용이 없으므로 Astro 컴포넌트다. 브라우저로 JS를 보내지 않는다.
+ * 지도 이미지는 공식 위키에서 가져온 Coffee Stain Studios 자산이다 (CLAUDE.md §4).
+ */
+import type { SiteCandidate } from '../lib/siting.ts';
+
+interface Props {
+  mapSrc: string;
+  sites: SiteCandidate[];
+  /** 강조할 부지 (첫 번째가 추천) */
+  selected?: number;
+  /** 확대도에 그릴 반경 */
+  radiusM?: number;
+  /** 자원별 표시 이름 */
+  resKo: Record<string, string>;
+}
+const { mapSrc, sites, selected = 0, radiusM = 250, resKo } = Astro.props;
+
+const site = sites[selected]!;
+
+/** 월드 한 변 (resource-nodes.json $transform bounds) */
+const WORLD_M = 7501;
+
+/** 확대도 크기 */
+const Z = 460;
+const scale = Z / (radiusM * 2); // px per meter
+
+/** 자원별 기호 — 색만으로 구분하지 않는다 (색각 이상 대응) */
+const SHAPE: Record<string, 'circle' | 'square' | 'triangle' | 'diamond'> = {
+  Desc_OreIron_C: 'circle',
+  Desc_OreCopper_C: 'square',
+  Desc_Stone_C: 'triangle',
+  Desc_Coal_C: 'diamond',
+};
+const shapeOf = (res: string) => SHAPE[res] ?? 'circle';
+
+const marker = (kind: string, x: number, y: number, r: number): string => {
+  if (kind === 'square') return `M ${x - r} ${y - r} h ${r * 2} v ${r * 2} h ${-r * 2} Z`;
+  if (kind === 'triangle') return `M ${x} ${y - r} L ${x + r} ${y + r} L ${x - r} ${y + r} Z`;
+  if (kind === 'diamond') return `M ${x} ${y - r} L ${x + r} ${y} L ${x} ${y + r} L ${x - r} ${y} Z`;
+  return `M ${x - r} ${y} a ${r} ${r} 0 1 0 ${r * 2} 0 a ${r} ${r} 0 1 0 ${-r * 2} 0`;
+};
+
+const fmt = (n: number) => (Number.isInteger(n) ? String(n) : String(Math.round(n * 10) / 10));
+---
+
+<div class="sp2">
+  <figure class="sp2-world">
+    <figcaption>
+      <strong>부지 위치</strong>
+      <span class="muted">그리드 한 칸 1.024 km · 월드 {WORLD_M / 1000} km</span>
+    </figcaption>
+    <div class="sp2-mapbox">
+      <img src={mapSrc} alt="Satisfactory 월드 지도. 추천 부지 위치가 표시되어 있다." loading="lazy" />
+      {sites.map((s, i) => (
+        <span
+          class={`sp2-pin${i === selected ? ' is-sel' : ''}`}
+          style={`left:${s.fx * 100}%; top:${s.fy * 100}%`}
+          title={`${s.cell} · 최대 운반 ${s.maxHaulM} m`}
+        >
+          <b>{i + 1}</b>
+          <i>{s.cell}</i>
+        </span>
+      ))}
+    </div>
+    <p class="sp2-note">
+      지도 원본은 <span class="n">1600×1600</span> 픽셀이고 월드는 <span class="n">{WORLD_M / 1000}</span> km입니다 —
+      1 픽셀이 약 <span class="n">4.7</span> m입니다. 그래서 부지 주변 100 m는 지도에서 20 픽셀밖에 안 됩니다.
+      확대해도 안 보이므로, 노드 배치는 아래 <strong>좌표로 그린 확대도</strong>로 봅니다.
+    </p>
+  </figure>
+
+  <figure class="sp2-zoom">
+    <figcaption>
+      <strong>{site.cell} 노드 배치</strong>
+      <span class="muted">반경 {radiusM} m · 좌표에서 그린 실척도</span>
+    </figcaption>
+    <svg
+      class="sp2-svg"
+      width={Z}
+      height={Z}
+      viewBox={`0 0 ${Z} ${Z}`}
+      role="img"
+      aria-label={`${site.cell} 부지 반경 ${radiusM} m 안의 자원 노드 배치도`}
+    >
+      {/* 거리 링 — 100 m 단위 */}
+      {[100, 200].filter((r) => r <= radiusM).map((r) => (
+        <>
+          <circle cx={Z / 2} cy={Z / 2} r={r * scale} class="sp2-ring" />
+          <text x={Z / 2 + 4} y={Z / 2 - r * scale + 12} class="sp2-ringlabel">{r} m</text>
+        </>
+      ))}
+      {/* 부지 중심 */}
+      <path d={marker('diamond', Z / 2, Z / 2, 7)} class="sp2-center" />
+      <text x={Z / 2 + 12} y={Z / 2 + 4} class="sp2-centerlabel">공장 부지</text>
+
+      {/* 노드 — 방향은 지도 좌표에서, 거리는 계산값에서 */}
+      {site.resources.flatMap((r) =>
+        r.nodes.map((n) => {
+          // 노드의 지도 좌표(fx, fy)를 부지 중심 기준 미터로 환산한다
+          const dx = n.fx - site.fx;
+          const dy = n.fy - site.fy;
+          const x = Z / 2 + dx * WORLD_M * scale;
+          const y = Z / 2 + dy * WORLD_M * scale;
+          const inside = Math.abs(x - Z / 2) < Z / 2 - 10 && Math.abs(y - Z / 2) < Z / 2 - 10;
+          if (!inside) return null;
+          return (
+            <g class={`sp2-node is-${n.purity}`}>
+              <path d={marker(shapeOf(r.res), x, y, 6)} />
+              <text x={x + 10} y={y + 4}>
+                {resKo[r.res] ?? r.ko} {n.distanceM > 0 ? `${n.distanceM} m` : '부지 위'}
+              </text>
+            </g>
+          );
+        })
+      )}
+    </svg>
+    <ul class="sp2-legend">
+      {site.resources.map((r) => (
+        <li>
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+            <path d={marker(shapeOf(r.res), 8, 8, 5)} class="sp2-legendmark" />
+          </svg>
+          {resKo[r.res] ?? r.ko}
+          <span class="n">{fmt(r.suppliedPerMinute)}/분</span>
+          <span class="muted">가장 먼 노드 {r.maxDistanceM} m</span>
+        </li>
+      ))}
+    </ul>
+    <p class="sp2-note">
+      기호로 자원을 구분합니다 — 색만으로는 구분하지 않습니다. 순도는 채움으로 나타냅니다
+      (채운 것이 순수, 빈 것이 노말·불순). 거리는 직선거리라 실제 벨트는 더 깁니다.
+    </p>
+  </figure>
+</div>

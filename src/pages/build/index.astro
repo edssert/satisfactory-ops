@@ -12,6 +12,7 @@
  */
 import Base from '../../layouts/Base.astro';
 import ModuleSheet from '../../components/ModuleSheet.astro';
+import SitePlan from '../../components/SitePlan.astro';
 import '../../styles/module-sheet.css';
 import resourceNodes from '../../data/app/resource-nodes.json';
 import { building, calculatorRecipes, item, milestonesByTier, nameOf } from '../../lib/gamedata';
@@ -233,6 +234,14 @@ const constraints = [
         하나입니다 — 벨트를 깔아야 하는 노동은 가장 먼 한 줄이 결정하기 때문입니다. 평균이 짧아도
         한 자원이 멀면 그 부지는 나쁜 부지입니다.
       </p>
+      <SitePlan
+        mapSrc={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/assets/map/biome-map.webp`}
+        sites={sites}
+        selected={0}
+        radiusM={250}
+        resKo={Object.fromEntries(wants.map((w) => [w.res, w.ko]))}
+      />
+
       <div class="scroll-x">
         <table class="table">
           <thead>
