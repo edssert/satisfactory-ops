@@ -194,16 +194,27 @@
  * 확대하면 글자가 붙고, 누르면 아래에 이름과 순도가 그대로 뜬다.
  */
 .rm-pt { cursor: pointer; }
-.rm-pt circle {
-  fill: rgb(10 12 16 / 0.82);
-  stroke: var(--ink-3);
-  stroke-width: 1.5;
-}
-.rm-pt.is-p circle { stroke: var(--accent); stroke-width: 2.5; }
-.rm-pt.is-n circle { stroke: var(--primary); stroke-width: 2; }
-.rm-pt.is-i circle { stroke: var(--ink-3); stroke-width: 1.5; }
+/* 채움색이 순도다. 테두리는 어두운 바탕에서 떼어 놓는 용도 */
+.rm-pt circle { stroke: rgb(0 0 0 / 0.8); stroke-width: 2; }
 .rm-pt:hover circle { stroke: #fff; }
-.rm-pt.is-sel circle { stroke: #fff; stroke-width: 3; }
+.rm-pt.is-sel circle { stroke: #fff; stroke-width: 3.5; }
+.rm-pt line { stroke: rgb(0 0 0 / 0.75); stroke-width: 2; }
+.rm-pt .rm-foot { fill: rgb(0 0 0 / 0.85); stroke: none; }
+.rm-badge {
+  fill: #fff;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: rgb(0 0 0 / 0.9);
+  stroke-width: 3;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+/* 겹쳐 보기 — 지형 위에 생물군계를 얹는다. 색이 살아나서 지대가 구분된다 */
+.rm-blend image { opacity: 0.55; mix-blend-mode: color; }
 .rm-plabel {
   fill: #fff;
   font-family: var(--font-mono);

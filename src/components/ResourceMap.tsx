@@ -70,10 +70,15 @@ const BELT_SEGMENT_M = 56;
 /** 전신주 하나가 덮는 반경. 전력을 끌고 가는 거리를 가늠할 때 쓴다 */
 const POLE_SPAN_M = 40;
 
-const PURITY: Record<string, { ko: string; mult: number }> = {
-  i: { ko: '불순', mult: 0.5 },
-  n: { ko: '보통', mult: 1 },
-  p: { ko: '순수', mult: 2 },
+/*
+ * 순도를 색으로 구분한다 — 커뮤니티 지도들이 그렇게 하고 눈에 가장 빨리 읽힌다.
+ * 다만 색만으로 두지 않는다(색각 이상 대응). 동그라미 옆에 한 글자 배지가 항상 붙고,
+ * 누르면 아래에 이름과 순도가 글로 뜬다. 빨강·초록 짝을 피해 불순은 회색을 쓴다.
+ */
+const PURITY: Record<string, { ko: string; short: string; mult: number; fill: string }> = {
+  i: { ko: '불순', short: '불', mult: 0.5, fill: '#8d99a6' },
+  n: { ko: '보통', short: '보', mult: 1, fill: '#f0a52b' },
+  p: { ko: '순수', short: '순', mult: 2, fill: '#3fbf6f' },
 };
 const KIND: Record<string, string> = {
   node: '채굴 노드',
@@ -310,6 +315,8 @@ export default function ResourceMap({
     setVb({ x: x - w / 2, y: y - w / aspect / 2, w, h: w / aspect });
 
   const koOf = (r: string) => resources.find((x) => x.r === r)?.ko ?? r;
+  /** 겹쳐 보기는 지형 위에 생물군계를 얹는 것이라 바탕은 지형이다 */
+  const baseLayer = (k: string) => (k === 'blend' ? 'terrain' : k);
 
   /** 이 처리량을 감당하는 가장 낮은 벨트 등급 */
   const beltFor = (perMin: number) => {
@@ -497,13 +504,13 @@ export default function ResourceMap({
           onClick={(e) => onStageClick(e as unknown as MouseEvent)}
         >
           <svg class="rm-svg" viewBox={`${vb.x} ${vb.y} ${vb.w} ${vh}`} role="img" aria-label="자원 지도">
-            <image href={`${mapBase}/${layer}/preview.webp`} x="0" y="0" width={SIZE} height={SIZE} />
+            <image href={`${mapBase}/${baseLayer(layer)}/preview.webp`} x="0" y="0" width={SIZE} height={SIZE} />
             {tiles?.list.map((t) => {
               const step = SIZE / tiles.grid;
               return (
                 <image
                   key={`${layer}-${tiles.level}-${t.i}-${t.j}`}
-                  href={`${mapBase}/${layer}/${tiles.level}-${t.i}-${t.j}.webp`}
+                  href={`${mapBase}/${baseLayer(layer)}/${tiles.level}-${t.i}-${t.j}.webp`}
                   x={t.i * step}
                   y={t.j * step}
                   width={step}
@@ -511,6 +518,26 @@ export default function ResourceMap({
                 />
               );
             })}
+
+            {/* 겹쳐 보기 — 지형 위에 생물군계를 반투명으로 얹으면 지대 구분이 살아난다 */}
+            {layer === 'blend' && (
+              <g class="rm-blend">
+                <image href={`${mapBase}/biome/preview.webp`} x="0" y="0" width={SIZE} height={SIZE} />
+                {tiles?.list.map((t) => {
+                  const step = SIZE / tiles.grid;
+                  return (
+                    <image
+                      key={`b-${tiles.level}-${t.i}-${t.j}`}
+                      href={`${mapBase}/biome/${tiles.level}-${t.i}-${t.j}.webp`}
+                      x={t.i * step}
+                      y={t.j * step}
+                      width={step}
+                      height={step}
+                    />
+                  );
+                })}
+              </g>
+            )}
 
             {showGrid && (
               <g class="rm-grid">
@@ -601,30 +628,48 @@ export default function ResourceMap({
               : shown.map((p, i) => {
                   const r = s((markPx / 2) * (p.t === 'node' ? 1 : 0.82));
                   const active = sel === p;
+                  /* 동그라미를 점 위로 띄우고 가는 줄로 실제 자리를 가리킨다. 지도를 안 가린다 */
+                  const cy = p.y - r * 1.55;
                   return (
                     <g
                       key={`${p.r}-${i}`}
                       class={`rm-pt is-${p.p}${active ? ' is-sel' : ''}`}
                       onClick={() => !moved.current && setSel(active ? null : p)}
                     >
-                      <circle cx={p.x} cy={p.y} r={r} vector-effect="non-scaling-stroke" />
-                      {/* 그림도 같이 커진다. 확대했는데 광석이 안 보이면 지도가 아니다 */}
+                      <line x1={p.x} y1={p.y} x2={p.x} y2={cy} vector-effect="non-scaling-stroke" />
+                      <circle
+                        cx={p.x}
+                        cy={p.y}
+                        r={s(1.6)}
+                        class="rm-foot"
+                        vector-effect="non-scaling-stroke"
+                      />
+                      <circle
+                        cx={p.x}
+                        cy={cy}
+                        r={r}
+                        fill={PURITY[p.p]!.fill}
+                        vector-effect="non-scaling-stroke"
+                      />
                       <image
                         href={`${assetBase}/items/${p.r}.png`}
-                        x={p.x - r * 0.74}
-                        y={p.y - r * 0.74}
-                        width={r * 1.48}
-                        height={r * 1.48}
+                        x={p.x - r * 0.72}
+                        y={cy - r * 0.72}
+                        width={r * 1.44}
+                        height={r * 1.44}
                       />
-                      {zoom > 2.4 && (
-                        <text
-                          x={p.x}
-                          y={p.y + r + s(labelPx)}
-                          font-size={s(labelPx)}
-                          class="rm-plabel"
-                        >
-                          {/* 이름까지 붙이면 서로 겹친다. 어느 정도 들어가야 이름을 준다 */}
-                          {zoom > 4.5 ? `${koOf(p.r)} · ${PURITY[p.p]!.ko}` : PURITY[p.p]!.ko}
+                      <text
+                        class="rm-badge"
+                        x={p.x + r * 0.78}
+                        y={cy + r * 1.02}
+                        font-size={s(markPx * 0.42)}
+                      >
+                        {PURITY[p.p]!.short}
+                      </text>
+                      {/* 이름은 충분히 들어갔을 때만. 그 전에는 그림과 배지로 읽는다 — 안 그러면 서로 겹친다 */}
+                      {zoom > 7 && (
+                        <text x={p.x} y={p.y + s(labelPx * 1.3)} font-size={s(labelPx)} class="rm-plabel">
+                          {koOf(p.r)}
                         </text>
                       )}
                     </g>

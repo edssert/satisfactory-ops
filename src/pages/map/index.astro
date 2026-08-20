@@ -76,7 +76,10 @@ const bytes = JSON.stringify({ points, resources, payloadAreas }).length;
       points={points}
       resources={resources}
       areas={payloadAreas}
-      layers={manifest.layers.map((l) => ({ key: l.key, ko: l.ko }))}
+      layers={[
+        ...manifest.layers.map((l) => ({ key: l.key, ko: l.ko })),
+        { key: 'blend', ko: '겹쳐 보기' },
+      ]}
       levels={manifest.levels}
       assetBase={`${base}/assets`}
       mapBase={`${base}/assets/map`}
