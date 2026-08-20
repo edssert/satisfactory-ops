@@ -157,6 +157,25 @@ test('카탈로그 항목은 클릭 배치와 HTML 드래그앤드롭을 함께 
   assert.match(doc.querySelector('.vp-ruler span')?.textContent ?? '', /카탈로그 드롭/);
 });
 
+test('도면 레이어는 토대와 설비를 독립적으로 숨기고 다시 표시한다', () => {
+  mount();
+  button('파운데이션 8 m × 8 m')?.click();
+  clickCanvas();
+  button('제련기')?.click();
+  clickCanvas();
+  const layerInput = (label: string) => all('.vp-layers label')
+    .find((entry) => entry.textContent?.includes(label))?.querySelector('input') as HTMLInputElement;
+  layerInput('토대').click();
+  assert.equal(all('.vp-foundation').length, 0);
+  assert.equal(all('.vp-placement').length, 1);
+  layerInput('설비').click();
+  assert.equal(all('.vp-placement').length, 0);
+  layerInput('토대').click();
+  layerInput('설비').click();
+  assert.equal(all('.vp-foundation').length, 1);
+  assert.equal(all('.vp-placement').length, 1);
+});
+
 test('도면 맞춤은 배치된 공정을 화면 중심으로 가져온다', () => {
   mount();
   button('파운데이션 8 m × 8 m')?.click();

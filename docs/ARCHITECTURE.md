@@ -69,6 +69,7 @@ satisfactory-ops/
 │  │  ├─ gamedata.ts       데이터 접근 계층 (빌드타임 전용)
 │  │  └─ types.ts          app/*.json 의 타입
 │  ├─ domain/factory/      공장 배치·포트·경로·검증·편집 영속 경계
+│  │  ├─ drawing-bounds.ts 도면 전체 범위·PNG 픽셀 예산 계산
 │  │  ├─ editor-state.ts   편집 JSON v4 검증·직렬화·게임 스펙 재결합
 │  │  ├─ geometry.ts       하드 클리어런스·포트 좌표 변환
 │  │  ├─ route.ts          설비를 피하는 직교 물류 경로
@@ -133,6 +134,13 @@ satisfactory-ops/
 진행 정보는 `localStorage['sfops.v1']`, 공장 설계판은 `localStorage['sfops.validated-planner.v4']`에
 분리한다. 둘 다 최상위 `schemaVersion`을 가지며 서버로 전송하지 않는다. 공장 설계판은 게임 스펙 전체를
 복제하지 않고 `buildingClass`만 저장한 뒤 현재 빌드의 검증 스펙과 다시 결합한다.
+
+### 시공 도면 내보내기
+
+편집기의 화면 SVG가 도면의 단일 렌더 정본이다. 내보낼 때 화면 DOM을 복제한 뒤 계산된 시각 스타일을
+인라인하고, 게임 원본 탑뷰 이미지를 데이터 URL로 내장한다. 편집 전용 포트·호버·선택·배치 대기 표시는
+제거한다. SVG는 외부 자산 경로가 없는 독립 파일이며, PNG는 같은 SVG를 최대 8192px 픽셀 예산 안에서
+래스터화한다. 화면 맞춤과 내보내기가 모두 `drawing-bounds.ts`를 사용하므로 위치·축척 범위가 갈라지지 않는다.
 
 ---
 

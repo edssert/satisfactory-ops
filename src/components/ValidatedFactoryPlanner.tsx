@@ -14,7 +14,7 @@ import {
   type StoredPlacement,
   type StoredPlan,
 } from '../domain/factory/editor-state';
-import { transformBox } from '../domain/factory/geometry';
+import { drawingPixelSize, factoryDrawingBounds, type DrawingBounds } from '../domain/factory/drawing-bounds';
 import { routeAroundMachines } from '../domain/factory/route';
 import { validateFactoryPlan } from '../domain/factory/validate';
 import type {
@@ -84,6 +84,94 @@ type PlacementTool = { kind: 'foundation' } | { kind: 'machine'; buildingClass: 
 const SAVE_KEY = 'sfops.validated-planner.v4';
 const FOUNDATION = 8;
 const SNAP = 1;
+
+type DrawingLayer = 'foundations' | 'machines' | 'logistics' | 'elevation' | 'flow';
+type DrawingLayers = Record<DrawingLayer, boolean>;
+
+const INLINE_SVG_PROPERTIES = [
+  'fill', 'fill-opacity', 'stroke', 'stroke-width', 'stroke-dasharray', 'stroke-linecap',
+  'stroke-linejoin', 'stroke-opacity', 'opacity', 'font-family', 'font-size', 'font-weight',
+  'text-anchor', 'dominant-baseline', 'paint-order', 'vector-effect',
+] as const;
+
+function blobAsDataUrl(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(reader.error ?? new Error('자산을 읽지 못했습니다.'));
+    reader.readAsDataURL(blob);
+  });
+}
+
+function downloadBlob(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  link.click();
+  window.setTimeout(() => URL.revokeObjectURL(url), 0);
+}
+
+async function standaloneSvgBlob(svg: SVGSVGElement, bounds: DrawingBounds): Promise<Blob> {
+  const stateful = [...svg.querySelectorAll('.is-selected, .is-active')];
+  const savedClasses = stateful.map((element) => element.getAttribute('class'));
+  stateful.forEach((element) => {
+    element.classList.remove('is-selected');
+    element.classList.remove('is-active');
+  });
+
+  const clone = svg.cloneNode(true) as SVGSVGElement;
+  try {
+    const originals = [svg, ...svg.querySelectorAll('*')];
+    const copies = [clone, ...clone.querySelectorAll('*')];
+    originals.forEach((original, index) => {
+      const copy = copies[index] as SVGElement | undefined;
+      if (!copy) return;
+      const computed = getComputedStyle(original);
+      const inline = INLINE_SVG_PROPERTIES
+        .map((property) => `${property}:${computed.getPropertyValue(property)}`)
+        .join(';');
+      copy.setAttribute('style', inline);
+    });
+  } finally {
+    stateful.forEach((element, index) => {
+      const className = savedClasses[index];
+      if (className) element.setAttribute('class', className);
+      else element.removeAttribute('class');
+    });
+  }
+
+  clone.querySelectorAll('.vp-port, .vp-machine-hover, .vp-placement-ghost, .vp-marquee, .vp-foundation-hit')
+    .forEach((element) => element.remove());
+  clone.removeAttribute('class');
+  clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+  clone.setAttribute('viewBox', `${bounds.x} ${bounds.y} ${bounds.width} ${bounds.height}`);
+  clone.setAttribute('width', String(Math.ceil(bounds.width * 64)));
+  clone.setAttribute('height', String(Math.ceil(bounds.height * 64)));
+  clone.querySelectorAll('.vp-grid-bg, .vp-grid-overlay').forEach((element) => {
+    element.setAttribute('x', String(bounds.x));
+    element.setAttribute('y', String(bounds.y));
+    element.setAttribute('width', String(bounds.width));
+    element.setAttribute('height', String(bounds.height));
+  });
+
+  const cache = new Map<string, string>();
+  for (const image of clone.querySelectorAll('image')) {
+    const href = image.getAttribute('href');
+    if (!href || href.startsWith('data:')) continue;
+    const absolute = new URL(href, window.location.href).href;
+    let embedded = cache.get(absolute);
+    if (!embedded) {
+      const response = await fetch(absolute);
+      if (!response.ok) throw new Error(`도면 자산 응답 ${response.status}`);
+      embedded = await blobAsDataUrl(await response.blob());
+      cache.set(absolute, embedded);
+    }
+    image.setAttribute('href', embedded);
+  }
+  const xml = new XMLSerializer().serializeToString(clone);
+  return new Blob([xml], { type: 'image/svg+xml;charset=utf-8' });
+}
 
 function boundsOf(spec: MachineSpec): Box3 {
   return {
@@ -234,6 +322,7 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
   const [cursorWorld, setCursorWorld] = useState<Vec3 | null>(null);
   const [marquee, setMarquee] = useState<{ start: Vec3; end: Vec3 } | null>(null);
   const [query, setQuery] = useState('');
+  const [layers, setLayers] = useState<DrawingLayers>({ foundations: true, machines: true, logistics: true, elevation: true, flow: true });
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [notice, setNotice] = useState('');
@@ -538,31 +627,54 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
     nextFoundations = foundations,
     nextTransports = transports,
   ) {
-    const boxes = nextPlacements.map((placement) => transformBox(placement, boundsOf(placement.spec)));
-    const points = [
-      ...boxes.flatMap((bounds) => [bounds.min, bounds.max]),
-      ...nextFoundations.flatMap((tile) => [
-        { x: tile.xM, y: tile.yM, z: tile.zM },
-        { x: tile.xM + tile.sizeM, y: tile.yM + tile.sizeM, z: tile.zM },
-      ]),
-      ...nextTransports.flatMap((route) => route.pathM),
-    ];
-    if (!points.length) {
+    const bounds = factoryDrawingBounds(nextPlacements, nextFoundations, nextTransports, 6);
+    if (!bounds) {
       setZoom(1);
       setPan({ x: 0, y: 0 });
       return;
     }
-    const minX = Math.min(...points.map((point) => point.x));
-    const maxX = Math.max(...points.map((point) => point.x));
-    const minY = Math.min(...points.map((point) => point.y));
-    const maxY = Math.max(...points.map((point) => point.y));
-    const paddedWidth = Math.max(16, maxX - minX + 12);
-    const paddedHeight = Math.max(16, maxY - minY + 12);
     const aspect = Math.max(.48, box.height / Math.max(box.width, 1));
-    const nextZoom = Math.max(.55, Math.min(2.4, 128 / paddedWidth, (128 * aspect) / paddedHeight));
+    const nextZoom = Math.max(.55, Math.min(2.4, 128 / bounds.width, (128 * aspect) / bounds.height));
     setZoom(nextZoom);
-    setPan({ x: (minX + maxX) / 2, y: (minY + maxY) / 2 });
+    setPan({ x: bounds.x + bounds.width / 2, y: bounds.y + bounds.height / 2 });
     setNotice('도면 전체를 화면에 맞췄습니다.');
+  }
+
+  function toggleLayer(layer: DrawingLayer) {
+    setLayers((current) => ({ ...current, [layer]: !current[layer] }));
+  }
+
+  async function exportDrawing(format: 'svg' | 'png') {
+    const svg = svgRef.current;
+    const bounds = factoryDrawingBounds(placements, foundations, transports, 4);
+    if (!svg || !bounds) return;
+    try {
+      const svgBlob = await standaloneSvgBlob(svg, bounds);
+      if (format === 'svg') {
+        downloadBlob(svgBlob, 'satisfactory-construction-plan.svg');
+        setNotice('독립 SVG 도면을 내보냈습니다. 모든 탑뷰 자산이 파일 안에 포함됩니다.');
+        return;
+      }
+      const size = drawingPixelSize(bounds);
+      const url = URL.createObjectURL(svgBlob);
+      const image = new Image();
+      image.src = url;
+      await image.decode();
+      const canvas = document.createElement('canvas');
+      canvas.width = size.width;
+      canvas.height = size.height;
+      const context = canvas.getContext('2d');
+      if (!context) throw new Error('PNG 캔버스를 만들지 못했습니다.');
+      context.drawImage(image, 0, 0, size.width, size.height);
+      URL.revokeObjectURL(url);
+      const png = await new Promise<Blob>((resolve, reject) => canvas.toBlob((blob) => (
+        blob ? resolve(blob) : reject(new Error('PNG 인코딩 실패'))
+      ), 'image/png'));
+      downloadBlob(png, 'satisfactory-construction-plan.png');
+      setNotice(`고해상도 PNG 도면 ${size.width.toLocaleString('ko-KR')} × ${size.height.toLocaleString('ko-KR')} px를 내보냈습니다.`);
+    } catch (error) {
+      setNotice(`도면 내보내기 실패 · ${error instanceof Error ? error.message : '자산을 확인하세요.'}`);
+    }
   }
 
   function changeElevation(deltaM: number) {
@@ -880,10 +992,26 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
           </g>
         ))}
         {route.pathM.slice(1, -1).filter((point) => elevated ? point.z > 2.1 : point.z <= 2.1).map((point) => <circle cx={point.x} cy={point.y} r="1.02" class="vp-belt-joint" />)}
-        {labelSegment && route.flowPerMinute > 0 && (
+        {layers.flow && labelSegment && route.flowPerMinute > 0 && (
           <g class="vp-route-label" transform={`translate(${labelSegment.x} ${labelSegment.y - 1.7})`}>
             <rect x="-4.5" y="-.7" width="9" height="1.4" rx=".24" />
             <text>{itemNames.get(route.itemId) ?? route.itemId} · {fmt(route.flowPerMinute)}/분{elevated ? ` · Z +${fmt(labelSegment.z)} m` : ''}</text>
+          </g>
+        )}
+      </g>
+    );
+  }
+
+  function renderFluidRoute(route: TransportRoute) {
+    const labelPoint = route.pathM[Math.floor(route.pathM.length / 2)];
+    return (
+      <g class="vp-route is-fluid" key={route.id} aria-label="파이프라인">
+        <path d={routePath(route.pathM)} class="vp-route-shell" />
+        <path d={routePath(route.pathM)} class="vp-route-core" />
+        {layers.flow && labelPoint && route.flowPerMinute > 0 && (
+          <g class="vp-route-label" transform={`translate(${labelPoint.x} ${labelPoint.y - 1.9})`}>
+            <rect x="-5.4" y="-.7" width="10.8" height="1.4" rx=".24" />
+            <text>{itemNames.get(route.itemId) ?? route.itemId} · {fmt(route.flowPerMinute)} m³/분</text>
           </g>
         )}
       </g>
@@ -895,10 +1023,12 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
       <g class="vp-lift" transform={`translate(${lift.x} ${lift.y})`} key={`${route.id}-lift-${index}`}>
         <rect x="-1.35" y="-2.1" width="2.7" height="4.2" rx=".45" class="vp-lift-bed" />
         <image href={liftImageUrl} x="-1.6" y="-2.4" width="3.2" height="4.8" preserveAspectRatio="xMidYMid meet" />
-        <g class="vp-lift-label" transform="translate(0 -2.7)">
-          <rect x="-2.25" y="-.65" width="4.5" height="1.3" rx=".22" />
-          <text>리프트 {fmt(lift.height)} m · Z +{fmt(lift.highZ)} m</text>
-        </g>
+        {layers.elevation && (
+          <g class="vp-lift-label" transform="translate(0 -2.7)">
+            <rect x="-2.25" y="-.65" width="4.5" height="1.3" rx=".22" />
+            <text>리프트 {fmt(lift.height)} m · Z +{fmt(lift.highZ)} m</text>
+          </g>
+        )}
       </g>
     ));
   }
@@ -970,11 +1100,25 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
             <button type="button" class="is-danger" onClick={resetPlan} disabled={!placements.length && !foundations.length}>전체 초기화</button>
             <button type="button" onClick={() => fitToPlan()} disabled={!placements.length && !foundations.length && !transports.length}>도면 맞춤</button>
             <button type="button" onClick={exportPlan}>JSON 내보내기</button>
+            <button type="button" onClick={() => void exportDrawing('svg')} disabled={!placements.length && !foundations.length && !transports.length}>SVG 도면</button>
+            <button type="button" onClick={() => void exportDrawing('png')} disabled={!placements.length && !foundations.length && !transports.length}>PNG 도면</button>
             <label class="vp-import-button">
               JSON 가져오기
               <input type="file" accept="application/json,.json" onChange={importPlan} />
             </label>
           </div>
+          <fieldset class="vp-layers">
+            <legend>도면 레이어</legend>
+            {([
+              ['foundations', '토대'],
+              ['machines', '설비'],
+              ['logistics', '물류'],
+              ['elevation', '층고'],
+              ['flow', '품목·유량'],
+            ] as const).map(([layer, label]) => (
+              <label><input type="checkbox" checked={layers[layer]} onChange={() => toggleLayer(layer)} /> <span>{label}</span></label>
+            ))}
+          </fieldset>
           {notice && <p class="vp-notice" role="status">{notice}</p>}
         </header>
 
@@ -1007,8 +1151,8 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
               </filter>
             </defs>
             <rect x={-viewWidth} y={-viewHeight} width={viewWidth * 2} height={viewHeight * 2} class="vp-grid-bg" />
-            <rect x={-viewWidth} y={-viewHeight} width={viewWidth * 2} height={viewHeight * 2} fill="url(#vp-foundation-grid)" pointer-events="none" />
-            {[...foundations].sort((a, b) => a.zM - b.zM).map((tile) => (
+            <rect x={-viewWidth} y={-viewHeight} width={viewWidth * 2} height={viewHeight * 2} fill="url(#vp-foundation-grid)" class="vp-grid-overlay" />
+            {layers.foundations && [...foundations].sort((a, b) => a.zM - b.zM).map((tile) => (
               <g
                 key={tile.id}
                 class={`vp-foundation${selectedFoundationId === tile.id ? ' is-selected' : ''}`}
@@ -1024,18 +1168,13 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
                   preserveAspectRatio="none"
                 />
                 <rect x={tile.xM} y={tile.yM} width={tile.sizeM} height={tile.sizeM} class="vp-foundation-hit" />
-                {tile.zM > 0 && <text x={tile.xM + .5} y={tile.yM + 1.1} class="vp-z-label">Z +{fmt(tile.zM)} m</text>}
+                {layers.elevation && tile.zM > 0 && <text x={tile.xM + .5} y={tile.yM + 1.1} class="vp-z-label">Z +{fmt(tile.zM)} m</text>}
               </g>
             ))}
 
-            {transports.map((route) => route.medium === 'solid' ? renderSolidRoute(route, false) : (
-              <g class="vp-route is-fluid" key={route.id} aria-label="파이프라인">
-                <path d={routePath(route.pathM)} class="vp-route-shell" />
-                <path d={routePath(route.pathM)} class="vp-route-core" />
-              </g>
-            ))}
+            {layers.logistics && transports.map((route) => route.medium === 'solid' ? renderSolidRoute(route, false) : renderFluidRoute(route))}
 
-            {[...placements].sort((a, b) => a.positionM.z - b.positionM.z).map((placement) => {
+            {layers.machines && [...placements].sort((a, b) => a.positionM.z - b.positionM.z).map((placement) => {
               const spec = byClass.get(placement.spec.buildingClass)!;
               const bounds = boundsOf(spec);
               const width = bounds.max.x - bounds.min.x;
@@ -1069,6 +1208,9 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
                     <text x="0" y={bounds.min.y - 1.55}>{spec.name}{placement.operation?.recipeName ? ` · ${placement.operation.recipeName}` : ''}</text>
                   </g>
                   <title>{spec.name}{placement.operation?.recipeName ? ` · ${placement.operation.recipeName} · ${fmt(placement.operation.clockPercent ?? 100)}%` : ''}</title>
+                  {layers.elevation && placement.positionM.z > 0 && (
+                    <text x={bounds.min.x + .5} y={bounds.min.y + 1.1} class="vp-z-label" transform={`rotate(${-placement.rotation} ${bounds.min.x + .5} ${bounds.min.y + 1.1})`}>Z +{fmt(placement.positionM.z)} m</text>
+                  )}
                   {spec.ports.map((port) => {
                     const active = pendingPort?.placementId === placement.id && pendingPort.portId === port.id;
                     return (
@@ -1090,8 +1232,8 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
                 </g>
               );
             })}
-            {transports.filter((route) => route.medium === 'solid').map((route) => renderSolidRoute(route, true))}
-            {transports.filter((route) => route.medium === 'solid').flatMap((route) => renderLift(route))}
+            {layers.logistics && transports.filter((route) => route.medium === 'solid').map((route) => renderSolidRoute(route, true))}
+            {layers.logistics && transports.filter((route) => route.medium === 'solid').flatMap((route) => renderLift(route))}
             {placementTool?.kind === 'foundation' && ghostPoint && (
               <g class="vp-placement-ghost">
                 <image href={foundationImageUrl} x={ghostPoint.x - .025} y={ghostPoint.y - .025} width={FOUNDATION + .05} height={FOUNDATION + .05} preserveAspectRatio="none" />

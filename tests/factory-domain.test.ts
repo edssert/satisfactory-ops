@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { existsSync } from 'node:fs';
+import { drawingPixelSize, factoryDrawingBounds } from '../src/domain/factory/drawing-bounds.ts';
 import { isStoredPlan, restoreStoredPlan, toStoredPlan } from '../src/domain/factory/editor-state.ts';
 import { portWorldPosition } from '../src/domain/factory/geometry.ts';
 import { routeAroundMachines } from '../src/domain/factory/route.ts';
@@ -139,6 +140,14 @@ test('편집 JSON은 운전 설정·수동 경로·층고를 바꾸지 않고 �
   const specs = new Map(edited.placements.map((placement) => [placement.spec.buildingClass, placement.spec]));
   const restored = restoreStoredPlan(parsed, specs);
   assert.deepEqual(toStoredPlan(restored.placements, restored.foundations, restored.transports), stored);
+});
+
+test('도면 내보내기 경계는 실제 미터 축척과 고해상도 픽셀 크기를 공유한다', () => {
+  const bounds = factoryDrawingBounds([], [{ id: 'f0', xM: 0, yM: 0, zM: 0, sizeM: 8 }], [], 4);
+  assert.deepEqual(bounds, { x: -4, y: -4, width: 16, height: 16 });
+  assert.deepEqual(drawingPixelSize(bounds!), { width: 1536, height: 1536 });
+  const large = drawingPixelSize({ x: 0, y: 0, width: 200, height: 100 });
+  assert.deepEqual(large, { width: 8192, height: 4096 });
 });
 
 test('배치 가능한 설비는 원근 아이콘 폴백 없이 실제 탑뷰를 갖는다', () => {

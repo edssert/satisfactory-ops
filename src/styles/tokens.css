@@ -87,6 +87,8 @@
   --blueprint-grid: #aeb5b3;
   --blueprint-belt: #1e262c;
   --blueprint-accent: var(--raw-orange-600);
+  --diagram-structure: var(--raw-ink-950);
+  --diagram-shadow: var(--raw-shadow-dark);
   --shadow-color: color-mix(in oklab, var(--raw-shadow-dark) 56%, transparent);
   --shadow-header: 0 14px 30px -24px var(--shadow-color);
   --shadow-card: 0 22px 50px -36px var(--shadow-color);

@@ -43,6 +43,13 @@ updated: 2026-08-21
 > `src/domain/factory/editor-state.ts`, 브라우저 조작 회귀는 `tests/planner-ui.test.ts`,
 > 직렬화 회귀는 `tests/factory-domain.test.ts`가 맡는다.
 
+> [!success] 2026-08-21 시공 도면 내보내기 체크포인트
+> 현재 설계판의 실축 좌표와 게임 원본 탑뷰를 유지한 독립 SVG와 고해상도 PNG 내보내기를 구현했다.
+> 내보낸 SVG는 외부 이미지 경로와 편집용 포트·선택 표시를 제거하고 자산을 데이터 URL로 내장한다.
+> 토대·설비·물류·층고·품목/처리량 레이어는 화면과 결과물에 동일하게 반영된다. 도면 범위와
+> 픽셀 예산은 `src/domain/factory/drawing-bounds.ts`, 브라우저 회귀는
+> `tests/planner-ui.test.ts`, 기하 회귀는 `tests/factory-domain.test.ts`가 맡는다.
+
 ## 설계 결정
 
 - [[0025-validated-factory-domain|ADR-0025 검증된 공장 도메인]]
