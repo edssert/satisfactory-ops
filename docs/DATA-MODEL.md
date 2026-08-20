@@ -137,7 +137,8 @@ ADR-0015. 출처: `rockfactory/satisfactory-logistics` (MIT).
 
 ## 5. 사용자 데이터 (`localStorage`)
 
-키는 `sfops.v1` 하나. 테마만 별도로 `sfops.theme`.
+진행 데이터 키는 `sfops.v1`이다. 테마는 `sfops.theme`, 공장 편집 계획은
+`sfops.validated-planner.v4`로 분리한다.
 
 ```ts
 interface UserState {
@@ -152,6 +153,27 @@ interface UserState {
   updatedAt: string | null;
 }
 ```
+
+### 공장 편집 계획 v4
+
+```ts
+interface StoredPlan {
+  schemaVersion: 4;
+  placements: Array<{
+    id: string;
+    buildingClass: string;
+    positionM: { x: number; y: number; z: number };
+    rotation: 0 | 90 | 180 | 270;
+    operation?: MachineOperation;
+  }>;
+  foundations: FoundationTile[];
+  transports: TransportRoute[]; // 포트 참조·품목·유량·용량·수동 pathM 포함
+}
+```
+
+`src/domain/factory/editor-state.ts`가 유효성을 검사하고 직렬화한다. 설비의 하드 클리어런스와 포트 스펙은
+저장하지 않으며 `buildingClass`로 현재 게임 데이터에 다시 결합한다. 반대로 사용자가 만든 운전 설정,
+층고, 회전, 물류 경로는 가져오기 과정에서 자동 재라우팅하지 않고 기록값을 그대로 복원한다.
 
 ### 규칙
 

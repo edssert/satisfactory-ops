@@ -68,6 +68,11 @@ satisfactory-ops/
 │  │  ├─ solver.ts         생산 체인 해결 + 순환 거부 (ADR-0013)
 │  │  ├─ gamedata.ts       데이터 접근 계층 (빌드타임 전용)
 │  │  └─ types.ts          app/*.json 의 타입
+│  ├─ domain/factory/      공장 배치·포트·경로·검증·편집 영속 경계
+│  │  ├─ editor-state.ts   편집 JSON v4 검증·직렬화·게임 스펙 재결합
+│  │  ├─ geometry.ts       하드 클리어런스·포트 좌표 변환
+│  │  ├─ route.ts          설비를 피하는 직교 물류 경로
+│  │  └─ validate.ts       시공 발행 가능 여부 단일 게이트
 │  ├─ state/               사용자 데이터. 브라우저에서만 산다
 │  │  ├─ persist.ts        localStorage · 스키마 버전 · 마이그레이션 사다리
 │  │  └─ progress.ts       signals 스토어 + 파생값(현재 티어·다음 할 일)
@@ -104,6 +109,7 @@ satisfactory-ops/
 | 랜딩 | 8개 섹션 전부 | `QuickCalc` (히어로 계산 위젯) |
 | 마일스톤 | 페이지 골격 | `MilestoneChecklist` (SSR 후 하이드레이션 — JS 없어도 목록은 읽힌다) |
 | 시작 가이드 | 허브 표·티어1 계획·본문 | `StartPath`(설정·분기) · `SiteMap`(맵 팬줌·노드 계획) |
+| 공장 설계판 | 페이지 설명·근거 | `ValidatedFactoryPlanner`(직접 배치·연결·검증·편집 이력) |
 | 계산기 | 페이지 골격 | `ProductionCalc` |
 | 용어집 · 레퍼런스 | 전부 | **없음 (JS 0KB)** |
 
@@ -124,8 +130,9 @@ satisfactory-ops/
 
 ### 사용자 데이터 (읽기·쓰기)
 
-`localStorage['sfops.v1']` 한 키. 최상위 `schemaVersion` + 마이그레이션 사다리.
-저장하는 것은 **사용자가 입력한 사실**뿐이고, 현재 티어·다음 할 일·완료율은 전부 파생값이다.
+진행 정보는 `localStorage['sfops.v1']`, 공장 설계판은 `localStorage['sfops.validated-planner.v4']`에
+분리한다. 둘 다 최상위 `schemaVersion`을 가지며 서버로 전송하지 않는다. 공장 설계판은 게임 스펙 전체를
+복제하지 않고 `buildingClass`만 저장한 뒤 현재 빌드의 검증 스펙과 다시 결합한다.
 
 ---
 

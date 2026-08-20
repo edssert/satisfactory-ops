@@ -6,6 +6,14 @@
  * 그대로 이동·회전시킨다. 발행 가능 여부는 domain/factory 검증기 하나가 판정한다.
  */
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
+import {
+  isStoredPlan,
+  nextEditorSequence,
+  restoreStoredPlan,
+  toStoredPlan,
+  type StoredPlacement,
+  type StoredPlan,
+} from '../domain/factory/editor-state';
 import { transformBox } from '../domain/factory/geometry';
 import { routeAroundMachines } from '../domain/factory/route';
 import { validateFactoryPlan } from '../domain/factory/validate';
@@ -54,58 +62,12 @@ interface Props {
   };
 }
 
-interface StoredPlacement {
-  id: string;
-  buildingClass: string;
-  positionM: Vec3;
-  rotation: QuarterTurn;
-  operation?: Placement['operation'];
-}
-
-interface StoredPlan {
-  schemaVersion: 4;
-  placements: StoredPlacement[];
-  foundations: FoundationTile[];
-  transports: TransportRoute[];
-}
-
-function isStoredPlan(value: unknown): value is StoredPlan {
-  if (!value || typeof value !== 'object') return false;
-  const candidate = value as Partial<StoredPlan>;
-  return candidate.schemaVersion === 4
-    && Array.isArray(candidate.placements)
-    && Array.isArray(candidate.foundations)
-    && Array.isArray(candidate.transports)
-    && candidate.placements.every((entry) => (
-      typeof entry?.id === 'string'
-      && typeof entry.buildingClass === 'string'
-      && typeof entry.positionM?.x === 'number'
-      && typeof entry.positionM?.y === 'number'
-      && typeof entry.positionM?.z === 'number'
-      && [0, 90, 180, 270].includes(entry.rotation)
-    ));
-}
-
-function toStoredPlan(placements: Placement[], foundations: FoundationTile[], transports: TransportRoute[]): StoredPlan {
-  return {
-    schemaVersion: 4,
-    placements: placements.map(({ id, spec, positionM, rotation, operation }) => ({
-      id,
-      buildingClass: spec.buildingClass,
-      positionM,
-      rotation,
-      operation,
-    })),
-    foundations,
-    transports,
-  };
-}
-
 type DragState = {
   kind: 'machine' | 'foundation';
   id: string;
   dx: number;
   dy: number;
+  historyRecorded: boolean;
 } | {
   kind: 'canvas';
   startClientX: number;
@@ -277,9 +239,11 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
   const [notice, setNotice] = useState('');
   const [ready, setReady] = useState(false);
   const [box, setBox] = useState({ width: 1200, height: 720 });
+  const [historyCounts, setHistoryCounts] = useState({ undo: 0, redo: 0 });
   const seq = useRef(1);
   const drag = useRef<DragState | null>(null);
   const copiedPlacement = useRef<StoredPlacement | null>(null);
+  const history = useRef<{ past: StoredPlan[]; future: StoredPlan[] }>({ past: [], future: [] });
   const svgRef = useRef<SVGSVGElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
 
@@ -289,17 +253,11 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
       if (raw) {
         const stored = JSON.parse(raw) as unknown;
         if (isStoredPlan(stored)) {
-          const restored = stored.placements.flatMap((entry) => {
-            const spec = byClass.get(entry.buildingClass);
-            return spec ? [{ ...entry, spec }] : [];
-          });
-          setPlacements(restored);
-          setFoundations(stored.foundations);
-          setTransports(rerouteTransports(stored.transports, restored));
-          seq.current = Math.max(
-            1,
-            ...[...restored, ...stored.foundations].map((entry) => Number(entry.id.split('-').at(-1)) + 1 || 1),
-          );
+          const restored = restoreStoredPlan(stored, byClass);
+          setPlacements(restored.placements);
+          setFoundations(restored.foundations);
+          setTransports(restored.transports);
+          seq.current = nextEditorSequence(stored);
         }
       }
     } catch {
@@ -340,8 +298,20 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
         event.preventDefault();
         return;
       }
-      if (!(event.ctrlKey || event.metaKey) || (event.key.toLowerCase() !== 'c' && event.key.toLowerCase() !== 'v')) return;
-      if (event.key.toLowerCase() === 'c') {
+      if (!(event.ctrlKey || event.metaKey)) return;
+      const key = event.key.toLowerCase();
+      if (key === 'z') {
+        if (event.shiftKey) redo();
+        else undo();
+        event.preventDefault();
+        return;
+      }
+      if (key === 'y') {
+        redo();
+        event.preventDefault();
+        return;
+      }
+      if (key === 'c') {
         const selected = placements.find((placement) => placement.id === selectedId);
         if (!selected) return;
         copiedPlacement.current = {
@@ -355,9 +325,11 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
         event.preventDefault();
         return;
       }
+      if (key !== 'v') return;
       const copied = copiedPlacement.current;
       const spec = copied ? byClass.get(copied.buildingClass) : undefined;
       if (!copied || !spec) return;
+      recordHistory();
       const next: Placement = {
         id: `machine-${seq.current++}`,
         spec,
@@ -374,7 +346,7 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [byClass, groupSelection, placements, selectedFoundationId, selectedId]);
+  }, [byClass, groupSelection, historyCounts, placements, selectedFoundationId, selectedId]);
 
   const plan: FactoryPlan = useMemo(() => {
     return {
@@ -408,7 +380,62 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
   const viewHeight = viewWidth * Math.max(.48, box.height / Math.max(box.width, 1));
   const viewBox = `${pan.x - viewWidth / 2} ${pan.y - viewHeight / 2} ${viewWidth} ${viewHeight}`;
 
+  function updateHistoryCounts() {
+    setHistoryCounts({ undo: history.current.past.length, redo: history.current.future.length });
+  }
+
+  function clearTransientSelection() {
+    setSelectedId(null);
+    setSelectedFoundationId(null);
+    setGroupSelection([]);
+    setPendingPort(null);
+    setPlacementTool(null);
+    setCursorWorld(null);
+    setMarquee(null);
+  }
+
+  function applyStoredState(stored: StoredPlan) {
+    const restored = restoreStoredPlan(stored, byClass);
+    setPlacements(restored.placements);
+    setFoundations(restored.foundations);
+    setTransports(restored.transports);
+    seq.current = nextEditorSequence(stored);
+    clearTransientSelection();
+  }
+
+  function recordHistory() {
+    const snapshot = toStoredPlan(placements, foundations, transports);
+    const previous = history.current.past.at(-1);
+    if (!previous || JSON.stringify(previous) !== JSON.stringify(snapshot)) {
+      history.current.past.push(snapshot);
+      if (history.current.past.length > 50) history.current.past.shift();
+    }
+    history.current.future = [];
+    updateHistoryCounts();
+  }
+
+  function undo() {
+    const previous = history.current.past.pop();
+    if (!previous) return;
+    history.current.future.push(toStoredPlan(placements, foundations, transports));
+    if (history.current.future.length > 50) history.current.future.shift();
+    applyStoredState(previous);
+    updateHistoryCounts();
+    setNotice('실행 취소 · Ctrl+Shift+Z로 다시 실행');
+  }
+
+  function redo() {
+    const next = history.current.future.pop();
+    if (!next) return;
+    history.current.past.push(toStoredPlan(placements, foundations, transports));
+    if (history.current.past.length > 50) history.current.past.shift();
+    applyStoredState(next);
+    updateHistoryCounts();
+    setNotice('다시 실행 · Ctrl+Z로 실행 취소');
+  }
+
   function addMachine(machine: DrawingMachine, positionM: Vec3) {
+    recordHistory();
     const placement: Placement = {
       id: `machine-${seq.current++}`,
       spec: machine,
@@ -429,6 +456,7 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
       setNotice('같은 층의 같은 자리에 이미 파운데이션이 있습니다.');
       return;
     }
+    recordHistory();
     const tile: FoundationTile = { id: `foundation-${seq.current++}`, xM, yM, zM, sizeM: FOUNDATION };
     setFoundations((current) => [...current, tile]);
     setSelectedFoundationId(tile.id);
@@ -456,12 +484,14 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
 
   function removeSelected() {
     if (selectedFoundationId) {
+      recordHistory();
       setFoundations((current) => current.filter((tile) => tile.id !== selectedFoundationId));
       setSelectedFoundationId(null);
       return;
     }
     const targets = new Set([...(selectedId ? [selectedId] : []), ...groupSelection]);
     if (!targets.size) return;
+    recordHistory();
     setPlacements((current) => current.filter((placement) => !targets.has(placement.id)));
     setTransports((current) => current.filter((route) => (
       !targets.has(route.from.placementId) && !targets.has(route.to.placementId)
@@ -472,6 +502,8 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
   }
 
   function rotateSelected() {
+    if (!selectedId) return;
+    recordHistory();
     setPlacements((current) => {
       const next = current.map((placement) => placement.id === selectedId ? {
         ...placement,
@@ -483,6 +515,8 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
   }
 
   function resetPlan() {
+    if (!placements.length && !foundations.length && !transports.length) return;
+    recordHistory();
     setPlacements([]);
     setFoundations([]);
     setTransports([]);
@@ -533,12 +567,14 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
 
   function changeElevation(deltaM: number) {
     if (selectedFoundationId) {
+      recordHistory();
       setFoundations((current) => current.map((tile) => tile.id === selectedFoundationId
         ? { ...tile, zM: Math.max(0, tile.zM + deltaM) }
         : tile));
       return;
     }
     if (!selectedId) return;
+    recordHistory();
     setPlacements((current) => {
       const next = current.map((placement) => placement.id === selectedId
         ? { ...placement, positionM: { ...placement.positionM, z: Math.max(0, placement.positionM.z + deltaM) } }
@@ -553,7 +589,7 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
     const svg = svgRef.current;
     if (!svg) return;
     const point = svgPoint(svg, event);
-    drag.current = { kind: 'machine', id: placement.id, dx: placement.positionM.x - point.x, dy: placement.positionM.y - point.y };
+    drag.current = { kind: 'machine', id: placement.id, dx: placement.positionM.x - point.x, dy: placement.positionM.y - point.y, historyRecorded: false };
     svg.setPointerCapture(event.pointerId);
     setSelectedId(placement.id);
     setSelectedFoundationId(null);
@@ -564,7 +600,7 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
     const svg = svgRef.current;
     if (!svg) return;
     const point = svgPoint(svg, event);
-    drag.current = { kind: 'foundation', id: tile.id, dx: tile.xM - point.x, dy: tile.yM - point.y };
+    drag.current = { kind: 'foundation', id: tile.id, dx: tile.xM - point.x, dy: tile.yM - point.y, historyRecorded: false };
     svg.setPointerCapture(event.pointerId);
     setSelectedFoundationId(tile.id);
     setSelectedId(null);
@@ -604,6 +640,13 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
     const snap = state.kind === 'foundation' ? FOUNDATION : SNAP;
     const x = Math.round((point.x + state.dx) / snap) * snap;
     const y = Math.round((point.y + state.dy) / snap) * snap;
+    const moved = state.kind === 'foundation'
+      ? foundations.some((tile) => tile.id === state.id && (tile.xM !== x || tile.yM !== y))
+      : placements.some((placement) => placement.id === state.id && (placement.positionM.x !== x || placement.positionM.y !== y));
+    if (moved && !state.historyRecorded) {
+      recordHistory();
+      drag.current = { ...state, historyRecorded: true };
+    }
     if (state.kind === 'foundation') {
       setFoundations((current) => current.map((tile) => tile.id === state.id
         ? { ...tile, xM: x, yM: y }
@@ -664,6 +707,44 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
     if (machine) addMachine(machine, { x: Math.round(point.x / SNAP) * SNAP, y: Math.round(point.y / SNAP) * SNAP, z: 0 });
   }
 
+  function beginCatalogDrag(event: DragEvent, tool: PlacementTool) {
+    const payload = tool.kind === 'foundation' ? 'foundation' : `machine:${tool.buildingClass}`;
+    event.dataTransfer?.setData('application/x-sfops-placement', payload);
+    event.dataTransfer?.setData('text/plain', payload);
+    if (event.dataTransfer) event.dataTransfer.effectAllowed = 'copy';
+    if (tool.kind === 'foundation') queueFoundation();
+    else {
+      const machine = byClass.get(tool.buildingClass);
+      if (machine) queueMachine(machine);
+    }
+  }
+
+  function stageDragOver(event: DragEvent) {
+    const payload = event.dataTransfer?.types.includes('application/x-sfops-placement');
+    if (!payload) return;
+    event.preventDefault();
+    if (event.dataTransfer) event.dataTransfer.dropEffect = 'copy';
+    const svg = svgRef.current;
+    if (svg) setCursorWorld(svgPoint(svg, event as unknown as PointerEvent));
+  }
+
+  function stageDrop(event: DragEvent) {
+    const payload = event.dataTransfer?.getData('application/x-sfops-placement')
+      || event.dataTransfer?.getData('text/plain');
+    if (!payload) return;
+    event.preventDefault();
+    const svg = svgRef.current;
+    if (!svg) return;
+    const point = svgPoint(svg, event as unknown as PointerEvent);
+    if (payload === 'foundation') {
+      addFoundation(Math.round(point.x / FOUNDATION) * FOUNDATION, Math.round(point.y / FOUNDATION) * FOUNDATION);
+      return;
+    }
+    if (!payload.startsWith('machine:')) return;
+    const machine = byClass.get(payload.slice('machine:'.length));
+    if (machine) addMachine(machine, { x: Math.round(point.x / SNAP) * SNAP, y: Math.round(point.y / SNAP) * SNAP, z: 0 });
+  }
+
   function finishPointer() {
     if (drag.current?.kind === 'marquee') setNotice(`${groupSelection.length}개 설비 선택 · Delete로 한 번에 삭제`);
     drag.current = null;
@@ -697,6 +778,7 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
     if (from && to && from.port.medium === to.port.medium && from.port.medium !== 'power') {
       const medium: 'solid' | 'fluid' = from.port.medium === 'solid' ? 'solid' : 'fluid';
       const rate = portRate(from.placement, from.port.id) ?? portRate(to.placement, to.port.id);
+      recordHistory();
       setTransports((current) => [...current, {
         id: `route-${seq.current++}`,
         from: from.ref,
@@ -715,6 +797,7 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
 
   function configureSelected(next: { recipeId?: string; clockPercent?: number; powerShards?: number; somersloops?: number }) {
     if (!selectedId) return;
+    recordHistory();
     setPlacements((current) => {
       const updated = current.map((placement) => {
         if (placement.id !== selectedId) return placement;
@@ -755,25 +838,10 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
     try {
       const stored = JSON.parse(await file.text()) as unknown;
       if (!isStoredPlan(stored)) throw new Error('지원하지 않는 도면 스키마');
-      const restored = stored.placements.flatMap((entry) => {
-        const spec = byClass.get(entry.buildingClass);
-        return spec ? [{ ...entry, spec }] : [];
-      });
-      if (restored.length !== stored.placements.length) throw new Error('현재 데이터에 없는 설비가 포함됨');
-      const restoredTransports = rerouteTransports(stored.transports, restored);
-      setPlacements(restored);
-      setFoundations(stored.foundations);
-      setTransports(restoredTransports);
-      setSelectedId(null);
-      setSelectedFoundationId(null);
-      setGroupSelection([]);
-      setPendingPort(null);
-      setPlacementTool(null);
-      fitToPlan(restored, stored.foundations, restoredTransports);
-      seq.current = Math.max(
-        1,
-        ...[...restored, ...stored.foundations, ...stored.transports].map((entry) => Number(entry.id.split('-').at(-1)) + 1 || 1),
-      );
+      const restored = restoreStoredPlan(stored, byClass);
+      recordHistory();
+      applyStoredState(stored);
+      fitToPlan(restored.placements, restored.foundations, restored.transports);
       setNotice(`${file.name} 도면을 복원했습니다.`);
     } catch (error) {
       setNotice(`가져오기 실패 · ${error instanceof Error ? error.message : '파일을 확인하세요.'}`);
@@ -847,16 +915,32 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
           <input aria-label="설비 검색" value={query} onInput={(event) => setQuery(event.currentTarget.value)} placeholder="설비 검색" />
         </label>
         <div class="vp-machine-list">
-          <button type="button" class={`vp-machine is-foundation${placementTool?.kind === 'foundation' ? ' is-armed' : ''}`} onClick={queueFoundation}>
-            <img src={foundationImageUrl} alt="" />
+          <button
+            type="button"
+            draggable
+            class={`vp-machine is-foundation${placementTool?.kind === 'foundation' ? ' is-armed' : ''}`}
+            onClick={queueFoundation}
+            onDragStart={(event) => beginCatalogDrag(event as unknown as DragEvent, { kind: 'foundation' })}
+            onDragEnd={() => setCursorWorld(null)}
+            title="클릭한 뒤 위치를 고르거나 캔버스로 드래그"
+          >
+            <img src={foundationImageUrl} alt="" draggable={false} />
             <span><strong>파운데이션 8 m × 8 m</strong><small>실제 게임 타일 · 8 m 스냅</small></span>
             <b aria-hidden="true">+</b>
           </button>
           {visibleMachines.map((machine) => {
             const bounds = boundsOf(machine);
             return (
-              <button type="button" class={`vp-machine${placementTool?.kind === 'machine' && placementTool.buildingClass === machine.buildingClass ? ' is-armed' : ''}`} onClick={() => queueMachine(machine)}>
-                <img src={machine.imageUrl} alt="" />
+              <button
+                type="button"
+                draggable
+                class={`vp-machine${placementTool?.kind === 'machine' && placementTool.buildingClass === machine.buildingClass ? ' is-armed' : ''}`}
+                onClick={() => queueMachine(machine)}
+                onDragStart={(event) => beginCatalogDrag(event as unknown as DragEvent, { kind: 'machine', buildingClass: machine.buildingClass })}
+                onDragEnd={() => setCursorWorld(null)}
+                title="클릭한 뒤 위치를 고르거나 캔버스로 드래그"
+              >
+                <img src={machine.imageUrl} alt="" draggable={false} />
                 <span><strong>{machine.name}</strong><small>{fmt(bounds.max.x - bounds.min.x)} × {fmt(bounds.max.y - bounds.min.y)} m · 포트 {machine.ports.length}</small></span>
                 <b aria-hidden="true">+</b>
               </button>
@@ -877,6 +961,8 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
             <small>설비 {placements.length} · 토대 {foundations.length} · 물류 {transports.length}</small>
           </div>
           <div class="vp-actions">
+            <button type="button" onClick={undo} disabled={!historyCounts.undo} title="Ctrl+Z">실행 취소</button>
+            <button type="button" onClick={redo} disabled={!historyCounts.redo} title="Ctrl+Shift+Z 또는 Ctrl+Y">다시 실행</button>
             <button type="button" onClick={rotateSelected} disabled={!selectedId}>90° 회전</button>
             <button type="button" onClick={() => changeElevation(-4)} disabled={!selectedId && !selectedFoundationId}>높이 −4 m</button>
             <button type="button" onClick={() => changeElevation(4)} disabled={!selectedId && !selectedFoundationId}>높이 +4 m</button>
@@ -892,8 +978,8 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
           {notice && <p class="vp-notice" role="status">{notice}</p>}
         </header>
 
-        <div class="vp-stage" ref={stageRef} onClick={canvasClick}>
-          <div class="vp-ruler"><strong>8 m · 파운데이션 1칸</strong><span>드래그 이동 · Shift+드래그 영역 선택 · Delete 삭제</span></div>
+        <div class="vp-stage" ref={stageRef} onClick={canvasClick} onDragOver={stageDragOver} onDrop={stageDrop}>
+          <div class="vp-ruler"><strong>8 m · 파운데이션 1칸</strong><span>카탈로그 드롭 · 배경 드래그 이동 · Shift+드래그 영역 선택 · Ctrl+Z 실행 취소</span></div>
           <div class="vp-zoom">
             <button type="button" onClick={() => setZoom((value) => Math.min(2.4, value + .2))} aria-label="확대">+</button>
             <span>{Math.round(zoom * 100)}%</span>

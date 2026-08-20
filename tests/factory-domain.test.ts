@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { existsSync } from 'node:fs';
+import { isStoredPlan, restoreStoredPlan, toStoredPlan } from '../src/domain/factory/editor-state.ts';
 import { portWorldPosition } from '../src/domain/factory/geometry.ts';
 import { routeAroundMachines } from '../src/domain/factory/route.ts';
 import { drawingSupported, requireMachineSpec } from '../src/domain/factory/specs.ts';
@@ -109,6 +110,35 @@ test('빈 판은 시공 도면으로 발행하지 않는다', () => {
   });
   assert.equal(result.publishable, false);
   assert.ok(result.issues.some((entry) => entry.code === 'EMPTY_PLAN'));
+});
+
+test('편집 JSON은 운전 설정·수동 경로·층고를 바꾸지 않고 왕복한다', () => {
+  const edited = structuredClone(validPlan);
+  edited.placements[0].positionM.z = 8;
+  edited.placements[0].operation = {
+    recipeId: 'Recipe_IngotIron_C',
+    recipeName: '철 주괴',
+    clockPercent: 150,
+    powerShards: 1,
+    somersloops: 1,
+    outputMultiplier: 2,
+    inputRates: { Desc_OreIron_C: 45 },
+    outputRates: { Desc_IronIngot_C: 90 },
+    powerDemandMW: 9.7,
+  };
+  edited.transports[0].pathM = [
+    { x: 0, y: 2, z: 9 },
+    { x: 0, y: 7, z: 9 },
+    { x: 12, y: 7, z: 1 },
+    { x: 12, y: -3, z: 1 },
+  ];
+  const stored = toStoredPlan(edited.placements, edited.foundations, edited.transports);
+  const parsed = JSON.parse(JSON.stringify(stored)) as unknown;
+  assert.equal(isStoredPlan(parsed), true);
+  if (!isStoredPlan(parsed)) return;
+  const specs = new Map(edited.placements.map((placement) => [placement.spec.buildingClass, placement.spec]));
+  const restored = restoreStoredPlan(parsed, specs);
+  assert.deepEqual(toStoredPlan(restored.placements, restored.foundations, restored.transports), stored);
 });
 
 test('배치 가능한 설비는 원근 아이콘 폴백 없이 실제 탑뷰를 갖는다', () => {

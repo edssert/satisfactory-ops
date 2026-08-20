@@ -37,6 +37,12 @@ updated: 2026-08-21
 - 랜딩: `src/pages/index.astro`, `src/styles/landing.css`
 - 검증: `npm run verify`
 
+> [!success] 2026-08-21 편집 상태 체크포인트
+> 카탈로그 HTML 드래그앤드롭, 50단계 Undo/Redo(`Ctrl+Z`, `Ctrl+Shift+Z`, `Ctrl+Y`),
+> 운전 설정·수동 경로·층고의 JSON 무손실 왕복을 구현했다. 순수 상태 경계는
+> `src/domain/factory/editor-state.ts`, 브라우저 조작 회귀는 `tests/planner-ui.test.ts`,
+> 직렬화 회귀는 `tests/factory-domain.test.ts`가 맡는다.
+
 ## 설계 결정
 
 - [[0025-validated-factory-domain|ADR-0025 검증된 공장 도메인]]

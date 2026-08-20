@@ -136,6 +136,27 @@ test('전체 초기화는 설비·토대·물류를 한 번에 비운다', () =>
   assert.match(doc.body.textContent ?? '', /EMPTY_PLAN/);
 });
 
+test('실행 취소·다시 실행은 최근 50단계의 편집 상태를 복원한다', () => {
+  mount();
+  for (let index = 0; index < 51; index += 1) {
+    button('제련기')?.click();
+    clickCanvas();
+  }
+  assert.equal(all('.vp-placement').length, 51);
+  for (let index = 0; index < 50; index += 1) button('실행 취소')?.click();
+  assert.equal(all('.vp-placement').length, 1);
+  assert.equal((button('실행 취소') as HTMLButtonElement).disabled, true);
+  for (let index = 0; index < 50; index += 1) button('다시 실행')?.click();
+  assert.equal(all('.vp-placement').length, 51);
+  assert.equal((button('다시 실행') as HTMLButtonElement).disabled, true);
+});
+
+test('카탈로그 항목은 클릭 배치와 HTML 드래그앤드롭을 함께 제공한다', () => {
+  mount();
+  assert.equal(all('.vp-machine[draggable="true"]').length, machines.length + 1);
+  assert.match(doc.querySelector('.vp-ruler span')?.textContent ?? '', /카탈로그 드롭/);
+});
+
 test('도면 맞춤은 배치된 공정을 화면 중심으로 가져온다', () => {
   mount();
   button('파운데이션 8 m × 8 m')?.click();
