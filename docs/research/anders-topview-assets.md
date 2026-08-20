@@ -10,7 +10,7 @@
 - 활용 튜토리얼: [A 10 min tutorial on making Satisfactory blueprints with Figma](https://www.reddit.com/r/SatisfactoryGame/comments/msq6pb/)
 
 제작자가 공개한 `Assets.zip`의 4096×4096 PNG 네 장을 분석했다. 저장소에는 전체 시트를 넣지 않고,
-게임 객체와 대조한 설비 여섯 개만 투명 WebP로 잘라 사용한다. 원본 시트와 자동 검출 미리보기는
+게임 객체와 대조한 토대·생산 설비·저장고·분배기·병합기 열 개만 투명 WebP로 잘라 사용한다. 원본 시트와 자동 검출 미리보기는
 `.tmp-research/`에만 둔다.
 
 ## 제품에서의 역할
@@ -21,8 +21,8 @@
 - 포트 위치: 실제 세이브·블루프린트 연결 끝점의 교차검증 좌표
 - 배치 가능 여부: `src/domain/factory/validate.ts`의 검증 결과
 
-즉 이미지를 크게 보이게 하려고 설비 점유공간을 바꾸지 않는다. 캔버스에서 WebP는 검증된 물리 박스 안에
-`object-fit: contain`으로 투영한다.
+즉 이미지를 크게 보이게 하려고 설비 점유공간을 바꾸지 않는다. 캔버스는 자산별 `occupancyFrame`을
+게임 하드 클리어런스에 맞춰 역산하고, 시각 메시가 물리 박스 밖으로 돌출되는 부분도 그대로 보존한다.
 
 ## 재생성
 
@@ -33,4 +33,3 @@ python scripts/build-topview-assets.py .tmp-research/anders-assets public/assets
 
 자산 식별과 크롭 좌표는 `src/data/curated/topview-assets.json`에 있다. 자동 검출 결과만으로 새 객체를
 추가하지 않고 실제 게임 모델·포트 수·외곽 비율을 사람이 확인한다.
-

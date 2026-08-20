@@ -1,10 +1,13 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { existsSync } from 'node:fs';
 import { portWorldPosition } from '../src/domain/factory/geometry.ts';
 import { routeAroundMachines } from '../src/domain/factory/route.ts';
 import { drawingSupported, requireMachineSpec } from '../src/domain/factory/specs.ts';
 import type { FactoryPlan, Placement } from '../src/domain/factory/types.ts';
 import { validateFactoryPlan } from '../src/domain/factory/validate.ts';
+import portRows from '../src/data/curated/machine-ports.json' with { type: 'json' };
+import topviewRows from '../src/data/curated/topview-assets.json' with { type: 'json' };
 
 function foundationGrid(minX: number, maxX: number, minY: number, maxY: number) {
   const tiles = [];
@@ -106,6 +109,19 @@ test('빈 판은 시공 도면으로 발행하지 않는다', () => {
   });
   assert.equal(result.publishable, false);
   assert.ok(result.issues.some((entry) => entry.code === 'EMPTY_PLAN'));
+});
+
+test('배치 가능한 설비는 원근 아이콘 폴백 없이 실제 탑뷰를 갖는다', () => {
+  const assets = new Set(topviewRows.assets.map((entry) => entry.buildingClass));
+  const materialConnected = new Set(portRows.ports
+    .filter((port) => port.medium !== 'power')
+    .map((port) => port.buildingClass));
+  const catalog = portRows.$completeBuildings.filter((buildingClass) => materialConnected.has(buildingClass));
+  const missing = catalog.filter((buildingClass) => !assets.has(buildingClass));
+  assert.deepEqual(missing, []);
+  for (const buildingClass of catalog) {
+    assert.equal(existsSync(`public/assets/topview/${buildingClass}.webp`), true, buildingClass);
+  }
 });
 
 test('직교 라우터는 중간 설비의 하드 클리어런스를 우회한다', () => {

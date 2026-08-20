@@ -1,22 +1,34 @@
 {
-  "$schemaVersion": 1,
-  "$source": {
-    "author": "AndersPottemager",
-    "reddit": "https://www.reddit.com/user/AndersPottemager/",
-    "releaseThread": "https://www.reddit.com/r/SatisfactoryGame/comments/12gskwe/can_we_get_a_new_anders_pottemager_asset_set/",
-    "download": "https://www.dropbox.com/scl/fi/fjso2avbeocyqyvchlecg/Assets.zip?dl=1&rlkey=6ut90yf5j7614acf9on95f42g",
-    "sheet": "Texture 02.png"
+  "$schemaVersion": 2,
+  "$sources": {
+    "anders-2023": {
+      "author": "AndersPottemager",
+      "reddit": "https://www.reddit.com/user/AndersPottemager/",
+      "releaseThread": "https://www.reddit.com/r/SatisfactoryGame/comments/12gskwe/can_we_get_a_new_anders_pottemager_asset_set/",
+      "download": "https://www.dropbox.com/scl/fi/fjso2avbeocyqyvchlecg/Assets.zip?dl=1&rlkey=6ut90yf5j7614acf9on95f42g",
+      "sheet": "Texture 02.png"
+    },
+    "game-install-cl-502094": {
+      "type": "local-game-extraction",
+      "gameVersion": "++FactoryGame+rel-main-anniversary-2026-CL-502094",
+      "engine": "Unreal Engine 5.6.1",
+      "extractor": "CUE4Parse cd413cfc",
+      "renderer": "Three.js 0.180.0 orthographic",
+      "licenseNote": "Coffee Stain Studios 게임 자산. MIT 적용 대상 아님."
+    }
   },
   "assets": [
-    { "buildingClass": "Build_Foundation_8x1_01_C", "sheet": "Sheet_01.png", "candidateId": 7, "cropPx": { "x": 1836, "y": 2028, "width": 552, "height": 552 } },
-    { "buildingClass": "Build_AssemblerMk1_C", "candidateId": 1, "cropPx": { "x": 1004, "y": 152, "width": 700, "height": 1040 }, "occupancyFrame": { "x": 0, "y": 0.0294, "width": 0.9668, "height": 0.9412 } },
-    { "buildingClass": "Build_FoundryMk1_C", "candidateId": 2, "cropPx": { "x": 216, "y": 168, "width": 592, "height": 708 }, "occupancyFrame": { "x": 0.0396, "y": 0.0201, "width": 0.9209, "height": 0.9195 } },
-    { "buildingClass": "Build_ManufacturerMk1_C", "candidateId": 3, "cropPx": { "x": 2016, "y": 172, "width": 1216, "height": 1304 }, "occupancyFrame": { "x": 0.0248, "y": 0.007, "width": 0.9513, "height": 0.9404 } },
-    { "buildingClass": "Build_ConstructorMk1_C", "candidateId": 5, "cropPx": { "x": 172, "y": 992, "width": 680, "height": 704 }, "occupancyFrame": { "x": 0.0031, "y": 0.1257, "width": 0.9953, "height": 0.8421 } },
-    { "buildingClass": "Build_SmelterMk1_C", "candidateId": 6, "cropPx": { "x": 3500, "y": 1004, "width": 424, "height": 744 }, "occupancyFrame": { "x": 0, "y": 0.0455, "width": 1, "height": 0.9091 } },
-    { "buildingClass": "Build_OilRefinery_C", "candidateId": 7, "cropPx": { "x": 980, "y": 1356, "width": 728, "height": 1372 }, "occupancyFrame": { "x": 0.0604, "y": 0.0304, "width": 0.8791, "height": 0.9496 } },
-    { "buildingClass": "Build_StorageContainerMk1_C", "candidateId": 4, "cropPx": { "x": 3520, "y": 172, "width": 384, "height": 684 }, "occupancyFrame": { "x": 0.0604, "y": 0, "width": 0.8791, "height": 0.9938 } },
-    { "buildingClass": "Build_ConveyorAttachmentSplitter_C", "candidateId": 18, "cropPx": { "x": 2512, "y": 3088, "width": 352, "height": 352 } },
-    { "buildingClass": "Build_ConveyorAttachmentMerger_C", "candidateId": 30, "cropPx": { "x": 2512, "y": 3536, "width": 352, "height": 352 } }
+    { "buildingClass": "Build_Foundation_8x1_01_C", "sourceId": "anders-2023", "sheet": "Sheet_01.png", "candidateId": 7, "cropPx": { "x": 1836, "y": 2028, "width": 552, "height": 552 } },
+    { "buildingClass": "Build_AssemblerMk1_C", "sourceId": "anders-2023", "candidateId": 1, "cropPx": { "x": 1004, "y": 152, "width": 700, "height": 1040 }, "occupancyFrame": { "x": 0, "y": 0.0294, "width": 0.9668, "height": 0.9412 } },
+    { "buildingClass": "Build_FoundryMk1_C", "sourceId": "anders-2023", "candidateId": 2, "cropPx": { "x": 216, "y": 168, "width": 592, "height": 708 }, "occupancyFrame": { "x": 0.0396, "y": 0.0201, "width": 0.9209, "height": 0.9195 } },
+    { "buildingClass": "Build_ManufacturerMk1_C", "sourceId": "anders-2023", "candidateId": 3, "cropPx": { "x": 2016, "y": 172, "width": 1216, "height": 1304 }, "occupancyFrame": { "x": 0.0248, "y": 0.007, "width": 0.9513, "height": 0.9404 } },
+    { "buildingClass": "Build_ConstructorMk1_C", "sourceId": "anders-2023", "candidateId": 5, "cropPx": { "x": 172, "y": 992, "width": 680, "height": 704 }, "occupancyFrame": { "x": 0.0031, "y": 0.1257, "width": 0.9953, "height": 0.8421 } },
+    { "buildingClass": "Build_SmelterMk1_C", "sourceId": "anders-2023", "candidateId": 6, "cropPx": { "x": 3500, "y": 1004, "width": 424, "height": 744 }, "occupancyFrame": { "x": 0, "y": 0.0455, "width": 1, "height": 0.9091 } },
+    { "buildingClass": "Build_OilRefinery_C", "sourceId": "anders-2023", "candidateId": 7, "cropPx": { "x": 980, "y": 1356, "width": 728, "height": 1372 }, "occupancyFrame": { "x": 0.0604, "y": 0.0304, "width": 0.8791, "height": 0.9496 } },
+    { "buildingClass": "Build_StorageContainerMk1_C", "sourceId": "anders-2023", "candidateId": 4, "cropPx": { "x": 3520, "y": 172, "width": 384, "height": 684 }, "occupancyFrame": { "x": 0.0604, "y": 0, "width": 0.8791, "height": 0.9938 } },
+    { "buildingClass": "Build_ConveyorAttachmentSplitter_C", "sourceId": "anders-2023", "candidateId": 18, "cropPx": { "x": 2512, "y": 3088, "width": 352, "height": 352 } },
+    { "buildingClass": "Build_ConveyorAttachmentMerger_C", "sourceId": "anders-2023", "candidateId": 30, "cropPx": { "x": 2512, "y": 3536, "width": 352, "height": 352 } },
+    { "buildingClass": "Build_MinerMk1_C", "sourceId": "game-install-cl-502094", "renderPx": { "width": 1024, "height": 1024 }, "meshBoundsM": { "width": 6.6285, "length": 14.2832, "height": 19.981 }, "occupancyFrame": { "x": 0.3125, "y": 0.042, "width": 0.3751, "height": 0.8752 } },
+    { "buildingClass": "Build_GeneratorBiomass_Automated_C", "sourceId": "game-install-cl-502094", "renderPx": { "width": 1024, "height": 1024 }, "meshBoundsM": { "width": 8.3344, "length": 7.5158, "height": 6.9785 }, "occupancyFrame": { "x": 0.1063, "y": 0.0047, "width": 0.8571, "height": 0.8571 } }
   ]
 }

@@ -100,6 +100,7 @@
   --surface: var(--layer-1);
   --raised: var(--layer-2);
   --ink: var(--text-primary);
+  --ink-1: var(--text-primary);
   --ink-2: var(--text-secondary);
   --ink-3: var(--text-tertiary);
   --line: var(--border-subtle);

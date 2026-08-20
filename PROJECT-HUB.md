@@ -46,6 +46,7 @@ updated: 2026-08-21
 ## 조사 축
 
 - [[anders-topview-assets]]
+- [[game-mesh-topviews]]
 - [[conveyor-geometry]]
 - [[factory-layout-engine-2026]]
 - [[public-save-blueprint-corpus]]
