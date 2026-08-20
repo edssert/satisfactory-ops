@@ -1,34 +1,27 @@
 ---
 /**
- * Base.astro — 모든 페이지의 껍데기.
- * 헤더/푸터/테마/메타. 게임 버전 표기는 데이터에서 온다 (ADR-0012 드리프트 대응).
+ * 문서 골격. 모든 페이지가 이것을 쓴다.
+ *
+ * 아일랜드를 쓰지 않는다(ADR-0009). 인라인 스크립트는 테마 토글 하나뿐이고,
+ * 그것도 렌더 전에 실행돼 깜빡임을 막는 목적이다.
  */
 import '../styles/tokens.css';
 import '../styles/base.css';
-import { meta } from '../lib/gamedata';
 
 interface Props {
   title: string;
   description: string;
-  /** 랜딩은 헤더 내비를 숨기고 자체 히어로를 쓴다 */
-  bare?: boolean;
+  /** 현재 위치 표시용 — 'guide' | 'tools' | 'versions' | null */
+  section?: string | null;
 }
-
-const { title, description, bare = false } = Astro.props;
+const { title, description, section = null } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
 const nav = [
-  { href: `${base}/milestones/`, label: '마일스톤' },
-  { href: `${base}/start/`, label: '시작 가이드' },
-  { href: `${base}/guide/`, label: '초반 가이드' },
-  { href: `${base}/build/`, label: '건설 프로그램' },
-  { href: `${base}/calc/`, label: '계산기' },
-  { href: `${base}/design/`, label: '설계 도면' },
-  { href: `${base}/glossary/`, label: '용어집' },
-  { href: `${base}/versions/`, label: '버전 연혁' },
-  { href: `${base}/ref/`, label: '레퍼런스' },
+  { key: 'guide', href: `${base}/guide/`, ko: '가이드' },
+  { key: 'tools', href: `${base}/tools/`, ko: '도구' },
+  { key: 'versions', href: `${base}/versions/`, ko: '연혁' },
 ];
-const here = Astro.url.pathname;
-const buildId = meta.game.steamBuildId ?? '알 수 없음';
 ---
 
 <!doctype html>
@@ -39,139 +32,68 @@ const buildId = meta.game.steamBuildId ?? '알 수 없음';
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="color-scheme" content="light dark" />
-    <link
-      rel="icon"
-      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%2314161A'/><rect x='4' y='20' width='24' height='4' fill='%23FA9549'/><rect x='4' y='10' width='14' height='4' fill='%23E4E1DD'/></svg>"
-    />
-    <link rel="manifest" href={`${base}/manifest.webmanifest`} />
-    <meta name="theme-color" content="#14161a" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
+    {/* 테마 선택을 렌더 전에 반영한다. 이게 없으면 새로고침마다 흰 화면이 번쩍인다 */}
     <script is:inline>
-      // 테마 깜빡임 방지. localStorage → 없으면 OS 설정.
       try {
-        var t = localStorage.getItem('sfops.theme');
-        if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
+        var t = localStorage.getItem('theme');
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
       } catch (e) {}
     </script>
   </head>
+
   <body>
     <a class="skip" href="#main">본문으로 건너뛰기</a>
 
-    {
-      !bare && (
-        <header class="site-head">
-          <div class="wrap head-inner">
-            <a class="wordmark" href={`${base}/`}>
-              <span class="mark" aria-hidden="true" />
-              satisfactory-ops
-            </a>
-            <nav aria-label="주요 화면">
-              <ul>
-                {nav.map((n) => (
-                  <li>
-                    <a href={n.href} aria-current={here.startsWith(n.href) ? 'page' : undefined}>
-                      {n.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-            <button type="button" class="theme-toggle" data-theme-toggle aria-label="밝기 전환">
-              밝기
-            </button>
-          </div>
-        </header>
-      )
-    }
+    <header class="site-head">
+      <div class="wrap head-inner">
+        <a class="brand" href={`${base}/`}>
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span class="brand-name">satisfactory<span class="brand-dim">-ops</span></span>
+        </a>
+
+        <nav aria-label="주요">
+          <ul class="nav">
+            {nav.map((n) => (
+              <li>
+                <a href={n.href} aria-current={section === n.key ? 'page' : undefined}>{n.ko}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <button class="theme" type="button" data-theme-toggle aria-label="밝기 전환">
+          <span class="theme-dot" aria-hidden="true"></span>
+        </button>
+      </div>
+    </header>
 
     <main id="main">
       <slot />
     </main>
 
     <footer class="site-foot">
-      <div class="wrap">
-        <div class="kv">
-          <div>
-            <span class="k">데이터 기준</span>
-            <span class="v">
-              Satisfactory 게임 배포 데이터 · Steam build <span class="n">{buildId}</span> ·
-              아이템 <span class="n">{meta.counts.items}</span> / 레시피{' '}
-              <span class="n">{meta.counts.recipes}</span> (대체{' '}
-              <span class="n">{meta.counts.alternateRecipes}</span>) / 건물{' '}
-              <span class="n">{meta.counts.buildings}</span>
-            </span>
-          </div>
-          <div>
-            <span class="k">소스</span>
-            <span class="v">
-              <a href="https://github.com/edssert/satisfactory-ops">github.com/edssert/satisfactory-ops</a>
-              · 한국어 표시명은 게임 공식 로케일을 따릅니다
-            </span>
-          </div>
-        </div>
-        <p class="legal">
-          satisfactory-ops는 비공식 팬 제작 프로젝트입니다. Coffee Stain Studios와 제휴·승인 관계가
-          없습니다. Satisfactory 및 관련 상표는 각 소유자의 재산입니다.
+      <div class="wrap foot-inner">
+        <p class="caption">
+          게임 수치는 Satisfactory 설치본의 배포 데이터에서 직접 생성합니다.
+          아이콘과 게임 자산의 저작권은 Coffee Stain Studios 에 있습니다. 이 사이트는 팬 제작물이며
+          공식 제품이 아닙니다.
+        </p>
+        <p class="caption">
+          <a href="https://github.com/edssert/satisfactory-ops">소스 · GitHub</a>
         </p>
       </div>
     </footer>
 
-    <!-- 새 버전 알림 (arch-offline §5: 자동 적용하지 않고 사용자에게 알린다) -->
-    <div class="sw-toast" data-sw-toast hidden role="status">
-      <span>새 버전이 배포되었습니다.</span>
-      <button type="button" class="btn" data-sw-reload>새로고침</button>
-    </div>
-
-    <script is:inline define:vars={{ swUrl: `${base}/sw.js`, swScope: `${base}/` }}>
-      // 서비스워커 등록 — 오프라인 전 기능 동작 (TRD C-3)
-      if ('serviceWorker' in navigator && location.protocol === 'https:') {
-        // 새 워커가 제어권을 가져가면 한 번만 새로고침한다 (구버전 화면이 남지 않게)
-        var reloading = false;
-        navigator.serviceWorker.addEventListener('controllerchange', function () {
-          if (reloading) return;
-          reloading = true;
-          location.reload();
-        });
-
-        navigator.serviceWorker.register(swUrl, { scope: swScope }).then(function (reg) {
-          var toast = document.querySelector('[data-sw-toast]');
-          var show = function () { if (toast) toast.hidden = false; };
-          var watch = function (worker) {
-            if (!worker) return;
-            worker.addEventListener('statechange', function () {
-              if (worker.state === 'installed' && navigator.serviceWorker.controller) show();
-            });
-          };
-          // 페이지가 뜨기 전에 이미 설치되어 대기 중인 워커가 있을 수 있다 — 이 경우 statechange가 안 온다
-          if (reg.waiting && navigator.serviceWorker.controller) show();
-          watch(reg.installing);
-          reg.addEventListener('updatefound', function () { watch(reg.installing); });
-
-          document.querySelector('[data-sw-reload]')?.addEventListener('click', function () {
-            if (reg.waiting) reg.waiting.postMessage('skip-waiting');
-            location.reload();
-          });
-
-          // 열려 있는 탭에서도 새 버전을 감지하도록 주기적으로 확인한다
-          reg.update();
-          setInterval(function () { reg.update(); }, 60 * 60 * 1000);
-        }).catch(function () { /* 등록 실패해도 앱은 온라인에서 정상 동작한다 */ });
-      }
-    </script>
-
     <script is:inline>
       document.querySelector('[data-theme-toggle]')?.addEventListener('click', function () {
         var root = document.documentElement;
-        var cur =
+        var now =
           root.dataset.theme ||
           (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        var next = cur === 'dark' ? 'light' : 'dark';
+        var next = now === 'dark' ? 'light' : 'dark';
         root.dataset.theme = next;
-        try {
-          localStorage.setItem('sfops.theme', next);
-        } catch (e) {}
+        try { localStorage.setItem('theme', next); } catch (e) {}
       });
     </script>
 
@@ -179,117 +101,108 @@ const buildId = meta.game.steamBuildId ?? '알 수 없음';
       .skip {
         position: absolute;
         left: -9999px;
-        top: 0;
-        background: var(--surface);
-        padding: var(--s2) var(--s4);
         z-index: 10;
+        padding: var(--s3) var(--s4);
+        background: var(--accent);
+        color: var(--on-accent);
       }
-      .skip:focus {
-        left: var(--s4);
-        top: var(--s2);
-      }
+      .skip:focus { left: var(--s4); top: var(--s4); }
 
       .site-head {
-        border-bottom: 1px solid var(--line-strong);
-        background: var(--surface-2);
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        border-bottom: var(--hair) solid var(--line);
+        background: color-mix(in oklab, var(--bg) 88%, transparent);
+        backdrop-filter: saturate(1.4) blur(10px);
       }
       .head-inner {
         display: flex;
         align-items: center;
         gap: var(--s6);
-        min-height: 52px;
-        flex-wrap: wrap;
+        height: 3.5rem;
       }
-      .wordmark {
+
+      .brand {
         display: inline-flex;
         align-items: center;
         gap: var(--s2);
-        font-family: var(--font-display);
-        font-weight: 700;
-        font-size: var(--t-body-s);
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-        color: var(--ink);
+        font-family: var(--font-mono);
+        font-size: var(--t-small);
+        font-weight: 500;
+        letter-spacing: -0.01em;
         text-decoration: none;
       }
-      .wordmark .mark {
-        width: 22px;
-        height: 3px;
-        background: var(--accent);
+      /* 브랜드 마크 — 파운데이션 한 장을 위에서 본 모양. 8m 격자가 이 게임의 기본 단위다 */
+      .brand-mark {
+        width: 0.75rem;
+        height: 0.75rem;
+        border: 2px solid var(--accent);
+        border-radius: 1px;
       }
-      .site-head nav ul {
+      .brand-dim { color: var(--ink-3); }
+
+      .nav {
         display: flex;
-        gap: var(--s4);
-        list-style: none;
+        gap: var(--s5);
         margin: 0;
         padding: 0;
-        overflow-x: auto;
+        list-style: none;
       }
-      .site-head nav a {
-        display: block;
-        padding: var(--s3) 0;
-        font-size: var(--t-body-s);
-        color: var(--ink-2);
+      .nav a {
+        font-size: var(--t-small);
+        font-weight: 500;
         text-decoration: none;
-        white-space: nowrap;
-        border-bottom: 2px solid transparent;
-      }
-      .site-head nav a:hover {
-        color: var(--ink);
-      }
-      .site-head nav a[aria-current='page'] {
-        color: var(--ink);
-        border-bottom-color: var(--accent);
-      }
-      .theme-toggle {
-        margin-left: auto;
-        font-family: var(--font-mono);
-        font-size: var(--t-label);
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
         color: var(--ink-2);
+      }
+      .nav a:hover { color: var(--ink); }
+      .nav a[aria-current='page'] { color: var(--ink); }
+      .nav a[aria-current='page']::after {
+        content: '';
+        display: block;
+        height: 2px;
+        margin-top: 0.35rem;
+        background: var(--accent);
+      }
+
+      .theme {
+        margin-left: auto;
+        display: grid;
+        place-items: center;
+        width: 2rem;
+        height: 2rem;
+        padding: 0;
+        border: var(--hair) solid var(--line);
+        border-radius: var(--radius);
         background: transparent;
-        border: 1px solid var(--line);
-        border-radius: var(--radius-chip);
-        padding: var(--s1) var(--s2);
         cursor: pointer;
       }
-      .theme-toggle:hover {
-        color: var(--accent-ink);
-        border-color: var(--accent);
+      .theme:hover { border-color: var(--line-strong); }
+      .theme-dot {
+        width: 0.6rem;
+        height: 0.6rem;
+        border-radius: 50%;
+        border: 2px solid var(--ink-2);
+        border-right-color: transparent;
+        border-bottom-color: transparent;
       }
 
       .site-foot {
-        border-top: 1px solid var(--line);
         margin-top: var(--s24);
-        padding: var(--s8) 0 var(--s16);
-        font-size: var(--t-body-s);
-        color: var(--ink-2);
+        border-top: var(--hair) solid var(--line);
+        padding-block: var(--s8);
       }
-      .sw-toast {
-        position: fixed;
-        left: var(--s4);
-        bottom: var(--s4);
-        z-index: 30;
+      .foot-inner {
         display: flex;
-        align-items: center;
-        gap: var(--s3);
-        background: var(--surface);
-        border: 1px solid var(--line-strong);
-        border-left: 3px solid var(--accent);
-        border-radius: var(--radius);
-        padding: var(--s3) var(--s4);
-        font-size: var(--t-body-s);
-        box-shadow: 0 2px 12px rgb(0 0 0 / 0.18);
+        flex-wrap: wrap;
+        gap: var(--s4) var(--s8);
+        justify-content: space-between;
       }
-      .sw-toast[hidden] {
-        display: none;
-      }
+      .foot-inner .caption { max-width: 46em; }
 
-      .legal {
-        margin-top: var(--s6);
-        font-size: var(--t-caption);
-        max-width: var(--measure);
+      @media (max-width: 560px) {
+        .head-inner { gap: var(--s4); }
+        .nav { gap: var(--s4); }
       }
     </style>
   </body>

@@ -23,7 +23,8 @@
     "test:sw": "node --test tests/sw-runtime.test.ts",
     "render": "astro build && node scripts/render-plan.mjs",
     "db": "node scripts/db.mjs",
-    "db:check": "node scripts/db.mjs --check"
+    "db:check": "node scripts/db.mjs --check",
+    "font": "node scripts/build-font.mjs"
   },
   "dependencies": {
     "@astrojs/preact": "6.0.3",

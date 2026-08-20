@@ -1,162 +1,141 @@
 ---
 /**
- * 버전 연혁 — 이 앱의 수치가 어느 버전 기준인지, 그리고 커뮤니티 공략을 읽을 때
- * 어느 부분을 의심해야 하는지.
+ * 버전 연혁 — 커뮤니티 공략을 읽을 때 어느 부분만 다시 확인하면 되는지.
  *
- * 왜 앱에 넣는가: 공략마다 작성 시점이 다르고, 지금 버전은 1.2인데 널리 퍼진 자료는 1.0 시점이
- * 많다. 그렇다고 오래된 자료를 다 버릴 이유는 없다 — 메인 시스템이 뒤집히지 않는 한 대부분
- * 유효하다. 그래서 이 표는 **필터가 아니라 의심 목록**이다.
- *
- * 게임 수치는 설치본에서 직접 뽑으므로 항상 현재 버전 기준이다. 위험은 데이터가 아니라
- * 커뮤니티 자료 쪽에 있다.
+ * 이 앱의 게임 수치는 설치본에서 직접 뽑으므로 언제나 현재 버전 기준이다.
+ * 낡을 위험은 데이터가 아니라 바깥 자료 쪽에 있다. 그래서 이 표는 바깥 자료용이다.
  */
 import Base from '../../layouts/Base.astro';
 import history from '../../data/curated/version-history.json';
-import meta from '../../data/app/meta.json';
+import { meta } from '../../lib/gamedata';
 
+type Change = {
+  what: string;
+  before?: string;
+  after?: string;
+  affects: string;
+  confidence: string;
+  source: string;
+};
 const doc = history as {
-  $purpose: string;
-  $dataBaseline: {
-    note: string;
-    steamBuildId: string;
-    gameUpdatedAt: string;
-    extractedAt: string;
-    confidence: string;
-  };
+  $dataBaseline: { steamBuildId: string; gameUpdatedAt: string; extractedAt: string };
   versions: {
     version: string;
     date: string;
     headline: string;
     confidence: string;
     source: string;
-    changes: {
-      what: string;
-      before?: string;
-      after?: string;
-      affects: string;
-      confidence: string;
-      source: string;
-    }[];
+    changes: Change[];
   }[];
   $pending?: string;
 };
 
-const CONF_KO: Record<string, string> = {
-  verified: '게임 데이터로 확인',
-  consensus: '여러 출처 일치',
-  disputed: '출처가 갈림',
-  assumed: '가정',
-  unsourced: '출처 미확보',
-};
-
-/** 데이터가 실제로 그 빌드에서 나왔는지 대조 — 어긋나면 화면에 드러낸다 */
 const liveBuild = meta.game?.steamBuildId ?? null;
 const baselineMatches = liveBuild === doc.$dataBaseline.steamBuildId;
+
+const facts = [
+  { k: '게임 버전', v: meta.game?.version ?? '1.2' },
+  { k: 'Steam 빌드', v: liveBuild ?? '—' },
+  { k: '게임 갱신', v: doc.$dataBaseline.gameUpdatedAt },
+  { k: '데이터 추출', v: doc.$dataBaseline.extractedAt },
+];
 ---
 
 <Base
-  title="버전 연혁 — 어느 부분을 의심해야 하는가"
-  description="이 앱의 수치가 어느 버전 기준인지, 그리고 커뮤니티 공략을 읽을 때 무엇을 다시 확인해야 하는지."
+  title="버전 연혁 — 어느 부분을 다시 확인할까"
+  description="Satisfactory 버전별 진행·설계 관련 변경. 오래된 공략을 읽을 때 무엇만 다시 확인하면 되는지."
+  section="versions"
 >
   <div class="wrap page">
     <header class="page-head">
-      <p class="section-label"><span class="num">F16</span> 버전 연혁</p>
-      <h1>어느 부분을 의심해야 하는가</h1>
-      <p class="prose">{doc.$purpose}</p>
+      <p class="marker"><span class="num">연혁</span></p>
+      <h1>어느 부분을<br />다시 확인할까</h1>
+      <p class="lede prose">
+        오래된 공략도 대부분 그대로 유효합니다. 아래 표에 <strong>올라온 항목만</strong> 다시
+        확인하면 됩니다.
+      </p>
     </header>
 
-    <section class="note" style="margin-bottom: var(--s10)">
-      <span class="note-title">이 앱의 수치는 어느 버전인가</span>
-      <p>{doc.$dataBaseline.note}</p>
-      <div class="kv">
-        <div>
-          <span class="k">Steam 빌드</span>
-          <span class="v n">
-            {doc.$dataBaseline.steamBuildId}
-            {!baselineMatches && liveBuild && (
-              <strong class="muted"> — 현재 데이터는 {liveBuild} (연혁 파일과 불일치)</strong>
-            )}
-          </span>
-        </div>
-        <div>
-          <span class="k">게임 갱신</span>
-          <span class="v n">{doc.$dataBaseline.gameUpdatedAt}</span>
-        </div>
-        <div>
-          <span class="k">데이터 추출</span>
-          <span class="v n">{doc.$dataBaseline.extractedAt}</span>
-        </div>
-      </div>
-      <p class="footnote">
-        게임 수치(레시피 비율·전력·처리량·해금 티어)는 <strong>설치본에서 직접 뽑습니다.</strong>
-        그래서 데이터는 항상 현재 버전 기준입니다. 낡을 위험은 데이터가 아니라
-        <strong>커뮤니티 공략</strong> 쪽에 있습니다.
-      </p>
-    </section>
-
-    <section class="section">
-      <p class="section-label"><span class="num">01</span> 연혁</p>
-      <h2>진행과 설계에 영향을 준 변경</h2>
-      <p class="prose">
-        버그 수정·성능 개선·번역 수정은 담지 않습니다. <strong>무엇을 어떻게 지을지에 영향을 주는
-        변경만</strong> 담습니다.
-      </p>
-
-      {doc.versions.map((v) => (
-        <div class="section" style="margin-top: var(--s6)">
-          <h3>
-            <span class="n">{v.version}</span> · <span class="muted n">{v.date}</span> — {v.headline}
-          </h3>
-          <p class="footnote">{CONF_KO[v.confidence] ?? v.confidence} · {v.source}</p>
-          <div class="scroll-x">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>무엇이</th>
-                  <th>이전</th>
-                  <th>이후</th>
-                  <th>낡아버린 조언</th>
-                  <th>근거</th>
-                </tr>
-              </thead>
-              <tbody>
-                {v.changes.map((c) => (
-                  <tr>
-                    <td><strong>{c.what}</strong></td>
-                    <td class="muted">{c.before ?? '—'}</td>
-                    <td>{c.after ?? '—'}</td>
-                    <td>{c.affects}</td>
-                    <td class="footnote">{CONF_KO[c.confidence] ?? c.confidence}<br />{c.source}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+    <div class="facts">
+      {facts.map((f) => (
+        <div class="fact">
+          <span class="fact-k">{f.k}</span>
+          <span class="fact-v n">{f.v}</span>
         </div>
       ))}
-    </section>
-
-    {doc.$pending && (
-      <section class="note">
-        <span class="note-title">아직 채우는 중</span>
-        <p>{doc.$pending}</p>
-        <p class="footnote">
-          비어 있는 것을 그럴듯하게 채우지 않습니다. 확인된 것만 올립니다.
-        </p>
-      </section>
+    </div>
+    {!baselineMatches && liveBuild && (
+      <p class="caption warn">
+        연혁 파일의 빌드({doc.$dataBaseline.steamBuildId})와 현재 데이터의 빌드({liveBuild})가
+        다릅니다.
+      </p>
     )}
 
-    <section class="note" style="margin-top: var(--s6)">
-      <span class="note-title">공략을 읽을 때</span>
-      <p>
-        오래된 자료라고 버릴 이유는 없습니다. 메인 시스템이 뒤집히지 않는 한 대부분 그대로
-        유효합니다. 위 표에 <strong>올라온 항목만</strong> 다시 확인하면 됩니다.
-      </p>
-      <p>
-        수치가 공략과 다르면 <strong>이 앱 쪽이 맞습니다</strong> — 게임 배포 데이터에서 직접
-        읽기 때문입니다. 실제로 커뮤니티에 퍼진 "철봉 10/분 → 나사 4/분"은 오타이고,
-        맞는 값은 나사 40/분입니다.
-      </p>
-    </section>
+    {doc.versions.map((v) => (
+      <section class="section">
+        <p class="marker">
+          <span class="num">{v.version}</span> {v.date}
+        </p>
+        <h2>{v.headline}</h2>
+        <div class="scroll-x">
+          <table>
+            <thead>
+              <tr>
+                <th>무엇이</th>
+                <th>이전</th>
+                <th>이후</th>
+                <th>낡아버린 조언</th>
+              </tr>
+            </thead>
+            <tbody>
+              {v.changes.map((c) => (
+                <tr>
+                  <td><strong>{c.what}</strong></td>
+                  <td class="muted">{c.before ?? '—'}</td>
+                  <td>{c.after ?? '—'}</td>
+                  <td class="small">{c.affects}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    ))}
+
+    {doc.$pending && (
+      <section class="section">
+        <p class="marker"><span class="num">진행 중</span></p>
+        <p class="prose muted">{doc.$pending}</p>
+      </section>
+    )}
   </div>
+
+  <style>
+    .page { padding-block: var(--s16) 0; }
+    .page-head { margin-bottom: var(--s10); }
+    .page-head h1 { margin-bottom: var(--s4); line-height: 1.15; }
+    .lede { font-size: var(--t-body-l); color: var(--ink-2); }
+    .lede strong { color: var(--ink); font-weight: 600; }
+
+    .facts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+      gap: var(--hair);
+      background: var(--line);
+      border: var(--hair) solid var(--line);
+    }
+    .fact { background: var(--bg); padding: var(--s4) var(--s5); }
+    .fact-k {
+      display: block;
+      font-size: var(--t-label);
+      letter-spacing: 0.06em;
+      color: var(--ink-3);
+      margin-bottom: var(--s1);
+    }
+    .fact-v { font-size: var(--t-body-l); font-weight: 500; }
+    .warn { color: var(--danger); margin-top: var(--s3); }
+
+    .section { padding-block: var(--s12) 0; }
+    .section h2 { margin-bottom: var(--s5); }
+  </style>
 </Base>

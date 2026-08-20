@@ -31,7 +31,7 @@
         { "item": "Desc_IronIngot_C", "perMinute": 60, "note": "채굴기 1대가 벨트 Mk.1로 낼 수 있는 최대" },
         { "item": "Desc_IronPlate_C", "perMinute": 20 },
         { "item": "Desc_IronRod_C", "perMinute": 15 },
-        { "item": "Desc_Screw_C", "perMinute": 40 }
+        { "item": "Desc_IronScrew_C", "perMinute": 40 }
       ],
       "actions": [
         { "do": "철 노드에 채굴기를 놓고 벨트 한 줄로 제련기 두 대에 나눈다", "why": "제련기 한 대가 철광석 30/분을 먹는다. 벨트 Mk.1 한 줄(60/분)이 정확히 두 대분이다." },
