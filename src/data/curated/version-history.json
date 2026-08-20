@@ -1,6 +1,6 @@
 {
   "$comment": "게임 버전 연혁. 버그 수정·성능 개선은 담지 않는다 — 진행과 설계 판단에 영향을 주는 변경만 담는다.",
-  "$purpose": "이 표는 **자료를 버리는 필터가 아니다.** 커뮤니티 공략을 읽을 때 어느 부분만 의심할지 알려주는 목록이다. 메인 시스템이 뒤집히지 않는 한 구버전 공략도 대부분 유효하다.",
+  "$purpose": "커뮤니티 공략을 읽을 때 어느 부분만 다시 확인할지 알려주는 목록이다. 메인 시스템이 뒤집히지 않는 한 구버전 공략도 대부분 유효하다.",
   "$dataBaseline": {
     "version": "1.2",
     "note": "이 앱의 게임 수치는 아래 빌드에서 직접 뽑은 것이다. 커뮤니티 자료와 어긋나면 이쪽이 맞다.",
@@ -11,22 +11,448 @@
   },
   "versions": [
     {
-      "version": "1.0",
-      "date": "2024-09-10",
-      "headline": "정식 출시",
-      "confidence": "consensus",
-      "source": "공식 출시일 — 여러 출처 일치",
+      "version": "얼리액세스",
+      "date": "2019-03-19",
+      "headline": "Epic Games Store 얼리액세스 출시",
+      "confidence": "verified",
+      "source": "공식 위키 Satisfactory — \"March 19, 2019 (Early Access)\"",
       "changes": [
         {
-          "what": "하드 드라이브 대체 제작법 선택 규칙",
+          "what": "게임 출시",
+          "after": "Epic 독점. 2020-06-08 에 Steam 출시",
+          "affects": "이 시점 자료는 지금과 거의 모든 것이 다르다. 참고하지 않는다",
+          "confidence": "verified",
+          "source": "공식 위키 Satisfactory"
+        }
+      ]
+    },
+    {
+      "version": "Update 2",
+      "date": "2019-07-02",
+      "headline": "티어 7 · 열차",
+      "confidence": "verified",
+      "source": "공식 위키 Update 2 (Patch 0.2.1)",
+      "changes": [
+        {
+          "what": "열차",
+          "after": "티어 6 해금. 화물차·역",
+          "affects": "장거리 물류가 처음 생긴 시점",
+          "confidence": "verified",
+          "source": "위키 Update 2"
+        },
+        {
+          "what": "티어 7 신설",
+          "after": "원자력 · 바이어 공정(보크사이트) · 채굴기 Mk.3",
+          "affects": "후반 구조의 원형",
+          "confidence": "verified",
+          "source": "위키 Update 2"
+        },
+        {
+          "what": "벨트 Mk.5 추가",
+          "after": "벨트 등급 5단계",
+          "affects": "벨트 등급별 처리량 표",
+          "confidence": "verified",
+          "source": "위키 Update 2"
+        }
+      ]
+    },
+    {
+      "version": "Update 3",
+      "date": "2020-03-11",
+      "headline": "유체 · 우주 엘리베이터 재설계 · 전면 재조정",
+      "confidence": "verified",
+      "source": "공식 위키 Update 3 (Patch 0.3.3.3)",
+      "changes": [
+        {
+          "what": "유체 시스템",
+          "before": "없음",
+          "after": "파이프 · 급수 추출기 · 유체 8종",
+          "affects": "이 이전 자료에는 물이 아예 없다",
+          "confidence": "verified",
+          "source": "위키 Update 3"
+        },
+        {
+          "what": "발전기 물 요구",
+          "before": "석탄·원자력이 물 없이 작동",
+          "after": "바이오매스·지열을 뺀 모든 발전기가 유체를 요구",
+          "affects": "석탄 발전 배치가 완전히 달라졌다",
+          "confidence": "verified",
+          "source": "위키 Update 3"
+        },
+        {
+          "what": "우주 엘리베이터 부품",
+          "after": "손으로 못 만드는 5종(지능형 도금판·다목적 골조·자동 배선·모듈식 엔진·적응형 제어 장치)",
+          "affects": "진행의 뼈대가 여기서 잡혔다",
+          "confidence": "verified",
+          "source": "위키 Update 3"
+        },
+        {
+          "what": "A.W.E.S.O.M.E. 싱크·상점",
+          "before": "없음",
+          "after": "신설",
+          "affects": "잉여 처리 방식이 생긴 시점",
+          "confidence": "verified",
+          "source": "위키 Update 3"
+        },
+        {
+          "what": "레시피 전면 재조정",
+          "after": "거의 모든 레시피 조정 · 부품 6종 · 대체 제작법 30종 추가",
+          "affects": "이 이전의 모든 수치",
+          "confidence": "verified",
+          "source": "위키 Update 3"
+        }
+      ]
+    },
+    {
+      "version": "Update 4",
+      "date": "2021-04-13",
+      "headline": "티어 8 · 알루미늄/원자력 재작업",
+      "confidence": "verified",
+      "source": "공식 위키 Update 4 (Patch 0.4.1.0)",
+      "changes": [
+        {
+          "what": "티어 8 신설",
+          "after": "티어 7 진행을 티어 8 에 맞춰 재구성",
+          "affects": "후반 티어 구조",
+          "confidence": "verified",
+          "source": "위키 Update 4"
+        },
+        {
+          "what": "알루미늄 라인",
+          "after": "보크사이트 생산 라인과 대체 제작법 전면 개편",
+          "affects": "알루미늄 관련 모든 수치",
+          "confidence": "verified",
+          "source": "위키 Update 4"
+        },
+        {
+          "what": "원자력 재작업",
+          "before": "우라늄 펠릿",
+          "after": "펠릿 제거 · 플루토늄 연료봉 체인 신설",
+          "affects": "원자력 공정 전체",
+          "confidence": "verified",
+          "source": "위키 Update 4"
+        },
+        {
+          "what": "연료 발전기 소비",
+          "before": "연료 15/분",
+          "after": "12/분",
+          "affects": "연료 발전 규모 계산",
+          "confidence": "verified",
+          "source": "위키 Update 4"
+        },
+        {
+          "what": "자원정 순도",
+          "after": "자원정에 순도 개념 도입 — 발전량이 순도에 따라 달라짐",
+          "affects": "자원정 계획",
+          "confidence": "verified",
+          "source": "위키 Update 4"
+        },
+        {
+          "what": "인벤토리 슬롯 진행",
+          "after": "슬롯 증가 시점 재조정",
+          "affects": "슬롯 확보 순서",
+          "confidence": "verified",
+          "source": "위키 Update 4"
+        }
+      ]
+    },
+    {
+      "version": "Update 5",
+      "date": "2021-11-23",
+      "headline": "건설 시스템 개편 · 커스터마이저",
+      "confidence": "verified",
+      "source": "공식 위키 Update 5 (Patch 0.5.1.0)",
+      "changes": [
+        {
+          "what": "클리어런스 구분",
+          "before": "단일 충돌 판정",
+          "after": "하드/소프트 구분 — 장식 부재는 겹쳐도 지어짐",
+          "affects": "배치 밀도. 이 앱의 클리어런스 계산도 이 구분을 따른다",
+          "confidence": "verified",
+          "source": "위키 Update 5"
+        },
+        {
+          "what": "줍기(Zooping)",
+          "after": "드래그로 최대 10개 한 번에 배치",
+          "affects": "건설 속도",
+          "confidence": "verified",
+          "source": "위키 Update 5"
+        },
+        {
+          "what": "열차 신호",
+          "before": "없음",
+          "after": "블록 신호 · 경로 신호 신설",
+          "affects": "열차 노선 설계",
+          "confidence": "verified",
+          "source": "위키 Update 5"
+        },
+        {
+          "what": "색칠",
+          "before": "컬러 건(유료 자원)",
+          "after": "커스터마이저로 무료",
+          "affects": "색칠 관련 조언 전부 · MAM 꽃잎 연구 삭제",
+          "confidence": "verified",
+          "source": "위키 Update 5"
+        }
+      ]
+    },
+    {
+      "version": "Update 6",
+      "date": "2022-09-20",
+      "headline": "MAM 재조정 · 지도 조기 해금",
+      "confidence": "verified",
+      "source": "공식 위키 Update 6 (Patch 0.6.1.0)",
+      "changes": [
+        {
+          "what": "지도 해금",
+          "before": "MAM 연구 필요",
+          "after": "티어 1",
+          "affects": "초반 탐험 조언",
+          "confidence": "verified",
+          "source": "위키 Update 6"
+        },
+        {
+          "what": "장비 슬롯",
+          "before": "몸에 하나만",
+          "after": "머리·몸·등·다리 동시 착용",
+          "affects": "장비 우선순위 조언",
+          "confidence": "verified",
+          "source": "위키 Update 6"
+        },
+        {
+          "what": "MAM 연구 시간",
+          "after": "전부 3초로 통일",
+          "affects": "\"연구가 오래 걸리니 미리 걸어 두라\"는 조언은 낡았다",
+          "confidence": "verified",
+          "source": "위키 Update 6"
+        },
+        {
+          "what": "터보 연료 · 압축 석탄",
+          "after": "일반 해금으로 이동",
+          "affects": "전력 진행 순서",
+          "confidence": "verified",
+          "source": "위키 Update 6"
+        },
+        {
+          "what": "레이더 타워",
+          "after": "전력을 넣으면 반경 내 자원 노드와 탐험 보상을 표시",
+          "affects": "노드 탐색 방법",
+          "confidence": "verified",
+          "source": "위키 Update 6"
+        }
+      ]
+    },
+    {
+      "version": "Update 7",
+      "date": "2022-12-06",
+      "headline": "청사진 · 오버클럭 전력 완화",
+      "confidence": "verified",
+      "source": "공식 위키 Update 7 (Patch 0.7.0.8)",
+      "changes": [
+        {
+          "what": "청사진",
+          "before": "없음",
+          "after": "청사진 설계소(티어 4) — 4×4 파운데이션, 벽 8단",
+          "affects": "모듈식 건설이 가능해진 시점",
+          "confidence": "verified",
+          "source": "위키 Update 7"
+        },
+        {
+          "what": "오버클럭 전력",
+          "before": "더 가파른 지수",
+          "after": "생산 건물 지수 완화 · 발전기는 클럭에 선형",
+          "affects": "오버클럭 전력 계산. 이 이전 자료의 전력 수치는 의심할 것",
+          "confidence": "verified",
+          "source": "위키 Update 7"
+        },
+        {
+          "what": "원자력 발전소 물",
+          "before": "300 m³/분",
+          "after": "240 m³/분",
+          "affects": "원자력 급수 계산",
+          "confidence": "verified",
+          "source": "위키 Update 7"
+        },
+        {
+          "what": "생물 적대성 설정",
+          "after": "일반 / 반격만 / 비적대 세 가지",
+          "affects": "전투 관련 조언",
+          "confidence": "verified",
+          "source": "위키 Update 7"
+        }
+      ]
+    },
+    {
+      "version": "Update 8",
+      "date": "2023-11-14",
+      "headline": "언리얼 5.2 · 바이옴 개편 · 우선전력 스위치",
+      "confidence": "verified",
+      "source": "공식 위키 Update 8 (Patch 0.8.3.0)",
+      "changes": [
+        {
+          "what": "엔진",
+          "before": "UE4",
+          "after": "UE 5.2.1",
+          "affects": "성능 조언",
+          "confidence": "verified",
+          "source": "위키 Update 8"
+        },
+        {
+          "what": "바이옴",
+          "after": "타이탄 숲 · 붉은 정글 대규모 개편",
+          "affects": "해당 지역의 지형·노드 위치 조언",
+          "confidence": "verified",
+          "source": "위키 Update 8"
+        },
+        {
+          "what": "우선전력 스위치 · 전력탑",
+          "before": "없음",
+          "after": "신설",
+          "affects": "정전 대비 설계",
+          "confidence": "verified",
+          "source": "위키 Update 8"
+        },
+        {
+          "what": "차량 물리",
+          "after": "Chaos 물리로 전환",
+          "affects": "차량 경로 조언",
+          "confidence": "verified",
+          "source": "위키 Update 8"
+        }
+      ]
+    },
+    {
+      "version": "1.0",
+      "date": "2024-09-10",
+      "headline": "정식 출시 — 여기가 의심의 경계선",
+      "confidence": "verified",
+      "source": "공식 위키 Satisfactory · docs/research/version-history.md",
+      "changes": [
+        {
+          "what": "레시피·마일스톤 대규모 재조정",
+          "after": "수치가 전반적으로 바뀜",
+          "affects": "**1.0 이전 자료의 수치는 대부분 낡았다.** 이것이 경계선이다",
+          "confidence": "verified",
+          "source": "docs/research/version-history.md"
+        },
+        {
+          "what": "티어 9 · 페이즈 5 신설",
+          "before": "티어 8까지",
+          "after": "티어 9 · 우주 엘리베이터 페이즈 5",
+          "affects": "엔딩 구조",
+          "confidence": "verified",
+          "source": "docs/research/version-history.md"
+        },
+        {
+          "what": "하드 드라이브 규칙",
           "before": "후보 3개 중 1개 선택",
           "after": "후보 2개 + 리롤 1회",
-          "affects": "대체 레시피 획득 전략. 얼리액세스 시절 공략의 '3개 중 고르기' 서술은 낡았다",
+          "affects": "대체 레시피 획득 전략",
           "confidence": "verified",
           "source": "docs/research/alternate-recipes.md — 게임 데이터로 확인"
+        },
+        {
+          "what": "자원 노드 재배치",
+          "after": "노드 위치·순도 조정",
+          "affects": "1.0 이전의 노드 위치 자료",
+          "confidence": "verified",
+          "source": "docs/research/version-history.md"
+        },
+        {
+          "what": "차원 창고 · 생산 증폭기 · 전력 증강기",
+          "before": "없음",
+          "after": "신설",
+          "affects": "소머슬룹·머서 구체 용도",
+          "confidence": "verified",
+          "source": "docs/research/version-history.md"
+        },
+        {
+          "what": "벨트 Mk.6",
+          "after": "1200/분 추가",
+          "affects": "벨트 등급표",
+          "confidence": "verified",
+          "source": "게임 데이터"
+        }
+      ]
+    },
+    {
+      "version": "1.1",
+      "date": "2025-06-10",
+      "headline": "물류 부품 대량 추가 — 수치 변경 0건",
+      "confidence": "verified",
+      "source": "docs/research/version-history.md",
+      "changes": [
+        {
+          "what": "물류 부품",
+          "after": "우선 병합기 · 처리량 모니터 · 컨베이어 벽 구멍 · 리프트용 분배기/병합기",
+          "affects": "배선 방법이 늘었다. 기존 수치는 그대로",
+          "confidence": "verified",
+          "source": "docs/research/version-history.md"
+        },
+        {
+          "what": "열차 탈선",
+          "before": "없음",
+          "after": "완충기 정지 지점 + 탈선 규칙 신설",
+          "affects": "열차 노선 안전",
+          "confidence": "verified",
+          "source": "docs/research/version-history.md"
+        },
+        {
+          "what": "수치 변경",
+          "after": "**0건**",
+          "affects": "1.1 이전 자료의 수치는 그대로 유효하다. 도구가 부족할 뿐이다",
+          "confidence": "verified",
+          "source": "docs/research/version-history.md"
+        }
+      ]
+    },
+    {
+      "version": "1.2",
+      "date": "2026-06-02",
+      "headline": "게임 모드 · 차량 경로 재작성 — 수치 변경 0건",
+      "confidence": "verified",
+      "source": "docs/research/version-history.md",
+      "changes": [
+        {
+          "what": "게임 모드",
+          "before": "없음",
+          "after": "비용 배수 · 노드 랜덤화 · 월드 시드",
+          "affects": "**비용 배수를 켜면 이 앱의 수치가 그대로 맞지 않는다.** 기본값 1× 기준이다",
+          "confidence": "verified",
+          "source": "docs/research/version-history.md"
+        },
+        {
+          "what": "차량 경로",
+          "after": "전면 재작성",
+          "affects": "차량 관련 조언",
+          "confidence": "verified",
+          "source": "docs/research/version-history.md"
+        },
+        {
+          "what": "유체 트럭 · 유체 트럭 정류장",
+          "before": "없음",
+          "after": "티어 5 신설",
+          "affects": "유체 장거리 운송",
+          "confidence": "verified",
+          "source": "게임 데이터"
+        },
+        {
+          "what": "파이프라인 T형 접합부",
+          "before": "없음",
+          "after": "티어 3 신설",
+          "affects": "유체 배관",
+          "confidence": "verified",
+          "source": "게임 데이터"
+        },
+        {
+          "what": "수치 변경",
+          "after": "**0건**",
+          "affects": "1.0~1.2 자료의 수치는 전부 유효하다",
+          "confidence": "verified",
+          "source": "docs/research/version-history.md"
         }
       ]
     }
   ],
-  "$pending": "1.1 · 1.2 변경 내역은 조사 중이다 (docs/research/version-history.md). 확인되는 대로 채운다."
+  "$dividingLine": "의심의 경계선은 **1.0(2024-09-10)**이다. 1.0 에서 레시피·마일스톤이 대규모로 재조정됐고 자원 노드도 재배치됐다. 반대로 1.1·1.2 는 새 건물과 시스템만 추가했고 수치 변경이 0건이라, 1.0 이후 자료의 수치는 지금도 그대로 유효하다."
 }

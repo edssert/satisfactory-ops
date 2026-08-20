@@ -6,6 +6,7 @@
  * 낡을 위험은 데이터가 아니라 바깥 자료 쪽에 있다. 그래서 이 표는 바깥 자료용이다.
  */
 import Base from '../../layouts/Base.astro';
+import '../../styles/fx.css';
 import history from '../../data/curated/version-history.json';
 import { meta } from '../../lib/gamedata';
 
@@ -18,6 +19,8 @@ type Change = {
   source: string;
 };
 const doc = history as {
+  $purpose: string;
+  $dividingLine: string;
   $dataBaseline: { version: string; steamBuildId: string; gameUpdatedAt: string; extractedAt: string };
   versions: {
     version: string;
@@ -49,11 +52,12 @@ const facts = [
   <div class="wrap page">
     <header class="page-head">
       <p class="marker"><span class="num">연혁</span></p>
-      <h1>어느 부분을<br />다시 확인할까</h1>
+      <h1><span class="fx-gradient-text">어느 부분을<br />다시 확인할까</span></h1>
       <p class="lede prose">
         오래된 공략도 대부분 그대로 유효합니다. 아래 표에 <strong>올라온 항목만</strong> 다시
         확인하면 됩니다.
       </p>
+      <p class="divide prose">{doc.$dividingLine}</p>
     </header>
 
     <div class="facts">
@@ -138,6 +142,16 @@ const facts = [
     }
     .fact-v { font-size: var(--t-body-l); font-weight: 500; }
     .warn { color: var(--danger); margin-top: var(--s3); }
+    .divide {
+      margin-top: var(--s5);
+      padding: var(--s4) var(--s5);
+      border-left: 2px solid var(--accent);
+      border-radius: var(--radius);
+      background: var(--glass-raised);
+      box-shadow: var(--lit);
+      backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+      font-size: var(--t-small);
+    }
 
     .section { padding-block: var(--s16) 0; }
     .section h2 { margin-bottom: var(--s5); }
