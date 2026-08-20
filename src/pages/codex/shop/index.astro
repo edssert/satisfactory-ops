@@ -1,9 +1,0 @@
----
-/** 상점 첫 화면은 첫 탭으로 보낸다 */
-import { shopTabs } from '../../../lib/tech';
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const first = shopTabs().tabs[0]!.slug;
----
-<meta http-equiv="refresh" content={`0; url=${base}/codex/shop/${first}/`} />
-<link rel="canonical" href={`${base}/codex/shop/${first}/`} />
-<p><a href={`${base}/codex/shop/${first}/`}>싱크 상점 도감으로 이동</a></p>

@@ -44,12 +44,12 @@ function rewards(e: TierEntry) {
 <Base
   title={`${tier.ko} — 도감`}
   description={`${tier.ko}의 ${list.length}개 항목과 각각의 보상·비용을 게임 화면 그대로 봅니다.`}
-  section="codex"
+  section="dex"
 >
-  <div class="wrap codex">
+  <div class="wrap dex">
     <TechNav here="tiers" />
 
-    <header class="codex-head">
+    <header class="dex-head">
       <p class="marker"><span class="num">도감</span> 허브 · 마일스톤</p>
       <h1>{tier.ko}</h1>
     </header>
@@ -57,7 +57,7 @@ function rewards(e: TierEntry) {
     <nav class="tabs" aria-label="티어">
       {all.map((t) => (
         <a
-          href={`${base}/codex/tiers/${t.tier}/`}
+          href={`${base}/dex/tiers/${t.tier}/`}
           aria-current={t.tier === tier.tier ? 'page' : undefined}
         >
           티어
@@ -138,10 +138,6 @@ function rewards(e: TierEntry) {
       </section>
     ))}
 
-    <p class="codex-foot">
-      티어 0 은 게임 화면의 이름 그대로입니다 — 허브 업그레이드가 티어 0 에 들어 있습니다.
-      비용과 보상은 게임 배포 데이터 그대로입니다.
-    </p>
   </div>
 
   <script is:inline>

@@ -1,14 +1,14 @@
 /*
- * tech.css — 도감(Codex). 티어·MAM·싱크 상점 세 화면.
+ * tech.css — 도감. 티어·MAM·싱크 상점 세 화면.
  *
  * 게임에서 이 셋은 서로 다른 화면이고 탭으로 고른다. 한 페이지에 쭉 늘어놓으면
  * 지금 무엇을 보고 있는지가 사라지므로 화면을 나누고 탭을 그대로 옮겼다.
  */
 
-.codex { padding-block: var(--s12) var(--s16); }
-.codex-head { margin-bottom: var(--s6); }
-.codex-head h1 { margin-bottom: var(--s3); }
-.codex-head .lede { font-size: var(--t-body-l); color: var(--ink-2); }
+.dex { padding-block: var(--s12) var(--s16); }
+.dex-head { margin-bottom: var(--s6); }
+.dex-head h1 { margin-bottom: var(--s3); }
+.dex-head .lede { font-size: var(--t-body-l); color: var(--ink-2); }
 
 /* ------------------------------------------------------------------ 탭 */
 
@@ -362,12 +362,12 @@
 
 /* ------------------------------------------------------------------ 도감 첫 화면 */
 
-.codex-cards {
+.dex-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: var(--s4);
 }
-.codex-card {
+.dex-card {
   display: block;
   padding: var(--s6);
   border-radius: var(--radius);
@@ -376,15 +376,15 @@
   color: inherit;
   text-decoration: none;
 }
-.codex-card:hover { box-shadow: inset 0 0 0 1px var(--primary), var(--lit); }
-.codex-card h2 { margin: 0 0 var(--s2); font-size: var(--t-h3); }
-.codex-card .n {
+.dex-card:hover { box-shadow: inset 0 0 0 1px var(--primary), var(--lit); }
+.dex-card h2 { margin: 0 0 var(--s2); font-size: var(--t-h3); }
+.dex-card .n {
   color: var(--accent);
   font-family: var(--font-mono);
   font-size: var(--t-h2);
   font-weight: 600;
 }
-.codex-card p {
+.dex-card p {
   margin: var(--s3) 0 0;
   color: var(--ink-2);
   font-size: var(--t-body-s);
@@ -392,7 +392,7 @@
   word-break: keep-all;
 }
 
-.codex-foot {
+.dex-foot {
   margin-top: var(--s10);
   color: var(--ink-3);
   font-size: var(--t-caption);

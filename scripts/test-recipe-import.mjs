@@ -25,7 +25,7 @@ const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
 const errs = [];
 page.on('pageerror', (e) => errs.push(String(e)));
-await page.goto(`http://127.0.0.1:4320${BASE}/codex/recipes/`, { waitUntil: 'networkidle' });
+await page.goto(`http://127.0.0.1:4320${BASE}/dex/recipes/`, { waitUntil: 'networkidle' });
 await page.setInputFiles('[data-own-file]', SAVE);
 await page.waitForFunction(() => !document.querySelector('[data-own-msg]')?.hidden, { timeout: 90_000 });
 const msg = await page.textContent('[data-own-msg]');

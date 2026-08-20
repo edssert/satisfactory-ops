@@ -73,6 +73,17 @@ const pct = (x: number) => `${trim((x * 100).toFixed(1))}%`;
 const mw = (x: number) => `${trim(x.toFixed(1))} MW`;
 const machines = (n: number) => `${n}대`;
 const qty = (n: number) => `${Math.round(n)}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+/**
+ * 조사 고르기. 물건 이름은 데이터에서 오므로 받침이 있는지 미리 알 수 없다.
+ * 받침을 직접 보고 을/를, 이/가를 고른다 (한글이 아니면 받침 없는 것으로 본다).
+ */
+const hasFinal = (w: string) => {
+  const c = w.charCodeAt(w.length - 1);
+  return c >= 0xac00 && c <= 0xd7a3 && (c - 0xac00) % 28 !== 0;
+};
+const eul = (w: string) => `${w}${hasFinal(w) ? '을' : '를'}`;
+const iga = (w: string) => `${w}${hasFinal(w) ? '이' : '가'}`;
+
 /** 규칙 id 는 kebab-case 로 고정한다. 게임 클래스명을 뒤에 붙일 때도 형식을 지킨다 */
 const kebab = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
@@ -91,6 +102,10 @@ interface Ctx {
   /** 설비 → 상류 */
   up: Map<string, string[]>;
   machineKeys: Set<string>;
+  /** 창고 (그래프의 도착지이지만 설비는 아니다) */
+  storage: Set<string>;
+  /** 간선 위를 흐르는 물건. 굶는 설비에게 "무엇이 모자란가"를 말해 준다 */
+  edgeItem: Map<string, string | null>;
 }
 
 /** 영향 크기. 대략 "설비 몇 대분을 잃고 있나"로 환산한다. 정렬에만 쓴다 */
@@ -128,6 +143,8 @@ function context(model: FactoryModel, catalog: CheckupCatalog): Ctx {
     down,
     up,
     machineKeys: new Set(model.machines.map((m) => m.key)),
+    storage: new Set(model.storageKeys),
+    edgeItem: new Map(model.edges.map((e) => [`${e.from}>${e.to}`, e.item])),
   };
 }
 
@@ -255,9 +272,11 @@ function starved(ctx: Ctx): Scored[] {
       .sort((a, b) => a.uptime! - b.uptime!)[0];
     if (!cause) continue;
     hit.push(m);
+    const item = ctx.edgeItem.get(`${cause.key}>${m.key}`);
+    const short = item ? `${iga(ctx.catalog.items[item] ?? item)} 모자람 · ` : '';
     rows.push({
       ko: m.recipeKo ? `${m.ko} — ${m.recipeKo}` : m.ko,
-      note: `가동률 ${pct(m.uptime)} · 상류 ${cause.ko} ${pct(cause.uptime!)}`,
+      note: `가동률 ${pct(m.uptime)} · ${short}상류 ${cause.ko} ${pct(cause.uptime!)}`,
     });
   }
   if (!hit.length) return [];
@@ -381,7 +400,10 @@ function power(ctx: Ctx): Scored[] {
       f: {
         id: 'power-margin',
         severity: margin < POWER_STOP ? 'stop' : 'warn',
-        title: `발전 ${mw(genMW)}에 정격 소비 ${mw(rated.total)} — 여유가 ${pct(Math.max(0, margin))}뿐입니다`,
+        title:
+          margin >= 0
+            ? `발전 ${mw(genMW)}에 정격 소비 ${mw(rated.total)} — 여유가 ${pct(margin)}뿐입니다`
+            : `정격 소비 ${mw(rated.total)}가 발전 ${mw(genMW)}보다 ${mw(rated.total - genMW)} 많습니다`,
         detail:
           `세이브에 적힌 순간 소비는 ${mw(useMW)}지만 그 값은 믿을 수 없다. 저장된 순간에 재료를 기다리며 ` +
           `서 있던 설비는 거의 0으로 잡히기 때문이다. 지어 둔 설비가 전부 동시에 돌면 ${mw(rated.total)}가 필요하고, ` +
@@ -481,13 +503,22 @@ function piling(ctx: Ctx): Scored[] {
         severity: 'warn',
         title: `${ko} ${qty(n)}개가 쌓이기만 하고 있습니다`,
         detail:
-          `이 공장에서 ${ko}를 만드는 설비는 ${machines(makers.length)}인데, 그 산출이 다른 설비로 이어진 곳이 하나도 없다. ` +
+          `이 공장에서 ${eul(ko)} 만드는 설비는 ${machines(makers.length)}인데, 그 산출이 다른 설비로 이어진 곳이 하나도 없다. ` +
           `창고나 끊긴 벨트에서 끝나고 있고, 재고가 ${qty(n)}개까지 늘었다. 창고가 차면 만드는 설비가 그대로 멈추므로 ` +
           `지금은 문제로 안 보여도 라인 하나가 곧 서는 자리다. 설비와 전력은 계속 쓰면서 결과는 쓰이지 않고 있다.`,
         fix:
           `쓸 곳이 있으면 벨트를 그쪽으로 잇는다. 쓸 곳이 없으면 만드는 설비의 클럭을 내려 소비 속도에 맞추거나, ` +
           `그 설비를 지금 필요한 다른 것으로 돌린다. 창고를 더 붙이는 것은 문제를 며칠 미루는 것일 뿐이다.`,
-        rows: capRows(makers.map(machineRow)),
+        rows: capRows(
+          makers.map((m) => {
+            const row = machineRow(m);
+            const outs = ctx.down.get(m.key) ?? [];
+            const where = outs.some((k) => ctx.storage.has(k))
+              ? '창고에서 끝남'
+              : '이어진 곳 없음';
+            return { ko: row.ko, note: `${row.note} · ${where}` };
+          })
+        ),
       },
     });
   }

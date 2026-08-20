@@ -4,7 +4,7 @@
     {
       "id": "hub",
       "tier": 0,
-      "label": "허브",
+      "label": "티어 0",
       "title": "직접 만드는 구간",
       "milestones": [
         "허브 업그레이드 1",

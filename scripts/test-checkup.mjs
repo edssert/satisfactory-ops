@@ -53,8 +53,17 @@ const GOLD = {
   lightweight: 987,
   lightKinds: 22,
   machinesWithRecipe: 32,
-  edges: 91,
-  danglingOutputs: 23,
+  /*
+   * 분배기·병합기를 접은 뒤의 수. **이 스크립트의 참조 구현이 낸 값**이다
+   * (`node scripts/test-checkup.mjs --ref` 로 다시 뽑을 수 있다).
+   * 모듈이 낸 값을 베끼면 검증이 아니게 되므로 근거를 참조 구현 쪽에 둔다.
+   * 접기 전 값은 91/23 이었다 — 그때는 "제련기 → 분배기" 를 세고 있었다.
+   */
+  edges: 121,
+  danglingOutputs: 11,
+  /* 그래프의 점: 생산 설비 43 + 창고 17 */
+  graphNodes: 60,
+  storageNodes: 17,
   genMW: 210.0,
   useMW: 153.0,
   circuits: 1,
@@ -123,6 +132,24 @@ console.log(
 const catalog = JSON.parse(fs.readFileSync(CATALOG, 'utf8'));
 
 /*
+ * --ref : 내 모듈은 안 부르고, 참조 구현이 낸 값만 찍는다.
+ * 정답값(GOLD)을 새로 잡을 때 쓴다. 모듈이 낸 값을 베끼면 검증이 아니게 되므로,
+ * 기준은 항상 여기서 나온 값으로 삼는다.
+ */
+if (process.argv.includes('--ref')) {
+  console.log('');
+  console.log('■ 참조 구현이 낸 값 (모듈 없이 파서만 씀)');  for (const f of [GOLDEN_SAVE, ...OTHER_SAVES].map((x) => path.join(SAVE_DIR, x))) {
+    if (!fs.existsSync(f)) continue;
+    const r = reference(f);
+    console.log(
+      `  ${path.basename(f).padEnd(20)} 객체 ${r.objects} · 완전 ${r.fullActors}/${r.fullKinds}종 · 경량 ${r.lightweight}/${r.lightKinds}종 · ` +
+        `점 ${r.nodeKeys.size}(창고 ${r.storageKeys.size}) · 간선 ${r.edges}(중복 뺀 쌍 ${r.edgeSet.size}) · 끊긴 출력구 ${r.dangling}`
+    );
+  }
+  process.exit(0);
+}
+
+/*
  * TypeScript 는 node 가 그대로 못 읽는다. esbuild 로 묶어서 .mjs 로 떨군 뒤 불러 온다.
  * (tests/planner-ui.test.ts 가 쓰는 것과 같은 수법이다. 거기는 파일 하나라 transformSync 로
  *  충분했지만, 여기는 모듈이 서로를 부를 수 있으므로 bundle 로 묶는다.)
@@ -172,9 +199,14 @@ console.log('  번들             완료');
  * 모듈을 안 쓰고 파서로 직접 다시 센다. 조사 스크립트가 하던 계산을 그대로 옮긴 것이다.
  * 모듈과 이것이 다르면 둘 중 하나가 틀린 것이고, 어느 쪽인지는 정답값이 갈라 준다.
  */
-function reference(file) {
+function reference(input) {
   const { Parser } = require('@etothepii/satisfactory-file-parser');
-  const raw = fs.readFileSync(file);
+  /*
+   * 경로가 아니라 이미 읽어 둔 바이트를 받는다.
+   * 게임이 켜져 있으면 오토세이브가 5분마다 덮어써진다 — 모델과 참조가 각자 파일을
+   * 다시 읽으면 서로 다른 세이브를 보고 엉뚱하게 어긋난다. 한 번 읽어 둘 다 그걸 쓴다.
+   */
+  const raw = Buffer.isBuffer(input) ? input : fs.readFileSync(input);
   const save = Parser.ParseSave('ref', raw.buffer.slice(raw.byteOffset, raw.byteOffset + raw.byteLength));
   const all = [];
   for (const lv of Object.values(save.levels ?? {})) for (const o of lv.objects ?? []) all.push(o);
@@ -219,7 +251,32 @@ function reference(file) {
     if (p.mOutputInventory) sumInv(p.mOutputInventory.value.pathName, withBuffers);
   }
 
-  /* 벨트를 접어 만든 방향 있는 간선. 조사 스크립트 10번과 같은 방식 */
+  /* -------------------------------------------------- 접힌 그래프 (독립 구현) */
+  /*
+   * 점(node) = 생산 설비(레시피가 붙었거나 채굴기·발전기) + 저장 컨테이너.
+   * 그 사이의 벨트·리프트·분배기·병합기·바닥 구멍은 전부 접는다 —
+   * 분배기는 도착지가 아니라 갈림길이라 "제련기 → 분배기" 로 끊으면 흐름을 못 읽는다.
+   *
+   * 무엇을 접을지는 **카탈로그의 cat === 'logistics'** 로 정한다.
+   * 모듈은 클래스명 정규식으로 정한다 — 일부러 다른 근거를 쓴다. 같은 근거를 쓰면
+   * 같이 틀려도 둘 다 통과해 버린다. (참고로 cat 쪽이 더 넓다. 선별 분배기·우선 병합기·
+   * 밸브·처리량 모니터까지 든다. 이 세이브 4개에는 그런 게 없어 결과는 같아야 한다.)
+   *
+   * 우주 엘리베이터는 연결구가 6개나 되지만 접으면 안 된다 — 물건이 들어가고 끝나는
+   * 종점이지 통로가 아니다. cat 이 'structure' 라 자연히 걸러진다.
+   */
+  const B = catalog.buildings ?? {};
+  const isMachine = (o) => {
+    const cat = B[cls(o.typePath)]?.cat;
+    return !!o.properties?.mCurrentRecipe || cat === 'extractor' || cat === 'generator';
+  };
+  const isNode = (o) => isMachine(o) || !!o.properties?.mStorageInventory;
+  const nodeKeys = new Set(acts.filter(isNode).map((o) => o.instanceName));
+  /* 창고는 설비가 아니면서 점인 것 — 모듈의 storageKeys 와 같은 뜻이어야 한다 */
+  const storageKeys = new Set(
+    acts.filter((o) => !isMachine(o) && o.properties?.mStorageInventory).map((o) => o.instanceName)
+  );
+
   const conns = all.filter((o) => /FGFactoryConnectionComponent/.test(o.typePath ?? ''));
   const link = new Map();
   for (const c of conns) {
@@ -231,26 +288,54 @@ function reference(file) {
     (byName.get(n)?.components ?? [])
       .map((x) => x.pathName)
       .filter((p) => /FGFactoryConnectionComponent/.test(byName.get(p)?.typePath ?? ''));
-  const isTransport = (n) => /Conveyor(Belt|Lift)|FoundationPassthrough|Pipeline/.test(n);
-  const follow = (start) => {
-    let cur = link.get(start);
-    for (let i = 0; cur && i < 400; i++) {
-      const owner = ownerOf(cur);
-      if (!isTransport(owner)) return owner;
-      const next = compsOf(owner).filter((p) => p !== cur);
-      if (!next.length) return null;
-      cur = link.get(next[0]);
-    }
-    return null;
+  /** 통로인가. 점이면 절대 통로가 아니다 — 순서가 중요하다 */
+  const isConduit = (owner) => {
+    const o = byName.get(owner);
+    if (!o || nodeKeys.has(owner)) return false;
+    return B[cls(o.typePath)]?.cat === 'logistics';
   };
-  let edges = 0;
+
+  /**
+   * 출력구 하나에서 시작해 닿는 점을 전부 모은다.
+   * 모듈은 너비 우선 큐를 쓴다. 여기는 깊이 우선 스택으로 훑는다 — 같은 답이 나와야 한다.
+   */
+  const reachable = (startComp) => {
+    const hit = new Set();
+    const seen = new Set();
+    const stack = [];
+    const first = link.get(startComp);
+    if (first) stack.push(first);
+    while (stack.length) {
+      const cur = stack.pop();
+      if (seen.has(cur)) continue;
+      seen.add(cur);
+      const owner = ownerOf(cur);
+      if (!isConduit(owner)) {
+        /* 점이 아니면(우주 엘리베이터·싱크 등) 그냥 버린다 */
+        if (nodeKeys.has(owner)) hit.add(owner);
+        continue;
+      }
+      for (const c of compsOf(owner)) {
+        if (c === cur) continue;
+        const nxt = link.get(c);
+        if (nxt && !seen.has(nxt)) stack.push(nxt);
+      }
+    }
+    return hit;
+  };
+
+  const edgeList = [];
   let dangling = 0;
-  for (const m of acts) {
-    if (isTransport(m.instanceName)) continue;
-    for (const cp of compsOf(m.instanceName)) {
+  for (const o of acts) {
+    if (!nodeKeys.has(o.instanceName)) continue;
+    for (const cp of compsOf(o.instanceName)) {
       if (!/^Output/.test(cp.split('.').pop())) continue;
-      if (follow(cp)) edges++;
-      else dangling++;
+      const hits = reachable(cp);
+      if (!hits.size) {
+        dangling++;
+        continue;
+      }
+      for (const to of hits) edgeList.push({ from: o.instanceName, to });
     }
   }
 
@@ -268,8 +353,19 @@ function reference(file) {
     withRecipe: acts.filter((o) => o.properties?.mCurrentRecipe).length,
     storageOnly,
     withBuffers,
-    edges,
+    edgeList,
+    edges: edgeList.length,
+    edgeSet: new Set(edgeList.map((e) => `${e.from}\u0000${e.to}`)),
     dangling,
+    nodeKeys,
+    storageKeys,
+    /* 어긋났을 때 instanceName 대신 "제련기#123" 처럼 찍으려고 */
+    label: new Map(
+      acts.map((o) => [
+        o.instanceName,
+        `${B[cls(o.typePath)]?.ko ?? cls(o.typePath)}#${(o.instanceName ?? '').split('_').pop()}`,
+      ])
+    ),
     circuits: circuits.length,
     instanceNames: new Set(all.map((o) => o.instanceName)),
     session: save.header?.sessionName,
@@ -292,7 +388,7 @@ async function runOne(file) {
   const ab = raw.buffer.slice(raw.byteOffset, raw.byteOffset + raw.byteLength);
   const t0 = performance.now();
   const model = await readFactory(ab, catalog, path.basename(file));
-  return { model, ms: performance.now() - t0, kb: stat.size / 1024 };
+  return { model, ms: performance.now() - t0, kb: stat.size / 1024, raw };
 }
 
 let run;
@@ -303,8 +399,9 @@ try {
   process.exit(1);
 }
 const m = run.model;
-const ref = reference(target);
+const ref = reference(run.raw);
 const keyOf = (x) => x.key ?? x.instanceName ?? x.id;
+const nameOf = (n) => ref.label.get(n) ?? (n ?? '').split('.').pop() ?? String(n);
 const isGolden = path.basename(target).toLowerCase() === GOLDEN_SAVE;
 
 console.log(`\n■ ${path.basename(target)} — ${run.kb.toFixed(0)} KB · 파싱+모델링 ${run.ms.toFixed(0)} ms`);
@@ -366,15 +463,65 @@ eq('counts 종류 수', Object.keys(m.counts ?? {}).length, ref.counts.size, (v)
   if (notReal.length) bad('간선 끝 = 실제 객체', `세이브에 없는 이름 ${notReal.length}개 — ${notReal.slice(0, 3).join(', ')}`);
   else ok('간선 끝 = 실제 객체', `${ends.length}개 끝 전부 세이브에 있음`);
 
-  const notMachine = [...new Set(ends.filter((n) => !machineKeys.has(n)))];
-  if (notMachine.length) {
+  /* 그래프의 점은 설비 + 창고다. 창고도 도착지라야 "쌓이기만 하는지" 를 볼 수 있다 */
+  const graphKeys = new Set([...machineKeys, ...(m.storageKeys ?? [])]);
+  const notNode = [...new Set(ends.filter((n) => !graphKeys.has(n)))];
+  if (notNode.length) {
     const kinds = new Map();
-    for (const n of notMachine) {
+    for (const n of notNode) {
       const t = (n.split('.').pop() ?? n).replace(/_\d+$/, '');
       kinds.set(t, (kinds.get(t) ?? 0) + 1);
     }
-    bad('간선 끝 = machines 원소', `machines 에 없는 끝 ${notMachine.length}개 — ${[...kinds].map(([k, v]) => `${k}×${v}`).join(', ')}`);
-  } else ok('간선 끝 = machines 원소', `${ends.length}개 전부 machines 안`);
+    bad('간선 끝 = 설비∪창고', `점이 아닌 끝 ${notNode.length}개 — ${[...kinds].map(([k, v]) => `${k}×${v}`).join(', ')}`);
+  } else ok('간선 끝 = 설비∪창고', `${ends.length}개 전부 설비 ${machineKeys.size} + 창고 ${(m.storageKeys ?? []).length} 안`);
+
+  /* 자기 자신으로 가는 간선은 흐름이 아니다 — 접기가 되돌아왔다는 뜻이다 */
+  const loops = (m.edges ?? []).filter((e) => e.from === e.to);
+  if (loops.length) {
+    const kinds = [...new Set(loops.map((e) => (e.from.split('.').pop() ?? '').replace(/_\d+$/, '')))];
+    bad('자기 간선 없음', `from === to 인 간선 ${loops.length}개 — ${kinds.slice(0, 4).join(', ')}`);
+  } else ok('자기 간선 없음', `${(m.edges ?? []).length}개 중 0개`);
+
+  /* 같은 쌍이 두 번 나오면 분배기 갈래를 훑다가 같은 길을 두 번 센 것이다 */
+  {
+    const seen = new Map();
+    for (const e of m.edges ?? []) {
+      const k = `${e.from} ${e.to}`;
+      seen.set(k, (seen.get(k) ?? 0) + 1);
+    }
+    const dup = [...seen].filter(([, v]) => v > 1);
+    if (dup.length) {
+      const ex = dup
+        .slice(0, 3)
+        .map(([k, v]) => {
+          const [a, z] = k.split(' ');
+          return `${nameOf(a)}→${nameOf(z)} ×${v}`;
+        })
+        .join(', ');
+      bad('간선 쌍 중복 없음', `중복 쌍 ${dup.length}종 — ${ex}`);
+    } else ok('간선 쌍 중복 없음', `서로 다른 쌍 ${seen.size}개`);
+  }
+
+  /* 설비와 창고가 겹치면 같은 것을 두 번 세게 된다 */
+  {
+    const overlap = (m.storageKeys ?? []).filter((k) => machineKeys.has(k));
+    if (overlap.length)
+      bad('설비∩창고 = ∅', `양쪽에 든 것 ${overlap.length}개 — ${overlap.slice(0, 3).map(nameOf).join(', ')}`);
+    else ok('설비∩창고 = ∅', `설비 ${machineKeys.size} + 창고 ${(m.storageKeys ?? []).length} = 점 ${graphKeys.size}`);
+  }
+
+  /* item 은 출발 설비가 만드는 것이라야 한다. 창고에서 나가는 것은 알 수 없으니 null */
+  {
+    const outOf = new Map((m.machines ?? []).map((x) => [keyOf(x), x.outItem ?? null]));
+    const wrong = (m.edges ?? []).filter((e) => {
+      if (!('item' in e)) return true;
+      return e.item !== (outOf.has(e.from) ? outOf.get(e.from) : null);
+    });
+    if (!(m.edges ?? []).length) ok('간선 item', '(간선 없음)');
+    else if (wrong.length)
+      bad('간선 item', `출발 설비의 산출물과 다른 간선 ${wrong.length}개 — 예: ${nameOf(wrong[0].from)} item=${wrong[0].item} vs 산출 ${outOf.get(wrong[0].from)}`);
+    else ok('간선 item', `${m.edges.length}개 전부 출발 설비의 산출물과 일치`);
+  }
 }
 
 /* --------------------------------- 참조 구현과의 대조 (정답값 없는 세이브도) */
@@ -382,8 +529,26 @@ console.log('\n  · 참조 구현 대조 (파서로 직접 다시 센 값)');
 eq('세션 이름', m.session, ref.session);
 eqNear('플레이 시간', m.hours, ref.hours, 0.11, 'h');
 eq('회로 수', m.power?.circuits, ref.circuits, (v) => `${v}개`);
+eq('그래프의 점', (m.machines ?? []).length + (m.storageKeys ?? []).length, ref.nodeKeys.size,
+  (v) => `${v}개 (설비 ${ref.nodeKeys.size - ref.storageKeys.size} + 창고 ${ref.storageKeys.size})`);
+eq('창고 수', (m.storageKeys ?? []).length, ref.storageKeys.size, (v) => `${v}개`);
 eq('설비→설비 간선', (m.edges ?? []).length, ref.edges, (v) => `${v}개`);
 eq('연결 안 된 출력구', m.danglingOutputs, ref.dangling, (v) => `${v}개`);
+{
+  /* 수만 같고 연결이 다를 수 있다. 쪽을 통째로 맞췄 본다 */
+  const mine = new Set((m.edges ?? []).map((e) => `${e.from} ${e.to}`));
+  const only = [...mine].filter((k) => !ref.edgeSet.has(k));
+  const miss = [...ref.edgeSet].filter((k) => !mine.has(k));
+  const show = (k) => {
+    const [a, z] = k.split(' ');
+    return `${nameOf(a)}→${nameOf(z)}`;
+  };
+  if (!only.length && !miss.length) ok('간선 집합', `${mine.size}쌍 전부 일치`);
+  else
+    bad('간선 집합',
+      `모듈에만 ${only.length}쌍(${only.slice(0, 2).map(show).join(', ')}), ` +
+        `참조에만 ${miss.length}쌍(${miss.slice(0, 2).map(show).join(', ')})`);
+}
 {
   /* stock 이 창고만인지 설비 버퍼까지인지 구분해서 알려 준다 */
   const same = (map) => {
@@ -424,6 +589,8 @@ if (isGolden) {
   if (unknown.length) bad('레시피 이름 해석', `못 찾은 것 ${unknown.length}건 — ${unknown.slice(0, 3).map((x) => x.recipe).join(', ')}`);
   else ok('레시피 이름 해석', `${withRecipe.length}/${withRecipe.length} 매칭`);
 
+  eq('그래프의 점(정답값)', (m.machines ?? []).length + (m.storageKeys ?? []).length, GOLD.graphNodes, (v) => `${v}개`);
+  eq('창고 수(정답값)', (m.storageKeys ?? []).length, GOLD.storageNodes, (v) => `${v}개`);
   eq('설비→설비 간선(정답값)', (m.edges ?? []).length, GOLD.edges, (v) => `${v}개`);
   eq('연결 안 된 출력구(정답값)', m.danglingOutputs, GOLD.danglingOutputs, (v) => `${v}개`);
 
@@ -491,18 +658,37 @@ for (const f of others) {
   try {
     const r = await runOne(f);
     const mm = r.model;
-    const rr = reference(f);
+    const rr = reference(r.raw);
     const total = Object.values(mm.counts ?? {}).reduce((a, b) => a + b, 0);
     const outside = (mm.machines ?? []).filter((x) => !(x.fx >= 0 && x.fx <= 1 && x.fy >= 0 && x.fy <= 1)).length;
     const ends = (mm.edges ?? []).flatMap((e) => [e.from, e.to]);
     const fake = ends.filter((n) => !rr.instanceNames.has(n)).length;
     const problems = [];
-    if (total !== rr.countsTotal) problems.push(`counts 합 ${total}≠${rr.countsTotal}`);
+    if (total !== rr.countsTotal) problems.push(`counts 합 ${total} ≠ 참조 ${rr.countsTotal}`);
     if (outside) problems.push(`좌표 벗어남 ${outside}대`);
     if (fake) problems.push(`세이브에 없는 간선 끝 ${fake}개`);
-    if ((mm.edges ?? []).length !== rr.edges) problems.push(`간선 ${mm.edges?.length} ≠ 참조 ${rr.edges}`);
-    if (mm.danglingOutputs !== rr.dangling) problems.push(`끊긴 출력구 ${mm.danglingOutputs} ≠ 참조 ${rr.dangling}`);
-    const line = `${r.kb.toFixed(0)} KB · ${r.ms.toFixed(0)} ms · 건물 ${total} · 설비 ${mm.machines?.length ?? 0} · 간선 ${mm.edges?.length ?? 0} · 발전 ${mm.power?.genMW}/소비 ${mm.power?.useMW} MW`;
+    /* 주 세이브와 같은 불변식을 그대로 걸어 본다 */
+    const mKeys = new Set((mm.machines ?? []).map(keyOf));
+    const gKeys = new Set([...mKeys, ...(mm.storageKeys ?? [])]);
+    const notNode = ends.filter((n) => !gKeys.has(n)).length;
+    if (notNode) problems.push(`점이 아닌 간선 끝 ${notNode}개`);
+    const loops = (mm.edges ?? []).filter((e) => e.from === e.to).length;
+    if (loops) problems.push(`자기 간선 ${loops}개`);
+    const pairs = new Set((mm.edges ?? []).map((e) => `${e.from} ${e.to}`));
+    if (pairs.size !== (mm.edges ?? []).length)
+      problems.push(`간선 중복 ${(mm.edges ?? []).length - pairs.size}개`);
+    const overlap = (mm.storageKeys ?? []).filter((k) => mKeys.has(k)).length;
+    if (overlap) problems.push(`설비∩창고 ${overlap}개`);
+    if (mKeys.size + (mm.storageKeys ?? []).length !== rr.nodeKeys.size)
+      problems.push(`점 ${mKeys.size + (mm.storageKeys ?? []).length} ≠ 참조 ${rr.nodeKeys.size}`);
+    /* 간선은 수가 아니라 집합으로 맞췄 본다 */
+    const onlyMine = [...pairs].filter((k) => !rr.edgeSet.has(k)).length;
+    const onlyRef = [...rr.edgeSet].filter((k) => !pairs.has(k)).length;
+    if (onlyMine || onlyRef)
+      problems.push(`간선 집합 어긋남 (모듈에만 ${onlyMine}, 참조에만 ${onlyRef})`);
+    if (mm.danglingOutputs !== rr.dangling)
+      problems.push(`끊긴 출력구 ${mm.danglingOutputs} ≠ 참조 ${rr.dangling}`);
+    const line = `${r.kb.toFixed(0)} KB · ${r.ms.toFixed(0)} ms · 건물 ${total} · 설비 ${mKeys.size}+창고 ${(mm.storageKeys ?? []).length} · 간선 ${mm.edges?.length ?? 0} · 끊긴 ${mm.danglingOutputs} · 발전 ${mm.power?.genMW}/소비 ${mm.power?.useMW} MW`;
     if (problems.length) bad(path.basename(f), `${line}\n         ↳ ${problems.join(', ')}`);
     else ok(path.basename(f), line);
   } catch (e) {

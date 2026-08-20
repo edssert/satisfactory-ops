@@ -30,12 +30,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 <Base
   title={`${tab.ko} — 싱크 상점 도감`}
   description={`어썸 싱크 상점의 ${tab.ko} 탭 ${tab.count}종을 게임과 같은 구성으로 봅니다.`}
-  section="codex"
+  section="dex"
 >
-  <div class="wrap codex">
+  <div class="wrap dex">
     <TechNav here="shop" />
 
-    <header class="codex-head">
+    <header class="dex-head">
       <p class="marker"><span class="num">도감</span> A.W.E.S.O.M.E. 싱크 상점</p>
       <h1>{tab.ko}</h1>
       <p class="lede prose">
@@ -45,7 +45,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
     <nav class="tabs is-wide" aria-label="상점 분류">
       {tabs.map((t) => (
-        <a href={`${base}/codex/shop/${t.slug}/`} aria-current={t.slug === tab.slug ? 'page' : undefined}>
+        <a href={`${base}/dex/shop/${t.slug}/`} aria-current={t.slug === tab.slug ? 'page' : undefined}>
           <b>{t.ko}</b>
           <span class="tab-n">{t.count}</span>
         </a>
@@ -105,7 +105,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       </section>
     ))}
 
-    <p class="codex-foot">
+    <p class="dex-foot">
       탭과 구획 구성은 게임 배포 데이터에 없어 공식 위키의 상점 문서에서 옮겼습니다
       (<a href={SHOP_SOURCE}>출처</a>). 이름과 쿠폰 값은 게임 데이터 그대로입니다.
       그림은 공식 위키의 것이며 Coffee Stain Studios 자산입니다.

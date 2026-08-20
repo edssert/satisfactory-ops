@@ -1,6 +1,6 @@
 ---
 /**
- * 도감(Codex) 첫 화면.
+ * 도감 첫 화면.
  *
  * 게임 안의 모든 해금·수치를 한 이름 아래 모았다. 진행도와 상관없이 전부 보인다.
  * 예전에는 「테크 사전」·「대체 제작법」·「도구」가 따로 있었는데, 셋 다 같은 성격의
@@ -19,7 +19,7 @@ const altCount = recipes.filter((r) => r.isAlternate).length;
 
 const cards = [
   {
-    href: `${base}/codex/tiers/0/`,
+    href: `${base}/dex/tiers/0/`,
     ko: '티어',
     n: tech.$counts.hub + tech.$counts.milestones,
     unit: '단계',
@@ -28,7 +28,7 @@ const cards = [
       '보상과 비용을 아이템 칸으로 봅니다.',
   },
   {
-    href: `${base}/codex/mam/`,
+    href: `${base}/dex/mam/`,
     ko: 'MAM',
     n: tech.$counts.mam,
     unit: '연구',
@@ -36,21 +36,21 @@ const cards = [
       '분자 분석기의 12개 트리. 트리를 하나씩 고르고, 선행 관계를 따라 가지가 뻗는 모양 그대로 봅니다.',
   },
   {
-    href: `${base}/codex/shop/`,
+    href: `${base}/dex/shop/`,
     ko: '싱크 상점',
     n: shopCount,
     unit: '품목',
     what: '게임의 상점 탭 구성 그대로 — 스페셜·관리·조직화·커스터마이저·토대·벽·건축물·장비·부품.',
   },
   {
-    href: `${base}/codex/recipes/`,
+    href: `${base}/dex/recipes/`,
     ko: '대체 제작법',
     n: altCount,
     unit: '가지',
     what: '하드 드라이브로 따는 제작법. 자체 점수로 등급을 매기고, 딴 것을 체크해 두면 설계 화면이 그것만 씁니다.',
   },
   {
-    href: `${base}/codex/reference/`,
+    href: `${base}/dex/reference/`,
     ko: '표',
     n: null,
     unit: '',
@@ -60,15 +60,15 @@ const cards = [
 ---
 
 <Base
-  title="Codex — 게임의 모든 해금과 수치"
+  title="도감 — 게임의 모든 해금과 수치"
   description="허브·마일스톤·MAM·싱크 상점·대체 제작법·수치표를 진행도와 상관없이 한 곳에서 봅니다."
-  section="codex"
+  section="dex"
 >
-  <div class="wrap codex">
+  <div class="wrap dex">
     <TechNav here={null} />
 
-    <header class="codex-head">
-      <p class="marker"><span class="num">CODEX</span></p>
+    <header class="dex-head">
+      <p class="marker"><span class="num">도감</span></p>
       <h1><span class="fx-gradient-text">게임에 있는 것 전부</span></h1>
       <p class="lede prose">
         진행도와 상관없이 전부 보입니다. 아직 못 여는 것도 무엇을 얼마나 내야 열리는지
@@ -76,9 +76,9 @@ const cards = [
       </p>
     </header>
 
-    <div class="codex-cards">
+    <div class="dex-cards">
       {cards.map((c) => (
-        <a class="codex-card" href={c.href}>
+        <a class="dex-card" href={c.href}>
           <h2>{c.ko}</h2>
           {c.n != null && (
             <p>
@@ -90,7 +90,7 @@ const cards = [
       ))}
     </div>
 
-    <p class="codex-foot">
+    <p class="dex-foot">
       수치와 이름은 1.2 게임 배포 데이터가 정본입니다. 배포 데이터에 없는 두 가지 —
       MAM 의 선행 관계와 상점의 탭 구성 — 만 공식 위키에서 가져왔고 해당 화면에 밝혀 두었습니다.
     </p>

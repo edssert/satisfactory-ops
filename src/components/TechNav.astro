@@ -1,6 +1,6 @@
 ---
 /**
- * TechNav — 도감(Codex) 안의 화면들을 오가는 띠.
+ * TechNav — 도감 안의 화면들을 오가는 띠.
  *
  * 게임도 이것들이 서로 다른 화면이다. 한 페이지에 쭉 늘어놓으면
  * 지금 무엇을 보고 있는지가 사라진다.
@@ -18,18 +18,18 @@ const links = [
   {
     key: 'tiers',
     ko: '티어',
-    href: `${base}/codex/tiers/0/`,
+    href: `${base}/dex/tiers/0/`,
     n: tech.$counts.hub + tech.$counts.milestones,
   },
-  { key: 'mam', ko: 'MAM', href: `${base}/codex/mam/`, n: tech.$counts.mam },
-  { key: 'shop', ko: '싱크 상점', href: `${base}/codex/shop/`, n: shopCount },
-  { key: 'recipes', ko: '대체 제작법', href: `${base}/codex/recipes/`, n: null },
-  { key: 'reference', ko: '표', href: `${base}/codex/reference/`, n: null },
+  { key: 'mam', ko: 'MAM', href: `${base}/dex/mam/`, n: tech.$counts.mam },
+  { key: 'shop', ko: '싱크 상점', href: `${base}/dex/shop/`, n: shopCount },
+  { key: 'recipes', ko: '대체 제작법', href: `${base}/dex/recipes/`, n: null },
+  { key: 'reference', ko: '표', href: `${base}/dex/reference/`, n: null },
 ];
 ---
 
 <nav class="tnav" aria-label="도감">
-  <a class="tnav-home" href={`${base}/codex/`}>CODEX</a>
+  <a class="tnav-home" href={`${base}/dex/`}>도감</a>
   <ul>
     {links.map((l) => (
       <li>

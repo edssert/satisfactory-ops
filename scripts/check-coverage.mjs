@@ -112,12 +112,12 @@ const pass = (msg) => notes.push(`  PASS  ${msg}`);
 }
 
 // ─────────────────────────────────────────────── 2. 표가 행을 말없이 버리지 않았는가
-/* 도구 표는 도감 안으로 옮겼다 (/codex/reference/) */
+/* 도구 표는 도감 안으로 옮겼다 (/dex/reference/) */
 const toolsPage = allHtml.find(({ p }) =>
-  p.includes(`codex${path.sep}reference${path.sep}index.html`)
+  p.includes(`dex${path.sep}reference${path.sep}index.html`)
 );
 if (!toolsPage) {
-  fail('레퍼런스 페이지(dist/codex/reference/index.html)를 찾지 못했습니다');
+  fail('레퍼런스 페이지(dist/dex/reference/index.html)를 찾지 못했습니다');
 } else {
   const s = toolsPage.s;
   /** 그 페이지가 실제로 언급한 건물 id 집합 — 이름(ko)이 본문에 있는지로 본다 */

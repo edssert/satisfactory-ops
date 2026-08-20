@@ -41,12 +41,12 @@ const { w: TW, h: TH } = MAM_TILE;
 <Base
   title={`${tree.ko} 연구 — MAM 도감`}
   description={`MAM ${tree.ko} 트리의 연구 ${tree.count}건을 선행 관계 그대로 봅니다. ${tree.opens}`}
-  section="codex"
+  section="dex"
 >
-  <div class="wrap codex">
+  <div class="wrap dex">
     <TechNav here="mam" />
 
-    <header class="codex-head">
+    <header class="dex-head">
       <p class="marker"><span class="num">도감</span> 분자 분석기</p>
       <h1>MAM</h1>
       <p class="lede prose">
@@ -62,7 +62,7 @@ const { w: TW, h: TH } = MAM_TILE;
             .map((t) => (
               <li>
                 <a
-                  href={t.link ? `${base}/codex/${t.link}/` : `${base}/codex/mam/${t.key}/`}
+                  href={t.link ? `${base}/dex/${t.link}/` : `${base}/dex/mam/${t.key}/`}
                   aria-current={t.key === tree.key ? 'page' : undefined}
                 >
                   <span>
@@ -83,7 +83,7 @@ const { w: TW, h: TH } = MAM_TILE;
             .map((t) => (
               <li>
                 <a
-                  href={`${base}/codex/mam/${t.key}/`}
+                  href={`${base}/dex/mam/${t.key}/`}
                   aria-current={t.key === tree.key ? 'page' : undefined}
                 >
                   <span>{t.ko}</span>
@@ -178,7 +178,7 @@ const { w: TW, h: TH } = MAM_TILE;
       </div>
     </div>
 
-    <p class="codex-foot">
+    <p class="dex-foot">
       선행 관계는 연구의 내부 클래스명 경로에서 뽑고 공식 위키의 MAM 문서로 보정했습니다.
       게임 배포 데이터에는 선행 관계가 들어 있지 않습니다 — 120건 전부 비어 있습니다.
       비용과 해금 내용은 배포 데이터 그대로입니다.
