@@ -147,17 +147,105 @@ tbody tr.tier-row:hover th { background: var(--bg); }
 .tree-open { color: var(--ink-3); letter-spacing: 0; font-family: var(--font-body); }
 .tree-count { margin-left: auto; color: var(--ink-3); }
 
-.tree-body { display: grid; justify-items: center; }
+/*
+ * 게임의 MAM 은 파선 격자 위에 타일이 놓이고 줄기에서 가지가 갈라진다.
+ * 그 모양을 그대로 옮긴다 — 다만 선행 관계는 배포 데이터에 없으므로 행 사이만 잇는다.
+ */
+.tree-body {
+  display: grid;
+  justify-items: center;
+  padding: var(--s6) var(--s4);
+  border-radius: var(--radius);
+  background-color: color-mix(in oklab, var(--bg) 60%, transparent);
+  background-image:
+    repeating-linear-gradient(
+      to right,
+      color-mix(in oklab, var(--line) 60%, transparent) 0 1px,
+      transparent 1px 56px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--line) 60%, transparent) 0 1px,
+      transparent 1px 56px
+    );
+}
+
 .tree-row {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: var(--s3);
 }
+/* 갈래선을 그릴 수 있는 줄은 열 자리를 고정한다 — 그래야 선이 상자 한가운데로 떨어진다 */
+.tree-row.is-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--n), 210px);
+  justify-content: center;
+  gap: var(--s3);
+}
+
+/* 줄기 하나가 내려와 가로줄로 벌어지고 각 상자로 떨어진다 */
+.tree-fan {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--n), 210px);
+  justify-content: center;
+  gap: var(--s3);
+  width: 100%;
+  height: 44px;
+}
+.fan-stem,
+.fan-bar,
+.fan-drop {
+  background: color-mix(in oklab, var(--primary) 65%, transparent);
+}
+.fan-stem {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 2px;
+  height: 20px;
+  transform: translateX(-1px);
+}
+/* 첫 열 중심에서 마지막 열 중심까지. 210px 열의 절반이 105px 이다 */
+.fan-bar {
+  position: absolute;
+  top: 19px;
+  right: 105px;
+  left: 105px;
+  height: 2px;
+}
+.fan-drop {
+  grid-row: 1;
+  align-self: end;
+  justify-self: center;
+  width: 2px;
+  height: 25px;
+}
+
 .tree-link {
   width: 2px;
   height: 24px;
   background: linear-gradient(180deg, var(--primary), color-mix(in oklab, var(--primary) 20%, transparent));
+}
+
+.tree-loose {
+  margin: var(--s6) 0 var(--s3);
+  color: var(--ink-3);
+  font-size: var(--t-caption);
+  word-break: keep-all;
+}
+
+/* 좁은 화면에서는 210px 열이 넘친다. 갈래선을 접고 줄바꿈으로 돌린다 */
+@media (max-width: 900px) {
+  .tree-row.is-grid {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .tree-fan { height: 24px; }
+  .fan-bar,
+  .fan-drop { display: none; }
+  .tree-body { padding: var(--s4) var(--s2); }
 }
 
 .tnode {

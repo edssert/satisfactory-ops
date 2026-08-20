@@ -183,6 +183,47 @@ if (!toolsPage) {
   if (!hit) pass(`큐레이션 텍스트 ${texts.length}개에 알려진 오류 표현 없음`);
 }
 
+// ─────────────────────────────────────────────── 설계판이 실제로 그려졌는가
+{
+  /*
+   * 아일랜드가 던지면 브라우저에서만 하얗게 죽는다. 빌드는 통과하고 배포도 된다.
+   * Astro 는 client:load 아일랜드도 빌드 때 한 번 그려서 HTML 에 넣으므로,
+   * 여기서 그 결과를 읽으면 "안 뜨는 화면"을 배포 전에 잡을 수 있다.
+   */
+  const hit = allHtml.find((h) => h.p.includes(`${path.sep}planner${path.sep}`));
+  if (!hit) {
+    fail('설계 페이지가 빌드되지 않았습니다');
+  } else {
+    const need = [
+      ['pl-canvas', '설계판 자체'],
+      ['제련기', '건물 목록'],
+      ['채굴기 Mk.1', '채굴기'],
+      ['석탄 발전기', '발전기'],
+      ['왼쪽에서 건물을 고르고', '빈 판 안내'],
+    ];
+    let miss = 0;
+    for (const [needle, what] of need) {
+      if (!hit.s.includes(needle)) {
+        fail(`설계 페이지에 ${what}(${needle})가 없습니다 — 아일랜드가 그려지지 않았을 수 있습니다`);
+        miss++;
+      }
+    }
+    /* base 를 안 붙인 절대 경로는 GitHub Pages 하위 경로에서 전부 404 가 된다 */
+    if (/src="\/assets\//.test(hit.s)) fail('설계 페이지에 base 없는 자산 경로가 있습니다');
+    if (!miss) pass('설계판이 건물·채굴기·발전기와 함께 그려짐');
+  }
+
+  /* 한글이 글자 단위로 쪼개지는 것을 한 번 겪었다. 규칙으로 박는다 */
+  const css = fs.readFileSync(path.join(ROOT, 'src/styles/planner.css'), 'utf8');
+  const keepAll = ['.pl-mname', '.pl-iname', '.pl-sum p', '.pl-empty'];
+  const bad = keepAll.filter((sel) => {
+    const i = css.indexOf(sel);
+    return i < 0 || !css.slice(i, css.indexOf('}', i)).includes('word-break: keep-all');
+  });
+  if (bad.length) fail(`설계판 CSS 에 word-break: keep-all 이 없습니다: ${bad.join(', ')}`);
+  else pass('설계판의 한글 줄바꿈 규칙 유지');
+}
+
 // ─────────────────────────────────────────────── 결과
 console.log('산출물 커버리지 검사:');
 console.log(notes.join('\n'));
