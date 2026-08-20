@@ -28,8 +28,18 @@ interface Alt {
   usableFromTier: number;
   needsOtherAlternate: boolean;
   grades: { lp: string; steam: string | null; own: string | null; gap: number | null };
-  own: { score: number; resourcePct: number; machinePct: number; powerPct: number } | null;
+  own: {
+    score: number;
+    efficiency: number;
+    convenience: number;
+    resourcePct: number;
+    machinePct: number;
+    powerPct: number;
+  } | null;
   agreement: 'strong' | 'weak' | 'split' | 'partial';
+  character: 'efficiency' | 'convenience' | 'balanced' | null;
+  hassleNotes: string[] | null;
+  disagreeWhy: string[] | null;
   consensus: 'both-high' | 'mixed' | 'conflict' | 'both-low' | 'unknown';
   sortKey: number;
   compare: {
@@ -60,6 +70,7 @@ const doc = priority as unknown as {
     note: string;
     threeWay: { strong: number; conflict: number; note: string };
   };
+  $axes: { efficiency: string; convenience: string; note: string };
   $note: string;
   $tierNote: string;
   $unranked: { id: string; ko: string; en: string }[];
@@ -135,9 +146,14 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
         차이를 봅니다. 원자재는 <strong>실제 맵의 노드 수</strong>로 희소도를 매겨 곱합니다 —
         우라늄 6개와 철 70여 개를 같은 무게로 셈하지 않습니다.
       </p>
+      <p>
+        점수는 <strong>두 축</strong>입니다. <strong>효율</strong>은 {doc.$axes.efficiency}{' '}
+        <strong>편의</strong>는 {doc.$axes.convenience}
+      </p>
+      <p class="caption">{doc.$axes.note}</p>
       <p class="caption">
-        커뮤니티 순위 두 건과 대조했고, <strong>{counts.conflict}건</strong>은 평가가 크게
-        갈립니다. 그런 항목에는 카드에 표시해 두었습니다. {doc.$note}
+        커뮤니티 순위 두 건과 대조했고 <strong>{counts.conflict}건</strong>이 크게 갈립니다.
+        그 항목은 카드에서 왜 갈리는지 펼쳐 볼 수 있습니다. {doc.$note}
       </p>
     </section>
 
@@ -220,28 +236,62 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
                   )}
 
                   {r.own && (
-                    <p class="own">
-                      <span class="own-k">1.2 계산</span>
-                      자원 <span class={`n ${r.own.resourcePct >= 0 ? 'is-save' : 'is-cost'}`}>
-                        {r.own.resourcePct >= 0 ? '−' : '+'}{Math.abs(r.own.resourcePct)}%
-                      </span>
-                      <span class="sep">·</span>
-                      기계 <span class={`n ${r.own.machinePct >= 0 ? 'is-save' : 'is-cost'}`}>
-                        {r.own.machinePct >= 0 ? '−' : '+'}{Math.abs(r.own.machinePct)}%
-                      </span>
-                      <span class="sep">·</span>
-                      전력 <span class={`n ${r.own.powerPct >= 0 ? 'is-save' : 'is-cost'}`}>
-                        {r.own.powerPct >= 0 ? '−' : '+'}{Math.abs(r.own.powerPct)}%
-                      </span>
-                    </p>
+                    <div class="axes">
+                      <div class="axis">
+                        <span class="axis-k">효율</span>
+                        <span class={`axis-bar ${r.own.efficiency >= 0 ? 'is-plus' : 'is-minus'}`}>
+                          <i style={`--w:${Math.min(100, Math.abs(r.own.efficiency) * 2.2)}%`}></i>
+                        </span>
+                        <span class={`axis-v n ${r.own.efficiency >= 0 ? 'is-save' : 'is-cost'}`}>
+                          {r.own.efficiency >= 0 ? '+' : ''}{num(r.own.efficiency)}
+                        </span>
+                        <span class="axis-note">
+                          자원 {r.own.resourcePct >= 0 ? '−' : '+'}{Math.abs(r.own.resourcePct)}% ·
+                          기계 {r.own.machinePct >= 0 ? '−' : '+'}{Math.abs(r.own.machinePct)}% ·
+                          전력 {r.own.powerPct >= 0 ? '−' : '+'}{Math.abs(r.own.powerPct)}%
+                        </span>
+                      </div>
+                      <div class="axis">
+                        <span class="axis-k">편의</span>
+                        <span class={`axis-bar ${r.own.convenience >= 0 ? 'is-plus' : 'is-minus'}`}>
+                          <i style={`--w:${Math.min(100, Math.abs(r.own.convenience) * 6)}%`}></i>
+                        </span>
+                        <span class={`axis-v n ${r.own.convenience >= 0 ? 'is-save' : 'is-cost'}`}>
+                          {r.own.convenience >= 0 ? '+' : ''}{num(r.own.convenience)}
+                        </span>
+                        <span class="axis-note">
+                          {r.hassleNotes && r.hassleNotes.length > 0
+                            ? r.hassleNotes.join(' · ')
+                            : '기본 제작법과 손이 비슷하다'}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                  {r.disagreeWhy && (
+                    <details class="why">
+                      <summary>커뮤니티 평가와 다릅니다 — 왜</summary>
+                      <ul>
+                        {r.disagreeWhy.map((w) => (
+                          <li>{w}</li>
+                        ))}
+                      </ul>
+                      <p class="caption">
+                        LP 모형 <span class="n">{r.grades.lp}</span> · 스팀 가이드{' '}
+                        <span class="n">{r.grades.steam ?? '—'}</span> · 이 사이트{' '}
+                        <span class="n">{r.grades.own ?? '—'}</span>
+                      </p>
+                    </details>
                   )}
                   {r.needsOtherAlternate && (
                     <p class="caution">다른 대체 제작법이 함께 있어야 제값을 합니다.</p>
                   )}
-                  <p class="caution">
-                    커뮤니티 평가 — LP 모형 <span class="n">{r.grades.lp}</span> ·
-                    스팀 가이드 <span class="n">{r.grades.steam ?? '—'}</span>
-                  </p>
+                  {!r.disagreeWhy && (
+                    <p class="caution">
+                      커뮤니티 평가도 비슷합니다 — LP <span class="n">{r.grades.lp}</span> · 스팀{' '}
+                      <span class="n">{r.grades.steam ?? '—'}</span>
+                    </p>
+                  )}
                 </>
               ) : (
                 <p class="caution">기본 제작법이 없어 비교할 대상이 없습니다.</p>
@@ -442,6 +492,61 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
     .is-save { color: var(--ok); }
     .is-cost { color: var(--ink-3); }
     .limits { color: var(--ink-3); }
+
+    /* 두 축을 막대로 나란히. 어느 쪽이 이 제작법의 성격인지 눈으로 잡히게 한다 */
+    .axes {
+      margin-top: var(--s4);
+      padding-top: var(--s4);
+      border-top: var(--hair) solid var(--line);
+      display: grid;
+      gap: var(--s3);
+    }
+    .axis {
+      display: grid;
+      grid-template-columns: 2.4rem minmax(0, 6rem) 3.4rem minmax(0, 1fr);
+      align-items: center;
+      gap: var(--s2) var(--s3);
+      font-size: var(--t-caption);
+    }
+    .axis-k {
+      font-family: var(--font-mono);
+      font-size: var(--t-label);
+      letter-spacing: 0.06em;
+      color: var(--ink-3);
+    }
+    .axis-bar {
+      position: relative;
+      height: 5px;
+      border-radius: 3px;
+      background: var(--line);
+      overflow: hidden;
+    }
+    .axis-bar i {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: var(--w);
+      border-radius: 3px;
+    }
+    .axis-bar.is-plus i { background: var(--ok); }
+    .axis-bar.is-minus i { background: var(--ink-3); }
+    .axis-v { text-align: right; }
+    .axis-note { color: var(--ink-3); min-width: 0; }
+    @media (max-width: 700px) {
+      .axis { grid-template-columns: 2.4rem minmax(0, 1fr) 3.4rem; }
+      .axis-note { grid-column: 1 / -1; }
+    }
+
+    .why { margin-top: var(--s3); font-size: var(--t-caption); }
+    .why summary {
+      cursor: pointer;
+      color: var(--accent);
+      list-style: none;
+    }
+    .why summary::-webkit-details-marker { display: none; }
+    .why summary::before { content: '+ '; font-family: var(--font-mono); }
+    .why[open] summary::before { content: '- '; }
+    .why ul { margin: var(--s2) 0; padding-left: 1.1em; color: var(--ink-2); }
+    .why li { margin-bottom: var(--s1); }
     .caution { margin: var(--s3) 0 0; font-size: var(--t-caption); color: var(--ink-3); }
 
     .unranked { display: flex; flex-wrap: wrap; gap: var(--s2); margin: var(--s4) 0 0; padding: 0; list-style: none; }
