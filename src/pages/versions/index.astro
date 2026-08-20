@@ -45,7 +45,7 @@ const facts = [
 ---
 
 <Base
-  title="버전 연혁 — 어느 부분을 다시 확인할까"
+  title="버전 연혁, 어느 부분을 다시 확인할까"
   description="Satisfactory 버전별 진행·설계 관련 변경. 오래된 공략을 읽을 때 무엇만 다시 확인하면 되는지."
   section="versions"
 >
@@ -88,16 +88,14 @@ const facts = [
                 <th>무엇이</th>
                 <th>이전</th>
                 <th>이후</th>
-                <th>낡아버린 조언</th>
               </tr>
             </thead>
             <tbody>
               {v.changes.map((c) => (
                 <tr>
                   <td><strong>{c.what}</strong></td>
-                  <td class="muted">{c.before ?? '—'}</td>
-                  <td>{c.after ?? '—'}</td>
-                  <td class="small">{c.affects}</td>
+                  <td class="muted">{c.before ?? ''}</td>
+                  <td>{c.after ?? ''}</td>
                 </tr>
               ))}
             </tbody>

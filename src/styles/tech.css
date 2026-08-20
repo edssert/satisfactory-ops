@@ -124,3 +124,105 @@
 tbody tr.tier-row:hover th { background: var(--bg); }
 
 .foot { margin-top: var(--s12); }
+
+/* ------------------------------------------------------------- MAM 트리 */
+/*
+ * 게임의 MAM 화면처럼 위에서 아래로 가지가 뻗는다.
+ * 선행 관계가 배포 데이터에 없어 클래스명의 행 번호를 깊이로 쓴다 — 게임 화면의 배치와
+ * 다를 수 있고, 그 사실을 페이지 아래에 밝힌다.
+ */
+.tree { margin-bottom: var(--s12); }
+.tree-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s3);
+  margin-bottom: var(--s4);
+  padding-bottom: var(--s2);
+  border-bottom: var(--hair) solid var(--line-strong);
+  font-family: var(--font-mono);
+  font-size: var(--t-caption);
+  letter-spacing: 0.06em;
+  color: var(--primary);
+}
+.tree-open { color: var(--ink-3); letter-spacing: 0; font-family: var(--font-body); }
+.tree-count { margin-left: auto; color: var(--ink-3); }
+
+.tree-body { display: grid; justify-items: center; }
+.tree-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--s3);
+}
+.tree-link {
+  width: 2px;
+  height: 24px;
+  background: linear-gradient(180deg, var(--primary), color-mix(in oklab, var(--primary) 20%, transparent));
+}
+
+.tnode {
+  width: 210px;
+  padding: var(--s4);
+  border-radius: calc(var(--radius) * 2);
+  background: var(--glass);
+  box-shadow: var(--lit);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  text-align: center;
+}
+.tnode.is-old { opacity: 0.45; }
+.tnode-icons {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  min-height: 34px;
+  margin-bottom: var(--s2);
+}
+.tnode-icons img { width: 34px; height: 34px; object-fit: contain; }
+.tnode h4 { margin-bottom: 4px; font-size: var(--t-small); }
+.tnode-cost {
+  margin: 0 0 var(--s2);
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  color: var(--ink-3);
+}
+.tnode .unlocks { justify-content: center; }
+
+/* ----------------------------------------------------------- 싱크 상점 */
+.shop-block { margin-bottom: var(--s10); }
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--s3);
+}
+.shop-card {
+  padding: var(--s4) var(--s3);
+  border-radius: calc(var(--radius) * 2);
+  background: var(--glass);
+  box-shadow: var(--lit);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  text-align: center;
+  transition: box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.shop-card:hover {
+  box-shadow: var(--lit-strong);
+  transform: translateY(-2px);
+}
+.shop-thumb {
+  display: grid;
+  place-items: center;
+  height: 64px;
+  margin-bottom: var(--s2);
+}
+.shop-thumb img { width: 56px; height: 56px; object-fit: contain; }
+.shop-noimg {
+  width: 40px;
+  height: 40px;
+  border: var(--hair) dashed var(--line-strong);
+  border-radius: var(--radius);
+}
+.shop-name {
+  margin: 0 0 2px;
+  font-size: var(--t-caption);
+  line-height: 1.4;
+}
+.shop-cost { margin: 0; font-size: var(--t-label); color: var(--accent); }

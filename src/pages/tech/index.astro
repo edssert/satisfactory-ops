@@ -46,7 +46,28 @@ const doc = tech as unknown as {
 };
 
 const tiers = [...new Set(doc.milestones.map((m) => m.tier))].sort((a, b) => a - b);
-const shopTiers = [...new Set(doc.shop.map((s) => s.coupons))].sort((a, b) => a - b);
+
+/**
+ * MAM 을 트리 → 행으로 묶는다. 게임 화면처럼 위에서 아래로 가지가 뻗는 모양이 된다.
+ * 선행 관계가 배포 데이터에 없어 클래스명의 행 번호를 깊이로 쓴다.
+ */
+const mamByTree = doc.mamTrees.map((t) => {
+  const nodes = doc.mam.filter((m) => m.tree === t.key);
+  const rows = [...new Set(nodes.map((n) => n.row))].sort((a, b) => a - b);
+  return {
+    ...t,
+    rows: rows.map((r) => ({ row: r, nodes: nodes.filter((n) => n.row === r) })),
+  };
+});
+
+/** 상점 항목의 대표 그림 — 해금하는 건물이나 아이템의 아이콘을 쓴다 */
+function iconOf(u: Unlocks): { src: string; kind: 'building' | 'item' } | null {
+  if (u.buildings.length) return { src: u.buildings[0]!.id, kind: 'building' };
+  if (u.items.length) return { src: u.items[0]!.id, kind: 'item' };
+  return null;
+}
+const shopCards = doc.shop.map((sh) => ({ ...sh, icon: iconOf(sh.unlocks) }));
+const shopTiers = [...new Set(doc.shop.map((x) => x.coupons))].sort((a, b) => a - b);
 
 /** 해금 내용을 한 줄로 */
 function summarize(u: Unlocks): string[] {
@@ -61,7 +82,7 @@ function summarize(u: Unlocks): string[] {
 ---
 
 <Base
-  title="테크 사전 — 모든 해금을 한 곳에"
+  title="테크 사전, 모든 해금을 한 곳에"
   description="허브·마일스톤·MAM·어썸 싱크 상점의 모든 해금을 진행도와 상관없이 볼 수 있습니다."
   section="tech"
 >
@@ -91,7 +112,7 @@ function summarize(u: Unlocks): string[] {
 
     <section class="section" id="hub">
       <p class="marker"><span class="num">01</span> 허브 업그레이드</p>
-      <h2>손으로 만드는 구간</h2>
+      <h2>직접 만드는 구간</h2>
       <div class="grid">
         {doc.hub.map((h) => (
           <article class="node">
@@ -147,41 +168,73 @@ function summarize(u: Unlocks): string[] {
       <h2>표본을 주워야 열린다</h2>
       <p class="prose muted">
         MAM 트리는 마일스톤과 달리 <strong>표본을 주워 스캔해야</strong> 열립니다. 그래서
-        탐험이 곧 해금입니다 — 석영과 카테리움을 일찍 주우면 편의 장비가 그만큼 빨리 열립니다.
+        탐험이 곧 해금입니다. 석영과 카테리움을 일찍 주우면 편의 장비가 그만큼 빨리 열립니다.
       </p>
 
-      {doc.mamTrees.map((tree) => (
-        <div class="tier-block">
-          <p class="tier-head">
+      {mamByTree.map((tree) => (
+        <div class="tree">
+          <p class="tree-head">
             <span class="n">{tree.ko}</span>
-            <span class="tier-note">{tree.opens} · {tree.count}건</span>
+            <span class="tree-open">{tree.opens}</span>
+            <span class="tree-count n">{tree.count}건</span>
           </p>
-          <div class="grid">
-            {doc.mam
-              .filter((m) => m.tree === tree.key)
-              .map((m) => (
-                <article class={`node${m.discontinued ? ' is-old' : ''}`}>
-                  <h3>
-                    {m.ko}
-                    {m.discontinued && <span class="tag">더 이상 안 나옴</span>}
-                  </h3>
-                  <p class="cost">
-                    {m.cost.length === 0 ? (
-                      <span class="muted">비용 없음</span>
-                    ) : (
-                      m.cost.map((c, i) => (
-                        <>
-                          {i > 0 && <span class="sep">·</span>}
-                          {c.ko} <span class="n">{c.amount}</span>
-                        </>
-                      ))
-                    )}
-                  </p>
-                  <ul class="unlocks">
-                    {summarize(m.unlocks).map((u) => <li class="chip">{u}</li>)}
-                  </ul>
-                </article>
-              ))}
+          <div class="tree-body">
+            {tree.rows.map((row, ri) => (
+              <>
+                {ri > 0 && <div class="tree-link" aria-hidden="true"></div>}
+                <div class="tree-row">
+                  {row.nodes.map((m) => (
+                    <article class={`tnode${m.discontinued ? ' is-old' : ''}`}>
+                      <div class="tnode-icons">
+                        {m.unlocks.buildings.slice(0, 3).map((b) => (
+                          <img
+                            src={`${base}/assets/buildings-png/${b.id}.png`}
+                            alt=""
+                            width="34"
+                            height="34"
+                            loading="lazy"
+                          />
+                        ))}
+                        {m.unlocks.buildings.length === 0 &&
+                          m.unlocks.items.slice(0, 3).map((i) => (
+                            <img
+                              src={`${base}/assets/items/${i.id}.png`}
+                              alt=""
+                              width="34"
+                              height="34"
+                              loading="lazy"
+                            />
+                          ))}
+                        {m.unlocks.buildings.length === 0 &&
+                          m.unlocks.items.length === 0 &&
+                          m.cost.slice(0, 3).map((c) => (
+                            <img
+                              src={`${base}/assets/items/${c.item}.png`}
+                              alt=""
+                              width="34"
+                              height="34"
+                              loading="lazy"
+                            />
+                          ))}
+                      </div>
+                      <h4>{m.ko}</h4>
+                      <p class="tnode-cost">
+                        {m.cost.length === 0
+                          ? '비용 없음'
+                          : m.cost.map((c) => `${c.ko} ${c.amount}`).join(' · ')}
+                      </p>
+                      {summarize(m.unlocks).length > 0 && (
+                        <ul class="unlocks">
+                          {summarize(m.unlocks).slice(0, 4).map((u) => (
+                            <li class="chip">{u}</li>
+                          ))}
+                        </ul>
+                      )}
+                    </article>
+                  ))}
+                </div>
+              </>
+            ))}
           </div>
         </div>
       ))}
@@ -194,35 +247,37 @@ function summarize(u: Unlocks): string[] {
         남는 부품을 싱크에 넣으면 쿠폰이 나오고, 그 쿠폰으로 아래를 삽니다.
         대부분은 꾸미기용이지만 <strong>장비와 청사진</strong>도 여기 있습니다.
       </p>
-      <div class="scroll-x">
-        <table>
-          <thead>
-            <tr>
-              <th class="n">쿠폰</th>
-              <th>이름</th>
-              <th>해금</th>
-            </tr>
-          </thead>
-          <tbody>
-            {shopTiers.map((c) => (
-              <>
-                <tr class="tier-row">
-                  <th colspan="3" scope="colgroup">쿠폰 {c}장</th>
-                </tr>
-                {doc.shop
-                  .filter((s) => s.coupons === c)
-                  .map((s) => (
-                    <tr>
-                      <td class="n">{s.coupons}</td>
-                      <td>{s.ko}</td>
-                      <td class="small muted">{summarize(s.unlocks).join(' · ') || '—'}</td>
-                    </tr>
-                  ))}
-              </>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {shopTiers.map((c) => (
+        <div class="shop-block">
+          <p class="tree-head">
+            <span class="n">쿠폰 {c}장</span>
+            <span class="tree-count n">{shopCards.filter((x) => x.coupons === c).length}종</span>
+          </p>
+          <div class="shop-grid">
+            {shopCards
+              .filter((x) => x.coupons === c)
+              .map((x) => (
+                <article class="shop-card">
+                  <div class="shop-thumb">
+                    {x.icon ? (
+                      <img
+                        src={`${base}/assets/${x.icon.kind === 'building' ? 'buildings-png' : 'items'}/${x.icon.src}.png`}
+                        alt=""
+                        width="56"
+                        height="56"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <span class="shop-noimg" aria-hidden="true"></span>
+                    )}
+                  </div>
+                  <p class="shop-name">{x.ko}</p>
+                  <p class="shop-cost n">쿠폰 {x.coupons}</p>
+                </article>
+              ))}
+          </div>
+        </div>
+      ))}
     </section>
 
     <p class="caption foot prose">

@@ -10,7 +10,7 @@
  * 모든 수치는 레시피에서 읽는다. 손으로 적은 값이 없다.
  */
 import { building, item, recipe } from './gamedata';
-import type { MachineBox, Row } from '../components/FlowChart.astro';
+import type { MachineBox, Row, StoreBox } from '../components/FlowChart.astro';
 
 export interface FlowDef {
   rows: Row[];
@@ -175,12 +175,21 @@ export function ironLine(): FlowDef {
       machines(screwMachines, () =>
         cons(ko('Desc_IronScrew_C'), ko('Desc_IronRod_C'), screwIn, screwOut)
       ),
+      {
+        kind: 'storage',
+        label: '저장 컨테이너로',
+        boxes: [
+          { itemKo: ko('Desc_IronPlate_C'), itemId: 'Desc_IronPlate_C', perMinute: plateOut },
+          { itemKo: ko('Desc_IronRod_C'), itemId: 'Desc_IronRod_C', perMinute: rodSpare },
+          { itemKo: ko('Desc_IronScrew_C'), itemId: 'Desc_IronScrew_C', perMinute: screwOut },
+        ] satisfies StoreBox[],
+      },
     ],
     caption:
       `철광석 ${fmt(ore)}개/분은 채굴기 한 대가 벨트 Mk.1 로 낼 수 있는 최대치입니다. ` +
       `모든 기계가 100% 로 돕니다 — 클럭을 건드릴 일이 없습니다. ` +
-      `산출은 셋입니다: 철판 ${fmt(plateOut)}개/분 · 철봉 ${fmt(rodSpare)}개/분 · 나사 ${fmt(screwOut)}개/분. ` +
-      `철봉 ${fmt(rodTotal)} 중 ${fmt(rodToScrew)}만 나사로 돌리고 나머지는 그대로 납품합니다.`,
+      `산출은 셋이고 각각 저장 컨테이너로 보냅니다 — 철판 ${fmt(plateOut)} · 철봉 ${fmt(rodSpare)} · 나사 ${fmt(screwOut)} 개/분. ` +
+      `철봉 ${fmt(rodTotal)} 중 ${fmt(rodToScrew)}만 나사로 돌립니다.`,
   };
 }
 

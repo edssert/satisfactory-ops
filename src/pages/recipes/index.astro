@@ -118,7 +118,7 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
 ---
 
 <Base
-  title="대체 제작법 — 무엇이 어떻게 달라지나"
+  title="대체 제작법, 무엇이 어떻게 달라지나"
   description="대체 제작법 104건을 기본 제작법과 나란히 비교합니다. 산출 1개당 재료량으로 정규화했습니다."
   section="recipes"
 >
@@ -128,7 +128,7 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
       <h1><span class="fx-gradient-text">무엇이 어떻게 달라지나</span></h1>
       <p class="lede prose">
         하드 드라이브는 후보 <strong>2개 중 1개</strong>를 고르고 리롤이 한 번 있습니다.
-        아래는 <strong>실제로 쓸 수 있게 되는 티어</strong>로 묶었습니다 — 재료가 아직 안 열렸으면
+        아래는 <strong>실제로 쓸 수 있게 되는 티어</strong>로 묶었습니다. 재료가 아직 안 열렸으면
         뽑아 둬도 못 씁니다.
       </p>
     </header>
@@ -144,8 +144,7 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
       <p>
         등급은 <strong>1.2 게임 데이터로 직접 계산</strong>했습니다. 우주 엘리베이터를 끝까지
         납품하는 데 드는 총량을 기본 제작법으로 한 번 풀고, 대체 제작법을 하나씩 끼워 다시 푼 뒤
-        차이를 봅니다. 원자재는 <strong>실제 맵의 노드 수</strong>로 희소도를 매겨 곱합니다 —
-        우라늄 6개와 철 70여 개를 같은 무게로 셈하지 않습니다.
+        차이를 봅니다. 원자재는 <strong>실제 맵의 노드 수</strong>로 희소도를 매겨 곱합니다. 우라늄 6개와 철 70여 개를 같은 무게로 셈하지 않습니다.
       </p>
       <p>
         점수는 <strong>두 축</strong>입니다. <strong>효율</strong>은 {doc.$axes.efficiency}{' '}
@@ -175,7 +174,7 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
                 <div class="card-grade">
                   {r.agreement === 'split' && <span class="verdict is-warn">평가 갈림</span>}
                   <span class={`grade is-${(r.grades.own ?? 'f').toLowerCase()}`}>
-                    {r.grades.own ?? '—'}
+                    {r.grades.own ?? ''}
                   </span>
                   {r.own && <span class="score n">{num(r.own.score)}</span>}
                 </div>
@@ -263,7 +262,7 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
                         <span class="axis-note">
                           {r.hassleNotes && r.hassleNotes.length > 0
                             ? r.hassleNotes.join(' · ')
-                            : '기본 제작법과 손이 비슷하다'}
+                            : '기본 제작법과 품이 비슷하다'}
                         </span>
                       </div>
                     </div>
@@ -271,7 +270,7 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
 
                   {r.disagreeWhy && (
                     <details class="why">
-                      <summary>커뮤니티 평가와 다릅니다 — 왜</summary>
+                      <summary>커뮤니티 평가와 다릅니다. 왜</summary>
                       <ul>
                         {r.disagreeWhy.map((w) => (
                           <li>{w}</li>
@@ -279,8 +278,8 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
                       </ul>
                       <p class="caption">
                         LP 모형 <span class="n">{r.grades.lp}</span> · 스팀 가이드{' '}
-                        <span class="n">{r.grades.steam ?? '—'}</span> · 이 사이트{' '}
-                        <span class="n">{r.grades.own ?? '—'}</span>
+                        <span class="n">{r.grades.steam ?? ''}</span> · 이 사이트{' '}
+                        <span class="n">{r.grades.own ?? ''}</span>
                       </p>
                     </details>
                   )}
@@ -289,8 +288,8 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
                   )}
                   {!r.disagreeWhy && (
                     <p class="caution">
-                      커뮤니티 평가도 비슷합니다 — LP <span class="n">{r.grades.lp}</span> · 스팀{' '}
-                      <span class="n">{r.grades.steam ?? '—'}</span>
+                      커뮤니티 평가도 비슷합니다. LP <span class="n">{r.grades.lp}</span> · 스팀{' '}
+                      <span class="n">{r.grades.steam ?? ''}</span>
                     </p>
                   )}
                 </>
@@ -322,7 +321,7 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
           <div class="src-item">
             <p>
               <span class="n src-n">{['LP 모형', '스팀 가이드', '자체 계산'][i]}</span>{' '}
-              <a href={src.url}>{src.title}</a> — {src.author}, {src.date} · 게임{' '}
+              <a href={src.url}>{src.title}</a>, {src.author}, {src.date} · 게임{' '}
               <span class="n">{src.gameVersion}</span>
             </p>
             <p class="caption">{src.method}</p>
@@ -433,7 +432,7 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
     .src-n { color: var(--accent); font-size: var(--t-caption); }
 
     /*
-     * 게임이 레시피를 보여주는 그대로 — 분당 재료 → 분당 산출. 산출 1개당으로 정규화하면
+     * 게임이 레시피를 보여주는 그대로, 분당 재료 → 분당 산출. 산출 1개당으로 정규화하면
      * 정확하긴 해도 게임 화면과 대조가 안 된다.
      */
     .cmp { display: grid; gap: var(--s2); font-size: var(--t-small); }

@@ -97,7 +97,7 @@ const facts = [
 ---
 
 <Base
-  title="Satisfactory — 지금 무엇을 얼마나 지어야 하는가"
+  title="Satisfactory, 지금 무엇을 얼마나 지어야 하는가"
   description="해금 순서대로 안내하는 한국어 Satisfactory 플레이북. 계산기가 아니라, 지금 할 일과 남겨둘 자리를 알려줍니다."
 >
   <section class="hero" style={`--hero-art:url('${base}/assets/art/keyart.webp')`}>
@@ -123,19 +123,42 @@ const facts = [
       </div>
 
       <div class="demo fx-beam">
-        <div class="demo-head">
-          <label class="demo-label" for="step">지금 어디까지 왔나요</label>
-          <select id="step" class="demo-select">
-            {options.map((o, i) => (
-              <option value={o.id} selected={i === 1}>{o.label} — {o.title}</option>
-            ))}
-          </select>
+        <header class="demo-top">
+          <span class="demo-dot" aria-hidden="true"></span>
+          <span class="demo-title">지금 어디까지 왔나요</span>
+        </header>
+
+        <div class="demo-steps" role="tablist" aria-label="진행 단계">
+          {options.map((o, i) => (
+            <button
+              class="demo-step"
+              type="button"
+              role="tab"
+              data-step={o.id}
+              aria-selected={i === 1 ? 'true' : 'false'}
+            >
+              <span class="demo-step-label n">{o.label}</span>
+            </button>
+          ))}
         </div>
+
+        <p class="demo-now" data-f="title"></p>
+
         <dl class="demo-out" aria-live="polite" data-demo-out>
-          <div class="row"><dt>지금 지을 것</dt><dd data-f="now"></dd></div>
-          <div class="row"><dt>왜 그 규모인가</dt><dd data-f="scale"></dd></div>
-          <div class="row is-keep"><dt>남겨둘 것</dt><dd data-f="keep"></dd></div>
+          <div class="row">
+            <dt>지을 것</dt>
+            <dd data-f="now"></dd>
+          </div>
+          <div class="row">
+            <dt>규모 근거</dt>
+            <dd data-f="scale"></dd>
+          </div>
+          <div class="row is-keep">
+            <dt>남겨둘 것</dt>
+            <dd data-f="keep"></dd>
+          </div>
         </dl>
+
         <p class="demo-gate"><span data-f="gate"></span></p>
       </div>
 
@@ -213,7 +236,7 @@ const facts = [
     </ol>
 
     <div class="showcase">
-      <p class="showcase-tag">가이드가 실제로 주는 것 — 티어 1 철 라인</p>
+      <p class="showcase-tag">가이드가 실제로 주는 것, 티어 1 철 라인</p>
       <FlowChart rows={showcase.rows} caption={showcase.caption} />
     </div>
   </section>
@@ -263,7 +286,7 @@ const facts = [
       ))}
     </div>
     <p class="caption facts-note prose">
-      화면에 손으로 옮겨 적은 수치가 없습니다. 게임이 갱신되면 데이터를 다시 뽑고, 검증에
+      화면에 사람이 옮겨 적은 수치가 없습니다. 게임이 갱신되면 데이터를 다시 뽑고, 검증에
       실패하면 빌드가 멈춥니다. 대체 제작법 등급은 남의 순위를 옮긴 것이 아니라{' '}
       <span class="n">{gameVersion}</span> 데이터로 직접 계산했습니다.
     </p>
@@ -282,13 +305,15 @@ const facts = [
   <script is:inline define:vars={{ options }}>
     (function () {
       var out = document.querySelector('[data-demo-out]');
-      var gate = document.querySelector('[data-f="gate"]');
-      var sel = document.getElementById('step');
-      if (!out || !sel) return;
+      var steps = [].slice.call(document.querySelectorAll('.demo-step'));
+      if (!out || !steps.length) return;
       var byId = {};
       options.forEach(function (o) {
         byId[o.id] = o;
       });
+      function field(name) {
+        return document.querySelector('[data-f="' + name + '"]');
+      }
       function render(id) {
         var o = byId[id];
         if (!o) return;
@@ -296,12 +321,20 @@ const facts = [
           var el = out.querySelector('[data-f="' + k + '"]');
           if (el) el.textContent = o[k];
         });
-        if (gate) gate.textContent = o.gate || '';
+        var t = field('title');
+        if (t) t.textContent = o.title;
+        var g = field('gate');
+        if (g) g.textContent = o.gate || '';
+        steps.forEach(function (b) {
+          b.setAttribute('aria-selected', b.dataset.step === id ? 'true' : 'false');
+        });
       }
-      sel.addEventListener('change', function () {
-        render(sel.value);
+      steps.forEach(function (b) {
+        b.addEventListener('click', function () {
+          render(b.dataset.step);
+        });
       });
-      render(sel.value);
+      render(steps[1] ? steps[1].dataset.step : steps[0].dataset.step);
     })();
   </script>
 </Base>

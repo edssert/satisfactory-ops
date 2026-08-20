@@ -134,54 +134,111 @@
 }
 
 /* ------------------------------------------------------------------ 위젯 */
+/*
+ * 폼이 아니라 **판독기**로 보여야 한다. 네이티브 select 를 쓰면 운영체제 위젯이 그대로 나와
+ * 화면 전체와 따로 논다. 단계 선택은 알약 버튼 줄로 만든다.
+ */
 .demo {
-  border-radius: calc(var(--radius) * 2);
+  border-radius: 14px;
   background: var(--glass);
   box-shadow: var(--lit-strong), 0 24px 70px -30px rgb(0 0 0 / 0.7);
   backdrop-filter: blur(calc(var(--glass-blur) * 1.4)) saturate(var(--glass-sat));
+  overflow: hidden;
 }
-.demo-head { padding: var(--s4) var(--s5); border-bottom: var(--hair) solid var(--line); }
-.demo-label {
-  display: block;
-  margin-bottom: var(--s2);
+
+.demo-top {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  padding: var(--s3) var(--s5);
+  border-bottom: var(--hair) solid var(--line);
+  background: color-mix(in oklab, var(--raised) 55%, transparent);
+}
+.demo-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary) 22%, transparent);
+}
+.demo-title {
   font-family: var(--font-mono);
   font-size: var(--t-label);
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ink-3);
 }
-.demo-select {
-  width: 100%;
-  padding: var(--s3);
-  border: var(--hair) solid var(--line-strong);
-  border-radius: var(--radius);
-  background: color-mix(in oklab, var(--bg) 70%, transparent);
-  color: var(--ink);
-  font: inherit;
-  font-size: var(--t-small);
-  font-weight: 600;
+
+.demo-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  padding: var(--s3) var(--s4) 0;
 }
-.demo-out { margin: 0; padding: var(--s2) var(--s5) var(--s4); }
-.demo-out .row { padding-block: var(--s3); border-bottom: var(--hair) solid var(--line); }
-.demo-out .row:last-child { border-bottom: 0; }
+.demo-step {
+  padding: 8px 4px;
+  border: var(--hair) solid var(--line);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink-3);
+  font: inherit;
+  font-size: var(--t-label);
+  cursor: pointer;
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
+    background-color var(--dur-fast) var(--ease);
+}
+.demo-step:hover { color: var(--ink); border-color: var(--line-strong); }
+.demo-step[aria-selected='true'] {
+  border-color: color-mix(in oklab, var(--primary) 55%, transparent);
+  background: color-mix(in oklab, var(--primary) 14%, transparent);
+  color: var(--primary-ink);
+}
+.demo-step-label { letter-spacing: 0; }
+
+.demo-now {
+  margin: var(--s4) 0 0;
+  padding: 0 var(--s5);
+  font-size: var(--t-body-l);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.demo-out { margin: 0; padding: var(--s4) var(--s5) var(--s4); }
+.demo-out .row {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  gap: var(--s3);
+  padding-block: var(--s3);
+  border-top: var(--hair) solid var(--line);
+}
 .demo-out dt {
   font-family: var(--font-mono);
   font-size: var(--t-label);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: var(--ink-3);
-  margin-bottom: var(--s1);
+  padding-top: 2px;
 }
-.demo-out dd { margin: 0; font-size: var(--t-small); line-height: 1.6; }
+.demo-out dd { margin: 0; font-size: var(--t-small); line-height: 1.6; color: var(--ink-2); }
+.demo-out .is-keep {
+  margin-top: var(--s2);
+  padding: var(--s3);
+  border-radius: 8px;
+  border-top: 0;
+  background: color-mix(in oklab, var(--accent) 10%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--accent) 26%, transparent);
+}
 .demo-out .is-keep dt { color: var(--accent); }
-.demo-out .is-keep dd { font-weight: 600; }
+.demo-out .is-keep dd { color: var(--ink); font-weight: 600; }
+
 .demo-gate {
   margin: 0;
   padding: var(--s3) var(--s5);
   border-top: var(--hair) solid var(--line);
-  background: color-mix(in oklab, var(--raised) 60%, transparent);
-  border-radius: 0 0 calc(var(--radius) * 2) calc(var(--radius) * 2);
+  background: color-mix(in oklab, var(--raised) 45%, transparent);
   font-size: var(--t-caption);
-  color: var(--ink-2);
+  color: var(--ink-3);
 }
 
 /* ------------------------------------------------------------------ 아이콘 띠 */

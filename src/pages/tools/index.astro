@@ -2,7 +2,7 @@
 /**
  * 도구 — 레퍼런스 표와 용어집. JS 0KB 정적 페이지.
  *
- * 표는 게임 배포 데이터에서 빌드타임에 렌더한다. 손으로 옮겨 적은 값이 없다.
+ * 표는 게임 배포 데이터에서 빌드타임에 렌더한다. 사람이 옮겨 적은 값이 없다.
  *
  * 표기 규칙 두 가지가 앞선 판본에서 문제가 됐다:
  *   - 컨베이어 벨트와 리프트는 등급별 처리량이 **같다**. 행을 두 벌 쓰지 않고 한 행에 합친다.
@@ -132,7 +132,7 @@ const sortedTerms = [...terms].sort(
 ---
 
 <Base
-  title="도구 — 레퍼런스 표와 용어집"
+  title="도구, 레퍼런스 표와 용어집"
   description="벨트·파이프 처리량, 채굴기 산출량, 발전기 출력, 생산 건물 전력. 게임 배포 데이터에서 직접 생성한 표."
   section="tools"
 >
@@ -193,7 +193,7 @@ const sortedTerms = [...terms].sort(
                 <tr>
                   <td>{m.ko} <span class="en">{m.en}</span></td>
                   {PURITY.map((p) => <td class="n">{num(b * p.mul)}</td>)}
-                  <td class="n">{m.powerMW ?? '—'}</td>
+                  <td class="n">{m.powerMW ?? ''}</td>
                   <td class="n">{tierOf(m.unlockTier)}</td>
                 </tr>
               );
@@ -217,7 +217,7 @@ const sortedTerms = [...terms].sort(
                 <tr>
                   <td>{m.ko}</td>
                   <td class="n">{m.extraction!.perMinuteAtNormalPurity}</td>
-                  <td class="n">{m.powerMW ?? '—'}</td>
+                  <td class="n">{m.powerMW ?? ''}</td>
                   <td class="n">{tierOf(m.unlockTier)}</td>
                 </tr>
               ))}
@@ -258,10 +258,10 @@ const sortedTerms = [...terms].sort(
                   {g.ko} <span class="en">{g.en}</span>
                   {g.powerGenMW == null && <span class="rownote">간헐천 순도에 따라 달라 배포 데이터에 값이 없습니다</span>}
                 </td>
-                <td class="n">{g.powerGenMW ?? '—'}</td>
+                <td class="n">{g.powerGenMW ?? ''}</td>
                 <td class="n">{tierOf(g.unlockTier)}</td>
                 <td class="small muted">
-                  {g.supplementalToPowerRatio ? `비율 ${g.supplementalToPowerRatio}` : '—'}
+                  {g.supplementalToPowerRatio ? `비율 ${g.supplementalToPowerRatio}` : ''}
                 </td>
               </tr>
             ))}
@@ -298,7 +298,7 @@ const sortedTerms = [...terms].sort(
                 <td class="n">
                   {b.powerIsVariable
                     ? `${num(b.powerMinMW ?? 0)}~${num(b.powerMaxMW ?? 0)}`
-                    : (b.powerMW ?? '—')}
+                    : (b.powerMW ?? '')}
                 </td>
                 <td>
                   {b.buildCost.map((c) => (
@@ -338,7 +338,7 @@ const sortedTerms = [...terms].sort(
                 {t.gameKo && (
                   <>
                     <dt>게임 표기</dt>
-                    <dd><strong>{t.gameKo}</strong> — 위 이름은 커뮤니티 통용어입니다.</dd>
+                    <dd><strong>{t.gameKo}</strong>, 위 이름은 커뮤니티 통용어입니다.</dd>
                   </>
                 )}
                 {t.originNote && (
@@ -435,7 +435,7 @@ const sortedTerms = [...terms].sort(
       color: var(--ink-2);
       white-space: nowrap;
     }
-    /* 실제 산업에서 그대로 쓰는 말만 강조색을 준다 — 게임 밖에서도 통하는 지식이라서다 */
+    /* 실제 산업에서 그대로 쓰는 말만 강조색을 준다. 게임 밖에서도 통하는 지식이라서다 */
     .term-origin.is-industry { border-color: var(--accent); color: var(--accent); }
     .term-unlock {
       text-align: right;

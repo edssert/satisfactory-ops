@@ -76,15 +76,25 @@ const pass = (msg) => notes.push(`  PASS  ${msg}`);
    * 또 빈칸이 나온다. 실제 아이템(건축 부재 제외)과 실제 설비(구조물·장식 제외)는
    * 미리 전부 받아 둔다.
    */
-  const wantItems = items.filter((i) => i.kind !== 'building-descriptor');
-  const SKIP_CAT = new Set(['structure', 'decoration']);
-  /** 구버전 세이브 호환용으로만 남은 것은 위키에도 문서가 없다 */
-  const LEGACY = new Set(['Build_JumpPad_C', 'Build_JumpPadTilted_C']);
-  const wantBuildings = buildings.filter((b) => !SKIP_CAT.has(b.category) && !LEGACY.has(b.id));
+  /*
+   * **전량**이 기준이다. 분류로 골라 받다가 상점 화면을 만들 때 구조물·장식 125개가
+   * 통째로 비어 있는 것을 뒤늦게 알았다. 나중에 화면을 만들면서 다시 받는 일이 없게,
+   * 받을 수 있는 것은 미리 다 받아 둔다.
+   */
+  const wantItems0 = items.filter((i) => i.kind !== 'building-descriptor');
+  /*
+   * 위키에 개별 아이콘 문서가 없어 받을 수 없는 것들(벽·경사로 변형 등).
+   * 목록을 데이터로 고정해 둔다 — 그래야 다음에 또 "왜 안 받아지지" 하며 헤매지 않는다.
+   */
+  const gaps = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/data/asset-gaps.json'), 'utf8'));
+  const UNAVAILABLE = new Set(gaps.buildings ?? []);
+  const UNAVAILABLE_ITEMS = new Set(gaps.items ?? []);
+  const wantBuildings = buildings.filter((b) => !UNAVAILABLE.has(b.id));
 
   const gone = (dir, list) =>
     list.filter((x) => !fs.existsSync(path.join(ROOT, 'public/assets', dir, `${x.id}.png`)));
 
+  const wantItems = wantItems0.filter((i) => !UNAVAILABLE_ITEMS.has(i.id));
   const mi = gone('items', wantItems);
   const mb = gone('buildings-png', wantBuildings);
   if (mi.length || mb.length) {

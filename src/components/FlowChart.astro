@@ -62,7 +62,17 @@ export interface BusLine {
   deliver?: { ko: string; perMinute: number };
 }
 
-export type Row = { kind: 'machines'; boxes: MachineBox[] } | { kind: 'bus'; bus: BusLine };
+/** 라인의 최종 산출이 쌓이는 곳. 무엇이 분당 몇 개씩 쌓이는지 적는다 */
+export interface StoreBox {
+  itemKo: string;
+  itemId?: string;
+  perMinute: number;
+}
+
+export type Row =
+  | { kind: 'machines'; boxes: MachineBox[] }
+  | { kind: 'bus'; bus: BusLine }
+  | { kind: 'storage'; label: string; boxes: StoreBox[] };
 
 interface Props {
   rows: Row[];
@@ -78,14 +88,18 @@ const iIcon = `${base}/assets/items`;
 const BUS_H = 34;
 const ROW_GAP = 40;
 
-const widest = Math.max(...rows.map((r) => (r.kind === 'machines' ? r.boxes.length : 1)), 1);
+const STORE_H = 92;
+const widest = Math.max(
+  ...rows.map((r) => (r.kind === 'bus' ? 1 : r.boxes.length)),
+  1
+);
 const width = PAD * 2 + widest * NODE_W + (widest - 1) * GAP_X;
 const centerX = width / 2;
 
 /** 위에서부터 층을 쌓는다 */
 let cursor = PAD;
 const placed = rows.map((row) => {
-  const h = row.kind === 'machines' ? NODE_H : BUS_H;
+  const h = row.kind === 'machines' ? NODE_H : row.kind === 'storage' ? STORE_H : BUS_H;
   const at = { row, y: cursor, h };
   cursor += h + ROW_GAP;
   return at;
@@ -103,6 +117,9 @@ const busX2 = width - PAD;
 
 /** 층과 층 사이를 잇는 선의 x 좌표들 */
 function connectors(row: Row): number[] {
+  if (row.kind === 'storage') {
+    return row.boxes.map((_, i) => boxX(row.boxes.length, i) + NODE_W / 2);
+  }
   if (row.kind === 'machines') {
     return row.boxes
       .map((b, i) => ({ b, x: boxX(row.boxes.length, i) + NODE_W / 2 }))
@@ -142,8 +159,10 @@ function connectors(row: Row): number[] {
         const y1 = p.y + p.h;
         const y2 = next.y;
         /* 벨트 줄이 한쪽에 있으면 그 줄은 가로로 길므로, 기계 쪽 상자마다 한 줄씩 내린다 */
+        /* 저장 행 앞에는 선을 긋지 않는다 — 어느 기계에서 왔는지가 한 줄로 안 그려진다 */
+        if (next.row.kind === 'storage') return null;
         const xs =
-          p.row.kind === 'machines' ? connectors(p.row) : connectors(next.row);
+          p.row.kind === 'bus' ? connectors(next.row) : connectors(p.row);
         return xs.map((x) => (
           <path
             d={`M${x},${y1} L${x},${y2}`}
@@ -156,6 +175,37 @@ function connectors(row: Row): number[] {
 
     {
       placed.map((p) => {
+        if (p.row.kind === 'storage') {
+          const boxes = p.row.boxes;
+          const label = p.row.label;
+          return (
+            <g class="fc-store">
+              <line x1={busX1} y1={p.y - 14} x2={busX2} y2={p.y - 14} class="fc-storeline" />
+              <text x={busX1} y={p.y - 20} class="fc-storelabel">{label}</text>
+              {boxes.map((b, i) => {
+                const x = boxX(boxes.length, i);
+                return (
+                  <g>
+                    <rect x={x} y={p.y} width={NODE_W} height={STORE_H} rx="3" class="fc-storebox" />
+                    {b.itemId && (
+                      <image
+                        href={`${iIcon}/${b.itemId}.png`}
+                        x={x + 14}
+                        y={p.y + 24}
+                        width="40"
+                        height="40"
+                      />
+                    )}
+                    <text x={x + 66} y={p.y + 40} class="fc-name">{b.itemKo}</text>
+                    <text x={x + 66} y={p.y + 62} class="fc-storerate">
+                      {fmtRate(b.perMinute)}/분씩 쌓임
+                    </text>
+                  </g>
+                );
+              })}
+            </g>
+          );
+        }
         if (p.row.kind === 'bus') {
           const b = p.row.bus;
           const label = `${b.itemKo} ${fmtRate(b.perMinute)}/분`;
@@ -195,9 +245,9 @@ function connectors(row: Row): number[] {
               {b.deliver && (
                 <>
                   <rect
-                    x={busX2 - chipWidth(`${b.deliver.ko} ${fmtRate(b.deliver.perMinute)}/분 납품`, false) - 6}
+                    x={busX2 - chipWidth(`${b.deliver.ko} ${fmtRate(b.deliver.perMinute)}/분 컨테이너로`, false) - 6}
                     y={p.y + 3}
-                    width={chipWidth(`${b.deliver.ko} ${fmtRate(b.deliver.perMinute)}/분 납품`, false)}
+                    width={chipWidth(`${b.deliver.ko} ${fmtRate(b.deliver.perMinute)}/분 컨테이너로`, false)}
                     height={p.h - 6}
                     rx="3"
                     class="fc-deliver"
@@ -208,7 +258,7 @@ function connectors(row: Row): number[] {
                     class="fc-delivertext"
                     text-anchor="end"
                   >
-                    {b.deliver.ko} {fmtRate(b.deliver.perMinute)}/분 납품
+                    {b.deliver.ko} {fmtRate(b.deliver.perMinute)}/분 컨테이너로
                   </text>
                 </>
               )}

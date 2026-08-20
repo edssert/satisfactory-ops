@@ -1,5 +1,5 @@
 {
-  "$comment": "게임 버전 연혁. 버그 수정·성능 개선은 담지 않는다 — 진행과 설계 판단에 영향을 주는 변경만 담는다.",
+  "$comment": "게임 버전 연혁. 버그 수정·성능 개선은 담지 않는다. 진행과 설계 판단에 영향을 주는 변경만 담는다.",
   "$purpose": "커뮤니티 공략을 읽을 때 어느 부분만 다시 확인할지 알려주는 목록이다. 메인 시스템이 뒤집히지 않는 한 구버전 공략도 대부분 유효하다.",
   "$dataBaseline": {
     "version": "1.2",
@@ -15,7 +15,7 @@
       "date": "2019-03-19",
       "headline": "Epic Games Store 얼리액세스 출시",
       "confidence": "verified",
-      "source": "공식 위키 Satisfactory — \"March 19, 2019 (Early Access)\"",
+      "source": "공식 위키 Satisfactory, \"March 19, 2019 (Early Access)\"",
       "changes": [
         {
           "what": "게임 출시",
@@ -142,7 +142,7 @@
         },
         {
           "what": "자원정 순도",
-          "after": "자원정에 순도 개념 도입 — 발전량이 순도에 따라 달라짐",
+          "after": "자원정에 순도 개념 도입, 발전량이 순도에 따라 달라짐",
           "affects": "자원정 계획",
           "confidence": "verified",
           "source": "위키 Update 4"
@@ -166,7 +166,7 @@
         {
           "what": "클리어런스 구분",
           "before": "단일 충돌 판정",
-          "after": "하드/소프트 구분 — 장식 부재는 겹쳐도 지어짐",
+          "after": "하드/소프트 구분, 장식 부재는 겹쳐도 지어짐",
           "affects": "배치 밀도. 이 앱의 클리어런스 계산도 이 구분을 따른다",
           "confidence": "verified",
           "source": "위키 Update 5"
@@ -252,7 +252,7 @@
         {
           "what": "청사진",
           "before": "없음",
-          "after": "청사진 설계소(티어 4) — 4×4 파운데이션, 벽 8단",
+          "after": "청사진 설계소(티어 4), 4×4 파운데이션, 벽 8단",
           "affects": "모듈식 건설이 가능해진 시점",
           "confidence": "verified",
           "source": "위키 Update 7"
@@ -324,7 +324,7 @@
     {
       "version": "1.0",
       "date": "2024-09-10",
-      "headline": "정식 출시 — 여기가 의심의 경계선",
+      "headline": "정식 출시, 여기가 의심의 경계선",
       "confidence": "verified",
       "source": "공식 위키 Satisfactory · docs/research/version-history.md",
       "changes": [
@@ -349,7 +349,7 @@
           "after": "후보 2개 + 리롤 1회",
           "affects": "대체 레시피 획득 전략",
           "confidence": "verified",
-          "source": "docs/research/alternate-recipes.md — 게임 데이터로 확인"
+          "source": "docs/research/alternate-recipes.md, 게임 데이터로 확인"
         },
         {
           "what": "자원 노드 재배치",
@@ -378,7 +378,7 @@
     {
       "version": "1.1",
       "date": "2025-06-10",
-      "headline": "물류 부품 대량 추가 — 수치 변경 0건",
+      "headline": "물류 부품 대량 추가, 수치 변경 0건",
       "confidence": "verified",
       "source": "docs/research/version-history.md",
       "changes": [
@@ -409,7 +409,7 @@
     {
       "version": "1.2",
       "date": "2026-06-02",
-      "headline": "게임 모드 · 차량 경로 재작성 — 수치 변경 0건",
+      "headline": "게임 모드 · 차량 경로 재작성, 수치 변경 0건",
       "confidence": "verified",
       "source": "docs/research/version-history.md",
       "changes": [

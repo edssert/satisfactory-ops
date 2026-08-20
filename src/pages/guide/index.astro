@@ -108,7 +108,7 @@ const FLOWS: Record<string, FlowDef> = {
 ---
 
 <Base
-  title="가이드 — 해금 순서대로 무엇을 얼마나"
+  title="가이드, 해금 순서대로 무엇을 얼마나"
   description="Satisfactory 진행 가이드. 허브부터 석탄 발전까지, 그 시점에 실제로 열려 있는 것만 다룹니다."
   section="guide"
 >
@@ -190,8 +190,8 @@ const FLOWS: Record<string, FlowDef> = {
                           </td>
                           <td class="n">{num(r.perMinute)}</td>
                           <td>{r.plan?.machineKo ?? '채굴기'}</td>
-                          <td class="n">{r.plan ? r.plan.count : '—'}</td>
-                          <td class="n">{r.plan && r.plan.clock < 100 ? `${num(r.plan.clock)}%` : '—'}</td>
+                          <td class="n">{r.plan ? r.plan.count : ''}</td>
+                          <td class="n">{r.plan && r.plan.clock < 100 ? `${num(r.plan.clock)}%` : ''}</td>
                           <td class="small muted">
                             {r.plan?.inputs.map((g) => (
                               <span class="chip">{g.ko} <span class="n">{num(g.perMinute)}</span></span>

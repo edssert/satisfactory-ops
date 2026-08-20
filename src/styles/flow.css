@@ -180,3 +180,32 @@
   font-weight: 700;
   text-anchor: middle;
 }
+
+/* ------------------------------------------------- 저장 컨테이너 (최종 산출) */
+/*
+ * 라인의 끝이 어디로 가는지 보여준다. 어느 기계에서 왔는지 선으로 잇지 않는다 —
+ * 산출이 여러 층에서 나와 한 줄로 그리면 오히려 헷갈린다. 대신 구분선과 라벨을 둔다.
+ */
+.fc-storeline {
+  stroke: var(--line-strong);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
+.fc-storelabel {
+  fill: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+.fc-storebox {
+  fill: var(--raised);
+  stroke: var(--accent);
+  stroke-width: 1;
+  stroke-opacity: 0.45;
+}
+.fc-storerate {
+  fill: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+}

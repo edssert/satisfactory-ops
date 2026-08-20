@@ -132,7 +132,12 @@ async function fetchBuildings() {
    * 그것들은 레퍼런스 표와 도면에 실제로 등장한다.
    * 구조물(벽·경사로·통로 388개)과 장식만 뺀다 — 위키에 같은 이름의 아이콘이 없고 쓰지도 않는다.
    */
-  const SKIP_CAT = new Set(['structure', 'decoration']);
+  /*
+   * 기본은 실제 설비만. `--cosmetics` 를 주면 구조물·장식까지 받는다 —
+   * 어썸 싱크 상점 화면이 대부분 꾸미기용이라 그것들이 필요하다.
+   */
+  const COSMETICS = argv.includes('--cosmetics');
+  const SKIP_CAT = COSMETICS ? new Set() : new Set(['structure', 'decoration']);
   const wanted = buildings.filter((b) => !SKIP_CAT.has(b.category));
 
   let got = 0;
