@@ -57,7 +57,15 @@ test('생성된 sw.js 가 모든 라우트를 캐시에서 찾을 수 있다', {
   const routes = assets
     .filter((a) => a.endsWith('/index.html'))
     .map((a) => a.replace(/index\.html$/, ''));
-  assert.ok(routes.length >= 6, `라우트가 너무 적다: ${routes.length}`);
+  /*
+   * 개수 대신 실제 경로를 확인한다. 앞선 판본은 최소 개수를 상수로 박아 두었는데,
+   * 페이지를 합치면서 그 상수가 곧바로 거짓이 됐다. 사이트 구조는 바뀔 수 있고
+   * 이 테스트가 지켜야 할 것은 "있는 라우트가 캐시에서 빗나가지 않는가" 다.
+   */
+  const EXPECTED = ['/satisfactory-ops/', '/satisfactory-ops/guide/', '/satisfactory-ops/tools/', '/satisfactory-ops/versions/'];
+  for (const want of EXPECTED) {
+    assert.ok(routes.includes(want), `라우트 누락: ${want}`);
+  }
 
   for (const route of routes) {
     assert.ok(

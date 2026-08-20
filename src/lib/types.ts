@@ -38,6 +38,13 @@ export interface Building {
   category: string;
   buildCost: { item: string; amount: number }[];
   powerMW: number | null;
+  /*
+   * 입자 가속기·양자 인코더·변환기는 고정 소비가 없다. mPowerConsumption 이 0 이고
+   * 추정 최소·최대만 있다. 이 셋을 고정값으로 읽으면 후반 전력이 실제의 1/3 로 나온다.
+   */
+  powerMinMW?: number | null;
+  powerMaxMW?: number | null;
+  powerIsVariable?: boolean;
   powerGenMW: number | null;
   powerExponent: number | null;
   manufacturingSpeed: number | null;

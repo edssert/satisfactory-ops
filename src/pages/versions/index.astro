@@ -18,7 +18,7 @@ type Change = {
   source: string;
 };
 const doc = history as {
-  $dataBaseline: { steamBuildId: string; gameUpdatedAt: string; extractedAt: string };
+  $dataBaseline: { version: string; steamBuildId: string; gameUpdatedAt: string; extractedAt: string };
   versions: {
     version: string;
     date: string;
@@ -34,7 +34,7 @@ const liveBuild = meta.game?.steamBuildId ?? null;
 const baselineMatches = liveBuild === doc.$dataBaseline.steamBuildId;
 
 const facts = [
-  { k: '게임 버전', v: meta.game?.version ?? '1.2' },
+  { k: '게임 버전', v: doc.$dataBaseline.version },
   { k: 'Steam 빌드', v: liveBuild ?? '—' },
   { k: '게임 갱신', v: doc.$dataBaseline.gameUpdatedAt },
   { k: '데이터 추출', v: doc.$dataBaseline.extractedAt },

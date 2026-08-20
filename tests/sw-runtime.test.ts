@@ -151,12 +151,10 @@ test('설치 시 프리캐시가 채워진다', { skip: !fs.existsSync(SW) }, as
 test('온라인에서 각 화면이 자기 문서를 돌려준다', { skip: !fs.existsSync(SW) }, async () => {
   const sw = await bootServiceWorker();
   const cases: [string, string][] = [
-    [`${BASE}/`, '플레이북'],
-    [`${BASE}/milestones/`, '마일스톤 체크리스트'],
-    [`${BASE}/calc/`, '생산 계산기'],
-    [`${BASE}/start/`, '시작 가이드'],
-    [`${BASE}/glossary/`, '용어집'],
-    [`${BASE}/ref/`, '레퍼런스'],
+    [`${BASE}/`, '지금 무엇을'],
+    [`${BASE}/guide/`, '해금 순서대로'],
+    [`${BASE}/tools/`, '레퍼런스'],
+    [`${BASE}/versions/`, '버전 연혁'],
   ];
   for (const [pathname, expected] of cases) {
     const res = await sw.navigate(pathname);
@@ -170,8 +168,8 @@ test('온라인에서 각 화면이 자기 문서를 돌려준다', { skip: !fs.
 
 test('오프라인에서도 각 화면이 자기 문서를 돌려준다', { skip: !fs.existsSync(SW) }, async () => {
   const sw = await bootServiceWorker(true);
-  const res = await sw.navigate(`${BASE}/milestones/`);
-  assert.ok(titleOf(res.body).includes('마일스톤'), `오프라인 응답: ${titleOf(res.body)}`);
+  const res = await sw.navigate(`${BASE}/guide/`);
+  assert.ok(titleOf(res.body).includes('해금 순서대로'), `오프라인 응답: ${titleOf(res.body)}`);
 });
 
 test('캐시에 없는 경로는 오프라인일 때만 셸로 폴백한다', { skip: !fs.existsSync(SW) }, async () => {
