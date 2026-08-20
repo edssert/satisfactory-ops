@@ -125,9 +125,11 @@ for (const s of list.filter((x) => x.type === 'mam')) {
   mam.push({
     id: s.className,
     ko: nameOf(s),
+    /* 영문 이름이 있어야 위키의 선행 관계표와 맞출 수 있다 */
+    en: s.name,
     tree,
     treeKo: TREE_KO[tree]?.ko ?? tree,
-    /** 클래스명에서 뽑은 깊이. 배포 데이터에 선행 관계가 없어 이것으로 순서를 세운다 */
+    /** 클래스명에서 뽑은 번호. 깊이는 parents 로 다시 계산하므로 참고용이다 */
     row: nums.length ? Number(nums[0]) : 99,
     col: nums.length > 1 ? Number(nums[1]) : 1,
     cost: cost(s.cost),
@@ -136,6 +138,53 @@ for (const s of list.filter((x) => x.type === 'mam')) {
     discontinued: /^Discontinued|중단/i.test(`${s.name ?? ''}${nameOf(s)}`),
   });
 }
+/*
+ * 선행 관계를 되살린다.
+ *
+ * 게임 배포 데이터의 mSchematicDependencies 는 MAM 122건이 전부 비어 있다 —
+ * 선행 관계가 블루프린트 자산 안에만 있고 Docs.json 으로 안 나온다.
+ * 그런데 클래스명이 경로다: Research_Caterium_4_1_2_C 는 Research_Caterium_4_1_C 의 자식이다.
+ * 거기서 뽑고, 이름에 숫자 경로가 없는 것(외계 기술 전체 등)만 큐레이션 보정표로 채운다.
+ */
+const MAM_LINKS = JSON.parse(
+  fs.readFileSync(path.join(ROOT, 'src/data/curated/mam-links.json'), 'utf8')
+);
+{
+  const ids = new Set(mam.map((m) => m.id));
+  const parentFromName = (id) => {
+    const m = id.match(/^Research_([A-Za-z]+)_(.+)_C$/);
+    if (!m) return [];
+    const [, tree, rest] = m;
+    const segs = rest.split('_');
+    if (!segs.every((x) => /^\d+$/.test(x))) return [];
+    /* 마지막 조각을 하나씩 떼어 실제로 있는 조상을 찾는다 */
+    for (let cut = segs.length - 1; cut >= 1; cut--) {
+      const cand = `Research_${tree}_${segs.slice(0, cut).join('_')}_C`;
+      if (ids.has(cand)) return [cand];
+    }
+    /* 본줄기는 앞 번호가 부모다 */
+    for (let k = Number(segs[0]) - 1; k >= 0; k--) {
+      const cand = `Research_${tree}_${k}_C`;
+      if (ids.has(cand)) return [cand];
+    }
+    return [];
+  };
+  let curated = 0;
+  for (const n of mam) {
+    const fix = MAM_LINKS.links[n.id];
+    if (fix) {
+      n.parents = fix.filter((x) => ids.has(x));
+      curated++;
+    } else {
+      n.parents = parentFromName(n.id);
+    }
+  }
+  const orphan = mam.filter((n) => n.parents.length === 0).length;
+  console.log(
+    `MAM 선행 관계: 클래스명 ${mam.length - curated}건 · 보정표 ${curated}건 · 뿌리 ${orphan}건`
+  );
+}
+
 mam.sort((a, b) => a.treeKo.localeCompare(b.treeKo, 'ko') || a.row - b.row || a.col - b.col);
 
 const mamTrees = [...new Set(mam.map((x) => x.tree))].map((t) => ({
@@ -151,6 +200,8 @@ const shop = list
   .map((s) => ({
     id: s.className,
     ko: nameOf(s),
+    /* 영문 이름이 있어야 위키의 상점 분류표와 맞출 수 있다 */
+    en: s.name,
     coupons: (s.cost ?? []).find((c) => /Coupon/i.test(c.item))?.amount ?? 0,
     unlocks: unlocksOf(s),
   }))

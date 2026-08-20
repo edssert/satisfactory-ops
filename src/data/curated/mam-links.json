@@ -1,0 +1,175 @@
+{
+  "$comment": "MAM 선행 관계 보정표. 대부분은 클래스명 경로에서 나온다 — Research_Caterium_4_1_2_C 는 Research_Caterium_4_1_C 의 자식이다. 하지만 이름에 숫자 경로가 없는 노드(외계 기술 전체, 황의 하드 드라이브 해금 등)와 경로만으로는 어긋나는 몇 건은 공식 위키의 MAM 문서를 따른다.",
+  "$source": "https://satisfactory.wiki.gg/wiki/MAM",
+  "$confidence": "consensus",
+  "$note": "게임 배포 데이터(Docs.json)의 mSchematicDependencies 는 MAM 122건 전부 비어 있다. 선행 관계가 블루프린트 자산 안에만 있고 내보내지지 않는다. 그래서 클래스명 + 위키를 쓴다.",
+  "links": {
+    "Research_Quartz_2_C": [
+      "Research_Quartz_1_1_C"
+    ],
+    "Research_Quartz_2_1_C": [
+      "Research_Quartz_1_1_C"
+    ],
+    "Research_Quartz_3_1_C": [
+      "Research_Quartz_2_C"
+    ],
+    "Research_Quartz_3_C": [
+      "Research_Quartz_2_C"
+    ],
+    "Research_Quartz_3_3_C": [
+      "Research_Quartz_2_C"
+    ],
+    "Research_Quartz_3_4_C": [
+      "Research_Quartz_2_C"
+    ],
+    "Research_Quartz_4_1_C": [
+      "Research_Quartz_3_C"
+    ],
+    "Research_Quartz_4_C": [
+      "Research_Quartz_3_C"
+    ],
+    "Research_Quartz_PriorityMerger_C": [
+      "Research_Quartz_2_C"
+    ],
+    "Research_Caterium_5_C": [
+      "Research_Caterium_2_C"
+    ],
+    "Research_Caterium_4_3_C": [
+      "Research_Caterium_2_C"
+    ],
+    "Research_Caterium_7_1_C": [
+      "Research_Caterium_4_1_C"
+    ],
+    "Research_Caterium_7_2_C": [
+      "Research_Caterium_5_C"
+    ],
+    "Research_Caterium_6_2_C": [
+      "Research_Caterium_5_C"
+    ],
+    "Research_Caterium_6_3_C": [
+      "Research_Caterium_5_C"
+    ],
+    "Research_Caterium_5_1_C": [
+      "Research_Caterium_5_C"
+    ],
+    "Research_Caterium_5_2_C": [
+      "Research_Caterium_5_C"
+    ],
+    "Research_PowerSlugs_2_C": [
+      "Research_PowerSlugs_1_C"
+    ],
+    "Research_PowerSlugs_3_C": [
+      "Research_PowerSlugs_1_C"
+    ],
+    "Research_PowerSlugs_4_C": [
+      "Research_PowerSlugs_3_C"
+    ],
+    "Research_PowerSlugs_5_C": [
+      "Research_PowerSlugs_3_C"
+    ],
+    "Research_PowerSlugs_6_C": [
+      "Research_PowerSlugs_4_C",
+      "Research_PowerSlugs_5_C"
+    ],
+    "Research_Sulfur_ExperimentalPower_C": [
+      "Research_Sulfur_0_C"
+    ],
+    "Research_Sulfur_CompactedCoal_C": [
+      "Research_Sulfur_0_C"
+    ],
+    "Research_Sulfur_TurboFuel_C": [
+      "Research_Sulfur_0_C"
+    ],
+    "Research_Sulfur_RocketFuel_C": [
+      "Research_Sulfur_0_C"
+    ],
+    "Research_Sulfur_IonizedFuel_C": [
+      "Research_Sulfur_0_C"
+    ],
+    "Research_Sulfur_5_C": [
+      "Research_Sulfur_1_C"
+    ],
+    "Research_Sulfur_6_C": [
+      "Research_Sulfur_3_C"
+    ],
+    "Research_Sulfur_5_1_C": [
+      "Research_Sulfur_3_C"
+    ],
+    "Research_Sulfur_5_2_C": [
+      "Research_Sulfur_3_C"
+    ],
+    "Research_Alien_ActiveSAM_C": [
+      "Research_Alien_SAM_C"
+    ],
+    "Research_Alien_SAMFluctuator_C": [
+      "Research_Alien_SAM_C"
+    ],
+    "Research_Alien_MercerSphere_C": [
+      "Research_Alien_SAMFluctuator_C"
+    ],
+    "Research_Alien_Somersloop_C": [
+      "Research_Alien_SAMFluctuator_C"
+    ],
+    "Research_Alien_BoosterFuel_C": [
+      "Research_Alien_SAMFluctuator_C"
+    ],
+    "Research_Alien_CentralStorage_C": [
+      "Research_Alien_MercerSphere_C"
+    ],
+    "Research_Alien_PortalPotty_C": [
+      "Research_Alien_MercerSphere_C"
+    ],
+    "Research_Alien_CentralInventory_C": [
+      "Research_Alien_CentralStorage_C"
+    ],
+    "Research_Alien_CentralUploadBoost_01_C": [
+      "Research_Alien_CentralStorage_C"
+    ],
+    "Research_Alien_CentralUploadBoost_02_C": [
+      "Research_Alien_CentralUploadBoost_01_C"
+    ],
+    "Research_Alien_CentralUploadBoost_03_C": [
+      "Research_Alien_CentralUploadBoost_02_C"
+    ],
+    "Research_Alien_CentralUploadBoost_04_C": [
+      "Research_Alien_CentralUploadBoost_03_C"
+    ],
+    "Research_Alien_CentralStackExpansion_01_C": [
+      "Research_Alien_CentralStorage_C"
+    ],
+    "Research_Alien_CentralStackExpansion_02_C": [
+      "Research_Alien_CentralStackExpansion_01_C"
+    ],
+    "Research_Alien_CentralStackExpansion_03_C": [
+      "Research_Alien_CentralStackExpansion_02_C"
+    ],
+    "Research_Alien_CentralStackExpansion_04_C": [
+      "Research_Alien_CentralStackExpansion_03_C"
+    ],
+    "Research_Alien_PowerBooster_C": [
+      "Research_Alien_Somersloop_C"
+    ],
+    "Research_Alien_ProductionBooster_C": [
+      "Research_Alien_Somersloop_C"
+    ],
+    "Research_Nutrients_3_C": [
+      "Research_Nutrients_0_C",
+      "Research_Nutrients_1_C",
+      "Research_Nutrients_2_C"
+    ],
+    "Research_Nutrients_4_C": [
+      "Research_Nutrients_3_C"
+    ],
+    "Research_Alien_BoosterBlocker_C": [
+      "Research_Alien_SAMFluctuator_C"
+    ]
+  },
+  "roots": {
+    "$comment": "트리의 첫 노드. 여기 없는 트리는 깊이 0 인 것을 뿌리로 본다.",
+    "Alien": [
+      "Research_Alien_SAM_C"
+    ],
+    "AO": [],
+    "AOrganisms": []
+  }
+}

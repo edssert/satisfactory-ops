@@ -1,0 +1,174 @@
+---
+/**
+ * 도감 · 티어 — 허브 업그레이드(티어 0)와 마일스톤을 게임 화면 그대로.
+ *
+ * 위에 티어 탭, 그 아래 그 티어의 항목 타일, 맨 아래 고른 항목의 보상·비용.
+ * 게임에서 이렇게 고르므로 그대로 옮긴다. 한 페이지에 전부 늘어놓으면
+ * 지금 몇 티어를 보고 있는지가 사라진다.
+ */
+import Base from '../../../layouts/Base.astro';
+import TechNav from '../../../components/TechNav.astro';
+import ItemChip from '../../../components/ItemChip.astro';
+import '../../../styles/fx.css';
+import '../../../styles/tech.css';
+import { hasBuildingIcon, hasItemIcon, iconOf, tiers, type TierEntry } from '../../../lib/tech';
+
+export function getStaticPaths() {
+  return tiers().map((t) => ({ params: { tier: String(t.tier) }, props: { tier: t } }));
+}
+
+const { tier } = Astro.props;
+const all = tiers();
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+/** 지금 펼쳐 볼 항목. 주소의 해시로 고르는 게 아니라 목록 전체를 미리 그려 두고 스크립트가 하나만 보인다 */
+const list = tier.list;
+
+/** 보상 하나하나를 그림으로. 게임의 「보상」 칸이 이 모양이다 */
+function rewards(e: TierEntry) {
+  const out: { id: string; ko: string; kind: 'items' | 'buildings-png'; tag: string }[] = [];
+  for (const b of e.unlocks.buildings) {
+    if (hasBuildingIcon(b.id)) out.push({ id: b.id, ko: b.ko, kind: 'buildings-png', tag: '건물' });
+  }
+  for (const i of e.unlocks.items) {
+    if (hasItemIcon(i.id)) out.push({ id: i.id, ko: i.ko, kind: 'items', tag: '아이템' });
+  }
+  for (const r of e.unlocks.recipes) {
+    /* 레시피는 만드는 물건의 그림으로 보여 준다. 게임도 그렇다 */
+    if (r.makes && hasItemIcon(r.id)) continue;
+  }
+  return out;
+}
+---
+
+<Base
+  title={`${tier.ko} — 도감`}
+  description={`${tier.ko}의 ${list.length}개 항목과 각각의 보상·비용을 게임 화면 그대로 봅니다.`}
+  section="codex"
+>
+  <div class="wrap codex">
+    <TechNav here="tiers" />
+
+    <header class="codex-head">
+      <p class="marker"><span class="num">도감</span> 허브 · 마일스톤</p>
+      <h1>{tier.ko}</h1>
+    </header>
+
+    <nav class="tabs" aria-label="티어">
+      {all.map((t) => (
+        <a
+          href={`${base}/codex/tiers/${t.tier}/`}
+          aria-current={t.tier === tier.tier ? 'page' : undefined}
+        >
+          티어
+          <b>{t.tier}</b>
+          <span class="tab-n">{t.list.length}</span>
+        </a>
+      ))}
+    </nav>
+
+    <div class="tiles" data-tiles>
+      {list.map((e, i) => {
+        const ic = iconOf(e.unlocks);
+        return (
+          <a
+            class="tile"
+            href={`#${e.id}`}
+            data-tile={e.id}
+            aria-current={i === 0 ? 'page' : undefined}
+          >
+            {ic ? (
+              <img
+                src={`${base}/assets/${ic.kind === 'building' ? 'buildings-png' : 'items'}/${ic.src}.png`}
+                alt=""
+                width="52"
+                height="52"
+                loading="lazy"
+              />
+            ) : (
+              <span class="tile-fb" aria-hidden="true">{e.ko.slice(0, 1)}</span>
+            )}
+            {e.ko}
+          </a>
+        );
+      })}
+    </div>
+
+    {list.map((e, i) => (
+      <section class="detail" id={e.id} data-detail={e.id} hidden={i !== 0}>
+        <div>
+          <h2>{e.ko}</h2>
+          <p class="panel-k">보상</p>
+          {rewards(e).length > 0 ? (
+            <ul class="rewards">
+              {rewards(e).map((r) => (
+                <li class="reward">
+                  <ItemChip id={r.id} ko={r.ko} kind={r.kind} size={56} />
+                  <span>{r.ko}</span>
+                  <span class="tag">{r.tag}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p class="detail-note">그림이 있는 보상이 없습니다.</p>
+          )}
+          {(e.unlocks.recipes.length > 0 || e.unlocks.slots > 0 || e.unlocks.other.length > 0) && (
+            <p class="detail-note">
+              {[
+                ...e.unlocks.recipes.map((r) => (r.isAlternate ? `${r.ko} (대체 제작법)` : r.ko)),
+                ...(e.unlocks.slots > 0 ? [`인벤토리 +${e.unlocks.slots}칸`] : []),
+                ...e.unlocks.other,
+              ].join(' · ')}
+            </p>
+          )}
+        </div>
+
+        <div>
+          <p class="panel-k">비용</p>
+          {e.cost.length > 0 ? (
+            <div class="costs">
+              {e.cost.map((c) => (
+                <ItemChip id={c.item} ko={c.ko} amount={c.amount} size={56} />
+              ))}
+            </div>
+          ) : (
+            <p class="detail-note">비용 없음</p>
+          )}
+        </div>
+      </section>
+    ))}
+
+    <p class="codex-foot">
+      티어 0 은 게임 화면의 이름 그대로입니다 — 허브 업그레이드가 티어 0 에 들어 있습니다.
+      비용과 보상은 게임 배포 데이터 그대로입니다.
+    </p>
+  </div>
+
+  <script is:inline>
+    (function () {
+      /* 타일을 누르면 그 항목만 펼친다. 게임에서 마일스톤을 고르는 것과 같다 */
+      var tiles = document.querySelectorAll('[data-tile]');
+      var panels = document.querySelectorAll('[data-detail]');
+      function show(id) {
+        for (var i = 0; i < panels.length; i++) {
+          panels[i].hidden = panels[i].dataset.detail !== id;
+        }
+        for (var j = 0; j < tiles.length; j++) {
+          if (tiles[j].dataset.tile === id) tiles[j].setAttribute('aria-current', 'page');
+          else tiles[j].removeAttribute('aria-current');
+        }
+      }
+      for (var k = 0; k < tiles.length; k++) {
+        tiles[k].addEventListener('click', function (e) {
+          e.preventDefault();
+          show(e.currentTarget.dataset.tile);
+          history.replaceState(null, '', '#' + e.currentTarget.dataset.tile);
+        });
+      }
+      if (location.hash.length > 1) {
+        var want = decodeURIComponent(location.hash.slice(1));
+        for (var m = 0; m < tiles.length; m++) if (tiles[m].dataset.tile === want) show(want);
+      }
+    })();
+  </script>
+</Base>

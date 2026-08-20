@@ -14,56 +14,79 @@
       "why": "Mk.1 벨트는 60개/분이고 순수 노드에 꽂은 Mk.1 채굴기는 120개/분입니다. 즉 물류를 열기 전까지 당신은 채굴 잠재력의 절반을 버리고 있습니다.",
       "dispute": "출처가 갈립니다. Prima·xgamingserver는 물류 우선, jeu.video는 기초 건축 우선을 권합니다. 처리량 근거가 있는 물류 쪽을 채택했습니다.",
       "confidence": "consensus",
-      "sources": ["progression#F", "progression#이견과 미해결"]
+      "sources": [
+        "progression#F",
+        "progression#이견과 미해결"
+      ]
     },
     "Schematic_1-3_C": {
       "action": "MAM을 세우고 하드 드라이브를 모으기 시작하세요. 대체 레시피 풀이 여기서 열립니다.",
       "trap": "이 마일스톤이 요구하는 나사 300개를 손으로 만들려 들지 마세요. 제작기 한 대를 나사 전용으로 돌리는 편이 빠릅니다.",
       "why": "초반 하드 드라이브의 가치는 대부분 '나사 제거' 계열에 몰려 있습니다. 봉합 철판과 강철 로터를 확보하면 Phase 2에서 나사 37,000개가 0이 됩니다.",
       "confidence": "verified",
-      "sources": ["progression#C", "recipes#1"]
+      "sources": [
+        "progression#C",
+        "recipes#1"
+      ]
     },
     "Schematic_2-1_C": {
       "action": "조립기 라인을 세울 때 강화 철판과 로터를 같은 자리에 붙여두세요. 스마트 플레이팅이 곧 이 둘을 동시에 먹습니다.",
       "trap": "나사 소모가 여기서 폭발합니다. 강화 철판 1개당 나사 12개, 로터 1개당 25개입니다.",
       "why": "Phase 1의 스마트 플레이팅 50개만 해도 나사 1,850개입니다. Phase 2는 1,000개를 요구하고, 그것은 나사 37,000개 — 표준 제작기 1대로 15시간이 넘습니다.",
       "confidence": "verified",
-      "sources": ["progression#C"]
+      "sources": [
+        "progression#C"
+      ]
     },
     "Schematic_3-2_C": {
-      "action": "석탄 발전으로 넘어가기 **전에** 이걸 뚫으세요. 순서가 반대면 벨트를 두 번 깝니다.",
+      "action": "석탄 발전으로 넘어가기 전에 이걸 뚫으세요. 순서가 반대면 벨트를 두 번 깝니다.",
       "trap": "Mk.1 벨트 한 줄(60/분)에 석탄 발전기는 정확히 4대까지만 붙습니다. 8대 라인을 계획했다면 Mk.2(120/분)가 먼저입니다.",
       "why": "석탄 발전기는 대당 석탄 15개/분을 먹습니다. 60 ÷ 15 = 4. 이것은 취향이 아니라 산수입니다.",
       "confidence": "verified",
-      "sources": ["progression#E", "progression#F"]
+      "sources": [
+        "progression#E",
+        "progression#F"
+      ]
     },
     "Schematic_3-1_C": {
       "action": "석탄 발전기 8대 + 급수 추출기 3대를 한 모듈로 잡으세요. 물이 정확히 맞아떨어집니다.",
       "trap": "파이프라인 Mk.1(300 ㎥/분) 한 줄에는 발전기 6대까지만 안전합니다. 위키 본문은 6~7대라고 하지만 7대는 이론 한계를 넘습니다.",
       "why": "석탄 발전기는 대당 물 45 ㎥/분, 급수 추출기는 120 ㎥/분입니다. 추출기 3대 = 360 = 발전기 8대. 소비가 생산을 넘고 저장 전력이 0이면 그리드 전체가 정지하고, 레버를 손으로 내려 리셋해야 합니다. 호버팩은 100 MW를 먹으면서 전력 그래프에 잡히지 않으니 리셋 전에 벗으세요.",
       "confidence": "verified",
-      "sources": ["power#3", "power#6", "progression#E"]
+      "sources": [
+        "power#3",
+        "power#6",
+        "progression#E"
+      ]
     },
     "Schematic_3-4_C": {
       "action": "여기서부터 임시 기지를 졸업할 수 있습니다. 석탄 발전이 서면 영구 배치를 고민할 시점입니다.",
       "trap": "티어 3 이전에 영구 기지를 확정하는 것이 초보 리스타트 원인 1위입니다. 첫 철 노드 옆에 눌러앉으면 석탄·석유·알루미늄이 전부 멀어집니다.",
       "why": "다수 출처가 '석탄 발전 해금 전에는 영구 기지를 짓지 말라'로 일치합니다.",
       "confidence": "consensus",
-      "sources": ["progression#설계에 주는 시사점", "progression#초보가 실제로 리스타트하게 되는 원인 Top 5"]
+      "sources": [
+        "progression#설계에 주는 시사점",
+        "progression#초보가 실제로 리스타트하게 되는 원인 Top 5"
+      ]
     },
     "Schematic_4-1_C": {
       "action": "채굴기 Mk.2가 열립니다. 기존 노드의 채굴기를 갈아끼우기 전에 벨트 티어부터 확인하세요.",
       "trap": "순수 노드 + 채굴기 Mk.2는 240개/분입니다. Mk.2 벨트(120/분)로는 절반이 버려집니다.",
       "why": "채굴기와 벨트는 항상 짝으로 올려야 합니다. 한쪽만 올리면 늘어난 만큼 그대로 버려집니다.",
       "confidence": "verified",
-      "sources": ["progression#F"]
+      "sources": [
+        "progression#F"
+      ]
     },
     "Schematic_4-3_C": {
       "action": "전력 저장소를 그리드에 붙여두세요. 100 MWh가 순간 부하를 흡수해 트립을 막습니다.",
       "trap": "여유 전력 없이 운영하면 기계 몇 대를 켜는 순간 그리드가 통째로 죽습니다.",
       "why": "커뮤니티 합의는 여유 전력 20% 확보입니다. 저장소는 그 여유를 시간 축으로 벌어줍니다.",
       "confidence": "consensus",
-      "sources": ["power#8", "progression#설계에 주는 시사점"]
+      "sources": [
+        "power#8",
+        "progression#설계에 주는 시사점"
+      ]
     }
   },
   "tierNotes": {

@@ -112,9 +112,12 @@ const pass = (msg) => notes.push(`  PASS  ${msg}`);
 }
 
 // ─────────────────────────────────────────────── 2. 표가 행을 말없이 버리지 않았는가
-const toolsPage = allHtml.find(({ p }) => p.includes(`tools${path.sep}index.html`));
+/* 도구 표는 도감 안으로 옮겼다 (/codex/reference/) */
+const toolsPage = allHtml.find(({ p }) =>
+  p.includes(`codex${path.sep}reference${path.sep}index.html`)
+);
 if (!toolsPage) {
-  fail('도구 페이지(dist/tools/index.html)를 찾지 못했습니다');
+  fail('레퍼런스 페이지(dist/codex/reference/index.html)를 찾지 못했습니다');
 } else {
   const s = toolsPage.s;
   /** 그 페이지가 실제로 언급한 건물 id 집합 — 이름(ko)이 본문에 있는지로 본다 */
@@ -138,7 +141,7 @@ if (!toolsPage) {
     const absent = e.list.filter((b) => !mentions(b.ko));
     if (absent.length) {
       fail(
-        `${e.what} ${absent.length}/${e.list.length}개가 도구 페이지에 없습니다 — ` +
+        `${e.what} ${absent.length}/${e.list.length}개가 레퍼런스 표에 없습니다 — ` +
           `필터가 행을 버렸을 수 있습니다:\n` +
           `      ${absent.slice(0, 8).map((b) => b.ko).join(', ')}`
       );
@@ -224,6 +227,24 @@ if (!toolsPage) {
   });
   if (bad.length) fail(`설계판 CSS 에 word-break: keep-all 이 없습니다: ${bad.join(', ')}`);
   else pass('설계판의 한글 줄바꿈 규칙 유지');
+}
+
+// ─────────────────────────────────────────────── 마크다운이 화면으로 새지 않았는가
+{
+  /*
+   * 큐레이션 글에 **강조** 를 써 놓고 그대로 뿌려서 별표가 화면에 보인 적이 있다.
+   * 이 앱은 마크다운을 렌더하지 않는다. 강조가 필요하면 마크업으로 해야 한다.
+   */
+  const leaked = [];
+  for (const h of allHtml) {
+    const text = h.s.replace(/<script[\s\S]*?<\/script>/g, '');
+    if (/\*\*/.test(text)) leaked.push(path.relative(DIST, h.p));
+  }
+  if (leaked.length) {
+    fail(`화면에 마크다운 별표가 그대로 나옵니다: ${leaked.join(', ')} — 큐레이션 글에서 ** 를 빼세요`);
+  } else {
+    pass('마크다운 별표가 화면으로 새지 않음');
+  }
 }
 
 // ─────────────────────────────────────────────── 결과

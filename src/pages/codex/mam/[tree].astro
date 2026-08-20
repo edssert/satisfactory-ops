@@ -1,0 +1,179 @@
+---
+/**
+ * 도감 · MAM — 트리를 하나씩 고른다. 게임의 분자 분석기 화면 그대로.
+ *
+ * 왼쪽에 트리 목록, 오른쪽에 그 트리 하나. 파선 격자 위에 타일이 놓이고
+ * 선행 관계를 따라 가지가 뻗는다.
+ *
+ * 선행 관계는 클래스명 경로에서 뽑고 공식 위키로 보정했다 —
+ * 게임 배포 데이터의 mSchematicDependencies 는 MAM 122건이 전부 비어 있다.
+ */
+import Base from '../../../layouts/Base.astro';
+import TechNav from '../../../components/TechNav.astro';
+import '../../../styles/fx.css';
+import '../../../styles/tech.css';
+import { MAM_TILE, hasBuildingIcon, hasItemIcon, mamLayout, summarize, tech } from '../../../lib/tech';
+
+export function getStaticPaths() {
+  return tech.mamTrees.map((t) => ({ params: { tree: t.key }, props: { tree: t } }));
+}
+
+const { tree } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const layout = mamLayout(tree.key);
+
+/** 노드의 그림 — 해금하는 것, 없으면 비용으로 내는 것 */
+function art(n: (typeof layout.nodes)[number]) {
+  const b = n.unlocks.buildings.find((x) => hasBuildingIcon(x.id));
+  if (b) return `${base}/assets/buildings-png/${b.id}.png`;
+  const i = n.unlocks.items.find((x) => hasItemIcon(x.id));
+  if (i) return `${base}/assets/items/${i.id}.png`;
+  const c = n.cost.find((x) => hasItemIcon(x.item));
+  if (c) return `${base}/assets/items/${c.item}.png`;
+  return null;
+}
+const { w: TW, h: TH } = MAM_TILE;
+---
+
+<Base
+  title={`${tree.ko} 연구 — MAM 도감`}
+  description={`MAM ${tree.ko} 트리의 연구 ${tree.count}건을 선행 관계 그대로 봅니다. ${tree.opens}`}
+  section="codex"
+>
+  <div class="wrap codex">
+    <TechNav here="mam" />
+
+    <header class="codex-head">
+      <p class="marker"><span class="num">도감</span> 분자 분석기</p>
+      <h1>MAM</h1>
+      <p class="lede prose">
+        마일스톤과 달리 표본을 주워 스캔해야 열립니다. 그래서 탐험이 곧 해금입니다.
+      </p>
+    </header>
+
+    <div class="mam">
+      <nav aria-label="연구 트리">
+        <ul class="mam-list">
+          {tech.mamTrees.map((t) => (
+            <li>
+              <a
+                href={`${base}/codex/mam/${t.key}/`}
+                aria-current={t.key === tree.key ? 'page' : undefined}
+              >
+                {t.ko}
+                <span class="n">{t.count}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div>
+        <div class="mam-head">
+          <h2>{tree.ko}</h2>
+          <span class="mam-open">{tree.opens}</span>
+        </div>
+
+        <div class="mam-stage">
+          <svg
+            class="mam-svg"
+            width={layout.width}
+            height={layout.height}
+            viewBox={`0 0 ${layout.width} ${layout.height}`}
+            role="img"
+            aria-label={`${tree.ko} 연구 트리`}
+          >
+            {layout.links.map((d) => <path d={d} class="mam-link" />)}
+
+            {layout.nodes.map((n) => {
+              const src = art(n);
+              const gain = summarize(n.unlocks)[0] ?? '';
+              const cost = n.cost.map((c) => `${c.ko} ${c.amount}`).join(' · ');
+              return (
+                <g class={n.discontinued ? 'mam-node is-old' : 'mam-node'}>
+                  <rect x={n.x} y={n.y} width={TW} height={TH} rx="4" />
+                  {src && (
+                    <image
+                      href={src}
+                      x={n.x + TW / 2 - 22}
+                      y={n.y + 10}
+                      width="44"
+                      height="44"
+                      preserveAspectRatio="xMidYMid meet"
+                    />
+                  )}
+                  <text x={n.x + TW / 2} y={n.y + 72} class="mam-name">
+                    {n.ko.length > 12 ? `${n.ko.slice(0, 12)}…` : n.ko}
+                  </text>
+                  <text x={n.x + TW / 2} y={n.y + 90} class="mam-cost">
+                    {cost.length > 22 ? `${cost.slice(0, 22)}…` : cost || '비용 없음'}
+                  </text>
+                  <text x={n.x + TW / 2} y={n.y + 110} class="mam-gain">
+                    {gain.length > 16 ? `${gain.slice(0, 16)}…` : gain}
+                  </text>
+                </g>
+              );
+            })}
+          </svg>
+        </div>
+
+        <details class="mam-table">
+          <summary>이 트리의 연구 {layout.nodes.length}건 — 비용과 해금 전체</summary>
+          <div class="scroll-x">
+            <table>
+              <thead>
+                <tr>
+                  <th>연구</th>
+                  <th>선행</th>
+                  <th>비용</th>
+                  <th>해금</th>
+                </tr>
+              </thead>
+              <tbody>
+                {layout.nodes.map((n) => (
+                  <tr>
+                    <th scope="row">{n.ko}</th>
+                    <td class="n">
+                      {n.parents
+                        .map((p) => layout.nodes.find((x) => x.id === p)?.ko)
+                        .filter(Boolean)
+                        .join(', ') || '트리 시작'}
+                    </td>
+                    <td class="n">{n.cost.map((c) => `${c.ko} ${c.amount}`).join(' · ') || '없음'}</td>
+                    <td>{summarize(n.unlocks).join(' · ') || '—'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <p class="codex-foot">
+      선행 관계는 연구의 내부 클래스명 경로에서 뽑고 공식 위키의 MAM 문서로 보정했습니다.
+      게임 배포 데이터에는 선행 관계가 들어 있지 않습니다 — 120건 전부 비어 있습니다.
+      비용과 해금 내용은 배포 데이터 그대로입니다.
+    </p>
+  </div>
+
+  <style>
+    .mam-table { margin-top: var(--s5); }
+    .mam-table summary {
+      color: var(--ink-2);
+      font-size: var(--t-body-s);
+      cursor: pointer;
+    }
+    .mam-table summary:hover { color: var(--ink); }
+    .mam-table table { width: 100%; margin-top: var(--s3); border-collapse: collapse; font-size: var(--t-small); }
+    .mam-table th, .mam-table td {
+      padding: var(--s2) var(--s3);
+      border-bottom: var(--hair) solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      word-break: keep-all;
+    }
+    .mam-table thead th { color: var(--ink-3); font-family: var(--font-mono); font-size: 11px; font-weight: 500; }
+    .mam-table tbody th { font-weight: 600; white-space: nowrap; }
+  </style>
+</Base>

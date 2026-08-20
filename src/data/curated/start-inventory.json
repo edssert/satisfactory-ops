@@ -5,17 +5,37 @@
   "tutorialSkip": {
     "note": "튜토리얼 스킵으로 시작하면 티어 0 마일스톤이 전부 해금된 상태로 시작하며, 아래 부품을 들고 시작한다.",
     "items": [
-      { "item": "Desc_IronPlate_C", "amount": 129 },
-      { "item": "Desc_IronRod_C", "amount": 60 },
-      { "item": "Desc_Wire_C", "amount": 48 },
-      { "item": "Desc_Cement_C", "amount": 58 },
-      { "item": "Desc_OreIron_C", "amount": 20 }
+      {
+        "item": "Desc_IronPlate_C",
+        "amount": 129
+      },
+      {
+        "item": "Desc_IronRod_C",
+        "amount": 60
+      },
+      {
+        "item": "Desc_Wire_C",
+        "amount": 48
+      },
+      {
+        "item": "Desc_Cement_C",
+        "amount": 58
+      },
+      {
+        "item": "Desc_OreIron_C",
+        "amount": 20
+      }
     ],
     "portableMiners": 4
   },
   "fullTutorial": {
     "note": "튜토리얼을 진행하면 드롭포드를 철거해 철광석 20개를 얻고, 그것이 허브 건설비와 정확히 일치한다.",
-    "items": [{ "item": "Desc_OreIron_C", "amount": 20 }],
+    "items": [
+      {
+        "item": "Desc_OreIron_C",
+        "amount": 20
+      }
+    ],
     "portableMiners": 0
   }
 }

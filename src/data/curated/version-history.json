@@ -331,7 +331,7 @@
         {
           "what": "레시피·마일스톤 대규모 재조정",
           "after": "수치가 전반적으로 바뀜",
-          "affects": "**1.0 이전 자료의 수치는 대부분 낡았다.** 이것이 경계선이다",
+          "affects": "1.0 이전 자료의 수치는 대부분 낡았다. 이것이 경계선이다",
           "confidence": "verified",
           "source": "docs/research/version-history.md"
         },
@@ -399,7 +399,7 @@
         },
         {
           "what": "수치 변경",
-          "after": "**0건**",
+          "after": "0건",
           "affects": "1.1 이전 자료의 수치는 그대로 유효하다. 도구가 부족할 뿐이다",
           "confidence": "verified",
           "source": "docs/research/version-history.md"
@@ -417,7 +417,7 @@
           "what": "게임 모드",
           "before": "없음",
           "after": "비용 배수 · 노드 랜덤화 · 월드 시드",
-          "affects": "**비용 배수를 켜면 이 앱의 수치가 그대로 맞지 않는다.** 기본값 1× 기준이다",
+          "affects": "비용 배수를 켜면 이 앱의 수치가 그대로 맞지 않는다. 기본값 1× 기준이다",
           "confidence": "verified",
           "source": "docs/research/version-history.md"
         },
@@ -446,7 +446,7 @@
         },
         {
           "what": "수치 변경",
-          "after": "**0건**",
+          "after": "0건",
           "affects": "1.0~1.2 자료의 수치는 전부 유효하다",
           "confidence": "verified",
           "source": "docs/research/version-history.md"
@@ -454,5 +454,5 @@
       ]
     }
   ],
-  "$dividingLine": "의심의 경계선은 **1.0(2024-09-10)**이다. 1.0 에서 레시피·마일스톤이 대규모로 재조정됐고 자원 노드도 재배치됐다. 반대로 1.1·1.2 는 새 건물과 시스템만 추가했고 수치 변경이 0건이라, 1.0 이후 자료의 수치는 지금도 그대로 유효하다."
+  "$dividingLine": "의심의 경계선은 1.0(2024-09-10)이다. 1.0 에서 레시피·마일스톤이 대규모로 재조정됐고 자원 노드도 재배치됐다. 반대로 1.1·1.2 는 새 건물과 시스템만 추가했고 수치 변경이 0건이라, 1.0 이후 자료의 수치는 지금도 그대로 유효하다."
 }

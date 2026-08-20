@@ -1,0 +1,9 @@
+---
+/** MAM 첫 화면은 첫 트리로 보낸다. 게임도 트리를 하나 고른 상태로 열린다 */
+import { tech } from '../../../lib/tech';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const first = tech.mamTrees[0]!.key;
+---
+<meta http-equiv="refresh" content={`0; url=${base}/codex/mam/${first}/`} />
+<link rel="canonical" href={`${base}/codex/mam/${first}/`} />
+<p><a href={`${base}/codex/mam/${first}/`}>MAM 도감으로 이동</a></p>

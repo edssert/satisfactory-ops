@@ -1,0 +1,427 @@
+{
+  "$comment": "어썸 싱크 상점의 실제 화면 구성. 게임 배포 데이터에는 상점 탭·구획 정보가 없어(스키매틱에 분류 필드가 없다) 공식 위키의 상점 문서에서 옮겼다. 이름은 영문 원문이고, 화면에서는 게임 로케일의 한글 이름으로 바꿔 붙인다.",
+  "$source": "https://satisfactory.wiki.gg/wiki/AWESOME_Shop",
+  "$confidence": "verified",
+  "$note": "쿠폰 값은 게임 데이터를 쓴다. 위키는 분류에만 쓴다 — 값이 어긋나면 게임 데이터가 정본이다. 이름은 게임 데이터의 영문 표기에 맞춰 두었다 — 위키와 단수·복수가 다른 것이 몇 개 있고, 그럴 때는 게임 쪽을 따른다.",
+  "tabs": [
+    {
+      "en": "FICSIT Specials",
+      "ko": "FICSIT 스페셜",
+      "groups": [
+        {
+          "en": "Vehicles",
+          "ko": "탈것",
+          "items": [
+            "FICSIT Factory Cart",
+            "Cyber Wagon",
+            "Golden FICSIT Factory Cart"
+          ]
+        },
+        {
+          "en": "BoomBox",
+          "ko": "붐박스",
+          "items": [
+            "Boom Box",
+            "Absolute FICSIT BoomBox Tape",
+            "FICSIT Anniversary Boombox Tape",
+            "Joel Syntholm BoomBox Tape",
+            "Le Michael BoomBox Tape",
+            "Sanctum BoomBox Tape",
+            "Sanctum 2 BoomBox Tape",
+            "Goat Music Boombox Tape"
+          ]
+        },
+        {
+          "en": "Pioneering Awards",
+          "ko": "개척 훈장",
+          "items": [
+            "FICSIT Checkmark",
+            "Adequate Pioneering",
+            "Pretty Good Pioneering",
+            "Satisfactory Pioneering",
+            "Hard Drive"
+          ]
+        },
+        {
+          "en": "Massage-2(AB)B Statues",
+          "ko": "조각상",
+          "items": [
+            "Silver Hog",
+            "Lizard Doggo",
+            "Confusing Creature",
+            "Golden Nut"
+          ]
+        }
+      ]
+    },
+    {
+      "en": "Management",
+      "ko": "관리",
+      "groups": [
+        {
+          "en": "Conveyors",
+          "ko": "컨베이어",
+          "items": [
+            "Conveyor Wall Mount",
+            "Conveyor Ceiling Mount",
+            "Conveyor Wall Hole",
+            "Conveyor Lift Floor Hole",
+            "Conveyor Throughput Monitor"
+          ]
+        },
+        {
+          "en": "Power",
+          "ko": "전력",
+          "items": [
+            "Wall Power Outlets Mk.1",
+            "Wall Power Outlets Mk.2",
+            "Wall Power Outlets Mk.3"
+          ]
+        },
+        {
+          "en": "Pipelines",
+          "ko": "파이프라인",
+          "items": [
+            "Pipeline Wall Attachments",
+            "Pipeline Floor Hole",
+            "Clean Pipeline Mk.1",
+            "Clean Pipeline Mk.2"
+          ]
+        },
+        {
+          "en": "Hyper Tubes",
+          "ko": "하이퍼튜브",
+          "items": [
+            "Hypertube Wall Attachments",
+            "Hypertube Floor Hole"
+          ]
+        }
+      ]
+    },
+    {
+      "en": "Organization",
+      "ko": "조직화",
+      "groups": [
+        {
+          "en": "Signs",
+          "ko": "표지판",
+          "items": [
+            "Label Sign Bundle",
+            "Display Sign Bundle",
+            "Billboard Set"
+          ]
+        },
+        {
+          "en": "Lighting",
+          "ko": "조명",
+          "items": [
+            "Street Light",
+            "Flood Lights",
+            "Indoor Lighting",
+            "Light Control Panel"
+          ]
+        },
+        {
+          "en": "Storage",
+          "ko": "보관",
+          "items": [
+            "Medical Box-Personal Storage Skin",
+            "Hazard Box-Personal Storage Skin",
+            "Basic Shelf Unit"
+          ]
+        }
+      ]
+    },
+    {
+      "en": "Customizer",
+      "ko": "커스터마이저",
+      "groups": [
+        {
+          "en": "Paint Finishes",
+          "ko": "도색",
+          "items": [
+            "Unpainted Finish",
+            "Copper Paint Finish",
+            "Chrome Paint Finish",
+            "Carbon Steel Finish",
+            "Caterium Paint Finish"
+          ]
+        },
+        {
+          "en": "Foundation Materials",
+          "ko": "토대 재질",
+          "items": [
+            "Coated Concrete Foundation Material",
+            "Concrete Foundation Material",
+            "Grip Metal Foundation Material",
+            "Asphalt Foundation Material"
+          ]
+        },
+        {
+          "en": "Foundation Patterns",
+          "ko": "토대 무늬",
+          "items": [
+            "Pathway Patterns",
+            "Factory Zone Patterns",
+            "Dotted Line Patterns",
+            "Solid Line Patterns",
+            "Arrow Patterns",
+            "Factory Icon Patterns",
+            "Transportation Icon Patterns",
+            "Number Patterns"
+          ]
+        },
+        {
+          "en": "Wall Materials",
+          "ko": "벽 재질",
+          "items": [
+            "Concrete Wall Material",
+            "Steel Wall Material"
+          ]
+        },
+        {
+          "en": "Roof Materials",
+          "ko": "지붕 재질",
+          "items": [
+            "Tar Roof Material",
+            "Metal Roof Material",
+            "Glass Roof Material"
+          ]
+        }
+      ]
+    },
+    {
+      "en": "Foundations",
+      "ko": "토대",
+      "groups": [
+        {
+          "en": "Foundations",
+          "ko": "토대",
+          "items": [
+            "Double Ramp Set",
+            "Half Foundation Set",
+            "Foundation Stairs Set",
+            "Quarter Pipes Pack",
+            "Quarter Pipe Extensions Pack",
+            "Inverted Ramp Set",
+            "Corner Ramp Pack",
+            "Inverted Corner Ramp Pack"
+          ]
+        }
+      ]
+    },
+    {
+      "en": "Walls",
+      "ko": "벽",
+      "groups": [
+        {
+          "en": "Walls",
+          "ko": "벽",
+          "items": [
+            "Conveyor Walls",
+            "Door Walls",
+            "Gates",
+            "Steel-Framed Windows",
+            "Windowed Walls",
+            "Inverted Ramp Wall Bundle",
+            "Ramp Wall Bundle",
+            "Tilted Walls"
+          ]
+        }
+      ]
+    },
+    {
+      "en": "Architecture",
+      "ko": "건축물",
+      "groups": [
+        {
+          "en": "Traversal",
+          "ko": "이동",
+          "items": [
+            "Factory Ladder",
+            "Modern Catwalks",
+            "Industrial Walkways",
+            "Personnel Elevator"
+          ]
+        },
+        {
+          "en": "Structural",
+          "ko": "구조",
+          "items": [
+            "FICSIT Roofs",
+            "FICSIT Roof Corners",
+            "Metal Pillar Set",
+            "Concrete Pillar Set",
+            "Frame Pillar Set",
+            "Structural Frame Set",
+            "Structural Beam Pack",
+            "Beam Expansion Pack",
+            "Structural Cable Pack",
+            "Modern Railing",
+            "Industrial Railing",
+            "Construction Fences",
+            "Road Barriers",
+            "Metal Barriers"
+          ]
+        },
+        {
+          "en": "Accessories",
+          "ko": "부속",
+          "items": [
+            "Ventilation Bundle"
+          ]
+        }
+      ]
+    },
+    {
+      "en": "Equipment",
+      "ko": "장비",
+      "groups": [
+        {
+          "en": "Equipment",
+          "ko": "장비",
+          "items": [
+            "FICSIT Coffee Cup",
+            "'Employee of the Planet' Cup"
+          ]
+        },
+        {
+          "en": "Consumables",
+          "ko": "소모품",
+          "items": [
+            "Health Pack",
+            "Gas Filters",
+            "Radiation Filters"
+          ]
+        },
+        {
+          "en": "Ammunition",
+          "ko": "탄약",
+          "items": [
+            "Iron Rebar Pack",
+            "Stun Rebar Pack",
+            "Shatter Rebar Pack",
+            "Explosive Rebar Pack",
+            "Nobelisk Pack",
+            "Gas Nobelisk Pack",
+            "Pulse Nobelisk Pack",
+            "Cluster Nobelisk Pack",
+            "Rifle Ammo Pack",
+            "Homing Rifle Ammo Pack",
+            "Turbo Rifle Ammo Pack"
+          ]
+        }
+      ]
+    },
+    {
+      "en": "Parts",
+      "ko": "부품",
+      "groups": [
+        {
+          "en": "Standard",
+          "ko": "기본",
+          "items": [
+            "Iron Plate",
+            "Iron Rod",
+            "Screws",
+            "Reinforced Iron Plate",
+            "Modular Frame",
+            "Copper Sheet",
+            "Steel Pipe",
+            "Steel Beam",
+            "Encased Industrial Beam",
+            "Heavy Modular Frame",
+            "Alclad Aluminum Sheet",
+            "Aluminum Casing",
+            "Ficsite Trigon"
+          ]
+        },
+        {
+          "en": "Electronics",
+          "ko": "전자",
+          "items": [
+            "Wire",
+            "Cable",
+            "Circuit Board",
+            "Quickwire",
+            "AI Limiter",
+            "High-Speed Connector",
+            "Electromagnetic Control Rod",
+            "Battery",
+            "Time Crystal",
+            "Synthetic Power Shard"
+          ]
+        },
+        {
+          "en": "Compounds",
+          "ko": "화합물",
+          "items": [
+            "Concrete",
+            "Quartz Crystal",
+            "Silica",
+            "Black Powder",
+            "Smokeless Powder",
+            "Compacted Coal",
+            "Copper Powder"
+          ]
+        },
+        {
+          "en": "Biomass",
+          "ko": "바이오매스",
+          "items": [
+            "Biomass",
+            "Biofuel",
+            "Packaged Liquid Biofuel",
+            "Fabric"
+          ]
+        },
+        {
+          "en": "Industrial",
+          "ko": "산업",
+          "items": [
+            "Rotor",
+            "Stator",
+            "Motor",
+            "Fused Modular Frame",
+            "Heat Sink",
+            "Cooling System",
+            "Turbo Motor"
+          ]
+        },
+        {
+          "en": "Communications",
+          "ko": "통신",
+          "items": [
+            "Crystal Oscillator",
+            "Computer",
+            "Radio Control Unit",
+            "Supercomputer",
+            "Superposition Oscillator",
+            "Neural-Quantum Processor"
+          ]
+        },
+        {
+          "en": "Oil Products",
+          "ko": "석유 제품",
+          "items": [
+            "Plastic",
+            "Rubber",
+            "Packaged Fuel",
+            "Packaged Turbofuel",
+            "Packaged Rocket Fuel",
+            "Packaged Ionized Fuel"
+          ]
+        },
+        {
+          "en": "Containers",
+          "ko": "용기",
+          "items": [
+            "Empty Canister",
+            "Empty Fluid Tank",
+            "Pressure Conversion Cube"
+          ]
+        }
+      ]
+    }
+  ]
+}

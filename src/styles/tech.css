@@ -1,162 +1,199 @@
 /*
- * tech.css — 테크 사전.
+ * tech.css — 도감(Codex). 티어·MAM·싱크 상점 세 화면.
  *
- * 341건을 한 페이지에 담는다. 카드가 작고 촘촘해야 훑을 수 있다.
+ * 게임에서 이 셋은 서로 다른 화면이고 탭으로 고른다. 한 페이지에 쭉 늘어놓으면
+ * 지금 무엇을 보고 있는지가 사라지므로 화면을 나누고 탭을 그대로 옮겼다.
  */
 
-.page { padding-block: var(--s16) 0; }
-.page-head { margin-bottom: var(--s8); }
-.page-head h1 { margin-bottom: var(--s4); }
-.lede { font-size: var(--t-body-l); color: var(--ink-2); }
-.lede strong { color: var(--ink); font-weight: 600; }
+.codex { padding-block: var(--s12) var(--s16); }
+.codex-head { margin-bottom: var(--s6); }
+.codex-head h1 { margin-bottom: var(--s3); }
+.codex-head .lede { font-size: var(--t-body-l); color: var(--ink-2); }
 
-.facts {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: var(--s3);
-}
-.fact {
-  padding: var(--s5);
-  border-radius: calc(var(--radius) * 2);
-  background: var(--glass);
-  box-shadow: var(--lit);
-  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
-}
-.fact-k { display: block; margin-bottom: var(--s2); font-size: var(--t-label); color: var(--ink-3); }
-.fact-v { font-size: var(--t-h3); font-weight: 600; }
+/* ------------------------------------------------------------------ 탭 */
 
-/* 절 사이를 뛰어다니는 고정 링크 */
-.jump {
-  position: sticky;
-  top: var(--head-h);
-  z-index: 3;
+/*
+ * 게임의 티어 탭 그대로 — 가로 한 줄, 고른 것만 강조색으로 채운다.
+ * 좁은 화면에서는 옆으로 밀린다. 줄바꿈하면 몇 번째인지 감이 사라진다.
+ */
+.tabs {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--s2);
-  margin-top: var(--s8);
-  padding-block: var(--s3);
-  background: color-mix(in oklab, var(--bg) 82%, transparent);
-  backdrop-filter: blur(var(--glass-blur));
+  overflow-x: auto;
+  gap: 2px;
+  margin-bottom: var(--s5);
+  padding-bottom: 2px;
+  scrollbar-width: thin;
 }
-.jump a {
-  padding: 4px 12px;
-  border: var(--hair) solid var(--line);
-  border-radius: 999px;
-  font-size: var(--t-caption);
-  text-decoration: none;
-  color: var(--ink-2);
-}
-.jump a:hover { border-color: var(--primary); color: var(--primary-ink); }
-
-.section { padding-block: var(--s16) 0; scroll-margin-top: 112px; }
-.section h2 { margin-bottom: var(--s5); }
-.section > .muted { margin-bottom: var(--s6); }
-
-.tier-block { margin-bottom: var(--s8); }
-.tier-head {
+.tabs a {
   display: flex;
-  align-items: baseline;
-  gap: var(--s3);
-  margin-bottom: var(--s3);
-  padding-bottom: var(--s2);
-  border-bottom: var(--hair) solid var(--line-strong);
-  font-family: var(--font-mono);
-  font-size: var(--t-caption);
-  letter-spacing: 0.06em;
-  color: var(--primary);
-}
-.tier-note { color: var(--ink-3); letter-spacing: 0; }
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: var(--s3);
-}
-
-.node {
-  padding: var(--s4);
-  border-radius: var(--radius);
-  background: var(--glass);
-  box-shadow: var(--lit);
-  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
-}
-.node h3 {
-  display: flex;
-  align-items: baseline;
-  gap: var(--s2);
-  margin-bottom: var(--s2);
-  font-size: var(--t-body);
-}
-.node.is-old { opacity: 0.55; }
-.tag {
-  padding: 1px 6px;
-  border: var(--hair) solid var(--line);
-  border-radius: var(--radius);
-  font-size: var(--t-label);
-  font-weight: 400;
+  min-width: 78px;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 12px;
+  border: var(--hair) solid var(--line-strong);
+  border-radius: 3px;
+  background: var(--surface);
   color: var(--ink-3);
-}
-.cost {
-  margin: 0 0 var(--s3);
   font-size: var(--t-caption);
-  color: var(--ink-2);
+  text-align: center;
+  text-decoration: none;
+  word-break: keep-all;
 }
-.sep { color: var(--ink-3); margin-inline: 0.35em; }
-.unlocks {
+.tabs a:hover { color: var(--ink); }
+.tabs a b {
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: var(--t-body-l);
+  font-weight: 700;
+  line-height: 1.1;
+}
+.tabs a[aria-current='page'] {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+.tabs a[aria-current='page'] b { color: var(--on-accent); }
+.tabs .tab-n { font-family: var(--font-mono); font-size: 10px; opacity: 0.8; }
+
+/* ------------------------------------------------------------------ 항목 타일 */
+
+/*
+ * 게임의 마일스톤 타일. 그림이 가운데, 이름이 아래.
+ * 고른 것은 강조색으로 채워 어디를 보고 있는지 한눈에 남긴다.
+ */
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+  gap: var(--s2);
+  margin-bottom: var(--s6);
+}
+.tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: var(--s4) var(--s3);
+  border: var(--hair) solid var(--line-strong);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--ink-2);
+  font-size: var(--t-body-s);
+  text-align: center;
+  text-decoration: none;
+  word-break: keep-all;
+}
+.tile:hover { border-color: var(--primary); color: var(--ink); }
+.tile img { width: 52px; height: 52px; object-fit: contain; }
+.tile-fb {
+  display: flex;
+  width: 52px;
+  height: 52px;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-3);
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+}
+.tile[aria-current='page'] {
+  border-color: var(--accent);
+  background: color-mix(in oklab, var(--accent) 18%, transparent);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------------ 상세 */
+
+/* 게임의 보상 / 비용 패널 */
+.detail {
+  display: grid;
+  gap: var(--s4);
+  padding: var(--s5);
+  border-radius: var(--radius);
+  background: var(--raised);
+  box-shadow: var(--lit);
+}
+@media (min-width: 900px) {
+  .detail { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
+}
+.detail h2 { margin: 0 0 var(--s3); font-size: var(--t-h3); }
+.panel-k {
+  margin: 0 0 var(--s3);
+  padding-bottom: 6px;
+  border-bottom: var(--hair) solid var(--line);
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+.rewards {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: var(--s4);
   margin: 0;
   padding: 0;
   list-style: none;
 }
-.unlocks .chip { font-size: var(--t-label); }
-
-.tier-row th {
-  padding-top: var(--s5);
-  border-bottom: var(--hair) solid var(--line-strong);
-  font-family: var(--font-mono);
-  font-size: var(--t-label);
-  letter-spacing: 0.1em;
-  color: var(--primary);
-  background: var(--bg);
+.reward {
+  display: flex;
+  width: 92px;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-2);
+  font-size: var(--t-caption);
+  text-align: center;
+  word-break: keep-all;
 }
-tbody tr.tier-row:hover th { background: var(--bg); }
+.reward .tag {
+  color: var(--primary);
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+.costs { display: flex; flex-wrap: wrap; gap: var(--s3); }
+.detail-note { margin: var(--s3) 0 0; color: var(--ink-3); font-size: var(--t-caption); }
 
-.foot { margin-top: var(--s12); }
+/* ------------------------------------------------------------------ MAM */
 
-/* ------------------------------------------------------------- MAM 트리 */
-/*
- * 게임의 MAM 화면처럼 위에서 아래로 가지가 뻗는다.
- * 선행 관계가 배포 데이터에 없어 클래스명의 행 번호를 깊이로 쓴다 — 게임 화면의 배치와
- * 다를 수 있고, 그 사실을 페이지 아래에 밝힌다.
- */
-.tree { margin-bottom: var(--s12); }
-.tree-head {
+.mam {
+  display: grid;
+  gap: var(--s4);
+  align-items: start;
+}
+@media (min-width: 900px) {
+  .mam { grid-template-columns: 210px minmax(0, 1fr); }
+}
+
+/* 게임의 왼쪽 트리 목록. 고른 것만 강조색 띠 */
+.mam-list { margin: 0; padding: 0; list-style: none; }
+.mam-list a {
   display: flex;
   align-items: baseline;
-  gap: var(--s3);
-  margin-bottom: var(--s4);
-  padding-bottom: var(--s2);
-  border-bottom: var(--hair) solid var(--line-strong);
-  font-family: var(--font-mono);
-  font-size: var(--t-caption);
-  letter-spacing: 0.06em;
-  color: var(--primary);
+  justify-content: space-between;
+  gap: var(--s2);
+  padding: 9px 12px;
+  color: var(--ink-2);
+  font-size: var(--t-body-s);
+  text-decoration: none;
+  word-break: keep-all;
 }
-.tree-open { color: var(--ink-3); letter-spacing: 0; font-family: var(--font-body); }
-.tree-count { margin-left: auto; color: var(--ink-3); }
+.mam-list a:hover { background: var(--surface); color: var(--ink); }
+.mam-list a[aria-current='page'] {
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+}
+.mam-list .n { color: var(--ink-3); font-family: var(--font-mono); font-size: 11px; }
+.mam-list a[aria-current='page'] .n { color: var(--on-accent); opacity: 0.75; }
 
-/*
- * 게임의 MAM 은 파선 격자 위에 타일이 놓이고 줄기에서 가지가 갈라진다.
- * 그 모양을 그대로 옮긴다 — 다만 선행 관계는 배포 데이터에 없으므로 행 사이만 잇는다.
- */
-.tree-body {
-  display: grid;
-  justify-items: center;
-  padding: var(--s6) var(--s4);
+.mam-stage {
+  overflow-x: auto;
+  padding: var(--s4);
   border-radius: var(--radius);
-  background-color: color-mix(in oklab, var(--bg) 60%, transparent);
+  /* 게임 MAM 화면의 파선 격자 */
+  background-color: var(--bg);
   background-image:
     repeating-linear-gradient(
       to right,
@@ -168,149 +205,158 @@ tbody tr.tier-row:hover th { background: var(--bg); }
       color-mix(in oklab, var(--line) 60%, transparent) 0 1px,
       transparent 1px 56px
     );
+  box-shadow: var(--lit);
 }
-
-.tree-row {
+.mam-head {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--s3);
+  gap: var(--s2) var(--s4);
+  align-items: baseline;
+  margin-bottom: var(--s3);
 }
-/* 갈래선을 그릴 수 있는 줄은 열 자리를 고정한다 — 그래야 선이 상자 한가운데로 떨어진다 */
-.tree-row.is-grid {
-  display: grid;
-  grid-template-columns: repeat(var(--n), 210px);
-  justify-content: center;
-  gap: var(--s3);
+.mam-head h2 { margin: 0; font-size: var(--t-h3); }
+.mam-open { color: var(--ink-3); font-size: var(--t-caption); word-break: keep-all; }
+
+.mam-svg { display: block; }
+.mam-link {
+  fill: none;
+  stroke: color-mix(in oklab, var(--primary) 55%, transparent);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-/* 줄기 하나가 내려와 가로줄로 벌어지고 각 상자로 떨어진다 */
-.tree-fan {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(var(--n), 210px);
-  justify-content: center;
-  gap: var(--s3);
-  width: 100%;
-  height: 44px;
+/* MAM 노드 — 게임처럼 그림이 가운데, 이름과 비용이 아래 */
+.mam-node rect {
+  fill: var(--raised);
+  stroke: var(--line-strong);
+  stroke-width: 1;
 }
-.fan-stem,
-.fan-bar,
-.fan-drop {
-  background: color-mix(in oklab, var(--primary) 65%, transparent);
+.mam-node.is-old rect { stroke-dasharray: 4 3; }
+.mam-node.is-old { opacity: 0.5; }
+.mam-name {
+  fill: var(--ink);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  text-anchor: middle;
 }
-.fan-stem {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 2px;
-  height: 20px;
-  transform: translateX(-1px);
-}
-/* 첫 열 중심에서 마지막 열 중심까지. 210px 열의 절반이 105px 이다 */
-.fan-bar {
-  position: absolute;
-  top: 19px;
-  right: 105px;
-  left: 105px;
-  height: 2px;
-}
-.fan-drop {
-  grid-row: 1;
-  align-self: end;
-  justify-self: center;
-  width: 2px;
-  height: 25px;
-}
-
-.tree-link {
-  width: 2px;
-  height: 24px;
-  background: linear-gradient(180deg, var(--primary), color-mix(in oklab, var(--primary) 20%, transparent));
-}
-
-.tree-loose {
-  margin: var(--s6) 0 var(--s3);
-  color: var(--ink-3);
-  font-size: var(--t-caption);
-  word-break: keep-all;
-}
-
-/* 좁은 화면에서는 210px 열이 넘친다. 갈래선을 접고 줄바꿈으로 돌린다 */
-@media (max-width: 900px) {
-  .tree-row.is-grid {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  .tree-fan { height: 24px; }
-  .fan-bar,
-  .fan-drop { display: none; }
-  .tree-body { padding: var(--s4) var(--s2); }
-}
-
-.tnode {
-  width: 210px;
-  padding: var(--s4);
-  border-radius: calc(var(--radius) * 2);
-  background: var(--glass);
-  box-shadow: var(--lit);
-  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
-  text-align: center;
-}
-.tnode.is-old { opacity: 0.45; }
-.tnode-icons {
-  display: flex;
-  justify-content: center;
-  gap: 4px;
-  min-height: 34px;
-  margin-bottom: var(--s2);
-}
-.tnode-icons img { width: 34px; height: 34px; object-fit: contain; }
-.tnode h4 { margin-bottom: 4px; font-size: var(--t-small); }
-.tnode-cost {
-  margin: 0 0 var(--s2);
+.mam-cost {
+  fill: var(--ink-3);
   font-family: var(--font-mono);
-  font-size: var(--t-label);
-  color: var(--ink-3);
+  font-size: 10px;
+  text-anchor: middle;
 }
-.tnode .unlocks { justify-content: center; }
+.mam-gain {
+  fill: var(--primary);
+  font-family: var(--font-body);
+  font-size: 10px;
+  text-anchor: middle;
+}
 
-/* ----------------------------------------------------------- 싱크 상점 */
-.shop-block { margin-bottom: var(--s10); }
+/* ------------------------------------------------------------------ 싱크 상점 */
+
+.shop-group { margin-bottom: var(--s8); }
+.shop-group h2 {
+  margin: 0 0 var(--s4);
+  padding-bottom: 6px;
+  border-bottom: var(--hair) solid var(--line-strong);
+  font-size: var(--t-body-l);
+}
 .shop-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(158px, 1fr));
   gap: var(--s3);
 }
 .shop-card {
-  padding: var(--s4) var(--s3);
-  border-radius: calc(var(--radius) * 2);
-  background: var(--glass);
-  box-shadow: var(--lit);
-  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: var(--s4) var(--s3) var(--s3);
+  border: var(--hair) solid var(--line-strong);
+  border-radius: 4px;
+  background: var(--surface);
   text-align: center;
-  transition: box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
-}
-.shop-card:hover {
-  box-shadow: var(--lit-strong);
-  transform: translateY(-2px);
 }
 .shop-thumb {
-  display: grid;
-  place-items: center;
-  height: 64px;
-  margin-bottom: var(--s2);
+  display: flex;
+  width: 72px;
+  height: 72px;
+  align-items: center;
+  justify-content: center;
 }
-.shop-thumb img { width: 56px; height: 56px; object-fit: contain; }
+.shop-thumb img { max-width: 100%; max-height: 100%; object-fit: contain; }
 .shop-noimg {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border: var(--hair) dashed var(--line-strong);
-  border-radius: var(--radius);
+  border-radius: 3px;
 }
 .shop-name {
-  margin: 0 0 2px;
-  font-size: var(--t-caption);
+  margin: 0;
+  color: var(--ink);
+  font-size: var(--t-body-s);
   line-height: 1.4;
+  word-break: keep-all;
 }
-.shop-cost { margin: 0; font-size: var(--t-label); color: var(--accent); }
+.shop-cost {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  margin: 0;
+  padding: 3px 9px;
+  border-radius: 3px;
+  background: color-mix(in oklab, var(--accent) 16%, transparent);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--t-caption);
+  font-weight: 600;
+}
+.shop-what {
+  margin: 0;
+  color: var(--ink-3);
+  font-size: 11px;
+  line-height: 1.5;
+  word-break: keep-all;
+}
+
+/* ------------------------------------------------------------------ 도감 첫 화면 */
+
+.codex-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--s4);
+}
+.codex-card {
+  display: block;
+  padding: var(--s6);
+  border-radius: var(--radius);
+  background: var(--raised);
+  box-shadow: var(--lit);
+  color: inherit;
+  text-decoration: none;
+}
+.codex-card:hover { box-shadow: inset 0 0 0 1px var(--primary), var(--lit); }
+.codex-card h2 { margin: 0 0 var(--s2); font-size: var(--t-h3); }
+.codex-card .n {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--t-h2);
+  font-weight: 600;
+}
+.codex-card p {
+  margin: var(--s3) 0 0;
+  color: var(--ink-2);
+  font-size: var(--t-body-s);
+  line-height: 1.7;
+  word-break: keep-all;
+}
+
+.codex-foot {
+  margin-top: var(--s10);
+  color: var(--ink-3);
+  font-size: var(--t-caption);
+  line-height: 1.8;
+  word-break: keep-all;
+}
