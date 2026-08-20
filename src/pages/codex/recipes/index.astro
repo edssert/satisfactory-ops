@@ -11,6 +11,7 @@
 import Base from '../../../layouts/Base.astro';
 import '../../../styles/fx.css';
 import priority from '../../../data/curated/alternate-priority.json';
+import saveUnlocks from '../../../data/app/save-unlocks.json';
 
 interface Ing {
   ko: string;
@@ -168,10 +169,15 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
         딴 것만 보기
       </label>
       <button type="button" class="ownbar-clear" data-own-clear>모두 해제</button>
+      <label class="ownbar-load" data-own-load>
+        <input type="file" accept=".sav" data-own-file />
+        <span data-own-label>세이브에서 가져오기</span>
+      </label>
       <p class="ownbar-note">
         여기서 체크한 것이 <a href={`${base}/planner/`}>설계</a> 화면의 레시피 목록에 그대로 쓰입니다.
         이 브라우저에만 저장됩니다.
       </p>
+      <p class="ownbar-note" data-own-msg hidden></p>
     </div>
 
     {groups.map((g) => (
@@ -364,6 +370,8 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
     </section>
   </div>
 
+  <script is:inline set:html={`window.__sfopsUnlocks=${JSON.stringify(saveUnlocks.map)}`}></script>
+
   <script is:inline>
     (function () {
       var KEY = 'sfops.owned';
@@ -435,6 +443,45 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
     })();
   </script>
 
+  <script>
+    /*
+     * 세이브에서 "딴 대체 제작법"을 가져온다. 110가지를 손으로 체크하는 건 실제로 안 한다.
+     * 파서가 2.6MB 라 파일을 고른 뒤에야 내려받는다. 파일은 브라우저 밖으로 나가지 않는다.
+     */
+    const box = document.querySelector('[data-own-file]');
+    const label = document.querySelector('[data-own-label]');
+    const msg = document.querySelector('[data-own-msg]');
+    const wrap = document.querySelector('[data-own-load]');
+    box?.addEventListener('change', async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      wrap.classList.add('is-busy');
+      label.textContent = '읽는 중…';
+      try {
+        const { readSave } = await import('../../../lib/save-import');
+        const r = await readSave(file, window.__sfopsUnlocks ?? {});
+        const KEY = 'sfops.owned';
+        const cur = JSON.parse(localStorage.getItem(KEY) || 'null');
+        const ids = [...new Set([...(cur?.ids ?? []), ...r.alternates])];
+        localStorage.setItem(KEY, JSON.stringify({ version: 1, ids }));
+        msg.hidden = false;
+        msg.textContent =
+          r.alternates.length === 0
+            ? `${r.session} · ${r.hours}시간 — 아직 딴 대체 제작법이 없습니다`
+            : `${r.session} · ${r.hours}시간 — ${r.alternates.length}가지를 가져왔습니다`;
+        /* 위 스크립트가 storage 를 듣고 있지만 같은 탭에는 안 온다. 직접 다시 그린다 */
+        window.dispatchEvent(new StorageEvent('storage', { key: KEY }));
+      } catch (err) {
+        msg.hidden = false;
+        msg.textContent = '읽지 못했습니다 — ' + (err?.message ?? err);
+      } finally {
+        wrap.classList.remove('is-busy');
+        label.textContent = '세이브에서 가져오기';
+        e.target.value = '';
+      }
+    });
+  </script>
+
   <style>
     .page { padding-block: var(--s16) 0; }
     .page-head { margin-bottom: var(--s8); }
@@ -504,6 +551,17 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
     .own { display: inline-flex; align-items: center; margin-right: var(--s2); vertical-align: middle; }
     .own input { accent-color: var(--primary); cursor: pointer; }
     /* 딴 것으로 표시한 카드. 체크 표시가 이미 붙어 있으므로 색은 보조 신호다 */
+    .ownbar-load {
+      padding: 4px 11px;
+      border: var(--hair) solid var(--primary);
+      border-radius: 4px;
+      font-size: var(--t-caption);
+      cursor: pointer;
+    }
+    .ownbar-load:hover { background: color-mix(in oklab, var(--primary) 14%, transparent); }
+    .ownbar-load.is-busy { border-color: var(--line-strong); color: var(--ink-3); cursor: progress; }
+    .ownbar-load input { display: none; }
+
     .card.is-owned { box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--primary) 40%, transparent); }
 
     .cards { display: grid; gap: var(--s5); }
