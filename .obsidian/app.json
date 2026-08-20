@@ -1,0 +1,15 @@
+{
+  "alwaysUpdateLinks": true,
+  "newLinkFormat": "shortest",
+  "showUnsupportedFiles": false,
+  "attachmentFolderPath": "docs/assets",
+  "useMarkdownLinks": false,
+  "userIgnoreFilters": [
+    ".astro/",
+    ".cache/",
+    ".git/",
+    ".tmp-research/",
+    "dist/",
+    "node_modules/"
+  ]
+}

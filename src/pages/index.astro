@@ -49,15 +49,15 @@ const workflow = [
   {
     number: '03',
     kicker: 'ROUTE',
-    title: '물류와 전력을 끝까지 연결합니다',
+    title: '물류를 실제 포트까지 연결합니다',
     body: '각 구간의 품목과 처리량을 추적하고, 끊긴 연결·용량 초과·역방향 접속·배선 누락을 찾아냅니다.',
-    signal: '네트워크 완결',
+    signal: '물류 완결',
   },
   {
     number: '04',
     kicker: 'PROVE',
     title: '지을 수 있을 때만 도면을 냅니다',
-    body: '충돌, 포트 정합, 유량 보존, 운송 용량, 전력 연결을 통과하지 못한 안은 완성 도면으로 취급하지 않습니다.',
+    body: '충돌, 파운데이션 지지, 포트 정합, 유량 보존, 운송 용량을 통과하지 못한 안은 완성 도면으로 취급하지 않습니다.',
     signal: '발행 가능',
   },
 ];
@@ -73,7 +73,7 @@ const workspaces = [
   {
     index: 'B',
     title: '설계 스튜디오',
-    body: '실제 크기의 설비를 배치하고 물류·전력 연결을 검증하는 작업 공간입니다.',
+    body: '실제 크기의 설비와 파운데이션을 배치하고 컨베이어·파이프 연결을 검증하는 작업 공간입니다.',
     href: `${base}/planner/`,
     action: '스튜디오 열기',
   },
@@ -89,7 +89,7 @@ const workspaces = [
 
 <Base
   title="Satisfactory 공장을 설계 가능한 시스템으로"
-  description="생산 목표를 실제 공간, 물류, 전력, 검증 조건까지 연결하는 Satisfactory 공장 설계 플레이북입니다."
+  description="생산 목표를 실제 공간, 물류, 검증 조건까지 연결하는 Satisfactory 공장 설계 플레이북입니다."
 >
   <div class="landing-progress" aria-hidden="true"><span></span></div>
 
@@ -110,7 +110,7 @@ const workspaces = [
           </h1>
           <p class="hero-lede">
             생산량 표를 실제 공장으로 옮기는 순간 생기는 문제까지 다룹니다.
-            공간, 포트, 물류, 전력 중 하나라도 성립하지 않으면 완성된 도면으로 내보내지 않습니다.
+            공간, 토대, 포트, 물류 중 하나라도 성립하지 않으면 완성된 도면으로 내보내지 않습니다.
           </p>
           <div class="hero-actions">
             <a class="landing-button is-primary" href={`${base}/planner/`}>
@@ -131,7 +131,7 @@ const workspaces = [
           <dl class="proof-list">
             <div><dt>공간</dt><dd>실제 크기 · 회전 · 충돌</dd></div>
             <div><dt>연결</dt><dd>입출력 포트 · 방향 · 매체</dd></div>
-            <div><dt>네트워크</dt><dd>유량 · 용량 · 전력</dd></div>
+            <div><dt>물류</dt><dd>컨베이어 · 파이프 · 용량</dd></div>
           </dl>
           <div class="proof-seal"><span aria-hidden="true"></span> 검증 실패 시 발행 차단</div>
         </aside>
@@ -322,8 +322,9 @@ const workspaces = [
 
         gsap.utils.toArray<HTMLElement>('.workflow-step').forEach((step, index) => {
           gsap.from(step, {
-            x: index % 2 === 0 ? 54 : 84,
+            scale: index % 2 === 0 ? 0.975 : 0.965,
             opacity: 0,
+            transformOrigin: '50% 100%',
             duration: 0.85,
             ease: 'power3.out',
             scrollTrigger: { trigger: step, start: 'top 84%', once: true },

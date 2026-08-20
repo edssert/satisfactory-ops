@@ -1,9 +1,20 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { portWorldPosition } from '../src/domain/factory/geometry.ts';
+import { routeAroundMachines } from '../src/domain/factory/route.ts';
 import { drawingSupported, requireMachineSpec } from '../src/domain/factory/specs.ts';
 import type { FactoryPlan, Placement } from '../src/domain/factory/types.ts';
 import { validateFactoryPlan } from '../src/domain/factory/validate.ts';
+
+function foundationGrid(minX: number, maxX: number, minY: number, maxY: number) {
+  const tiles = [];
+  for (let y = minY; y < maxY; y += 8) {
+    for (let x = minX; x < maxX; x += 8) {
+      tiles.push({ id: `foundation:${x}:${y}`, xM: x, yM: y, zM: 0, sizeM: 8 });
+    }
+  }
+  return tiles;
+}
 
 const smelter: Placement = {
   id: 'smelter-1',
@@ -59,7 +70,9 @@ test('반복 관측한 제작기·제련기 포트 좌표를 그대로 쓴다', 
 
 test('포트 일부만 관측한 설비는 도면 발행 대상으로 승격하지 않는다', () => {
   assert.equal(drawingSupported('Build_OilRefinery_C'), true);
-  assert.equal(drawingSupported('Build_FoundryMk1_C'), false);
+  assert.equal(drawingSupported('Build_FoundryMk1_C'), true);
+  assert.equal(drawingSupported('Build_ManufacturerMk1_C'), false);
+  assert.equal(requireMachineSpec('Build_FoundryMk1_C').ports.length, 4);
   assert.equal(requireMachineSpec('Build_OilRefinery_C').ports.length, 5);
 });
 
@@ -79,4 +92,67 @@ test('충돌과 용량 초과, 포트 미접속을 동시에 보고한다', () =
   assert(codes.has('MACHINE_COLLISION'));
   assert(codes.has('TRANSPORT_CAPACITY'));
   assert(codes.has('ROUTE_ENDPOINT'));
+});
+
+test('빈 판은 시공 도면으로 발행하지 않는다', () => {
+  const result = validateFactoryPlan({
+    schemaVersion: 1,
+    id: 'empty',
+    foundations: [],
+    placements: [],
+    transports: [],
+    powerSources: [],
+    powerEdges: [],
+  });
+  assert.equal(result.publishable, false);
+  assert.ok(result.issues.some((entry) => entry.code === 'EMPTY_PLAN'));
+});
+
+test('직교 라우터는 중간 설비의 하드 클리어런스를 우회한다', () => {
+  const pole: Placement = {
+    id: 'pole-1',
+    spec: requireMachineSpec('Build_PowerPoleMk1_C'),
+    positionM: { x: 6, y: 4, z: 0 },
+    rotation: 0,
+  };
+  const pathM = routeAroundMachines(smelter, output, constructor, input, [smelter, constructor, pole]);
+  const routed: FactoryPlan = structuredClone(validPlan);
+  routed.placements.push(pole);
+  routed.transports[0].pathM = pathM;
+  const result = validateFactoryPlan(routed);
+  assert.ok(pathM.length >= 4, JSON.stringify(pathM));
+  assert.equal(result.issues.some((entry) => entry.code === 'ROUTE_COLLISION'), false, JSON.stringify(pathM));
+});
+
+test('같은 높이의 벨트가 접속 장치 없이 교차하면 발행을 막는다', () => {
+  const smelter = requireMachineSpec('Build_SmelterMk1_C');
+  const constructor = requireMachineSpec('Build_ConstructorMk1_C');
+  const placements = [
+    { id: 'a', spec: smelter, positionM: { x: -12, y: -12, z: 0 }, rotation: 0 as const },
+    { id: 'b', spec: constructor, positionM: { x: 12, y: 12, z: 0 }, rotation: 180 as const },
+    { id: 'c', spec: smelter, positionM: { x: 12, y: -12, z: 0 }, rotation: 0 as const },
+    { id: 'd', spec: constructor, positionM: { x: -12, y: 12, z: 0 }, rotation: 180 as const },
+  ];
+  const plan = {
+    schemaVersion: 1 as const,
+    id: 'crossing',
+    placements,
+    foundations: foundationGrid(-32, 32, -32, 32),
+    transports: [
+      {
+        id: 'route-a', from: { placementId: 'a', portId: 'Output2' }, to: { placementId: 'b', portId: 'Input0' },
+        medium: 'solid' as const, itemId: 'test', flowPerMinute: 0, capacityPerMinute: 60,
+        pathM: [{ x: -12, y: -10, z: 1 }, { x: -12, y: 0, z: 1 }, { x: 12, y: 0, z: 1 }, { x: 12, y: 9, z: 1 }],
+      },
+      {
+        id: 'route-b', from: { placementId: 'c', portId: 'Output2' }, to: { placementId: 'd', portId: 'Input0' },
+        medium: 'solid' as const, itemId: 'test', flowPerMinute: 0, capacityPerMinute: 60,
+        pathM: [{ x: 12, y: -10, z: 1 }, { x: 0, y: -10, z: 1 }, { x: 0, y: 9, z: 1 }, { x: -12, y: 9, z: 1 }],
+      },
+    ],
+    powerSources: [],
+    powerEdges: [],
+  };
+  const result = validateFactoryPlan(plan);
+  assert.equal(result.issues.some((entry) => entry.code === 'ROUTE_CROSSING'), true);
 });

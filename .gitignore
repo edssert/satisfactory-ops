@@ -11,8 +11,14 @@
 .DS_Store
 .env
 .idea/
+.playwright-cli/
 .tmp-research/
 .vscode/
+.obsidian/cache/
+.obsidian/plugins/
+.obsidian/themes/
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
 /tmp/
 dist/
 node_modules/

@@ -23,11 +23,15 @@ def main() -> None:
     root = Path(__file__).resolve().parents[1]
     manifest_path = root / "src/data/curated/topview-assets.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    sheet = Image.open(args.source_directory / manifest["$source"]["sheet"]).convert("RGBA")
+    sheets: dict[str, Image.Image] = {}
     args.output_directory.mkdir(parents=True, exist_ok=True)
 
     generated = []
     for asset in manifest["assets"]:
+        sheet_name = asset.get("sheet", manifest["$source"]["sheet"])
+        if sheet_name not in sheets:
+            sheets[sheet_name] = Image.open(args.source_directory / sheet_name).convert("RGBA")
+        sheet = sheets[sheet_name]
         crop = asset["cropPx"]
         left = crop["x"]
         top = crop["y"]
@@ -45,4 +49,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

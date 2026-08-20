@@ -333,13 +333,13 @@ if (!toolsPage) {
     fail('설계 페이지가 빌드되지 않았습니다');
   } else {
     const need = [
-      ['pl-svg', '도면판 자체'],
+      ['vp-stage', '도면판 자체'],
       ['제련기', '건물 목록'],
       ['채굴기 Mk.1', '채굴기'],
-      ['석탄 발전기', '발전기'],
+      ['바이오매스 연소기', '자동 급유 발전기'],
       ['컨베이어 분배기', '물류 설비'],
-      ['왼쪽에서 건물을 누르면', '빈 판 안내'],
-      ['자동 배치', '자동 배치 단추'],
+      ['왼쪽에서 검증 설비를 놓으세요.', '빈 판 안내'],
+      ['도면 맞춤', '도면 맞춤 단추'],
     ];
     let miss = 0;
     for (const [needle, what] of need) {
@@ -350,12 +350,13 @@ if (!toolsPage) {
     }
     /* base 를 안 붙인 절대 경로는 GitHub Pages 하위 경로에서 전부 404 가 된다 */
     if (/src="\/assets\//.test(hit.s)) fail('설계 페이지에 base 없는 자산 경로가 있습니다');
+    if (hit.s.includes('자동 배치')) fail('수동 설계판에 폐기한 자동 배치 문구가 남아 있습니다');
     if (!miss) pass('설계판이 건물·채굴기·발전기와 함께 그려짐');
   }
 
   /* 한글이 글자 단위로 쪼개지는 것을 한 번 겪었다. 규칙으로 박는다 */
-  const css = fs.readFileSync(path.join(ROOT, 'src/styles/planner.css'), 'utf8');
-  const keepAll = ['.pl-mname', '.pl-rname', '.pl-sum p', '.pl-empty'];
+  const css = fs.readFileSync(path.join(ROOT, 'src/styles/validated-planner.css'), 'utf8');
+  const keepAll = ['.vp-machine strong', '.vp-empty p'];
   const bad = keepAll.filter((sel) => {
     const i = css.indexOf(sel);
     return i < 0 || !css.slice(i, css.indexOf('}', i)).includes('word-break: keep-all');

@@ -1,3 +1,15 @@
+---
+title: 시스템 아키텍처
+aliases:
+  - ARCHITECTURE
+tags:
+  - satisfactory-ops
+  - architecture
+status: active
+updated: 2026-08-21
+traceability: "[[PRODUCT-SPEC]]"
+---
+
 # ARCHITECTURE — satisfactory-ops
 
 | | |

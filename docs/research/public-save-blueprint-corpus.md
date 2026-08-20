@@ -1,7 +1,7 @@
 # 공개 세이브·블루프린트 검증 코퍼스
 
 조사일: 2026-08-21  
-상태: 코퍼스 7건 파싱 완료, 포트 좌표 큐레이션 반영
+상태: 공개 코퍼스 10건과 로컬 세이브 1건 파싱 완료, 포트 좌표 큐레이션 반영
 
 ## 목적
 
@@ -27,6 +27,9 @@
 | 11980 | [BB Plastics Factory 90 1.2V1](https://satisfactory-calculator.com/en/blueprints/index/details/id/11980/name/BB%2BPlastics%2BFactory%2B90%2B1.2V1) | Frabble | 488068 | 1.2 정유소 6·블렌더·배관·전력 | `a9d116c8b26c9e43af195b332168a38164399341d660600532b65019cdef2cbe` |
 | 12230 | [Manufacturer w Platform](https://satisfactory-calculator.com/en/blueprints/index/details/id/12230/name/Manufacturer%2Bw%2BPlatform) | N0TAB0T | 493833 | 1.2 제조기·5개 벨트·전력 | `b5b536483e1ed57b8ef38e4a49e2cfb99772b643d6606ed78882441af50c3757` |
 | 12350 | [Motors/Stators/Rotors](https://satisfactory-calculator.com/en/blueprints/index/details/id/12350/name/Motors%2FStators%2FRotors) | _TREVOR_ | 495413 | 1.2 제작기 31·조립기 9·제련기 9·주조기 2 | `ffe782263ea9a3aadc30fc72a9107e026b682b208a58226db2106f7215ed99c7` |
+| 5396 | [Modular Foundry](https://satisfactory-calculator.com/en/blueprints/index/details/id/5396/name/Modular%2BFoundry) | Xeinaemm | 416835 | 주조기 6·분배기 2·병합기 1·전력선 7 | `4b2006db39d0c5b01be81b2f5715d805ad77ab0c0cbc17c753d8593e219bf94d` |
+| 6934 | [Anyfacturer](https://satisfactory-calculator.com/en/blueprints/index/details/id/6934/name/Anyfacturer) | FugitiveHearts | 368883 | 조립기·제작기·스마트 분배기·병합기의 다단 물류 | `763a25436ad7e9c0b640c7982db44d269b3335033a61d17079d0f29073a1edae` |
+| 11770 | [Rate Limiter / Rate Splitter](https://satisfactory-calculator.com/en/blueprints/index/details/id/11770/name/Rate%2BLimiter%2B%2F%2BRate%2BSplitter) | JohnSpray | 463028 | 분배기 15·병합기 14·스마트 분배기 8 | `086e15a8b92716eb0f6593b81a848c46fde628dea89f8f4ac33012902f5a851e` |
 
 세이브 파일이 `.sav`이며 블루프린트가 세이브와 유사한 직렬화 구조를 쓴다는 형식 근거는 [공식 위키의 Save files](https://satisfactory.wiki.gg/wiki/Save_files)와 사용 중인 [Satisfactory file parser](https://github.com/JWalk9000/sf-file-parser)에서 확인했다.
 
@@ -57,6 +60,8 @@ node scripts/analyze-blueprint-corpus.mjs <blueprint-directory>
 - 정유소 전력 포트는 세 공개 블루프린트 22관측에서 `(0, -9.6904, 18.7247)m`로 수렴했다.
 - 8753 파일의 일부 조립기 변환은 연결 끝점과 충돌 상자가 양립하지 않았다. 30개 포트 후보 중 12개를 자동 폐기했고, 유효 군집에 섞인 2개 유체 이상치도 합의 군집에서 제외했다. 따라서 다운로드 수나 평점이 높아도 파일 전체를 무비판적으로 신뢰하지 않는다.
 - 12350의 1.2 설비는 제작기 31대, 분배기 70개, 병합기 55개, 벨트 245개, 전력선 63개였다. 기계만 놓는 도면은 실제 고밀도 공장의 물류·전력 부품량을 크게 과소평가한다.
+- 분배기와 병합기를 분석 대상에서 제외하던 초기 필터를 수정했다. 서로 다른 8개 블루프린트에서 병합기 4포트는 32~85회, 분배기 4포트는 40~112회 관측됐고 최대 편차는 0.7mm였다.
+- 주조기는 5396과 12350 두 제작자의 파일에서 입력·출력·전력 포트가 교차 일치했다. 5396에서만 연결된 나머지 입력도 같은 파일 안 3회가 정확히 일치해 완전 설비로 승격했다.
 
 ## 제품 반영
 
@@ -64,4 +69,3 @@ node scripts/analyze-blueprint-corpus.mjs <blueprint-directory>
 - 설비에 일부 포트만 있어도 도면을 발행하던 허점을 막았다. `$completeBuildings`에 있고 모든 포트가 검증된 설비만 발행 가능하다.
 - 포트 미검증 설비는 계산에는 쓸 수 있어도 실제 배치 도면에는 쓸 수 없다.
 - 다음 단계는 컨베이어 리프트의 `mTopTransform`을 해석해 리프트에 직접 붙은 제조기·블렌더 고체 포트를 현재 1.2 코퍼스에서 추가 검증하는 것이다.
-

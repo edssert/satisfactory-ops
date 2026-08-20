@@ -1,3 +1,15 @@
+---
+title: 기술 요구사항
+aliases:
+  - TRD
+tags:
+  - satisfactory-ops
+  - architecture/technical-requirements
+status: active
+updated: 2026-08-21
+traceability: "[[PRODUCT-SPEC]]"
+---
+
 # TRD — satisfactory-ops
 
 **기술 요구사항 문서 (Technical Requirements Document)**

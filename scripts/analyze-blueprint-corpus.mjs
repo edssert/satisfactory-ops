@@ -138,7 +138,8 @@ function observePorts(blueprint, sourceId) {
   for (const machine of objects) {
     const buildingClass = tail(machine.typePath);
     if (!buildingClass.startsWith('Build_')) continue;
-    if (/Conveyor|Pipeline|PowerLine|Foundation|Wall|Ramp|Pole|Sign|Catwalk|Walkway|Barrier/.test(buildingClass)) continue;
+    const isLogisticsAttachment = /^Build_ConveyorAttachment(?:Splitter|Merger)/.test(buildingClass);
+    if (!isLogisticsAttachment && /Conveyor|Pipeline|PowerLine|Foundation|Wall|Ramp|Pole|Sign|Catwalk|Walkway|Barrier/.test(buildingClass)) continue;
 
     const components = (machine.components ?? [])
       .map((reference) => objectsByName.get(reference.pathName))

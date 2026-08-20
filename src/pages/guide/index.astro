@@ -11,7 +11,6 @@
  */
 import Base from '../../layouts/Base.astro';
 import '../../styles/fx.css';
-import FlowChart from '../../components/FlowChart.astro';
 import { building, buildings, defaultRecipeOf, item, milestones, recipe } from '../../lib/gamedata';
 import spine from '../../data/curated/spine.json';
 import finite from '../../data/curated/finite-resources.json';
@@ -20,7 +19,6 @@ import craft from '../../data/curated/build-craft.json';
 import purity from '../../data/curated/node-purity.json';
 import saveUnlocks from '../../data/app/save-unlocks.json';
 import hub from '../../data/app/hub.json';
-import { aluminiumLine, biomassLine, ironLine, oilLine, smartPlatingLine, type FlowDef } from '../../lib/flows';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -221,15 +219,6 @@ const steps = spine.steps.map((s) => ({
   })),
 }));
 
-const FLOWS: Record<string, FlowDef> = {
-  hub: biomassLine(),
-  't1-iron': ironLine(),
-  /* 고체 바이오 연료는 티어 2 「장애물 제거」 해금이라 여기서 처음 그린다 */
-  't2-assembler': smartPlatingLine(),
-  't2-biofuel': biomassLine(true),
-  't5-oil': oilLine(),
-  't7-aluminium': aluminiumLine(),
-};
 ---
 
 <Base
@@ -325,7 +314,7 @@ const FLOWS: Record<string, FlowDef> = {
               </ul>
             </div>
 
-            <h3 class="sub">지금 지을 것</h3>
+            <h3 class="sub">이번 단계의 공사 순서</h3>
             <ol class="actions">
               {s.actions.map((a) => (
                 <li>
@@ -374,31 +363,16 @@ const FLOWS: Record<string, FlowDef> = {
               </>
             )}
 
-            {FLOWS[s.id] && (
-              <div class="flowwrap">
-                <FlowChart
-                  rows={FLOWS[s.id]!.rows}
-                  links={FLOWS[s.id]!.links}
-                  caption={FLOWS[s.id]!.caption}
-                  wide={FLOWS[s.id]!.wide}
-                  index={i + 1}
-                />
-              </div>
-            )}
-            {s.id === 't2-assembler' && (
-              <div class="flowwrap">
-                <FlowChart
-                rows={FLOWS['t2-biofuel']!.rows}
-                links={FLOWS['t2-biofuel']!.links}
-                caption={FLOWS['t2-biofuel']!.caption}
-                index={90}
-              />
-              </div>
+            {s.rows.length > 0 && (
+              <p class="planner-bridge">
+                이 구간의 기계 배치와 실제 포트 연결은 추상 공정도로 대신하지 않습니다.
+                <a href={`${base}/planner/`}>검증형 도면판에서 실제 축척으로 배치하기 →</a>
+              </p>
             )}
 
             {s.leaveRoom && (
               <div class="keep">
-                <p class="keep-tag">남겨둘 것</p>
+                <p class="keep-tag">증설 경계</p>
                 <p class="keep-body">{s.leaveRoom}</p>
               </div>
             )}
@@ -989,6 +963,18 @@ const FLOWS: Record<string, FlowDef> = {
      * 옆으로 굴린다. 페이지 본문은 절대 가로로 밀리지 않는다.
      * 오른쪽 끝을 흐리게 해서 "더 있다"는 것을 알린다 — 안 그러면 잘린 그림처럼 보인다.
      */
+    .planner-bridge {
+      display: grid;
+      gap: var(--s2);
+      margin: var(--s6) 0 0;
+      padding: var(--s4);
+      border-left: 3px solid var(--primary);
+      background: color-mix(in oklab, var(--primary) 7%, transparent);
+      color: var(--ink-2);
+      font-size: var(--t-small);
+      line-height: 1.7;
+    }
+    .planner-bridge a { color: var(--ink); font-weight: 700; }
     .flowwrap { margin-top: var(--s10); }
     /* 굴리는 것은 그림뿐이다. 설명글은 제자리에서 접혀야 읽힌다 */
     .flowwrap > :global(.fc) {

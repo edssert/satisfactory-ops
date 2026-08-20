@@ -142,7 +142,8 @@ let rejectedObservationCount = 0;
 
 for (const machine of objects) {
   const buildingClass = tail(machine.typePath);
-  if (!buildingClass.startsWith('Build_') || /Conveyor|Pipeline|PowerLine/.test(buildingClass)) continue;
+  const isLogisticsAttachment = /^Build_ConveyorAttachment(?:Splitter|Merger)/.test(buildingClass);
+  if (!buildingClass.startsWith('Build_') || (!isLogisticsAttachment && /Conveyor|Pipeline|PowerLine/.test(buildingClass))) continue;
 
   const components = (machine.components ?? [])
     .map((reference) => byName.get(reference.pathName))

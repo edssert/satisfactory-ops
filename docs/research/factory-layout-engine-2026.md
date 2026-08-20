@@ -29,6 +29,7 @@
 - `scripts/extract-save-ports.mjs`: 실제 세이브의 컨베이어 스플라인 끝점에서 설비 포트 좌표 역산
 - `src/data/curated/machine-ports.json`: 반복 관측이 5cm 이내로 일치한 포트만 `verified`
 - `src/domain/factory/`: 미터 좌표계, 회전, 하드 박스 충돌, 포트 접속, 용량, 전력 검증
+- 같은 높이의 벨트·파이프가 접속 장치 없이 교차하면 발행을 차단하고, 면적 절약·균형·증설 우선 후보를 서로 다른 실제 통로 폭으로 생성
 - 검증된 포트가 없는 설비는 자동 배치 도면 발행 불가
 
 ## 출처
@@ -48,4 +49,3 @@
   https://arxiv.org/abs/1905.08412
 - SML Documentation, “Extracting Game Files.” FModel, UE 5.6, glTF/PNG 추출 절차.
   https://docs.ficsit.app/satisfactory-modding/latest/Development/ExtractGameFiles.html
-

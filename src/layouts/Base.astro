@@ -73,6 +73,7 @@ const nav = [
             </li>
           ))}
         </ul>
+        <span class="nav-more" aria-hidden="true">→</span>
       </nav>
     </header>
 
@@ -214,7 +215,8 @@ const nav = [
   .theme-toggle:hover { border-color: var(--border-strong); color: var(--text-primary); }
   .theme-toggle svg { width: 16px; fill: none; stroke: currentColor; stroke-width: 1.7; }
 
-  .nav-rail { border-top: var(--hair) solid var(--border-subtle); }
+  .nav-rail { position: relative; border-top: var(--hair) solid var(--border-subtle); }
+  .nav-more { display: none; }
   .nav {
     display: flex;
     gap: var(--s8);
@@ -259,12 +261,26 @@ const nav = [
     .theme-toggle { margin-left: auto; }
     .theme-toggle span { display: none; }
     .nav-rail {
+      display: flex;
       overflow-x: auto;
       overscroll-behavior-x: contain;
+      scroll-padding-inline: var(--s5);
       scrollbar-width: none;
     }
     .nav-rail::-webkit-scrollbar { display: none; }
-    .nav { width: max-content; gap: var(--s6); padding-right: var(--s8); }
+    .nav { width: max-content; flex: none; gap: var(--s6); padding-right: var(--s16); }
+    .nav-more {
+      position: sticky;
+      right: 0;
+      display: grid;
+      width: 34px;
+      flex: none;
+      place-items: center;
+      background: linear-gradient(90deg, transparent, var(--canvas) 46%);
+      color: var(--text-tertiary);
+      font: 700 var(--t-caption) var(--font-mono);
+      pointer-events: none;
+    }
     .foot-legal { text-align: left; }
   }
 </style>

@@ -1,3 +1,15 @@
+---
+title: 제품 요구사항
+aliases:
+  - PRD
+tags:
+  - satisfactory-ops
+  - product/requirements
+status: active
+updated: 2026-08-21
+traceability: "[[PRODUCT-SPEC]]"
+---
+
 # PRD — satisfactory-ops
 
 **제품 요구사항 문서 (Product Requirements Document)**

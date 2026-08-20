@@ -34,6 +34,12 @@ export interface MachineSpec {
 }
 
 export interface MachineOperation {
+  recipeId?: string;
+  recipeName?: string;
+  clockPercent?: number;
+  powerShards?: number;
+  somersloops?: number;
+  outputMultiplier?: number;
   inputRates: Record<string, number>;
   outputRates: Record<string, number>;
   powerDemandMW?: number;
@@ -97,12 +103,18 @@ export type ValidationSeverity = 'error' | 'warning';
 
 export interface ValidationIssue {
   code:
+    | 'EMPTY_PLAN'
     | 'DUPLICATE_ID'
     | 'PORT_DATA_MISSING'
     | 'UNSUPPORTED_PORT'
     | 'FOUNDATION_SUPPORT'
     | 'MACHINE_COLLISION'
+    | 'ROUTE_COLLISION'
+    | 'ROUTE_CROSSING'
     | 'ROUTE_ENDPOINT'
+    | 'ROUTE_SEGMENT_LENGTH'
+    | 'ROUTE_TURN_RADIUS'
+    | 'LIFT_HEIGHT'
     | 'PORT_DIRECTION'
     | 'PORT_MEDIUM'
     | 'TRANSPORT_CAPACITY'
@@ -119,4 +131,3 @@ export interface ValidationResult {
   publishable: boolean;
   issues: ValidationIssue[];
 }
-

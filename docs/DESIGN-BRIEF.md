@@ -1,3 +1,15 @@
+---
+title: 디자인 브리프
+aliases:
+  - DESIGN-BRIEF
+tags:
+  - satisfactory-ops
+  - design/system
+status: active
+updated: 2026-08-21
+traceability: "[[PRODUCT-SPEC]]"
+---
+
 # satisfactory-ops 디자인 브리프
 
 - 작성일: 2026-08-19

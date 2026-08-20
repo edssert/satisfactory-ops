@@ -1,3 +1,15 @@
+---
+title: 데이터 모델
+aliases:
+  - DATA-MODEL
+tags:
+  - satisfactory-ops
+  - architecture/data-model
+status: active
+updated: 2026-08-21
+traceability: "[[PRODUCT-SPEC]]"
+---
+
 # DATA-MODEL — satisfactory-ops
 
 | | |
