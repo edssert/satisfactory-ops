@@ -39,85 +39,113 @@ const ko = (id: string) => item(id).ko;
 const fmt = (n: number) => (Number.isInteger(n) ? String(n) : String(Math.round(n * 100) / 100));
 
 /**
- * 티어 1 철 3종 라인.
+ * 필요량 전개 — 목표 품목 N//분을 만들려면 상류가 얼마나 필요한가.
  *
- * **기계를 개별로 그린다.** 같은 종류라도 출력이 다른 곳으로 가면 한 상자로 묶지 않는다 —
- * 묶으면 없는 병합기가 생기고, 그것을 다시 분배기로 가르는 그림이 된다.
- * 실제로는 제련기 #1 이 철판 제작기에 직결되고, 제련기 #2 만 분배기로 갈라진다.
+ * 조립기 입력만 세면 안 된다. 그 입력을 만드는 제작기·제련기·채굴기까지 내려가야
+ * 실제 노드 소요가 나온다. (가이드가 지능형 도금판 5/분을 철광석 22.5/분이라 적은 적이 있다.
+ * 조립기 바로 앞만 세서 나온 값이고, 실제는 116.25/분이다.)
+ */
+const CHAIN: Record<string, string> = {
+  Desc_SpaceElevatorPart_1_C: 'Recipe_SpaceElevatorPart_1_C',
+  Desc_IronPlateReinforced_C: 'Recipe_IronPlateReinforced_C',
+  Desc_Rotor_C: 'Recipe_Rotor_C',
+  Desc_IronPlate_C: 'Recipe_IronPlate_C',
+  Desc_IronRod_C: 'Recipe_IronRod_C',
+  Desc_IronScrew_C: 'Recipe_Screw_C',
+  Desc_IronIngot_C: 'Recipe_IngotIron_C',
+};
+
+export function expandDemand(itemId: string, perMinute: number): Map<string, number> {
+  const need = new Map<string, number>();
+  const walk = (id: string, rate: number) => {
+    need.set(id, (need.get(id) ?? 0) + rate);
+    const rid = CHAIN[id];
+    if (!rid) return;
+    const r = recipe(rid);
+    const out = r.products.find((pr) => pr.item === id)?.perMinute ?? 0;
+    if (!out) return;
+    for (const g of r.ingredients) walk(g.item, (g.perMinute * rate) / out);
+  };
+  walk(itemId, perMinute);
+  return need;
+}
+
+/** 목표 처리량에 필요한 기계 대수와 클럭 */
+function plan(recipeId: string, targetPerMinute: number) {
+  const r = recipe(recipeId);
+  const out = r.products[0]?.perMinute ?? 0;
+  const exact = targetPerMinute / out;
+  const count = Math.ceil(exact - 1e-9);
+  return { count, clock: Math.round((exact / count) * 1000) / 10 };
+}
+
+/**
+ * 초반 철 라인 — **보강된 철판 5/분을 먹여 살리는 크기**로 잡는다.
  *
- * 벨트 Mk.1 한 줄(60/분)이 제련기 두 대분이라 채굴기 뒤에 분배기가 하나 필요하다.
+ * 이 크기를 쓰는 이유: 보강된 철판 5/분이 철광석 정확히 60/분이고, 그게 채굴기 한 대가
+ * 벨트 Mk.1 로 낼 수 있는 최대치와 같다. 노드 하나·벨트 한 줄이 딱 떨어진다.
+ *
+ * 철괴 60 을 철판용 45 와 철봉용 15 로 나눠야 하는데 정수비가 아니라 밸런서로는 못 나눈다.
+ * 제련기 두 대 출력을 한 줄로 합치고 제작기를 그 줄에 차례로 무는 매니폴드가 표준 해법이다.
  */
 export function ironLine(): FlowDef {
   const miner = building('Build_MinerMk1_C');
   const smelter = building('Build_SmelterMk1_C');
   const constructor = building('Build_ConstructorMk1_C');
-  const ore = building('Build_ConveyorBeltMk1_C').beltItemsPerMinute ?? 60;
 
-  const smeltIn = inOf('Recipe_IngotIron_C');
-  const smeltOut = outOf('Recipe_IngotIron_C');
-  const plateIn = inOf('Recipe_IronPlate_C');
-  const rodIn = inOf('Recipe_IronRod_C');
-  const rodOut = outOf('Recipe_IronRod_C');
-  const screwIn = inOf('Recipe_Screw_C');
-  const screwOut = outOf('Recipe_Screw_C');
+  const need = expandDemand('Desc_IronPlateReinforced_C', 5);
+  const ore = need.get('Desc_OreIron_C') ?? 0;
+  const ingot = need.get('Desc_IronIngot_C') ?? 0;
+  const plate = need.get('Desc_IronPlate_C') ?? 0;
+  const rod = need.get('Desc_IronRod_C') ?? 0;
+  const screw = need.get('Desc_IronScrew_C') ?? 0;
 
-  /** 이 배선은 "제련기 2대 · 철판 1대 · 철봉 2대"라는 정수 비율 위에 서 있다 */
-  const smelters = ore / smeltIn;
-  const rodsPerSmelter = smeltOut / rodIn;
-  if (smelters !== 2 || smeltOut !== plateIn || rodsPerSmelter !== 2) {
-    throw new Error(
-      `철 라인 비율이 깨졌습니다 (제련기 ${smelters} · 철판 ${smeltOut}/${plateIn} · 철봉 ${rodsPerSmelter}). ` +
-        '게임 레시피가 바뀌었으니 그림을 다시 짜야 합니다.'
-    );
-  }
+  const ingotToPlate = (inOf('Recipe_IronPlate_C') * plate) / outOf('Recipe_IronPlate_C');
+  const ingotToRod = (inOf('Recipe_IronRod_C') * rod) / outOf('Recipe_IronRod_C');
 
-  const rodNode = (n: number, out: number): FlowNodeDef => ({
-    id: `rod${n}`,
-    machineKo: `${constructor.ko} #${n + 1}`,
-    productKo: ko('Desc_IronRod_C'),
-    machineId: constructor.id,
-    count: 1,
-    layer: 2,
-    out: { itemKo: ko('Desc_IronRod_C'), itemId: 'Desc_IronRod_C', perMinute: out },
-  });
+  const pSmelt = plan('Recipe_IngotIron_C', ingot);
+  const pPlate = plan('Recipe_IronPlate_C', plate);
+  const pRod = plan('Recipe_IronRod_C', rod);
+  const pScrew = plan('Recipe_Screw_C', screw);
+
+  const belt = building('Build_ConveyorBeltMk1_C').beltItemsPerMinute ?? 60;
 
   return {
     nodes: [
       { id: 'mine', machineKo: miner.ko, productKo: ko('Desc_OreIron_C'), machineId: miner.id, count: 1, layer: 0 },
-      { id: 'smelt1', machineKo: `${smelter.ko} #1`, productKo: ko('Desc_IronIngot_C'), machineId: smelter.id, count: 1, layer: 1 },
-      { id: 'smelt2', machineKo: `${smelter.ko} #2`, productKo: ko('Desc_IronIngot_C'), machineId: smelter.id, count: 1, layer: 1 },
+      { id: 'smelt', machineKo: smelter.ko, productKo: ko('Desc_IronIngot_C'), machineId: smelter.id, count: pSmelt.count, clock: pSmelt.clock, layer: 1 },
       {
         id: 'plate',
-        machineKo: `${constructor.ko} #1`,
+        machineKo: constructor.ko,
         productKo: ko('Desc_IronPlate_C'),
         machineId: constructor.id,
-        count: 1,
+        count: pPlate.count,
+        clock: pPlate.clock,
         layer: 2,
-        out: { itemKo: ko('Desc_IronPlate_C'), itemId: 'Desc_IronPlate_C', perMinute: outOf('Recipe_IronPlate_C') },
+        out: { itemKo: ko('Desc_IronPlate_C'), itemId: 'Desc_IronPlate_C', perMinute: plate },
       },
-      rodNode(1, rodOut - screwIn),
-      rodNode(2, rodOut),
+      { id: 'rod', machineKo: constructor.ko, productKo: ko('Desc_IronRod_C'), machineId: constructor.id, count: pRod.count, clock: pRod.clock, layer: 2 },
       {
         id: 'screw',
-        machineKo: `${constructor.ko} #4`,
+        machineKo: constructor.ko,
         productKo: ko('Desc_IronScrew_C'),
         machineId: constructor.id,
-        count: 1,
+        count: pScrew.count,
+        clock: pScrew.clock,
         layer: 3,
-        out: { itemKo: ko('Desc_IronScrew_C'), itemId: 'Desc_IronScrew_C', perMinute: screwOut },
+        out: { itemKo: ko('Desc_IronScrew_C'), itemId: 'Desc_IronScrew_C', perMinute: screw },
       },
     ],
     edges: [
-      { from: 'mine', to: 'smelt1', itemKo: ko('Desc_OreIron_C'), itemId: 'Desc_OreIron_C', perMinute: smeltIn, split: true },
-      { from: 'mine', to: 'smelt2', itemKo: ko('Desc_OreIron_C'), itemId: 'Desc_OreIron_C', perMinute: smeltIn },
-      { from: 'smelt1', to: 'plate', itemKo: ko('Desc_IronIngot_C'), itemId: 'Desc_IronIngot_C', perMinute: plateIn },
-      { from: 'smelt2', to: 'rod1', itemKo: ko('Desc_IronIngot_C'), itemId: 'Desc_IronIngot_C', perMinute: rodIn, split: true },
-      { from: 'smelt2', to: 'rod2', itemKo: ko('Desc_IronIngot_C'), itemId: 'Desc_IronIngot_C', perMinute: rodIn },
-      { from: 'rod1', to: 'screw', itemKo: ko('Desc_IronRod_C'), itemId: 'Desc_IronRod_C', perMinute: screwIn, split: true },
+      { from: 'mine', to: 'smelt', itemKo: ko('Desc_OreIron_C'), itemId: 'Desc_OreIron_C', perMinute: ore },
+      { from: 'smelt', to: 'plate', itemKo: ko('Desc_IronIngot_C'), itemId: 'Desc_IronIngot_C', perMinute: ingotToPlate, split: true },
+      { from: 'smelt', to: 'rod', itemKo: ko('Desc_IronIngot_C'), itemId: 'Desc_IronIngot_C', perMinute: ingotToRod },
+      { from: 'rod', to: 'screw', itemKo: ko('Desc_IronRod_C'), itemId: 'Desc_IronRod_C', perMinute: rod },
     ],
     caption:
-      `분배기는 두 곳에만 들어갑니다 — 채굴기 뒤(${fmt(ore)} → ${fmt(smeltIn)}씩)와 제련기 #2 뒤(${fmt(smeltOut)} → ${fmt(rodIn)}씩). ` +
-      `제련기 #1 은 철판 제작기에 그대로 물립니다. 병합기는 쓰지 않습니다.`,
+      `철광석 ${fmt(ore)}개/분 — 채굴기 한 대가 벨트 Mk.1(${fmt(belt)}개/분)로 낼 수 있는 최대치와 정확히 같습니다. ` +
+      `철괴를 철판용 ${fmt(ingotToPlate)} 와 철봉용 ${fmt(ingotToRod)} 로 나누는데 정수비가 아니라 밸런서로는 못 나눕니다. ` +
+      `제련기 출력을 한 줄로 합치고 제작기를 그 줄에 차례로 무십시오(매니폴드).`,
   };
 }
 
@@ -179,7 +207,11 @@ export function smartPlatingLine(target = 5): FlowDef {
       { from: 'rip', to: 'smart', itemKo: ko('Desc_IronPlateReinforced_C'), itemId: 'Desc_IronPlateReinforced_C', perMinute: target },
       { from: 'rotor', to: 'smart', itemKo: ko('Desc_Rotor_C'), itemId: 'Desc_Rotor_C', perMinute: target },
     ],
-    caption: `${assembler.ko} 두 대면 됩니다. 대수를 늘리는 대신 클럭을 내립니다 — 전력이 클럭에 지수로 붙습니다.`,
+    caption:
+      `조립기는 ${rip.count + rotor.count + smart.count}대면 되지만, 이 그림이 감추는 것은 상류입니다 — ` +
+      `여기까지 오려면 나사 ${fmt(expandDemand('Desc_SpaceElevatorPart_1_C', target).get('Desc_IronScrew_C') ?? 0)}개/분, ` +
+      `철광석 ${fmt(expandDemand('Desc_SpaceElevatorPart_1_C', target).get('Desc_OreIron_C') ?? 0)}개/분이 필요합니다. ` +
+      `노드 하나로는 못 댑니다.`,
   };
 }
 
