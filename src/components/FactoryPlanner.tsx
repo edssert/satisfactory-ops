@@ -4,6 +4,9 @@
  * 자동 계산기(`/builder`)와 역할이 다르다. 거기는 "무엇을 분당 몇 개"를 넣으면 공정을 펼쳐 주고,
  * 여기는 사람이 배치를 짠다. 인게임에서 짓기 전에 먼저 그려 보고, 그린 것을 남에게 보여 주는 용도다.
  *
+ * 순서는 게임과 같다. **건물을 먼저 놓고, 놓인 것을 눌러 레시피를 고른다.**
+ * 인게임에서도 제작기를 짓고 나서 열어 무엇을 만들지 정한다.
+ *
  * 흐름은 왼쪽에서 오른쪽이다. 투입구는 상자 왼쪽, 산출구는 오른쪽.
  * 산출구를 누르고 다음 기계의 같은 품목 투입구를 누르면 이어진다.
  *
@@ -92,8 +95,10 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, iconB
   const seq = useRef(1);
   const [ready, setReady] = useState(false);
 
-  const [mach, setMach] = useState<string | null>(null);
   const [q, setQ] = useState('');
+  /** 지금 레시피를 고르는 중인 상자 */
+  const [edit, setEdit] = useState<number | null>(null);
+  const [eq, setEq] = useState('');
   const [pick, setPick] = useState<{ node: number; item: string } | null>(null);
   const [sel, setSel] = useState<number | null>(null);
   const [copied, setCopied] = useState(false);
@@ -191,24 +196,48 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, iconB
 
   /* ---------------------------------------------------------------- 조작 */
 
-  const addNode = (kind: NodeKind, ref: string, machine: string) => {
+  /** 건물의 성격. 채굴기·발전기는 레시피가 아니라 자원·연료를 고른다 */
+  const kindOf = (m: PMachine): NodeKind =>
+    m.res ? 'extract' : m.f ? 'generator' : 'recipe';
+
+  /**
+   * 건물만 놓는다. 무엇을 만들지는 놓인 상자를 눌러 고른다 — 인게임과 같은 순서다.
+   * 놓자마자 레시피를 강요하면 "이 건물로 뭘 할 수 있지"를 판 위에서 못 본다.
+   */
+  const addNode = (m: PMachine) => {
     const id = seq.current++;
     const k = nodes.length;
-    const m = machineById.get(machine);
     const node: PNode = {
       id,
-      kind,
-      ref,
-      machine,
+      kind: kindOf(m),
+      ref: kindOf(m) === 'recipe' ? '' : m.i,
+      machine: m.i,
       x: 40 + (k % 4) * (NODE_W + 60),
       y: 40 + Math.floor(k / 4) * 250,
       count: 1,
       clock: 100,
-      ...(kind === 'extract' ? { resource: m?.res?.[0], purity: 1 } : {}),
-      ...(kind === 'generator' ? { fuel: m?.f?.[0]?.f } : {}),
+      ...(kindOf(m) === 'extract' ? { purity: 1 } : {}),
     };
     setNodes((v) => [...v, node]);
     setSel(id);
+    /* 놓자마자 고르는 창을 연다. 한 번 더 누르게 만들 이유가 없다 */
+    setEdit(id);
+    setEq('');
+  };
+
+  /** 이 상자가 아직 무엇을 만들지 정하지 않았는가 */
+  const unset = (n: PNode) =>
+    n.kind === 'recipe' ? !n.ref : n.kind === 'extract' ? !n.resource : !n.fuel;
+
+  /**
+   * 무엇을 만들지 바꾸면 품목이 달라진다. 예전 품목으로 이어 둔 벨트는 갈 곳이 없으므로 끊는다.
+   * 남겨 두면 화면에는 선이 있는데 아무것도 안 흐르는 상태가 된다.
+   */
+  const choose = (id: number, p: Partial<PNode>) => {
+    setNodes((v) => v.map((n) => (n.id === id ? { ...n, ...p } : n)));
+    setEdges((v) => v.filter((e) => e.from !== id && e.to !== id));
+    setEdit(null);
+    setPick(null);
   };
 
   const patch = (id: number, p: Partial<PNode>) =>
@@ -300,13 +329,18 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, iconB
 
   const titleOf = (n: PNode) =>
     n.kind === 'recipe'
-      ? (recipeById.get(n.ref)?.k ?? n.ref)
+      ? (recipeById.get(n.ref)?.k ?? '무엇을 만들지 고르세요')
       : n.kind === 'extract'
-        ? `${nameOf(n.resource ?? '')} · ${PURITY.find((p) => p.v === n.purity)?.k ?? ''}`
-        : nameOf(n.fuel ?? '');
+        ? n.resource
+          ? `${nameOf(n.resource)} · ${PURITY.find((p) => p.v === n.purity)?.k ?? ''}`
+          : '무엇을 캘지 고르세요'
+        : n.fuel
+          ? nameOf(n.fuel)
+          : '무엇을 태울지 고르세요';
 
   /* ---------------------------------------------------------------- 왼쪽 목록 */
 
+  /** 왼쪽은 건물만 늘어놓는다. 레시피는 놓은 뒤에 고른다 */
   const machineList = useMemo(() => {
     const s = q.trim();
     if (!s) return machines;
@@ -315,13 +349,24 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, iconB
     );
   }, [machines, q, recipesOf]);
 
-  const shown = mach ? machineById.get(mach) : null;
-  const shownRecipes = useMemo(() => {
-    if (!mach) return [];
-    const s = q.trim();
-    const list = recipesOf.get(mach) ?? [];
-    return s ? list.filter((r) => r.k.includes(s)) : list;
-  }, [mach, q, recipesOf]);
+  /** 지금 고르는 중인 상자에 놓을 수 있는 것들 */
+  const choices = useMemo(() => {
+    const n = nodes.find((x) => x.id === edit);
+    if (!n) return null;
+    const m = machineById.get(n.machine);
+    if (!m) return null;
+    const s = eq.trim();
+    if (n.kind === 'extract') {
+      const list = (m.res ?? []).filter((r) => !s || nameOf(r).includes(s));
+      return { n, m, kind: 'extract' as const, list };
+    }
+    if (n.kind === 'generator') {
+      const list = (m.f ?? []).map((f) => f.f).filter((r) => !s || nameOf(r).includes(s));
+      return { n, m, kind: 'generator' as const, list };
+    }
+    const list = (recipesOf.get(n.machine) ?? []).filter((r) => !s || r.k.includes(s));
+    return { n, m, kind: 'recipe' as const, list };
+  }, [edit, eq, nodes, machineById, recipesOf, itemById]);
 
   const icon = (kind: 'items' | 'buildings-png', id: string, size: number) => (
     <img
@@ -337,81 +382,30 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, iconB
   return (
     <div class="pl">
       <aside class="pl-pal">
+        <p class="pl-palhead">건물을 눌러 판에 놓으세요</p>
         <label class="pl-search">
-          <span class="sr-only">건물·레시피 찾기</span>
+          <span class="sr-only">건물 찾기</span>
           <input
             type="search"
             value={q}
-            placeholder="건물이나 레시피 이름"
+            placeholder="건물 이름 · 만들 물건 이름"
             onInput={(e) => setQ((e.currentTarget as HTMLInputElement).value)}
           />
         </label>
 
-        {!shown && (
-          <ul class="pl-machines">
-            {machineList.map((m) => (
-              <li key={m.i}>
-                <button type="button" onClick={() => setMach(m.i)}>
-                  {icon('buildings-png', m.i, 28)}
-                  <span class="pl-mname">{m.k}</span>
-                  <span class="pl-mmeta">
-                    {m.res ? '채굴' : m.f ? '발전' : `${m.n}종`}
-                  </span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-
-        {shown && (
-          <div class="pl-recipes">
-            <button type="button" class="pl-back" onClick={() => setMach(null)}>
-              ← 건물 목록
-            </button>
-            <p class="pl-rhead">
-              {icon('buildings-png', shown.i, 24)}
-              <span>{shown.k}</span>
-            </p>
-
-            {shown.res && (
-              <ul>
-                {shown.res.map((rid) => (
-                  <li key={rid}>
-                    <button type="button" onClick={() => addNode('extract', shown.i, shown.i)}>
-                      {icon('items', rid, 22)}
-                      <span class="pl-rname">{nameOf(rid)}</span>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-
-            {shown.f && (
-              <ul>
-                {shown.f.map((f) => (
-                  <li key={f.f}>
-                    <button type="button" onClick={() => addNode('generator', shown.i, shown.i)}>
-                      {icon('items', f.f, 22)}
-                      <span class="pl-rname">{nameOf(f.f)}</span>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-
-            <ul>
-              {shownRecipes.map((r) => (
-                <li key={r.i}>
-                  <button type="button" onClick={() => addNode('recipe', r.i, r.m)}>
-                    {icon('items', r.o[0]![0], 22)}
-                    <span class="pl-rname">{r.k}</span>
-                    {r.a && <span class="pl-alt">대체</span>}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        <ul class="pl-machines">
+          {machineList.map((m) => (
+            <li key={m.i}>
+              <button type="button" onClick={() => addNode(m)}>
+                {icon('buildings-png', m.i, 28)}
+                <span class="pl-mname">{m.k}</span>
+                <span class="pl-mmeta">
+                  {m.res ? '채굴' : m.f ? '발전' : `${m.n}종`}
+                </span>
+              </button>
+            </li>
+          ))}
+        </ul>
       </aside>
 
       <div class="pl-main">
@@ -446,6 +440,7 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, iconB
               if (e.target === e.currentTarget) {
                 setPick(null);
                 setSel(null);
+                setEdit(null);
               }
             }}
           >
@@ -485,7 +480,12 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, iconB
               return (
                 <article
                   key={n.id}
-                  class={`pl-node${sel === n.id ? ' is-sel' : ''}${starved ? ' is-short' : ''}`}
+                  class={
+                    `pl-node${sel === n.id ? ' is-sel' : ''}` +
+                    `${starved && !unset(n) ? ' is-short' : ''}` +
+                    `${unset(n) ? ' is-unset' : ''}` +
+                    `${edit === n.id ? ' is-editing' : ''}`
+                  }
                   style={`left:${n.x}px;top:${n.y}px;width:${NODE_W}px;height:${g.h}px`}
                 >
                   <header
@@ -495,21 +495,94 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, iconB
                     onPointerUp={onHeadUp}
                   >
                     {icon('buildings-png', n.machine, 26)}
-                    <span class="pl-ntitle">
-                      <b>{titleOf(n)}</b>
+                    {/*
+                      * 건물 이름이 위, 무엇을 만드는지가 아래. 눌러서 바꾼다.
+                      * 인게임에서 기계를 열어 레시피를 고르는 것과 같은 자리다.
+                      */}
+                    <button
+                      type="button"
+                      class={`pl-ntitle${unset(n) ? ' is-unset' : ''}`}
+                      onClick={() => {
+                        setEdit(edit === n.id ? null : n.id);
+                        setEq('');
+                        setSel(n.id);
+                      }}
+                      onPointerDown={(e) => e.stopPropagation()}
+                    >
                       <small>{m?.k ?? n.machine}</small>
-                    </span>
+                      <b>{titleOf(n)}</b>
+                    </button>
                     <button
                       type="button"
                       class="pl-x"
                       aria-label="지우기"
                       onClick={() => removeNode(n.id)}
+                      onPointerDown={(e) => e.stopPropagation()}
                     >
                       ✕
                     </button>
                   </header>
 
+                  {edit === n.id && choices && (
+                    <div class="pl-picker">
+                      <input
+                        type="search"
+                        class="pl-pq"
+                        value={eq}
+                        placeholder={
+                          choices.kind === 'recipe'
+                            ? `${m?.k ?? ''} 레시피 ${choices.list.length}종`
+                            : choices.kind === 'extract'
+                              ? '캘 자원'
+                              : '태울 연료'
+                        }
+                        onInput={(e) => setEq((e.currentTarget as HTMLInputElement).value)}
+                      />
+                      <ul>
+                        {choices.kind === 'recipe' &&
+                          (choices.list as PRecipe[]).map((r) => (
+                            <li key={r.i}>
+                              <button type="button" onClick={() => choose(n.id, { ref: r.i })}>
+                                {icon('items', r.o[0]![0], 20)}
+                                <span class="pl-rname">{r.k}</span>
+                                {r.a && <span class="pl-alt">대체</span>}
+                              </button>
+                            </li>
+                          ))}
+                        {choices.kind !== 'recipe' &&
+                          (choices.list as string[]).map((id) => (
+                            <li key={id}>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  choose(
+                                    n.id,
+                                    choices.kind === 'extract' ? { resource: id } : { fuel: id }
+                                  )
+                                }
+                              >
+                                {icon('items', id, 20)}
+                                <span class="pl-rname">{nameOf(id)}</span>
+                              </button>
+                            </li>
+                          ))}
+                      </ul>
+                    </div>
+                  )}
+
                   <div class="pl-io">
+                    {unset(n) && (
+                      <p class="pl-hint">
+                        상자 제목을 눌러
+                        {n.kind === 'recipe'
+                          ? ' 레시피를'
+                          : n.kind === 'extract'
+                            ? ' 캘 자원을'
+                            : ' 태울 연료를'}
+                        {' '}
+                        고르세요
+                      </p>
+                    )}
                     {[...b.ins].map(([item, v], k) => {
                       const linkable = pick && pick.item === item && pick.node !== n.id;
                       return (
@@ -620,36 +693,6 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, iconB
                         ))}
                       </select>
                     )}
-                    {n.kind === 'extract' && (m?.res?.length ?? 0) > 1 && (
-                      <select
-                        aria-label="캘 자원"
-                        value={n.resource}
-                        onChange={(e) =>
-                          patch(n.id, { resource: (e.currentTarget as HTMLSelectElement).value })
-                        }
-                      >
-                        {m!.res!.map((rid) => (
-                          <option key={rid} value={rid}>
-                            {nameOf(rid)}
-                          </option>
-                        ))}
-                      </select>
-                    )}
-                    {n.kind === 'generator' && (
-                      <select
-                        aria-label="연료"
-                        value={n.fuel}
-                        onChange={(e) =>
-                          patch(n.id, { fuel: (e.currentTarget as HTMLSelectElement).value })
-                        }
-                      >
-                        {m!.f!.map((f) => (
-                          <option key={f.f} value={f.f}>
-                            {nameOf(f.f)}
-                          </option>
-                        ))}
-                      </select>
-                    )}
                     {starved && <span class="pl-short">가동 {fmt(Math.round(r * 1000) / 10)}%</span>}
                   </footer>
                 </article>
@@ -658,7 +701,8 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, iconB
 
             {!nodes.length && (
               <p class="pl-empty">
-                왼쪽에서 건물을 고르고 레시피를 누르면 여기에 놓입니다.
+                왼쪽에서 건물을 누르면 여기에 놓입니다. 놓인 상자의 제목을 누르면
+                무엇을 만들지 고를 수 있습니다.
                 <br />
                 산출구(오른쪽 점)를 누른 뒤 다음 기계의 투입구(왼쪽 점)를 누르면 이어집니다.
               </p>

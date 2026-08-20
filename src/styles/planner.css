@@ -41,8 +41,16 @@
   outline-offset: 1px;
 }
 
+.pl-palhead {
+  margin: 0;
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
 .pl-machines,
-.pl-recipes ul {
+.pl-picker ul {
   overflow-y: auto;
   flex: 1;
   margin: 0;
@@ -51,7 +59,7 @@
 }
 
 .pl-machines button,
-.pl-recipes ul button {
+.pl-picker ul button {
   display: flex;
   gap: var(--s2);
   align-items: center;
@@ -67,12 +75,12 @@
   cursor: pointer;
 }
 .pl-machines button:hover,
-.pl-recipes ul button:hover {
+.pl-picker ul button:hover {
   background: var(--surface);
   color: var(--ink);
 }
 .pl-machines img,
-.pl-recipes img {
+.pl-picker img {
   flex: none;
 }
 
@@ -100,34 +108,37 @@
   font-weight: 600;
 }
 
-.pl-recipes {
+/*
+ * 무엇을 만들지 고르는 창. 왼쪽 목록이 아니라 **놓인 상자 위**에 뜬다 —
+ * 인게임에서도 기계를 짓고 나서 그 기계를 열어 레시피를 고른다.
+ */
+.pl-picker {
+  position: absolute;
+  z-index: 2;
+  top: 46px;
+  left: 0;
   display: flex;
-  overflow: hidden;
-  flex: 1;
   flex-direction: column;
-  gap: var(--s2);
-  min-height: 0;
+  gap: 6px;
+  width: 268px;
+  max-height: 320px;
+  padding: 8px;
+  border: var(--hair) solid var(--primary);
+  border-radius: 4px;
+  background: var(--bg);
+  box-shadow: 0 18px 40px -20px rgb(0 0 0 / 0.95);
 }
-.pl-back {
-  align-self: flex-start;
-  padding: 4px 6px;
-  border: 0;
-  background: none;
-  color: var(--ink-3);
-  font: inherit;
-  font-size: var(--t-caption);
-  cursor: pointer;
-}
-.pl-back:hover { color: var(--ink); }
-.pl-rhead {
-  display: flex;
-  gap: var(--s2);
-  align-items: center;
-  margin: 0;
+.pl-pq {
+  width: 100%;
+  padding: 6px 8px;
+  border: var(--hair) solid var(--line-strong);
+  border-radius: 3px;
+  background: var(--raised);
   color: var(--ink);
-  font-size: var(--t-body-s);
-  font-weight: 600;
+  font: inherit;
+  font-size: 12px;
 }
+.pl-picker ul { max-height: 246px; }
 
 /* ------------------------------------------------------------------ 짜는 곳 */
 
@@ -240,6 +251,10 @@
   box-shadow: 0 10px 24px -18px rgb(0 0 0 / 0.9);
 }
 .pl-node.is-sel { border-color: var(--primary); }
+/* 고르는 창이 떠 있는 상자가 다른 상자에 가리면 안 된다 */
+.pl-node.is-editing { z-index: 20; }
+/* 아직 무엇을 만들지 안 정한 상자. 파선으로 미완성임을 드러낸다 */
+.pl-node.is-unset { border-style: dashed; }
 /* 공급이 모자란 묶음. 색만으로 알리지 않는다 — 아래에 "가동 nn%" 글자가 같이 붙는다 */
 .pl-node.is-short { border-color: color-mix(in oklab, var(--accent) 70%, var(--line-strong)); }
 
@@ -259,8 +274,16 @@
   overflow: hidden;
   flex: 1;
   flex-direction: column;
+  padding: 2px 4px;
+  border: 0;
+  border-radius: 3px;
+  background: none;
+  font: inherit;
   line-height: 1.25;
+  text-align: left;
+  cursor: pointer;
 }
+.pl-ntitle:hover { background: var(--surface); }
 .pl-ntitle b {
   overflow: hidden;
   color: var(--ink);
@@ -270,9 +293,19 @@
   white-space: nowrap;
   word-break: keep-all;
 }
+.pl-ntitle.is-unset b { color: var(--primary); font-weight: 500; }
 .pl-ntitle small {
   color: var(--ink-3);
   font-size: 11px;
+}
+
+.pl-hint {
+  margin: 0;
+  padding: 12px 12px 0;
+  color: var(--ink-3);
+  font-size: 12px;
+  line-height: 1.6;
+  word-break: keep-all;
 }
 .pl-x {
   flex: none;
