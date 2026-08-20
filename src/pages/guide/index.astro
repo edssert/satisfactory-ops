@@ -12,7 +12,7 @@
 import Base from '../../layouts/Base.astro';
 import '../../styles/fx.css';
 import FlowChart from '../../components/FlowChart.astro';
-import { building, buildings, defaultRecipeOf, item, milestones } from '../../lib/gamedata';
+import { building, buildings, defaultRecipeOf, item, milestones, recipe } from '../../lib/gamedata';
 import spine from '../../data/curated/spine.json';
 import finite from '../../data/curated/finite-resources.json';
 import exploration from '../../data/curated/exploration.json';
@@ -75,6 +75,12 @@ const finiteDoc = finite as {
     advice: string;
     amplified?: { ko: string; base: number; withSloop: number }[];
     slots?: string;
+    synthetic?: {
+      recipe: string;
+      unlockedByKo: string;
+      why: string;
+      catch: string;
+    };
   }[];
   /** 동물군은 반대다 — 되살아난다. 나란히 놓아야 오해가 안 생긴다 */
   $contrast: string;
@@ -90,6 +96,7 @@ const exploreDoc = exploration as {
   $key: string;
   steps: { order: number; ko: string; when: string; cost: string; what: string; why: string }[];
   gear: { ko: string; when: string; cost: string; effect: string; priority: string; why: string }[];
+  tips: { ko: string; keys: string; what: string; why: string; source: string }[];
 };
 
 /** 소수점이 붙을 때만 보여준다. 5.00 대신 5 */
@@ -339,6 +346,28 @@ const FLOWS: Record<string, FlowDef> = {
                     </>
                   )}
                 </dl>
+                {f.synthetic && (() => {
+                  /* 수치를 타이핑하지 않는다 — 레시피에서 가져온다 */
+                  const r = recipe(f.synthetic.recipe);
+                  const b = building(r.producedIn[0]!);
+                  const shows = (xs: { item: string; perMinute: number }[]) =>
+                    xs.map((x) => `${item(x.item).ko} ${x.perMinute}/분`).join(' + ');
+                  return (
+                    <div class="synth">
+                      <p class="synth-head">
+                        <span class="synth-tag">나중에</span>
+                        {r.ko} · {b.ko}
+                        <span class="synth-when">{f.synthetic.unlockedByKo}</span>
+                      </p>
+                      <p class="synth-eq n">
+                        {shows(r.ingredients)} → {shows(r.products)}
+                      </p>
+                      <p>{f.synthetic.why}</p>
+                      <p class="synth-catch">{f.synthetic.catch}</p>
+                    </div>
+                  );
+                })()}
+
                 {f.amplified && (
                   <table class="amp">
                     <thead>
@@ -478,6 +507,26 @@ const FLOWS: Record<string, FlowDef> = {
               </tbody>
             </table>
           </div>
+
+          {exploreDoc.tips.map((t) => (
+            <div class="tip">
+              <p class="tip-head">
+                <kbd>{t.keys}</kbd>
+                {t.ko}
+              </p>
+              <p>{t.what}</p>
+              <p class="tip-why">{t.why}</p>
+            </div>
+          ))}
+
+          <details class="src">
+            <summary>출처</summary>
+            <ol>
+              {exploreDoc.tips.map((t) => (
+                <li>{t.source}</li>
+              ))}
+            </ol>
+          </details>
         </section>
 
         <section class="step" id="craft">
@@ -643,6 +692,81 @@ const FLOWS: Record<string, FlowDef> = {
     .keep-body { margin: 0; font-weight: 600; max-width: var(--measure); }
 
     .step.is-open h2 { color: var(--ink-2); }
+
+    /* 게임이 알려 주지 않는 조작 */
+    .tip {
+      margin-top: var(--s4);
+      padding: var(--s3);
+      border-left: 2px solid var(--primary);
+      background: var(--surface);
+    }
+    .tip p {
+      margin: 0 0 6px;
+      color: var(--ink-2);
+      font-size: var(--t-body-s);
+      line-height: 1.7;
+      word-break: keep-all;
+    }
+    .tip p:last-child { margin-bottom: 0; }
+    .tip-head {
+      display: flex;
+      gap: 9px;
+      align-items: baseline;
+      color: var(--ink) !important;
+      font-weight: 600;
+    }
+    .tip kbd {
+      padding: 2px 8px;
+      border: var(--hair) solid var(--line-strong);
+      border-radius: 3px;
+      background: var(--raised);
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: var(--t-caption);
+      white-space: nowrap;
+    }
+    .tip-why { color: var(--ink-3) !important; }
+
+    /* 합성 동력 조각 — 슬러그 칸 안의 「나중에 열리는 길」 */
+    .synth {
+      margin-top: var(--s3);
+      padding: var(--s3);
+      border: var(--hair) solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+    .synth p {
+      margin: 0 0 6px;
+      color: var(--ink-2);
+      font-size: var(--t-body-s);
+      line-height: 1.7;
+      word-break: keep-all;
+    }
+    .synth p:last-child { margin-bottom: 0; }
+    .synth-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      align-items: baseline;
+      color: var(--ink) !important;
+      font-weight: 600;
+    }
+    .synth-tag {
+      padding: 1px 7px;
+      border: var(--hair) solid var(--line-strong);
+      border-radius: 3px;
+      color: var(--ink-3);
+      font-size: var(--t-caption);
+      font-weight: 400;
+    }
+    .synth-when { color: var(--ink-3); font-size: var(--t-caption); font-weight: 400; }
+    .synth-eq {
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: var(--t-caption) !important;
+      white-space: nowrap;
+    }
+    .synth-catch { color: var(--warn, #e0a13c) !important; }
 
     /* 순도 표 — 수치는 오른쪽 맞춤, 자릿수가 눈으로 비교돼야 한다 */
     .pur {

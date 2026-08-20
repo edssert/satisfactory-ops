@@ -89,5 +89,15 @@
     "게임 데이터, src/data/app/tech.json",
     "docs/research/version-history.md (Update 6 레이더 타워)"
   ],
-  "confidence": "verified"
+  "confidence": "verified",
+  "tips": [
+    {
+      "ko": "사진 모드 자유 카메라로 미리 본다",
+      "keys": "P → R",
+      "what": "사진 모드를 연 뒤 카메라를 몸에서 떼어 내면, 절벽 너머나 동굴 안을 걸어가 보지 않고 확인할 수 있습니다. 몸에서 150 m까지 부드럽게, 160 m가 한계입니다 — 토대 18~20장 거리입니다.",
+      "why": "부지를 고를 때 실제로 도움이 됩니다. 지형이 평평한지, 노드 사이에 강이 끼는지를 올라가 보지 않고 판단할 수 있습니다. 게임이 알려 주지 않는 조작이라 모르고 지나치기 쉽습니다.",
+      "confidence": "verified",
+      "source": "공식 위키 Photo Mode — 기본 키 P, 카메라 분리 R, 150 m 소프트 · 160 m 하드 한계(토대 18~20장)"
+    }
+  ]
 }
