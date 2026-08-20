@@ -129,6 +129,8 @@ export default function ResourceMap({
   /* 수집품은 처음엔 꺼 둔다. 1764개를 한꺼번에 켜면 자원이 안 보인다 */
   const [dropsOn, setDropsOn] = useState<Set<string>>(() => new Set());
   const [dropInfo, setDropInfo] = useState<MapDrop | null>(null);
+  /* 서랍은 판 위에 뜬다. 지도를 가리면 접는다 */
+  const [side, setSide] = useState(true);
   const [showGrid, setShowGrid] = useState(true);
   const [showAreas, setShowAreas] = useState(true);
   const [sel, setSel] = useState<MapPoint | null>(null);
@@ -474,14 +476,40 @@ export default function ResourceMap({
           거리 재기
         </button>
 
-        <span class="rm-legend" aria-label="순도 색 안내">
+        {/* 색 안내이면서 거르개다. 누르면 그 순도가 꺼진다 */}
+        <span class="rm-legend">
           {(['p', 'n', 'i'] as const).map((k) => (
-            <span key={k}>
+            <button
+              key={k}
+              type="button"
+              class={pur.has(k) ? 'is-on' : ''}
+              aria-pressed={pur.has(k)}
+              onClick={() => toggle(pur, k, setPur)}
+            >
               <i style={`background:${PURITY[k]!.fill}`} aria-hidden="true"></i>
               {PURITY[k]!.ko}
-            </span>
+            </button>
           ))}
         </span>
+
+        <details class="rm-menu">
+          <summary>종류</summary>
+          <ul>
+            {Object.entries(KIND).map(([k, ko]) => (
+              <li key={k}>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={kinds.has(k)}
+                    onChange={() => toggle(kinds, k, setKinds)}
+                  />
+                  <span>{ko}</span>
+                  <b class="n">{points.filter((q) => q.t === k).length}</b>
+                </label>
+              </li>
+            ))}
+          </ul>
+        </details>
 
         <span class="rm-spacer" />
         <span class="rm-count">
@@ -496,7 +524,25 @@ export default function ResourceMap({
       </div>
 
       <div class="rm-body">
-        <aside class="rm-side">
+        <div
+          class={`rm-stage${measure ? ' is-measuring' : ''}`}
+          ref={host}
+          onPointerDown={(e) => onDown(e as unknown as PointerEvent)}
+          onPointerMove={(e) => onMove(e as unknown as PointerEvent)}
+          onPointerUp={onUp}
+          onPointerLeave={onUp}
+          onClick={(e) => onStageClick(e as unknown as MouseEvent)}
+          onDblClick={onStageDouble}
+        >
+        {!side && (
+          <button type="button" class="rm-fold" onClick={() => setSide(true)}>
+            자원 고르기
+          </button>
+        )}
+        <aside class={`rm-side${side ? '' : ' is-off'}`} onPointerDown={(e) => e.stopPropagation()}>
+          <button type="button" class="rm-foldx" onClick={() => setSide(false)} aria-label="접기">
+            ✕
+          </button>
           <p class="rm-k">자원</p>
           <input
             class="rm-q"
@@ -562,43 +608,8 @@ export default function ResourceMap({
             ))}
           </ul>
 
-          <p class="rm-k">순도</p>
-          <ul class="rm-pur">
-            {(['p', 'n', 'i'] as const).map((k) => (
-              <li key={k}>
-                <label>
-                  <input type="checkbox" checked={pur.has(k)} onChange={() => toggle(pur, k, setPur)} />
-                  <span>{PURITY[k]!.ko}</span>
-                  <b class="n">×{PURITY[k]!.mult}</b>
-                </label>
-              </li>
-            ))}
-          </ul>
-
-          <p class="rm-k">종류</p>
-          <ul class="rm-pur">
-            {Object.entries(KIND).map(([k, ko]) => (
-              <li key={k}>
-                <label>
-                  <input type="checkbox" checked={kinds.has(k)} onChange={() => toggle(kinds, k, setKinds)} />
-                  <span>{ko}</span>
-                  <b class="n">{points.filter((p) => p.t === k).length}</b>
-                </label>
-              </li>
-            ))}
-          </ul>
         </aside>
 
-        <div
-          class={`rm-stage${measure ? ' is-measuring' : ''}`}
-          ref={host}
-          onPointerDown={(e) => onDown(e as unknown as PointerEvent)}
-          onPointerMove={(e) => onMove(e as unknown as PointerEvent)}
-          onPointerUp={onUp}
-          onPointerLeave={onUp}
-          onClick={(e) => onStageClick(e as unknown as MouseEvent)}
-          onDblClick={onStageDouble}
-        >
           <svg class="rm-svg" viewBox={`${vb.x} ${vb.y} ${vb.w} ${vh}`} role="img" aria-label="자원 지도">
             <image href={`${mapBase}/${baseLayer(layer)}/preview.webp`} x="0" y="0" width={SIZE} height={SIZE} />
             {tiles?.list.map((t) => {

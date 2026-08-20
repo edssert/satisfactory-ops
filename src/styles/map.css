@@ -74,20 +74,68 @@
 
 /* ------------------------------------------------------------------ 본문 */
 
+/*
+ * 지도는 정사각형이다. 판을 화면 폭에 맞춰 늘리면 양옆에 검은 띠만 생긴다.
+ * 판을 정사각형으로 두고 서랍과 함께 가운데에 세운다.
+ */
 .rm-body {
-  display: grid;
-  grid-template-columns: 214px minmax(0, 1fr);
-  gap: var(--s3);
+  display: flex;
+  justify-content: center;
 }
 
+/*
+ * 두 줄로 늘어놓는다. 한 줄이면 목록이 길어져 스크롤이 생기고,
+ * 무엇이 있는지 한눈에 안 들어온다.
+ */
+/*
+ * 서랍을 판 옆에 두면 지도가 오른쪽으로 밀린다. 판 위에 띄워서 지도를 한가운데에 둔다.
+ * 가릴 때는 접는다.
+ */
 .rm-side {
+  position: absolute;
+  z-index: 5;
+  top: var(--s3);
+  left: var(--s3);
   overflow-y: auto;
-  max-height: min(80vh, 1000px);
+  width: 372px;
+  max-height: calc(100% - var(--s6));
   padding: var(--s3);
+  border: var(--hair) solid var(--line-strong);
   border-radius: var(--radius);
-  background: var(--raised);
-  box-shadow: var(--lit);
+  background: color-mix(in oklab, var(--raised) 93%, transparent);
+  box-shadow: 0 18px 40px -24px rgb(0 0 0 / 0.95);
+  backdrop-filter: blur(8px);
 }
+.rm-side.is-off { display: none; }
+
+.rm-fold {
+  position: absolute;
+  z-index: 6;
+  top: var(--s3);
+  left: var(--s3);
+  padding: 6px 12px;
+  border: var(--hair) solid var(--line-strong);
+  border-radius: var(--radius);
+  background: color-mix(in oklab, var(--raised) 93%, transparent);
+  color: var(--ink-2);
+  font: inherit;
+  font-size: var(--t-caption);
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+}
+.rm-fold:hover { color: var(--ink); }
+.rm-side .rm-foldx {
+  position: sticky;
+  top: 0;
+  float: right;
+  padding: 2px 6px;
+  border: 0;
+  background: none;
+  color: var(--ink-3);
+  font-size: 12px;
+  cursor: pointer;
+}
+.rm-side .rm-foldx:hover { color: var(--ink); }
 .rm-k {
   margin: 0 0 6px;
   color: var(--ink-3);
@@ -95,7 +143,16 @@
   font-size: 11px;
   letter-spacing: 0.06em;
 }
-.rm-side ul { margin: 0 0 var(--s4); padding: 0; list-style: none; }
+.rm-side ul {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 var(--s2);
+  margin: 0 0 var(--s4);
+  padding: 0;
+  list-style: none;
+}
+/* 순도·종류는 짧아서 한 줄이 낫다 */
+.rm-side ul.rm-pur { grid-template-columns: 1fr; }
 .rm-side label {
   display: flex;
   gap: 7px;
@@ -135,9 +192,11 @@
 .rm-stage {
   position: relative;
   overflow: hidden;
-  /* 정사각형으로 묶으면 넓은 화면에서 폭이 남는다. 판은 화면을 다 쓰고 viewBox 가 비율을 따라간다 */
-  height: min(80vh, 1000px);
-  min-height: 480px;
+  /* 지도가 정사각형이라 판도 정사각형이다. 남는 띠 없이 딱 들어간다 */
+  height: min(78vh, 980px);
+  min-height: 460px;
+  aspect-ratio: 1;
+  max-width: 100%;
   border-radius: var(--radius);
   background: var(--bg);
   box-shadow: var(--lit);
@@ -286,19 +345,26 @@
   cursor: pointer;
 }
 
-/* 자원 옆의 「그 자리로」 단추 */
-.rm-side li { display: flex; align-items: center; }
-.rm-side li label { flex: 1; min-width: 0; }
+/*
+ * 「그 자리로」 단추는 평소에 숨겨 둔다. 두 줄로 좁아진 칸에서 이 단추가
+ * 이름을 밀어내 「철…」처럼 잘리게 만들었다. 가리킬 때만 나온다.
+ */
+.rm-side li { position: relative; display: flex; align-items: center; }
+.rm-side li label { flex: 1; min-width: 0; padding-right: 18px; }
 .rm-go {
-  flex: none;
-  padding: 3px 6px;
+  position: absolute;
+  right: 0;
+  padding: 3px 5px;
   border: 0;
   background: none;
   color: var(--line-strong);
   font-size: 12px;
   cursor: pointer;
+  opacity: 0;
 }
+.rm-side li:hover .rm-go { opacity: 1; }
 .rm-go:hover { color: var(--primary); }
+.rm-go:focus-visible { opacity: 1; }
 
 /* 고른 노드 설명. 지도 위에 겹쳐 띄운다 */
 .rm-info {
@@ -332,8 +398,8 @@
 .rm-info button:hover { color: var(--ink); }
 
 @media (max-width: 900px) {
-  .rm-body { grid-template-columns: 1fr; }
-  .rm-side { max-height: 240px; }
+  .rm-stage { aspect-ratio: auto; height: 64vh; }
+  .rm-side { width: calc(100% - var(--s6)); max-height: 52%; }
 }
 
 /* 자원 검색 */
@@ -371,14 +437,24 @@
  * 마커에서 글자를 뺐다 — 그림이 자원을, 색이 순도를 말하는데 이름까지 적으면 지도가 글자로 덮인다.
  * 대신 색이 무엇을 뜻하는지 여기서 한 번 말하고, 마커마다 title 을 달고, 누르면 아래에 글로 뜬다.
  */
-.rm-legend { display: flex; gap: var(--s3); align-items: center; }
-.rm-legend span {
+/* 색 안내이면서 거르개다 */
+.rm-legend { display: flex; gap: 3px; align-items: center; }
+.rm-legend button {
   display: inline-flex;
   gap: 5px;
   align-items: center;
+  padding: 4px 9px;
+  border: var(--hair) solid transparent;
+  border-radius: 4px;
+  background: none;
   color: var(--ink-3);
+  font: inherit;
   font-size: var(--t-caption);
+  cursor: pointer;
 }
+.rm-legend button:hover { border-color: var(--line-strong); }
+.rm-legend button.is-on { border-color: var(--line-strong); color: var(--ink); }
+.rm-legend button:not(.is-on) i { opacity: 0.3; }
 .rm-legend i {
   width: 11px;
   height: 11px;
@@ -457,3 +533,51 @@
 .rm-measure path { stroke: var(--accent); stroke-width: 2.5; stroke-dasharray: 7 5; stroke-linejoin: round; }
 .rm-seg { fill: var(--ink); font-weight: 500; text-anchor: middle; }
 .rm-hint button:disabled { opacity: 0.4; cursor: default; }
+
+
+/* 위 띠의 작은 펼침 목록 */
+.rm-menu { position: relative; }
+.rm-menu summary {
+  padding: 5px 11px;
+  border: var(--hair) solid var(--line-strong);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: var(--t-caption);
+  list-style: none;
+  cursor: pointer;
+}
+.rm-menu summary::-webkit-details-marker { display: none; }
+.rm-menu summary::after { content: ' ▾'; color: var(--ink-3); }
+.rm-menu[open] summary { border-color: var(--primary); }
+.rm-menu ul {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 200px;
+  margin: 0;
+  padding: 6px;
+  border: var(--hair) solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--raised);
+  box-shadow: 0 16px 36px -20px rgb(0 0 0 / 0.95);
+  list-style: none;
+}
+.rm-menu label {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  padding: 5px 6px;
+  border-radius: 3px;
+  color: var(--ink-2);
+  font-size: var(--t-body-s);
+  cursor: pointer;
+}
+.rm-menu label:hover { background: var(--surface); color: var(--ink); }
+.rm-menu label span { flex: 1; }
+.rm-menu input { accent-color: var(--primary); }
+.rm-menu b { color: var(--ink-3); font-family: var(--font-mono); font-size: 11px; }
+
+/* 두 줄로 늘어놓을 때 칸이 좁아 글자가 잘리지 않게 */
+.rm-side li { min-width: 0; }
