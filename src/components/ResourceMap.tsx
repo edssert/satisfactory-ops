@@ -100,6 +100,14 @@ const POLE_SPAN_M = 40;
  * 다만 색만으로 두지 않는다(색각 이상 대응). 동그라미 옆에 한 글자 배지가 항상 붙고,
  * 누르면 아래에 이름과 순도가 글로 뜬다. 빨강·초록 짝을 피해 불순은 회색을 쓴다.
  */
+/*
+ * 주운 수집품의 색.
+ *
+ * 수집품에는 순도가 없어서 동그라미 색이 비어 있다 — 그 자리를 「주웠나」로 쓴다.
+ * 흐리게만 하면 축소했을 때 안 보이는데, 정작 알고 싶은 건 「어디가 남았나」다.
+ */
+const GOT_FILL = '#3fbf6f';
+
 const PURITY: Record<string, { ko: string; short: string; mult: number; fill: string }> = {
   i: { ko: '불순', short: '불', mult: 0.5, fill: '#8d99a6' },
   n: { ko: '보통', short: '보', mult: 1, fill: '#f0a52b' },
@@ -348,10 +356,10 @@ export default function ResourceMap({
     setImportErr(null);
     try {
       const { readSave } = await import('../lib/save-import');
-      const r = await readSave(file, unlockMap);
-      /* 아는 id 만 받는다 — 모르는 것을 넣어 두면 개수가 어긋난다 */
-      const known = new Set(drops.map((d) => d.i));
-      const next = new Set([...got, ...r.collected.filter((id) => known.has(id))]);
+      /* 세이브에는 버섯·열매까지 섞여 있다. 우리가 아는 것만 종류와 함께 넘긴다 */
+      const kindOf = Object.fromEntries(drops.map((d) => [d.i, d.k]));
+      const r = await readSave(file, unlockMap, kindOf);
+      const next = new Set([...got, ...r.collected]);
       setGot(next);
       saveCollected(next);
       /* 불러왔는데 종류가 꺼져 있으면 아무것도 안 보인다. 찾은 종류를 켜 준다 */
@@ -638,6 +646,10 @@ export default function ResourceMap({
 
         <aside class="rm-side is-right" onPointerDown={(e) => e.stopPropagation()}>
           <p class="rm-k">수집품</p>
+          <p class="rm-gotkey">
+            <i style={`background:${GOT_FILL}`} aria-hidden="true"></i>
+            초록은 이미 주운 것입니다
+          </p>
           <div class="rm-seg3" role="group" aria-label="주운 것 거르기">
             {(
               [
@@ -858,7 +870,7 @@ export default function ResourceMap({
                     cx={d.x}
                     cy={cy}
                     r={r}
-                    fill={kind?.fill ?? '#7d8ea0'}
+                    fill={got.has(d.i) ? GOT_FILL : (kind?.fill ?? '#7d8ea0')}
                     vector-effect="non-scaling-stroke"
                   />
                   {kind?.item && (

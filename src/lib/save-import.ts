@@ -1,11 +1,14 @@
 /**
  * save-import.ts — 인게임 세이브(.sav)를 읽어 진행 상황을 가져온다.
  *
- * 왜 되는가:
- *   슬러그·소머슬룹·머서 구체·화물칸은 맵에 고정으로 놓여 있고, 게임은 **손댄 것만**
- *   세이브에 적는다. 그래서 세이브에 있는 수집품 액터 = 이미 주운 것이다.
- *   (플레이 24시간 세이브 228건, 35시간 세이브 343건. 전체 1764건보다 훨씬 적다.)
- *   액터 이름의 마지막 마디가 우리 수집품 id 와 그대로 같다 — 228/228 일치를 확인했다.
+ * 주운 것을 어디서 읽나:
+ *   레벨마다 `collectables` 목록이 따로 있다. 이게 **실제로 주운 것**이다.
+ *   경로의 마지막 마디가 우리 수집품 id 와 그대로 같다.
+ *
+ *   처음에는 세이브에 들어 있는 수집품 액터를 주운 것으로 봤다. 틀렸다 —
+ *   그건 **지나간 지역에 있는 것**이지 주운 것이 아니다. 36시간 세이브에서 액터는 228개인데
+ *   실제로 주운 것은 14개였고, 창고 재고(파란 슬러그 5 + 동력 조각 1, 노란 1, 소머슬룹 1)와
+ *   맞는 쪽은 14개였다. 지도가 주운 것을 열 배 넘게 부풀려 표시하고 있었다.
  *
  * 대체 제작법은 mPurchasedSchematics 에서 가져온다. 이름 규칙으로 유추하지 않고
  * 배포 데이터에서 만든 지도(save-unlocks.json)를 쓴다 — 하드 드라이브와 MAM 양쪽에서
@@ -14,16 +17,6 @@
  * 세이브 파일을 서버로 보내지 않는다(CLAUDE.md). 전부 브라우저 안에서 끝난다.
  * 파서는 2.6MB짜리라 파일을 고른 뒤에야 내려받는다.
  */
-
-/** 세이브에 나타나는 수집품 클래스 → 우리 종류 */
-const COLLECTIBLE_CLASS: Record<string, string> = {
-  BP_Crystal_C: 'slug1',
-  BP_Crystal_mk2_C: 'slug2',
-  BP_Crystal_mk3_C: 'slug3',
-  BP_WAT1_C: 'sloop',
-  BP_WAT2_C: 'mercer',
-  BP_DropPod_C: 'drive',
-};
 
 export interface SaveReport {
   /** 세이브 이름 */
@@ -46,23 +39,33 @@ const tail = (s: string) => s.split('.').pop() ?? s;
 
 export async function readSave(
   file: File,
-  unlockMap: Record<string, string[]>
+  unlockMap: Record<string, string[]>,
+  /** 우리가 아는 수집품 id → 종류. 모르는 것(버섯·열매·머서 사당)은 세지 않는다 */
+  kindOf: Record<string, string> = {}
 ): Promise<SaveReport> {
   const buf = await file.arrayBuffer();
   /* 파일을 고른 뒤에야 파서를 내려받는다 */
   const { Parser } = await import('@etothepii/satisfactory-file-parser');
   const save = Parser.ParseSave(file.name.replace(/\.sav$/i, ''), buf) as {
     header?: { sessionName?: string; playDurationSeconds?: number };
-    levels: Record<string, { objects?: { typePath?: string; instanceName?: string }[] }>;
+    levels: Record<
+      string,
+      {
+        objects?: { typePath?: string; instanceName?: string }[];
+        collectables?: { pathName?: string }[];
+      }
+    >;
   };
 
   const collected: string[] = [];
   const byKind: Record<string, number> = {};
   for (const lv of Object.values(save.levels ?? {})) {
-    for (const o of lv.objects ?? []) {
-      const kind = COLLECTIBLE_CLASS[tail(o.typePath ?? '')];
-      if (!kind || !o.instanceName) continue;
-      collected.push(tail(o.instanceName));
+    for (const c of lv.collectables ?? []) {
+      const id = tail(c.pathName ?? '');
+      const kind = kindOf[id];
+      /* 버섯·열매처럼 우리가 안 다루는 것도 여기 섞여 있다. 아는 것만 센다 */
+      if (!kind) continue;
+      collected.push(id);
       byKind[kind] = (byKind[kind] ?? 0) + 1;
     }
   }

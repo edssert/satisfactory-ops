@@ -67,6 +67,13 @@ if (errs.length) console.log('  콘솔 오류:\n    ' + errs.slice(0, 5).join('\
  * 대체 제작법은 세이브마다 0가지일 수 있다(하드 드라이브를 안 돌린 세이브).
  * 그래서 0을 실패로 보지 않고, 옮겨야 할 게 있었는지를 결과 문구로 확인한다.
  */
-const fail = bad || store.collected === 0 || before !== left + gotN || errs.length;
+/*
+ * 주운 것은 세이브의 collectables 목록에서 온다. 지나간 지역의 액터를 세면 열 배 넘게
+ * 부풀려진다 — 그 회귀를 막으려고 상한을 둔다. 36시간 세이브의 실제 값은 14건이었다.
+ */
+const tooMany = store.collected > 200;
+if (tooMany) console.log(`  [경고] 주운 것이 ${store.collected}건 — 지나간 지역까지 세고 있습니다`);
+const fail =
+  bad || store.collected === 0 || tooMany || before !== left + gotN || errs.length;
 console.log(fail ? '\n[실패]' : '\n[통과] 브라우저에서 세이브를 읽었습니다.');
 process.exit(fail ? 1 : 0);

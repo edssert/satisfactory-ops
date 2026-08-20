@@ -476,8 +476,46 @@ if (coveredAlts.size !== altIds.size) {
   die(4, `스키매틱으로 못 얻는 대체 제작법 ${miss.length}건: ${miss.slice(0, 5).join(', ')}`);
 }
 
+/*
+ * 진단 화면이 쓸 최소 카탈로그.
+ *
+ * buildings.json 380KB + recipes.json 322KB 를 다 실을 수는 없다. 세이브를 읽어
+ * "이 설비가 무엇이고 얼마를 내는가"를 답하는 데 필요한 것만 추린다.
+ */
+const checkup = {
+  $comment:
+    '세이브 진단이 쓰는 최소 카탈로그. 전체 데이터를 브라우저에 싣지 않기 위해 필요한 열만 남긴다.',
+  buildings: Object.fromEntries(
+    buildings.map((b) => [
+      b.id,
+      {
+        ko: b.ko,
+        cat: b.category,
+        p: b.powerMW ?? null,
+        g: b.powerGenMW ?? null,
+        e: b.powerExponent ?? null,
+      },
+    ])
+  ),
+  recipes: Object.fromEntries(
+    recipes.map((r) => [
+      r.id,
+      { ko: r.ko, out: r.products[0]?.item ?? null, per: r.products[0]?.perMinute ?? 0 },
+    ])
+  ),
+  items: Object.fromEntries(items.map((i) => [i.id, i.ko])),
+  /* 벨트 처리량 — 벨트가 막혔는지 판단하는 데 쓴다 */
+  belts: Object.fromEntries(
+    buildings
+      .filter((b) => b.beltItemsPerMinute != null && b.id.includes('ConveyorBelt'))
+      .map((b) => [b.id, b.beltItemsPerMinute])
+  ),
+  nodes: Object.fromEntries(resourceNodes.map((n) => [n.id, { r: n.ko, p: n.purity }])),
+};
+
 const outputs = {
   'meta.json': meta,
+  'checkup-catalog.json': checkup,
   'save-unlocks.json': {
     $comment:
       '세이브의 mPurchasedSchematics 를 우리 대체 제작법 id 로 옮기는 지도. 게임 배포 데이터의 unlocks.recipes 를 뒤집은 것이다.',

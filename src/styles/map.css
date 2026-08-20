@@ -531,8 +531,12 @@
 /* ------------------------------------------------- 주운 것 표시 */
 
 /* 주운 것은 흐리게. 지워지지 않고 자리만 남는다 */
-.rm-drop.is-got { opacity: 0.28; }
-.rm-drop.is-got circle { stroke-width: 1.2; }
+/*
+ * 주운 것. 흐리게만 하면 축소했을 때 아예 안 보인다 —
+ * 색으로 구분하고 살짝만 낮춘다. 서 있는 막대도 같이 낮춰 배경과 섞이게 한다.
+ */
+.rm-drop.is-got { opacity: 0.72; }
+.rm-drop.is-got line { opacity: 0.5; }
 
 .rm-seg3 { display: flex; gap: 2px; margin-bottom: var(--s2); }
 .rm-seg3 button {
@@ -619,3 +623,18 @@
 }
 .rm-ok { margin: 6px 0 0; color: var(--ink-2); font-size: var(--t-caption); word-break: keep-all; }
 .rm-bad { margin: 6px 0 0; color: var(--danger, #e0623c); font-size: var(--t-caption); }
+
+/* 초록이 무슨 뜻인지 서랍에서 한 번 말해 준다 */
+.rm-gotkey {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin: 0 0 var(--s2);
+  color: var(--ink-3);
+  font-size: var(--t-caption);
+}
+.rm-gotkey i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
