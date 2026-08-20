@@ -15,7 +15,7 @@ import Base from '../layouts/Base.astro';
 import FlowChart from '../components/FlowChart.astro';
 import '../styles/fx.css';
 import '../styles/landing.css';
-import { building, item, items, meta, milestonesByTier, recipe } from '../lib/gamedata';
+import { building, buildings, item, items, meta, milestonesByTier, recipe } from '../lib/gamedata';
 import { ironLine } from '../lib/flows';
 import spine from '../data/curated/spine.json';
 import versionHistory from '../data/curated/version-history.json';
@@ -79,6 +79,14 @@ const stripIcons = items
   .map((i) => i.id);
 
 const altCount = (priority as unknown as { recipes: unknown[] }).recipes.length;
+
+/**
+ * 기계 전시 — 세로로 스크롤하면 가로로 흘러간다.
+ * 게임이 준 렌더를 그대로 쓴다. 해금 티어순으로 늘어놓아 진행 순서가 그대로 보인다.
+ */
+const gallery = buildings
+  .filter((b) => ['manufacturer', 'generator', 'extractor'].includes(b.category ?? ''))
+  .sort((a, b) => (a.unlockTier ?? -1) - (b.unlockTier ?? -1) || (a.powerMW ?? 0) - (b.powerMW ?? 0));
 
 const facts = [
   { k: '레시피', v: meta.counts?.recipes ?? 0 },
@@ -206,6 +214,35 @@ const facts = [
     <div class="showcase">
       <p class="showcase-tag">가이드가 실제로 주는 것 — 티어 1 철 라인</p>
       <FlowChart rows={showcase.rows} caption={showcase.caption} />
+    </div>
+  </section>
+
+  <section class="gallery">
+    <div class="wrap gallery-head">
+      <p class="marker"><span class="num">02-b</span> 설비</p>
+      <h2>해금 순서대로 늘어놓은 <span class="n">{gallery.length}</span>대</h2>
+      <p class="caption">스크롤하면 옆으로 흘러갑니다. 게임이 주는 렌더 그대로입니다.</p>
+    </div>
+    <div class="gallery-viewport">
+      <div class="gallery-track">
+        {gallery.map((b) => (
+          <article class="machine">
+            <img
+              src={`${base}/assets/buildings-png/${b.id}.png`}
+              alt={b.ko}
+              width="104"
+              height="104"
+              loading="lazy"
+            />
+            <p class="machine-name">{b.ko}</p>
+            <p class="machine-meta">
+              <span class="machine-tier">{b.unlockTier == null ? '허브' : `티어 ${b.unlockTier}`}</span>
+              {b.powerMW != null && ` · ${b.powerMW} MW`}
+              {b.powerGenMW != null && ` · +${b.powerGenMW} MW`}
+            </p>
+          </article>
+        ))}
+      </div>
     </div>
   </section>
 
