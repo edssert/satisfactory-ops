@@ -195,12 +195,13 @@ if (!toolsPage) {
     fail('설계 페이지가 빌드되지 않았습니다');
   } else {
     const need = [
-      ['pl-canvas', '설계판 자체'],
+      ['pl-svg', '도면판 자체'],
       ['제련기', '건물 목록'],
       ['채굴기 Mk.1', '채굴기'],
       ['석탄 발전기', '발전기'],
+      ['컨베이어 분배기', '물류 설비'],
       ['왼쪽에서 건물을 누르면', '빈 판 안내'],
-      ['제목을 누르면', '레시피 고르기 안내'],
+      ['자동 배치', '자동 배치 단추'],
     ];
     let miss = 0;
     for (const [needle, what] of need) {
@@ -216,7 +217,7 @@ if (!toolsPage) {
 
   /* 한글이 글자 단위로 쪼개지는 것을 한 번 겪었다. 규칙으로 박는다 */
   const css = fs.readFileSync(path.join(ROOT, 'src/styles/planner.css'), 'utf8');
-  const keepAll = ['.pl-mname', '.pl-iname', '.pl-sum p', '.pl-empty'];
+  const keepAll = ['.pl-mname', '.pl-rname', '.pl-sum p', '.pl-empty'];
   const bad = keepAll.filter((sel) => {
     const i = css.indexOf(sel);
     return i < 0 || !css.slice(i, css.indexOf('}', i)).includes('word-break: keep-all');

@@ -1,25 +1,27 @@
 /*
- * planner.css — 설계판(FactoryPlanner).
+ * planner.css — 설계 도면판(FactoryPlanner).
  *
- * 왼쪽은 고르는 곳, 가운데는 짜는 곳, 아래는 결과. 흐름은 왼쪽에서 오른쪽이다.
+ * 왼쪽은 건물 서랍, 가운데는 도면, 아래는 결과. 도면의 좌표 단위는 **미터**이고
+ * 바닥 격자는 토대 한 칸(8 m)이다. 그래서 눈으로 본 비율이 게임에서 그대로 맞는다.
+ *
  * 색은 tokens.css 의 커스텀 프로퍼티만 쓴다. 자원 구분에 색만 쓰지 않는다 —
- * 모든 줄에 아이콘과 글자 이름이 같이 붙는다.
+ * 포트에는 아이콘과 이름이 같이 붙는다.
  */
 
 .pl {
   display: grid;
-  grid-template-columns: 264px minmax(0, 1fr);
-  gap: var(--s4);
-  min-height: 620px;
+  grid-template-columns: 262px minmax(0, 1fr);
+  gap: var(--s3);
 }
 
-/* ------------------------------------------------------------------ 고르는 곳 */
+/* ------------------------------------------------------------------ 건물 서랍 */
 
 .pl-pal {
   display: flex;
   flex-direction: column;
   gap: var(--s3);
   min-height: 0;
+  max-height: calc(100vh - 160px);
   padding: var(--s3);
   border-radius: var(--radius);
   background: var(--raised);
@@ -41,32 +43,44 @@
   outline-offset: 1px;
 }
 
-.pl-palhead {
+.pl-groups {
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+.pl-groups h3 {
+  position: sticky;
+  z-index: 1;
+  top: 0;
   margin: 0;
+  padding: 6px 8px;
+  background: var(--raised);
   color: var(--ink-3);
   font-family: var(--font-mono);
   font-size: 11px;
-  letter-spacing: 0.04em;
+  font-weight: 500;
+  letter-spacing: 0.06em;
 }
-
-.pl-machines,
-.pl-picker ul {
-  overflow-y: auto;
-  flex: 1;
-  margin: 0;
+.pl-groups ul {
+  margin: 0 0 var(--s3);
   padding: 0;
   list-style: none;
 }
+.pl-groups li {
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+}
+.pl-groups li:hover { background: var(--surface); }
 
-.pl-machines button,
-.pl-picker ul button {
+.pl-mbtn {
   display: flex;
   gap: var(--s2);
   align-items: center;
-  width: 100%;
-  padding: 7px 8px;
+  min-width: 0;
+  flex: 1;
+  padding: 6px 4px 6px 8px;
   border: 0;
-  border-radius: 4px;
   background: none;
   color: var(--ink-2);
   font: inherit;
@@ -74,18 +88,9 @@
   text-align: left;
   cursor: pointer;
 }
-.pl-machines button:hover,
-.pl-picker ul button:hover {
-  background: var(--surface);
-  color: var(--ink);
-}
-.pl-machines img,
-.pl-picker img {
-  flex: none;
-}
-
-.pl-mname,
-.pl-rname {
+.pl-groups li:hover .pl-mbtn { color: var(--ink); }
+.pl-mbtn img { flex: none; }
+.pl-mname {
   overflow: hidden;
   flex: 1;
   text-overflow: ellipsis;
@@ -96,78 +101,75 @@
   flex: none;
   color: var(--ink-3);
   font-family: var(--font-mono);
-  font-size: 11px;
-}
-.pl-alt {
-  flex: none;
-  padding: 1px 5px;
-  border-radius: 2px;
-  background: color-mix(in oklab, var(--primary) 22%, transparent);
-  color: var(--primary);
   font-size: 10px;
-  font-weight: 600;
 }
 
-/*
- * 무엇을 만들지 고르는 창. 왼쪽 목록이 아니라 **놓인 상자 위**에 뜬다 —
- * 인게임에서도 기계를 짓고 나서 그 기계를 열어 레시피를 고른다.
- */
-.pl-picker {
-  position: absolute;
-  z-index: 2;
-  top: 46px;
-  left: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  width: 268px;
-  max-height: 320px;
-  padding: 8px;
-  border: var(--hair) solid var(--primary);
-  border-radius: 4px;
-  background: var(--bg);
-  box-shadow: 0 18px 40px -20px rgb(0 0 0 / 0.95);
-}
-.pl-pq {
-  width: 100%;
-  padding: 6px 8px;
-  border: var(--hair) solid var(--line-strong);
-  border-radius: 3px;
-  background: var(--raised);
-  color: var(--ink);
-  font: inherit;
+.pl-star {
+  flex: none;
+  padding: 4px 8px;
+  border: 0;
+  background: none;
+  color: var(--line-strong);
   font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
 }
-.pl-picker ul { max-height: 246px; }
+.pl-star:hover { color: var(--ink-3); }
+.pl-star.is-on { color: var(--accent); }
 
-/* ------------------------------------------------------------------ 짜는 곳 */
+/* ------------------------------------------------------------------ 위 띠 */
 
 .pl-main {
   display: flex;
   flex-direction: column;
-  gap: var(--s3);
+  gap: var(--s2);
   min-width: 0;
 }
 
 .pl-bar {
   display: flex;
-  gap: var(--s3);
+  flex-wrap: wrap;
+  gap: var(--s2) var(--s3);
   align-items: center;
   padding: var(--s2) var(--s3);
   border-radius: var(--radius);
   background: var(--raised);
   box-shadow: var(--lit);
 }
-.pl-stat {
+.pl-stat,
+.pl-floor {
+  display: flex;
+  gap: 6px;
+  align-items: center;
   color: var(--ink-3);
   font-size: var(--t-caption);
 }
-.pl-stat b {
+.pl-stat b,
+.pl-floor b {
   color: var(--accent);
   font-family: var(--font-mono);
   font-weight: 600;
 }
+.pl-fh {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  margin-left: var(--s2);
+}
+.pl-fh input,
+.pl-floor input {
+  width: 46px;
+  padding: 3px 4px;
+  border: var(--hair) solid var(--line-strong);
+  border-radius: 3px;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-align: right;
+}
 .pl-spacer { flex: 1; }
+.pl-zoom { display: flex; gap: 4px; align-items: center; }
 
 .pl-btn {
   padding: 6px 12px;
@@ -181,6 +183,22 @@
 }
 .pl-btn:hover { border-color: var(--primary); }
 .pl-btn.is-quiet { color: var(--ink-3); }
+.pl-btn b { color: var(--accent); font-family: var(--font-mono); }
+
+.pl-sq {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: var(--hair) solid var(--line-strong);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+}
+.pl-sq:hover { border-color: var(--primary); }
 
 /* ------------------------------------------------- 딴 대체 제작법 체크 */
 
@@ -202,266 +220,227 @@
   line-height: 1.7;
   word-break: keep-all;
 }
-.pl-altlist {
+.pl-altgrid {
   display: grid;
   overflow-y: auto;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 2px var(--s3);
-  max-height: 320px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--s3);
+  max-height: 46vh;
 }
-.pl-altlist label {
+.pl-altgrid h4 {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin: 0 0 4px;
+  padding-bottom: 4px;
+  border-bottom: var(--hair) solid var(--line);
+  font-size: var(--t-body-s);
+}
+.pl-altgrid h4 .n { margin-left: auto; color: var(--ink-3); font-family: var(--font-mono); font-size: 11px; }
+.pl-altgrid ul { margin: 0; padding: 0; list-style: none; }
+.pl-altgrid label {
   display: flex;
   gap: var(--s2);
   align-items: center;
-  padding: 5px 6px;
+  padding: 4px 6px;
   border-radius: 3px;
   font-size: var(--t-body-s);
   cursor: pointer;
 }
-.pl-altlist label:hover { background: var(--surface); }
-.pl-altlist input { flex: none; accent-color: var(--primary); }
+.pl-altgrid label:hover { background: var(--surface); }
+.pl-altgrid input { flex: none; accent-color: var(--primary); }
 
-.pl-scroll {
-  overflow: auto;
+/* ------------------------------------------------------------------ 도면 */
+
+.pl-stage {
+  position: relative;
+  overflow: hidden;
+  height: min(78vh, 900px);
   min-height: 520px;
-  max-height: 74vh;
   border-radius: var(--radius);
   background: var(--bg);
   box-shadow: var(--lit);
+  touch-action: none;
+}
+.pl-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+.pl-svg:active { cursor: grabbing; }
+
+.pl-gridline {
+  stroke: color-mix(in oklab, var(--line) 70%, transparent);
+}
+.pl-gridline.is-major {
+  stroke: color-mix(in oklab, var(--primary) 22%, transparent);
 }
 
-.pl-canvas {
-  position: relative;
-  /*
-   * 인게임 분자 분석기·건설 화면과 같은 파선 격자. 8m 파운데이션 감각을 그대로 옮긴다.
-   * 상자를 8px 격자에 붙이므로 눈금과 어긋나지 않는다.
-   */
-  background-image:
-    repeating-linear-gradient(
-      to right,
-      color-mix(in oklab, var(--line) 55%, transparent) 0 1px,
-      transparent 1px 64px
-    ),
-    repeating-linear-gradient(
-      to bottom,
-      color-mix(in oklab, var(--line) 55%, transparent) 0 1px,
-      transparent 1px 64px
-    );
+/* 벨트 — 겉을 굵게 깔고 안에 밝은 심을 넣는다. 실제 컨베이어처럼 보인다 */
+.pl-belt-shell {
+  fill: none;
+  stroke: var(--bg);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.9;
 }
-
-.pl-wires {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-.pl-wire path {
+.pl-belt-core {
   fill: none;
   stroke: var(--primary);
-  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
-.pl-wire text {
+.pl-belt.is-dry .pl-belt-core {
+  stroke: var(--line-strong);
+  stroke-dasharray: 3 2.5;
+}
+.pl-beltrate {
   fill: var(--ink-2);
   font-family: var(--font-mono);
-  font-size: 11px;
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: var(--bg);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+.pl-belt.is-dry .pl-beltrate { fill: var(--ink-3); }
+
+/* 층이 다르면 리프트다. 높이를 같이 적는다 */
+.pl-lift circle {
+  fill: var(--raised);
+  stroke: var(--accent);
+  stroke-width: 0.3;
+}
+.pl-lift text {
+  fill: var(--accent);
   text-anchor: middle;
 }
-/* 흐르지 않는 벨트 — 위에서 아무것도 안 오는 상태 */
-.pl-wire.is-dry path {
+.pl-liftlabel {
+  fill: var(--accent);
+  font-family: var(--font-mono);
+  paint-order: stroke;
+  stroke: var(--bg);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+
+.pl-cut { fill: transparent; cursor: pointer; }
+.pl-cut:hover { fill: color-mix(in oklab, var(--accent) 35%, transparent); }
+
+/* ------------------------------------------------------------------ 건물 */
+
+.pl-b { cursor: grab; }
+.pl-b:active { cursor: grabbing; }
+.pl-bbody {
+  fill: var(--raised);
   stroke: var(--line-strong);
-  stroke-dasharray: 5 4;
 }
-.pl-wire.is-dry text { fill: var(--ink-3); }
-.pl-cut {
-  fill: transparent;
-  cursor: pointer;
-  pointer-events: auto;
+.pl-b.is-sel .pl-bbody { stroke: var(--primary); }
+/* 아직 무엇을 만들지 안 정한 건물. 파선으로 미완성임을 드러낸다 */
+.pl-b.is-unset .pl-bbody { stroke-dasharray: 2 1.5; stroke: var(--primary); }
+/* 공급이 모자란 건물. 색만으로 알리지 않는다 — 위에 "가동 nn%" 글자가 같이 붙는다 */
+.pl-b.is-short .pl-bbody { stroke: var(--accent); }
+/* 다른 층. 보이되 눌리지는 않는다 */
+.pl-b.is-off { opacity: 0.22; pointer-events: none; }
+
+.pl-bicon { pointer-events: none; }
+
+.pl-bname {
+  fill: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 600;
+  paint-order: stroke;
+  stroke: var(--bg);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  pointer-events: none;
 }
-.pl-cut:hover {
-  fill: color-mix(in oklab, var(--accent) 30%, transparent);
+.pl-btitle {
+  fill: var(--ink-2);
+  font-family: var(--font-body);
+  paint-order: stroke;
+  stroke: var(--bg);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+.pl-b.is-unset .pl-btitle { fill: var(--primary); }
+.pl-bsub,
+.pl-bshort {
+  fill: var(--accent);
+  font-family: var(--font-mono);
+  paint-order: stroke;
+  stroke: var(--bg);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  pointer-events: none;
 }
 
-/* ------------------------------------------------------------------ 기계 묶음 */
+/* 포트 — 투입은 뒷면, 산출은 앞면 한가운데 */
+.pl-port { cursor: pointer; }
+.pl-port circle {
+  fill: var(--bg);
+  stroke: var(--line-strong);
+  stroke-width: 0.28;
+}
+.pl-port:hover circle { stroke: var(--primary); }
+.pl-port.is-picked circle { fill: var(--accent); stroke: var(--accent); }
+.pl-port.is-target circle {
+  stroke: var(--accent);
+  stroke-width: 0.6;
+}
+.pl-portrate {
+  fill: var(--ink-2);
+  font-family: var(--font-mono);
+  paint-order: stroke;
+  stroke: var(--bg);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
 
-.pl-node {
+/* ------------------------------------------------- 고른 건물 손잡이 */
+
+/*
+ * 배율과 상관없이 같은 크기여야 해서 SVG 가 아니라 HTML 로 띄운다.
+ * 도면 위에 겹치므로 그림자로 띄워 둔다.
+ */
+.pl-tools {
   position: absolute;
+  z-index: 5;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 4px 6px;
   border: var(--hair) solid var(--line-strong);
   border-radius: 4px;
   background: var(--raised);
-  box-shadow: 0 10px 24px -18px rgb(0 0 0 / 0.9);
+  box-shadow: 0 12px 28px -18px rgb(0 0 0 / 0.95);
+  white-space: nowrap;
 }
-.pl-node.is-sel { border-color: var(--primary); }
-/* 고르는 창이 떠 있는 상자가 다른 상자에 가리면 안 된다 */
-.pl-node.is-editing { z-index: 20; }
-/* 아직 무엇을 만들지 안 정한 상자. 파선으로 미완성임을 드러낸다 */
-.pl-node.is-unset { border-style: dashed; }
-/* 공급이 모자란 묶음. 색만으로 알리지 않는다 — 아래에 "가동 nn%" 글자가 같이 붙는다 */
-.pl-node.is-short { border-color: color-mix(in oklab, var(--accent) 70%, var(--line-strong)); }
-
-.pl-nhead {
-  display: flex;
-  gap: var(--s2);
-  align-items: center;
-  height: 46px;
-  padding: 0 6px 0 10px;
-  border-bottom: var(--hair) solid var(--line);
-  cursor: grab;
-  touch-action: none;
-}
-.pl-nhead:active { cursor: grabbing; }
-.pl-ntitle {
-  display: flex;
-  overflow: hidden;
-  flex: 1;
-  flex-direction: column;
-  padding: 2px 4px;
+.pl-tools button {
+  padding: 3px 8px;
   border: 0;
   border-radius: 3px;
-  background: none;
-  font: inherit;
-  line-height: 1.25;
-  text-align: left;
-  cursor: pointer;
-}
-.pl-ntitle:hover { background: var(--surface); }
-.pl-ntitle b {
-  overflow: hidden;
+  background: var(--surface);
   color: var(--ink);
-  font-size: 13px;
-  font-weight: 600;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  word-break: keep-all;
-}
-.pl-ntitle.is-unset b { color: var(--primary); font-weight: 500; }
-.pl-ntitle small {
-  color: var(--ink-3);
-  font-size: 11px;
-}
-
-.pl-hint {
-  position: absolute;
-  top: 52px;
-  margin: 0;
-  padding: 0 12px;
-  color: var(--ink-3);
+  font: inherit;
   font-size: 12px;
-  line-height: 1.6;
-  word-break: keep-all;
-}
-.pl-x {
-  flex: none;
-  padding: 4px 6px;
-  border: 0;
-  background: none;
-  color: var(--ink-3);
-  font-size: 12px;
-  line-height: 1;
   cursor: pointer;
 }
-.pl-x:hover { color: var(--ink); }
-
-/*
- * 상자 전체를 덮는다. 안의 줄은 상자 맨 위를 기준으로 top 을 계산하므로
- * 흐름 안에 두면 머리 높이(46px)만큼 통째로 밀린다 — 포트와 벨트가 어긋난다.
- */
-.pl-io {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-.pl-io > * { pointer-events: auto; }
-
-.pl-row {
-  position: absolute;
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  width: 100%;
-  height: 26px;
-  padding: 0 10px;
-}
-.pl-row.is-in { justify-content: flex-start; }
-.pl-row.is-out { justify-content: flex-end; }
-.pl-iname {
-  overflow: hidden;
-  flex: 1;
-  color: var(--ink-2);
-  font-size: 12px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  word-break: keep-all;
-}
-.pl-row.is-out .pl-iname { text-align: right; }
-.pl-irate {
-  flex: none;
-  color: var(--accent);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 500;
-}
-
-.pl-port {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  padding: 0;
-  border: 2px solid var(--line-strong);
-  border-radius: 50%;
-  background: var(--bg);
-  cursor: pointer;
-}
-.pl-row.is-in .pl-port { left: -6px; }
-.pl-row.is-out .pl-port { right: -6px; }
-.pl-port:hover { border-color: var(--primary); }
-.pl-row.is-picked .pl-port {
-  border-color: var(--accent);
-  background: var(--accent);
-}
-/* 지금 이을 수 있는 투입구를 드러낸다 */
-.pl-row.is-target .pl-port {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 25%, transparent);
-}
-
-.pl-sep {
-  position: absolute;
-  left: 10px;
-  width: calc(100% - 20px);
-  border-top: var(--hair) dashed var(--line);
-}
-
-.pl-gen {
-  position: absolute;
-  width: 100%;
-  padding: 0 10px;
-  color: var(--primary);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  text-align: right;
-}
-
-.pl-nfoot {
-  position: absolute;
-  bottom: 0;
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  width: 100%;
-  height: 40px;
-  padding: 0 8px;
-  border-top: var(--hair) solid var(--line);
-}
-.pl-nfoot label {
+.pl-tools button:hover { background: var(--primary); color: var(--on-accent); }
+.pl-tools button.is-danger:hover { background: var(--danger); }
+.pl-tools label {
   display: flex;
   gap: 2px;
   align-items: center;
+  color: var(--ink-3);
+  font-size: 11px;
 }
-.pl-nfoot input {
-  width: 44px;
-  padding: 3px 4px;
+.pl-tools input {
+  width: 42px;
+  padding: 2px 3px;
   border: var(--hair) solid var(--line-strong);
   border-radius: 3px;
   background: var(--bg);
@@ -470,14 +449,8 @@
   font-size: 12px;
   text-align: right;
 }
-.pl-nfoot em {
-  color: var(--ink-3);
-  font-size: 11px;
-  font-style: normal;
-}
-.pl-nfoot select {
-  max-width: 84px;
-  padding: 3px 4px;
+.pl-tools select {
+  padding: 2px 3px;
   border: var(--hair) solid var(--line-strong);
   border-radius: 3px;
   background: var(--bg);
@@ -485,23 +458,122 @@
   font: inherit;
   font-size: 11px;
 }
-.pl-short {
-  margin-left: auto;
-  color: var(--accent);
-  font-family: var(--font-mono);
-  font-size: 11px;
+
+/* ------------------------------------------------- 고르기 창 */
+
+/*
+ * 무엇을 만들지 고르는 창. 왼쪽 서랍이 아니라 놓인 건물 옆에 뜬다 —
+ * 인게임에서도 기계를 짓고 나서 그 기계를 열어 레시피를 고른다.
+ */
+.pl-picker {
+  position: absolute;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 280px;
+  max-height: 340px;
+  padding: 8px;
+  border: var(--hair) solid var(--primary);
+  border-radius: 4px;
+  background: var(--bg);
+  box-shadow: 0 18px 40px -20px rgb(0 0 0 / 0.95);
 }
+.pl-pq {
+  width: 100%;
+  padding: 6px 8px;
+  border: var(--hair) solid var(--line-strong);
+  border-radius: 3px;
+  background: var(--raised);
+  color: var(--ink);
+  font: inherit;
+  font-size: 12px;
+}
+.pl-picker ul {
+  overflow-y: auto;
+  max-height: 262px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pl-picker li button {
+  display: flex;
+  gap: var(--s2);
+  align-items: center;
+  width: 100%;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 3px;
+  background: none;
+  color: var(--ink-2);
+  font: inherit;
+  font-size: var(--t-body-s);
+  text-align: left;
+  cursor: pointer;
+}
+.pl-picker li button:hover { background: var(--surface); color: var(--ink); }
+.pl-rname {
+  overflow: hidden;
+  flex: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: keep-all;
+}
+.pl-alt {
+  flex: none;
+  padding: 1px 5px;
+  border-radius: 2px;
+  background: color-mix(in oklab, var(--primary) 22%, transparent);
+  color: var(--primary);
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* ------------------------------------------------- 층 목록 · 빈 판 */
+
+.pl-floors {
+  position: absolute;
+  z-index: 4;
+  right: var(--s3);
+  bottom: var(--s3);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.pl-floors button {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 62px;
+  padding: 4px 8px;
+  border: var(--hair) solid var(--line-strong);
+  border-radius: 3px;
+  background: color-mix(in oklab, var(--raised) 88%, transparent);
+  color: var(--ink-3);
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+.pl-floors button:hover { color: var(--ink); }
+.pl-floors button.is-on {
+  border-color: var(--primary);
+  color: var(--ink);
+}
+.pl-floors .n { color: var(--accent); font-family: var(--font-mono); }
 
 .pl-empty {
   position: absolute;
-  top: 40%;
+  top: 38%;
   left: 0;
   width: 100%;
+  padding-inline: var(--s6);
   color: var(--ink-3);
   font-size: var(--t-body-s);
   line-height: 1.9;
   text-align: center;
   word-break: keep-all;
+  pointer-events: none;
 }
 
 /* ------------------------------------------------------------------ 결과 */
@@ -531,8 +603,9 @@
   word-break: keep-all;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
   .pl { grid-template-columns: 1fr; }
-  .pl-pal { max-height: 320px; }
+  .pl-pal { max-height: 300px; }
   .pl-sum { grid-template-columns: 1fr; }
+  .pl-stage { height: 64vh; }
 }

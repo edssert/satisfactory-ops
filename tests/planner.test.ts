@@ -25,6 +25,7 @@ import itemsJson from '../src/data/app/items.json' with { type: 'json' };
 type B = {
   id: string;
   ko: string;
+  beltItemsPerMinute?: number | null;
   powerMW: number | null;
   powerMaxMW: number | null;
   powerGenMW: number | null;
@@ -78,10 +79,15 @@ const mById = new Map(buildings.map((b) => [b.id, asMachine(b)]));
 const rById = new Map(recipes.map((r) => [r.id, asRecipe(r)]));
 const eById = new Map(items.map((i) => [i.id, i.energyMJ]));
 
+const beltById = new Map(
+  buildings.filter((b) => /^Build_Conveyor(Belt|Lift)Mk\d_C$/.test(b.id)).map((b) => [b.id, b])
+);
+
 const cat: Catalog = {
   machine: (id) => mById.get(id),
   recipe: (id) => rById.get(id),
   energyMJ: (id) => eById.get(id) ?? 0,
+  beltRate: (id) => (id ? ((beltById.get(id) as { beltItemsPerMinute?: number } | undefined)?.beltItemsPerMinute ?? 0) : 0),
 };
 
 let seq = 0;
@@ -89,6 +95,7 @@ const node = (p: Partial<PlanNode> & Pick<PlanNode, 'kind' | 'ref' | 'machine'>)
   id: ++seq,
   x: 0,
   y: 0,
+  floor: 0,
   count: 1,
   clock: 100,
   ...p,

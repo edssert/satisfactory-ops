@@ -17,3 +17,6 @@
 dist/
 node_modules/
 Thumbs.db
+
+# 테스트가 만드는 임시 번들
+src/components/.planner-test.mjs

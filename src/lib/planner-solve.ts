@@ -10,6 +10,7 @@
  *   - 한 산출구가 여러 곳으로 갈리면 각 목적지가 필요로 하는 양에 비례해 나눈다.
  *     매니폴드가 정상 상태에서 하는 일이 이것이다.
  *   - 안 이은 투입구는 밖에서 대 준다고 본다. 요약에 "넣어야 할 것"으로 뜬다.
+ *   - 분배기·병합기는 **그냥 지나가는 것**이다. 받은 만큼 내보내되 벨트 등급이 상한이다.
  */
 
 /* ------------------------------------------------------------------ 게임 데이터 */
@@ -30,6 +31,11 @@ export interface PMachine {
   /** 보조물 비율. 보조물/분 = 발전MW × 비율 × 60 / 1000 */
   sr?: number | null;
   f?: { f: string; s: string | null; b: string | null; ba: number | null }[];
+  /** 분배기·병합기인가. 나르는 물건이 정해져 있지 않고 지나가기만 한다 */
+  lg?: 'split' | 'merge';
+  /** 바닥 크기(m). 게임의 충돌 박스에서 나온 실제 치수다 */
+  fw?: number;
+  fl?: number;
   /** 이 기계로 돌릴 수 있는 레시피 수 */
   n: number;
 }
@@ -53,24 +59,43 @@ export interface PItem {
   mj?: number;
 }
 
+/** 벨트·리프트 등급 */
+export interface PBelt {
+  i: string;
+  k: string;
+  /** 분당 처리량 */
+  r: number;
+  t: number | null;
+  /** 리프트인가 */
+  lift?: 1;
+}
+
 /* ------------------------------------------------------------------ 계획 */
 
-export type NodeKind = 'recipe' | 'extract' | 'generator';
+export type NodeKind = 'recipe' | 'extract' | 'generator' | 'logistic';
 
 export interface PlanNode {
   id: number;
   kind: NodeKind;
-  /** 레시피 id (recipe) 또는 기계 id (extract·generator) */
+  /** 레시피 id (recipe) 또는 기계 id (그 밖) */
   ref: string;
   machine: string;
   x: number;
   y: number;
+  /** 몇 층에 있는가. 층이 다르면 벨트가 아니라 리프트로 잇는다 */
+  floor: number;
   count: number;
   /** 퍼센트 */
   clock: number;
+  /** 돌린 각도. 0·90·180·270 만 쓴다 — 게임도 그렇다 */
+  rot?: 0 | 90 | 180 | 270;
   resource?: string;
   purity?: number;
   fuel?: string;
+  /** 분배기·병합기가 나르는 물건 */
+  item?: string;
+  /** 분배기·병합기의 벨트 등급 (처리량 상한) */
+  belt?: string;
 }
 
 export interface PlanEdge {
@@ -78,6 +103,8 @@ export interface PlanEdge {
   from: number;
   to: number;
   item: string;
+  /** 이 구간에 깐 벨트·리프트 등급. 없으면 상한을 안 본다 */
+  belt?: string;
 }
 
 export interface Catalog {
@@ -85,6 +112,8 @@ export interface Catalog {
   recipe(id: string): PRecipe | undefined;
   /** 연료 열량(MJ). 없으면 0 */
   energyMJ(id: string): number;
+  /** 벨트·리프트 등급의 분당 처리량. 모르면 0 */
+  beltRate(id: string | undefined): number;
 }
 
 export interface Rates {
@@ -107,6 +136,9 @@ export interface Rates {
  */
 export const POWER_EXP = 1.321928;
 
+/** 분배기·병합기에 벨트 등급을 안 정했을 때 쓰는 상한. Mk.6 처리량이다 */
+export const DEFAULT_BELT = 1200;
+
 /** 한 묶음이 100% 가동일 때 분당 무엇을 얼마나 먹고 내는가 */
 export function nodeRates(n: PlanNode, cat: Catalog): Rates {
   const ins = new Map<string, number>();
@@ -126,6 +158,17 @@ export function nodeRates(n: PlanNode, cat: Catalog): Rates {
   } else if (n.kind === 'extract') {
     if (n.resource) outs.set(n.resource, (m?.e ?? 0) * (n.purity ?? 1) * scale);
     power = (m?.p ?? 0) * n.count * Math.pow(n.clock / 100, POWER_EXP);
+  } else if (n.kind === 'logistic') {
+    /*
+     * 분배기·병합기는 만들지 않는다. 받은 만큼 내보낸다.
+     * 상한을 벨트 처리량으로 두면 가동률이 곧 "지나간 양 / 벨트 상한"이 되고,
+     * 내보내는 양이 정확히 받은 양이 된다. 벨트가 모자라면 거기서 잘린다 — 게임과 같다.
+     */
+    if (n.item) {
+      const cap = (cat.beltRate(n.belt) || DEFAULT_BELT) * n.count;
+      ins.set(n.item, cap);
+      outs.set(n.item, cap);
+    }
   } else {
     const spec = m?.f?.find((f) => f.f === n.fuel);
     const mj = n.fuel ? cat.energyMJ(n.fuel) : 0;
@@ -173,8 +216,12 @@ export function solve(nodes: PlanNode[], edges: PlanEdge[], cat: Catalog): Solut
     inEdges.get(ik)!.push(e);
   }
 
+  /* 지나가기만 하는 묶음(분배기·병합기)은 처음엔 아무것도 안 흘린다 */
+  const passthrough = new Set(nodes.filter((n) => n.kind === 'logistic').map((n) => n.id));
+  for (const id of passthrough) ratio.set(id, 0);
+
   /* 되먹임(부산물 재투입)이 있는 배치도 있으므로 수렴할 때까지 돌린다 */
-  for (let pass = 0; pass < 60; pass++) {
+  for (let pass = 0; pass < 80; pass++) {
     flow.clear();
     for (const n of nodes) {
       for (const [item, cap] of base.get(n.id)!.outs) {
@@ -184,7 +231,10 @@ export function solve(nodes: PlanNode[], edges: PlanEdge[], cat: Catalog): Solut
         const needs = es.map((e) => base.get(e.to)?.ins.get(item) ?? 0);
         const total = needs.reduce((a, b) => a + b, 0);
         es.forEach((e, i) => {
-          flow.set(e.id, total > 0 ? Math.min(needs[i]!, (avail * needs[i]!) / total) : 0);
+          const want = total > 0 ? Math.min(needs[i]!, (avail * needs[i]!) / total) : 0;
+          /* 그 구간에 깐 벨트가 못 넘기는 양은 못 흐른다 */
+          const cap2 = cat.beltRate(e.belt);
+          flow.set(e.id, cap2 > 0 ? Math.min(want, cap2) : want);
         });
       }
     }
@@ -193,7 +243,11 @@ export function solve(nodes: PlanNode[], edges: PlanEdge[], cat: Catalog): Solut
       let r = 1;
       for (const [item, need] of base.get(n.id)!.ins) {
         const inc = inEdges.get(`${n.id}|${item}`);
-        if (!inc || need <= 0) continue;
+        if (!inc || need <= 0) {
+          /* 지나가는 묶음은 위에서 아무것도 안 오면 아무것도 못 내보낸다 */
+          if (passthrough.has(n.id)) r = 0;
+          continue;
+        }
         const got = inc.reduce((a, e) => a + (flow.get(e.id) ?? 0), 0);
         r = Math.min(r, got / need);
       }
@@ -213,6 +267,8 @@ export function solve(nodes: PlanNode[], edges: PlanEdge[], cat: Catalog): Solut
     power += b.power * r;
     gen += b.gen * r;
     for (const [item, need] of b.ins) {
+      /* 지나가는 묶음은 "모자란다"는 개념이 없다. 오는 만큼만 지나간다 */
+      if (passthrough.has(n.id)) continue;
       const inc = inEdges.get(`${n.id}|${item}`) ?? [];
       const got = inc.reduce((a, e) => a + (flow.get(e.id) ?? 0), 0);
       const short = need * r - got;

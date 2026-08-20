@@ -22,6 +22,14 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
+/** 게임 배포 데이터의 물질 형태 enum → 앱에서 쓰는 이름. 아이템과 추출기가 같은 표를 쓴다 */
+const RESOURCE_FORM = {
+  RF_SOLID: 'solid',
+  RF_LIQUID: 'liquid',
+  RF_GAS: 'gas',
+  RF_INVALID: 'none',
+};
+
 const ROOT = path.resolve(fileURLToPath(new URL('.', import.meta.url)), '..');
 
 // ---------------------------------------------------------------- args
@@ -304,9 +312,7 @@ function buildItems(groups) {
         abbreviation: clean(c.mAbbreviatedDisplayName) || null,
         nativeClass: n,
         kind: itemKind(n),
-        form: form === 'RF_SOLID' ? 'solid'
-          : form === 'RF_LIQUID' ? 'liquid'
-          : form === 'RF_GAS' ? 'gas' : 'none',
+        form: RESOURCE_FORM[form] ?? 'none',
         isFluid: FLUID_FORMS.has(form),
         stackSize: clean(c.mStackSize) || null,
         energyMJ: num(c.mEnergyValue),
@@ -449,7 +455,16 @@ function buildBuildings(groups, itemIndex, recipes) {
           cycleTimeSec: cycle,
           itemsPerCycle: per,
           perMinuteAtNormalPurity: cycle > 0 ? round((per * 60) / cycle) : null,
-          allowedForms: forms.replace(/[()]/g, '').split(',').map((s) => s.trim()).filter(Boolean),
+          /*
+           * 아이템의 form 과 같은 이름으로 맞춘다. 여기만 RF_SOLID 로 두었더니
+           * 화면에서 "이 추출기가 캘 수 있는 자원"을 구할 때 조인이 안 돼 목록이 0개가 됐다.
+           */
+          allowedForms: forms
+            .replace(/[()]/g, '')
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean)
+            .map((f) => RESOURCE_FORM[f] ?? f),
         };
       }
       // 발전기: 연료 목록 + 보조 자원(물) 비율

@@ -1,6 +1,6 @@
 {
   "$comment": "이 폴더의 items/recipes/buildings/schematics/milestones.json은 scripts/build-data.mjs가 게임 원본에서 생성합니다. 직접 수정하지 마세요.",
-  "generatedAt": "2026-08-19T04:25:20.345Z",
+  "generatedAt": "2026-08-20T11:50:58.388Z",
   "generator": "scripts/build-data.mjs",
   "source": {
     "kind": "local-game-install",
@@ -25,6 +25,7 @@
     "fluidUnits": "액체/기체 수치는 원본의 1/1000 (리터 -> m3)로 환산됨",
     "rates": "perMinute = amount * 60 / durationSec (클록 100%, 소머슬룹 미사용 기준)",
     "belt": "beltItemsPerMinute = mSpeed / 2",
+    "footprint": "mClearanceData의 모든 충돌 박스 합집합, cm -> m",
     "pipe": "pipeFlowM3PerMinute = mFlowLimit * 60",
     "extraction": "perMinuteAtNormalPurity = itemsPerCycle * 60 / cycleTimeSec (순도 배율 미적용)"
   }

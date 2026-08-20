@@ -7218,7 +7218,7 @@
       "itemsPerCycle": 1,
       "perMinuteAtNormalPurity": 60,
       "allowedForms": [
-        "RF_SOLID"
+        "solid"
       ]
     }
   },
@@ -7280,7 +7280,7 @@
       "itemsPerCycle": 2,
       "perMinuteAtNormalPurity": 120,
       "allowedForms": [
-        "RF_LIQUID"
+        "liquid"
       ]
     }
   },
@@ -7355,7 +7355,7 @@
       "itemsPerCycle": 1,
       "perMinuteAtNormalPurity": 120,
       "allowedForms": [
-        "RF_SOLID"
+        "solid"
       ]
     }
   },
@@ -7435,7 +7435,7 @@
       "itemsPerCycle": 1,
       "perMinuteAtNormalPurity": 240,
       "allowedForms": [
-        "RF_SOLID"
+        "solid"
       ]
     }
   },
@@ -20072,7 +20072,7 @@
       "itemsPerCycle": 2,
       "perMinuteAtNormalPurity": 120,
       "allowedForms": [
-        "RF_LIQUID"
+        "liquid"
       ]
     }
   },
@@ -23235,8 +23235,8 @@
       "itemsPerCycle": 1,
       "perMinuteAtNormalPurity": 60,
       "allowedForms": [
-        "RF_LIQUID",
-        "RF_GAS"
+        "liquid",
+        "gas"
       ]
     }
   },
