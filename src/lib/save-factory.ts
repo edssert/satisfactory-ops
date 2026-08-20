@@ -65,10 +65,12 @@ export interface FactoryModel {
   power: { genMW: number; useMW: number; circuits: number };
   /** Desc_*_C → 창고와 설비에 든 총 개수 */
   stock: Record<string, number>;
-  /** 설비 → 설비. 벨트를 따라가 이은 것이다 */
-  edges: { from: string; to: string }[];
-  /** 아무 데도 안 이어진 출력구 수 */
+  /** 설비 → 설비. 벨트와 분배기를 따라가 이은 것이다 */
+  edges: { from: string; to: string; item: string | null }[];
+  /** 아무 데도 안 이어진 출력구 수 — 만든 게 갈 데가 없다는 뜻이다 */
   danglingOutputs: number;
+  /** 창고의 세이브 안 이름. 그래프에서 창고를 가려내는 데 쓴다 */
+  storageKeys: string[];
   /** 세이브에 든 객체 수 — 제대로 읽었는지 눈으로 확인하는 값 */
   objects: number;
 }
@@ -98,8 +100,15 @@ const num = (p: Prop | undefined): number | undefined =>
 const ref = (p: Prop | undefined): string | undefined =>
   (p?.value as { pathName?: string } | undefined)?.pathName;
 
-/** 물건을 나르기만 하는 것. 간선을 따라갈 때 건너뛴다 */
-const TRANSPORT = /Conveyor(Belt|Lift)|FoundationPassthrough|Pipeline|PipeMk/;
+/**
+ * 물건을 나르기만 하는 것. 간선을 따라갈 때 건너뛴다.
+ *
+ * 분배기·병합기도 여기 든다 — 그것들은 도착지가 아니라 갈림길이다. 접지 않으면
+ * "제련기 → 분배기" 로 끊겨서 무엇이 어디로 가는지 답할 수 없다.
+ * (접기 전에는 설비→설비 간선이 36개였는데, 접으니 실제 흐름이 드러났다.)
+ */
+const TRANSPORT =
+  /Conveyor(Belt|Lift)|ConveyorAttachment(Splitter|Merger)|FoundationPassthrough|Pipeline|PipeMk|Pipe(Junction|Pump)/;
 
 export async function readFactory(
   buf: ArrayBuffer,
@@ -231,33 +240,53 @@ export async function readFactory(
       .map((x) => x.pathName ?? '')
       .filter((p) => /FGFactoryConnectionComponent/.test(byName.get(p)?.typePath ?? ''));
 
-  /** 출력구에서 벨트를 타고 내려가 닿는 설비를 찾는다 */
-  function downstream(from: string): string | null {
-    let cur = link.get(from);
-    /* 벨트가 길게 이어질 수 있다. 무한 루프만 막는다 */
-    for (let i = 0; cur && i < 400; i++) {
+  /**
+   * 출력구에서 벨트를 타고 내려가 닿는 설비를 모두 찾는다.
+   *
+   * 분배기를 만나면 갈래가 여럿이라 하나만 따라가면 안 된다. 너비 우선으로 전부 훑는다.
+   */
+  function downstream(from: string): string[] {
+    const hit = new Set<string>();
+    const seen = new Set<string>();
+    const queue = [link.get(from)].filter(Boolean) as string[];
+    /* 벨트가 길게 이어질 수 있다. 순환과 폭주만 막는다 */
+    for (let i = 0; queue.length && i < 4000; i++) {
+      const cur = queue.shift()!;
+      if (seen.has(cur)) continue;
+      seen.add(cur);
       const owner = ownerOf(cur);
-      if (!TRANSPORT.test(owner)) return owner;
-      const next = connsOf(owner).filter((c) => c !== cur);
-      if (!next.length) return null;
-      cur = link.get(next[0]!);
+      if (!TRANSPORT.test(owner)) {
+        hit.add(owner);
+        continue;
+      }
+      for (const c of connsOf(owner)) {
+        if (c === cur) continue;
+        const nxt = link.get(c);
+        if (nxt && !seen.has(nxt)) queue.push(nxt);
+      }
     }
-    return null;
+    return [...hit];
   }
 
-  const machineKeys = new Set(machines.map((m) => m.key));
-  const edges: { from: string; to: string }[] = [];
+  /* 창고도 그래프의 한 점이다 — 쌓이기만 하는지 보려면 도착지로 세야 한다 */
+  const graphKeys = new Set(machines.map((m) => m.key));
+  for (const o of actors) {
+    if (o.properties?.mStorageInventory) graphKeys.add(o.instanceName ?? '');
+  }
+  const outItemOf = new Map(machines.map((m) => [m.key, m.outItem]));
+
+  const edges: { from: string; to: string; item: string | null }[] = [];
   let danglingOutputs = 0;
   for (const c of conns) {
     if (!/^Output/.test(tail(c.instanceName))) continue;
     const owner = ownerOf(c.instanceName ?? '');
-    if (!machineKeys.has(owner)) continue;
-    const to = downstream(c.instanceName ?? '');
-    if (!to) {
+    if (!graphKeys.has(owner)) continue;
+    const hits = downstream(c.instanceName ?? '').filter((k) => graphKeys.has(k));
+    if (!hits.length) {
       danglingOutputs++;
       continue;
     }
-    edges.push({ from: owner, to });
+    for (const to of hits) edges.push({ from: owner, to, item: outItemOf.get(owner) ?? null });
   }
 
   const header = save.header ?? {};
@@ -270,6 +299,7 @@ export async function readFactory(
     stock,
     edges,
     danglingOutputs,
+    storageKeys: [...graphKeys].filter((k) => !machines.some((m) => m.key === k)),
     objects: all.length,
   };
 }

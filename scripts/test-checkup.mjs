@@ -316,6 +316,23 @@ const missing = need.filter((k) => m?.[k] === undefined);
 if (missing.length) bad('필드 존재', `빠진 것: ${missing.join(', ')}`);
 else ok('필드 존재', need.join(', '));
 
+/*
+ * 계약이 흔들리면 여기 먼저 보인다. 통과/실패로 세지는 않는다 —
+ * 모듈을 아직 쓰는 중이라 필드가 늘고 줄 수 있고, 그걸 실패로 부르면 시끄럽기만 하다.
+ */
+{
+  const m0 = (m.machines ?? [])[0];
+  const e0 = (m.edges ?? [])[0];
+  const notes = [
+    `readFactory  ${readFactory.constructor.name === 'AsyncFunction' ? 'async (Promise 반환)' : '동기'}`,
+    `FactoryModel 필드  ${Object.keys(m ?? {}).join(', ')}`,
+    `machine 필드       ${m0 ? Object.keys(m0).join(', ') : '(설비 없음)'}`,
+    `edge 필드          ${e0 ? Object.keys(e0).join(', ') : '(간선 없음)'}`,
+  ];
+  console.log('\n  · 계약 (참고 — 통과/실패로 세지 않음)');
+  for (const n of notes) console.log(`  [참고] ${n}`);
+}
+
 /* 3. counts 의 합이 실제 객체 수와 맞는가 */
 eq('counts 합', Object.values(m.counts ?? {}).reduce((a, b) => a + b, 0), ref.countsTotal,
   (v) => `${v}개 (완전 ${ref.fullActors} + 경량 ${ref.lightweight})`);
