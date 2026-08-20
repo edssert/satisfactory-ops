@@ -256,18 +256,35 @@
 
 /* ------------------------------------------------------------------ 싱크 상점 */
 
+/* 탭 이름이 긴 상점은 한 줄짜리로 */
+.tabs.is-wide a { min-width: 0; flex-direction: row; gap: 6px; align-items: baseline; }
+.tabs.is-wide a b { font-family: var(--font-body); font-size: var(--t-body-s); font-weight: 600; }
+
 .shop-group { margin-bottom: var(--s8); }
+/* 게임의 구획 제목 — 가운데 글자, 양옆으로 가로줄 */
 .shop-group h2 {
+  display: flex;
+  gap: var(--s4);
+  align-items: center;
   margin: 0 0 var(--s4);
-  padding-bottom: 6px;
-  border-bottom: var(--hair) solid var(--line-strong);
+  color: var(--ink-2);
   font-size: var(--t-body-l);
+  font-weight: 600;
 }
+.shop-group h2::before,
+.shop-group h2::after {
+  content: '';
+  flex: 1;
+  border-top: var(--hair) solid var(--line-strong);
+}
+
 .shop-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(158px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
   gap: var(--s3);
 }
+
+/* 게임의 상점 카드 — 그림, 이름, 가로줄, 쿠폰과 개수 */
 .shop-card {
   display: flex;
   flex-direction: column;
@@ -281,37 +298,59 @@
 }
 .shop-thumb {
   display: flex;
-  width: 72px;
-  height: 72px;
+  width: 96px;
+  height: 96px;
   align-items: center;
   justify-content: center;
 }
 .shop-thumb img { max-width: 100%; max-height: 100%; object-fit: contain; }
-.shop-noimg {
-  width: 44px;
-  height: 44px;
-  border: var(--hair) dashed var(--line-strong);
-  border-radius: 3px;
-}
 .shop-name {
   margin: 0;
+  padding-bottom: 8px;
+  border-bottom: var(--hair) solid var(--line-strong);
+  width: 82%;
   color: var(--ink);
   font-size: var(--t-body-s);
   line-height: 1.4;
   word-break: keep-all;
 }
-.shop-cost {
+.shop-price {
   display: inline-flex;
-  gap: 5px;
+  gap: 6px;
   align-items: center;
   margin: 0;
-  padding: 3px 9px;
-  border-radius: 3px;
-  background: color-mix(in oklab, var(--accent) 16%, transparent);
   color: var(--accent);
   font-family: var(--font-mono);
-  font-size: var(--t-caption);
+  font-size: var(--t-body-s);
   font-weight: 600;
+}
+.shop-price img { width: 26px; height: 26px; object-fit: contain; }
+
+.shop-parts { width: 100%; }
+.shop-parts summary {
+  color: var(--ink-3);
+  font-size: 11px;
+  cursor: pointer;
+  list-style: none;
+}
+.shop-parts summary::-webkit-details-marker { display: none; }
+.shop-parts summary::before { content: '▸ '; }
+.shop-parts[open] summary::before { content: '▾ '; }
+.shop-parts summary:hover { color: var(--ink); }
+.shop-parts ul {
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+.shop-parts li {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 2px 0;
+  color: var(--ink-2);
+  font-size: 11px;
+  word-break: keep-all;
 }
 .shop-what {
   margin: 0;
@@ -359,4 +398,32 @@
   font-size: var(--t-caption);
   line-height: 1.8;
   word-break: keep-all;
+}
+
+/* 트리 목록의 잠긴 이름과 이벤트 구분선 */
+.mam-list a > span:first-child { display: flex; flex-direction: column; }
+.mam-list em {
+  color: var(--ink-3);
+  font-size: 10px;
+  font-style: normal;
+}
+.mam-list a[aria-current='page'] em { color: var(--on-accent); opacity: 0.7; }
+.mam-sep {
+  margin: var(--s4) 0 var(--s2);
+  padding-top: var(--s3);
+  border-top: var(--hair) solid var(--line);
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+.mam-open.is-event { color: var(--accent); }
+
+/* 낱개 부재에 그림이 없을 때. 빈칸 대신 작은 점 */
+.shop-dot {
+  width: 24px;
+  height: 24px;
+  flex: none;
+  border-radius: 2px;
+  background: color-mix(in oklab, var(--line-strong) 60%, transparent);
 }

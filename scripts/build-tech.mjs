@@ -96,20 +96,17 @@ const hub = list
  * 트리 이름을 한국어로. 게임 안에서 MAM 이 실제로 쓰는 분류다.
  * 트리를 열려면 그 트리의 표본을 주워 스캔해야 한다 — 그 표본도 적는다.
  */
-const TREE_KO = {
-  Quartz: { ko: '석영', opens: '석영 원석을 주워 스캔' },
-  Caterium: { ko: '카테리움', opens: '카테리움 광석을 주워 스캔' },
-  Sulfur: { ko: '황', opens: '황을 주워 스캔' },
-  PowerSlugs: { ko: '파워 슬러그', opens: '파워 슬러그를 주워 스캔' },
-  Mycelia: { ko: '균사', opens: '균사를 주워 스캔' },
-  ACarapace: { ko: '외계 등껍질', opens: '호그를 처치하고 등껍질 획득' },
-  AOrgans: { ko: '외계 기관', opens: '스피터를 처치하고 기관 획득' },
-  AO: { ko: '외계 생물', opens: '외계 생물 표본 획득' },
-  AOrganisms: { ko: '외계 유기체', opens: '외계 유기체 표본 획득' },
-  Nutrients: { ko: '영양분', opens: '식용 식물을 주워 스캔' },
-  Alien: { ko: '외계 기술', opens: '소머슬룹 또는 머서 구체 획득' },
-  XMas: { ko: 'FICSMAS', opens: '기간 한정 이벤트' },
-};
+/*
+ * 게임 화면의 실제 트리 목록. 내부 클래스명 접두사로 나누면 안 된다 —
+ * 「외계 거대생물」 한 트리가 ACarapace·AO·AOrgans·AOrganisms 네 접두사로 흩어져 있어서,
+ * 그대로 쓰면 게임에 없는 트리 네 개가 생긴다.
+ */
+const TREE_DEF = JSON.parse(
+  fs.readFileSync(path.join(ROOT, 'src/data/curated/mam-trees.json'), 'utf8')
+).trees;
+/** 접두사 → 트리 키 */
+const TREE_OF = new Map();
+for (const t of TREE_DEF) for (const pre of t.prefixes) TREE_OF.set(pre, t.key);
 
 const mam = [];
 for (const s of list.filter((x) => x.type === 'mam')) {
@@ -119,7 +116,8 @@ for (const s of list.filter((x) => x.type === 'mam')) {
    * 트리는 첫 알파벳 조각이고, 나머지에서 숫자가 나오면 깊이로 쓴다.
    */
   const m = (s.className ?? '').match(/^Research_([A-Za-z]+)_(.+)_C$/);
-  const tree = m?.[1] ?? '기타';
+  const prefix = m?.[1] ?? '기타';
+  const tree = TREE_OF.get(prefix) ?? '기타';
   const rest = m?.[2] ?? '';
   const nums = rest.match(/\d+/g) ?? [];
   mam.push({
@@ -128,7 +126,9 @@ for (const s of list.filter((x) => x.type === 'mam')) {
     /* 영문 이름이 있어야 위키의 선행 관계표와 맞출 수 있다 */
     en: s.name,
     tree,
-    treeKo: TREE_KO[tree]?.ko ?? tree,
+    treeKo: TREE_DEF.find((t) => t.key === tree)?.ko ?? tree,
+    /** 클래스명 접두사. 같은 트리 안에서 갈래를 구분하는 데 쓴다 */
+    branch: prefix,
     /** 클래스명에서 뽑은 번호. 깊이는 parents 로 다시 계산하므로 참고용이다 */
     row: nums.length ? Number(nums[0]) : 99,
     col: nums.length > 1 ? Number(nums[1]) : 1,
@@ -187,12 +187,29 @@ const MAM_LINKS = JSON.parse(
 
 mam.sort((a, b) => a.treeKo.localeCompare(b.treeKo, 'ko') || a.row - b.row || a.col - b.col);
 
-const mamTrees = [...new Set(mam.map((x) => x.tree))].map((t) => ({
-  key: t,
-  ko: TREE_KO[t]?.ko ?? t,
-  opens: TREE_KO[t]?.opens ?? '표본 획득 조건 미확인',
-  count: mam.filter((x) => x.tree === t).length,
+const mamTrees = TREE_DEF.map((t) => ({
+  key: t.key,
+  ko: t.ko,
+  en: t.en,
+  opens: t.opens,
+  ...(t.lockedKo ? { lockedKo: t.lockedKo } : {}),
+  ...(t.event ? { event: true } : {}),
+  ...(t.link ? { link: t.link } : {}),
+  ...(t.note ? { note: t.note } : {}),
+  count: mam.filter((x) => x.tree === t.key).length,
 }));
+
+/* 어느 트리에도 못 들어간 연구가 있으면 조용히 사라지므로 빌드를 세운다 */
+{
+  const orphan = mam.filter((m) => m.tree === '기타');
+  if (orphan.length) {
+    console.error(
+      '[실패] 트리를 못 찾은 MAM 연구: ' + orphan.map((m) => m.id).join(', ') +
+        '\n  → src/data/curated/mam-trees.json 의 prefixes 에 추가하세요.'
+    );
+    process.exit(3);
+  }
+}
 
 // ────────────────────────────────────────────────── 어썸 싱크 상점
 const shop = list

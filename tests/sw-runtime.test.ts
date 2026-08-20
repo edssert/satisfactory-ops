@@ -155,7 +155,7 @@ test('온라인에서 각 화면이 자기 문서를 돌려준다', { skip: !fs.
     [`${BASE}/guide/`, '해금 순서대로'],
     [`${BASE}/codex/reference/`, '레퍼런스'],
     [`${BASE}/codex/tiers/0/`, '티어 0'],
-    [`${BASE}/codex/mam/Quartz/`, 'MAM 도감'],
+    [`${BASE}/codex/mam/quartz/`, 'MAM 도감'],
     [`${BASE}/codex/shop/parts/`, '싱크 상점 도감'],
     [`${BASE}/versions/`, 'Release Notes'],
   ];

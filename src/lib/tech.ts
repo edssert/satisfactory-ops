@@ -50,7 +50,20 @@ export const tech = techJson as unknown as {
   $counts: { hub: number; milestones: number; mam: number; shop: number };
   hub: { id: string; ko: string; order: number; cost: Cost[]; unlocks: Unlocks }[];
   milestones: { id: string; ko: string; tier: number; cost: Cost[]; unlocks: Unlocks }[];
-  mamTrees: { key: string; ko: string; opens: string; count: number }[];
+  mamTrees: {
+    key: string;
+    ko: string;
+    en: string;
+    opens: string;
+    count: number;
+    /** 잠겨 있을 때 게임이 보여 주는 다른 이름 */
+    lockedKo?: string;
+    /** 기간 한정 이벤트 트리인가 */
+    event?: boolean;
+    /** 연구 트리가 아니라 다른 화면으로 보내는 항목 (하드 드라이브) */
+    link?: string;
+    note?: string;
+  }[];
   mam: MamNode[];
   shop: ShopEntry[];
 };

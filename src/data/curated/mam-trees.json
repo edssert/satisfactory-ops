@@ -1,0 +1,84 @@
+{
+  "$comment": "게임 MAM 화면의 실제 연구 트리 목록과 순서. 내부 클래스명 접두사로 나누면 안 된다 — 「외계 거대생물」 한 트리가 ACarapace·AO·AOrgans·AOrganisms 네 접두사로 흩어져 있어서, 그대로 쓰면 게임에 없는 트리 네 개가 생긴다.",
+  "$source": "게임 MAM 화면(1.2 한국어) · https://satisfactory.wiki.gg/wiki/MAM",
+  "$confidence": "verified",
+  "$note": "잠긴 트리는 게임이 다른 이름으로 보여 준다 — 카테리움은 「미확인 금속」, 균사는 「유사-균류 성장물」. 이 앱은 진행도와 상관없이 전부 보여 주므로 열린 이름을 쓰고 잠긴 이름을 같이 적는다.",
+  "trees": [
+    {
+      "key": "harddrive",
+      "ko": "하드 드라이브",
+      "en": "Hard Drive",
+      "prefixes": [],
+      "opens": "추락한 화물칸에서 하드 드라이브를 주움",
+      "link": "recipes",
+      "note": "하드 드라이브는 연구 트리가 아니라 대체 제작법 뽑기다. 후보 두 개가 나오고 리롤이 한 번 있다."
+    },
+    {
+      "key": "megafauna",
+      "ko": "외계 거대생물",
+      "en": "Alien Megafauna",
+      "prefixes": ["ACarapace", "AO", "AOrgans", "AOrganisms"],
+      "opens": "호그·해처·스팅어·스피터의 유해를 획득"
+    },
+    {
+      "key": "alien",
+      "ko": "외계 기술",
+      "en": "Alien Technology",
+      "prefixes": ["Alien"],
+      "opens": "S.A.M. 원석을 채집"
+    },
+    {
+      "key": "nutrients",
+      "ko": "영양소",
+      "en": "Nutrients",
+      "prefixes": ["Nutrients"],
+      "opens": "베릴 너트·팔레베리·베이컨 아가릭을 채집"
+    },
+    {
+      "key": "slugs",
+      "ko": "파워 슬러그",
+      "en": "Power Slugs",
+      "prefixes": ["PowerSlugs"],
+      "opens": "파워 슬러그를 주움"
+    },
+    {
+      "key": "quartz",
+      "ko": "석영",
+      "en": "Quartz",
+      "prefixes": ["Quartz"],
+      "opens": "석영 원석을 주움"
+    },
+    {
+      "key": "sulfur",
+      "ko": "황",
+      "en": "Sulfur",
+      "prefixes": ["Sulfur"],
+      "opens": "황을 주움"
+    },
+    {
+      "key": "caterium",
+      "ko": "카테리움",
+      "en": "Caterium",
+      "prefixes": ["Caterium"],
+      "lockedKo": "미확인 금속",
+      "opens": "카테리움 광석을 주움"
+    },
+    {
+      "key": "mycelia",
+      "ko": "균사",
+      "en": "Mycelia",
+      "prefixes": ["Mycelia"],
+      "lockedKo": "유사-균류 성장물",
+      "opens": "균사를 주움"
+    },
+    {
+      "key": "ficsmas",
+      "ko": "FICSMAS",
+      "en": "FICSMAS",
+      "prefixes": ["XMas"],
+      "event": true,
+      "opens": "기간 한정 이벤트 기간에만 열린다",
+      "note": "해마다 12월 무렵에만 열리는 이벤트다. 상시 콘텐츠와 섞으면 「지금 할 수 있는 것」이 흐려지므로 따로 둔다."
+    }
+  ]
+}

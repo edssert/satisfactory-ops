@@ -1,19 +1,22 @@
 ---
 /**
- * 도감 · A.W.E.S.O.M.E. 싱크 상점 — 게임의 탭 구성 그대로.
+ * 도감 · A.W.E.S.O.M.E. 싱크 상점 — 게임의 탭 구성과 카드 모양 그대로.
  *
  * 쿠폰 값으로 묶던 것을 걷어냈다. 게임에서 상점을 그렇게 쓰지 않는다 —
  * FICSIT 스페셜 / 관리 / 조직화 / 커스터마이저 / 토대 / 벽 / 건축물 / 장비 / 부품 탭으로 고르고,
  * 그 안이 다시 구획으로 나뉜다.
  *
- * 탭 구성은 게임 배포 데이터에 없다(스키매틱에 분류 필드가 없다). 공식 위키에서 옮겼고
- * 쿠폰 값과 이름은 게임 데이터를 쓴다.
+ * 카드도 게임과 같다: 그림, 이름, 가로줄, 쿠폰 그림과 개수.
+ * 묶음이면 게임처럼 「설계도 포함」으로 무엇이 들어 있는지 펼쳐 본다.
+ *
+ * 탭 구성은 게임 배포 데이터에 없어 공식 위키에서 옮겼고, 이름과 쿠폰 값은 게임 데이터를 쓴다.
+ * 그림은 공식 위키에서 받아 `public/assets/shop/<스키매틱 클래스>.png` 로 둔다 — 173건 전부 있다.
  */
 import Base from '../../../layouts/Base.astro';
 import TechNav from '../../../components/TechNav.astro';
 import '../../../styles/fx.css';
 import '../../../styles/tech.css';
-import { SHOP_SOURCE, hasBuildingIcon, hasItemIcon, iconOf, shopTabs, summarize } from '../../../lib/tech';
+import { SHOP_SOURCE, hasBuildingIcon, shopTabs, summarize } from '../../../lib/tech';
 
 export function getStaticPaths() {
   const { tabs } = shopTabs();
@@ -40,10 +43,10 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       </p>
     </header>
 
-    <nav class="tabs" aria-label="상점 분류">
+    <nav class="tabs is-wide" aria-label="상점 분류">
       {tabs.map((t) => (
         <a href={`${base}/codex/shop/${t.slug}/`} aria-current={t.slug === tab.slug ? 'page' : undefined}>
-          <b style="font-size:var(--t-body-s)">{t.ko}</b>
+          <b>{t.ko}</b>
           <span class="tab-n">{t.count}</span>
         </a>
       ))}
@@ -51,29 +54,50 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
     {tab.groups.map((g) => (
       <section class="shop-group">
-        <h2>{g.ko} <span class="n">{g.list.length}</span></h2>
+        <h2>{g.ko}</h2>
         <div class="shop-grid">
           {g.list.map((s) => {
-            const ic = iconOf(s.unlocks);
+            const parts = s.unlocks.buildings;
             const what = summarize(s.unlocks);
             return (
               <article class="shop-card">
                 <div class="shop-thumb">
-                  {ic ? (
-                    <img
-                      src={`${base}/assets/${ic.kind === 'building' ? 'buildings-png' : 'items'}/${ic.src}.png`}
-                      alt=""
-                      width="72"
-                      height="72"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <span class="shop-noimg" aria-hidden="true"></span>
-                  )}
+                  <img src={`${base}/assets/shop/${s.id}.png`} alt="" width="96" height="96" loading="lazy" />
                 </div>
                 <p class="shop-name">{s.ko}</p>
-                <p class="shop-cost">쿠폰 {s.coupons}</p>
-                {what.length > 0 && <p class="shop-what">{what.slice(0, 3).join(' · ')}</p>}
+                <p class="shop-price">
+                  <img src={`${base}/assets/shop/_coupon.png`} alt="쿠폰" width="26" height="26" />
+                  <span>×{s.coupons}</span>
+                </p>
+                {parts.length > 1 ? (
+                  <details class="shop-parts">
+                    <summary>설계도 포함 {parts.length}</summary>
+                    <ul>
+                      {parts.map((b) => (
+                        <li>
+                          {/*
+                            * 벽·경사로·지붕의 낱개 부재는 위키에 그림이 없다.
+                            * 없는 그림을 걸면 빈칸이 나가므로 있을 때만 건다.
+                            */}
+                          {hasBuildingIcon(b.id) ? (
+                            <img
+                              src={`${base}/assets/buildings-png/${b.id}.png`}
+                              alt=""
+                              width="24"
+                              height="24"
+                              loading="lazy"
+                            />
+                          ) : (
+                            <span class="shop-dot" aria-hidden="true"></span>
+                          )}
+                          {b.ko}
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                ) : (
+                  what.length > 0 && <p class="shop-what">{what.slice(0, 2).join(' · ')}</p>
+                )}
               </article>
             );
           })}
@@ -84,6 +108,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <p class="codex-foot">
       탭과 구획 구성은 게임 배포 데이터에 없어 공식 위키의 상점 문서에서 옮겼습니다
       (<a href={SHOP_SOURCE}>출처</a>). 이름과 쿠폰 값은 게임 데이터 그대로입니다.
+      그림은 공식 위키의 것이며 Coffee Stain Studios 자산입니다.
     </p>
   </div>
 </Base>

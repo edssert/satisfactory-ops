@@ -15,7 +15,10 @@ import '../../../styles/tech.css';
 import { MAM_TILE, hasBuildingIcon, hasItemIcon, mamLayout, summarize, tech } from '../../../lib/tech';
 
 export function getStaticPaths() {
-  return tech.mamTrees.map((t) => ({ params: { tree: t.key }, props: { tree: t } }));
+  /* 하드 드라이브는 연구 트리가 아니라 대체 제작법 뽑기라 자기 화면이 없다 */
+  return tech.mamTrees
+    .filter((t) => t.count > 0)
+    .map((t) => ({ params: { tree: t.key }, props: { tree: t } }));
 }
 
 const { tree } = Astro.props;
@@ -54,17 +57,40 @@ const { w: TW, h: TH } = MAM_TILE;
     <div class="mam">
       <nav aria-label="연구 트리">
         <ul class="mam-list">
-          {tech.mamTrees.map((t) => (
-            <li>
-              <a
-                href={`${base}/codex/mam/${t.key}/`}
-                aria-current={t.key === tree.key ? 'page' : undefined}
-              >
-                {t.ko}
-                <span class="n">{t.count}</span>
-              </a>
-            </li>
-          ))}
+          {tech.mamTrees
+            .filter((t) => !t.event)
+            .map((t) => (
+              <li>
+                <a
+                  href={t.link ? `${base}/codex/${t.link}/` : `${base}/codex/mam/${t.key}/`}
+                  aria-current={t.key === tree.key ? 'page' : undefined}
+                >
+                  <span>
+                    {t.ko}
+                    {t.lockedKo && <em>잠김: {t.lockedKo}</em>}
+                  </span>
+                  <span class="n">{t.count || '↗'}</span>
+                </a>
+              </li>
+            ))}
+        </ul>
+
+        {/* 이벤트 트리는 상시 콘텐츠와 섞으면 "지금 할 수 있는 것"이 흐려진다 */}
+        <p class="mam-sep">기간 한정</p>
+        <ul class="mam-list">
+          {tech.mamTrees
+            .filter((t) => t.event)
+            .map((t) => (
+              <li>
+                <a
+                  href={`${base}/codex/mam/${t.key}/`}
+                  aria-current={t.key === tree.key ? 'page' : undefined}
+                >
+                  <span>{t.ko}</span>
+                  <span class="n">{t.count}</span>
+                </a>
+              </li>
+            ))}
         </ul>
       </nav>
 
@@ -72,6 +98,8 @@ const { w: TW, h: TH } = MAM_TILE;
         <div class="mam-head">
           <h2>{tree.ko}</h2>
           <span class="mam-open">{tree.opens}</span>
+          {tree.lockedKo && <span class="mam-open">게임에서 잠겨 있을 때 이름: {tree.lockedKo}</span>}
+          {tree.event && <span class="mam-open is-event">기간 한정 이벤트</span>}
         </div>
 
         <div class="mam-stage">

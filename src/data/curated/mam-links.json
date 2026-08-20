@@ -162,6 +162,78 @@
     ],
     "Research_Alien_BoosterBlocker_C": [
       "Research_Alien_SAMFluctuator_C"
+    ],
+    "Research_AO_Hatcher_C": [
+      "Research_ACarapace_0_C"
+    ],
+    "Research_AO_Stinger_C": [
+      "Research_ACarapace_0_C"
+    ],
+    "Research_AOrgans_0_C": [
+      "Research_ACarapace_0_C"
+    ],
+    "Research_AO_DNACapsule_C": [
+      "Research_ACarapace_0_C",
+      "Research_AO_Hatcher_C",
+      "Research_AO_Stinger_C",
+      "Research_AOrgans_0_C"
+    ],
+    "Research_AOrgans_2_C": [
+      "Research_AO_DNACapsule_C"
+    ],
+    "Research_AO_Pre_Rebar_C": [
+      "Research_AO_DNACapsule_C"
+    ],
+    "Research_ACarapace_2_C": [
+      "Research_AO_Pre_Rebar_C"
+    ],
+    "Research_ACarapace_3_C": [
+      "Research_AO_DNACapsule_C"
+    ],
+    "Research_AOrganisms_2_C": [
+      "Research_AO_DNACapsule_C"
+    ],
+    "Research_AOrgans_3_C": [
+      "Research_AOrgans_2_C"
+    ],
+    "Research_AOrgans_1_C": [
+      "Research_AO_DNACapsule_C"
+    ],
+    "Research_ACarapace_1_C": [
+      "Research_AO_DNACapsule_C"
+    ],
+    "Research_ACarapace_2_1_C": [
+      "Research_ACarapace_2_C"
+    ],
+    "Research_AOrganisms_1_C": [
+      "Research_AO_DNACapsule_C"
+    ],
+    "Research_Mycelia_2_C": [
+      "Research_Mycelia_1_C"
+    ],
+    "Research_Mycelia_4_C": [
+      "Research_Mycelia_1_C"
+    ],
+    "Research_Mycelia_2_1_C": [
+      "Research_Mycelia_2_C"
+    ],
+    "Research_Mycelia_3_C": [
+      "Research_Mycelia_2_C"
+    ],
+    "Research_Mycelia_7_C": [
+      "Research_Mycelia_2_C"
+    ],
+    "Research_Mycelia_GasMask_C": [
+      "Research_Mycelia_2_C"
+    ],
+    "Research_Mycelia_5_C": [
+      "Research_Mycelia_4_C"
+    ],
+    "Research_Mycelia_6_C": [
+      "Research_Mycelia_5_C"
+    ],
+    "Research_Mycelia_8_C": [
+      "Research_Mycelia_6_C"
     ]
   },
   "roots": {
