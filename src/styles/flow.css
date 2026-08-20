@@ -13,9 +13,10 @@
 
 .fc {
   margin: 0;
-  border: var(--hair) solid var(--line);
   border-radius: var(--radius);
-  background: var(--surface);
+  background: var(--glass);
+  box-shadow: var(--lit);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
 }
 
 .fc-svg {
@@ -39,7 +40,7 @@
 
 /* ------------------------------------------------------------------ 기계 상자 */
 .fc-node rect {
-  fill: var(--bg);
+  fill: var(--raised);
   stroke: var(--line-strong);
   stroke-width: 1;
   rx: 3;

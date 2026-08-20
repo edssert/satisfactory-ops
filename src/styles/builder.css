@@ -17,9 +17,10 @@
   align-items: end;
   gap: var(--s4);
   padding: var(--s5);
-  border: var(--hair) solid var(--line-strong);
   border-radius: var(--radius);
-  background: var(--surface);
+  background: var(--glass);
+  box-shadow: var(--lit-strong);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
 }
 .fb-field {
   display: grid;

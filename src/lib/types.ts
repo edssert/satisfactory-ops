@@ -99,6 +99,8 @@ export interface AppMeta {
     alternateRecipes: number;
     buildings: number;
     milestones: number;
+    hubUpgrades: number;
+    resourceNodes: number;
     curatedFiles: number;
   };
   conventions: Record<string, string>;

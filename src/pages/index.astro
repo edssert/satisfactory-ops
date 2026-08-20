@@ -1,57 +1,45 @@
 ---
 /**
- * 랜딩. 히어로 유형 = **체험형(Live Demo)**.
+ * 랜딩.
  *
- * 근거: 이 프로젝트는 후기·사용자수·로고월이 하나도 없는 개인 제작물이다.
- * 그런 경우 작동하는 위젯이 증언보다 강한 신뢰 신호다
- * (docs/research/design-landing-craft.md §3, landing-page-craft 스킬 1단계).
+ * 시각 방향: 게임 실물(공식 키 아트) 위에 유리 계층. 효과는 Magic UI 가 정착시킨 것들을
+ * CSS 로 옮겨 썼다(`src/styles/fx.css`) — Border Beam · Retro Grid · Dot Pattern ·
+ * Shimmer · Gradient Text · Number Ticker.
  *
- * 위젯 강제 요건:
- *   1. 네트워크 요청 0 — 필요한 데이터를 HTML 에 인라인한다.
- *   2. 결과에 이 앱 고유의 판단 한 줄이 붙는다(계산 결과만 뱉으면 계산기다).
- *   3. label 명시 + 결과 영역 aria-live.
- *   4. LCP 대상이 텍스트다.
+ * 히어로는 **체험형**이다. 후기도 사용자수도 없는 개인 제작물에서는 작동하는 위젯이
+ * 가장 강한 신뢰 신호다. 데이터를 HTML 에 인라인해 네트워크 요청이 0 이다.
  *
- * 화면의 모든 수치는 빌드 타임에 게임 데이터에서 계산한다. 마크업에 타이핑하지 않는다.
+ * 화면의 모든 수치는 빌드 타임에 게임 데이터에서 계산한다.
  */
 import Base from '../layouts/Base.astro';
 import FlowChart from '../components/FlowChart.astro';
-import { building, item, meta, milestonesByTier, recipe } from '../lib/gamedata';
-import spine from '../data/curated/spine.json';
+import '../styles/fx.css';
+import '../styles/landing.css';
+import { building, item, items, meta, milestonesByTier, recipe } from '../lib/gamedata';
 import { ironLine } from '../lib/flows';
+import spine from '../data/curated/spine.json';
 import versionHistory from '../data/curated/version-history.json';
+import priority from '../data/curated/alternate-priority.json';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-
-/** 게임 버전은 배포 데이터에 없다. 빌드 ID 에 묶인 큐레이션 사실이라 연혁 파일이 정본이다 */
 const gameVersion = versionHistory.$dataBaseline.version;
 
-const minerMk1 = building('Build_MinerMk1_C');
 const beltMk1 = building('Build_ConveyorBeltMk1_C');
 const smelter = building('Build_SmelterMk1_C');
 const assembler = building('Build_AssemblerMk1_C');
 const coalGen = building('Build_GeneratorCoal_C');
 
 const beltMk1Rate = beltMk1.beltItemsPerMinute ?? 60;
-const coalMW = coalGen.powerGenMW ?? 75;
-const coalPerGen = (coalMW / (item('Desc_Coal_C').energyMJ ?? 300)) * 60;
-
-/** 제련기 한 대가 먹는 철광석 — 레시피에서 읽는다 */
-const ironIngot = recipe('Recipe_IngotIron_C');
-const smeltIn = ironIngot.ingredients[0]?.perMinute ?? 30;
-
-/** 벨트 한 줄에 붙는 제련기 대수 — 초반 라인 크기가 여기서 정해진다 */
+const coalPerGen = ((coalGen.powerGenMW ?? 75) / (item('Desc_Coal_C').energyMJ ?? 300)) * 60;
+const smeltIn = recipe('Recipe_IngotIron_C').ingredients[0]?.perMinute ?? 30;
 const smeltersPerBelt = Math.floor(beltMk1Rate / smeltIn);
 const gensPerBelt = Math.floor(beltMk1Rate / coalPerGen);
 
-/**
- * 위젯 선택지. 순서와 문구는 spine.json 이 정하고, 수치는 여기서 계산해 끼운다.
- * 인라인 스크립트로 넘기므로 순수 데이터만 담는다.
- */
 const LINES: Record<string, { now: string; scale: string; keep: string }> = {
   hub: {
     now: '철 노드 옆에 허브를 놓고, 허브 6까지 민다',
-    scale: '허브 6에서 바이오매스 연소기와 바이오매스 레시피가 같이 열린다 — 급유 자동화가 되는 시점이 정확히 여기다',
+    scale:
+      '허브 6에서 바이오매스 연소기와 바이오매스 레시피가 같이 열린다 — 급유 자동화가 되는 시점이 정확히 여기다',
     keep: '이파리보다 나무를 먼저 챙긴다. 나무 하나가 바이오매스 5개, 이파리는 0.5개다',
   },
   't1-iron': {
@@ -79,21 +67,24 @@ const options = spine.steps.map((s) => ({
   ...(LINES[s.id] ?? { now: '', scale: '', keep: '' }),
 }));
 
-/** 랜딩에 싣는 실물 — 가이드와 같은 정의를 쓴다 */
 const showcase = ironLine();
 
 const tiers = milestonesByTier();
-const laterMilestones = tiers
-  .filter((t) => t.tier >= 4)
-  .reduce((n, t) => n + t.list.length, 0);
+const laterMilestones = tiers.filter((t) => t.tier >= 4).reduce((n, t) => n + t.list.length, 0);
 
-const buildFacts = [
-  { k: '게임 버전', v: gameVersion },
-  { k: 'Steam 빌드', v: meta.game?.steamBuildId ?? '—' },
-  { k: '데이터 추출', v: String(meta.generatedAt ?? '').slice(0, 10) },
-  { k: '레시피', v: `${meta.counts?.recipes ?? 0}건` },
-  { k: '건물', v: `${meta.counts?.buildings ?? 0}건` },
-  { k: '마일스톤', v: `${meta.counts?.milestones ?? 0}건` },
+/** 아이콘 띠 — 이 앱이 아는 것의 규모를 말이 아니라 실물로 보여준다 */
+const stripIcons = items
+  .filter((i) => i.kind === 'part' || i.kind === 'resource')
+  .slice(0, 44)
+  .map((i) => i.id);
+
+const altCount = (priority as unknown as { recipes: unknown[] }).recipes.length;
+
+const facts = [
+  { k: '레시피', v: meta.counts?.recipes ?? 0 },
+  { k: '건물', v: meta.counts?.buildings ?? 0 },
+  { k: '대체 제작법 등급', v: altCount },
+  { k: '자원 노드', v: meta.counts?.resourceNodes ?? 0 },
 ];
 ---
 
@@ -101,20 +92,28 @@ const buildFacts = [
   title="Satisfactory — 지금 무엇을 얼마나 지어야 하는가"
   description="해금 순서대로 안내하는 한국어 Satisfactory 플레이북. 계산기가 아니라, 지금 할 일과 남겨둘 자리를 알려줍니다."
 >
-  <section class="hero">
+  <section class="hero" style={`--hero-art:url('${base}/assets/art/keyart.webp')`}>
+    <div class="hero-art" aria-hidden="true"></div>
+    <div class="hero-scrim" aria-hidden="true"></div>
+    <div class="fx-retrogrid" aria-hidden="true"></div>
+
     <div class="wrap hero-inner">
       <div class="hero-copy">
         <p class="eyebrow">
-          <span class="n">Satisfactory {gameVersion}</span> · 한국어 플레이북
+          <span class="dot" aria-hidden="true"></span>
+          <span class="n">Satisfactory {gameVersion}</span> · 게임 데이터 기준
         </p>
-        <h1>지금 무엇을<br />얼마나 지어야 하는가</h1>
-        <p class="lede prose">
+        <h1>
+          지금 무엇을<br />
+          <span class="fx-gradient-text">얼마나 지어야 하는가</span>
+        </h1>
+        <p class="lede">
           기계 대수를 답하는 계산기는 이미 많습니다. 이 사이트는 <strong>해금 순서</strong>대로
           지금 지을 것과 <strong>비워 둘 자리</strong>를 알려줍니다.
         </p>
       </div>
 
-      <div class="demo">
+      <div class="demo fx-beam">
         <div class="demo-head">
           <label class="demo-label" for="step">지금 어디까지 왔나요</label>
           <select id="step" class="demo-select">
@@ -123,33 +122,30 @@ const buildFacts = [
             ))}
           </select>
         </div>
-
         <dl class="demo-out" aria-live="polite" data-demo-out>
-          <div class="row">
-            <dt>지금 지을 것</dt>
-            <dd data-f="now"></dd>
-          </div>
-          <div class="row">
-            <dt>왜 그 규모인가</dt>
-            <dd data-f="scale"></dd>
-          </div>
-          <div class="row is-keep">
-            <dt>남겨둘 것</dt>
-            <dd data-f="keep"></dd>
-          </div>
+          <div class="row"><dt>지금 지을 것</dt><dd data-f="now"></dd></div>
+          <div class="row"><dt>왜 그 규모인가</dt><dd data-f="scale"></dd></div>
+          <div class="row is-keep"><dt>남겨둘 것</dt><dd data-f="keep"></dd></div>
         </dl>
-
         <p class="demo-gate"><span data-f="gate"></span></p>
       </div>
 
       <div class="hero-cta">
-        <a class="btn is-primary" href={`${base}/guide/`}>가이드 열기</a>
-        <a class="btn" href={`${base}/tools/`}>레퍼런스 표</a>
+        <a class="btn is-primary fx-shimmer" href={`${base}/guide/`}>가이드 열기</a>
+        <a class="btn" href={`${base}/builder/`}>직접 만들어 보기</a>
       </div>
     </div>
   </section>
 
-  <section class="wrap section">
+  <div class="strip" aria-hidden="true">
+    <div class="strip-track">
+      {[...stripIcons, ...stripIcons].map((id) => (
+        <img src={`${base}/assets/items/${id}.png`} alt="" width="34" height="34" loading="lazy" />
+      ))}
+    </div>
+  </div>
+
+  <section class="wrap section reveal">
     <p class="marker"><span class="num">01</span> 왜 다른가</p>
     <h2 class="prose">같은 질문에 다른 답을 냅니다</h2>
     <p class="prose muted">
@@ -166,11 +162,11 @@ const buildFacts = [
         <p class="vs-note">목표 수량을 넣으면 필요한 기계 수를 돌려줍니다. 정확합니다.</p>
       </article>
 
-      <article class="vs-col is-ours">
+      <article class="vs-col is-ours fx-beam">
         <p class="vs-tag">satisfactory-ops</p>
         <p class="vs-answer">
-          지금은 {assembler.ko} <span class="n">2</span>대만 짓고,
-          옆을 <span class="n">4×4</span> 파운데이션 비워 두세요.
+          지금은 {assembler.ko} <span class="n">2</span>대만 짓고, 옆을{' '}
+          <span class="n">4×4</span> 파운데이션 비워 두세요.
         </p>
         <p class="vs-note">
           페이즈 2가 같은 부품을 <span class="n">20</span>배 요구합니다. 지금 자리를 안 남기면
@@ -180,7 +176,7 @@ const buildFacts = [
     </div>
   </section>
 
-  <section class="wrap section">
+  <section class="wrap section reveal">
     <p class="marker"><span class="num">02</span> 진행 축</p>
     <h2 class="prose">해금 순서를 벗어나지 않습니다</h2>
     <p class="prose muted">
@@ -213,28 +209,35 @@ const buildFacts = [
     </div>
   </section>
 
-  <section class="wrap section">
+  <section class="wrap section reveal">
     <p class="marker"><span class="num">03</span> 수치의 출처</p>
     <h2 class="prose">이 사이트의 숫자는 게임 파일에서 나옵니다</h2>
 
     <div class="facts">
-      {buildFacts.map((f) => (
+      {facts.map((f) => (
         <div class="fact">
           <span class="fact-k">{f.k}</span>
-          <span class="fact-v n">{f.v}</span>
+          <span class="fact-v n">
+            <span class="fx-ticker" style={`--to:${f.v}`}></span>
+            <span class="fx-ticker-fallback">{f.v}</span>
+          </span>
         </div>
       ))}
     </div>
-    <p class="caption facts-note">
-      화면에 손으로 옮겨 적은 수치가 없습니다. 게임이 갱신되면 데이터를 다시 뽑고, 검증에 실패하면
-      빌드가 멈춥니다.
+    <p class="caption facts-note prose">
+      화면에 손으로 옮겨 적은 수치가 없습니다. 게임이 갱신되면 데이터를 다시 뽑고, 검증에
+      실패하면 빌드가 멈춥니다. 대체 제작법 등급은 남의 순위를 옮긴 것이 아니라{' '}
+      <span class="n">{gameVersion}</span> 데이터로 직접 계산했습니다.
     </p>
   </section>
 
-  <section class="final">
+  <section class="final" style={`--final-art:url('${base}/assets/art/factory.webp')`}>
+    <div class="final-art" aria-hidden="true"></div>
+    <div class="final-scrim" aria-hidden="true"></div>
+    <div class="fx-dots" aria-hidden="true"></div>
     <div class="wrap final-inner">
       <h2>지금 어디까지 왔든, 다음 한 단계</h2>
-      <a class="btn is-primary" href={`${base}/guide/`}>가이드 열기</a>
+      <a class="btn is-primary fx-shimmer" href={`${base}/guide/`}>가이드 열기</a>
     </div>
   </section>
 
@@ -263,320 +266,4 @@ const buildFacts = [
       render(sel.value);
     })();
   </script>
-
-  <style>
-    .hero {
-      border-bottom: var(--hair) solid var(--line);
-      padding-block: var(--s16);
-    }
-    .hero-inner {
-      display: grid;
-      gap: var(--s10);
-    }
-    @media (min-width: 940px) {
-      .hero {
-        padding-block: var(--s24) var(--s20);
-      }
-      .hero-inner {
-        grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
-        grid-template-areas: 'copy demo' 'cta demo';
-        align-items: start;
-        column-gap: var(--s16);
-        row-gap: var(--s8);
-      }
-      .hero-copy {
-        grid-area: copy;
-      }
-      .demo {
-        grid-area: demo;
-      }
-      .hero-cta {
-        grid-area: cta;
-      }
-    }
-
-    .eyebrow {
-      margin-bottom: var(--s4);
-      font-family: var(--font-mono);
-      font-size: var(--t-caption);
-      letter-spacing: 0.08em;
-      color: var(--ink-2);
-    }
-    .hero h1 {
-      font-size: var(--t-display);
-      line-height: 1.14;
-      margin-bottom: var(--s6);
-    }
-    .lede {
-      font-size: var(--t-body-l);
-      color: var(--ink-2);
-      margin-bottom: 0;
-    }
-    .lede strong {
-      color: var(--ink);
-      font-weight: 600;
-    }
-
-    .hero-cta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--s3);
-    }
-
-    .demo {
-      border: var(--hair) solid var(--line-strong);
-      border-radius: var(--radius);
-      background: var(--surface);
-    }
-    .demo-head {
-      padding: var(--s4) var(--s5);
-      border-bottom: var(--hair) solid var(--line);
-    }
-    .demo-label {
-      display: block;
-      margin-bottom: var(--s2);
-      font-family: var(--font-mono);
-      font-size: var(--t-label);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--ink-3);
-    }
-    .demo-select {
-      width: 100%;
-      padding: var(--s2) var(--s3);
-      border: var(--hair) solid var(--line-strong);
-      border-radius: var(--radius);
-      background: var(--bg);
-      color: var(--ink);
-      font: inherit;
-      font-size: var(--t-small);
-      font-weight: 600;
-    }
-    .demo-out {
-      margin: 0;
-      padding: var(--s2) var(--s5) var(--s4);
-    }
-    .demo-out .row {
-      padding-block: var(--s3);
-      border-bottom: var(--hair) solid var(--line);
-    }
-    .demo-out .row:last-child {
-      border-bottom: 0;
-    }
-    .demo-out dt {
-      font-family: var(--font-mono);
-      font-size: var(--t-label);
-      letter-spacing: 0.08em;
-      color: var(--ink-3);
-      margin-bottom: var(--s1);
-    }
-    .demo-out dd {
-      margin: 0;
-      font-size: var(--t-small);
-      line-height: 1.6;
-    }
-    .demo-out .is-keep dt {
-      color: var(--accent);
-    }
-    .demo-out .is-keep dd {
-      font-weight: 600;
-    }
-    .demo-gate {
-      margin: 0;
-      padding: var(--s3) var(--s5);
-      border-top: var(--hair) solid var(--line);
-      background: var(--raised);
-      font-size: var(--t-caption);
-      color: var(--ink-2);
-      border-radius: 0 0 var(--radius) var(--radius);
-    }
-
-    .section {
-      padding-block: var(--s20) 0;
-    }
-    .section h2 {
-      margin-bottom: var(--s3);
-    }
-    .section > .muted {
-      margin-bottom: var(--s8);
-    }
-
-    .versus {
-      display: grid;
-      gap: var(--hair);
-      background: var(--line);
-      border: var(--hair) solid var(--line);
-    }
-    @media (min-width: 780px) {
-      .versus {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-    .vs-col {
-      background: var(--bg);
-      padding: var(--s6);
-    }
-    .vs-col.is-ours {
-      background: var(--surface);
-    }
-    .vs-tag {
-      margin-bottom: var(--s4);
-      font-family: var(--font-mono);
-      font-size: var(--t-label);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--ink-3);
-    }
-    .is-ours .vs-tag {
-      color: var(--accent);
-    }
-    .vs-answer {
-      font-size: var(--t-body-l);
-      font-weight: 600;
-      line-height: 1.5;
-      margin-bottom: var(--s3);
-    }
-    .vs-note {
-      margin: 0;
-      font-size: var(--t-small);
-      color: var(--ink-2);
-    }
-
-    /*
-     * 진행 축 레일. 스크롤에 따라 채워진다 — 이 사이트에서 유일한 '볼거리' 모션이고,
-     * 장식이 아니라 진행 자체를 나타낸다. 미지원 브라우저(Firefox 156 미만 등)에서는
-     * 레일이 그냥 회색 선으로 남는다. 내용은 그대로다.
-     */
-    .spine {
-      position: relative;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-    .spine-rail {
-      position: absolute;
-      left: 2.55rem;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: var(--line);
-      pointer-events: none;
-    }
-    .spine-rail::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--accent);
-      transform-origin: top;
-      transform: scaleY(0.06);
-    }
-    @supports (animation-timeline: view()) {
-      .spine-rail::after {
-        animation: rail-grow linear both;
-        animation-timeline: view();
-        animation-range: cover 12% cover 78%;
-      }
-      @keyframes rail-grow {
-        from { transform: scaleY(0.06); }
-        to { transform: scaleY(1); }
-      }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .spine-rail::after { animation: none; transform: scaleY(1); }
-    }
-    .spine-step {
-      display: grid;
-      grid-template-columns: 5.5rem minmax(0, 1fr);
-      gap: var(--s5);
-      padding-block: var(--s5);
-      border-top: var(--hair) solid var(--line);
-    }
-    .spine-step:last-child {
-      border-bottom: var(--hair) solid var(--line);
-    }
-    .spine-step > div { min-width: 0; }
-    .spine-tier {
-      position: relative;
-      font-size: var(--t-caption);
-      color: var(--accent);
-      padding-top: 0.35em;
-      letter-spacing: 0;
-    }
-    .spine-tier::after {
-      content: '';
-      position: absolute;
-      right: -1.02rem;
-      top: 0.85em;
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--accent);
-      outline: 3px solid var(--bg);
-    }
-    .spine-step.is-future .spine-tier::after { background: var(--line-strong); }
-    .spine-step h3 {
-      margin-bottom: var(--s1);
-      font-size: var(--t-body-l);
-    }
-
-    .showcase { margin-top: var(--s10); }
-    .showcase-tag {
-      margin-bottom: var(--s3);
-      font-family: var(--font-mono);
-      font-size: var(--t-label);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--ink-3);
-    }
-    .spine-step.is-future .spine-tier {
-      color: var(--ink-3);
-    }
-    .spine-step.is-future h3 {
-      color: var(--ink-2);
-      font-weight: 600;
-    }
-
-    .facts {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
-      gap: var(--hair);
-      background: var(--line);
-      border: var(--hair) solid var(--line);
-    }
-    .fact {
-      background: var(--bg);
-      padding: var(--s4) var(--s5);
-    }
-    .fact-k {
-      display: block;
-      font-size: var(--t-label);
-      letter-spacing: 0.06em;
-      color: var(--ink-3);
-      margin-bottom: var(--s1);
-    }
-    .fact-v {
-      font-size: var(--t-body-l);
-      font-weight: 500;
-    }
-    .facts-note {
-      margin-top: var(--s4);
-      max-width: var(--measure);
-    }
-
-    .final {
-      margin-top: var(--s24);
-      border-top: var(--hair) solid var(--line);
-      padding-block: var(--s16);
-    }
-    .final-inner {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--s6);
-    }
-    .final h2 {
-      margin: 0;
-    }
-  </style>
 </Base>

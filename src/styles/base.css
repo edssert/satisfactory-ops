@@ -26,6 +26,16 @@ html {
 body {
   margin: 0;
   background: var(--bg);
+  /*
+   * 배경 광원 — 위쪽에서 아주 옅게 들어온다. 색을 칠하는 게 아니라 깊이를 만드는 용도라
+   * 불투명도를 낮게 둔다. 유리 패널이 이 위에 뜨면 경계가 살아난다.
+   */
+  background-image:
+    radial-gradient(70% 45% at 15% -5%, var(--ambient-cool), transparent 65%),
+    radial-gradient(60% 40% at 88% 8%, var(--ambient-warm), transparent 62%),
+    radial-gradient(90% 50% at 50% 100%, var(--ambient-cool), transparent 70%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
   color: var(--ink);
   font-family: var(--font-body);
   font-size: var(--t-body);
@@ -64,10 +74,10 @@ a {
   transition: color var(--dur-fast) var(--ease),
     text-decoration-color var(--dur-fast) var(--ease);
 }
-a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+a:hover { color: var(--primary-ink); text-decoration-color: var(--primary); }
 
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--primary);
   outline-offset: 2px;
   border-radius: 1px;
 }
@@ -125,7 +135,7 @@ a:hover { color: var(--accent); text-decoration-color: var(--accent); }
   height: var(--hair);
   background: var(--line);
 }
-.marker .num { color: var(--accent); }
+.marker .num { color: var(--primary); }
 
 /* ------------------------------------------------------------------ 표 */
 table {
@@ -212,7 +222,7 @@ tbody tr:hover td { background: var(--raised); }
   transition: border-color var(--dur-fast) var(--ease),
     color var(--dur-fast) var(--ease), background-color var(--dur-fast) var(--ease);
 }
-.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn:hover { border-color: var(--primary); color: var(--primary-ink); }
 /* 채움 버튼은 화면당 하나만 쓴다 */
 .btn.is-primary {
   background: var(--accent);

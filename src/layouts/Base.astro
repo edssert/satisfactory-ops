@@ -115,8 +115,9 @@ const nav = [
         top: 0;
         z-index: 5;
         border-bottom: var(--hair) solid var(--line);
-        background: color-mix(in oklab, var(--bg) 88%, transparent);
-        backdrop-filter: saturate(1.4) blur(10px);
+        background: color-mix(in oklab, var(--bg) 72%, transparent);
+        backdrop-filter: saturate(var(--glass-sat)) blur(var(--glass-blur));
+        box-shadow: inset 0 -1px 0 color-mix(in oklab, var(--primary) 14%, transparent);
       }
       .head-inner {
         display: flex;
@@ -139,7 +140,7 @@ const nav = [
       .brand-mark {
         width: 0.75rem;
         height: 0.75rem;
-        border: 2px solid var(--accent);
+        border: 2px solid var(--primary);
         border-radius: 1px;
       }
       .brand-dim { color: var(--ink-3); }
@@ -164,7 +165,7 @@ const nav = [
         display: block;
         height: 2px;
         margin-top: 0.35rem;
-        background: var(--accent);
+        background: var(--primary);
       }
 
       .theme {

@@ -169,6 +169,67 @@ for (const [id, amt] of topRaw.slice(0, 8)) {
   console.log(`   ${ko(id).padEnd(12)} ${Math.round(amt).toLocaleString()}개  (희소도 ×${scarcity(id).toFixed(2)})`);
 }
 
+// ────────────────────────────────────────────────── 인게임 편의성
+/**
+ * 효율만으로는 순위가 안 나온다. 커뮤니티 순위 두 곳이 크게 갈리는 이유가 여기 있다 —
+ * 한쪽(LP 모형)은 전체 생산망의 효율만 보고, 다른 쪽(스팀 가이드)은 "짓기 번거로운가"를
+ * 크게 본다. 번거로움은 취향이 아니라 셀 수 있는 것이다.
+ *
+ * 손이 더 가는 것들:
+ *   ① 재료 가짓수 — 기계 하나에 벨트를 몇 줄 넣어야 하는가. 입력은 최대 4줄이다.
+ *   ② 유체 — 파이프는 벨트보다 손이 많이 간다(양정·펌프·접합부·공기 갇힘).
+ *   ③ 부산물 — 처리하지 않으면 라인이 멈춘다. 싱크로 빼든 되먹이든 배관이 는다.
+ *   ④ 새 자원 도입 — 노드를 새로 잡고 거기까지 벨트를 끌어야 한다.
+ *   ⑤ 기계 등급 — 제조기는 조립기보다, 조립기는 제작기보다 크고 전력을 먹는다.
+ *
+ * 기본 제작법 대비 **얼마나 더 번거로워지는가**를 재고, 줄어들면 양수가 되게 부호를 맞춘다.
+ */
+const FLUID = new Set(
+  items.filter((i) => i.form === 'liquid' || i.form === 'gas').map((i) => i.id)
+);
+const MACHINE_RANK = {
+  Build_ConstructorMk1_C: 1,
+  Build_SmelterMk1_C: 1,
+  Build_AssemblerMk1_C: 2,
+  Build_FoundryMk1_C: 2,
+  Build_OilRefinery_C: 3,
+  Build_Packager_C: 2,
+  Build_ManufacturerMk1_C: 4,
+  Build_Blender_C: 4,
+  Build_HadronCollider_C: 5,
+  Build_Converter_C: 4,
+  Build_QuantumEncoder_C: 5,
+};
+
+function hassle(r) {
+  const inputs = r.ingredients.length;
+  const fluids = r.ingredients.filter((g) => FLUID.has(g.item)).length;
+  const byproducts = Math.max(0, r.products.length - 1);
+  const rank = MACHINE_RANK[r.producedIn[0]] ?? 2;
+  /* 가중치는 판단이다. 유체 한 줄이 고체 두 줄만큼, 부산물 하나가 유체 한 줄만큼 번거롭다고 본다 */
+  return inputs + fluids * 2 + byproducts * 2 + rank;
+}
+
+/** 그 레시피가 기본 제작법에 없던 자원을 새로 끌어오는가 */
+function newResources(alt, std) {
+  const reach = (r, depth = 0, seen = new Set()) => {
+    if (depth > 12) return seen;
+    for (const g of r.ingredients) {
+      const it = itemById.get(g.item);
+      if (!it) continue;
+      if (it.kind === 'resource') seen.add(g.item);
+      else {
+        const nr = defaultFor.get(g.item);
+        if (nr && !seen.has(g.item)) reach(nr, depth + 1, seen);
+      }
+    }
+    return seen;
+  };
+  const a = reach(alt);
+  const b = reach(std);
+  return [...a].filter((k) => !b.has(k)).length;
+}
+
 // ────────────────────────────────────────────────── 대체 제작법을 하나씩 끼워 본다
 const alts = recipes.filter(isAlt);
 const results = [];
@@ -189,6 +250,9 @@ for (const a of alts) {
   }
   /* 줄어들면 양수가 되도록 부호를 맞춘다 */
   const d = (k) => ((baseline[k] - r[k]) / baseline[k]) * 100;
+  const std = defaultFor.get(target);
+  const hassleDelta = hassle(a) - hassle(std);
+  const added = newResources(a, std);
   results.push({
     id: a.id,
     ko: (a.ko || a.en).replace(/^(대체|Alternate):\s*/i, ''),
@@ -196,6 +260,17 @@ for (const a of alts) {
     resourcePct: Math.round(d('resourceScore') * 100) / 100,
     machinePct: Math.round(d('machineScaled') * 100) / 100,
     powerPct: Math.round(d('power') * 100) / 100,
+    /* 번거로움 상세 — 왜 편의 점수가 그렇게 나왔는지 화면에서 설명하기 위해 남긴다 */
+    hassleDelta: hassleDelta + added * 1.5,
+    hassleWhy: {
+      inputs: a.ingredients.length - std.ingredients.length,
+      fluids:
+        a.ingredients.filter((g) => FLUID.has(g.item)).length -
+        std.ingredients.filter((g) => FLUID.has(g.item)).length,
+      byproducts: Math.max(0, a.products.length - 1) - Math.max(0, std.products.length - 1),
+      machineStep: (MACHINE_RANK[a.producedIn[0]] ?? 2) - (MACHINE_RANK[std.producedIn[0]] ?? 2),
+      newResources: added,
+    },
   });
 }
 
@@ -205,9 +280,14 @@ for (const a of alts) {
  * 자원을 가장 무겁게 두는 이유: 맵의 노드는 유한하고 늘릴 수 없다. 기계와 전력은
  * 자원만 있으면 늘릴 수 있다. 이 가중치는 판단이며, 바꾸면 순위도 바뀐다 — 그래서 적어 둔다.
  */
-const W = { resource: 3, machine: 2, power: 1 };
+const W = { resource: 3, machine: 2, power: 1, hassle: 2.5 };
 for (const r of results) {
-  r.score = Math.round((r.resourcePct * W.resource + r.machinePct * W.machine + r.powerPct * W.power) * 100) / 100;
+  /* 효율 축 — 남의 LP 모형이 보는 것과 같은 축이다 */
+  r.efficiency =
+    Math.round((r.resourcePct * W.resource + r.machinePct * W.machine + r.powerPct * W.power) * 100) / 100;
+  /* 편의 축 — 스팀 가이드가 사람 눈으로 보던 것을 수치로 옮긴 것이다 */
+  r.convenience = Math.round(-r.hassleDelta * W.hassle * 100) / 100;
+  r.score = Math.round((r.efficiency + r.convenience) * 100) / 100;
 }
 results.sort((a, b) => b.score - a.score);
 

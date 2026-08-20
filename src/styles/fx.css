@@ -1,0 +1,202 @@
+/*
+ * fx.css — 랜딩용 시각 효과.
+ *
+ * 직접 지어내지 않았다. Magic UI(github.com/magicuidesign/magicui, MIT)가 정착시킨
+ * 이름과 파라미터를 그대로 따르되, React + Framer Motion 대신 **CSS 만으로** 옮겼다.
+ * 이 저장소는 Astro 정적 사이트라 아일랜드를 늘리지 않는 편이 낫다(ADR-0009).
+ *
+ * 옮긴 것:
+ *   Border Beam   — 테두리를 도는 빛. 원본 기본값 size 50 · duration 6s · #ffaa40 → #9c40ff
+ *   Retro Grid    — 원근 격자 바닥. 원본 perspective 200px · 15s 스크롤
+ *   Dot Pattern   — 점 격자 배경
+ *   Shimmer       — 버튼 위를 지나가는 빛
+ *   Number Ticker — 숫자가 올라가는 카운터
+ *   Gradient Text — 흐르는 그라디언트 글자
+ *
+ * 색은 이 사이트 팔레트로 바꿨다. 원본의 주황→보라는 우리 것이 아니다.
+ * 모든 효과는 `prefers-reduced-motion: reduce` 에서 멈춘다.
+ */
+
+@property --beam-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@property --tick {
+  syntax: '<integer>';
+  initial-value: 0;
+  inherits: false;
+}
+
+/* ---------------------------------------------------------- Border Beam */
+/*
+ * 원본은 offset-path 로 점 하나를 테두리를 따라 돌린다. 여기서는 conic-gradient 를
+ * 테두리 폭만큼만 남기고(mask-composite) 각도를 돌린다 — 결과가 같고 요소가 하나 준다.
+ */
+.fx-beam {
+  position: relative;
+  isolation: isolate;
+}
+.fx-beam::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  padding: 1px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--beam-angle),
+    transparent 0deg 250deg,
+    color-mix(in oklab, var(--primary) 85%, transparent) 300deg,
+    var(--accent) 345deg,
+    transparent 360deg
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: fx-beam-spin 6s linear infinite;
+}
+@keyframes fx-beam-spin {
+  to { --beam-angle: 360deg; }
+}
+
+/* ----------------------------------------------------------- Retro Grid */
+/*
+ * 원근 격자 바닥. 아래쪽에서 지평선으로 흘러 들어간다.
+ * 원본 파라미터: perspective 200px · 15s · 기울기 65deg.
+ */
+/* 바닥에만 깔린다. 화면 전체에 두면 원근이 안 보이고 그냥 줄무늬가 된다 */
+.fx-retrogrid {
+  position: absolute;
+  inset: auto 0 0;
+  height: 46%;
+  overflow: hidden;
+  perspective: 200px;
+  pointer-events: none;
+  mask-image: linear-gradient(180deg, transparent, #000 55%, transparent 96%);
+}
+.fx-retrogrid::before {
+  content: '';
+  position: absolute;
+  inset: 0% 0px;
+  width: 600%;
+  height: 300%;
+  left: -50%;
+  transform: rotateX(65deg);
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--primary) 26%, transparent) 1px, transparent 0),
+    linear-gradient(to bottom, color-mix(in oklab, var(--primary) 26%, transparent) 1px, transparent 0);
+  background-size: 60px 60px;
+  background-repeat: repeat;
+  transform-origin: 100% 0 0;
+  animation: fx-grid-scroll 15s linear infinite;
+}
+@keyframes fx-grid-scroll {
+  from { transform: rotateX(65deg) translateY(-50%); }
+  to { transform: rotateX(65deg) translateY(0); }
+}
+
+/* ---------------------------------------------------------- Dot Pattern */
+.fx-dots {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(
+    color-mix(in oklab, var(--ink) 16%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 18px 18px;
+  mask-image: radial-gradient(70% 60% at 50% 40%, #000, transparent);
+}
+
+/* ------------------------------------------------------------- Shimmer */
+.fx-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.fx-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 30%,
+    color-mix(in oklab, white 30%, transparent) 50%,
+    transparent 70%
+  );
+  transform: translateX(-100%);
+  animation: fx-shimmer-run 3.4s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes fx-shimmer-run {
+  0%, 55% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* -------------------------------------------------------- Gradient Text */
+.fx-gradient-text {
+  background: linear-gradient(
+    100deg,
+    var(--ink) 0%,
+    var(--accent-ink) 30%,
+    var(--primary-ink) 50%,
+    var(--accent-ink) 70%,
+    var(--ink) 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: fx-gradient-slide 7s linear infinite;
+}
+@keyframes fx-gradient-slide {
+  to { background-position: -250% 0; }
+}
+
+/* -------------------------------------------------------- Number Ticker */
+/*
+ * 숫자가 0 에서 목표까지 올라간다. `--to` 를 인라인 스타일로 준다.
+ * @property 를 지원하지 않으면 `.fx-ticker-fallback` 의 정적 숫자가 그대로 보인다.
+ */
+.fx-ticker {
+  display: none;
+  font-variant-numeric: tabular-nums;
+}
+@supports (animation-timeline: view()) and (background: paint(x)) {
+  /* 위 조건은 형식적이다 — 실제로는 아래 @property 지원 여부로 갈린다 */
+}
+@supports at-rule(@property) {
+  .fx-ticker { display: inline; }
+  .fx-ticker-fallback { display: none; }
+  .fx-ticker::after {
+    content: counter(fx-n);
+    counter-reset: fx-n var(--tick);
+    animation: fx-count 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 30%;
+  }
+  @keyframes fx-count {
+    from { --tick: 0; }
+    to { --tick: var(--to); }
+  }
+}
+
+/* ------------------------------------------------------------ 접근성 */
+@media (prefers-reduced-motion: reduce) {
+  .fx-beam::before,
+  .fx-retrogrid::before,
+  .fx-shimmer::after,
+  .fx-gradient-text,
+  .fx-ticker::after {
+    animation: none !important;
+  }
+  .fx-gradient-text { background-position: 0 0; }
+  .fx-ticker { display: none; }
+  .fx-ticker-fallback { display: inline; }
+}

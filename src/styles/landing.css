@@ -1,0 +1,387 @@
+/*
+ * landing.css — 랜딩 화면.
+ *
+ * 방향: 게임 실물 위에 유리 계층. 배경은 공식 키 아트, 그 위에 어둠을 덮고, 정보 패널이 떠 있다.
+ * 스크롤에 따라 배경이 천천히 밀리고 확대되며, 각 절이 시야에 들어올 때 올라온다.
+ *
+ * 모션은 전부 CSS 스크롤 연동(`animation-timeline`)이다. 지원하지 않는 브라우저에서는
+ * 그냥 정지 상태로 보이고 내용은 온전하다. `prefers-reduced-motion` 에서도 멈춘다.
+ */
+
+/* ------------------------------------------------------------------ 히어로 */
+.hero {
+  position: relative;
+  isolation: isolate;
+  min-height: min(92vh, 60rem);
+  display: grid;
+  align-items: center;
+  padding-block: var(--s24) var(--s20);
+  overflow: clip;
+}
+
+/* 배경 — 실제 게임 아트. 스크롤하면 천천히 밀리고 커진다 */
+.hero-art {
+  position: absolute;
+  inset: -8% -4% -14%;
+  z-index: -2;
+  background-image: var(--hero-art);
+  background-size: cover;
+  background-position: 50% 42%;
+  transform-origin: 50% 30%;
+  will-change: transform;
+}
+@supports (animation-timeline: scroll()) {
+  .hero-art {
+    animation: hero-drift linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0 90vh;
+  }
+  @keyframes hero-drift {
+    from { transform: scale(1.04) translateY(0); }
+    to { transform: scale(1.16) translateY(6%); }
+  }
+}
+
+/* 어둠 — 글자가 읽히려면 아트를 눌러야 한다. 위아래로 짙게, 가운데는 살려 둔다 */
+.hero-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(180deg,
+      color-mix(in oklab, var(--bg) 82%, transparent) 0%,
+      color-mix(in oklab, var(--bg) 55%, transparent) 34%,
+      color-mix(in oklab, var(--bg) 88%, transparent) 78%,
+      var(--bg) 100%),
+    radial-gradient(80% 60% at 22% 45%, color-mix(in oklab, var(--bg) 70%, transparent), transparent 70%);
+}
+
+.hero-inner {
+  display: grid;
+  gap: var(--s10);
+  width: 100%;
+}
+@media (min-width: 980px) {
+  .hero-inner {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 27rem);
+    grid-template-areas: 'copy demo' 'cta demo';
+    align-items: center;
+    column-gap: var(--s16);
+    row-gap: var(--s8);
+  }
+  .hero-copy { grid-area: copy; }
+  .demo { grid-area: demo; }
+  .hero-cta { grid-area: cta; align-self: start; }
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  margin-bottom: var(--s5);
+  padding: 0.35em 0.8em;
+  border-radius: 999px;
+  background: var(--glass-raised);
+  box-shadow: var(--lit);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  font-family: var(--font-mono);
+  font-size: var(--t-caption);
+  letter-spacing: 0.06em;
+  color: var(--ink-2);
+}
+.eyebrow .dot {
+  width: 0.45em;
+  height: 0.45em;
+  border-radius: 50%;
+  background: var(--ok);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--ok) 22%, transparent);
+}
+
+.hero h1 {
+  font-size: var(--t-display);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  margin-bottom: var(--s6);
+  text-wrap: balance;
+  text-shadow: 0 2px 24px color-mix(in oklab, var(--bg) 70%, transparent);
+}
+.hero h1 .glow {
+  background: linear-gradient(
+    100deg,
+    var(--ink) 0%,
+    var(--accent-ink) 45%,
+    var(--ink) 90%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.lede {
+  max-width: 34em;
+  font-size: var(--t-body-l);
+  color: var(--ink-2);
+  margin-bottom: 0;
+  text-shadow: 0 1px 16px color-mix(in oklab, var(--bg) 60%, transparent);
+}
+.lede strong { color: var(--ink); font-weight: 600; }
+
+.hero-cta { display: flex; flex-wrap: wrap; gap: var(--s3); }
+.btn.is-primary {
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--accent) 40%, transparent),
+    0 8px 30px -10px color-mix(in oklab, var(--accent) 55%, transparent);
+}
+
+/* ------------------------------------------------------------------ 위젯 */
+.demo {
+  border-radius: calc(var(--radius) * 2);
+  background: var(--glass);
+  box-shadow: var(--lit-strong), 0 24px 70px -30px rgb(0 0 0 / 0.7);
+  backdrop-filter: blur(calc(var(--glass-blur) * 1.4)) saturate(var(--glass-sat));
+}
+.demo-head { padding: var(--s4) var(--s5); border-bottom: var(--hair) solid var(--line); }
+.demo-label {
+  display: block;
+  margin-bottom: var(--s2);
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.demo-select {
+  width: 100%;
+  padding: var(--s3);
+  border: var(--hair) solid var(--line-strong);
+  border-radius: var(--radius);
+  background: color-mix(in oklab, var(--bg) 70%, transparent);
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--t-small);
+  font-weight: 600;
+}
+.demo-out { margin: 0; padding: var(--s2) var(--s5) var(--s4); }
+.demo-out .row { padding-block: var(--s3); border-bottom: var(--hair) solid var(--line); }
+.demo-out .row:last-child { border-bottom: 0; }
+.demo-out dt {
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  margin-bottom: var(--s1);
+}
+.demo-out dd { margin: 0; font-size: var(--t-small); line-height: 1.6; }
+.demo-out .is-keep dt { color: var(--accent); }
+.demo-out .is-keep dd { font-weight: 600; }
+.demo-gate {
+  margin: 0;
+  padding: var(--s3) var(--s5);
+  border-top: var(--hair) solid var(--line);
+  background: color-mix(in oklab, var(--raised) 60%, transparent);
+  border-radius: 0 0 calc(var(--radius) * 2) calc(var(--radius) * 2);
+  font-size: var(--t-caption);
+  color: var(--ink-2);
+}
+
+/* ------------------------------------------------------------------ 아이콘 띠 */
+/*
+ * 이 앱이 아는 것의 규모를 말이 아니라 실물로 보여준다. 게임 아이콘이 천천히 흐른다.
+ * 장식이 아니라 데이터 범위의 증거다.
+ */
+.strip {
+  position: relative;
+  padding-block: var(--s6);
+  border-block: var(--hair) solid var(--line);
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.strip-track {
+  display: flex;
+  gap: var(--s5);
+  width: max-content;
+  animation: strip-scroll 90s linear infinite;
+}
+.strip img {
+  width: 34px;
+  height: 34px;
+  opacity: 0.62;
+  filter: saturate(0.85);
+  transition: opacity var(--dur) var(--ease), filter var(--dur) var(--ease);
+}
+.strip:hover img { opacity: 0.9; filter: saturate(1); }
+@keyframes strip-scroll {
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .strip-track { animation: none; }
+}
+
+/* ------------------------------------------------------------------ 절 공통 */
+.section { padding-block: var(--s20) 0; }
+.section h2 { margin-bottom: var(--s3); }
+.section > .muted { margin-bottom: var(--s8); }
+
+/* 시야에 들어올 때 올라온다. 지원 안 하면 그냥 처음부터 보인다 */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: rise 480ms var(--ease) both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 22%;
+    }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: none; }
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ 01 비교 */
+.versus {
+  display: grid;
+  gap: var(--s4);
+}
+@media (min-width: 780px) { .versus { grid-template-columns: 1fr 1fr; } }
+.vs-col {
+  padding: var(--s6);
+  border-radius: calc(var(--radius) * 2);
+  background: color-mix(in oklab, var(--surface) 55%, transparent);
+  box-shadow: 0 0 0 1px var(--line);
+}
+.vs-col.is-ours {
+  background: var(--glass);
+  box-shadow: var(--lit-strong), 0 20px 60px -34px rgb(0 0 0 / 0.8);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+}
+.vs-tag {
+  margin-bottom: var(--s4);
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.is-ours .vs-tag { color: var(--accent); }
+.vs-answer { font-size: var(--t-body-l); font-weight: 600; line-height: 1.5; margin-bottom: var(--s3); }
+.vs-note { margin: 0; font-size: var(--t-small); color: var(--ink-2); }
+
+/* ------------------------------------------------------------------ 02 진행 축 */
+.spine { position: relative; margin: 0; padding: 0; list-style: none; }
+.spine-rail {
+  position: absolute;
+  left: 2.55rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--line);
+  pointer-events: none;
+}
+.spine-rail::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--primary), var(--accent));
+  transform-origin: top;
+  transform: scaleY(0.06);
+  box-shadow: 0 0 12px color-mix(in oklab, var(--primary) 45%, transparent);
+}
+@supports (animation-timeline: view()) {
+  .spine-rail::after {
+    animation: rail-grow linear both;
+    animation-timeline: view();
+    animation-range: cover 12% cover 78%;
+  }
+  @keyframes rail-grow {
+    from { transform: scaleY(0.06); }
+    to { transform: scaleY(1); }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spine-rail::after { animation: none; transform: scaleY(1); }
+}
+
+.spine-step {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: var(--s5);
+  padding-block: var(--s5);
+  border-top: var(--hair) solid var(--line);
+}
+.spine-step:last-child { border-bottom: var(--hair) solid var(--line); }
+.spine-step > div { min-width: 0; }
+.spine-tier { position: relative; font-size: var(--t-caption); color: var(--accent); padding-top: 0.35em; }
+.spine-tier::after {
+  content: '';
+  position: absolute;
+  right: -1.02rem;
+  top: 0.85em;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  outline: 3px solid var(--bg);
+  box-shadow: 0 0 10px color-mix(in oklab, var(--accent) 60%, transparent);
+}
+.spine-step.is-future .spine-tier { color: var(--ink-3); }
+.spine-step.is-future .spine-tier::after { background: var(--line-strong); box-shadow: none; }
+.spine-step h3 { margin-bottom: var(--s1); font-size: var(--t-body-l); }
+
+.showcase { margin-top: var(--s10); }
+.showcase-tag {
+  margin-bottom: var(--s3);
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* ------------------------------------------------------------------ 03 출처 */
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: var(--s3);
+}
+.fact {
+  padding: var(--s5);
+  border-radius: calc(var(--radius) * 2);
+  background: var(--glass);
+  box-shadow: var(--lit);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+}
+.fact-k { display: block; margin-bottom: var(--s2); font-size: var(--t-label); color: var(--ink-3); }
+.fact-v { font-size: var(--t-h3); font-weight: 600; letter-spacing: -0.02em; }
+.facts-note { margin-top: var(--s5); }
+
+/* ------------------------------------------------------------------ 최종 */
+.final {
+  position: relative;
+  isolation: isolate;
+  margin-top: var(--s24);
+  padding-block: var(--s24);
+  overflow: clip;
+}
+.final-art {
+  position: absolute;
+  inset: -20% 0 -20%;
+  z-index: -2;
+  background-image: var(--final-art);
+  background-size: cover;
+  background-position: 50% 60%;
+  opacity: 0.5;
+}
+.final-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, var(--bg), color-mix(in oklab, var(--bg) 62%, transparent) 45%, var(--bg));
+}
+.final-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s6);
+}
+.final h2 { margin: 0; text-wrap: balance; }

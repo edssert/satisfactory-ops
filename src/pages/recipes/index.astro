@@ -13,14 +13,10 @@ import priority from '../../data/curated/alternate-priority.json';
 
 interface Ing {
   ko: string;
-  per: number;
+  perMinute: number;
 }
-interface Change {
-  ko: string;
-  before: number;
-  after: number;
-  kind: '제거' | '감소' | '증가' | '추가';
-  pct: number | null;
+interface Out extends Ing {
+  isMain: boolean;
 }
 interface Alt {
   id: string;
@@ -37,11 +33,12 @@ interface Alt {
   consensus: 'both-high' | 'mixed' | 'conflict' | 'both-low' | 'unknown';
   sortKey: number;
   compare: {
-    standard: { ko: string; machineKo: string; outPerMin: number; ingredients: Ing[] };
-    alternate: { machineKo: string; outPerMin: number; ingredients: Ing[] };
+    standard: { ko: string; machineKo: string; outPerMin: number; ingredients: Ing[]; outputs: Out[] };
+    alternate: { machineKo: string; outPerMin: number; ingredients: Ing[]; outputs: Out[] };
     outputRatio: number;
-    byproducts: { ko: string; per: number }[];
-    changes: Change[];
+    removed: string[];
+    added: string[];
+    byproducts: Out[];
   } | null;
 }
 
@@ -169,76 +166,58 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
 
               {r.compare ? (
                 <>
-                  <table class="cmp">
-                    <thead>
-                      <tr>
-                        <th />
-                        <th>재료 (산출 1개당)</th>
-                        <th class="n">기계당 산출</th>
-                        <th>기계</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr class="is-std">
-                        <th scope="row">기본</th>
-                        <td>
-                          {r.compare.standard.ingredients.map((g2, i) => (
+                  <div class="cmp">
+                    {[
+                      { label: '기본', d: r.compare.standard, alt: false },
+                      { label: '대체', d: r.compare.alternate, alt: true },
+                    ].map((row) => (
+                      <div class={`cmp-row${row.alt ? ' is-alt' : ''}`}>
+                        <span class="cmp-label">{row.label}</span>
+                        <span class="cmp-in">
+                          {row.d.ingredients.map((g2, i) => (
                             <>
                               {i > 0 && <span class="sep">·</span>}
-                              {g2.ko} <span class="n">{num(g2.per)}</span>
+                              {g2.ko} <span class="n">{num(g2.perMinute)}/분</span>
                             </>
                           ))}
-                        </td>
-                        <td class="n">{num(r.compare.standard.outPerMin)}/분</td>
-                        <td class="small muted nowrap">{r.compare.standard.machineKo}</td>
-                      </tr>
-                      <tr class="is-alt">
-                        <th scope="row">대체</th>
-                        <td>
-                          {r.compare.alternate.ingredients.map((g2, i) => (
+                        </span>
+                        <span class="cmp-arrow" aria-hidden="true">→</span>
+                        <span class="cmp-out">
+                          {row.d.outputs.map((o, i) => (
                             <>
                               {i > 0 && <span class="sep">·</span>}
-                              {g2.ko} <span class="n">{num(g2.per)}</span>
+                              <span class={o.isMain ? 'is-main' : 'is-by'}>
+                                {o.ko} <span class="n">{num(o.perMinute)}/분</span>
+                              </span>
                             </>
                           ))}
-                        </td>
-                        <td class="n">
-                          {num(r.compare.alternate.outPerMin)}/분
-                          {r.compare.outputRatio !== 1 && (
-                            <span class={`ratio${r.compare.outputRatio > 1 ? ' is-up' : ' is-down'}`}>
-                              ×{num(r.compare.outputRatio)}
+                          {row.alt && r.compare!.outputRatio !== 1 && (
+                            <span class={`ratio${r.compare!.outputRatio > 1 ? ' is-up' : ' is-down'}`}>
+                              ×{num(r.compare!.outputRatio)}
                             </span>
                           )}
-                        </td>
-                        <td class="small muted nowrap">{r.compare.alternate.machineKo}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                  <p class="changes">
-                    {r.compare.changes.map((c, i) => (
-                      <>
-                        {i > 0 && <span class="sep">·</span>}
-                        <span class={`chg is-${c.kind}`}>
-                          {c.ko}{' '}
-                          {c.kind === '제거'
-                            ? '빠짐'
-                            : c.kind === '추가'
-                              ? '들어감'
-                              : pct(c.pct ?? 0)}
                         </span>
-                      </>
+                        <span class="cmp-machine">{row.d.machineKo}</span>
+                      </div>
                     ))}
-                    {r.compare.byproducts.length > 0 &&
-                      r.compare.byproducts.map((b) => (
+                  </div>
+
+                  {(r.compare.removed.length > 0 || r.compare.added.length > 0) && (
+                    <p class="changes">
+                      {r.compare.removed.map((k, i) => (
                         <>
-                          <span class="sep">·</span>
-                          <span class="chg is-byproduct">
-                            부산물 {b.ko} <span class="n">{num(b.per)}</span>
-                          </span>
+                          {i > 0 && <span class="sep">·</span>}
+                          <span class="chg is-out">{k} 빠짐</span>
                         </>
                       ))}
-                  </p>
+                      {r.compare.added.map((k, i) => (
+                        <>
+                          {(i > 0 || r.compare!.removed.length > 0) && <span class="sep">·</span>}
+                          <span class="chg is-in">{k} 들어감</span>
+                        </>
+                      ))}
+                    </p>
+                  )}
 
                   {r.own && (
                     <p class="own">
@@ -303,8 +282,8 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
         <p class="caption">{doc.$note}</p>
         <p class="caption">{doc.$tierNote}</p>
         <p class="caption">
-          재료는 <strong>산출 1개당</strong>으로 맞췄습니다. 산출 속도가 다른 두 제작법을
-          절대량으로 비교하면 틀린 결론이 나옵니다.
+          레시피는 <strong>기계 한 대를 100%로 돌렸을 때의 분당 값</strong>입니다. 게임 화면과
+          같은 수치라 그대로 대조할 수 있습니다.
         </p>
       </div>
     </section>
@@ -336,12 +315,14 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
 
     .card {
       padding: var(--s5);
-      border: var(--hair) solid var(--line);
       border-radius: var(--radius);
-      background: var(--surface);
+      background: var(--glass);
+      box-shadow: var(--lit);
+      backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
     }
     /* 두 곳이 함께 높게 본 것만 테두리로 띄운다. 색이 아니라 라벨이 정본이다 */
-    .card.is-both-high { border-color: var(--line-strong); }
+    /* 상위 등급은 테두리를 밝혀 어둠 속에서 먼저 눈에 들어오게 한다 */
+    .card:has(.grade.is-s), .card:has(.grade.is-a) { box-shadow: var(--lit-strong); }
     .card-grade .grade { min-width: 1.7rem; font-size: var(--t-body); }
 
     .card-head {
@@ -384,8 +365,11 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
     .note-box {
       margin-top: var(--s6);
       padding: var(--s5);
-      border-left: 2px solid var(--accent);
-      background: var(--raised);
+      border-left: 2px solid var(--primary);
+      border-radius: var(--radius);
+      background: var(--glass-raised);
+      box-shadow: var(--lit);
+      backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
     }
     .note-box p { max-width: var(--measure-wide); }
     .fact.is-ok .fact-v { color: var(--ok); }
@@ -393,32 +377,41 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
     .src-item { margin-bottom: var(--s5); }
     .src-n { color: var(--accent); font-size: var(--t-caption); }
 
-    .cmp { font-size: var(--t-small); }
-    .cmp thead th {
-      position: static;
-      padding-block: 0 var(--s1);
-      border-bottom: var(--hair) solid var(--line);
-      background: transparent;
+    /*
+     * 게임이 레시피를 보여주는 그대로 — 분당 재료 → 분당 산출. 산출 1개당으로 정규화하면
+     * 정확하긴 해도 게임 화면과 대조가 안 된다.
+     */
+    .cmp { display: grid; gap: var(--s2); font-size: var(--t-small); }
+    .cmp-row {
+      display: grid;
+      grid-template-columns: 2.2rem minmax(0, 1fr) 1rem minmax(0, 0.8fr) auto;
+      align-items: baseline;
+      gap: var(--s2) var(--s3);
+      padding-block: var(--s2);
+      border-top: var(--hair) solid var(--line);
     }
-    .cmp tbody th {
-      width: 2.6rem;
-      padding-left: 0;
+    .cmp-label {
       font-family: var(--font-mono);
       font-size: var(--t-label);
       letter-spacing: 0.06em;
       color: var(--ink-3);
-      text-align: left;
-      border-bottom: var(--hair) solid var(--line);
     }
-    .cmp td { padding-inline: var(--s3) 0; }
-    .cmp tbody tr:hover td, .cmp tbody tr:hover th { background: transparent; }
-    .cmp .is-std td { color: var(--ink-2); }
-    .cmp .is-alt th { color: var(--accent); }
-    .cmp .is-alt td { font-weight: 500; }
+    .cmp-row.is-alt .cmp-label { color: var(--accent); }
+    .cmp-row.is-alt { font-weight: 500; }
+    .cmp-row:not(.is-alt) { color: var(--ink-2); }
+    .cmp-arrow { color: var(--ink-3); text-align: center; }
+    .cmp-machine { font-size: var(--t-caption); color: var(--ink-3); white-space: nowrap; }
+    .cmp-out .is-by { color: var(--accent); }
     .sep { color: var(--ink-3); margin-inline: 0.35em; }
     .ratio { margin-left: var(--s2); font-size: var(--t-caption); }
     .ratio.is-up { color: var(--ok); }
     .ratio.is-down { color: var(--ink-3); }
+
+    @media (max-width: 700px) {
+      .cmp-row { grid-template-columns: 2.2rem minmax(0, 1fr); }
+      .cmp-arrow { display: none; }
+      .cmp-out, .cmp-machine { grid-column: 2; }
+    }
 
     .changes {
       margin: var(--s4) 0 0;
@@ -427,11 +420,8 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
       color: var(--ink-2);
     }
     .chg { white-space: nowrap; }
-    .chg.is-제거 { color: var(--ok); font-weight: 600; }
-    .chg.is-감소 { color: var(--ok); }
-    .chg.is-추가 { color: var(--ink-2); }
-    .chg.is-증가 { color: var(--ink-3); }
-    .chg.is-byproduct { color: var(--accent); }
+    .chg.is-out { color: var(--ok); font-weight: 600; }
+    .chg.is-in { color: var(--ink-2); }
 
     .own {
       margin: var(--s3) 0 0;

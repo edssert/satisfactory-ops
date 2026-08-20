@@ -1,0 +1,10 @@
+{
+  "$comment": "게임 아트. Coffee Stain Studios 자산이며 공식 위키(satisfactory.wiki.gg)에서 가져왔습니다. MIT 라이선스 대상이 아닙니다. 상업적 사용·게임사 사칭 금지.",
+  "files": [
+    { "file": "keyart.webp", "source": "File:Satisfactory_KeyArt_1_1920x1080_NoLogo.png", "use": "랜딩 히어로 배경" },
+    { "file": "factory.webp", "source": "File:Satisfactory_2020-05-03_07_04_11.png", "use": "랜딩 하단 배경" },
+    { "file": "biome-abyss.webp", "source": "File:Abyss Cliffs.png", "use": "예비" }
+  ],
+  "fetchedAt": "2026-08-20",
+  "wiki": "https://satisfactory.wiki.gg/"
+}
