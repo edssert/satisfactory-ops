@@ -63,12 +63,7 @@
  * 공식 위키의 매니폴드 정의 그대로 — 분배기를 일렬로 이어 붙인 한 줄이다.
  * 기계 사이를 잇는 선이 아니라 **줄 자체**가 하나의 설비라서 굵은 띠로 그린다.
  */
-.fc-bus rect:first-of-type {
-  fill: var(--raised);
-  stroke: var(--line-strong);
-  stroke-width: 1;
-  stroke-dasharray: 3 3;
-}
+/* 띠를 걷어냈다. 분배기 실물과 배선만 남는다 */
 .fc-buschip {
   fill: var(--bg);
   stroke: var(--line-strong);

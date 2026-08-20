@@ -92,8 +92,10 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const bIcon = `${base}/assets/buildings-png`;
 const iIcon = `${base}/assets/items`;
 
-const BUS_H = 34;
-const ROW_GAP = 40;
+const BUS_H = 30;
+const ROW_GAP = 44;
+/** 필렛 반지름. 배선이 꺾이는 곳을 둥글게 돌린다 */
+const R = 10;
 
 const STORE_H = 92;
 const widest = Math.max(
@@ -163,22 +165,59 @@ function connectors(row: Row): number[] {
     </defs>
 
     {
+      /*
+       * 배선. 위 줄에서 내려와 한 점에 모였다가 아래 줄로 갈라진다.
+       * 꺾이는 곳은 필렛으로 돌린다 — 직각으로 꺾으면 도면이 아니라 순서도로 보인다.
+       */
       placed.map((p, ri) => {
         const next = placed[ri + 1];
         if (!next) return null;
+        if (next.row.kind === 'storage') return null;
+
         const y1 = p.y + p.h;
         const y2 = next.y;
-        /* 벨트 줄이 한쪽에 있으면 그 줄은 가로로 길므로, 기계 쪽 상자마다 한 줄씩 내린다 */
-        /* 저장 행으로 가는 선은 따로 그린다(아래 블록). 여기서는 건너뛴다 */
-        if (next.row.kind === 'storage') return null;
-        const xs =
-          p.row.kind === 'bus' ? connectors(next.row) : connectors(p.row);
-        return xs.map((x) => (
-          <path
-            d={`M${x},${y1} L${x},${y2}`}
-            class="fc-link"
-            marker-end={`url(#fc-arrow-${index})`}
-          />
+        const mid = (y1 + y2) / 2;
+
+        const srcXs = p.row.kind === 'bus' ? [centerX] : connectors(p.row);
+        const dstXs = next.row.kind === 'bus' ? [centerX] : connectors(next.row);
+        if (!srcXs.length || !dstXs.length) return null;
+
+        /** 한 점에서 여러 갈래로 갈라지거나, 여러 갈래가 한 점에 모이는 배선 */
+        const branch = (xs: number[], toward: number, fromY: number, toY: number, down: boolean) => {
+          const spineY = down ? mid : mid;
+          return xs.map((x) => {
+            if (Math.abs(x - toward) < 1) {
+              return `M${x},${fromY} L${x},${toY}`;
+            }
+            const dir = x > toward ? 1 : -1;
+            if (down) {
+              /* 한 점 → 여러 갈래: 내려와서 옆으로 벌어졌다가 다시 내려간다 */
+              return (
+                `M${toward},${fromY} L${toward},${spineY - R} ` +
+                `Q${toward},${spineY} ${toward + R * dir},${spineY} ` +
+                `L${x - R * dir},${spineY} ` +
+                `Q${x},${spineY} ${x},${spineY + R} ` +
+                `L${x},${toY}`
+              );
+            }
+            /* 여러 갈래 → 한 점 */
+            return (
+              `M${x},${fromY} L${x},${spineY - R} ` +
+              `Q${x},${spineY} ${x - R * dir},${spineY} ` +
+              `L${toward + R * dir},${spineY} ` +
+              `Q${toward},${spineY} ${toward},${spineY + R} ` +
+              `L${toward},${toY}`
+            );
+          });
+        };
+
+        const paths =
+          srcXs.length === 1
+            ? branch(dstXs, srcXs[0]!, y1, y2, true)
+            : branch(srcXs, dstXs[0]!, y1, y2, false);
+
+        return paths.map((d) => (
+          <path d={d} class="fc-link" fill="none" marker-end={`url(#fc-arrow-${index})`} />
         ));
       })
     }
@@ -241,57 +280,49 @@ function connectors(row: Row): number[] {
         }
         if (p.row.kind === 'bus') {
           const b = p.row.bus;
+          const merge = /병합/.test(b.note ?? '');
+          const attach = merge
+            ? 'Build_ConveyorAttachmentMerger_C'
+            : 'Build_ConveyorAttachmentSplitter_C';
           const label = `${b.itemKo} ${fmtRate(b.perMinute)}/분`;
           const w = chipWidth(label);
+          const cy = p.y + p.h / 2;
           return (
             <g class="fc-bus">
-              <rect x={busX1} y={p.y} width={busX2 - busX1} height={p.h} rx="4" />
+              {/* 분배기·병합기 실물 */}
+              <image
+                href={`${bIcon}/${attach}.png`}
+                x={centerX - 21}
+                y={cy - 21}
+                width="42"
+                height="42"
+                preserveAspectRatio="xMidYMid meet"
+              />
+              {/* 유량은 옆에 붙인다 */}
               <rect
-                x={centerX - w / 2}
-                y={p.y + 2}
+                x={centerX + 28}
+                y={cy - 13}
                 width={w}
-                height={p.h - 4}
+                height="26"
                 rx="3"
                 class="fc-buschip"
               />
               {b.itemId && (
-                <image
-                  href={`${iIcon}/${b.itemId}.png`}
-                  x={centerX - w / 2 + 5}
-                  y={p.y + 5}
-                  width="24"
-                  height="24"
-                />
+                <image href={`${iIcon}/${b.itemId}.png`} x={centerX + 32} y={cy - 10} width="20" height="20" />
               )}
-              <text
-                x={centerX - w / 2 + (b.itemId ? 33 : 11)}
-                y={p.y + p.h / 2 + 5}
-                class="fc-bustext"
-              >
-                {label}
-              </text>
-              {b.note && !b.deliver && (
-                <text x={busX2 - 8} y={p.y + p.h / 2 + 4} class="fc-busnote" text-anchor="end">
-                  {b.note}
-                </text>
-              )}
+              <text x={centerX + (b.itemId ? 56 : 36)} y={cy + 5} class="fc-bustext">{label}</text>
               {b.deliver && (
                 <>
                   <rect
-                    x={busX2 - chipWidth(`${b.deliver.ko} ${fmtRate(b.deliver.perMinute)}/분 컨테이너로`, false) - 6}
-                    y={p.y + 3}
-                    width={chipWidth(`${b.deliver.ko} ${fmtRate(b.deliver.perMinute)}/분 컨테이너로`, false)}
-                    height={p.h - 6}
+                    x={centerX - 32 - chipWidth(`${b.deliver.ko} ${fmtRate(b.deliver.perMinute)}/분`, false)}
+                    y={cy - 13}
+                    width={chipWidth(`${b.deliver.ko} ${fmtRate(b.deliver.perMinute)}/분`, false)}
+                    height="26"
                     rx="3"
                     class="fc-deliver"
                   />
-                  <text
-                    x={busX2 - 12}
-                    y={p.y + p.h / 2 + 4}
-                    class="fc-delivertext"
-                    text-anchor="end"
-                  >
-                    {b.deliver.ko} {fmtRate(b.deliver.perMinute)}/분 컨테이너로
+                  <text x={centerX - 38} y={cy + 5} class="fc-delivertext" text-anchor="end">
+                    {b.deliver.ko} {fmtRate(b.deliver.perMinute)}/분
                   </text>
                 </>
               )}
