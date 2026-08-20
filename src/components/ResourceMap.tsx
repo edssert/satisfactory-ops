@@ -413,6 +413,15 @@ export default function ResourceMap({
           거리 재기
         </button>
 
+        <span class="rm-legend" aria-label="순도 색 안내">
+          {(['p', 'n', 'i'] as const).map((k) => (
+            <span key={k}>
+              <i style={`background:${PURITY[k]!.fill}`} aria-hidden="true"></i>
+              {PURITY[k]!.ko}
+            </span>
+          ))}
+        </span>
+
         <span class="rm-spacer" />
         <span class="rm-count">
           보이는 노드 <b class="n">{shown.length}</b>
@@ -607,12 +616,13 @@ export default function ResourceMap({
                           {c.res.size === 1 && (
                             <image
                               href={`${assetBase}/items/${[...c.res][0]}.png`}
-                              x={c.x - r * 0.52}
-                              y={c.y - r * 0.72}
-                              width={r * 1.04}
-                              height={r * 1.04}
+                              x={c.x - r * 0.56}
+                              y={c.y - r * 0.78}
+                              width={r * 1.12}
+                              height={r * 1.12}
                             />
                           )}
+                          <title>{c.n}개 — 눌러서 들어가기</title>
                           <text
                             x={c.x}
                             y={c.res.size === 1 ? c.y + r * 0.66 : c.y + s(labelPx * 0.36)}
@@ -658,20 +668,14 @@ export default function ResourceMap({
                         width={r * 1.44}
                         height={r * 1.44}
                       />
-                      <text
-                        class="rm-badge"
-                        x={p.x + r * 0.78}
-                        y={cy + r * 1.02}
-                        font-size={s(markPx * 0.42)}
-                      >
-                        {PURITY[p.p]!.short}
-                      </text>
-                      {/* 이름은 충분히 들어갔을 때만. 그 전에는 그림과 배지로 읽는다 — 안 그러면 서로 겹친다 */}
-                      {zoom > 7 && (
-                        <text x={p.x} y={p.y + s(labelPx * 1.3)} font-size={s(labelPx)} class="rm-plabel">
-                          {koOf(p.r)}
-                        </text>
-                      )}
+                      {/*
+                        * 글자를 안 붙인다. 그림이 무슨 자원인지, 색이 순도를 말하므로
+                        * 이름과 순도를 겹쳐 적으면 지도가 글자로 덮인다.
+                        * 색을 못 읽는 경우를 위해 이름은 title 로 남기고, 누르면 아래에 글로 뜬다.
+                        */}
+                      <title>
+                        {koOf(p.r)} · {PURITY[p.p]!.ko} · {KIND[p.t] ?? p.t}
+                      </title>
                     </g>
                   );
                 })}

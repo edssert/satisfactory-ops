@@ -370,3 +370,24 @@
   cursor: pointer;
 }
 .rm-send:hover { background: var(--primary); color: var(--on-accent); }
+
+/*
+ * 순도 색 안내.
+ *
+ * 마커에서 글자를 뺐다 — 그림이 자원을, 색이 순도를 말하는데 이름까지 적으면 지도가 글자로 덮인다.
+ * 대신 색이 무엇을 뜻하는지 여기서 한 번 말하고, 마커마다 title 을 달고, 누르면 아래에 글로 뜬다.
+ */
+.rm-legend { display: flex; gap: var(--s3); align-items: center; }
+.rm-legend span {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  color: var(--ink-3);
+  font-size: var(--t-caption);
+}
+.rm-legend i {
+  width: 11px;
+  height: 11px;
+  border: 1px solid rgb(0 0 0 / 0.7);
+  border-radius: 50%;
+}
