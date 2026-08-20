@@ -120,11 +120,15 @@ const facts = [
     .facts {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
-      gap: var(--hair);
-      background: var(--line);
-      border: var(--hair) solid var(--line);
+      gap: var(--s3);
     }
-    .fact { background: var(--bg); padding: var(--s4) var(--s5); }
+    .fact {
+      padding: var(--s4) var(--s5);
+      border-radius: calc(var(--radius) * 2);
+      background: var(--glass);
+      box-shadow: var(--lit);
+      backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    }
     .fact-k {
       display: block;
       font-size: var(--t-label);

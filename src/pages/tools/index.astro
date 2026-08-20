@@ -10,6 +10,7 @@
  *     표를 나눈다.
  */
 import Base from '../../layouts/Base.astro';
+import '../../styles/fx.css';
 import { buildings, item, logistics } from '../../lib/gamedata';
 import glossaryJson from '../../data/glossary.json';
 
@@ -138,7 +139,7 @@ const sortedTerms = [...terms].sort(
   <div class="wrap page">
     <header class="page-head">
       <p class="marker"><span class="num">도구</span></p>
-      <h1>레퍼런스 표</h1>
+      <h1><span class="fx-gradient-text">레퍼런스 표</span></h1>
       <p class="lede prose">게임 배포 데이터에서 그대로 생성합니다.</p>
     </header>
 
