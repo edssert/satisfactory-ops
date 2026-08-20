@@ -247,6 +247,29 @@ if (!toolsPage) {
   }
 }
 
+// ─────────────────────────────────────────────── 넘겨보내는 주소가 실제로 있는가
+{
+  /*
+   * 옛 주소와 목록 첫 화면은 meta refresh 로 넘겨보낸다. 보내는 곳이 없으면 404 가 되는데
+   * 빌드도 통과하고 링크도 눌리므로 눈으로만 보면 안 잡힌다.
+   * MAM 첫 화면이 실제로 그렇게 깨져 있었다 — 목록 맨 위가 화면 없는 항목이었다.
+   */
+  let bad = 0;
+  let seen = 0;
+  for (const h of allHtml) {
+    const m = /<meta http-equiv="refresh" content="0; url=([^"]+)"/.exec(h.s);
+    if (!m) continue;
+    seen++;
+    const to = m[1].replace(/^\/satisfactory-ops/, '');
+    const file = path.join(DIST, to.replace(/\/$/, ''), 'index.html');
+    if (!fs.existsSync(file)) {
+      fail(`${path.relative(DIST, h.p)} 가 없는 주소로 보냅니다: ${m[1]}`);
+      bad++;
+    }
+  }
+  if (!bad) pass(`넘겨보내는 주소 ${seen}개가 전부 존재`);
+}
+
 // ─────────────────────────────────────────────── 결과
 console.log('산출물 커버리지 검사:');
 console.log(notes.join('\n'));
