@@ -14,6 +14,7 @@
  * 상태를 갖는 최소 단위라서 아일랜드다(ADR-0009).
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'preact/hooks';
+import { loadCollected, saveCollected } from '../lib/collected';
 
 export interface MapPoint {
   r: string;
@@ -41,6 +42,8 @@ export interface MapBelt {
 
 /** 수집품 — 슬러그·소머슬룹·머서 구체·하드 드라이브 */
 export interface MapDrop {
+  /** 게임 안의 이름. 주운 것을 표시할 때 이 값으로 기억한다 */
+  i: string;
   k: string;
   x: number;
   y: number;
@@ -129,6 +132,12 @@ export default function ResourceMap({
   /* 수집품은 처음엔 꺼 둔다. 1764개를 한꺼번에 켜면 자원이 안 보인다 */
   const [dropsOn, setDropsOn] = useState<Set<string>>(() => new Set());
   const [dropInfo, setDropInfo] = useState<MapDrop | null>(null);
+  /**
+   * 이미 주운 것. 이 지도의 쓸모는 "어디에 있나"가 아니라 "어디가 아직 남았나"다.
+   *   all  전부  ·  left 안 주운 것만  ·  got 주운 것만
+   */
+  const [got, setGot] = useState<Set<string>>(new Set());
+  const [gotView, setGotView] = useState<'all' | 'left' | 'got'>('all');
   const [showGrid, setShowGrid] = useState(true);
   const [showAreas, setShowAreas] = useState(true);
   const [sel, setSel] = useState<MapPoint | null>(null);
@@ -182,8 +191,13 @@ export default function ResourceMap({
    * 그러면 최소 배율에서 무엇이 어디에 있는지가 사라진다. 전부 하나씩 찍는다.
    */
   const shownDrops = useMemo(
-    () => drops.filter((d) => dropsOn.has(d.k)),
-    [drops, dropsOn]
+    () =>
+      drops.filter(
+        (d) =>
+          dropsOn.has(d.k) &&
+          (gotView === 'all' || (gotView === 'got' ? got.has(d.i) : !got.has(d.i)))
+      ),
+    [drops, dropsOn, gotView, got]
   );
 
   /** 지금 배율에 맞는 타일 단계와, 그중 보이는 것만 */
@@ -309,6 +323,20 @@ export default function ResourceMap({
   };
   const undoPoint = () =>
     setMeasure((m) => (m && m.pts.length ? { ...m, pts: m.pts.slice(0, -1), done: false } : m));
+
+  useEffect(() => {
+    setGot(loadCollected());
+  }, []);
+
+  const markGot = (id: string) => {
+    setGot((v) => {
+      const next = new Set(v);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      saveCollected(next);
+      return next;
+    });
+  };
 
   useEffect(() => {
     const el = host.current;
@@ -571,6 +599,25 @@ export default function ResourceMap({
 
         <aside class="rm-side is-right" onPointerDown={(e) => e.stopPropagation()}>
           <p class="rm-k">수집품</p>
+          <div class="rm-seg3" role="group" aria-label="주운 것 거르기">
+            {(
+              [
+                ['all', '전부'],
+                ['left', '안 주움'],
+                ['got', '주움'],
+              ] as const
+            ).map(([k, ko]) => (
+              <button
+                key={k}
+                type="button"
+                class={gotView === k ? 'is-on' : ''}
+                aria-pressed={gotView === k}
+                onClick={() => setGotView(k)}
+              >
+                {ko}
+              </button>
+            ))}
+          </div>
           <ul>
             {dropKinds.map((k) => (
               <li key={k.key}>
@@ -583,11 +630,28 @@ export default function ResourceMap({
                   <i class="rm-swatch" style={`background:${k.fill}`} aria-hidden="true"></i>
                   {k.item && <img src={`${assetBase}/items/${k.item}.png`} alt="" width="20" height="20" />}
                   <span>{k.ko}</span>
-                  <b class="n">{k.n}</b>
+                  <b class="n">
+                    {drops.filter((d) => d.k === k.key && !got.has(d.i)).length}
+                    <em>/{k.n}</em>
+                  </b>
                 </label>
               </li>
             ))}
           </ul>
+          {got.size > 0 && (
+            <button
+              type="button"
+              class="rm-clear"
+              onClick={() => {
+                if (confirm('주웠다고 표시한 것을 모두 지웁니다.')) {
+                  setGot(new Set());
+                  saveCollected(new Set());
+                }
+              }}
+            >
+              표시 {got.size}건 지우기
+            </button>
+          )}
 
         </aside>
 
@@ -724,7 +788,10 @@ export default function ResourceMap({
               return (
                 <g
                   key={`d${i}`}
-                  class={`rm-drop${d.k === 'drive' ? ' is-drive' : ''}`}
+                  class={
+                    `rm-drop${d.k === 'drive' ? ' is-drive' : ''}` +
+                    `${got.has(d.i) ? ' is-got' : ''}`
+                  }
                   onPointerEnter={() => setDropInfo(d)}
                   onPointerLeave={() => setDropInfo((h) => (h === d ? null : h))}
                   onClick={() => !moved.current && setDropInfo(d)}
@@ -749,6 +816,7 @@ export default function ResourceMap({
                   )}
                   <title>
                     {kind?.ko ?? d.k}
+                    {got.has(d.i) ? ' — 주웠음' : ''}
                     {d.c ? ` — 잠금 ${d.c.map((c) => `${c.ko} ${c.amount}`).join(', ')}` : ''}
                   </title>
                 </g>
@@ -850,6 +918,13 @@ export default function ResourceMap({
                         <span>주우면 그만입니다. 다시 생기지 않습니다</span>
                       )}
                     </div>
+                    <button
+                      type="button"
+                      class={`rm-got${got.has(dropInfo.i) ? ' is-on' : ''}`}
+                      onClick={() => markGot(dropInfo.i)}
+                    >
+                      {got.has(dropInfo.i) ? '주웠음 ✓' : '주웠다고 표시'}
+                    </button>
                     <button type="button" onClick={() => setDropInfo(null)} aria-label="닫기">
                       ✕
                     </button>

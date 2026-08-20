@@ -32,7 +32,13 @@ const manifest = manifestJson as unknown as {
 const collectiblesDoc = collectiblesJson as unknown as {
   $kinds: { key: string; ko: string; item: string | null; n: number }[];
   $driveNote: string;
-  items: { kind: string; fx: number; fy: number; cost?: { item: string; ko: string; amount: number }[] }[];
+  items: {
+    id: string;
+    kind: string;
+    fx: number;
+    fy: number;
+    cost?: { item: string; ko: string; amount: number }[];
+  }[];
 };
 
 /*
@@ -48,6 +54,7 @@ const DROP_FILL: Record<string, string> = {
   drive: '#c9d1d9',
 };
 const drops = collectiblesDoc.items.map((c) => ({
+  i: c.id,
   k: c.kind,
   x: Math.round(c.fx * 100000) / 100,
   y: Math.round(c.fy * 100000) / 100,

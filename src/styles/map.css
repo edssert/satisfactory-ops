@@ -527,3 +527,63 @@
 
 /* 두 줄로 늘어놓을 때 칸이 좁아 글자가 잘리지 않게 */
 .rm-side li { min-width: 0; }
+
+/* ------------------------------------------------- 주운 것 표시 */
+
+/* 주운 것은 흐리게. 지워지지 않고 자리만 남는다 */
+.rm-drop.is-got { opacity: 0.28; }
+.rm-drop.is-got circle { stroke-width: 1.2; }
+
+.rm-seg3 { display: flex; gap: 2px; margin-bottom: var(--s2); }
+.rm-seg3 button {
+  flex: 1;
+  padding: 4px 0;
+  border: var(--hair) solid var(--line-strong);
+  border-radius: 3px;
+  background: none;
+  color: var(--ink-3);
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+.rm-seg3 button:hover { color: var(--ink); }
+.rm-seg3 button.is-on {
+  border-color: var(--primary);
+  background: color-mix(in oklab, var(--primary) 18%, transparent);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.rm-side b em { color: var(--ink-3); font-size: 10px; font-style: normal; opacity: 0.7; }
+
+.rm-clear {
+  width: 100%;
+  padding: 5px 0;
+  border: var(--hair) solid var(--line-strong);
+  border-radius: 3px;
+  background: none;
+  color: var(--ink-3);
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+.rm-clear:hover { color: var(--ink); }
+
+.rm-got {
+  flex: none;
+  padding: 5px 11px;
+  border: var(--hair) solid var(--line-strong);
+  border-radius: 4px;
+  background: none;
+  color: var(--ink-2);
+  font: inherit;
+  font-size: var(--t-caption);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.rm-got:hover { border-color: var(--primary); color: var(--ink); }
+.rm-got.is-on {
+  border-color: var(--accent);
+  background: color-mix(in oklab, var(--accent) 18%, transparent);
+  color: var(--accent);
+}
