@@ -61,13 +61,12 @@ const bytes = JSON.stringify({ points, resources, payloadAreas }).length;
   description="철·구리·석회석부터 우라늄까지 모든 자원 노드를 순도와 함께 지도 위에서 봅니다. 확대해도 표시가 뭉개지지 않습니다."
   section="map"
 >
-  <div class="wrap page">
-    <header class="page-head">
-      <p class="marker"><span class="num">지도</span></p>
-      <h1><span class="fx-gradient-text">무엇이 어디에 있나</span></h1>
-      <p class="lede prose">
-        노드 {doc.nodes.length}개를 순도와 함께 얹었습니다. 자원을 골라서 켜고 끄고,
-        굴려서 확대하고, 노드를 누르면 채굴기 등급별 산출이 나옵니다.
+  <div class="map-page">
+    <header class="map-head">
+      <h1>자원 지도</h1>
+      <p>
+        노드 {doc.nodes.length}개를 순도와 함께. 굴려서 확대, 끌어서 이동,
+        노드를 누르면 채굴기 등급별 산출과 필요한 벨트 등급이 나옵니다.
       </p>
     </header>
 
@@ -83,7 +82,7 @@ const bytes = JSON.stringify({ points, resources, payloadAreas }).length;
       mapBase={`${base}/assets/map`}
     />
 
-    <p class="caption foot prose">
+    <p class="caption foot">
       노드 좌표·순도는 게임 데이터에서 가져왔습니다. 지형과 생물군계 그림은 공식 위키의 5000×5000
       원본을 배율 계단(1024 · 2048 · 5120)으로 잘라 둔 것이며 Coffee Stain Studios 자산입니다. 그 위에 그리는 것은 전부
       벡터라 확대해도 뭉개지지 않습니다 — 게임 지형의 벡터 원본은 공개된 것이 없어 바탕만 사진입니다.
@@ -96,11 +95,32 @@ const bytes = JSON.stringify({ points, resources, payloadAreas }).length;
   </div>
 
   <style>
-    .page { padding-block: var(--s14) var(--s16); }
-    .page-head { margin-bottom: var(--s6); }
-    .page-head h1 { margin-bottom: var(--s4); }
-    .lede { font-size: var(--t-body-l); color: var(--ink-2); }
-    .foot { margin-top: var(--s6); }
-    .back { margin-top: var(--s6); }
+    /*
+     * 지도는 도구다. 제목이 화면의 3분의 1을 먹으면 정작 지도를 볼 자리가 없다.
+     * 머리말을 한 줄로 줄이고 폭도 다 쓴다.
+     */
+    .map-page {
+      width: min(2200px, calc(100vw - var(--s6)));
+      margin-inline: auto;
+      padding: var(--s10) var(--s3) var(--s12);
+    }
+    .map-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s2) var(--s5);
+      align-items: baseline;
+      margin-bottom: var(--s3);
+    }
+    .map-head h1 { margin: 0; font-size: var(--t-h2); }
+    .map-head p {
+      margin: 0;
+      max-width: var(--measure);
+      color: var(--ink-3);
+      font-size: var(--t-small);
+      line-height: 1.7;
+      word-break: keep-all;
+    }
+    .foot { margin-top: var(--s4); max-width: var(--measure-wide); }
+    .back { margin-top: var(--s4); }
   </style>
 </Base>

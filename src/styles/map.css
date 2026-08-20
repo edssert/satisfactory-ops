@@ -82,7 +82,7 @@
 
 .rm-side {
   overflow-y: auto;
-  max-height: min(80vh, 900px);
+  max-height: min(80vh, 1000px);
   padding: var(--s3);
   border-radius: var(--radius);
   background: var(--raised);
@@ -135,8 +135,9 @@
 .rm-stage {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 1;
-  max-height: min(80vh, 900px);
+  /* 정사각형으로 묶으면 넓은 화면에서 폭이 남는다. 판은 화면을 다 쓰고 viewBox 가 비율을 따라간다 */
+  height: min(80vh, 1000px);
+  min-height: 480px;
   border-radius: var(--radius);
   background: var(--bg);
   box-shadow: var(--lit);

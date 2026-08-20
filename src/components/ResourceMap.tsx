@@ -111,11 +111,25 @@ export default function ResourceMap({
   const [sent, setSent] = useState(false);
   const [q, setQ] = useState('');
 
+  /** 판의 화면 비율. viewBox 를 여기에 맞춰야 지도가 안 찌그러지고 폭도 안 남는다 */
+  const [aspect, setAspect] = useState(1.6);
   const host = useRef<HTMLDivElement>(null);
   const pan = useRef<{ px: number; py: number; vx: number; vy: number } | null>(null);
   const moved = useRef(false);
 
+  /* 세로는 판 비율에서 나온다. 상태로 들고 다니면 두 값이 어긋난다 */
+  const vh = vb.w / aspect;
   const zoom = SIZE / vb.w;
+
+  /**
+   * 표시 크기는 배율을 따라 커지되 그대로 비례하진 않는다.
+   *
+   * 화면 크기로 고정하면 확대해도 안 커져서 광석 그림이 안 보이고,
+   * 세계 좌표로 두면 멀리서 볼 때 지도를 덮는다. 그 사이를 지수로 눌러 놓고
+   * 위아래를 잘라 둔다 — 멀리서 14px, 최대로 확대하면 52px.
+   */
+  const markPx = Math.max(14, Math.min(52, 11 * Math.pow(zoom, 0.62)));
+  const labelPx = Math.max(9, Math.min(17, 7.5 * Math.pow(zoom, 0.5)));
   /** 화면에서 같은 크기로 보이게 하는 세계 단위 길이 */
   const s = useCallback((px: number) => (px * vb.w) / SIZE, [vb.w]);
 
@@ -162,13 +176,13 @@ export default function ResourceMap({
       for (let j = 0; j < grid; j++) {
         for (let i = 0; i < grid; i++) {
           if (i * step + step < vb.x || i * step > vb.x + vb.w) continue;
-          if (j * step + step < vb.y || j * step > vb.y + vb.h) continue;
+          if (j * step + step < vb.y || j * step > vb.y + vb.w / aspect) continue;
           out.push({ i, j });
         }
       }
       return out;
     }
-  }, [zoom, vb, levels]);
+  }, [zoom, vb, levels, aspect]);
 
   const toggle = (set: Set<string>, k: string, f: (s: Set<string>) => void) => {
     const next = new Set(set);
@@ -183,22 +197,29 @@ export default function ResourceMap({
       if (!r) return { x: 0, y: 0 };
       return {
         x: vb.x + ((clientX - r.left) / r.width) * vb.w,
-        y: vb.y + ((clientY - r.top) / r.height) * vb.h,
+        y: vb.y + ((clientY - r.top) / r.height) * (vb.w / aspect),
       };
     },
-    [vb]
+    [vb, aspect]
   );
 
-  const zoomAt = useCallback((wx: number, wy: number, f: number) => {
-    setVb((v) => {
-      const w = Math.max(SIZE / MAX_ZOOM, Math.min(SIZE, v.w / f));
-      const kx = (wx - v.x) / v.w;
-      const ky = (wy - v.y) / v.h;
-      const x = Math.max(-30, Math.min(SIZE + 30 - w, wx - kx * w));
-      const y = Math.max(-30, Math.min(SIZE + 30 - w, wy - ky * w));
-      return { x, y, w, h: w };
-    });
-  }, []);
+  const zoomAt = useCallback(
+    (wx: number, wy: number, f: number) => {
+      setVb((v) => {
+        const w = Math.max(SIZE / MAX_ZOOM, Math.min(SIZE * Math.max(1, aspect), v.w / f));
+        const h = w / aspect;
+        const kx = (wx - v.x) / v.w;
+        const ky = (wy - v.y) / (v.w / aspect);
+        return {
+          x: Math.max(-60, Math.min(SIZE + 60 - w, wx - kx * w)),
+          y: Math.max(-60, Math.min(SIZE + 60 - h, wy - ky * h)),
+          w,
+          h,
+        };
+      });
+    },
+    [aspect]
+  );
 
   const onDown = (e: PointerEvent) => {
     if (measure) return;
@@ -215,12 +236,12 @@ export default function ResourceMap({
     const r = host.current?.getBoundingClientRect();
     if (!p || !r) return;
     const dx = ((e.clientX - p.px) / r.width) * vb.w;
-    const dy = ((e.clientY - p.py) / r.height) * vb.h;
+    const dy = ((e.clientY - p.py) / r.height) * (vb.w / aspect);
     if (Math.abs(dx) + Math.abs(dy) > 2) moved.current = true;
     setVb((v) => ({
       ...v,
-      x: Math.max(-30, Math.min(SIZE + 30 - v.w, p.vx - dx)),
-      y: Math.max(-30, Math.min(SIZE + 30 - v.h, p.vy - dy)),
+      x: Math.max(-60, Math.min(SIZE + 60 - v.w, p.vx - dx)),
+      y: Math.max(-60, Math.min(SIZE + 60 - v.w / aspect, p.vy - dy)),
     }));
   };
   const onUp = () => {
@@ -235,6 +256,17 @@ export default function ResourceMap({
 
   useEffect(() => {
     const el = host.current;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver(() => {
+      const r = el.getBoundingClientRect();
+      if (r.width > 0 && r.height > 0) setAspect(r.width / r.height);
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const el = host.current;
     if (!el) return;
     const h = (e: WheelEvent) => {
       e.preventDefault();
@@ -245,7 +277,19 @@ export default function ResourceMap({
     return () => el.removeEventListener('wheel', h);
   }, [toWorld, zoomAt]);
 
-  const reset = () => setVb({ x: 0, y: 0, w: SIZE, h: SIZE });
+  const reset = () =>
+    setVb(
+      aspect >= 1
+        ? { x: (SIZE - SIZE * aspect) / 2, y: 0, w: SIZE * aspect, h: SIZE }
+        : { x: 0, y: (SIZE - SIZE / aspect) / 2, w: SIZE, h: SIZE / aspect }
+    );
+  /* 판 크기를 처음 잰 뒤 한 번 맞춘다 */
+  const fitted = useRef(false);
+  useEffect(() => {
+    if (fitted.current || aspect === 1.6) return;
+    fitted.current = true;
+    reset();
+  }, [aspect]);
 
   const cellBox = (cell: string) => {
     const m = /^X(\d+)Y(\d+)$/.exec(cell);
@@ -263,7 +307,7 @@ export default function ResourceMap({
 
   /** 어떤 자원이 있는 곳으로 데려간다 */
   const flyTo = (x: number, y: number, w = SIZE / 6) =>
-    setVb({ x: Math.max(0, x - w / 2), y: Math.max(0, y - w / 2), w, h: w });
+    setVb({ x: x - w / 2, y: y - w / aspect / 2, w, h: w / aspect });
 
   const koOf = (r: string) => resources.find((x) => x.r === r)?.ko ?? r;
 
@@ -320,11 +364,11 @@ export default function ResourceMap({
     <div class="rm">
       <div class="rm-bar">
         <span class="rm-zoom">
-          <button type="button" class="rm-sq" onClick={() => zoomAt(vb.x + vb.w / 2, vb.y + vb.h / 2, 1 / 1.5)}>
+          <button type="button" class="rm-sq" onClick={() => zoomAt(vb.x + vb.w / 2, vb.y + vh / 2, 1 / 1.5)}>
             −
           </button>
           <b class="n">×{Math.round(zoom * 10) / 10}</b>
-          <button type="button" class="rm-sq" onClick={() => zoomAt(vb.x + vb.w / 2, vb.y + vb.h / 2, 1.5)}>
+          <button type="button" class="rm-sq" onClick={() => zoomAt(vb.x + vb.w / 2, vb.y + vh / 2, 1.5)}>
             +
           </button>
           <button type="button" class="rm-btn is-quiet" onClick={reset}>
@@ -452,7 +496,7 @@ export default function ResourceMap({
           onPointerLeave={onUp}
           onClick={(e) => onStageClick(e as unknown as MouseEvent)}
         >
-          <svg class="rm-svg" viewBox={`${vb.x} ${vb.y} ${vb.w} ${vb.h}`} role="img" aria-label="자원 지도">
+          <svg class="rm-svg" viewBox={`${vb.x} ${vb.y} ${vb.w} ${vh}`} role="img" aria-label="자원 지도">
             <image href={`${mapBase}/${layer}/preview.webp`} x="0" y="0" width={SIZE} height={SIZE} />
             {tiles?.list.map((t) => {
               const step = SIZE / tiles.grid;
@@ -477,7 +521,7 @@ export default function ResourceMap({
                       <g key={`g${i}-${jj}`}>
                         <rect x={b.x} y={b.y} width={b.w} height={b.h} vector-effect="non-scaling-stroke" />
                         {zoom > 1.2 && (
-                          <text x={b.x + s(5)} y={b.y + s(13)} font-size={s(10)}>
+                          <text x={b.x + s(6)} y={b.y + s(labelPx * 1.5)} font-size={s(labelPx * 1.1)}>
                             X{i}Y{jj}
                           </text>
                         )}
@@ -503,7 +547,7 @@ export default function ResourceMap({
                         rx={s(4)}
                         vector-effect="non-scaling-stroke"
                       />
-                      <text x={b.x + b.w / 2} y={b.y + b.h / 2} font-size={s(14)}>
+                      <text x={b.x + b.w / 2} y={b.y + b.h / 2} font-size={s(Math.max(14, labelPx * 1.5))}>
                         {a.ko}
                       </text>
                     </g>
@@ -515,7 +559,7 @@ export default function ResourceMap({
             {clusters
               ? clusters.map((c, i) => {
                   const one = c.n === 1 ? c.pts[0]! : null;
-                  const r = s(one ? 8 : Math.min(15, 8 + Math.log2(c.n) * 2.4));
+                  const r = s(one ? markPx / 2 : Math.min(markPx * 0.9, markPx / 2 + Math.log2(c.n) * 3));
                   return (
                     <g
                       key={`c${i}`}
@@ -544,8 +588,8 @@ export default function ResourceMap({
                           )}
                           <text
                             x={c.x}
-                            y={c.res.size === 1 ? c.y + r * 0.66 : c.y + s(4)}
-                            font-size={s(c.res.size === 1 ? 9 : 12)}
+                            y={c.res.size === 1 ? c.y + r * 0.66 : c.y + s(labelPx * 0.36)}
+                            font-size={s(c.res.size === 1 ? labelPx * 0.9 : labelPx * 1.15)}
                           >
                             {c.n}
                           </text>
@@ -555,7 +599,7 @@ export default function ResourceMap({
                   );
                 })
               : shown.map((p, i) => {
-                  const r = s(p.t === 'node' ? 9 : 7);
+                  const r = s((markPx / 2) * (p.t === 'node' ? 1 : 0.82));
                   const active = sel === p;
                   return (
                     <g
@@ -564,16 +608,23 @@ export default function ResourceMap({
                       onClick={() => !moved.current && setSel(active ? null : p)}
                     >
                       <circle cx={p.x} cy={p.y} r={r} vector-effect="non-scaling-stroke" />
+                      {/* 그림도 같이 커진다. 확대했는데 광석이 안 보이면 지도가 아니다 */}
                       <image
                         href={`${assetBase}/items/${p.r}.png`}
-                        x={p.x - r * 0.7}
-                        y={p.y - r * 0.7}
-                        width={r * 1.4}
-                        height={r * 1.4}
+                        x={p.x - r * 0.74}
+                        y={p.y - r * 0.74}
+                        width={r * 1.48}
+                        height={r * 1.48}
                       />
-                      {zoom > 5 && (
-                        <text x={p.x} y={p.y + r + s(10)} font-size={s(9)} class="rm-plabel">
-                          {PURITY[p.p]!.ko}
+                      {zoom > 2.4 && (
+                        <text
+                          x={p.x}
+                          y={p.y + r + s(labelPx)}
+                          font-size={s(labelPx)}
+                          class="rm-plabel"
+                        >
+                          {/* 이름까지 붙이면 서로 겹친다. 어느 정도 들어가야 이름을 준다 */}
+                          {zoom > 4.5 ? `${koOf(p.r)} · ${PURITY[p.p]!.ko}` : PURITY[p.p]!.ko}
                         </text>
                       )}
                     </g>
@@ -594,14 +645,14 @@ export default function ResourceMap({
                 <text
                   x={(measure.a.x + mEnd.x) / 2}
                   y={(measure.a.y + mEnd.y) / 2 - s(8)}
-                  font-size={s(12)}
+                  font-size={s(Math.max(12, labelPx * 1.2))}
                 >
                   {km(measure.a, mEnd).toFixed(2)} km
                 </text>
                 <text
                   x={(measure.a.x + mEnd.x) / 2}
                   y={(measure.a.y + mEnd.y) / 2 + s(12)}
-                  font-size={s(10)}
+                  font-size={s(Math.max(10, labelPx))}
                 >
                   벨트 재료 {Math.ceil(km(measure.a, mEnd) * 1000 * BELT_PER_M)}개 · 구간{' '}
                   {Math.ceil((km(measure.a, mEnd) * 1000) / BELT_SEGMENT_M)}개 · 전신주{' '}
