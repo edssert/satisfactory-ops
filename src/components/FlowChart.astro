@@ -1,167 +1,110 @@
 ---
-import '../styles/flow.css';
 /**
  * FlowChart — 공정 흐름도. **축척이 없다.**
  *
- * 앞서 실패한 것은 실척 배치도였다: 폭 32 m 안에 기계를 실제 치수로 넣으려다 기계가 50 px짜리
- * 조각이 되고, 아이콘이 뭉개지고, 벨트가 미로가 됐다. 그건 "어디에 놓는가"를 답하려던 그림이다.
+ * 모델을 바꿨다. 앞선 판본은 기계를 점으로 두고 기계끼리 화살표를 이었는데,
+ * 그러면 45:15 같은 비정수 분배가 분배기 하나로 갈라지는 것처럼 그려진다. 실제로는 그렇게 안 된다.
  *
- * 이 그림은 다른 질문에 답한다: **무엇이 무엇을 먹어 무엇이 되는가, 분당 몇 개씩.**
- * 그래서 좌표를 버리고 계층 그래프로 그린다 — 원자재가 위, 완제품이 아래, 단계마다 한 줄.
- * mermaid 의 flowchart 와 같은 성격이다.
+ * 초반 공장의 표준은 **매니폴드**이고, 공식 위키의 정의는 이렇다:
+ *   "Manifold refers to a fill method where Conveyor Splitters or Conveyor Mergers are aligned
+ *    in a series (that is, one after another), usually parallel to the arrangement of buildings."
+ *   — 즉 컨베이어 분배기를 **일렬로 이어 붙여** 기계 배열과 나란히 놓는 채움 방식이다.
+ *   (satisfactory.wiki.gg/wiki/Manifold)
  *
- * 배치는 플레이어가 정한다. 이 그림은 비율과 흐름만 보여준다.
+ * 그 줄 하나를 상자 하나로 그리고, 기계는 그 줄에 붙는다. 그래프가 아니라 세로로 쌓은 층이다:
+ *
+ *     [기계] [기계]          같은 일을 하는 기계도 각자 상자를 갖는다 (×2 로 뭉치지 않는다)
+ *   ══ 철 주괴 60/분 ══       분배기를 일렬로 이어 붙인 줄. 유량은 여기 적는다
+ *     [기계] [기계] [기계]
+ *
+ * 유량은 연결선이 아니라 **벨트 줄과 기계 상자 안**에 적는다.
+ * 선에 라벨을 달면 어느 기계가 얼마를 내는지 눈으로 따라갈 수 없다.
  */
+import '../styles/flow.css';
+import { NODE_W, NODE_H, GAP_X, PAD, chipWidth, fmtRate } from '../lib/flow-layout';
 
-export interface FlowNode {
-  id: string;
-  /** 기계 이름 */
-  machineKo: string;
-  /**
-   * 이 기계가 무엇을 만드는가. 기계 이름과 같은 줄에 붙이면 상자를 넘치므로 줄을 나눠 적는다.
-   * (`제작기 · 철판 ×1` 처럼 한 줄로 쓰다가 글자가 상자 밖으로 나갔다.)
-   */
-  productKo?: string;
-  /** 몇 대 */
-  count: number;
-  /** 클럭 (100 이면 표시하지 않는다) */
-  clock?: number;
+export interface MachineBox {
+  /** 기계 이름. 같은 기계가 여러 대면 상자를 여러 개 만든다 */
+  ko: string;
   /** 아이콘용 건물 클래스 */
   machineId?: string;
+  /** 이 기계가 내는 것 */
+  productKo?: string;
+  perMinute?: number;
+  /** 100 이면 적지 않는다 */
+  clock?: number;
+  /** 기계가 아닌 것(저장 컨테이너 등)에 붙이는 한 줄 */
+  note?: string;
   /**
-   * 이 노드에서 밖으로 나가는 산출. 노드 아래에 칩으로 붙는다.
-   * 철봉처럼 **일부는 납품하고 일부는 다음 공정으로** 가는 경우, 이 칩과 아래로 가는
-   * 화살표가 같이 그려져 갈라지는 것이 보인다.
+   * 이 기계의 산출이 아래 줄로 가는가. 기본값 true.
+   * 철판처럼 그 자리에서 끝나는 것은 false — 아니면 없는 연결선이 그려진다.
    */
-  out?: { itemKo: string; itemId?: string; perMinute: number };
-  /** 몇 번째 계층인가 (0 = 맨 위) */
-  layer: number;
+  feedsNext?: boolean;
 }
 
-export interface FlowEdge {
-  from: string;
-  to: string;
-  /** 무엇이 흐르는가 */
+export interface BusLine {
   itemKo: string;
   itemId?: string;
   perMinute: number;
-  /** 갈라지는 지점인가 — 분배기가 필요하다 */
-  split?: boolean;
+  /** 이 줄의 성격 — 예: "분배기 직렬", "병합기로 합침" */
+  note?: string;
 }
 
+export type Row = { kind: 'machines'; boxes: MachineBox[] } | { kind: 'bus'; bus: BusLine };
+
 interface Props {
-  nodes: FlowNode[];
-  edges: FlowEdge[];
-  /** 맨 위로 들어오는 것 */
-  input?: { itemKo: string; itemId?: string; perMinute: number; note?: string };
-  /** 맨 아래로 나가는 것 */
-  output?: { itemKo: string; itemId?: string; perMinute: number };
+  rows: Row[];
   caption?: string;
   index?: number;
 }
-const { nodes, edges, input, output, caption, index = 1 } = Astro.props;
+const { rows, caption, index = 1 } = Astro.props;
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const bIcon = `${base}/assets/buildings-png`;
 const iIcon = `${base}/assets/items`;
 
-// ── 계층 배치. 좌표가 아니라 순서만 정한다.
-const NODE_W = 176;
-const NODE_H = 80;
-const GAP_X = 26;
-const GAP_Y = 86;
-const PAD = 28;
-const CHIP_H = 30;
+const BUS_H = 34;
+const ROW_GAP = 40;
 
-const layers = [...new Set(nodes.map((n) => n.layer))].sort((a, b) => a - b);
-const byLayer = layers.map((l) => nodes.filter((n) => n.layer === l));
-const maxPerLayer = Math.max(...byLayer.map((r) => r.length), 1);
-
-/** 레이어를 건너뛰는 연결이 있으면 옆으로 우회할 여백이 필요하다 */
-const hasSkip = edges.some((e) => {
-  const a = nodes.find((n) => n.id === e.from);
-  const b = nodes.find((n) => n.id === e.to);
-  return a && b && Math.abs(b.layer - a.layer) > 1;
-});
-const SIDE = hasSkip ? 92 : 0;
-const width = PAD * 2 + SIDE * 2 + maxPerLayer * NODE_W + (maxPerLayer - 1) * GAP_X;
+const widest = Math.max(...rows.map((r) => (r.kind === 'machines' ? r.boxes.length : 1)), 1);
+const width = PAD * 2 + widest * NODE_W + (widest - 1) * GAP_X;
 const centerX = width / 2;
 
-/** 입력 칩이 맨 위에 한 줄, 그 아래 계층들, 맨 아래 출력 칩 */
-const topOffset = input ? PAD + CHIP_H + GAP_Y : PAD;
-const placed = new Map<string, { x: number; y: number; n: FlowNode }>();
-byLayer.forEach((row, li) => {
-  const total = row.length * NODE_W + (row.length - 1) * GAP_X;
-  row.forEach((n, k) => {
-    placed.set(n.id, {
-      x: (width - total) / 2 + k * (NODE_W + GAP_X),
-      y: topOffset + li * (NODE_H + GAP_Y),
-      n,
-    });
-  });
+/** 위에서부터 층을 쌓는다 */
+let cursor = PAD;
+const placed = rows.map((row) => {
+  const h = row.kind === 'machines' ? NODE_H : BUS_H;
+  const at = { row, y: cursor, h };
+  cursor += h + ROW_GAP;
+  return at;
 });
-const bottomY = topOffset + layers.length * (NODE_H + GAP_Y) - GAP_Y;
-/** 노드별 출력 칩이 있으면 아래쪽 여유가 더 필요하다 */
-const hasNodeOut = nodes.some((n) => n.out);
-const height =
-  bottomY + (output ? GAP_Y + CHIP_H : hasNodeOut ? CHIP_H + PAD : 0) + PAD;
+const height = cursor - ROW_GAP + PAD;
 
-const fmt = (n: number) => (Number.isInteger(n) ? String(n) : String(Math.round(n * 100) / 100));
-
-/** 라벨 칩 폭 — 한글 12 px, 나머지 7 px로 어림 */
-const chipW = (t: string, withIcon = true) => {
-  let w = withIcon ? 34 : 12;
-  for (const ch of t) w += /[가-힣]/.test(ch) ? 12 : 7;
-  return Math.ceil(w);
+/** 기계 상자를 가운데 정렬해 x 를 매긴다 */
+const boxX = (count: number, i: number) => {
+  const total = count * NODE_W + (count - 1) * GAP_X;
+  return (width - total) / 2 + i * (NODE_W + GAP_X);
 };
 
-/**
- * 레이어를 건너뛰는 연결은 **옆으로 우회**시킨다.
- *
- * 곧장 내려가면 중간 레이어의 유량 칩 위를 지나가 겹친다 — 철봉이 나사를 건너뛰고 회전자로
- * 갈 때 실제로 그랬다. 블록 바깥으로 빼서 내려보내면 겹칠 것이 없다.
- */
-const bypass = (x1: number, y1: number, x2: number, y2: number, side: number) => {
-  const r = 14;
-  return (
-    `M ${x1} ${y1} L ${x1} ${y1 + 18}` +
-    ` Q ${x1} ${y1 + 18 + r} ${x1 + (side > 0 ? r : -r)} ${y1 + 18 + r}` +
-    ` L ${side - (side > 0 ? r : -r)} ${y1 + 18 + r}` +
-    ` Q ${side} ${y1 + 18 + r} ${side} ${y1 + 18 + r * 2}` +
-    ` L ${side} ${y2 - 18 - r}` +
-    ` Q ${side} ${y2 - 18} ${side + (x2 > side ? r : -r)} ${y2 - 18}` +
-    ` L ${x2 - (x2 > side ? r : -r)} ${y2 - 18}` +
-    ` Q ${x2} ${y2 - 18} ${x2} ${y2 - 18 + r}` +
-    ` L ${x2} ${y2}`
-  );
-};
+const busX1 = PAD;
+const busX2 = width - PAD;
 
-/** 위에서 아래로 내려가는 연결선. 어긋나면 가운데서 한 번 꺾는다. */
-const link = (x1: number, y1: number, x2: number, y2: number) => {
-  if (Math.abs(x1 - x2) < 1) return `M ${x1} ${y1} L ${x2} ${y2}`;
-  const my = (y1 + y2) / 2;
-  const r = Math.min(14, Math.abs(x2 - x1) / 2, Math.abs(y2 - y1) / 2);
-  const d = x2 > x1 ? 1 : -1;
-  return (
-    `M ${x1} ${y1} L ${x1} ${my - r}` +
-    ` Q ${x1} ${my} ${x1 + d * r} ${my}` +
-    ` L ${x2 - d * r} ${my}` +
-    ` Q ${x2} ${my} ${x2} ${my + r}` +
-    ` L ${x2} ${y2}`
-  );
-};
-
-/** 같은 출발점에서 여러 갈래로 나가면 분배기가 필요하다 */
-const outCount = new Map<string, number>();
-for (const e of edges) outCount.set(e.from, (outCount.get(e.from) ?? 0) + 1);
+/** 층과 층 사이를 잇는 선의 x 좌표들 */
+function connectors(row: Row): number[] {
+  if (row.kind === 'machines') {
+    return row.boxes
+      .map((b, i) => ({ b, x: boxX(row.boxes.length, i) + NODE_W / 2 }))
+      .filter(({ b }) => b.feedsNext !== false)
+      .map(({ x }) => x);
+  }
+  return [centerX];
+}
 ---
 
 <figure class="fc">
   <svg
     class="fc-svg"
     style={`max-width:${width}px`}
-    width={width}
-    height={height}
     viewBox={`0 0 ${width} ${height}`}
     role="img"
     aria-label={caption ?? '공정 흐름도'}
@@ -172,175 +115,108 @@ for (const e of edges) outCount.set(e.from, (outCount.get(e.from) ?? 0) + 1);
         viewBox="0 0 10 10"
         refX="9"
         refY="5"
-        markerWidth="6"
-        markerHeight="6"
+        markerWidth="5"
+        markerHeight="5"
         orient="auto-start-reverse"
       >
-        <path d="M 0 0 L 10 5 L 0 10 z" class="fc-arrowhead" />
+        <path d="M0,1 L9,5 L0,9 z" class="fc-arrowhead" />
       </marker>
     </defs>
 
-    {/* ── 입력 (채굴기에서 들어오는 것) */}
-    {input && (
-      <g>
-        {(() => {
-          const t = `${input.itemKo} ${fmt(input.perMinute)}/분`;
-          const w = chipW(t);
+    {
+      placed.map((p, ri) => {
+        const next = placed[ri + 1];
+        if (!next) return null;
+        const y1 = p.y + p.h;
+        const y2 = next.y;
+        /* 벨트 줄이 한쪽에 있으면 그 줄은 가로로 길므로, 기계 쪽 상자마다 한 줄씩 내린다 */
+        const xs =
+          p.row.kind === 'machines' ? connectors(p.row) : connectors(next.row);
+        return xs.map((x) => (
+          <path
+            d={`M${x},${y1} L${x},${y2}`}
+            class="fc-link"
+            marker-end={`url(#fc-arrow-${index})`}
+          />
+        ));
+      })
+    }
+
+    {
+      placed.map((p) => {
+        if (p.row.kind === 'bus') {
+          const b = p.row.bus;
+          const label = `${b.itemKo} ${fmtRate(b.perMinute)}/분`;
+          const w = chipWidth(label);
           return (
-            <>
-              <rect x={centerX - w / 2} y={PAD} width={w} height={CHIP_H} rx="4" class="fc-chip" />
-              {input.itemId && (
-                <image href={`${iIcon}/${input.itemId}.png`} x={centerX - w / 2 + 4} y={PAD + 3} width="24" height="24" />
+            <g class="fc-bus">
+              <rect x={busX1} y={p.y} width={busX2 - busX1} height={p.h} rx="4" />
+              <rect
+                x={centerX - w / 2}
+                y={p.y + 2}
+                width={w}
+                height={p.h - 4}
+                rx="3"
+                class="fc-buschip"
+              />
+              {b.itemId && (
+                <image
+                  href={`${iIcon}/${b.itemId}.png`}
+                  x={centerX - w / 2 + 5}
+                  y={p.y + 5}
+                  width="24"
+                  height="24"
+                />
               )}
-              <text x={centerX - w / 2 + (input.itemId ? 32 : 10)} y={PAD + 20} class="fc-chiptext">{t}</text>
-            </>
-          );
-        })()}
-        {byLayer[0]?.map((n) => {
-          const p = placed.get(n.id)!;
-          return (
-            <path
-              d={link(centerX, PAD + CHIP_H, p.x + NODE_W / 2, p.y)}
-              class="fc-link"
-              fill="none"
-              marker-end={`url(#fc-arrow-${index})`}
-            />
-          );
-        })}
-        {(byLayer[0]?.length ?? 0) > 1 && (
-          <g class="fc-hub">
-            <circle cx={centerX} cy={PAD + CHIP_H + 20} r="13" />
-            <text x={centerX} y={PAD + CHIP_H + 24} text-anchor="middle">분</text>
-          </g>
-        )}
-      </g>
-    )}
-
-    {/* ── 연결선 */}
-    {edges.map((e) => {
-      const a = placed.get(e.from);
-      const b = placed.get(e.to);
-      if (!a || !b) return null;
-      const x1 = a.x + NODE_W / 2;
-      const y1 = a.y + NODE_H;
-      const x2 = b.x + NODE_W / 2;
-      const y2 = b.y;
-      // 레이어를 두 칸 이상 건너뛰면 옆으로 우회한다
-      const skips = Math.abs(b.n.layer - a.n.layer) > 1;
-      const sideX = a.x < width / 2 ? PAD - 8 : width - PAD + 8;
-      const d = skips ? bypass(x1, y1, x2, y2, sideX) : link(x1, y1, x2, y2);
-      const t = `${e.itemKo} ${fmt(e.perMinute)}/분`;
-      const w = chipW(t);
-      /*
-        라벨을 중점에 두면 갈래가 둘일 때 분배기 원 위에서 서로 겹친다.
-        목적지 쪽(70%)으로 내리면 갈래마다 가로로 벌어져 겹칠 일이 없다.
-      */
-      const mx = skips ? sideX : x1 + (x2 - x1) * 0.7;
-      const my = skips ? (y1 + y2) / 2 : y1 + (y2 - y1) * 0.72;
-      return (
-        <g>
-          <path d={d} class="fc-link" fill="none" marker-end={`url(#fc-arrow-${index})`} />
-          <rect x={mx - w / 2} y={my - CHIP_H / 2} width={w} height={CHIP_H} rx="4" class="fc-chip" />
-          {e.itemId && (
-            <image href={`${iIcon}/${e.itemId}.png`} x={mx - w / 2 + 4} y={my - CHIP_H / 2 + 3} width="24" height="24" />
-          )}
-          <text x={mx - w / 2 + (e.itemId ? 32 : 10)} y={my + 5} class="fc-chiptext">{t}</text>
-        </g>
-      );
-    })}
-
-    {/* ── 분배기 표시: 한 노드에서 두 갈래 이상 나갈 때 */}
-    {[...outCount.entries()]
-      .filter(([, c]) => c > 1)
-      .map(([id]) => {
-        const a = placed.get(id);
-        if (!a) return null;
-        return (
-          <g class="fc-hub">
-            <circle cx={a.x + NODE_W / 2} cy={a.y + NODE_H + 20} r="13" />
-            <text x={a.x + NODE_W / 2} y={a.y + NODE_H + 24} text-anchor="middle">분</text>
-          </g>
-        );
-      })}
-
-    {/* ── 기계 상자 */}
-    {[...placed.values()].map(({ x, y, n }) => (
-      <g class="fc-node">
-        <rect x={x} y={y} width={NODE_W} height={NODE_H} rx="6" />
-        {n.machineId && (
-          <image href={`${bIcon}/${n.machineId}.png`} x={x + 8} y={y + 8} width="50" height="50" preserveAspectRatio="xMidYMid meet" />
-        )}
-        {/* 기계 · 산출물 · 클럭을 각각 다른 줄에. 한 줄에 몰면 상자를 넘친다 */}
-        <text x={x + (n.machineId ? 66 : 12)} y={y + 26} class="fc-name">
-          {n.machineKo} <tspan class="fc-count">×{n.count}</tspan>
-        </text>
-        {n.productKo && (
-          <text x={x + (n.machineId ? 66 : 12)} y={y + 46} class="fc-product">
-            {n.productKo}
-          </text>
-        )}
-        {n.clock != null && n.clock < 100 && (
-          <text x={x + (n.machineId ? 66 : 12)} y={y + (n.productKo ? 64 : 46)} class="fc-sub">
-            {fmt(n.clock)}%
-          </text>
-        )}
-      </g>
-    ))}
-
-    {/* ── 노드별 산출 칩 — 그 기계에서 밖으로 나가는 것 */}
-    {[...placed.values()]
-      .filter(({ n }) => n.out)
-      .map(({ x, y, n }) => {
-        const o = n.out!;
-        const t = `${o.itemKo} ${fmt(o.perMinute)}/분`;
-        const w = chipW(t);
-        const cx = x + NODE_W / 2;
-        const cy = y + NODE_H + 30;
-        return (
-          <g>
-            <path d={`M ${cx} ${y + NODE_H} L ${cx} ${cy - 2}`} class="fc-link" fill="none" marker-end={`url(#fc-arrow-${index})`} />
-            <rect x={cx - w / 2} y={cy} width={w} height={CHIP_H} rx="4" class="fc-chip is-out" />
-            {o.itemId && <image href={`${iIcon}/${o.itemId}.png`} x={cx - w / 2 + 4} y={cy + 3} width="24" height="24" />}
-            <text x={cx - w / 2 + (o.itemId ? 32 : 10)} y={cy + 20} class="fc-chiptext is-out">{t}</text>
-          </g>
-        );
-      })}
-
-    {/* ── 출력 */}
-    {output && (
-      <g>
-        {byLayer[byLayer.length - 1]?.map((n) => {
-          const p = placed.get(n.id)!;
-          return (
-            <path
-              d={link(p.x + NODE_W / 2, p.y + NODE_H, centerX, bottomY + GAP_Y)}
-              class="fc-link"
-              fill="none"
-              marker-end={`url(#fc-arrow-${index})`}
-            />
-          );
-        })}
-        {(byLayer[byLayer.length - 1]?.length ?? 0) > 1 && (
-          <g class="fc-hub is-merge">
-            <circle cx={centerX} cy={bottomY + GAP_Y / 2} r="13" />
-            <text x={centerX} y={bottomY + GAP_Y / 2 + 4} text-anchor="middle">병</text>
-          </g>
-        )}
-        {(() => {
-          const t = `${output.itemKo} ${fmt(output.perMinute)}/분`;
-          const w = chipW(t);
-          return (
-            <>
-              <rect x={centerX - w / 2} y={bottomY + GAP_Y} width={w} height={CHIP_H} rx="4" class="fc-chip is-out" />
-              {output.itemId && (
-                <image href={`${iIcon}/${output.itemId}.png`} x={centerX - w / 2 + 4} y={bottomY + GAP_Y + 3} width="24" height="24" />
+              <text
+                x={centerX - w / 2 + (b.itemId ? 33 : 11)}
+                y={p.y + p.h / 2 + 5}
+                class="fc-bustext"
+              >
+                {label}
+              </text>
+              {b.note && (
+                <text x={busX2 - 8} y={p.y + p.h / 2 + 4} class="fc-busnote" text-anchor="end">
+                  {b.note}
+                </text>
               )}
-              <text x={centerX - w / 2 + (output.itemId ? 32 : 10)} y={bottomY + GAP_Y + 20} class="fc-chiptext is-out">{t}</text>
-            </>
+            </g>
           );
-        })()}
-      </g>
-    )}
+        }
+
+        const boxes = p.row.boxes;
+        return boxes.map((m, i) => {
+          const x = boxX(boxes.length, i);
+          const tx = x + (m.machineId ? 62 : 12);
+          return (
+            <g class="fc-node">
+              <rect x={x} y={p.y} width={NODE_W} height={NODE_H} rx="3" />
+              {m.machineId && (
+                <image
+                  href={`${bIcon}/${m.machineId}.png`}
+                  x={x + 7}
+                  y={p.y + 15}
+                  width="48"
+                  height="48"
+                  preserveAspectRatio="xMidYMid meet"
+                />
+              )}
+              <text x={tx} y={p.y + 27} class="fc-name">{m.ko}</text>
+              {m.productKo != null && m.perMinute != null && (
+                <text x={tx} y={p.y + 48} class="fc-rate">
+                  {m.productKo} <tspan class="fc-num">{fmtRate(m.perMinute)}/분</tspan>
+                </text>
+              )}
+              {m.note && <text x={tx} y={p.y + 48} class="fc-product">{m.note}</text>}
+              {m.clock != null && m.clock < 100 && (
+                <text x={tx} y={p.y + 67} class="fc-sub">{fmtRate(m.clock)}%</text>
+              )}
+            </g>
+          );
+        });
+      })
+    }
   </svg>
+
   {caption && <figcaption class="fc-cap">{caption}</figcaption>}
 </figure>

@@ -69,6 +69,42 @@
       "file": "Desc_OreUranium_C.png"
     },
     {
+      "id": "Desc_Fuel_C",
+      "en": "Packaged Fuel",
+      "file": "Desc_Fuel_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Packaged_Fuel.png/96px-Packaged_Fuel.png?1f8352"
+    },
+    {
+      "id": "Desc_HeavyOilResidue_C",
+      "en": "Heavy Oil Residue",
+      "file": "Desc_HeavyOilResidue_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Heavy_Oil_Residue.png/96px-Heavy_Oil_Residue.png?b3971c"
+    },
+    {
+      "id": "Desc_DarkEnergy_C",
+      "en": "Dark Matter Residue",
+      "file": "Desc_DarkEnergy_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Dark_Matter_Residue.png/96px-Dark_Matter_Residue.png?d830c1"
+    },
+    {
+      "id": "Desc_QuantumEnergy_C",
+      "en": "Excited Photonic Matter",
+      "file": "Desc_QuantumEnergy_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Excited_Photonic_Matter.png/96px-Excited_Photonic_Matter.png?ceb483"
+    },
+    {
+      "id": "Desc_IonizedFuel_C",
+      "en": "Ionized Fuel",
+      "file": "Desc_IonizedFuel_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Ionized_Fuel.png/96px-Ionized_Fuel.png?23b280"
+    },
+    {
+      "id": "Desc_RocketFuel_C",
+      "en": "Rocket Fuel",
+      "file": "Desc_RocketFuel_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Rocket_Fuel.png/96px-Rocket_Fuel.png?a6ca60"
+    },
+    {
       "id": "Desc_IronPlate_C",
       "en": "Iron Plate",
       "file": "Desc_IronPlate_C.png"
@@ -104,6 +140,54 @@
       "file": "Desc_SteelIngot_C.png"
     },
     {
+      "id": "Desc_HazmatFilter_C",
+      "en": "Iodine-Infused Filter",
+      "file": "Desc_HazmatFilter_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Iodine-Infused_Filter.png/96px-Iodine-Infused_Filter.png?d6c9bd"
+    },
+    {
+      "id": "Desc_Filter_C",
+      "en": "Gas Filter",
+      "file": "Desc_Filter_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Gas_Filter.png/96px-Gas_Filter.png?cc1cbe"
+    },
+    {
+      "id": "Desc_AluminumCasing_C",
+      "en": "Aluminum Casing",
+      "file": "Desc_AluminumCasing_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Aluminum_Casing.png/96px-Aluminum_Casing.png?cea75a"
+    },
+    {
+      "id": "Desc_AluminumIngot_C",
+      "en": "Aluminum Ingot",
+      "file": "Desc_AluminumIngot_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Aluminum_Ingot.png/96px-Aluminum_Ingot.png?223f1f"
+    },
+    {
+      "id": "Desc_AluminumPlate_C",
+      "en": "Alclad Aluminum Sheet",
+      "file": "Desc_AluminumPlate_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Alclad_Aluminum_Sheet.png/96px-Alclad_Aluminum_Sheet.png?45856b"
+    },
+    {
+      "id": "Desc_AluminumPlateReinforced_C",
+      "en": "Heat Sink",
+      "file": "Desc_AluminumPlateReinforced_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Heat_Sink.png/96px-Heat_Sink.png?cd283e"
+    },
+    {
+      "id": "Desc_AluminumScrap_C",
+      "en": "Aluminum Scrap",
+      "file": "Desc_AluminumScrap_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Aluminum_Scrap.png/96px-Aluminum_Scrap.png?feaec6"
+    },
+    {
+      "id": "Desc_Computer_C",
+      "en": "Computer",
+      "file": "Desc_Computer_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Computer.png/96px-Computer.png?823b42"
+    },
+    {
       "id": "Desc_CopperIngot_C",
       "en": "Copper Ingot",
       "file": "Desc_CopperIngot_C.png"
@@ -117,6 +201,18 @@
       "id": "Desc_ModularFrame_C",
       "en": "Modular Frame",
       "file": "Desc_ModularFrame_C.png"
+    },
+    {
+      "id": "Desc_ModularFrameHeavy_C",
+      "en": "Heavy Modular Frame",
+      "file": "Desc_ModularFrameHeavy_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Heavy_Modular_Frame.png/96px-Heavy_Modular_Frame.png?3faddb"
+    },
+    {
+      "id": "Desc_Motor_C",
+      "en": "Motor",
+      "file": "Desc_Motor_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Motor.png/96px-Motor.png?345ae9"
     },
     {
       "id": "Desc_Rotor_C",
@@ -139,6 +235,24 @@
       "file": "Desc_SteelPlateReinforced_C.png"
     },
     {
+      "id": "Desc_PackagedIonizedFuel_C",
+      "en": "Packaged Ionized Fuel",
+      "file": "Desc_PackagedIonizedFuel_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Packaged_Ionized_Fuel.png/96px-Packaged_Ionized_Fuel.png?71332a"
+    },
+    {
+      "id": "Desc_PackagedRocketFuel_C",
+      "en": "Packaged Rocket Fuel",
+      "file": "Desc_PackagedRocketFuel_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Packaged_Rocket_Fuel.png/96px-Packaged_Rocket_Fuel.png?d3e993"
+    },
+    {
+      "id": "Desc_TurboFuel_C",
+      "en": "Packaged Turbofuel",
+      "file": "Desc_TurboFuel_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Packaged_Turbofuel.png/96px-Packaged_Turbofuel.png?8bdd09"
+    },
+    {
       "id": "Desc_Cement_C",
       "en": "Concrete",
       "file": "Desc_Cement_C.png"
@@ -149,9 +263,951 @@
       "file": "Desc_IronScrew_C.png"
     },
     {
+      "id": "Desc_SpaceElevatorPart_1_C",
+      "en": "Smart Plating",
+      "file": "Desc_SpaceElevatorPart_1_C.png"
+    },
+    {
+      "id": "Desc_SpaceElevatorPart_2_C",
+      "en": "Versatile Framework",
+      "file": "Desc_SpaceElevatorPart_2_C.png"
+    },
+    {
+      "id": "Desc_SpaceElevatorPart_3_C",
+      "en": "Automated Wiring",
+      "file": "Desc_SpaceElevatorPart_3_C.png"
+    },
+    {
+      "id": "Desc_SpaceElevatorPart_4_C",
+      "en": "Modular Engine",
+      "file": "Desc_SpaceElevatorPart_4_C.png"
+    },
+    {
+      "id": "Desc_SpaceElevatorPart_5_C",
+      "en": "Adaptive Control Unit",
+      "file": "Desc_SpaceElevatorPart_5_C.png"
+    },
+    {
+      "id": "Desc_SpaceElevatorPart_6_C",
+      "en": "Magnetic Field Generator",
+      "file": "Desc_SpaceElevatorPart_6_C.png"
+    },
+    {
+      "id": "Desc_SpaceElevatorPart_7_C",
+      "en": "Assembly Director System",
+      "file": "Desc_SpaceElevatorPart_7_C.png"
+    },
+    {
+      "id": "Desc_SpaceElevatorPart_8_C",
+      "en": "Thermal Propulsion Rocket",
+      "file": "Desc_SpaceElevatorPart_8_C.png"
+    },
+    {
+      "id": "Desc_SpaceElevatorPart_9_C",
+      "en": "Nuclear Pasta",
+      "file": "Desc_SpaceElevatorPart_9_C.png"
+    },
+    {
+      "id": "Desc_SpaceElevatorPart_11_C",
+      "en": "Ballistic Warp Drive",
+      "file": "Desc_SpaceElevatorPart_11_C.png"
+    },
+    {
+      "id": "Desc_SpaceElevatorPart_12_C",
+      "en": "AI Expansion Server",
+      "file": "Desc_SpaceElevatorPart_12_C.png"
+    },
+    {
+      "id": "Desc_SpaceElevatorPart_10_C",
+      "en": "Biochemical Sculptor",
+      "file": "Desc_SpaceElevatorPart_10_C.png"
+    },
+    {
+      "id": "Desc_Silica_C",
+      "en": "Silica",
+      "file": "Desc_Silica_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Silica.png/96px-Silica.png?7f794a"
+    },
+    {
+      "id": "Desc_LiquidFuel_C",
+      "en": "Fuel",
+      "file": "Desc_LiquidFuel_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Fuel.png/96px-Fuel.png?f21d48"
+    },
+    {
+      "id": "Desc_Plastic_C",
+      "en": "Plastic",
+      "file": "Desc_Plastic_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Plastic.png/96px-Plastic.png?c8d276"
+    },
+    {
+      "id": "Desc_CircuitBoard_C",
+      "en": "Circuit Board",
+      "file": "Desc_CircuitBoard_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Circuit_Board.png/96px-Circuit_Board.png?1b77f5"
+    },
+    {
+      "id": "Desc_Rubber_C",
+      "en": "Rubber",
+      "file": "Desc_Rubber_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Rubber.png/96px-Rubber.png?69f8e2"
+    },
+    {
+      "id": "Desc_PolymerResin_C",
+      "en": "Polymer Resin",
+      "file": "Desc_PolymerResin_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Polymer_Resin.png/96px-Polymer_Resin.png?a2f719"
+    },
+    {
+      "id": "Desc_PetroleumCoke_C",
+      "en": "Petroleum Coke",
+      "file": "Desc_PetroleumCoke_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Petroleum_Coke.png/96px-Petroleum_Coke.png?c7b3af"
+    },
+    {
+      "id": "Desc_HighSpeedWire_C",
+      "en": "Quickwire",
+      "file": "Desc_HighSpeedWire_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Quickwire.png/96px-Quickwire.png?92bd94"
+    },
+    {
+      "id": "Desc_HighSpeedConnector_C",
+      "en": "High-Speed Connector",
+      "file": "Desc_HighSpeedConnector_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/High-Speed_Connector.png/96px-High-Speed_Connector.png?7a36b1"
+    },
+    {
+      "id": "Desc_NuclearWaste_C",
+      "en": "Uranium Waste",
+      "file": "Desc_NuclearWaste_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Uranium_Waste.png/96px-Uranium_Waste.png?81410e"
+    },
+    {
+      "id": "Desc_PlutoniumWaste_C",
+      "en": "Plutonium Waste",
+      "file": "Desc_PlutoniumWaste_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Plutonium_Waste.png/96px-Plutonium_Waste.png?5dd0ae"
+    },
+    {
+      "id": "Desc_CoolingSystem_C",
+      "en": "Cooling System",
+      "file": "Desc_CoolingSystem_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Cooling_System.png/96px-Cooling_System.png?311266"
+    },
+    {
+      "id": "Desc_CrystalOscillator_C",
+      "en": "Crystal Oscillator",
+      "file": "Desc_CrystalOscillator_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Crystal_Oscillator.png/96px-Crystal_Oscillator.png?d0e57d"
+    },
+    {
+      "id": "Desc_ElectromagneticControlRod_C",
+      "en": "Electromagnetic Control Rod",
+      "file": "Desc_ElectromagneticControlRod_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Electromagnetic_Control_Rod.png/96px-Electromagnetic_Control_Rod.png?d058e2"
+    },
+    {
+      "id": "Desc_ModularFrameFused_C",
+      "en": "Fused Modular Frame",
+      "file": "Desc_ModularFrameFused_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Fused_Modular_Frame.png/96px-Fused_Modular_Frame.png?23cae9"
+    },
+    {
+      "id": "Desc_MotorLightweight_C",
+      "en": "Turbo Motor",
+      "file": "Desc_MotorLightweight_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Turbo_Motor.png/96px-Turbo_Motor.png?d2275a"
+    },
+    {
+      "id": "Desc_QuartzCrystal_C",
+      "en": "Quartz Crystal",
+      "file": "Desc_QuartzCrystal_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Quartz_Crystal.png/96px-Quartz_Crystal.png?fccd00"
+    },
+    {
+      "id": "Desc_Stator_C",
+      "en": "Stator",
+      "file": "Desc_Stator_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Stator.png/96px-Stator.png?69b63f"
+    },
+    {
+      "id": "Desc_Crystal_C",
+      "en": "Blue Power Slug",
+      "file": "Desc_Crystal_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Blue_Power_Slug.png/96px-Blue_Power_Slug.png?c638f8"
+    },
+    {
+      "id": "Desc_Crystal_mk2_C",
+      "en": "Yellow Power Slug",
+      "file": "Desc_Crystal_mk2_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Yellow_Power_Slug.png/96px-Yellow_Power_Slug.png?73d24c"
+    },
+    {
+      "id": "Desc_Crystal_mk3_C",
+      "en": "Purple Power Slug",
+      "file": "Desc_Crystal_mk3_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Purple_Power_Slug.png/96px-Purple_Power_Slug.png?b04ed5"
+    },
+    {
+      "id": "Desc_Battery_C",
+      "en": "Battery",
+      "file": "Desc_Battery_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Battery.png/96px-Battery.png?8ab8ca"
+    },
+    {
+      "id": "Desc_GoldIngot_C",
+      "en": "Caterium Ingot",
+      "file": "Desc_GoldIngot_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Caterium_Ingot.png/96px-Caterium_Ingot.png?91cdc0"
+    },
+    {
+      "id": "Desc_CircuitBoardHighSpeed_C",
+      "en": "AI Limiter",
+      "file": "Desc_CircuitBoardHighSpeed_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/AI_Limiter.png/96px-AI_Limiter.png?a51ac6"
+    },
+    {
+      "id": "Desc_NitricAcid_C",
+      "en": "Nitric Acid",
+      "file": "Desc_NitricAcid_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Nitric_Acid.png/96px-Nitric_Acid.png?59b116"
+    },
+    {
+      "id": "Desc_SulfuricAcid_C",
+      "en": "Sulfuric Acid",
+      "file": "Desc_SulfuricAcid_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Sulfuric_Acid.png/96px-Sulfuric_Acid.png?9071d1"
+    },
+    {
+      "id": "Desc_GasTank_C",
+      "en": "Empty Fluid Tank",
+      "file": "Desc_GasTank_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Empty_Fluid_Tank.png/96px-Empty_Fluid_Tank.png?6c5529"
+    },
+    {
+      "id": "Desc_Gunpowder_C",
+      "en": "Black Powder",
+      "file": "Desc_Gunpowder_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Black_Powder.png/96px-Black_Powder.png?e7d138"
+    },
+    {
+      "id": "Desc_PlutoniumCell_C",
+      "en": "Encased Plutonium Cell",
+      "file": "Desc_PlutoniumCell_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Encased_Plutonium_Cell.png/96px-Encased_Plutonium_Cell.png?5e7f34"
+    },
+    {
+      "id": "Desc_PlutoniumPellet_C",
+      "en": "Plutonium Pellet",
+      "file": "Desc_PlutoniumPellet_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Plutonium_Pellet.png/96px-Plutonium_Pellet.png?e8b921"
+    },
+    {
+      "id": "Desc_ModularFrameLightweight_C",
+      "en": "Radio Control Unit",
+      "file": "Desc_ModularFrameLightweight_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Radio_Control_Unit.png/96px-Radio_Control_Unit.png?2cf497"
+    },
+    {
+      "id": "Desc_PressureConversionCube_C",
+      "en": "Pressure Conversion Cube",
+      "file": "Desc_PressureConversionCube_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Pressure_Conversion_Cube.png/96px-Pressure_Conversion_Cube.png?cc788e"
+    },
+    {
+      "id": "Desc_NonFissibleUranium_C",
+      "en": "Non-Fissile Uranium",
+      "file": "Desc_NonFissibleUranium_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Non-Fissile_Uranium.png/96px-Non-Fissile_Uranium.png?3df8d3"
+    },
+    {
+      "id": "Desc_ComputerSuper_C",
+      "en": "Supercomputer",
+      "file": "Desc_ComputerSuper_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Supercomputer.png/96px-Supercomputer.png?3cd6c8"
+    },
+    {
+      "id": "Desc_CopperDust_C",
+      "en": "Copper Powder",
+      "file": "Desc_CopperDust_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Copper_Powder.png/96px-Copper_Powder.png?7104bd"
+    },
+    {
+      "id": "Desc_TimeCrystal_C",
+      "en": "Time Crystal",
+      "file": "Desc_TimeCrystal_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Time_Crystal.png/96px-Time_Crystal.png?77b7e0"
+    },
+    {
+      "id": "Desc_Diamond_C",
+      "en": "Diamonds",
+      "file": "Desc_Diamond_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Diamonds.png/96px-Diamonds.png?1e71b5"
+    },
+    {
+      "id": "Desc_SAMFluctuator_C",
+      "en": "SAM Fluctuator",
+      "file": "Desc_SAMFluctuator_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/SAM_Fluctuator.png/96px-SAM_Fluctuator.png?8a69ee"
+    },
+    {
       "id": "Desc_SAMIngot_C",
       "en": "Reanimated SAM",
       "file": "Desc_SAMIngot_C.png"
+    },
+    {
+      "id": "Desc_FicsiteIngot_C",
+      "en": "Ficsite Ingot",
+      "file": "Desc_FicsiteIngot_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Ficsite_Ingot.png/96px-Ficsite_Ingot.png?282052"
+    },
+    {
+      "id": "Desc_FicsiteMesh_C",
+      "en": "Ficsite Trigon",
+      "file": "Desc_FicsiteMesh_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Ficsite_Trigon.png/96px-Ficsite_Trigon.png?27883e"
+    },
+    {
+      "id": "Desc_DarkMatter_C",
+      "en": "Dark Matter Crystal",
+      "file": "Desc_DarkMatter_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Dark_Matter_Crystal.png/96px-Dark_Matter_Crystal.png?f308d8"
+    },
+    {
+      "id": "Desc_QuantumOscillator_C",
+      "en": "Superposition Oscillator",
+      "file": "Desc_QuantumOscillator_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Superposition_Oscillator.png/96px-Superposition_Oscillator.png?10e747"
+    },
+    {
+      "id": "Desc_TemporalProcessor_C",
+      "en": "Neural-Quantum Processor",
+      "file": "Desc_TemporalProcessor_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Neural-Quantum_Processor.png/96px-Neural-Quantum_Processor.png?2abda7"
+    },
+    {
+      "id": "Desc_LiquidTurboFuel_C",
+      "en": "Turbofuel",
+      "file": "Desc_LiquidTurboFuel_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Turbofuel.png/96px-Turbofuel.png?d2bdd3"
+    },
+    {
+      "id": "Desc_CompactedCoal_C",
+      "en": "Compacted Coal",
+      "file": "Desc_CompactedCoal_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Compacted_Coal.png/96px-Compacted_Coal.png?cce317"
+    },
+    {
+      "id": "Desc_UraniumCell_C",
+      "en": "Encased Uranium Cell",
+      "file": "Desc_UraniumCell_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Encased_Uranium_Cell.png/96px-Encased_Uranium_Cell.png?26f3a7"
+    },
+    {
+      "id": "Desc_AluminaSolution_C",
+      "en": "Alumina Solution",
+      "file": "Desc_AluminaSolution_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Alumina_Solution.png/96px-Alumina_Solution.png?9b0a9b"
+    },
+    {
+      "id": "Desc_FluidCanister_C",
+      "en": "Empty Canister",
+      "file": "Desc_FluidCanister_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Empty_Canister.png/96px-Empty_Canister.png?9f80b4"
+    },
+    {
+      "id": "Desc_PackagedOil_C",
+      "en": "Packaged Oil",
+      "file": "Desc_PackagedOil_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Packaged_Oil.png/96px-Packaged_Oil.png?1713a9"
+    },
+    {
+      "id": "Desc_PackagedOilResidue_C",
+      "en": "Packaged Heavy Oil Residue",
+      "file": "Desc_PackagedOilResidue_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Packaged_Heavy_Oil_Residue.png/96px-Packaged_Heavy_Oil_Residue.png?4a9dda"
+    },
+    {
+      "id": "Desc_PackagedWater_C",
+      "en": "Packaged Water",
+      "file": "Desc_PackagedWater_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Packaged_Water.png/96px-Packaged_Water.png?a2cf8d"
+    },
+    {
+      "id": "Desc_GunpowderMK2_C",
+      "en": "Smokeless Powder",
+      "file": "Desc_GunpowderMK2_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Smokeless_Powder.png/96px-Smokeless_Powder.png?acada5"
+    },
+    {
+      "id": "Desc_AlienProtein_C",
+      "en": "Alien Protein",
+      "file": "Desc_AlienProtein_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Alien_Protein.png/96px-Alien_Protein.png?1798cc"
+    },
+    {
+      "id": "Desc_XmasStar_C",
+      "en": "FICSMAS Wonder Star",
+      "file": "Desc_XmasStar_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/FICSMAS_Wonder_Star.png/96px-FICSMAS_Wonder_Star.png?96db95"
+    },
+    {
+      "id": "Desc_XmasBallCluster_C",
+      "en": "FICSMAS Ornament Bundle",
+      "file": "Desc_XmasBallCluster_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/FICSMAS_Ornament_Bundle.png/96px-FICSMAS_Ornament_Bundle.png?345d78"
+    },
+    {
+      "id": "Desc_XmasBranch_C",
+      "en": "FICSMAS Tree Branch",
+      "file": "Desc_XmasBranch_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/FICSMAS_Tree_Branch.png/96px-FICSMAS_Tree_Branch.png?2f00ff"
+    },
+    {
+      "id": "Desc_XmasWreath_C",
+      "en": "FICSMAS Wreath",
+      "file": "Desc_XmasWreath_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/FICSMAS_Wreath.png/96px-FICSMAS_Wreath.png?ba3933"
+    },
+    {
+      "id": "Desc_XmasDataCartridge4_C",
+      "en": "FICSMAS Data Cartridge Day 14",
+      "file": "Desc_XmasDataCartridge4_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/FICSMAS_Data_Cartridge.png/96px-FICSMAS_Data_Cartridge.png?945f27"
+    },
+    {
+      "id": "Desc_Gift_C",
+      "en": "FICSMAS Gift",
+      "file": "Desc_Gift_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/FICSMAS_Gift.png/96px-FICSMAS_Gift.png?b4d66b"
+    },
+    {
+      "id": "Desc_Snow_C",
+      "en": "FICSMAS Actual Snow",
+      "file": "Desc_Snow_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Actual_Snow.png/96px-Actual_Snow.png?38d9ce"
+    },
+    {
+      "id": "Desc_CandyCane_C",
+      "en": "Candy Cane",
+      "file": "Desc_CandyCane_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Candy_Cane.png/96px-Candy_Cane.png?aeff5a"
+    },
+    {
+      "id": "Desc_XmasBow_C",
+      "en": "FICSMAS Bow",
+      "file": "Desc_XmasBow_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/FICSMAS_Bow.png/96px-FICSMAS_Bow.png?c232f4"
+    },
+    {
+      "id": "Desc_XmasDataCartridge3_C",
+      "en": "FICSMAS Data Cartridge Day 8",
+      "file": "Desc_XmasDataCartridge3_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/FICSMAS_Data_Cartridge.png/96px-FICSMAS_Data_Cartridge.png?945f27"
+    },
+    {
+      "id": "Desc_XmasBall1_C",
+      "en": "Red FICSMAS Ornament",
+      "file": "Desc_XmasBall1_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Red_FICSMAS_Ornament.png/96px-Red_FICSMAS_Ornament.png?950d43"
+    },
+    {
+      "id": "Desc_XmasBall2_C",
+      "en": "Blue FICSMAS Ornament",
+      "file": "Desc_XmasBall2_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Blue_FICSMAS_Ornament.png/96px-Blue_FICSMAS_Ornament.png?f3a088"
+    },
+    {
+      "id": "Desc_XmasBall3_C",
+      "en": "Copper FICSMAS Ornament",
+      "file": "Desc_XmasBall3_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Copper_FICSMAS_Ornament.png/96px-Copper_FICSMAS_Ornament.png?e42182"
+    },
+    {
+      "id": "Desc_XmasBall4_C",
+      "en": "Iron FICSMAS Ornament",
+      "file": "Desc_XmasBall4_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Iron_FICSMAS_Ornament.png/96px-Iron_FICSMAS_Ornament.png?d75334"
+    },
+    {
+      "id": "Desc_XmasDataCartridge2_C",
+      "en": "FICSMAS Data Cartridge Day 4",
+      "file": "Desc_XmasDataCartridge2_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/FICSMAS_Data_Cartridge.png/96px-FICSMAS_Data_Cartridge.png?945f27"
+    },
+    {
+      "id": "Desc_XmasDataCartridge1_C",
+      "en": "FICSMAS Data Cartridge Day 1",
+      "file": "Desc_XmasDataCartridge1_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/FICSMAS_Data_Cartridge.png/96px-FICSMAS_Data_Cartridge.png?945f27"
+    },
+    {
+      "id": "Desc_WAT2_C",
+      "en": "Mercer Sphere",
+      "file": "Desc_WAT2_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Mercer_Sphere.png/96px-Mercer_Sphere.png?7b3d0e"
+    },
+    {
+      "id": "Desc_SingularityCell_C",
+      "en": "Singularity Cell",
+      "file": "Desc_SingularityCell_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Singularity_Cell.png/96px-Singularity_Cell.png?6924db"
+    },
+    {
+      "id": "Desc_AlienDNACapsule_C",
+      "en": "Alien DNA Capsule",
+      "file": "Desc_AlienDNACapsule_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Alien_DNA_Capsule.png/96px-Alien_DNA_Capsule.png?f16f36"
+    },
+    {
+      "id": "Desc_Ficsonium_C",
+      "en": "Ficsonium",
+      "file": "Desc_Ficsonium_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Ficsonium.png/96px-Ficsonium.png?74c802"
+    },
+    {
+      "id": "Desc_DissolvedSilica_C",
+      "en": "Dissolved Silica",
+      "file": "Desc_DissolvedSilica_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Dissolved_Silica.png/96px-Dissolved_Silica.png?e715f3"
+    },
+    {
+      "id": "BP_EquipmentDescriptorShockShank_C",
+      "en": "Xeno-Zapper",
+      "file": "BP_EquipmentDescriptorShockShank_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Xeno-Zapper.png/96px-Xeno-Zapper.png?f979bb"
+    },
+    {
+      "id": "BP_EquipmentDescriptorObjectScanner_C",
+      "en": "Object Scanner",
+      "file": "BP_EquipmentDescriptorObjectScanner_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Object_Scanner.png/96px-Object_Scanner.png?2b1b6f"
+    },
+    {
+      "id": "Desc_RebarGunProjectile_C",
+      "en": "Rebar Gun",
+      "file": "Desc_RebarGunProjectile_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Rebar_Gun.png/96px-Rebar_Gun.png?b1f002"
+    },
+    {
+      "id": "BP_EquipmentDescriptorRifle_C",
+      "en": "Rifle",
+      "file": "BP_EquipmentDescriptorRifle_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Rifle.png/96px-Rifle.png?c0885d"
+    },
+    {
+      "id": "BP_EquipmentDescriptorGasmask_C",
+      "en": "Gas Mask",
+      "file": "BP_EquipmentDescriptorGasmask_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Gas_Mask.png/96px-Gas_Mask.png?74731c"
+    },
+    {
+      "id": "BP_EquipmentDescriptorJetPack_C",
+      "en": "Jetpack",
+      "file": "BP_EquipmentDescriptorJetPack_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Jetpack.png/96px-Jetpack.png?22073a"
+    },
+    {
+      "id": "BP_EquipmentDescriptorNobeliskDetonator_C",
+      "en": "Nobelisk Detonator",
+      "file": "BP_EquipmentDescriptorNobeliskDetonator_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Nobelisk_Detonator.png/96px-Nobelisk_Detonator.png?416718"
+    },
+    {
+      "id": "BP_EquipmentDescriptorHazmatSuit_C",
+      "en": "Hazmat Suit",
+      "file": "BP_EquipmentDescriptorHazmatSuit_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Hazmat_Suit.png/96px-Hazmat_Suit.png?41c0a4"
+    },
+    {
+      "id": "BP_ItemDescriptorPortableMiner_C",
+      "en": "Portable Miner",
+      "file": "BP_ItemDescriptorPortableMiner_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Portable_Miner.png/96px-Portable_Miner.png?ba064f"
+    },
+    {
+      "id": "Desc_GolfCart_C",
+      "en": "Factory Cart™",
+      "file": "Desc_GolfCart_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Factory_Cart.png/96px-Factory_Cart.png?92227b"
+    },
+    {
+      "id": "Desc_GolfCartGold_C",
+      "en": "Golden Factory Cart™",
+      "file": "Desc_GolfCartGold_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Golden_Factory_Cart.png/96px-Golden_Factory_Cart.png?6c12b9"
+    },
+    {
+      "id": "Desc_Chainsaw_C",
+      "en": "Chainsaw",
+      "file": "Desc_Chainsaw_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Chainsaw.png/96px-Chainsaw.png?7726d8"
+    },
+    {
+      "id": "BP_EquipmentDescriptorCandyCane_C",
+      "en": "Candy Cane Basher",
+      "file": "BP_EquipmentDescriptorCandyCane_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Candy_Cane_Basher.png/96px-Candy_Cane_Basher.png?d1d434"
+    },
+    {
+      "id": "BP_EquipmentDescriptorJumpingStilts_C",
+      "en": "Blade Runners",
+      "file": "BP_EquipmentDescriptorJumpingStilts_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Blade_Runners.png/96px-Blade_Runners.png?6ce91f"
+    },
+    {
+      "id": "BP_EqDescZipLine_C",
+      "en": "Zipline",
+      "file": "BP_EqDescZipLine_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Zipline.png/96px-Zipline.png?198d53"
+    },
+    {
+      "id": "BP_EquipmentDescriptorHoverPack_C",
+      "en": "Hoverpack",
+      "file": "BP_EquipmentDescriptorHoverPack_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Hoverpack.png/96px-Hoverpack.png?46e048"
+    },
+    {
+      "id": "BP_EquipmentDescriptorStunSpear_C",
+      "en": "Xeno-Basher",
+      "file": "BP_EquipmentDescriptorStunSpear_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Xeno-Basher.png/96px-Xeno-Basher.png?42bfc4"
+    },
+    {
+      "id": "Desc_Biofuel_C",
+      "en": "Solid Biofuel",
+      "file": "Desc_Biofuel_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Solid_Biofuel.png/96px-Solid_Biofuel.png?572297"
+    },
+    {
+      "id": "Desc_Wood_C",
+      "en": "Wood",
+      "file": "Desc_Wood_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Wood.png/96px-Wood.png?729069"
+    },
+    {
+      "id": "Desc_Leaves_C",
+      "en": "Leaves",
+      "file": "Desc_Leaves_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Leaves.png/96px-Leaves.png?cec6fe"
+    },
+    {
+      "id": "Desc_PackagedBiofuel_C",
+      "en": "Packaged Liquid Biofuel",
+      "file": "Desc_PackagedBiofuel_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Packaged_Liquid_Biofuel.png/96px-Packaged_Liquid_Biofuel.png?3730e9"
+    },
+    {
+      "id": "Desc_GenericBiomass_C",
+      "en": "Biomass",
+      "file": "Desc_GenericBiomass_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Biomass.png/96px-Biomass.png?42a2d5"
+    },
+    {
+      "id": "Desc_HogParts_C",
+      "en": "Hog Remains",
+      "file": "Desc_HogParts_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Hog_Remains.png/96px-Hog_Remains.png?92ca22"
+    },
+    {
+      "id": "Desc_SpitterParts_C",
+      "en": "Spitter Remains",
+      "file": "Desc_SpitterParts_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Spitter_Remains.png/96px-Spitter_Remains.png?703b5e"
+    },
+    {
+      "id": "Desc_PackagedNitricAcid_C",
+      "en": "Packaged Nitric Acid",
+      "file": "Desc_PackagedNitricAcid_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Packaged_Nitric_Acid.png/96px-Packaged_Nitric_Acid.png?cd2744"
+    },
+    {
+      "id": "Desc_PackagedNitrogenGas_C",
+      "en": "Packaged Nitrogen Gas",
+      "file": "Desc_PackagedNitrogenGas_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Packaged_Nitrogen_Gas.png/96px-Packaged_Nitrogen_Gas.png?482cc6"
+    },
+    {
+      "id": "Desc_PackagedAlumina_C",
+      "en": "Packaged Alumina Solution",
+      "file": "Desc_PackagedAlumina_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Packaged_Alumina_Solution.png/96px-Packaged_Alumina_Solution.png?3319ee"
+    },
+    {
+      "id": "Desc_LiquidBiofuel_C",
+      "en": "Liquid Biofuel",
+      "file": "Desc_LiquidBiofuel_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Liquid_Biofuel.png/96px-Liquid_Biofuel.png?5b2a4f"
+    },
+    {
+      "id": "Desc_Fabric_C",
+      "en": "Fabric",
+      "file": "Desc_Fabric_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Fabric.png/96px-Fabric.png?5d3c94"
+    },
+    {
+      "id": "Desc_Mycelia_C",
+      "en": "Mycelia",
+      "file": "Desc_Mycelia_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Mycelia.png/96px-Mycelia.png?d5eacc"
+    },
+    {
+      "id": "Desc_StingerParts_C",
+      "en": "Stinger Remains",
+      "file": "Desc_StingerParts_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Stinger_Remains.png/96px-Stinger_Remains.png?c8bfb0"
+    },
+    {
+      "id": "Desc_HatcherParts_C",
+      "en": "Hatcher Remains",
+      "file": "Desc_HatcherParts_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Hatcher_Remains.png/96px-Hatcher_Remains.png?f1c793"
+    },
+    {
+      "id": "Desc_PackagedSulfuricAcid_C",
+      "en": "Packaged Sulfuric Acid",
+      "file": "Desc_PackagedSulfuricAcid_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Packaged_Sulfuric_Acid.png/96px-Packaged_Sulfuric_Acid.png?91f48d"
+    },
+    {
+      "id": "Desc_Berry_C",
+      "en": "Paleberry",
+      "file": "Desc_Berry_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Paleberry.png/96px-Paleberry.png?5b0f20"
+    },
+    {
+      "id": "Desc_Nut_C",
+      "en": "Beryl Nut",
+      "file": "Desc_Nut_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Beryl_Nut.png/96px-Beryl_Nut.png?84068a"
+    },
+    {
+      "id": "Desc_Medkit_C",
+      "en": "Medicinal Inhaler",
+      "file": "Desc_Medkit_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Medicinal_Inhaler.png/96px-Medicinal_Inhaler.png?5ee407"
+    },
+    {
+      "id": "Desc_Shroom_C",
+      "en": "Bacon Agaric",
+      "file": "Desc_Shroom_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Bacon_Agaric.png/96px-Bacon_Agaric.png?fd8447"
+    },
+    {
+      "id": "Desc_Parachute_C",
+      "en": "Parachute",
+      "file": "Desc_Parachute_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Parachute.png/96px-Parachute.png?9ed0f0"
+    },
+    {
+      "id": "Desc_WorkBench_C",
+      "en": "Crafting Bench",
+      "file": "Desc_WorkBench_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Crafting_Bench.png/96px-Crafting_Bench.png?8a3a12"
+    },
+    {
+      "id": "Desc_Workshop_C",
+      "en": "Equipment Workshop",
+      "file": "Desc_Workshop_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Equipment_Workshop.png/96px-Equipment_Workshop.png?64adef"
+    },
+    {
+      "id": "Desc_Beam_C",
+      "en": "Metal Beam",
+      "file": "Desc_Beam_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Metal_Beam.png/96px-Metal_Beam.png?1cc563"
+    },
+    {
+      "id": "Desc_Beam_Painted_C",
+      "en": "Painted Beam",
+      "file": "Desc_Beam_Painted_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Painted_Beam.png/96px-Painted_Beam.png?99c1fc"
+    },
+    {
+      "id": "Desc_TradingPost_C",
+      "en": "The HUB",
+      "file": "Desc_TradingPost_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/The_HUB.png/96px-The_HUB.png?9d3cf6"
+    },
+    {
+      "id": "Desc_ConveyorPole_C",
+      "en": "Conveyor Pole",
+      "file": "Desc_ConveyorPole_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Conveyor_Pole.png/96px-Conveyor_Pole.png?b9b801"
+    },
+    {
+      "id": "Desc_ConveyorCeilingAttachment_C",
+      "en": "Conveyor Ceiling Mount",
+      "file": "Desc_ConveyorCeilingAttachment_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Conveyor_Ceiling_Mount.png/96px-Conveyor_Ceiling_Mount.png?39507b"
+    },
+    {
+      "id": "Desc_ConveyorPoleWall_C",
+      "en": "Conveyor Wall Mount",
+      "file": "Desc_ConveyorPoleWall_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Conveyor_Wall_Mount.png/96px-Conveyor_Wall_Mount.png?bf4394"
+    },
+    {
+      "id": "Desc_ConveyorBeltMk1_C",
+      "en": "Conveyor Belt Mk.1",
+      "file": "Desc_ConveyorBeltMk1_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Conveyor_Belt_Mk.1.png/96px-Conveyor_Belt_Mk.1.png?b2ac54"
+    },
+    {
+      "id": "Desc_PowerPoleWall_C",
+      "en": "Wall Outlet Mk.1",
+      "file": "Desc_PowerPoleWall_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Wall_Outlet_Mk.1.png/96px-Wall_Outlet_Mk.1.png?e57e15"
+    },
+    {
+      "id": "Desc_PowerLine_C",
+      "en": "Power Line",
+      "file": "Desc_PowerLine_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Power_Line.png/96px-Power_Line.png?d64b2c"
+    },
+    {
+      "id": "Desc_PowerPoleMk1_C",
+      "en": "Power Pole Mk.1",
+      "file": "Desc_PowerPoleMk1_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Power_Pole_Mk.1.png/96px-Power_Pole_Mk.1.png?96f12d"
+    },
+    {
+      "id": "Desc_Stairs_Left_01_C",
+      "en": "Stairs Left",
+      "file": "Desc_Stairs_Left_01_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Stairs_Left.png/96px-Stairs_Left.png?8455b2"
+    },
+    {
+      "id": "Desc_Stairs_Right_01_C",
+      "en": "Stairs Right",
+      "file": "Desc_Stairs_Right_01_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Stairs_Right.png/96px-Stairs_Right.png?eaf280"
+    },
+    {
+      "id": "Desc_Fence_01_C",
+      "en": "Industrial Railing",
+      "file": "Desc_Fence_01_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Industrial_Railing.png/96px-Industrial_Railing.png?3974bc"
+    },
+    {
+      "id": "Desc_WalkwayRamp_C",
+      "en": "Walkway Ramp",
+      "file": "Desc_WalkwayRamp_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Walkway_Ramp.png/96px-Walkway_Ramp.png?a76d65"
+    },
+    {
+      "id": "Desc_PillarTop_C",
+      "en": "Pillar Top",
+      "file": "Desc_PillarTop_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Pillar_Top.png/96px-Pillar_Top.png?9bec8f"
+    },
+    {
+      "id": "Desc_GeneratorBiomass_Automated_C",
+      "en": "Biomass Burner",
+      "file": "Desc_GeneratorBiomass_Automated_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Biomass_Burner.png/96px-Biomass_Burner.png?57d94b"
+    },
+    {
+      "id": "Desc_StorageContainerMk1_C",
+      "en": "Storage Container",
+      "file": "Desc_StorageContainerMk1_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Storage_Container.png/96px-Storage_Container.png?ab0f64"
+    },
+    {
+      "id": "Desc_MinerMk1_C",
+      "en": "Miner Mk.1",
+      "file": "Desc_MinerMk1_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Miner_Mk.1.png/96px-Miner_Mk.1.png?baf89c"
+    },
+    {
+      "id": "Desc_ConstructorMk1_C",
+      "en": "Constructor",
+      "file": "Desc_ConstructorMk1_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Constructor.png/96px-Constructor.png?e11c2b"
+    },
+    {
+      "id": "Desc_SpaceElevator_C",
+      "en": "Space Elevator",
+      "file": "Desc_SpaceElevator_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Space_Elevator.png/96px-Space_Elevator.png?b12fda"
+    },
+    {
+      "id": "Desc_SmelterMk1_C",
+      "en": "Smelter",
+      "file": "Desc_SmelterMk1_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Smelter.png/96px-Smelter.png?dd029f"
+    },
+    {
+      "id": "Desc_Wall_Window_8x4_01_C",
+      "en": "Single Window",
+      "file": "Desc_Wall_Window_8x4_01_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Single_Window_%28FICSIT%29.png/96px-Single_Window_%28FICSIT%29.png?a1560e"
+    },
+    {
+      "id": "Desc_Wall_Window_8x4_03_C",
+      "en": "Panel Window",
+      "file": "Desc_Wall_Window_8x4_03_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Panel_Window_%28FICSIT%29.png/96px-Panel_Window_%28FICSIT%29.png?49613a"
+    },
+    {
+      "id": "Desc_Wall_Window_8x4_02_C",
+      "en": "Frame Window",
+      "file": "Desc_Wall_Window_8x4_02_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Frame_Window_%28FICSIT%29.png/96px-Frame_Window_%28FICSIT%29.png?5bdbd2"
+    },
+    {
+      "id": "Desc_Wall_Concrete_8x4_Window_01_C",
+      "en": "Single Window",
+      "file": "Desc_Wall_Concrete_8x4_Window_01_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Single_Window_%28FICSIT%29.png/96px-Single_Window_%28FICSIT%29.png?a1560e"
+    },
+    {
+      "id": "Desc_Wall_Concrete_8x4_Window_02_C",
+      "en": "Frame Window",
+      "file": "Desc_Wall_Concrete_8x4_Window_02_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Frame_Window_%28FICSIT%29.png/96px-Frame_Window_%28FICSIT%29.png?5bdbd2"
+    },
+    {
+      "id": "Desc_Wall_Concrete_8x4_Window_03_C",
+      "en": "Panel Window",
+      "file": "Desc_Wall_Concrete_8x4_Window_03_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Panel_Window_%28FICSIT%29.png/96px-Panel_Window_%28FICSIT%29.png?49613a"
+    },
+    {
+      "id": "Desc_SteelWall_8x4_Window_01_C",
+      "en": "Single Window",
+      "file": "Desc_SteelWall_8x4_Window_01_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Single_Window_%28FICSIT%29.png/96px-Single_Window_%28FICSIT%29.png?a1560e"
+    },
+    {
+      "id": "Desc_SteelWall_8x4_Window_03_C",
+      "en": "Frame Window",
+      "file": "Desc_SteelWall_8x4_Window_03_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Frame_Window_%28FICSIT%29.png/96px-Frame_Window_%28FICSIT%29.png?5bdbd2"
+    },
+    {
+      "id": "Desc_SteelWall_8x4_Window_04_C",
+      "en": "Panel Window",
+      "file": "Desc_SteelWall_8x4_Window_04_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Panel_Window_%28FICSIT%29.png/96px-Panel_Window_%28FICSIT%29.png?49613a"
+    },
+    {
+      "id": "Desc_Wall_Window_8x4_04_C",
+      "en": "Reinforced Window",
+      "file": "Desc_Wall_Window_8x4_04_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Reinforced_Window_%28FICSIT%29.png/96px-Reinforced_Window_%28FICSIT%29.png?254304"
+    },
+    {
+      "id": "Desc_Wall_Concrete_8x4_Window_04_C",
+      "en": "Reinforced Window",
+      "file": "Desc_Wall_Concrete_8x4_Window_04_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Reinforced_Window_%28FICSIT%29.png/96px-Reinforced_Window_%28FICSIT%29.png?254304"
+    },
+    {
+      "id": "Desc_SteelWall_8x4_Window_02_C",
+      "en": "Reinforced Window",
+      "file": "Desc_SteelWall_8x4_Window_02_C.png",
+      "source": "https://satisfactory.wiki.gg/images/thumb/Reinforced_Window_%28FICSIT%29.png/96px-Reinforced_Window_%28FICSIT%29.png?254304"
     }
   ]
 }

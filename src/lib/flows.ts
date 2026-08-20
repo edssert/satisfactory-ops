@@ -4,32 +4,16 @@
  * 랜딩과 가이드가 같은 그림을 쓰므로 한 곳에서 만든다. 두 벌로 두었더니 한쪽만 고쳐져
  * 서로 다른 대수를 보여줬다.
  *
- * 모든 수치는 레시피에서 읽는다. 대수는 목표 처리량을 레시피 처리량으로 나눈 값이다.
+ * 그림 모델은 FlowChart.astro 참조 — 기계 줄과 분배기 줄(매니폴드)을 세로로 쌓는다.
+ * 같은 기계가 여러 대여도 상자를 각각 만든다. "×2" 로 뭉치면 실제로 몇 대를 어디에 놓는지가 안 보인다.
+ *
+ * 모든 수치는 레시피에서 읽는다. 손으로 적은 값이 없다.
  */
 import { building, item, recipe } from './gamedata';
+import type { MachineBox, Row } from '../components/FlowChart.astro';
 
-/** FlowChart.astro 의 Props 와 같은 모양. .astro 에서 타입을 가져올 수 없어 여기 둔다 */
-export interface FlowNodeDef {
-  id: string;
-  machineKo: string;
-  productKo?: string;
-  count: number;
-  clock?: number;
-  machineId?: string;
-  out?: { itemKo: string; itemId?: string; perMinute: number };
-  layer: number;
-}
-export interface FlowEdgeDef {
-  from: string;
-  to: string;
-  itemKo: string;
-  itemId?: string;
-  perMinute: number;
-  split?: boolean;
-}
 export interface FlowDef {
-  nodes: FlowNodeDef[];
-  edges: FlowEdgeDef[];
+  rows: Row[];
   caption: string;
 }
 
@@ -39,11 +23,11 @@ const ko = (id: string) => item(id).ko;
 const fmt = (n: number) => (Number.isInteger(n) ? String(n) : String(Math.round(n * 100) / 100));
 
 /**
- * 필요량 전개 — 목표 품목 N//분을 만들려면 상류가 얼마나 필요한가.
+ * 필요량 전개 — 목표 품목 N/분을 만들려면 상류가 얼마나 필요한가.
  *
  * 조립기 입력만 세면 안 된다. 그 입력을 만드는 제작기·제련기·채굴기까지 내려가야
  * 실제 노드 소요가 나온다. (가이드가 지능형 도금판 5/분을 철광석 22.5/분이라 적은 적이 있다.
- * 조립기 바로 앞만 세서 나온 값이고, 실제는 116.25/분이다.)
+ * 조립기 바로 앞만 세서 나온 값이고 실제는 116.25/분이다.)
  */
 const CHAIN: Record<string, string> = {
   Desc_SpaceElevatorPart_1_C: 'Recipe_SpaceElevatorPart_1_C',
@@ -72,21 +56,30 @@ export function expandDemand(itemId: string, perMinute: number): Map<string, num
 
 /** 목표 처리량에 필요한 기계 대수와 클럭 */
 function plan(recipeId: string, targetPerMinute: number) {
-  const r = recipe(recipeId);
-  const out = r.products[0]?.perMinute ?? 0;
+  const out = outOf(recipeId);
   const exact = targetPerMinute / out;
   const count = Math.ceil(exact - 1e-9);
-  return { count, clock: Math.round((exact / count) * 1000) / 10 };
+  return { count, clock: Math.round((exact / count) * 1000) / 10, each: targetPerMinute / count };
 }
 
+/** 같은 기계를 n 대 만든다. 상자를 각각 만든다 */
+function machines(
+  n: number,
+  make: (i: number) => MachineBox
+): { kind: 'machines'; boxes: MachineBox[] } {
+  return { kind: 'machines', boxes: Array.from({ length: n }, (_, i) => make(i)) };
+}
+
+const bus = (itemId: string, perMinute: number, note?: string): Row => ({
+  kind: 'bus',
+  bus: { itemKo: ko(itemId), itemId, perMinute, note },
+});
+
 /**
- * 초반 철 라인 — **보강된 철판 5/분을 먹여 살리는 크기**로 잡는다.
+ * 초반 철 라인 — **보강된 철판 5/분을 감당할 크기**로 잡는다.
  *
  * 이 크기를 쓰는 이유: 보강된 철판 5/분이 철광석 정확히 60/분이고, 그게 채굴기 한 대가
  * 벨트 Mk.1 로 낼 수 있는 최대치와 같다. 노드 하나·벨트 한 줄이 딱 떨어진다.
- *
- * 철괴 60 을 철판용 45 와 철봉용 15 로 나눠야 하는데 정수비가 아니라 밸런서로는 못 나눈다.
- * 제련기 두 대 출력을 한 줄로 합치고 제작기를 그 줄에 차례로 무는 매니폴드가 표준 해법이다.
  */
 export function ironLine(): FlowDef {
   const miner = building('Build_MinerMk1_C');
@@ -100,170 +93,184 @@ export function ironLine(): FlowDef {
   const rod = need.get('Desc_IronRod_C') ?? 0;
   const screw = need.get('Desc_IronScrew_C') ?? 0;
 
-  const ingotToPlate = (inOf('Recipe_IronPlate_C') * plate) / outOf('Recipe_IronPlate_C');
-  const ingotToRod = (inOf('Recipe_IronRod_C') * rod) / outOf('Recipe_IronRod_C');
-
   const pSmelt = plan('Recipe_IngotIron_C', ingot);
   const pPlate = plan('Recipe_IronPlate_C', plate);
   const pRod = plan('Recipe_IronRod_C', rod);
   const pScrew = plan('Recipe_Screw_C', screw);
 
-  const belt = building('Build_ConveyorBeltMk1_C').beltItemsPerMinute ?? 60;
+  const ingotToPlate = (inOf('Recipe_IronPlate_C') * plate) / outOf('Recipe_IronPlate_C');
+  const ingotToRod = (inOf('Recipe_IronRod_C') * rod) / outOf('Recipe_IronRod_C');
 
   return {
-    nodes: [
-      { id: 'mine', machineKo: miner.ko, productKo: ko('Desc_OreIron_C'), machineId: miner.id, count: 1, layer: 0 },
-      { id: 'smelt', machineKo: smelter.ko, productKo: ko('Desc_IronIngot_C'), machineId: smelter.id, count: pSmelt.count, clock: pSmelt.clock, layer: 1 },
+    rows: [
+      machines(1, () => ({
+        ko: miner.ko,
+        machineId: miner.id,
+        productKo: ko('Desc_OreIron_C'),
+        perMinute: ore,
+      })),
+      bus('Desc_OreIron_C', ore, '분배기 직렬'),
+      machines(pSmelt.count, (i) => ({
+        ko: `${smelter.ko} #${i + 1}`,
+        machineId: smelter.id,
+        productKo: ko('Desc_IronIngot_C'),
+        perMinute: pSmelt.each,
+        clock: pSmelt.clock,
+      })),
+      bus('Desc_IronIngot_C', ingot, '분배기 직렬'),
       {
-        id: 'plate',
-        machineKo: constructor.ko,
-        productKo: ko('Desc_IronPlate_C'),
-        machineId: constructor.id,
-        count: pPlate.count,
-        clock: pPlate.clock,
-        layer: 2,
-        out: { itemKo: ko('Desc_IronPlate_C'), itemId: 'Desc_IronPlate_C', perMinute: plate },
+        kind: 'machines',
+        boxes: [
+          ...Array.from({ length: pPlate.count }, (_, i) => ({
+            ko: `${constructor.ko} #${i + 1}`,
+            machineId: constructor.id,
+            productKo: ko('Desc_IronPlate_C'),
+            perMinute: pPlate.each,
+            clock: pPlate.clock,
+            /* 철판은 여기서 끝난다. 아래 나사 줄로 내려가지 않는다 */
+            feedsNext: false,
+          })),
+          ...Array.from({ length: pRod.count }, (_, i) => ({
+            ko: `${constructor.ko} #${pPlate.count + i + 1}`,
+            machineId: constructor.id,
+            productKo: ko('Desc_IronRod_C'),
+            perMinute: pRod.each,
+            clock: pRod.clock,
+          })),
+        ],
       },
-      { id: 'rod', machineKo: constructor.ko, productKo: ko('Desc_IronRod_C'), machineId: constructor.id, count: pRod.count, clock: pRod.clock, layer: 2 },
-      {
-        id: 'screw',
-        machineKo: constructor.ko,
+      bus('Desc_IronRod_C', rod),
+      machines(pScrew.count, (i) => ({
+        ko: `${constructor.ko} #${pPlate.count + pRod.count + i + 1}`,
+        machineId: constructor.id,
         productKo: ko('Desc_IronScrew_C'),
-        machineId: constructor.id,
-        count: pScrew.count,
+        perMinute: pScrew.each,
         clock: pScrew.clock,
-        layer: 3,
-        out: { itemKo: ko('Desc_IronScrew_C'), itemId: 'Desc_IronScrew_C', perMinute: screw },
-      },
-    ],
-    edges: [
-      { from: 'mine', to: 'smelt', itemKo: ko('Desc_OreIron_C'), itemId: 'Desc_OreIron_C', perMinute: ore },
-      { from: 'smelt', to: 'plate', itemKo: ko('Desc_IronIngot_C'), itemId: 'Desc_IronIngot_C', perMinute: ingotToPlate, split: true },
-      { from: 'smelt', to: 'rod', itemKo: ko('Desc_IronIngot_C'), itemId: 'Desc_IronIngot_C', perMinute: ingotToRod },
-      { from: 'rod', to: 'screw', itemKo: ko('Desc_IronRod_C'), itemId: 'Desc_IronRod_C', perMinute: rod },
+      })),
     ],
     caption:
-      `철광석 ${fmt(ore)}개/분 — 채굴기 한 대가 벨트 Mk.1(${fmt(belt)}개/분)로 낼 수 있는 최대치와 정확히 같습니다. ` +
-      `철괴를 철판용 ${fmt(ingotToPlate)} 와 철봉용 ${fmt(ingotToRod)} 로 나누는데 정수비가 아니라 밸런서로는 못 나눕니다. ` +
-      `제련기 출력을 한 줄로 합치고 제작기를 그 줄에 차례로 무십시오(매니폴드).`,
+      `철광석 ${fmt(ore)}개/분은 채굴기 한 대가 벨트 Mk.1 로 낼 수 있는 최대치입니다. ` +
+      `철괴를 철판용 ${fmt(ingotToPlate)}와 철봉용 ${fmt(ingotToRod)}로 나누는데 정수비가 아니라 ` +
+      `밸런서로는 못 나눕니다. 분배기를 일렬로 이어 붙이면 앞쪽 기계부터 차면서 저절로 맞습니다. ` +
+      `산출은 철판 ${fmt(plate)}개/분 · 나사 ${fmt(screw)}개/분 — 보강된 철판 5개/분의 입력과 같습니다.`,
   };
 }
 
 /**
- * 티어 2 지능형 도금판 라인. 목표 5개/분.
+ * 허브 6 급유 자동화.
  *
- * 대수를 늘리는 대신 클럭을 내린다 — 전력이 클럭에 지수(약 1.32)로 붙어서,
- * 두 대를 절반씩 돌리는 것보다 한 대를 낮춰 돌리는 편이 싸다.
+ * 나무와 이파리는 **레시피가 다르다.** 제작기 한 대가 둘 다 처리하지 못하므로 각각 한 대씩 두고
+ * 병합기로 합쳐 연소기로 보낸다.
  */
-export function smartPlatingLine(target = 5): FlowDef {
-  const assembler = building('Build_AssemblerMk1_C');
-
-  const plan = (recipeId: string) => {
-    const out = outOf(recipeId);
-    const exact = target / out;
-    const count = Math.ceil(exact - 1e-9);
-    return { count, clock: Math.round((exact / count) * 1000) / 10 };
-  };
-  const rip = plan('Recipe_IronPlateReinforced_C');
-  const rotor = plan('Recipe_Rotor_C');
-  const smart = plan('Recipe_SpaceElevatorPart_1_C');
-
-  return {
-    nodes: [
-      {
-        id: 'rip',
-        machineKo: assembler.ko,
-        productKo: ko('Desc_IronPlateReinforced_C'),
-        machineId: assembler.id,
-        count: rip.count,
-        clock: rip.clock,
-        layer: 0,
-      },
-      {
-        id: 'rotor',
-        machineKo: assembler.ko,
-        productKo: ko('Desc_Rotor_C'),
-        machineId: assembler.id,
-        count: rotor.count,
-        clock: rotor.clock,
-        layer: 0,
-      },
-      {
-        id: 'smart',
-        machineKo: assembler.ko,
-        productKo: ko('Desc_SpaceElevatorPart_1_C'),
-        machineId: assembler.id,
-        count: smart.count,
-        clock: smart.clock,
-        layer: 1,
-        out: {
-          itemKo: ko('Desc_SpaceElevatorPart_1_C'),
-          itemId: 'Desc_SpaceElevatorPart_1_C',
-          perMinute: target,
-        },
-      },
-    ],
-    edges: [
-      { from: 'rip', to: 'smart', itemKo: ko('Desc_IronPlateReinforced_C'), itemId: 'Desc_IronPlateReinforced_C', perMinute: target },
-      { from: 'rotor', to: 'smart', itemKo: ko('Desc_Rotor_C'), itemId: 'Desc_Rotor_C', perMinute: target },
-    ],
-    caption:
-      `조립기는 ${rip.count + rotor.count + smart.count}대면 되지만, 이 그림이 감추는 것은 상류입니다 — ` +
-      `여기까지 오려면 나사 ${fmt(expandDemand('Desc_SpaceElevatorPart_1_C', target).get('Desc_IronScrew_C') ?? 0)}개/분, ` +
-      `철광석 ${fmt(expandDemand('Desc_SpaceElevatorPart_1_C', target).get('Desc_OreIron_C') ?? 0)}개/분이 필요합니다. ` +
-      `노드 하나로는 못 댑니다.`,
-  };
-}
-
-/**
- * 허브 6 급유 자동화. 주운 것을 컨테이너에 붓기만 하면 연소기까지 자동으로 간다.
- * 나무와 이파리는 개당 열량이 10배 차이 나므로 나무 기준으로 잡는다.
- */
-export function biomassLine(): FlowDef {
+export function biomassLine(withBiofuel = false): FlowDef {
   const constructor = building('Build_ConstructorMk1_C');
   const burner = building('Build_GeneratorBiomass_Automated_C');
   const container = building('Build_StorageContainerMk1_C');
 
-  const bioPerBurner = ((burner.powerGenMW ?? 30) / (item('Desc_GenericBiomass_C').energyMJ ?? 180)) * 60;
-  const woodIn = inOf('Recipe_Biomass_Wood_C');
-  const bioOut = outOf('Recipe_Biomass_Wood_C');
-  const woodPerBurner = (bioPerBurner / bioOut) * woodIn;
-  const burnersPerConstructor = bioOut / bioPerBurner;
+  const bioPerBurner =
+    ((burner.powerGenMW ?? 30) / (item('Desc_GenericBiomass_C').energyMJ ?? 180)) * 60;
+  /** 두 재료가 절반씩 댄다고 본다. 실제로는 주운 대로 들어가고 벨트가 차면 알아서 멈춘다 */
+  const half = bioPerBurner / 2;
+  const woodIn = (half / outOf('Recipe_Biomass_Wood_C')) * inOf('Recipe_Biomass_Wood_C');
+  const leafIn = (half / outOf('Recipe_Biomass_Leaves_C')) * inOf('Recipe_Biomass_Leaves_C');
+
+  const rows: Row[] = [
+    {
+      kind: 'machines',
+      boxes: [
+        { ko: container.ko, machineId: container.id, productKo: ko('Desc_Wood_C'), perMinute: woodIn },
+        { ko: container.ko, machineId: container.id, productKo: ko('Desc_Leaves_C'), perMinute: leafIn },
+      ],
+    },
+    {
+      kind: 'machines',
+      boxes: [
+        { ko: `${constructor.ko} #1`, machineId: constructor.id, productKo: ko('Desc_GenericBiomass_C'), perMinute: half },
+        { ko: `${constructor.ko} #2`, machineId: constructor.id, productKo: ko('Desc_GenericBiomass_C'), perMinute: half },
+      ],
+    },
+    bus('Desc_GenericBiomass_C', bioPerBurner, '병합기로 합침'),
+  ];
+
+  let caption =
+    `나무와 이파리는 레시피가 달라 제작기가 각각 필요합니다. 나온 바이오매스를 병합기로 합쳐 ` +
+    `연소기로 보냅니다. 클럭은 건드리지 않아도 됩니다 — 벨트가 차면 제작기가 멈추고, ` +
+    `연소기가 쓰는 만큼만 다시 돕니다.`;
+
+  if (withBiofuel) {
+    const fuelPerBurner =
+      ((burner.powerGenMW ?? 30) / (item('Desc_Biofuel_C').energyMJ ?? 450)) * 60;
+    const bioForFuel = (fuelPerBurner / outOf('Recipe_Biofuel_C')) * inOf('Recipe_Biofuel_C');
+    rows.push(
+      machines(1, () => ({
+        ko: `${constructor.ko} #3`,
+        machineId: constructor.id,
+        productKo: ko('Desc_Biofuel_C'),
+        perMinute: fuelPerBurner,
+      })),
+      bus('Desc_Biofuel_C', fuelPerBurner),
+      machines(1, () => ({ ko: burner.ko, machineId: burner.id, note: `${burner.powerGenMW} MW` }))
+    );
+    caption =
+      `나무와 이파리는 레시피가 달라 제작기가 각각 필요합니다. 합친 바이오매스를 제작기 한 대가 ` +
+      `고체 바이오 연료로 바꿉니다 — 연소기 한 대가 바이오매스 ${fmt(bioPerBurner)}개/분 대신 ` +
+      `고체 바이오 연료 ${fmt(fuelPerBurner)}개/분으로 돕니다. 원료로 환산하면 ${fmt(bioForFuel)}개/분이라 ` +
+      `${Math.round((1 - bioForFuel / bioPerBurner) * 100)}%를 아끼고, 벨트 한 칸당 열량이 ` +
+      `${item('Desc_Biofuel_C').energyMJ! / item('Desc_GenericBiomass_C').energyMJ!}배입니다.`;
+  } else {
+    rows.push(
+      machines(1, () => ({ ko: burner.ko, machineId: burner.id, note: `${burner.powerGenMW} MW` }))
+    );
+  }
+
+  return { rows, caption };
+}
+
+/**
+ * 티어 2 지능형 도금판 라인.
+ *
+ * 조립기 대수는 적게 나오지만 이 그림이 감추는 것은 상류다. 회전자가 나사를 대량으로 쓰기 때문에
+ * 노드 소요가 보강된 철판 때의 두 배 가까이 된다.
+ */
+export function smartPlatingLine(target = 5): FlowDef {
+  const assembler = building('Build_AssemblerMk1_C');
+  const rip = plan('Recipe_IronPlateReinforced_C', target);
+  const rotor = plan('Recipe_Rotor_C', target);
+  const smart = plan('Recipe_SpaceElevatorPart_1_C', target);
+  const need = expandDemand('Desc_SpaceElevatorPart_1_C', target);
 
   return {
-    nodes: [
+    rows: [
       {
-        id: 'box',
-        machineKo: container.ko,
-        productKo: `${ko('Desc_Wood_C')} · ${ko('Desc_Leaves_C')}`,
-        machineId: container.id,
-        count: 1,
-        layer: 0,
+        kind: 'machines',
+        boxes: [
+          ...Array.from({ length: rip.count }, (_, i) => ({
+            ko: `${assembler.ko} #${i + 1}`,
+            machineId: assembler.id,
+            productKo: ko('Desc_IronPlateReinforced_C'),
+            perMinute: rip.each,
+            clock: rip.clock,
+          })),
+          ...Array.from({ length: rotor.count }, (_, i) => ({
+            ko: `${assembler.ko} #${rip.count + i + 1}`,
+            machineId: assembler.id,
+            productKo: ko('Desc_Rotor_C'),
+            perMinute: rotor.each,
+            clock: rotor.clock,
+          })),
+        ],
       },
-      {
-        id: 'bio',
-        machineKo: constructor.ko,
-        productKo: ko('Desc_GenericBiomass_C'),
-        machineId: constructor.id,
-        count: 1,
-        layer: 1,
-      },
-      {
-        id: 'burn',
-        machineKo: burner.ko,
-        productKo: `${burner.powerGenMW} MW`,
-        machineId: burner.id,
-        count: 1,
-        layer: 2,
-      },
-    ],
-    edges: [
-      { from: 'box', to: 'bio', itemKo: ko('Desc_Wood_C'), itemId: 'Desc_Wood_C', perMinute: woodPerBurner },
-      { from: 'bio', to: 'burn', itemKo: ko('Desc_GenericBiomass_C'), itemId: 'Desc_GenericBiomass_C', perMinute: bioPerBurner },
+      machines(smart.count, (i) => ({
+        ko: `${assembler.ko} #${rip.count + rotor.count + i + 1}`,
+        machineId: assembler.id,
+        productKo: ko('Desc_SpaceElevatorPart_1_C'),
+        perMinute: smart.each,
+        clock: smart.clock,
+      })),
     ],
     caption:
-      `연소기 한 대는 ${burner.powerGenMW} MW 를 내고 ${ko('Desc_GenericBiomass_C')} ${fmt(bioPerBurner)}개/분을 먹습니다 — ` +
-      `나무로는 ${fmt(woodPerBurner)}개/분입니다. 제작기는 클럭을 건드릴 필요가 없습니다. ` +
-      `벨트가 차면 알아서 멈추고, 연소기가 먹는 만큼만 다시 돕니다.`,
+      `조립기는 ${rip.count + rotor.count + smart.count}대면 되지만 이 그림이 감추는 것은 상류입니다 — ` +
+      `여기까지 오려면 나사 ${fmt(need.get('Desc_IronScrew_C') ?? 0)}개/분, ` +
+      `철광석 ${fmt(need.get('Desc_OreIron_C') ?? 0)}개/분이 필요합니다. 노드 하나로는 못 댑니다.`,
   };
 }

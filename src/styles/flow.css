@@ -57,6 +57,46 @@
   font-size: 13px;
   font-weight: 500;
 }
+/* ------------------------------------------------- 분배기 직렬 줄 */
+/*
+ * 공식 위키의 매니폴드 정의 그대로 — 분배기를 일렬로 이어 붙인 한 줄이다.
+ * 기계 사이를 잇는 선이 아니라 **줄 자체**가 하나의 설비라서 굵은 띠로 그린다.
+ */
+.fc-bus rect:first-of-type {
+  fill: var(--raised);
+  stroke: var(--line-strong);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+.fc-buschip {
+  fill: var(--bg);
+  stroke: var(--line-strong);
+  stroke-width: 1;
+}
+.fc-bustext {
+  fill: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+}
+.fc-busnote {
+  fill: var(--ink-3);
+  font-family: var(--font-body);
+  font-size: 11px;
+}
+
+/* 기계 상자 안의 산출 — 무엇을 분당 몇 개 내는가 */
+.fc-rate {
+  fill: var(--ink-2);
+  font-family: var(--font-body);
+  font-size: 12px;
+}
+.fc-num {
+  fill: var(--accent);
+  font-family: var(--font-mono);
+  font-weight: 500;
+}
+
 .fc-product {
   fill: var(--ink-2);
   font-family: var(--font-body);

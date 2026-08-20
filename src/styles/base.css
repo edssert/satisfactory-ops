@@ -130,7 +130,12 @@ a:hover { color: var(--accent); text-decoration-color: var(--accent); }
 /* ------------------------------------------------------------------ 표 */
 table {
   width: 100%;
-  border-collapse: collapse;
+  /*
+   * collapse 가 아니라 separate 다. 머리행을 sticky 로 붙이면 collapse 에서는
+   * 셀 경계선이 같이 따라오지 않아 스크롤할 때 선이 사라진다.
+   */
+  border-collapse: separate;
+  border-spacing: 0;
   font-size: var(--t-small);
   line-height: 1.55;
 }
@@ -147,9 +152,14 @@ th, td {
   border-bottom: var(--hair) solid var(--line);
   vertical-align: baseline;
 }
+/* 긴 표에서 어느 열인지 놓치지 않도록 머리행을 붙여 둔다. 사이트 머리띠(3.5rem) 아래에 선다 */
 thead th {
-  padding-block: var(--s2);
+  position: sticky;
+  top: 3.5rem;
+  z-index: 2;
+  padding-block: var(--s3) var(--s2);
   border-bottom: var(--hair) solid var(--line-strong);
+  background: var(--bg);
   font-size: var(--t-label);
   font-weight: 600;
   letter-spacing: 0.06em;
@@ -162,9 +172,13 @@ tbody tr:hover td { background: var(--raised); }
 
 /* 가로로 넘치는 표는 표 안에서만 스크롤한다. 페이지 본문은 절대 가로 스크롤하지 않는다 */
 .scroll-x {
+  /*
+   * 가로만 넘치게 한다. overflow-y 까지 auto 가 되면 머리행 sticky 가 이 상자 안에 갇혀
+   * 페이지를 스크롤할 때 따라오지 않는다.
+   */
   overflow-x: auto;
+  overflow-y: visible;
   border-block: var(--hair) solid var(--line);
-  padding-block: var(--s1);
 }
 
 /* ------------------------------------------------------------------ 칩 */
@@ -210,7 +224,12 @@ tbody tr:hover td { background: var(--raised); }
 /* ------------------------------------------------------------------ 유틸 */
 .muted { color: var(--ink-2); }
 .small { font-size: var(--t-small); }
-.caption { font-size: var(--t-caption); color: var(--ink-2); line-height: 1.6; }
+.caption {
+  max-width: var(--measure-wide);
+  font-size: var(--t-caption);
+  color: var(--ink-2);
+  line-height: 1.6;
+}
 .stack > * + * { margin-top: var(--s4); }
 .visually-hidden {
   position: absolute;

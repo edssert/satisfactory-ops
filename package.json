@@ -19,12 +19,13 @@
     "preview": "astro preview",
     "check": "astro check",
     "test": "node --test tests/solver.test.ts tests/sw.test.ts tests/sw-runtime.test.ts tests/recipe-select.test.ts tests/layout.test.ts tests/floorplan.test.ts tests/module-plan.test.ts",
-    "verify": "npm run data:check && npm test && astro check --minimumSeverity error && npm run db:check",
+    "verify": "npm run data:check && npm test && astro check --minimumSeverity error && npm run db:check && npm run build && npm run check:coverage",
     "test:sw": "node --test tests/sw-runtime.test.ts",
     "render": "astro build && node scripts/render-plan.mjs",
     "db": "node scripts/db.mjs",
     "db:check": "node scripts/db.mjs --check",
-    "font": "node scripts/build-font.mjs"
+    "font": "node scripts/build-font.mjs",
+    "check:coverage": "node scripts/check-coverage.mjs"
   },
   "dependencies": {
     "@astrojs/preact": "6.0.3",

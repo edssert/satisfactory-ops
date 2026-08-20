@@ -66,9 +66,17 @@ const consumers = buildings
       (a.powerMW ?? a.powerMaxMW ?? 0) - (b.powerMW ?? b.powerMaxMW ?? 0)
   );
 
+/** 티어별로 묶는다. 36행을 한 덩어리로 두면 어디서 티어가 바뀌는지 안 보인다 */
+const consumersByTier = [...new Map<number, typeof consumers>(
+  consumers.map((b) => [b.unlockTier ?? -1, []])
+)].map(([tier]) => ({
+  tier,
+  list: consumers.filter((b) => (b.unlockTier ?? -1) === tier),
+}));
+
 /** 분류 라벨. 데이터의 category 값을 화면 말로 옮긴다 */
 const CATEGORY_KO: Record<string, string> = {
-  extractor: '채굴·추출',
+  extractor: '채굴',
   manufacturer: '생산',
   logistics: '물류',
   transport: '운송',
@@ -113,6 +121,13 @@ const ORIGIN_KO: Record<string, string> = {
   industry: '실제 산업 용어',
   community: '커뮤니티 용어',
 };
+/* 같은 분류끼리 붙여 둔다. 배지가 열을 이루면 훑을 때 눈이 덜 튄다 */
+const ORIGIN_ORDER = ['industry', 'game', 'community'];
+const sortedTerms = [...terms].sort(
+  (a, b) =>
+    ORIGIN_ORDER.indexOf(a.origin ?? 'game') - ORIGIN_ORDER.indexOf(b.origin ?? 'game') ||
+    a.term.localeCompare(b.term, 'ko')
+);
 ---
 
 <Base
@@ -256,7 +271,7 @@ const ORIGIN_KO: Record<string, string> = {
 
     <section class="section">
       <p class="marker"><span class="num">05</span> 전력 소비</p>
-      <h2>전기를 먹는 건물 <span class="n">{consumers.length}</span>개</h2>
+      <h2>전력을 쓰는 건물 <span class="n">{consumers.length}</span>개</h2>
       <div class="scroll-x">
         <table>
           <thead>
@@ -264,27 +279,34 @@ const ORIGIN_KO: Record<string, string> = {
               <th>건물</th>
               <th>분류</th>
               <th class="n">전력 (MW)</th>
-              <th class="n">해금</th>
               <th>건설 비용</th>
             </tr>
           </thead>
           <tbody>
-            {consumers.map((b) => (
+            {consumersByTier.map((g) => (
+              <>
+                <tr class="tier-row">
+                  <th colspan="5" scope="colgroup">
+                    {g.tier < 0 ? '허브' : `티어 ${g.tier}`}
+                  </th>
+                </tr>
+                {g.list.map((b) => (
               <tr>
                 <td>{b.ko} <span class="en">{b.en}</span></td>
-                <td class="small muted">{CATEGORY_KO[b.category ?? 'other'] ?? b.category}</td>
+                <td class="small muted nowrap">{CATEGORY_KO[b.category ?? 'other'] ?? b.category}</td>
                 <td class="n">
                   {b.powerIsVariable
                     ? `${num(b.powerMinMW ?? 0)}~${num(b.powerMaxMW ?? 0)}`
                     : (b.powerMW ?? '—')}
                 </td>
-                <td class="n">{tierOf(b.unlockTier)}</td>
                 <td>
                   {b.buildCost.map((c) => (
                     <span class="chip">{item(c.item).ko} <span class="n">{c.amount}</span></span>
                   ))}
                 </td>
               </tr>
+                ))}
+              </>
             ))}
           </tbody>
         </table>
@@ -299,7 +321,7 @@ const ORIGIN_KO: Record<string, string> = {
       <p class="marker"><span class="num">06</span> 용어집</p>
       <h2>처음 만나는 용어</h2>
       <div class="terms">
-        {terms.map((t) => (
+        {sortedTerms.map((t) => (
           <details class="term">
             <summary>
               <span class="term-ko">{t.term}</span>
@@ -307,22 +329,36 @@ const ORIGIN_KO: Record<string, string> = {
               {t.origin && (
                 <span class={`term-origin is-${t.origin}`}>{ORIGIN_KO[t.origin]}</span>
               )}
-              {t.unlock && <span class="term-unlock">{t.unlock}</span>}
+              {t.origin === 'game' && t.unlock && <span class="term-unlock">{t.unlock}</span>}
             </summary>
             <div class="term-body">
-              {t.gameKo && (
-                <p class="term-l">
-                  <span class="term-k">게임 표기</span>
-                  <strong>{t.gameKo}</strong> — 위 이름은 커뮤니티 통용어입니다.
-                </p>
-              )}
-              {t.originNote && (
-                <p class="term-l"><span class="term-k">바깥 뜻</span>{t.originNote}</p>
-              )}
-              <p>{t.short}</p>
-              <p class="term-l"><span class="term-k">왜</span>{t.why}</p>
-              <p class="term-l"><span class="term-k">어떻게</span>{t.how}</p>
-              <p class="term-l is-gotcha"><span class="term-k">함정</span>{t.gotcha}</p>
+              <p class="term-lead">{t.short}</p>
+              <dl class="term-rows">
+                {t.gameKo && (
+                  <>
+                    <dt>게임 표기</dt>
+                    <dd><strong>{t.gameKo}</strong> — 위 이름은 커뮤니티 통용어입니다.</dd>
+                  </>
+                )}
+                {t.originNote && (
+                  <>
+                    <dt>바깥 뜻</dt>
+                    <dd>{t.originNote}</dd>
+                  </>
+                )}
+                {t.origin !== 'game' && t.unlock && (
+                  <>
+                    <dt>필요한 것</dt>
+                    <dd>{t.unlock}</dd>
+                  </>
+                )}
+                <dt>왜</dt>
+                <dd>{t.why}</dd>
+                <dt>어떻게</dt>
+                <dd>{t.how}</dd>
+                <dt class="is-gotcha">함정</dt>
+                <dd>{t.gotcha}</dd>
+              </dl>
             </div>
           </details>
         ))}
@@ -344,29 +380,53 @@ const ORIGIN_KO: Record<string, string> = {
     @media (min-width: 780px) { .two { grid-template-columns: 1fr 1fr; gap: var(--s8); } }
 
     .rownote { display: block; font-size: var(--t-caption); color: var(--ink-3); }
+    .nowrap { white-space: nowrap; }
+    /* 티어가 바뀌는 지점을 눈에 보이게 한다 */
+    .tier-row th {
+      padding-top: var(--s5);
+      border-bottom: var(--hair) solid var(--line-strong);
+      font-family: var(--font-mono);
+      font-size: var(--t-label);
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      background: var(--bg);
+    }
+    tbody tr.tier-row:hover th { background: var(--bg); }
     td .chip { margin: 1px 2px 1px 0; }
 
     .terms { border-top: var(--hair) solid var(--line); }
     .term { border-bottom: var(--hair) solid var(--line); }
+    /*
+     * 열을 고정한다. flex 로 두면 용어 길이에 따라 배지가 제각각 다른 곳에 붙어
+     * 훑어 읽을 수가 없다.
+     */
     .term summary {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: 1.1rem minmax(0, 11rem) minmax(0, 11rem) 7.5rem minmax(0, 1fr);
       align-items: baseline;
-      gap: var(--s2) var(--s3);
+      gap: var(--s3);
       padding-block: var(--s4);
       cursor: pointer;
       list-style: none;
+    }
+    @media (max-width: 860px) {
+      .term summary {
+        grid-template-columns: 1.1rem minmax(0, 1fr) 7.5rem;
+      }
+      .term summary .en { grid-column: 2; }
+      .term-unlock { grid-column: 2 / -1; }
     }
     .term summary::-webkit-details-marker { display: none; }
     .term summary::before {
       content: '+';
       font-family: var(--font-mono);
       color: var(--accent);
-      width: 1rem;
     }
     .term[open] summary::before { content: '−'; }
     .term-ko { font-weight: 600; }
     .term-origin {
+      justify-self: start;
+      text-align: center;
       padding: 0.1em 0.45em;
       border: var(--hair) solid var(--line);
       border-radius: var(--radius);
@@ -377,22 +437,39 @@ const ORIGIN_KO: Record<string, string> = {
     /* 실제 산업에서 그대로 쓰는 말만 강조색을 준다 — 게임 밖에서도 통하는 지식이라서다 */
     .term-origin.is-industry { border-color: var(--accent); color: var(--accent); }
     .term-unlock {
-      margin-left: auto;
+      text-align: right;
       font-family: var(--font-mono);
       font-size: var(--t-caption);
       color: var(--ink-3);
     }
-    .term-body { padding: 0 0 var(--s5) 1rem; max-width: var(--measure); }
-    .term-body > p { font-size: var(--t-small); }
-    .term-l { margin-bottom: var(--s2); color: var(--ink-2); }
-    .term-k {
-      display: inline-block;
-      min-width: 3.2rem;
+    .term-body { padding: 0 0 var(--s6) 2.3rem; }
+    .term-lead {
+      margin-bottom: var(--s4);
+      max-width: 54em;
+      font-size: var(--t-body);
+      font-weight: 600;
+    }
+    /* 라벨과 본문을 두 열로 세운다. 인라인 라벨은 본문을 라벨 밑으로 말아 넣는다 */
+    .term-rows {
+      display: grid;
+      grid-template-columns: 5.5rem minmax(0, 1fr);
+      gap: var(--s3) var(--s5);
+      margin: 0;
+      max-width: 62em;
+    }
+    .term-rows dt {
       font-family: var(--font-mono);
       font-size: var(--t-label);
       letter-spacing: 0.06em;
-      color: var(--ink-3);
+      color: var(--ink-2);
+      padding-top: 0.2em;
     }
-    .term-l.is-gotcha .term-k { color: var(--accent); }
+    .term-rows dt.is-gotcha { color: var(--accent); }
+    .term-rows dd { margin: 0; font-size: var(--t-small); color: var(--ink); }
+    @media (max-width: 640px) {
+      .term-body { padding-left: 0; }
+      .term-rows { grid-template-columns: minmax(0, 1fr); gap: var(--s1) 0; }
+      .term-rows dd { margin-bottom: var(--s3); }
+    }
   </style>
 </Base>

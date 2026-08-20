@@ -32,7 +32,12 @@ const WIKI = 'https://satisfactory.wiki.gg/api.php';
 const UA = 'satisfactory-ops/1.0 (open-source playbook; contact via github.com/edssert/satisfactory-ops)';
 
 const argv = process.argv.slice(2);
-const ALL = argv.includes('--all');
+/*
+ * 기본은 **전부 받기**다. 앞서 초반 티어만 골라 받았더니 나무·바이오매스처럼
+ * 가이드가 나중에 쓰게 된 아이콘이 빈칸으로 나갔다. 자산은 한 번에 다 모아 둔다.
+ * `--subset` 을 주면 예전처럼 마일스톤 기준으로만 받는다.
+ */
+const ALL = !argv.includes('--subset');
 const tierArg = argv.find((a) => a.startsWith('--tier='));
 const MAX_TIER = tierArg ? Number(tierArg.split('=')[1]) : 4;
 
@@ -95,9 +100,12 @@ async function wikiThumb(title, width) {
  */
 async function fetchBuildings() {
   fs.mkdirSync(OUT_B, { recursive: true });
-  const wanted = buildings.filter((b) =>
-    /^(Build_(Smelter|Constructor|Assembler|Manufacturer|Foundry|OilRefinery|Packager|Blender|HadronCollider|Miner|WaterPump|OilPump|ConveyorAttachment|StorageContainer|AwesomeSink|Generator|PowerStorage|TrainStation|BlueprintDesigner))/.test(b.id)
-  );
+  /*
+   * 장식·구조 부재(벽·토대·경사로 등)는 도면에 등장하지 않으므로 제외하고, 나머지는 전부 받는다.
+   * 예전에는 건물 이름을 정규식으로 골라 받았는데, 도면에 새 건물이 등장할 때마다 빠졌다.
+   */
+  const SKIP = /^Build_(Wall|Foundation|Ramp|Pillar|Beam|Catwalk|Stair|Fence|Roof|Sign|Barrier|Gate|Window|Door|Ladder|Walkway|QuarterPipe|Half|Corner|Frame_|Pipe(Support|Hyper)|ConveyorPole|ConveyorBelt|ConveyorLift|Pipeline|PowerLine|PowerPole|Lights|StreetLight|FloodLight|Decor|Paint)/i;
+  const wanted = buildings.filter((b) => !SKIP.test(b.id));
   let got = 0;
   const missing = [];
   for (const b of wanted) {

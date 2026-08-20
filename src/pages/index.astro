@@ -56,7 +56,7 @@ const LINES: Record<string, { now: string; scale: string; keep: string }> = {
   },
   't1-iron': {
     now: `채굴기 1대 → ${smelter.ko} ${smeltersPerBelt}대 → 제작기 4대`,
-    scale: `${smelter.ko} 한 대가 철광석 ${smeltIn}개/분을 먹는다. 벨트 Mk.1 한 줄(${beltMk1Rate}개/분)이 정확히 ${smeltersPerBelt}대분이다`,
+    scale: `${smelter.ko} 한 대가 철광석 ${smeltIn}개/분을 소모한다. 벨트 Mk.1 한 줄(${beltMk1Rate}개/분)이 정확히 ${smeltersPerBelt}대분이다`,
     keep: '제련기 줄 옆을 비워 둔다. 티어 2에서 조립기가 여기 붙는다',
   },
   't2-assembler': {
@@ -66,7 +66,7 @@ const LINES: Record<string, { now: string; scale: string; keep: string }> = {
   },
   't3-coal': {
     now: `${coalGen.ko} ${gensPerBelt}대`,
-    scale: `한 대가 석탄 ${coalPerGen}개/분을 먹는다. 벨트 Mk.1 한 줄이 정확히 ${gensPerBelt}대분이다`,
+    scale: `한 대가 석탄 ${coalPerGen}개/분을 소모한다. 벨트 Mk.1 한 줄이 정확히 ${gensPerBelt}대분이다`,
     keep: '바이오매스 연소기를 철거하지 않는다. 석탄이 끊기면 그걸로 복구한다',
   },
 };
@@ -209,7 +209,7 @@ const buildFacts = [
 
     <div class="showcase">
       <p class="showcase-tag">가이드가 실제로 주는 것 — 티어 1 철 라인</p>
-      <FlowChart nodes={showcase.nodes} edges={showcase.edges} caption={showcase.caption} />
+      <FlowChart rows={showcase.rows} caption={showcase.caption} />
     </div>
   </section>
 

@@ -84,7 +84,9 @@ const steps = spine.steps.map((s) => ({
 const FLOWS: Record<string, FlowDef> = {
   hub: biomassLine(),
   't1-iron': ironLine(),
+  /* 고체 바이오 연료는 티어 2 「장애물 제거」 해금이라 여기서 처음 그린다 */
   't2-assembler': smartPlatingLine(),
+  't2-biofuel': biomassLine(true),
 };
 ---
 
@@ -159,7 +161,7 @@ const FLOWS: Record<string, FlowDef> = {
                         <th>기계</th>
                         <th class="n">대수</th>
                         <th class="n">클럭</th>
-                        <th>먹는 것</th>
+                        <th>재료</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -188,11 +190,12 @@ const FLOWS: Record<string, FlowDef> = {
 
             {FLOWS[s.id] && (
               <div class="flowwrap">
-                <FlowChart
-                  nodes={FLOWS[s.id]!.nodes}
-                  edges={FLOWS[s.id]!.edges}
-                  caption={FLOWS[s.id]!.caption}
-                />
+                <FlowChart rows={FLOWS[s.id]!.rows} caption={FLOWS[s.id]!.caption} index={i + 1} />
+              </div>
+            )}
+            {s.id === 't2-assembler' && (
+              <div class="flowwrap">
+                <FlowChart rows={FLOWS['t2-biofuel']!.rows} caption={FLOWS['t2-biofuel']!.caption} index={90} />
               </div>
             )}
 
@@ -208,7 +211,7 @@ const FLOWS: Record<string, FlowDef> = {
         <section class="step is-open">
           <p class="marker"><span class="num">{String(steps.length).padStart(2, '0')}</span> 티어 4 이후</p>
           <h2>아직 쓰지 않았습니다</h2>
-          <p class="prose muted">
+          <p class="wide muted">
             티어 4부터는 해금 목록과 요구 부품만 <a href={`${base}/tools/`}>표</a>로 제공합니다.
             진행 조언은 조사가 끝나는 대로 같은 형식으로 추가합니다.
           </p>
@@ -322,5 +325,6 @@ const FLOWS: Record<string, FlowDef> = {
     .keep-body { margin: 0; font-weight: 600; max-width: var(--measure); }
 
     .step.is-open h2 { color: var(--ink-2); }
+    .wide { max-width: var(--measure-wide); }
   </style>
 </Base>
