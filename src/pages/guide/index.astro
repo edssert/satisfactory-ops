@@ -20,7 +20,7 @@ import craft from '../../data/curated/build-craft.json';
 import purity from '../../data/curated/node-purity.json';
 import saveUnlocks from '../../data/app/save-unlocks.json';
 import hub from '../../data/app/hub.json';
-import { biomassLine, ironLine, smartPlatingLine, type FlowDef } from '../../lib/flows';
+import { aluminiumLine, biomassLine, ironLine, oilLine, smartPlatingLine, type FlowDef } from '../../lib/flows';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -194,6 +194,8 @@ const FLOWS: Record<string, FlowDef> = {
   /* 고체 바이오 연료는 티어 2 「장애물 제거」 해금이라 여기서 처음 그린다 */
   't2-assembler': smartPlatingLine(),
   't2-biofuel': biomassLine(true),
+  't5-oil': oilLine(),
+  't7-aluminium': aluminiumLine(),
 };
 ---
 
@@ -342,6 +344,7 @@ const FLOWS: Record<string, FlowDef> = {
                   rows={FLOWS[s.id]!.rows}
                   links={FLOWS[s.id]!.links}
                   caption={FLOWS[s.id]!.caption}
+                  wide={FLOWS[s.id]!.wide}
                   index={i + 1}
                 />
               </div>
@@ -1056,7 +1059,7 @@ const FLOWS: Record<string, FlowDef> = {
       font-size: var(--t-caption) !important;
       line-height: 1.9 !important;
     }
-    .synth-catch { color: var(--warn, #e0a13c) !important; }
+    .synth-catch { color: var(--accent-ink) !important; }
 
     /* 순도 표 — 수치는 오른쪽 맞춤, 자릿수가 눈으로 비교돼야 한다 */
     .pur {

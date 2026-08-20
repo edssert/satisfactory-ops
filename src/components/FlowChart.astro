@@ -22,6 +22,7 @@ import { NODE_W, GAP_X, PAD, fmtRate } from '../lib/flow-layout';
 
 /** 네 줄(기계·투입·산출·클럭)이 들어가야 하므로 flow-layout 기본값보다 높다 */
 const NODE_H = 88;
+const NODE_H_BY = 108;
 const STORE_H = 92;
 /** 분배기·병합기가 들어갈 자리를 줄 사이에 확보한다 */
 const ROW_GAP = 68;
@@ -38,6 +39,11 @@ export interface MachineBox {
   inputs?: { ko: string; perMinute: number }[];
   /** 단위는 기본이 "/분". 발전기처럼 MW 를 내는 것은 unit 을 바꾼다 */
   output?: { ko: string; perMinute: number; unit?: string };
+  /**
+   * 같이 나오는데 안 쓰는 것. 정제소가 플라스틱을 내면서 중유 잔여물을 함께 낸다.
+   * 이걸 안 그리면 "왜 라인이 멈추나"를 그림이 설명하지 못한다.
+   */
+  byproduct?: { ko: string; perMinute: number };
   /** 100 이면 적지 않는다 */
   clock?: number;
   /** 기계가 아닌 것(저장 컨테이너 등)에 붙이는 한 줄 */
@@ -66,6 +72,8 @@ export interface Link {
   to: At;
   /** 갈라지는 지점에서만 적는다. 안 적으면 어느 가지가 얼만지 알 수 없다 */
   perMinute?: number;
+  /** 주 산출이 아니라 부산물을 나르는 줄 */
+  byproduct?: boolean;
 }
 
 interface Props {
@@ -73,8 +81,21 @@ interface Props {
   links: Link[];
   caption?: string;
   index?: number;
+  /** 투입이 둘 이상이라 한 줄이 긴 그림. 상자를 넓힌다 */
+  wide?: boolean;
 }
-const { rows, links, caption, index = 1 } = Astro.props;
+const { rows, links, caption, index = 1, wide = false } = Astro.props;
+
+/** 이 그림에서 쓸 상자 너비 */
+const BOX_W = wide ? 244 : NODE_W;
+/** 되돌아오는 줄이 도는 바깥 통로의 너비 */
+const LOOP_LANE = 34;
+
+/* 부산물 줄이 하나라도 있으면 그림 전체의 상자를 높인다 — 상자마다 높이가 다르면 줄이 어긋난다 */
+const anyByproduct = rows.some(
+  (r) => r.kind === 'machines' && r.boxes.some((b) => (b as MachineBox).byproduct)
+);
+const BOX_H = anyByproduct ? NODE_H_BY : NODE_H;
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const bIcon = `${base}/assets/buildings-png`;
@@ -88,26 +109,33 @@ const cols = Math.max(
     Math.max(r.boxes.length, ...r.boxes.map((b: { col?: number }) => (b.col ?? 0) + 1))
   )
 );
-const width = PAD * 2 + cols * NODE_W + (cols - 1) * GAP_X;
+/* 되돌아오는 줄은 상자 바깥으로 돈다. 그만큼 그림이 넓어야 잘리지 않는다 */
+const hasLoop = links.some((l) => l.to[0] < l.from[0]);
+const width =
+  PAD * 2 + cols * BOX_W + (cols - 1) * GAP_X + (hasLoop ? LOOP_LANE + PAD : 0);
 
 let cursor = PAD;
 const placed = rows.map((row) => {
-  const h = row.kind === 'storage' ? STORE_H : NODE_H;
+  const h = row.kind === 'storage' ? STORE_H : BOX_H;
   const at = { row, y: cursor, h };
   cursor += h + ROW_GAP;
   return at;
 });
 const height = cursor - ROW_GAP + PAD;
 
+/** 상자가 놓이는 영역. 되돌림 통로는 이 영역 바깥이다 */
+const FIELD_W = width - (hasLoop ? LOOP_LANE + PAD : 0);
+
 function boxLeft(ri: number, bi: number): number {
   const row = rows[ri]!;
   const b = row.boxes[bi] as { col?: number } | undefined;
-  if (b?.col != null) return PAD + b.col * (NODE_W + GAP_X);
+  if (b?.col != null) return PAD + b.col * (BOX_W + GAP_X);
   const n = row.boxes.length;
-  const total = n * NODE_W + (n - 1) * GAP_X;
-  return (width - total) / 2 + bi * (NODE_W + GAP_X);
+  const total = n * BOX_W + (n - 1) * GAP_X;
+  return (FIELD_W - total) / 2 + bi * (BOX_W + GAP_X);
 }
-const boxCx = (ri: number, bi: number) => boxLeft(ri, bi) + NODE_W / 2;
+const boxCx = (ri: number, bi: number) => boxLeft(ri, bi) + BOX_W / 2;
+const boxRight = (ri: number, bi: number) => boxLeft(ri, bi) + BOX_W;
 const rowTop = (ri: number) => placed[ri]!.y;
 const rowBottom = (ri: number) => placed[ri]!.y + placed[ri]!.h;
 
@@ -116,7 +144,13 @@ const rowBottom = (ri: number) => placed[ri]!.y + placed[ri]!.h;
 const key = (a: At) => `${a[0]}:${a[1]}`;
 const outs = new Map<string, Link[]>();
 const ins = new Map<string, Link[]>();
+/** 되돌아오는 줄 — 아래에서 위로 간다 */
+const isLoop = (l: Link) => l.to[0] < l.from[0];
+/** 같은 줄에서 옆으로 넘기는 줄 (물 추출기 → 정제소처럼) */
+const isSide = (l: Link) => l.to[0] === l.from[0];
+
 for (const l of links) {
+  if (isLoop(l) || isSide(l)) continue;
   const sk = key(l.from);
   const dk = key(l.to);
   if (!outs.has(sk)) outs.set(sk, []);
@@ -129,7 +163,8 @@ for (const l of links) {
 function carried(l: Link): string {
   const row = rows[l.from[0]]!;
   if (row.kind !== 'machines') return '';
-  return row.boxes[l.from[1]]?.output?.ko ?? '';
+  const b = row.boxes[l.from[1]] as MachineBox | undefined;
+  return (l.byproduct ? b?.byproduct?.ko : b?.output?.ko) ?? '';
 }
 
 /**
@@ -151,7 +186,7 @@ function dstX(l: Link): number {
   const inc = ins.get(k) ?? [];
   if (isMerge(k) || inc.length <= 1) return boxCx(l.to[0], l.to[1]);
   const i = inc.indexOf(l);
-  return boxLeft(l.to[0], l.to[1]) + (NODE_W * (i + 1)) / (inc.length + 1);
+  return boxLeft(l.to[0], l.to[1]) + (BOX_W * (i + 1)) / (inc.length + 1);
 }
 
 /** 가로로 도는 높이를 hy 로 못박은 꺾인 선. 꺾임은 필렛으로 돌린다 */
@@ -168,16 +203,68 @@ function elbow(x1: number, y1: number, x2: number, y2: number, hy: number): stri
   );
 }
 
+/**
+ * 되돌아오는 줄. 상자 오른쪽으로 나가 바깥 통로를 타고 올라가서 목표 상자 오른쪽으로 들어간다.
+ * 위아래 화살표만 있는 그림에 순환을 억지로 넣으면 선이 상자를 가로지른다.
+ */
+function loopPath(l: Link): string {
+  const lane = FIELD_W + LOOP_LANE / 2;
+  const y0 = rowTop(l.from[0]) + placed[l.from[0]]!.h / 2;
+  const y1 = rowTop(l.to[0]) + placed[l.to[0]]!.h / 2;
+  const x0 = boxRight(l.from[0], l.from[1]);
+  const x1 = boxRight(l.to[0], l.to[1]);
+  const r = Math.min(R, Math.abs(y1 - y0) / 2);
+  const dir = y1 > y0 ? 1 : -1;
+  return (
+    `M${x0},${y0} L${lane - r},${y0} ` +
+    `Q${lane},${y0} ${lane},${y0 + r * dir} ` +
+    `L${lane},${y1 - r * dir} ` +
+    `Q${lane},${y1} ${lane - r},${y1} ` +
+    `L${x1},${y1}`
+  );
+}
+
 const edges = links.map((l) => {
-  const split = (outs.get(key(l.from)) ?? []).length >= 2;
+  if (isSide(l)) {
+    /* 상자 옆면끼리 곧장 — 아래로 내려갔다 올라오면 남의 상자를 가로지른다 */
+    const y = rowTop(l.from[0]) + placed[l.from[0]]!.h / 2;
+    const right = boxLeft(l.to[0], l.to[1]) > boxLeft(l.from[0], l.from[1]);
+    return {
+      d: right
+        ? `M${boxRight(l.from[0], l.from[1])},${y} L${boxLeft(l.to[0], l.to[1])},${y}`
+        : `M${boxLeft(l.from[0], l.from[1])},${y} L${boxRight(l.to[0], l.to[1])},${y}`,
+      skips: false,
+      arrow: true,
+      byproduct: !!l.byproduct,
+      loop: false,
+      rate: null as { x: number; y: number; v: number } | null,
+    };
+  }
+  if (isLoop(l)) {
+    return {
+      d: loopPath(l),
+      skips: false,
+      arrow: true,
+      byproduct: !!l.byproduct,
+      loop: true,
+      rate: null as { x: number; y: number; v: number } | null,
+    };
+  }
+  /* 부산물 줄은 갈라짐으로 세지 않는다 — 물건이 달라 분배기가 아니라 다른 배출구다 */
+  const sameKind = (outs.get(key(l.from)) ?? []).filter((o) => !!o.byproduct === !!l.byproduct);
+  const split = sameKind.length >= 2;
   const merge = isMerge(key(l.to));
-  const sx = boxCx(l.from[0], l.from[1]);
+  const sx = l.byproduct
+    ? boxLeft(l.from[0], l.from[1]) + BOX_W * 0.8
+    : boxCx(l.from[0], l.from[1]);
   const ex = merge ? boxCx(l.to[0], l.to[1]) : dstX(l);
   const y0 = rowBottom(l.from[0]) + (split ? BRANCH_DY : 0);
   const y1 = rowTop(l.to[0]) - (merge ? BRANCH_DY : 0);
   const hy = split ? y0 + ATTACH / 2 + 4 : merge ? y1 - ATTACH / 2 - 4 : (y0 + y1) / 2;
   return {
     d: elbow(sx, y0, ex, y1, hy),
+    byproduct: !!l.byproduct,
+    loop: false,
     /* 중간 줄을 들르지 않고 지나가는 벨트는 점선으로 — 그 줄에 꽂힌 게 아님을 드러낸다 */
     skips: l.to[0] > l.from[0] + 1,
     arrow: !merge,
@@ -188,7 +275,7 @@ const edges = links.map((l) => {
 
 /** 분배기 실물이 설 자리 */
 const splitters = [...outs.entries()]
-  .filter(([, v]) => v.length >= 2)
+  .filter(([, v]) => v.filter((o) => !o.byproduct).length >= 2)
   .map(([k]) => {
     const [ri, bi] = k.split(':').map(Number) as [number, number];
     return { x: boxCx(ri, bi), y: rowBottom(ri) + BRANCH_DY };
@@ -227,7 +314,10 @@ const mergers = [...ins.keys()].filter(isMerge).map((k) => {
       edges.map((e) => (
         <path
           d={e.d}
-          class={e.skips ? 'fc-link is-skip' : 'fc-link'}
+          class={
+            `fc-link${e.skips ? ' is-skip' : ''}` +
+            `${e.byproduct ? ' is-by' : ''}${e.loop ? ' is-loop' : ''}`
+          }
           fill="none"
           marker-end={e.arrow ? `url(#fc-arrow-${index})` : undefined}
         />
@@ -301,7 +391,7 @@ const mergers = [...ins.keys()].filter(isMerge).map((k) => {
                 const x = boxLeft(ri, bi);
                 return (
                   <g>
-                    <rect x={x} y={p.y} width={NODE_W} height={STORE_H} rx="3" class="fc-storebox" />
+                    <rect x={x} y={p.y} width={BOX_W} height={STORE_H} rx="3" class="fc-storebox" />
                     {b.itemId && (
                       <image
                         href={`${iIcon}/${b.itemId}.png`}
@@ -329,7 +419,7 @@ const mergers = [...ins.keys()].filter(isMerge).map((k) => {
           const tx = x + (m.machineId ? 62 : 12);
           return (
             <g class="fc-node">
-              <rect x={x} y={p.y} width={NODE_W} height={NODE_H} rx="3" />
+              <rect x={x} y={p.y} width={BOX_W} height={BOX_H} rx="3" />
               {m.machineId && (
                 <image
                   href={`${bIcon}/${m.machineId}.png`}
@@ -365,14 +455,30 @@ const mergers = [...ins.keys()].filter(isMerge).map((k) => {
                   </tspan>
                 </text>
               )}
+              {m.byproduct && (
+                <text x={tx} y={p.y + (m.note && m.inputs?.length ? 101 : 83)} class="fc-io fc-by">
+                  <tspan class="fc-iolabel">남음</tspan>
+                  <tspan> {m.byproduct.ko} </tspan>
+                  <tspan class="fc-num">{fmtRate(m.byproduct.perMinute)}/분</tspan>
+                </text>
+              )}
               {m.note && (
-                <text x={tx} y={p.y + 45} class="fc-product">
+                <text
+                  x={tx}
+                  y={p.y + (m.inputs?.length ? 83 : 45)}
+                  class="fc-product"
+                >
                   {m.note}
                 </text>
               )}
-              {/* 100% 는 기본값이라 적지 않는다. 적으면 상자마다 같은 글자가 반복돼 잡음이 된다 */}
+              {/*
+                * 100% 는 기본값이라 적지 않는다. 적으면 상자마다 같은 글자가 반복돼 잡음이 된다.
+                * 자리는 이름 줄 오른쪽 — 아래 줄은 설명이 쓰고, 둘이 같은 줄을 다투면 글자가 뭉갠다.
+                */}
               {m.clock != null && m.clock < 100 && (
-                <text x={tx} y={p.y + 83} class="fc-sub">클럭 {fmtRate(m.clock)}%</text>
+                <text x={x + BOX_W - 10} y={p.y + 24} class="fc-sub" text-anchor="end">
+                  {fmtRate(m.clock)}%
+                </text>
               )}
             </g>
           );

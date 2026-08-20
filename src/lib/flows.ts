@@ -18,6 +18,8 @@ export interface FlowDef {
   rows: Row[];
   links: Link[];
   caption: string;
+  /** 투입이 둘 이상이라 한 줄이 긴 그림 — 상자를 넓혀야 글자가 안 잘린다 */
+  wide?: boolean;
 }
 
 const inOf = (id: string) => recipe(id).ingredients[0]?.perMinute ?? 0;
@@ -385,5 +387,279 @@ export function smartPlatingLine(target = 5): FlowDef {
       `조립기는 ${rip.count + rotor.count + smart.count}대면 되지만 이 그림이 감추는 것은 상류입니다 — ` +
       `여기까지 오려면 나사 ${fmt(need.get('Desc_IronScrew_C') ?? 0)}개/분, ` +
       `철광석 ${fmt(need.get('Desc_OreIron_C') ?? 0)}개/분이 필요합니다. 노드 하나로는 못 댑니다.`,
+  };
+}
+
+/**
+ * 발전기 한 대가 분당 먹는 연료. 발전량 ÷ 연료 열량 이다.
+ *
+ * 유체는 단위가 다르다 — 게임 데이터의 열량은 낱개 기준인데 화면과 벨트는 m³ 로 센다.
+ * 1 m³ = 1000 낱개라 유체는 1000으로 나눈다. (이걸 빼먹어 발전기가 「전력 0 MW」로 나왔다.)
+ */
+function burnPerMinute(buildingId: string, fuelId: string): number {
+  const g = building(buildingId);
+  const f = item(fuelId);
+  if (!g.powerGenMW || !f.energyMJ) return 0;
+  const raw = (g.powerGenMW / f.energyMJ) * 60;
+  return f.form === 'solid' ? raw : raw / 1000;
+}
+
+/**
+ * 티어 5 원유 — 부산물이 라인을 멈추는 구조를 그린다.
+ *
+ * 이 그림의 요점은 대수가 아니다. **정제소가 쓸 것과 안 쓸 것을 같이 낸다**는 점이다.
+ * 중유 잔여물의 출구를 안 만들면 파이프가 차고, 파이프가 차면 정제소가 선다.
+ * 그래서 잔여물 줄을 다른 색으로 그리고, 그 줄이 실제로 어디로 가는지까지 잇는다.
+ *
+ * 규모는 플라스틱 20/분 + 고무 20/분 — 정제소 한 대씩으로 떨어지는 가장 작은 단위다.
+ */
+export function oilLine(): FlowDef {
+  const refinery = building('Build_OilRefinery_C');
+  const gen = building('Build_GeneratorFuel_C');
+
+  const rPlastic = recipe('Recipe_Plastic_C');
+  const rRubber = recipe('Recipe_Rubber_C');
+  const rFuel = recipe('Recipe_ResidualFuel_C');
+
+  const outAt = (r: typeof rPlastic, id: string) =>
+    r.products.find((x) => x.item === id)?.perMinute ?? 0;
+
+  const HOR = 'Desc_HeavyOilResidue_C';
+  const residue = outAt(rPlastic, HOR) + outAt(rRubber, HOR);
+  /* 잔여물 전부를 연료로 돌린다. 한 대를 다 못 채우면 클럭을 내린다 */
+  const fuelPlan = plan('Recipe_ResidualFuel_C', (outAt(rFuel, 'Desc_LiquidFuel_C') * residue) / inOf('Recipe_ResidualFuel_C'));
+  const fuelMade = (outAt(rFuel, 'Desc_LiquidFuel_C') * residue) / inOf('Recipe_ResidualFuel_C');
+  const burn = burnPerMinute('Build_GeneratorFuel_C', 'Desc_LiquidFuel_C');
+  const genCount = Math.ceil(fuelMade / burn - 1e-9);
+
+  const rows: Row[] = [
+    {
+      kind: 'machines',
+      boxes: [
+        {
+          ko: `${refinery.ko} #1`,
+          machineId: refinery.id,
+          inputs: [{ ko: ko('Desc_LiquidOil_C'), perMinute: inOf('Recipe_Plastic_C') }],
+          output: { ko: ko('Desc_Plastic_C'), perMinute: outAt(rPlastic, 'Desc_Plastic_C') },
+          byproduct: { ko: ko(HOR), perMinute: outAt(rPlastic, HOR) },
+        },
+        {
+          ko: `${refinery.ko} #2`,
+          machineId: refinery.id,
+          inputs: [{ ko: ko('Desc_LiquidOil_C'), perMinute: inOf('Recipe_Rubber_C') }],
+          output: { ko: ko('Desc_Rubber_C'), perMinute: outAt(rRubber, 'Desc_Rubber_C') },
+          byproduct: { ko: ko(HOR), perMinute: outAt(rRubber, HOR) },
+        },
+      ],
+    },
+    {
+      kind: 'machines',
+      boxes: [
+        {
+          ko: `${refinery.ko} #3`,
+          machineId: refinery.id,
+          inputs: [{ ko: ko(HOR), perMinute: residue }],
+          output: { ko: ko('Desc_LiquidFuel_C'), perMinute: fuelMade },
+          clock: fuelPlan.clock,
+          col: 1,
+        },
+      ],
+    },
+    {
+      kind: 'machines',
+      boxes: Array.from({ length: genCount }, (_, i) => ({
+        ko: `${gen.ko} #${i + 1}`,
+        machineId: gen.id,
+        inputs: [{ ko: ko('Desc_LiquidFuel_C'), perMinute: fuelMade / genCount }],
+        output: {
+          ko: '전력',
+          perMinute: Math.round(((gen.powerGenMW ?? 250) * fuelMade) / genCount / burn),
+          unit: ' MW',
+        },
+        col: 1,
+      })),
+    },
+    {
+      kind: 'storage',
+      label: '쓰는 곳으로',
+      boxes: [
+        { itemKo: ko('Desc_Plastic_C'), itemId: 'Desc_Plastic_C', perMinute: outAt(rPlastic, 'Desc_Plastic_C'), col: 0 },
+        { itemKo: ko('Desc_Rubber_C'), itemId: 'Desc_Rubber_C', perMinute: outAt(rRubber, 'Desc_Rubber_C'), col: 2 },
+      ],
+    },
+  ];
+
+  const links: Link[] = [
+    /* 부산물은 두 정제소에서 나와 세 번째 정제소로 모인다 */
+    { from: [0, 0], to: [1, 0], byproduct: true },
+    { from: [0, 1], to: [1, 0], byproduct: true },
+    { from: [1, 0], to: [2, 0] },
+    /* 주 산출은 중간 줄을 지나쳐 곧장 쓰는 곳으로 간다 */
+    { from: [0, 0], to: [3, 0] },
+    { from: [0, 1], to: [3, 1] },
+  ];
+
+  return {
+    rows,
+    links,
+    caption:
+      `정제소 두 대가 ${ko(HOR)} ${fmt(residue)}/분을 같이 냅니다. 이 줄을 만들지 않으면 ` +
+      `파이프가 차고, 파이프가 차면 위의 정제소 두 대가 함께 멈춥니다. ` +
+      `태워서 없애는 김에 ${genCount * (gen.powerGenMW ?? 250)} MW가 나옵니다.`,
+  };
+}
+
+/**
+ * 티어 7 알루미늄 — 물이 되돌아오는 구조를 그린다.
+ *
+ * 알루미늄이 어렵다는 말의 실체는 이것 하나다. 알루미늄 조각을 만들면 물이 딸려 나오고,
+ * 그 물을 버리면 파이프가 막히고 흘려보내면 앞이 마른다. 되돌리는 줄을 그려야 이해된다.
+ */
+export function aluminiumLine(): FlowDef {
+  const refinery = building('Build_OilRefinery_C');
+  const foundry = building('Build_FoundryMk1_C');
+  const pump = building('Build_WaterPump_C');
+  const constructor = building('Build_ConstructorMk1_C');
+
+  const rAlumina = recipe('Recipe_AluminaSolution_C');
+  const rScrap = recipe('Recipe_AluminumScrap_C');
+  const rIngot = recipe('Recipe_IngotAluminum_C');
+  const rSilica = recipe('Recipe_Silica_C');
+
+  const outAt = (r: typeof rAlumina, id: string) =>
+    r.products.find((x) => x.item === id)?.perMinute ?? 0;
+  const inAt = (r: typeof rAlumina, id: string) =>
+    r.ingredients.find((x) => x.item === id)?.perMinute ?? 0;
+
+  const W = 'Desc_Water_C';
+  const SIL = 'Desc_Silica_C';
+
+  /* 정제소 한 대 기준으로 아래를 다 맞춘다 */
+  const aluminaOut = outAt(rAlumina, 'Desc_AluminaSolution_C');
+  const scrapRuns = aluminaOut / inAt(rScrap, 'Desc_AluminaSolution_C');
+  const backWater = outAt(rScrap, W) * scrapRuns;
+  const needWater = inAt(rAlumina, W);
+  const freshWater = Math.max(0, needWater - backWater);
+  const scrapOut = outAt(rScrap, 'Desc_AluminumScrap_C') * scrapRuns;
+  const ingotRuns = scrapOut / inAt(rIngot, 'Desc_AluminumScrap_C');
+  const ingotOut = outAt(rIngot, 'Desc_AluminumIngot_C') * ingotRuns;
+
+  /*
+   * 이산화규소는 알루미나 용액에서 부산물로 나오지만 **모자란다**.
+   * 처음 이 그림을 그렸을 때 "따로 캐 오지 않아도 된다"고 적었다가 그림이 그걸 반박했다 —
+   * 나오는 양과 쓰는 양을 나란히 두면 바로 보인다.
+   */
+  const silicaFree = outAt(rAlumina, SIL);
+  const silicaNeed = inAt(rIngot, SIL) * ingotRuns;
+  const silicaShort = Math.max(0, silicaNeed - silicaFree);
+  const silicaPlan = plan('Recipe_Silica_C', silicaShort);
+
+  const rows: Row[] = [
+    {
+      kind: 'machines',
+      boxes: [
+        {
+          ko: pump.ko,
+          machineId: pump.id,
+          output: { ko: ko(W), perMinute: freshWater },
+          note: `되돌아오는 ${fmt(backWater)}/분만큼 덜 뽑습니다`,
+          col: 0,
+        },
+        {
+          ko: refinery.ko,
+          machineId: refinery.id,
+          inputs: [
+            { ko: ko('Desc_OreBauxite_C'), perMinute: inAt(rAlumina, 'Desc_OreBauxite_C') },
+            { ko: ko(W), perMinute: needWater },
+          ],
+          output: { ko: ko('Desc_AluminaSolution_C'), perMinute: aluminaOut },
+          byproduct: { ko: ko(SIL), perMinute: silicaFree },
+          col: 1,
+        },
+      ],
+    },
+    {
+      kind: 'machines',
+      boxes: [
+        {
+          ko: `${refinery.ko} (조각)`,
+          machineId: refinery.id,
+          inputs: [
+            { ko: ko('Desc_AluminaSolution_C'), perMinute: aluminaOut },
+            { ko: ko('Desc_Coal_C'), perMinute: inAt(rScrap, 'Desc_Coal_C') * scrapRuns },
+          ],
+          output: { ko: ko('Desc_AluminumScrap_C'), perMinute: scrapOut },
+          byproduct: { ko: ko(W), perMinute: backWater },
+          clock: Math.round(scrapRuns * 1000) / 10,
+          col: 1,
+        },
+        {
+          ko: `${constructor.ko} ×${silicaPlan.count}`,
+          machineId: constructor.id,
+          inputs: [
+            {
+              ko: ko('Desc_RawQuartz_C'),
+              perMinute: (inAt(rSilica, 'Desc_RawQuartz_C') * silicaShort) / outAt(rSilica, SIL),
+            },
+          ],
+          output: { ko: ko(SIL), perMinute: silicaShort },
+          note: `부산물로 모자란 ${fmt(silicaShort)}/분을 채웁니다`,
+          clock: silicaPlan.clock,
+          col: 2,
+        },
+      ],
+    },
+    {
+      kind: 'machines',
+      boxes: [
+        {
+          ko: foundry.ko,
+          machineId: foundry.id,
+          inputs: [
+            { ko: ko('Desc_AluminumScrap_C'), perMinute: scrapOut },
+            { ko: ko(SIL), perMinute: silicaNeed },
+          ],
+          output: { ko: ko('Desc_AluminumIngot_C'), perMinute: ingotOut },
+          clock: Math.round(ingotRuns * 1000) / 10,
+          col: 1,
+        },
+      ],
+    },
+    {
+      kind: 'storage',
+      label: '쓰는 곳으로',
+      boxes: [
+        {
+          itemKo: ko('Desc_AluminumIngot_C'),
+          itemId: 'Desc_AluminumIngot_C',
+          perMinute: ingotOut,
+          col: 1,
+        },
+      ],
+    },
+  ];
+
+  const links: Link[] = [
+    { from: [0, 0], to: [0, 1] },
+    { from: [0, 1], to: [1, 0] },
+    /* 부산물 이산화규소는 주조소로 곧장 간다. 모자란 만큼은 제작기가 채운다 */
+    { from: [0, 1], to: [2, 0], byproduct: true },
+    { from: [1, 1], to: [2, 0] },
+    { from: [1, 0], to: [2, 0] },
+    /* 되돌아오는 물. 이 줄이 이 그림의 전부다 */
+    { from: [1, 0], to: [0, 1], byproduct: true },
+    { from: [2, 0], to: [3, 0] },
+  ];
+
+  return {
+    rows,
+    links,
+    wide: true,
+    caption:
+      `조각 공정이 물 ${fmt(backWater)}/분을 되돌립니다. 그래서 새로 뽑는 물은 ` +
+      `${fmt(needWater)}/분이 아니라 ${fmt(freshWater)}/분이면 됩니다. 되돌린 물을 먼저 넣고 ` +
+      `모자란 만큼만 추출기가 채우게 지으면 시동할 때 흔들리지 않습니다. ` +
+      `${ko(SIL)}는 부산물로 ${fmt(silicaFree)}/분이 나오는데 주조소가 ${fmt(silicaNeed)}/분을 ` +
+      `먹으므로 ${fmt(silicaShort)}/분은 석영에서 따로 만들어야 합니다.`,
   };
 }

@@ -146,3 +146,14 @@
   font-size: 12px;
   font-weight: 500;
 }
+
+/*
+ * 부산물 — 같이 나오는데 안 쓰는 것.
+ * 주 산출과 색이 같으면 그림이 "왜 여기서 막히나"를 설명하지 못한다.
+ */
+.fc-by tspan { fill: var(--accent-ink); }
+.fc-by .fc-iolabel { fill: color-mix(in oklab, var(--accent-ink) 70%, transparent); }
+.fc-link.is-by { stroke: var(--accent-ink); stroke-dasharray: none; opacity: 0.85; }
+
+/* 되돌아오는 줄 — 바깥으로 돌아 다시 위로 들어간다 */
+.fc-link.is-loop { stroke-dasharray: 5 4; }
