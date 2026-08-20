@@ -18,6 +18,8 @@ import finite from '../../data/curated/finite-resources.json';
 import exploration from '../../data/curated/exploration.json';
 import craft from '../../data/curated/build-craft.json';
 import purity from '../../data/curated/node-purity.json';
+import saveUnlocks from '../../data/app/save-unlocks.json';
+import hub from '../../data/app/hub.json';
 import { biomassLine, ironLine, smartPlatingLine, type FlowDef } from '../../lib/flows';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -151,9 +153,32 @@ function machinesFor(itemId: string, perMinute: number) {
   };
 }
 
+/*
+ * 구간 ↔ 마일스톤 클래스명. 세이브에는 산 스키매틱이 클래스명으로 들어 있어서,
+ * 이것만 있으면 "지금 어느 구간인가"를 화면에서 바로 답할 수 있다.
+ * 이름이 아니라 클래스명으로 잇는다 — 이름은 게임 갱신마다 바뀔 수 있다.
+ */
+const milestoneIdByKo = new Map([
+  ...milestones.map((m) => [m.ko, m.id] as const),
+  ...(hub as { id: string; ko: string }[]).map((h) => [h.ko, h.id] as const),
+]);
+const unmapped = spine.steps.flatMap((x) => x.milestones.filter((n) => !milestoneIdByKo.has(n)));
+if (unmapped.length) throw new Error('가이드가 없는 마일스톤을 가리킵니다: ' + unmapped.join(', '));
+
 const steps = spine.steps.map((s) => ({
   ...s,
   unlocks: unlockedBuildings(s.milestones),
+  needIds: s.milestones.map((n) => milestoneIdByKo.get(n)!),
+  /* 이 구간에서 사야 할 것과 그 비용. 이름을 타이핑하지 않고 데이터에서 가져온다 */
+  need: s.milestones.map((n) => {
+    const id = milestoneIdByKo.get(n)!;
+    const m = milestones.find((x) => x.id === id);
+    const h = (hub as { id: string; ko: string; cost: { item: string; amount: number }[] }[]).find(
+      (x) => x.id === id
+    );
+    const cost = (m?.cost ?? h?.cost ?? []).map((c) => ({ ko: item(c.item).ko, amount: c.amount }));
+    return { id, ko: n, cost };
+  }),
   rows: s.targets.map((t) => ({
     ko: item(t.item).ko,
     en: item(t.item).en,
@@ -185,7 +210,24 @@ const FLOWS: Record<string, FlowDef> = {
         각 단계는 그 시점에 <strong>실제로 열려 있는 것만</strong> 다룹니다.
       </p>
     
-      <p class="startlink">
+      <div class="prog" data-prog hidden>
+        <p class="prog-line">
+          <b data-prog-where></b>
+          <span data-prog-who></span>
+        </p>
+        <button type="button" data-prog-clear>지우기</button>
+      </div>
+
+      <label class="prog-load" data-prog-load>
+        <input type="file" accept=".sav" data-prog-file />
+        <span data-prog-label>세이브를 열어 내 진행에 맞추기</span>
+      </label>
+      <p class="prog-note" data-prog-msg>
+        인게임 세이브를 고르면 어디까지 왔는지 읽어 각 구간에 끝남·지금·앞으로를 표시합니다.
+        파일은 이 브라우저 밖으로 나가지 않습니다.
+      </p>
+
+      <p class="startlink" data-startlink>
         아직 시작도 안 했다면 — <a href={`${base}/guide/start/`}>어디서 시작할 것인가</a>부터 보세요.
         네 시작 지역의 철·구리·석회석·S.A.M. 노드 수를 세어 비교합니다.
       </p>
@@ -195,7 +237,7 @@ const FLOWS: Record<string, FlowDef> = {
       <nav class="toc" aria-label="단계 목차">
         <ol>
           {steps.map((s, i) => (
-            <li>
+            <li data-step={s.id} data-need={s.needIds.join(' ')}>
               <a href={`#${s.id}`}>
                 <span class="toc-n n">{String(i).padStart(2, '0')}</span>
                 <span class="toc-t">{s.title}</span>
@@ -208,9 +250,10 @@ const FLOWS: Record<string, FlowDef> = {
 
       <div class="body">
         {steps.map((s, i) => (
-          <section class="step" id={s.id}>
+          <section class="step" id={s.id} data-step={s.id} data-need={s.needIds.join(' ')}>
             <p class="marker">
               <span class="num">{String(i).padStart(2, '0')}</span> {s.label}
+              <span class="stage" data-stage hidden></span>
             </p>
             <h2>{s.title}</h2>
             <p class="goal">{s.goal}</p>
@@ -225,6 +268,24 @@ const FLOWS: Record<string, FlowDef> = {
                 </ul>
               </div>
             )}
+
+            <div class="remain" data-remain hidden>
+              <h3 class="sub">이 구간에서 아직 안 산 것</h3>
+              <ul>
+                {s.need.map((n) => (
+                  <li data-ms={n.id}>
+                    <span class="remain-ko">{n.ko}</span>
+                    <span class="remain-cost n">
+                      {n.cost.map((c) => (
+                        <span>
+                          {c.ko} {c.amount}
+                        </span>
+                      ))}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
             <h3 class="sub">지금 지을 것</h3>
             <ol class="actions">
@@ -580,6 +641,144 @@ const FLOWS: Record<string, FlowDef> = {
     </div>
   </div>
 
+  <script is:inline set:html={`window.__sfopsUnlocks=${JSON.stringify(saveUnlocks.map)}`}></script>
+
+  <script>
+    /*
+     * 세이브를 읽어 "지금 어느 구간인가"를 표시한다.
+     *
+     * 구간이 끝났다 = 그 구간의 마일스톤을 전부 샀다. 지금 구간 = 안 끝난 첫 구간.
+     * 판정은 클래스명 대조뿐이라 게임 표기가 바뀌어도 흔들리지 않는다.
+     */
+    import { loadProgress, saveProgress, clearProgress } from '../../lib/progress';
+
+    const box = document.querySelector('[data-prog-file]') as HTMLInputElement | null;
+    const label = document.querySelector('[data-prog-label]') as HTMLElement | null;
+    const msg = document.querySelector('[data-prog-msg]') as HTMLElement | null;
+    const wrap = document.querySelector('[data-prog-load]') as HTMLElement | null;
+    const bar = document.querySelector('[data-prog]') as HTMLElement | null;
+    const where = document.querySelector('[data-prog-where]') as HTMLElement | null;
+    const who = document.querySelector('[data-prog-who]') as HTMLElement | null;
+    const clearBtn = document.querySelector('[data-prog-clear]') as HTMLElement | null;
+
+    const STAGE = { done: '끝남', now: '지금 여기', next: '앞으로' };
+
+    function paint() {
+      const p = loadProgress();
+      const groups = [...document.querySelectorAll<HTMLElement>('[data-step][data-need]')];
+      if (!p) {
+        groups.forEach((g) => {
+          g.classList.remove('is-done', 'is-now', 'is-next');
+          const s = g.querySelector<HTMLElement>('[data-stage]');
+          if (s) s.hidden = true;
+          const box = g.querySelector<HTMLElement>('[data-remain]');
+          if (box) box.hidden = true;
+        });
+          if (bar) bar.hidden = true;
+        const link0 = document.querySelector<HTMLElement>('[data-startlink]');
+        if (link0) link0.hidden = false;
+        return;
+      }
+      const have = new Set(p.ids);
+      /* 구간 순서대로 훑어 안 끝난 첫 구간을 지금으로 삼는다 */
+      const seen = new Set<string>();
+      let nowId: string | null = null;
+      for (const g of groups) {
+        const id = g.dataset.step!;
+        if (seen.has(id)) continue;
+        seen.add(id);
+        const need = g.dataset.need!.split(' ').filter(Boolean);
+        if (!need.every((n) => have.has(n)) && nowId === null) nowId = id;
+      }
+
+      let doneCount = 0;
+      const titles = new Map<string, string>();
+      for (const g of groups) {
+        const id = g.dataset.step!;
+        const need = g.dataset.need!.split(' ').filter(Boolean);
+        const done = need.every((n) => have.has(n));
+        const stage = done ? 'done' : id === nowId ? 'now' : 'next';
+        g.classList.toggle('is-done', stage === 'done');
+        g.classList.toggle('is-now', stage === 'now');
+        g.classList.toggle('is-next', stage === 'next');
+        const tag = g.querySelector<HTMLElement>('[data-stage]');
+        if (tag) {
+          tag.hidden = false;
+          tag.textContent = STAGE[stage];
+        }
+        if (g.tagName === 'SECTION') {
+          if (done) doneCount++;
+          const h = g.querySelector('h2');
+          if (h) titles.set(id, h.textContent ?? '');
+
+          /* 몇 개 중 몇 개인지, 그리고 뭐가 남았는지 */
+          const got = need.filter((n) => have.has(n)).length;
+          if (tag) tag.textContent = `${STAGE[stage]} · ${got}/${need.length}`;
+
+          const box = g.querySelector<HTMLElement>('[data-remain]');
+          if (box) {
+            const rows = [...box.querySelectorAll<HTMLElement>('[data-ms]')];
+            rows.forEach((r) => {
+              r.hidden = have.has(r.dataset.ms!);
+            });
+            /* 다 산 구간에는 보여 줄 게 없다 */
+            box.hidden = stage !== 'now' || rows.every((r) => r.hidden);
+          }
+        }
+      }
+
+      /* 36시간 하고 있는 사람에게 「어디서 시작할까」는 필요 없다 */
+      const link = document.querySelector<HTMLElement>('[data-startlink]');
+      if (link) link.hidden = doneCount > 0;
+
+      if (bar && where && who) {
+        bar.hidden = false;
+        where.textContent = nowId
+          ? `지금 여기 — ${titles.get(nowId) ?? nowId}`
+          : '모든 구간을 끝냈습니다';
+        who.textContent = `${p.session} · ${p.hours}시간 · 구간 ${doneCount}개 완료`;
+      }
+    }
+
+    box?.addEventListener('change', async () => {
+      const file = box.files?.[0];
+      if (!file || !label || !wrap || !msg) return;
+      wrap.classList.add('is-busy');
+      label.textContent = '읽는 중…';
+      try {
+        const { readSave } = await import('../../lib/save-import');
+        const unlocks = (window as unknown as { __sfopsUnlocks?: Record<string, string[]> })
+          .__sfopsUnlocks;
+        const r = await readSave(file, unlocks ?? {});
+        saveProgress({ ids: r.schematicIds, session: r.session, hours: r.hours });
+        /* 한 번 읽을 때 딸려 오는 것은 같이 저장한다. 두 번 고르게 하지 않는다 */
+        if (r.alternates.length) {
+          const cur = JSON.parse(localStorage.getItem('sfops.owned') || 'null') as {
+            ids?: string[];
+          } | null;
+          const ids = [...new Set([...(cur?.ids ?? []), ...r.alternates])];
+          localStorage.setItem('sfops.owned', JSON.stringify({ version: 1, ids }));
+        }
+        msg.textContent = `마일스톤 ${r.schematicIds.length}개를 읽었습니다.`;
+        paint();
+        document.querySelector('.step.is-now')?.scrollIntoView({ block: 'start' });
+      } catch (err) {
+        msg.textContent = '읽지 못했습니다 — ' + (err instanceof Error ? err.message : String(err));
+      } finally {
+        wrap.classList.remove('is-busy');
+        label.textContent = '세이브를 열어 내 진행에 맞추기';
+        box.value = '';
+      }
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      clearProgress();
+      paint();
+    });
+
+    paint();
+  </script>
+
   <style>
     .page { padding-block: var(--s16) 0; }
     .page-head { margin-bottom: var(--s16); }
@@ -693,6 +892,96 @@ const FLOWS: Record<string, FlowDef> = {
     .keep-body { margin: 0; font-weight: 600; max-width: var(--measure); }
 
     .step.is-open h2 { color: var(--ink-2); }
+
+    /* 내 진행 상황 */
+    .prog {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s3);
+      align-items: center;
+      margin-bottom: var(--s3);
+      padding: var(--s3);
+      border-left: 2px solid var(--primary);
+      background: var(--surface);
+    }
+    .prog-line { margin: 0; flex: 1; min-width: 0; }
+    .prog-line b { display: block; color: var(--ink); font-size: var(--t-body); }
+    .prog-line span { color: var(--ink-3); font-size: var(--t-caption); }
+    .prog button {
+      padding: 4px 10px;
+      border: var(--hair) solid var(--line-strong);
+      border-radius: 4px;
+      background: none;
+      color: var(--ink-3);
+      font: inherit;
+      font-size: var(--t-caption);
+      cursor: pointer;
+    }
+    .prog button:hover { color: var(--ink); }
+
+    .prog-load {
+      display: inline-block;
+      padding: 6px 13px;
+      border: var(--hair) solid var(--primary);
+      border-radius: 4px;
+      color: var(--ink);
+      font-size: var(--t-body-s);
+      cursor: pointer;
+    }
+    .prog-load:hover { background: color-mix(in oklab, var(--primary) 14%, transparent); }
+    .prog-load.is-busy { border-color: var(--line-strong); color: var(--ink-3); cursor: progress; }
+    .prog-load input { display: none; }
+    .prog-note {
+      margin: 6px 0 var(--s4);
+      color: var(--ink-3);
+      font-size: var(--t-caption);
+      line-height: 1.7;
+      word-break: keep-all;
+    }
+
+    /* 이 구간에서 아직 안 산 것 */
+    .remain {
+      margin-bottom: var(--s5);
+      padding: var(--s3) var(--s4);
+      border-left: 2px solid var(--primary);
+      background: var(--surface);
+    }
+    .remain .sub { margin-top: 0; }
+    .remain ul { margin: 0; padding: 0; list-style: none; }
+    .remain li {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px var(--s3);
+      align-items: baseline;
+      padding: 7px 0;
+      border-bottom: var(--hair) solid var(--line);
+    }
+    .remain li:last-child { border-bottom: 0; }
+    .remain-ko { flex: 1 1 12em; color: var(--ink); font-weight: 500; }
+    .remain-cost {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 10px;
+      color: var(--ink-3);
+      font-size: var(--t-caption);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* 구간마다 끝남·지금·앞으로 */
+    .stage {
+      margin-left: 8px;
+      padding: 1px 7px;
+      border: var(--hair) solid var(--line-strong);
+      border-radius: 3px;
+      color: var(--ink-3);
+      font-size: var(--t-caption);
+    }
+    .step.is-now .stage { border-color: var(--primary); color: var(--primary); }
+    .step.is-done { opacity: 0.55; }
+    .step.is-done:hover { opacity: 1; }
+    .toc li.is-done a { opacity: 0.5; }
+    .toc li.is-now a { color: var(--primary); }
+    .toc li.is-now .toc-t { font-weight: 600; }
 
     /* 게임이 알려 주지 않는 조작 */
     .tip {

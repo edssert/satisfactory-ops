@@ -38,6 +38,8 @@ export interface SaveReport {
   alternates: string[];
   /** 산 스키매틱 수 — 세이브를 제대로 읽었는지 눈으로 확인하는 값 */
   schematics: number;
+  /** 산 스키매틱의 클래스명. 마일스톤 id 와 그대로 같아서 진행 상황을 여기서 뽑는다 */
+  schematicIds: string[];
 }
 
 const tail = (s: string) => s.split('.').pop() ?? s;
@@ -67,16 +69,16 @@ export async function readSave(
 
   /* 스키매틱은 매니저 객체 하나가 통째로 들고 있다 */
   const alternates = new Set<string>();
-  let schematics = 0;
+  let schematicIds: string[] = [];
   for (const lv of Object.values(save.levels ?? {})) {
     for (const o of lv.objects ?? []) {
       if (!/BP_SchematicManager/.test(o.typePath ?? '')) continue;
       const arr = (o as { properties?: Record<string, { values?: { pathName?: string }[] }> })
         .properties?.mPurchasedSchematics?.values;
       if (!Array.isArray(arr)) continue;
-      schematics = arr.length;
-      for (const v of arr) {
-        for (const r of unlockMap[tail(v.pathName ?? '')] ?? []) alternates.add(r);
+      schematicIds = arr.map((v) => tail(v.pathName ?? ''));
+      for (const id of schematicIds) {
+        for (const r of unlockMap[id] ?? []) alternates.add(r);
       }
     }
   }
@@ -88,6 +90,7 @@ export async function readSave(
     collected,
     byKind,
     alternates: [...alternates],
-    schematics,
+    schematics: schematicIds.length,
+    schematicIds,
   };
 }
