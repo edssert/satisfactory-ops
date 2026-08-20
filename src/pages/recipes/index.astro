@@ -93,7 +93,9 @@ const TIER_KO: Record<string, string> = {
  */
 const GRADE_ORDER = ['S', 'A', 'B', 'C', 'D', 'F'];
 const gradeRank = (g: string | null) => (g ? GRADE_ORDER.indexOf(g) : 99);
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const counts = {
+  total: doc.recipes.length,
   s: doc.recipes.filter((r) => r.grades.own === 'S').length,
   a: doc.recipes.filter((r) => r.grades.own === 'A').length,
   conflict: doc.recipes.filter((r) => r.agreement === 'split').length,
@@ -157,6 +159,21 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
       </p>
     </section>
 
+    <div class="ownbar" data-ownbar hidden>
+      <p class="ownbar-n">
+        딴 대체 제작법 <b class="n" data-own-count>0</b>/<span class="n">{counts.total}</span>
+      </p>
+      <label class="ownbar-filter">
+        <input type="checkbox" data-own-filter />
+        딴 것만 보기
+      </label>
+      <button type="button" class="ownbar-clear" data-own-clear>모두 해제</button>
+      <p class="ownbar-note">
+        여기서 체크한 것이 <a href={`${base}/planner/`}>설계</a> 화면의 레시피 목록에 그대로 쓰입니다.
+        이 브라우저에만 저장됩니다.
+      </p>
+    </div>
+
     {groups.map((g) => (
       <section class="section">
         <p class="marker">
@@ -166,9 +183,17 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
 
         <div class="cards">
           {g.list.map((r) => (
-            <article class={`card is-${r.consensus}`}>
+            <article class={`card is-${r.consensus}`} data-alt={r.id}>
               <header class="card-head">
                 <h3>
+                  <label class="own">
+                    {/*
+                      * 딴 것을 체크해 둔다. 하드 드라이브가 대체 제작법 수보다 적어서
+                      * 사람마다 가진 것이 다르고, 설계 화면은 여기서 체크한 것만 보여 준다.
+                      */}
+                    <input type="checkbox" data-own={r.id} />
+                    <span class="sr-only">{r.ko} 딴 것으로 표시</span>
+                  </label>
                   {r.ko} <span class="en">{r.en}</span>
                 </h3>
                 <div class="card-grade">
@@ -339,6 +364,77 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
     </section>
   </div>
 
+  <script is:inline>
+    (function () {
+      var KEY = 'sfops.owned';
+      var VERSION = 1;
+      function load() {
+        try {
+          var s = JSON.parse(localStorage.getItem(KEY) || 'null');
+          if (!s || s.version !== VERSION || !Array.isArray(s.ids)) return [];
+          return s.ids;
+        } catch (e) {
+          return [];
+        }
+      }
+      function save(ids) {
+        try {
+          localStorage.setItem(KEY, JSON.stringify({ version: VERSION, ids: ids }));
+        } catch (e) {}
+      }
+
+      var owned = load();
+      var bar = document.querySelector('[data-ownbar]');
+      var count = document.querySelector('[data-own-count]');
+      var filter = document.querySelector('[data-own-filter]');
+      var boxes = Array.prototype.slice.call(document.querySelectorAll('[data-own]'));
+      if (!bar) return;
+      bar.hidden = false;
+
+      function paint() {
+        var set = {};
+        for (var i = 0; i < owned.length; i++) set[owned[i]] = 1;
+        for (var j = 0; j < boxes.length; j++) {
+          var b = boxes[j];
+          var on = !!set[b.dataset.own];
+          b.checked = on;
+          var card = b.closest('.card');
+          card.classList.toggle('is-owned', on);
+          card.hidden = filter && filter.checked && !on;
+        }
+        count.textContent = String(owned.length);
+      }
+
+      for (var k = 0; k < boxes.length; k++) {
+        boxes[k].addEventListener('change', function (e) {
+          var id = e.currentTarget.dataset.own;
+          var at = owned.indexOf(id);
+          if (at >= 0) owned.splice(at, 1);
+          else owned.push(id);
+          save(owned);
+          paint();
+        });
+      }
+      if (filter) filter.addEventListener('change', paint);
+      var clear = document.querySelector('[data-own-clear]');
+      if (clear)
+        clear.addEventListener('click', function () {
+          owned = [];
+          save(owned);
+          if (filter) filter.checked = false;
+          paint();
+        });
+      /* 다른 탭(설계 화면)에서 바꾼 것을 따라간다 */
+      window.addEventListener('storage', function (e) {
+        if (e.key === KEY) {
+          owned = load();
+          paint();
+        }
+      });
+      paint();
+    })();
+  </script>
+
   <style>
     .page { padding-block: var(--s16) 0; }
     .page-head { margin-bottom: var(--s8); }
@@ -363,6 +459,52 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
 
     .section { padding-block: var(--s16) 0; }
     .marker-count { margin-left: auto; color: var(--ink-3); }
+
+    .ownbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s3) var(--s5);
+      align-items: center;
+      margin-bottom: var(--s8);
+      padding: var(--s4) var(--s5);
+      border-radius: var(--radius);
+      background: var(--raised);
+      box-shadow: var(--lit);
+    }
+    .ownbar-n { margin: 0; font-size: var(--t-body-s); }
+    .ownbar-n b { color: var(--accent); }
+    .ownbar-filter {
+      display: flex;
+      gap: var(--s2);
+      align-items: center;
+      font-size: var(--t-body-s);
+      cursor: pointer;
+    }
+    .ownbar-filter input { accent-color: var(--primary); }
+    .ownbar-clear {
+      padding: 4px 10px;
+      border: var(--hair) solid var(--line-strong);
+      border-radius: 4px;
+      background: none;
+      color: var(--ink-3);
+      font: inherit;
+      font-size: var(--t-caption);
+      cursor: pointer;
+    }
+    .ownbar-clear:hover { color: var(--ink); }
+    .ownbar-note {
+      flex-basis: 100%;
+      margin: 0;
+      color: var(--ink-3);
+      font-size: var(--t-caption);
+      line-height: 1.7;
+      word-break: keep-all;
+    }
+
+    .own { display: inline-flex; align-items: center; margin-right: var(--s2); vertical-align: middle; }
+    .own input { accent-color: var(--primary); cursor: pointer; }
+    /* 딴 것으로 표시한 카드. 체크 표시가 이미 붙어 있으므로 색은 보조 신호다 */
+    .card.is-owned { box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--primary) 40%, transparent); }
 
     .cards { display: grid; gap: var(--s5); }
     @media (min-width: 1000px) { .cards { grid-template-columns: 1fr 1fr; } }

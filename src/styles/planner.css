@@ -182,6 +182,48 @@
 .pl-btn:hover { border-color: var(--primary); }
 .pl-btn.is-quiet { color: var(--ink-3); }
 
+/* ------------------------------------------------- 딴 대체 제작법 체크 */
+
+.pl-alts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+  padding: var(--s3);
+  border-radius: var(--radius);
+  background: var(--raised);
+  box-shadow: var(--lit);
+}
+.pl-altbar { display: flex; gap: var(--s2); align-items: center; }
+.pl-altbar .pl-pq { flex: 1; }
+.pl-altnote {
+  margin: 0;
+  color: var(--ink-3);
+  font-size: var(--t-caption);
+  line-height: 1.7;
+  word-break: keep-all;
+}
+.pl-altlist {
+  display: grid;
+  overflow-y: auto;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2px var(--s3);
+  max-height: 320px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pl-altlist label {
+  display: flex;
+  gap: var(--s2);
+  align-items: center;
+  padding: 5px 6px;
+  border-radius: 3px;
+  font-size: var(--t-body-s);
+  cursor: pointer;
+}
+.pl-altlist label:hover { background: var(--surface); }
+.pl-altlist input { flex: none; accent-color: var(--primary); }
+
 .pl-scroll {
   overflow: auto;
   min-height: 520px;
@@ -300,8 +342,10 @@
 }
 
 .pl-hint {
+  position: absolute;
+  top: 52px;
   margin: 0;
-  padding: 12px 12px 0;
+  padding: 0 12px;
   color: var(--ink-3);
   font-size: 12px;
   line-height: 1.6;
@@ -319,7 +363,16 @@
 }
 .pl-x:hover { color: var(--ink); }
 
-.pl-io { position: relative; }
+/*
+ * 상자 전체를 덮는다. 안의 줄은 상자 맨 위를 기준으로 top 을 계산하므로
+ * 흐름 안에 두면 머리 높이(46px)만큼 통째로 밀린다 — 포트와 벨트가 어긋난다.
+ */
+.pl-io {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.pl-io > * { pointer-events: auto; }
 
 .pl-row {
   position: absolute;

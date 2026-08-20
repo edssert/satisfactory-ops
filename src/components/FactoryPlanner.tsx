@@ -27,6 +27,8 @@ import {
 } from '../lib/planner-solve';
 
 /* 계산은 lib 에 있다. 화면 안에 두면 검증을 못 한다 */
+import { loadOwned, saveOwned, watchOwned } from '../lib/owned-recipes';
+
 export type { PMachine, PRecipe, PItem } from '../lib/planner-solve';
 
 interface Props {
@@ -99,6 +101,13 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, iconB
   /** 지금 레시피를 고르는 중인 상자 */
   const [edit, setEdit] = useState<number | null>(null);
   const [eq, setEq] = useState('');
+  /**
+   * 딴 대체 제작법. 110가지 전부를 보여 주면 딴 적 없는 것으로 공장을 짜게 된다.
+   * 하드 드라이브 수가 대체 제작법 수보다 적어서 사람마다 가진 게 다르다.
+   */
+  const [owned, setOwned] = useState<Set<string>>(new Set());
+  const [altOpen, setAltOpen] = useState(false);
+  const [altQ, setAltQ] = useState('');
   const [pick, setPick] = useState<{ node: number; item: string } | null>(null);
   const [sel, setSel] = useState<number | null>(null);
   const [copied, setCopied] = useState(false);
@@ -126,6 +135,8 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, iconB
       /* 저장이 깨졌으면 빈 판에서 시작한다 */
     }
     setReady(true);
+    setOwned(loadOwned());
+    return watchOwned(setOwned);
   }, []);
 
   useEffect(() => {
@@ -158,7 +169,10 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, iconB
       const b = solved.base.get(n.id);
       const nIn = b ? b.ins.size : 0;
       const nOut = b ? b.outs.size : 0;
-      const h = HEAD_H + PAD_Y + nIn * ROW_H + SEP_H + nOut * ROW_H + PAD_Y + FOOT_H;
+      /* 아직 무엇을 만들지 안 정한 상자는 줄이 없다. 안내 한 줄이 들어갈 자리를 준다 */
+      const empty = nIn === 0 && nOut === 0;
+      const h =
+        HEAD_H + PAD_Y + nIn * ROW_H + SEP_H + nOut * ROW_H + PAD_Y + FOOT_H + (empty ? 34 : 0);
       const inY = (k: number) => n.y + HEAD_H + PAD_Y + k * ROW_H + ROW_H / 2;
       const outY = (k: number) =>
         n.y + HEAD_H + PAD_Y + nIn * ROW_H + SEP_H + k * ROW_H + ROW_H / 2;
@@ -195,6 +209,27 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, iconB
   }, [nodes, geom]);
 
   /* ---------------------------------------------------------------- 조작 */
+
+  const toggleOwned = (id: string) => {
+    setOwned((v) => {
+      const next = new Set(v);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      saveOwned(next);
+      return next;
+    });
+  };
+  const setAll = (on: boolean, ids: string[]) => {
+    setOwned((v) => {
+      const next = new Set(v);
+      for (const id of ids) {
+        if (on) next.add(id);
+        else next.delete(id);
+      }
+      saveOwned(next);
+      return next;
+    });
+  };
 
   /** 건물의 성격. 채굴기·발전기는 레시피가 아니라 자원·연료를 고른다 */
   const kindOf = (m: PMachine): NodeKind =>
@@ -364,9 +399,27 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, iconB
       const list = (m.f ?? []).map((f) => f.f).filter((r) => !s || nameOf(r).includes(s));
       return { n, m, kind: 'generator' as const, list };
     }
-    const list = (recipesOf.get(n.machine) ?? []).filter((r) => !s || r.k.includes(s));
+    const list = (recipesOf.get(n.machine) ?? [])
+      /* 안 딴 대체 제작법은 뺀다. 지금 고른 것이면 남긴다 — 계획이 조용히 사라지면 안 된다 */
+      .filter((r) => !r.a || owned.has(r.i) || r.i === n.ref)
+      .filter((r) => !s || r.k.includes(s));
     return { n, m, kind: 'recipe' as const, list };
-  }, [edit, eq, nodes, machineById, recipesOf, itemById]);
+  }, [edit, eq, nodes, machineById, recipesOf, itemById, owned]);
+
+  /** 대체 제작법 전체 — 체크해 두는 화면에서 쓴다 */
+  const alts = useMemo(
+    () =>
+      recipesList
+        .filter((r) => r.a)
+        .sort((a, b) => a.k.localeCompare(b.k, 'ko')),
+    [recipesList]
+  );
+  const altsShown = useMemo(() => {
+    const s = altQ.trim();
+    return s
+      ? alts.filter((r) => r.k.includes(s) || (machineById.get(r.m)?.k ?? '').includes(s))
+      : alts;
+  }, [alts, altQ, machineById]);
 
   const icon = (kind: 'items' | 'buildings-png', id: string, size: number) => (
     <img
@@ -423,6 +476,14 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, iconB
             )}
           </span>
           <span class="pl-spacer" />
+          <button
+            type="button"
+            class={`pl-btn${owned.size ? '' : ' is-quiet'}`}
+            aria-expanded={altOpen}
+            onClick={() => setAltOpen((v) => !v)}
+          >
+            딴 대체 제작법 <b>{owned.size}</b>/{alts.length}
+          </button>
           <button type="button" class="pl-btn" onClick={copy}>
             {copied ? '복사됨' : '글로 복사'}
           </button>
@@ -430,6 +491,57 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, iconB
             모두 지우기
           </button>
         </div>
+
+        {altOpen && (
+          <div class="pl-alts">
+            <div class="pl-altbar">
+              <input
+                type="search"
+                class="pl-pq"
+                value={altQ}
+                placeholder="제작법이나 기계 이름"
+                onInput={(e) => setAltQ((e.currentTarget as HTMLInputElement).value)}
+              />
+              <button
+                type="button"
+                class="pl-btn is-quiet"
+                onClick={() => setAll(true, altsShown.map((r) => r.i))}
+              >
+                보이는 것 모두 체크
+              </button>
+              <button
+                type="button"
+                class="pl-btn is-quiet"
+                onClick={() => setAll(false, altsShown.map((r) => r.i))}
+              >
+                모두 해제
+              </button>
+              <button type="button" class="pl-btn" onClick={() => setAltOpen(false)}>
+                닫기
+              </button>
+            </div>
+            <p class="pl-altnote">
+              하드 드라이브는 대체 제작법 수보다 적어서 사람마다 가진 것이 다릅니다.
+              여기서 체크한 것만 레시피 목록에 나옵니다.
+            </p>
+            <ul class="pl-altlist">
+              {altsShown.map((r) => (
+                <li key={r.i}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={owned.has(r.i)}
+                      onChange={() => toggleOwned(r.i)}
+                    />
+                    {icon('items', r.o[0]![0], 20)}
+                    <span class="pl-rname">{r.k}</span>
+                    <span class="pl-mmeta">{machineById.get(r.m)?.k ?? ''}</span>
+                  </label>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <div class="pl-scroll">
           <div
