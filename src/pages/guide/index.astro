@@ -21,7 +21,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const finiteDoc = finite as {
   items: {
-    id: string;
+    /** 게임 아이템 목록에 없는 것(하드 드라이브)은 id 가 없다 */
+    id?: string;
     ko: string;
     what: string;
     becomes: string;
@@ -236,14 +237,16 @@ const FLOWS: Record<string, FlowDef> = {
             {finiteDoc.items.map((f) => (
               <article class="fin">
                 <header class="fin-head">
-                  <img
-                    class="fin-icon"
-                    src={`${base}/assets/items/${f.id}.png`}
-                    alt=""
-                    width="32"
-                    height="32"
-                    loading="lazy"
-                  />
+                  {f.id && (
+                    <img
+                      class="fin-icon"
+                      src={`${base}/assets/items/${f.id}.png`}
+                      alt=""
+                      width="32"
+                      height="32"
+                      loading="lazy"
+                    />
+                  )}
                   <h3>{f.ko}</h3>
                 </header>
                 <p class="fin-what">{f.what}</p>
