@@ -1,225 +1,3780 @@
 {
-  "$comment": "대체 레시피 우선순위. 근거는 docs/research/recipes.md의 '권장 분류(근거 기반)'. 게임 객체는 클래스명으로만 참조하므로, 레시피가 사라지거나 개명되면 빌드가 실패한다.",
-  "$source": "docs/research/recipes.md",
-  "$note": "대체 레시피는 하드드라이브(MAM) 해금이라 티어 게이트가 데이터상 신뢰할 수 없다(대부분 techTier 0). 따라서 여기서는 '언제 쓸모가 생기는가'를 hunt 필드로 따로 적는다.",
-  "confidence": "consensus",
-  "verdicts": {
-    "must": "반드시 잡을 것 — 복수 출처가 일치하고 효과가 크다",
-    "conditional": "조건부 — 특정 병목이 있을 때만 이득",
-    "trap": "함정 — 신규 플레이어가 잘 집는데 실제로는 손해"
+  "$comment": "대체 제작법 우선순위. 순위와 점수는 커뮤니티 분석글(1.0 기준)에서 그대로 옮긴 것이고, 레시피 id·한글명·산출은 게임 데이터에서 붙였다. 우리가 매긴 점수가 아니다.",
+  "$source": {
+    "title": "Alternate Recipe Ranking 1.0 - Optimizing for Time/Effort",
+    "author": "u/wrigh516",
+    "url": "https://www.reddit.com/comments/1fekus9/",
+    "date": "2024-09-11",
+    "gameVersion": "1.0",
+    "method": "게임 파일 데이터로 선형계획 모형(Pyomo + glpk)을 돌려, 한 레시피를 강제했을 때 전체 생산망의 전력·아이템 이동량·기계 수·자원 소모가 얼마나 바뀌는지로 점수를 매겼다. 이 순위는 자원 효율이 아니라 시간·수고 최소화 기준이다.",
+    "confidence": "consensus"
   },
+  "$note": "1.0 기준이다. 1.1~1.2 에서 바뀐 레시피가 있으면 이 순위도 흔들린다 — 게임 데이터와 대조해 확인된 것만 화면에 쓴다.",
+  "$unranked": [
+    {
+      "id": "Recipe_Alternate_Coal_1_C",
+      "ko": "목탄",
+      "en": "Charcoal"
+    },
+    {
+      "id": "Recipe_Alternate_Coal_2_C",
+      "ko": "유기 석탄",
+      "en": "Biocoal"
+    },
+    {
+      "id": "Recipe_Alternate_EnrichedCoal_C",
+      "ko": "압축 석탄",
+      "en": "Compacted Coal"
+    },
+    {
+      "id": "Recipe_Alternate_PolyesterFabric_C",
+      "ko": "폴리에스테르 섬유",
+      "en": "Polyester Fabric"
+    },
+    {
+      "id": "Recipe_Alternate_AutomatedMiner_C",
+      "ko": "자동화된 채굴기",
+      "en": "Automated Miner"
+    },
+    {
+      "id": "Recipe_Alternate_DilutedPackagedFuel_C",
+      "ko": "포장된 희석 연료",
+      "en": "Diluted Packaged Fuel"
+    }
+  ],
   "recipes": [
     {
       "id": "Recipe_Alternate_ModularFrameHeavy_C",
-      "verdict": "must",
-      "hunt": "중반 (고중량 모듈식 골조가 필요해지는 시점)",
-      "reason": "모듈식 골조 -47%, 나사 -100%, 파이프 -40%. 조사한 전 출처가 만장일치로 최우선."
-    },
-    {
-      "id": "Recipe_Alternate_ReinforcedIronPlate_2_C",
-      "verdict": "must",
-      "hunt": "초반 (티어 2에 획득 가능)",
-      "reason": "보강된 철판의 총 원자재 -31%이고 나사를 아예 쓰지 않는다. 초반 나사 병목을 끊는 가장 빠른 수단."
-    },
-    {
-      "id": "Recipe_Alternate_ModularFrame_C",
-      "verdict": "must",
-      "hunt": "초중반",
-      "reason": "모듈식 골조당 보강된 철판 -56%, 철봉 제거."
-    },
-    {
-      "id": "Recipe_Alternate_IngotSteel_1_C",
-      "verdict": "must",
-      "hunt": "티어 3 강철 진입 직후",
-      "reason": "강철 주괴 45 → 60/분, 총 원자재 2.0 → 1.333 (-33%). 주조소 대수는 그대로."
-    },
-    {
-      "id": "Recipe_Alternate_Screw_2_C",
-      "verdict": "must",
-      "hunt": "나사 라인이 아직 남아 있다면",
-      "reason": "나사당 철광석 -79%. 나사를 없애지 못하는 구간에서 가장 큰 절감."
+      "ko": "포장된 고중량 골조",
+      "en": "Heavy Encased Frame",
+      "makes": {
+        "item": "Desc_ModularFrameHeavy_C",
+        "ko": "고중량 모듈식 골조",
+        "perMinute": 2.8125
+      },
+      "tier": "S",
+      "score": 97.7,
+      "effect": {
+        "power": "-1.83%",
+        "items": "-6.53%",
+        "buildings": "-7.65%",
+        "resources": "-2.77%"
+      },
+      "needsOtherAlternate": true,
+      "machine": {
+        "id": "Build_ManufacturerMk1_C",
+        "ko": "제조기",
+        "unlockTier": 6
+      },
+      "usableFromTier": 6,
+      "ingredients": [
+        {
+          "ko": "모듈식 골조",
+          "perMinute": 7.5
+        },
+        {
+          "ko": "포장된 산업용 빔",
+          "perMinute": 9.375
+        },
+        {
+          "ko": "강철 파이프",
+          "perMinute": 33.75
+        },
+        {
+          "ko": "콘크리트",
+          "perMinute": 20.625
+        }
+      ]
     },
     {
       "id": "Recipe_Alternate_CopperAlloyIngot_C",
-      "verdict": "must",
-      "hunt": "구리 노드가 부족할 때",
-      "reason": "구리광석 -50%. 주조소 1대로 100/분 — 제련소 3.33대를 대체한다."
+      "ko": "구리 합금 주괴",
+      "en": "Copper Alloy Ingot",
+      "makes": {
+        "item": "Desc_CopperIngot_C",
+        "ko": "구리 주괴",
+        "perMinute": 100
+      },
+      "tier": "S",
+      "score": 92.3,
+      "effect": {
+        "power": "0.55%",
+        "items": "0.07%",
+        "buildings": "-23.37%",
+        "resources": "0.10%"
+      },
+      "needsOtherAlternate": true,
+      "machine": {
+        "id": "Build_FoundryMk1_C",
+        "ko": "주조소",
+        "unlockTier": 3
+      },
+      "usableFromTier": 3,
+      "ingredients": [
+        {
+          "ko": "구리 광석",
+          "perMinute": 50
+        },
+        {
+          "ko": "철 광석",
+          "perMinute": 50
+        }
+      ]
     },
     {
-      "id": "Recipe_Alternate_Computer_2_C",
-      "verdict": "must",
-      "hunt": "컴퓨터 대량 생산 직전",
-      "reason": "컴퓨터당 회로 기판 -62.5%. 제조기(55MW) 대신 조립기(15MW)를 쓴다 — 전력도 크게 준다."
+      "id": "Recipe_PureAluminumIngot_C",
+      "ko": "순수한 알루미늄 주괴",
+      "en": "Pure Aluminum Ingot",
+      "makes": {
+        "item": "Desc_AluminumIngot_C",
+        "ko": "알루미늄 주괴",
+        "perMinute": 30
+      },
+      "tier": "S",
+      "score": 92,
+      "effect": {
+        "power": "-0.66%",
+        "items": "-1.67%",
+        "buildings": "-2.16%",
+        "resources": "-2.16%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_SmelterMk1_C",
+        "ko": "제련기",
+        "unlockTier": 0
+      },
+      "usableFromTier": 7,
+      "ingredients": [
+        {
+          "ko": "알루미늄 조각",
+          "perMinute": 60
+        }
+      ]
     },
     {
-      "id": "Recipe_Alternate_HeavyOilResidue_C",
-      "verdict": "must",
-      "hunt": "석유 진입 시점",
-      "reason": "희석 연료·재활용 계열의 입력원. 원유 30 → 중유 잔여물 40."
+      "id": "Recipe_Alternate_Diamond_OilBased_C",
+      "ko": "기름 기반 다이아몬드",
+      "en": "Oil-Based Diamonds",
+      "makes": {
+        "item": "Desc_Diamond_C",
+        "ko": "다이아몬드",
+        "perMinute": 40
+      },
+      "tier": "S",
+      "score": 87.6,
+      "effect": {
+        "power": "-2.54%",
+        "items": "-4.89%",
+        "buildings": "-0.82%",
+        "resources": "-10.88%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_HadronCollider_C",
+        "ko": "입자 가속기",
+        "unlockTier": 8
+      },
+      "usableFromTier": 8,
+      "ingredients": [
+        {
+          "ko": "원유",
+          "perMinute": 200
+        }
+      ]
     },
     {
-      "id": "Recipe_Alternate_DilutedFuel_C",
-      "verdict": "must",
-      "hunt": "연료 발전 전환 시점",
-      "reason": "원유당 발전량 4배. 후반 전력의 전제 조건이다."
-    },
-
-    {
-      "id": "Recipe_Alternate_PureIronIngot_C",
-      "verdict": "conditional",
-      "hunt": "광석이 병목이고 전력이 남을 때",
-      "reason": "광석 효율은 최상급이지만 전력을 6배 각오해야 한다. 초반 전력 상황에서는 오히려 독."
-    },
-    {
-      "id": "Recipe_Alternate_PureCopperIngot_C",
-      "verdict": "conditional",
-      "hunt": "구리광이 병목이고 전력이 남을 때",
-      "reason": "위와 같은 트레이드오프."
-    },
-    {
-      "id": "Recipe_Alternate_CokeSteelIngot_C",
-      "verdict": "conditional",
-      "hunt": "석탄이 부족하고 원유가 남을 때",
-      "reason": "주조소당 100/분으로 처리량이 가장 높다. 석유 라인이 이미 있어야 성립."
-    },
-    {
-      "id": "Recipe_Alternate_Computer_1_C",
-      "verdict": "conditional",
-      "hunt": "플라스틱이 병목일 때",
-      "reason": "카테리움 노드 확보가 전제. 플라스틱 라인을 우회한다."
-    },
-    {
-      "id": "Recipe_Alternate_CircuitBoard_2_C",
-      "verdict": "conditional",
-      "hunt": "플라스틱이 병목일 때",
-      "reason": "위와 같은 조건."
-    },
-    {
-      "id": "Recipe_Alternate_Motor_1_C",
-      "verdict": "conditional",
-      "hunt": "석영 라인이 이미 있을 때",
-      "reason": "로터·스테이터 -75%."
-    },
-    {
-      "id": "Recipe_Alternate_InstantScrap_C",
-      "verdict": "conditional",
-      "hunt": "알루미나 배관을 피하고 싶을 때",
-      "reason": "황산과 혼합기가 필요하다."
-    },
-    {
-      "id": "Recipe_Alternate_Wire_2_C",
-      "verdict": "conditional",
-      "hunt": "전선을 대량으로 쓰는 구간",
-      "reason": "구리 라인을 카테리움으로 대체한다."
-    },
-    {
-      "id": "Recipe_Alternate_FusedWire_C",
-      "verdict": "conditional",
-      "hunt": "전선을 대량으로 쓰는 구간",
-      "reason": "위와 같은 목적."
-    },
-    {
-      "id": "Recipe_Alternate_CoatedIronPlate_C",
-      "verdict": "conditional",
-      "hunt": "플라스틱을 소량 확보한 뒤",
-      "reason": "제작기당 75/분 (표준 20/분의 3.75배). 처리량 개선폭이 크다."
-    },
-    {
-      "id": "Recipe_Alternate_EncasedIndustrialBeam_C",
-      "verdict": "conditional",
-      "hunt": "강철이 병목일 때",
-      "reason": "강철 -25%. 단 피복 산업용 빔 처리량이 6 → 4/분으로 떨어진다."
-    },
-    {
-      "id": "Recipe_Alternate_WetConcrete_C",
-      "verdict": "conditional",
-      "hunt": "티어 3 (석탄 발전으로 물이 이미 있을 때)",
-      "reason": "콘크리트 대량 소비 구간에서 유효. 물 라인이 전제."
-    },
-    {
-      "id": "Recipe_Alternate_RubberConcrete_C",
-      "verdict": "conditional",
-      "hunt": "고무 라인이 있을 때",
-      "reason": "콘크리트 대량 소비 구간."
-    },
-    {
-      "id": "Recipe_Alternate_SteelBeam_Molded_C",
-      "verdict": "conditional",
-      "hunt": "콘크리트가 남을 때",
-      "reason": "제작기 대신 주조소 1대로 45/분. 콘크리트로 강철을 아낀다."
-    },
-
-    {
-      "id": "Recipe_Alternate_ReinforcedIronPlate_1_C",
-      "verdict": "trap",
-      "hunt": "-",
-      "reason": "철 +9.7%에 나사 250/분을 요구한다. 처리량만 오르고 나사 지옥이 심해진다."
-    },
-    {
-      "id": "Recipe_Alternate_BoltedFrame_C",
-      "verdict": "trap",
-      "hunt": "-",
-      "reason": "나사 140/분. 강철 골조를 얻는 즉시 폐기 대상."
-    },
-    {
-      "id": "Recipe_Alternate_CopperRotor_C",
-      "verdict": "trap",
-      "hunt": "-",
-      "reason": "나사 195/분 + 구리 시트. 강철 회전자의 완전 하위 호환."
+      "id": "Recipe_Alternate_DarkMatter_Trap_C",
+      "ko": "암흑 물질 트랩",
+      "en": "Dark Matter Trap",
+      "makes": {
+        "item": "Desc_DarkMatter_C",
+        "ko": "암흑 물질 수정",
+        "perMinute": 60
+      },
+      "tier": "S",
+      "score": 87.3,
+      "effect": {
+        "power": "-0.52%",
+        "items": "-1.53%",
+        "buildings": "0.05%",
+        "resources": "-2.26%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_HadronCollider_C",
+        "ko": "입자 가속기",
+        "unlockTier": 8
+      },
+      "usableFromTier": 9,
+      "ingredients": [
+        {
+          "ko": "시간 수정",
+          "perMinute": 30
+        },
+        {
+          "ko": "암흑 물질 잔여물",
+          "perMinute": 150
+        }
+      ]
     },
     {
       "id": "Recipe_Alternate_HeavyFlexibleFrame_C",
-      "verdict": "trap",
-      "hunt": "-",
-      "reason": "나사 390/분 + 고무 75/분. 포장된 고중량 골조에 전면 열세."
+      "ko": "고중량 신축성 골조",
+      "en": "Heavy Flexible Frame",
+      "makes": {
+        "item": "Desc_ModularFrameHeavy_C",
+        "ko": "고중량 모듈식 골조",
+        "perMinute": 3.75
+      },
+      "tier": "S",
+      "score": 86.7,
+      "effect": {
+        "power": "-1.02%",
+        "items": "-3.62%",
+        "buildings": "-3.84%",
+        "resources": "-2.19%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_ManufacturerMk1_C",
+        "ko": "제조기",
+        "unlockTier": 6
+      },
+      "usableFromTier": 6,
+      "ingredients": [
+        {
+          "ko": "모듈식 골조",
+          "perMinute": 18.75
+        },
+        {
+          "ko": "포장된 산업용 빔",
+          "perMinute": 11.25
+        },
+        {
+          "ko": "고무",
+          "perMinute": 75
+        },
+        {
+          "ko": "나사",
+          "perMinute": 390
+        }
+      ]
     },
     {
-      "id": "Recipe_Alternate_IronIngot_Basic_C",
-      "verdict": "trap",
-      "hunt": "-",
-      "reason": "철광석은 -50%지만 총 원자재가 +30%다(석회석 40). 석회석이 진짜로 남을 때만."
+      "id": "Recipe_Alternate_SloppyAlumina_C",
+      "ko": "걸쭉한 알루미나",
+      "en": "Sloppy Alumina",
+      "makes": {
+        "item": "Desc_AluminaSolution_C",
+        "ko": "알루미나 용액",
+        "perMinute": 240
+      },
+      "tier": "S",
+      "score": 86.1,
+      "effect": {
+        "power": "-0.90%",
+        "items": "-2.46%",
+        "buildings": "1.20%",
+        "resources": "-4.81%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_OilRefinery_C",
+        "ko": "정제소",
+        "unlockTier": 5
+      },
+      "usableFromTier": 5,
+      "ingredients": [
+        {
+          "ko": "보크사이트",
+          "perMinute": 200
+        },
+        {
+          "ko": "물",
+          "perMinute": 200
+        }
+      ]
     },
     {
-      "id": "Recipe_Alternate_IngotSteel_2_C",
-      "verdict": "trap",
-      "hunt": "-",
-      "reason": "원자재 효율은 최상이지만 주조소당 10/분. 코크스 강철 대비 기계·전력이 10배이고 유황도 먹는다."
+      "id": "Recipe_Alternate_CrystalOscillator_C",
+      "ko": "절연 수정 발진기",
+      "en": "Insulated Crystal Oscillator",
+      "makes": {
+        "item": "Desc_CrystalOscillator_C",
+        "ko": "수정 발진기",
+        "perMinute": 1.875
+      },
+      "tier": "S",
+      "score": 83,
+      "effect": {
+        "power": "-1.34%",
+        "items": "-1.62%",
+        "buildings": "-3.05%",
+        "resources": "-1.38%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_ManufacturerMk1_C",
+        "ko": "제조기",
+        "unlockTier": 6
+      },
+      "usableFromTier": 6,
+      "ingredients": [
+        {
+          "ko": "석영 수정",
+          "perMinute": 18.75
+        },
+        {
+          "ko": "고무",
+          "perMinute": 13.125
+        },
+        {
+          "ko": "인공지능 진폭 제한 회로",
+          "perMinute": 1.875
+        }
+      ]
     },
     {
-      "id": "Recipe_Alternate_Screw_C",
-      "verdict": "trap",
-      "hunt": "-",
-      "reason": "나사당 철 소모가 표준과 동일하다. 제작기 한 단계를 생략하는 것이 전부."
+      "id": "Recipe_Alternate_CircuitBoard_1_C",
+      "ko": "실리콘 회로 기판",
+      "en": "Silicon Circuit Board",
+      "makes": {
+        "item": "Desc_CircuitBoard_C",
+        "ko": "회로 기판",
+        "perMinute": 12.5
+      },
+      "tier": "S",
+      "score": 80.4,
+      "effect": {
+        "power": "-1.92%",
+        "items": "-0.71%",
+        "buildings": "-3.19%",
+        "resources": "-0.66%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 3,
+      "ingredients": [
+        {
+          "ko": "구리판",
+          "perMinute": 27.5
+        },
+        {
+          "ko": "이산화규소",
+          "perMinute": 27.5
+        }
+      ]
     },
     {
-      "id": "Recipe_Alternate_CopperIngot_Tempered_C",
-      "verdict": "trap",
-      "hunt": "-",
-      "reason": "구리광 효율은 좋지만 석유 코크스 40/분이 석유 라인을 잠식한다."
+      "id": "Recipe_Alternate_Computer_2_C",
+      "ko": "수정 컴퓨터",
+      "en": "Crystal Computer",
+      "makes": {
+        "item": "Desc_Computer_C",
+        "ko": "컴퓨터",
+        "perMinute": 3.333333
+      },
+      "tier": "S",
+      "score": 79.1,
+      "effect": {
+        "power": "-1.23%",
+        "items": "-2.01%",
+        "buildings": "-2.15%",
+        "resources": "-1.42%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 6,
+      "ingredients": [
+        {
+          "ko": "회로 기판",
+          "perMinute": 5
+        },
+        {
+          "ko": "수정 발진기",
+          "perMinute": 1.666667
+        }
+      ]
     },
     {
-      "id": "Recipe_Alternate_ElectrodeCircuitBoard_C",
-      "verdict": "trap",
-      "hunt": "-",
-      "reason": "조립기당 5/분 (표준 7.5/분). 처리량·원자재 모두 열세."
+      "id": "Recipe_Alternate_HeatFusedFrame_C",
+      "ko": "열 융합 골조",
+      "en": "Heat-Fused Frame",
+      "makes": {
+        "item": "Desc_ModularFrameFused_C",
+        "ko": "융합된 모듈식 골조",
+        "perMinute": 3
+      },
+      "tier": "S",
+      "score": 78.8,
+      "effect": {
+        "power": "-0.35%",
+        "items": "-2.77%",
+        "buildings": "-2.57%",
+        "resources": "-1.00%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_Blender_C",
+        "ko": "혼합기",
+        "unlockTier": 7
+      },
+      "usableFromTier": 8,
+      "ingredients": [
+        {
+          "ko": "고중량 모듈식 골조",
+          "perMinute": 3
+        },
+        {
+          "ko": "알루미늄 주괴",
+          "perMinute": 150
+        },
+        {
+          "ko": "질산",
+          "perMinute": 24
+        },
+        {
+          "ko": "연료",
+          "perMinute": 30
+        }
+      ]
     },
     {
-      "id": "Recipe_Alternate_Wire_1_C",
-      "verdict": "trap",
-      "hunt": "-",
-      "reason": "제작기당 22.5/분 (표준 30/분). 구리가 정말 없을 때만."
+      "id": "Recipe_Alternate_NuclearFuelRod_1_C",
+      "ko": "우라늄 연료 장치",
+      "en": "Uranium Fuel Unit",
+      "makes": {
+        "item": "Desc_NuclearFuelRod_C",
+        "ko": "우라늄 연료봉",
+        "perMinute": 0.6
+      },
+      "tier": "S",
+      "score": 78.3,
+      "effect": {
+        "power": "-1.64%",
+        "items": "-1.63%",
+        "buildings": "-1.55%",
+        "resources": "-1.94%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_ManufacturerMk1_C",
+        "ko": "제조기",
+        "unlockTier": 6
+      },
+      "usableFromTier": 8,
+      "ingredients": [
+        {
+          "ko": "포장된 우라늄 전지",
+          "perMinute": 20
+        },
+        {
+          "ko": "전자기 제어봉",
+          "perMinute": 2
+        },
+        {
+          "ko": "수정 발진기",
+          "perMinute": 0.6
+        },
+        {
+          "ko": "회전자",
+          "perMinute": 2
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_CircuitBoard_2_C",
+      "ko": "카테리움 회로 기판",
+      "en": "Caterium Circuit Board",
+      "makes": {
+        "item": "Desc_CircuitBoard_C",
+        "ko": "회로 기판",
+        "perMinute": 8.75
+      },
+      "tier": "S",
+      "score": 77.2,
+      "effect": {
+        "power": "-1.96%",
+        "items": "-0.69%",
+        "buildings": "-2.72%",
+        "resources": "-1.78%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 5,
+      "ingredients": [
+        {
+          "ko": "플라스틱",
+          "perMinute": 12.5
+        },
+        {
+          "ko": "고속 전선",
+          "perMinute": 37.5
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_SuperStateComputer_C",
+      "ko": "초상태 컴퓨터",
+      "en": "Super-State Computer",
+      "makes": {
+        "item": "Desc_ComputerSuper_C",
+        "ko": "슈퍼컴퓨터",
+        "perMinute": 2.4
+      },
+      "tier": "A",
+      "score": 73.3,
+      "effect": {
+        "power": "-0.83%",
+        "items": "-0.97%",
+        "buildings": "-2.77%",
+        "resources": "-0.40%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_ManufacturerMk1_C",
+        "ko": "제조기",
+        "unlockTier": 6
+      },
+      "usableFromTier": 8,
+      "ingredients": [
+        {
+          "ko": "컴퓨터",
+          "perMinute": 7.2
+        },
+        {
+          "ko": "전자기 제어봉",
+          "perMinute": 2.4
+        },
+        {
+          "ko": "배터리",
+          "perMinute": 24
+        },
+        {
+          "ko": "전선",
+          "perMinute": 60
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_Diamond_Turbo_C",
+      "ko": "터보 다이아몬드",
+      "en": "Turbo Diamonds",
+      "makes": {
+        "item": "Desc_Diamond_C",
+        "ko": "다이아몬드",
+        "perMinute": 60
+      },
+      "tier": "A",
+      "score": 72,
+      "effect": {
+        "power": "-3.09%",
+        "items": "-1.73%",
+        "buildings": "0.71%",
+        "resources": "-6.00%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_HadronCollider_C",
+        "ko": "입자 가속기",
+        "unlockTier": 8
+      },
+      "usableFromTier": 8,
+      "ingredients": [
+        {
+          "ko": "석탄",
+          "perMinute": 600
+        },
+        {
+          "ko": "포장된 터보 연료",
+          "perMinute": 40
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_Computer_1_C",
+      "ko": "카테리움 컴퓨터",
+      "en": "Caterium Computer",
+      "makes": {
+        "item": "Desc_Computer_C",
+        "ko": "컴퓨터",
+        "perMinute": 3.75
+      },
+      "tier": "A",
+      "score": 71.3,
+      "effect": {
+        "power": "-1.01%",
+        "items": "-1.16%",
+        "buildings": "-1.25%",
+        "resources": "-0.85%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_ManufacturerMk1_C",
+        "ko": "제조기",
+        "unlockTier": 6
+      },
+      "usableFromTier": 6,
+      "ingredients": [
+        {
+          "ko": "회로 기판",
+          "perMinute": 15
+        },
+        {
+          "ko": "고속 전선",
+          "perMinute": 52.5
+        },
+        {
+          "ko": "고무",
+          "perMinute": 22.5
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_ElectroAluminumScrap_C",
+      "ko": "전극 알루미늄 조각",
+      "en": "Electrode Aluminum Scrap",
+      "makes": {
+        "item": "Desc_AluminumScrap_C",
+        "ko": "알루미늄 조각",
+        "perMinute": 300
+      },
+      "tier": "A",
+      "score": 71,
+      "effect": {
+        "power": "0.23%",
+        "items": "-1.27%",
+        "buildings": "1.23%",
+        "resources": "-5.41%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_OilRefinery_C",
+        "ko": "정제소",
+        "unlockTier": 5
+      },
+      "usableFromTier": 7,
+      "ingredients": [
+        {
+          "ko": "알루미나 용액",
+          "perMinute": 180
+        },
+        {
+          "ko": "석유 코크스",
+          "perMinute": 60
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_DilutedFuel_C",
+      "ko": "희석 연료",
+      "en": "Diluted Fuel",
+      "makes": {
+        "item": "Desc_LiquidFuel_C",
+        "ko": "연료",
+        "perMinute": 100
+      },
+      "tier": "A",
+      "score": 69.6,
+      "effect": {
+        "power": "-0.96%",
+        "items": "0.17%",
+        "buildings": "-1.67%",
+        "resources": "1.32%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_Blender_C",
+        "ko": "혼합기",
+        "unlockTier": 7
+      },
+      "usableFromTier": 7,
+      "ingredients": [
+        {
+          "ko": "중유 잔여물",
+          "perMinute": 50
+        },
+        {
+          "ko": "물",
+          "perMinute": 100
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_TurboPressureMotor_C",
+      "ko": "압력 터보 모터",
+      "en": "Turbo Pressure Motor",
+      "makes": {
+        "item": "Desc_MotorLightweight_C",
+        "ko": "터보 모터",
+        "perMinute": 3.75
+      },
+      "tier": "A",
+      "score": 67.9,
+      "effect": {
+        "power": "-0.58%",
+        "items": "-0.74%",
+        "buildings": "-0.94%",
+        "resources": "-0.61%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_ManufacturerMk1_C",
+        "ko": "제조기",
+        "unlockTier": 6
+      },
+      "usableFromTier": 8,
+      "ingredients": [
+        {
+          "ko": "모터",
+          "perMinute": 7.5
+        },
+        {
+          "ko": "압력 변환 큐브",
+          "perMinute": 1.875
+        },
+        {
+          "ko": "포장된 질소 가스",
+          "perMinute": 45
+        },
+        {
+          "ko": "고정자",
+          "perMinute": 15
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_RubberConcrete_C",
+      "ko": "고무 콘크리트",
+      "en": "Rubber Concrete",
+      "makes": {
+        "item": "Desc_Cement_C",
+        "ko": "콘크리트",
+        "perMinute": 90
+      },
+      "tier": "A",
+      "score": 67.4,
+      "effect": {
+        "power": "-0.27%",
+        "items": "-1.56%",
+        "buildings": "-3.80%",
+        "resources": "-4.03%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 5,
+      "ingredients": [
+        {
+          "ko": "석회석",
+          "perMinute": 100
+        },
+        {
+          "ko": "고무",
+          "perMinute": 20
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_AILimiter_Plastic_C",
+      "ko": "플라스틱 인공지능 진폭 제한 회로",
+      "en": "Plastic AI Limiter",
+      "makes": {
+        "item": "Desc_CircuitBoardHighSpeed_C",
+        "ko": "인공지능 진폭 제한 회로",
+        "perMinute": 8
+      },
+      "tier": "A",
+      "score": 66.7,
+      "effect": {
+        "power": "-0.42%",
+        "items": "-1.02%",
+        "buildings": "-1.57%",
+        "resources": "-1.20%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 5,
+      "ingredients": [
+        {
+          "ko": "고속 전선",
+          "perMinute": 120
+        },
+        {
+          "ko": "플라스틱",
+          "perMinute": 28
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_Screw_2_C",
+      "ko": "강철 나사",
+      "en": "Steel Screw",
+      "makes": {
+        "item": "Desc_IronScrew_C",
+        "ko": "나사",
+        "perMinute": 260
+      },
+      "tier": "A",
+      "score": 65.5,
+      "effect": {
+        "power": "-0.42%",
+        "items": "-0.51%",
+        "buildings": "-5.15%",
+        "resources": "-0.14%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_ConstructorMk1_C",
+        "ko": "제작기",
+        "unlockTier": 0
+      },
+      "usableFromTier": 3,
+      "ingredients": [
+        {
+          "ko": "강철 빔",
+          "perMinute": 5
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_Motor_1_C",
+      "ko": "고정밀 모터",
+      "en": "Rigor Motor",
+      "makes": {
+        "item": "Desc_Motor_C",
+        "ko": "모터",
+        "perMinute": 7.5
+      },
+      "tier": "A",
+      "score": 64.4,
+      "effect": {
+        "power": "-0.02%",
+        "items": "-1.17%",
+        "buildings": "-1.12%",
+        "resources": "-0.68%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_ManufacturerMk1_C",
+        "ko": "제조기",
+        "unlockTier": 6
+      },
+      "usableFromTier": 6,
+      "ingredients": [
+        {
+          "ko": "회전자",
+          "perMinute": 3.75
+        },
+        {
+          "ko": "고정자",
+          "perMinute": 3.75
+        },
+        {
+          "ko": "수정 발진기",
+          "perMinute": 1.25
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_SteelRod_C",
+      "ko": "강철봉",
+      "en": "Steel Rod",
+      "makes": {
+        "item": "Desc_IronRod_C",
+        "ko": "철봉",
+        "perMinute": 48
+      },
+      "tier": "A",
+      "score": 64.2,
+      "effect": {
+        "power": "-0.30%",
+        "items": "-0.71%",
+        "buildings": "-3.05%",
+        "resources": "-0.83%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_ConstructorMk1_C",
+        "ko": "제작기",
+        "unlockTier": 0
+      },
+      "usableFromTier": 3,
+      "ingredients": [
+        {
+          "ko": "강철 주괴",
+          "perMinute": 12
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_Concrete_C",
+      "ko": "개선된 콘크리트",
+      "en": "Fine Concrete",
+      "makes": {
+        "item": "Desc_Cement_C",
+        "ko": "콘크리트",
+        "perMinute": 50
+      },
+      "tier": "A",
+      "score": 63.5,
+      "effect": {
+        "power": "-0.25%",
+        "items": "-1.32%",
+        "buildings": "-2.92%",
+        "resources": "-3.79%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 3,
+      "ingredients": [
+        {
+          "ko": "이산화규소",
+          "perMinute": 15
+        },
+        {
+          "ko": "석회석",
+          "perMinute": 60
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_ModularFrame_C",
+      "ko": "강철 골조",
+      "en": "Steeled Frame",
+      "makes": {
+        "item": "Desc_ModularFrame_C",
+        "ko": "모듈식 골조",
+        "perMinute": 3
+      },
+      "tier": "A",
+      "score": 63.1,
+      "effect": {
+        "power": "-0.42%",
+        "items": "-0.02%",
+        "buildings": "-1.85%",
+        "resources": "0.17%"
+      },
+      "needsOtherAlternate": true,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 3,
+      "ingredients": [
+        {
+          "ko": "보강된 철판",
+          "perMinute": 2
+        },
+        {
+          "ko": "강철 파이프",
+          "perMinute": 10
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_SteelBeam_Aluminum_C",
+      "ko": "알루미늄 빔",
+      "en": "Aluminum Beam",
+      "makes": {
+        "item": "Desc_SteelPlate_C",
+        "ko": "강철 빔",
+        "perMinute": 22.5
+      },
+      "tier": "A",
+      "score": 62.6,
+      "effect": {
+        "power": "-0.64%",
+        "items": "-1.11%",
+        "buildings": "-2.30%",
+        "resources": "-0.66%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_ConstructorMk1_C",
+        "ko": "제작기",
+        "unlockTier": 0
+      },
+      "usableFromTier": 7,
+      "ingredients": [
+        {
+          "ko": "알루미늄 주괴",
+          "perMinute": 22.5
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_AluminumRod_C",
+      "ko": "알루미늄 봉",
+      "en": "Aluminum Rod",
+      "makes": {
+        "item": "Desc_IronRod_C",
+        "ko": "철봉",
+        "perMinute": 52.5
+      },
+      "tier": "A",
+      "score": 61,
+      "effect": {
+        "power": "-0.33%",
+        "items": "-0.54%",
+        "buildings": "-3.06%",
+        "resources": "-0.71%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_ConstructorMk1_C",
+        "ko": "제작기",
+        "unlockTier": 0
+      },
+      "usableFromTier": 7,
+      "ingredients": [
+        {
+          "ko": "알루미늄 주괴",
+          "perMinute": 7.5
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_TurboMotor_1_C",
+      "ko": "전기 터보 모터",
+      "en": "Turbo Electric Motor",
+      "makes": {
+        "item": "Desc_MotorLightweight_C",
+        "ko": "터보 모터",
+        "perMinute": 2.8125
+      },
+      "tier": "A",
+      "score": 60.8,
+      "effect": {
+        "power": "-0.33%",
+        "items": "-0.19%",
+        "buildings": "-0.32%",
+        "resources": "-0.39%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_ManufacturerMk1_C",
+        "ko": "제조기",
+        "unlockTier": 6
+      },
+      "usableFromTier": 8,
+      "ingredients": [
+        {
+          "ko": "모터",
+          "perMinute": 6.5625
+        },
+        {
+          "ko": "무선 제어 장치",
+          "perMinute": 8.4375
+        },
+        {
+          "ko": "전자기 제어봉",
+          "perMinute": 4.6875
+        },
+        {
+          "ko": "회전자",
+          "perMinute": 6.5625
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_ElectricMotor_C",
+      "ko": "전기 모터",
+      "en": "Electric Motor",
+      "makes": {
+        "item": "Desc_Motor_C",
+        "ko": "모터",
+        "perMinute": 7.5
+      },
+      "tier": "A",
+      "score": 60,
+      "effect": {
+        "power": "-0.07%",
+        "items": "-0.68%",
+        "buildings": "-0.50%",
+        "resources": "-0.53%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 8,
+      "ingredients": [
+        {
+          "ko": "전자기 제어봉",
+          "perMinute": 3.75
+        },
+        {
+          "ko": "회전자",
+          "perMinute": 7.5
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_WetConcrete_C",
+      "ko": "습식 콘크리트",
+      "en": "Wet Concrete",
+      "makes": {
+        "item": "Desc_Cement_C",
+        "ko": "콘크리트",
+        "perMinute": 80
+      },
+      "tier": "A",
+      "score": 59.2,
+      "effect": {
+        "power": "0.08%",
+        "items": "-0.23%",
+        "buildings": "-4.00%",
+        "resources": "-0.56%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_OilRefinery_C",
+        "ko": "정제소",
+        "unlockTier": 5
+      },
+      "usableFromTier": 5,
+      "ingredients": [
+        {
+          "ko": "석회석",
+          "perMinute": 120
+        },
+        {
+          "ko": "물",
+          "perMinute": 100
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_HighSpeedWiring_C",
+      "ko": "자동 고속 전선",
+      "en": "Automated Speed Wiring",
+      "makes": {
+        "item": "Desc_SpaceElevatorPart_3_C",
+        "ko": "자동 배선기",
+        "perMinute": 7.5
+      },
+      "tier": "A",
+      "score": 59.2,
+      "effect": {
+        "power": "-0.06%",
+        "items": "-0.57%",
+        "buildings": "-1.01%",
+        "resources": "-0.06%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_ManufacturerMk1_C",
+        "ko": "제조기",
+        "unlockTier": 6
+      },
+      "usableFromTier": 6,
+      "ingredients": [
+        {
+          "ko": "고정자",
+          "perMinute": 3.75
+        },
+        {
+          "ko": "전선",
+          "perMinute": 75
+        },
+        {
+          "ko": "고속 커넥터",
+          "perMinute": 1.875
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_CokeSteelIngot_C",
+      "ko": "코크스 강철 주괴",
+      "en": "Coke Steel Ingot",
+      "makes": {
+        "item": "Desc_SteelIngot_C",
+        "ko": "강철 주괴",
+        "perMinute": 100
+      },
+      "tier": "A",
+      "score": 59,
+      "effect": {
+        "power": "-0.08%",
+        "items": "-0.07%",
+        "buildings": "-0.15%",
+        "resources": "-2.94%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_FoundryMk1_C",
+        "ko": "주조소",
+        "unlockTier": 3
+      },
+      "usableFromTier": 5,
+      "ingredients": [
+        {
+          "ko": "철 광석",
+          "perMinute": 75
+        },
+        {
+          "ko": "석유 코크스",
+          "perMinute": 75
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_UraniumCell_1_C",
+      "ko": "주입된 우라늄 전지",
+      "en": "Infused Uranium Cell",
+      "makes": {
+        "item": "Desc_UraniumCell_C",
+        "ko": "포장된 우라늄 전지",
+        "perMinute": 20
+      },
+      "tier": "A",
+      "score": 58.9,
+      "effect": {
+        "power": "-0.03%",
+        "items": "0.51%",
+        "buildings": "1.31%",
+        "resources": "-0.25%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_ManufacturerMk1_C",
+        "ko": "제조기",
+        "unlockTier": 6
+      },
+      "usableFromTier": 6,
+      "ingredients": [
+        {
+          "ko": "우라늄",
+          "perMinute": 25
+        },
+        {
+          "ko": "이산화규소",
+          "perMinute": 15
+        },
+        {
+          "ko": "황",
+          "perMinute": 25
+        },
+        {
+          "ko": "고속 전선",
+          "perMinute": 75
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_HighSpeedConnector_C",
+      "ko": "실리콘 고속 커넥터",
+      "en": "Silicon High-Speed Connector",
+      "makes": {
+        "item": "Desc_HighSpeedConnector_C",
+        "ko": "고속 커넥터",
+        "perMinute": 3
+      },
+      "tier": "B",
+      "score": 57.1,
+      "effect": {
+        "power": "-0.06%",
+        "items": "-0.59%",
+        "buildings": "-0.71%",
+        "resources": "-0.15%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_ManufacturerMk1_C",
+        "ko": "제조기",
+        "unlockTier": 6
+      },
+      "usableFromTier": 6,
+      "ingredients": [
+        {
+          "ko": "고속 전선",
+          "perMinute": 90
+        },
+        {
+          "ko": "이산화규소",
+          "perMinute": 37.5
+        },
+        {
+          "ko": "회로 기판",
+          "perMinute": 3
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_RadioControlSystem_C",
+      "ko": "무선 제어 시스템",
+      "en": "Radio Control System",
+      "makes": {
+        "item": "Desc_ModularFrameLightweight_C",
+        "ko": "무선 제어 장치",
+        "perMinute": 4.5
+      },
+      "tier": "B",
+      "score": 57.1,
+      "effect": {
+        "power": "-0.95%",
+        "items": "0.75%",
+        "buildings": "-1.22%",
+        "resources": "0.33%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_ManufacturerMk1_C",
+        "ko": "제조기",
+        "unlockTier": 6
+      },
+      "usableFromTier": 7,
+      "ingredients": [
+        {
+          "ko": "수정 발진기",
+          "perMinute": 1.5
+        },
+        {
+          "ko": "회로 기판",
+          "perMinute": 15
+        },
+        {
+          "ko": "알루미늄 케이스",
+          "perMinute": 90
+        },
+        {
+          "ko": "고무",
+          "perMinute": 45
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_IngotSteel_1_C",
+      "ko": "단단한 강철 주괴",
+      "en": "Solid Steel Ingot",
+      "makes": {
+        "item": "Desc_SteelIngot_C",
+        "ko": "강철 주괴",
+        "perMinute": 60
+      },
+      "tier": "B",
+      "score": 56.4,
+      "effect": {
+        "power": "-0.14%",
+        "items": "-0.27%",
+        "buildings": "0.27%",
+        "resources": "-2.46%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_FoundryMk1_C",
+        "ko": "주조소",
+        "unlockTier": 3
+      },
+      "usableFromTier": 3,
+      "ingredients": [
+        {
+          "ko": "철 주괴",
+          "perMinute": 40
+        },
+        {
+          "ko": "석탄",
+          "perMinute": 40
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_HeatSink_1_C",
+      "ko": "열 교환기",
+      "en": "Heat Exchanger",
+      "makes": {
+        "item": "Desc_AluminumPlateReinforced_C",
+        "ko": "방열판",
+        "perMinute": 10
+      },
+      "tier": "B",
+      "score": 56.1,
+      "effect": {
+        "power": "-0.19%",
+        "items": "-0.41%",
+        "buildings": "-0.57%",
+        "resources": "-0.40%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 7,
+      "ingredients": [
+        {
+          "ko": "알루미늄 케이스",
+          "perMinute": 30
+        },
+        {
+          "ko": "고무",
+          "perMinute": 30
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_Plastic_1_C",
+      "ko": "재활용 플라스틱",
+      "en": "Recycled Plastic",
+      "makes": {
+        "item": "Desc_Plastic_C",
+        "ko": "플라스틱",
+        "perMinute": 60
+      },
+      "tier": "B",
+      "score": 56,
+      "effect": {
+        "power": "0.11%",
+        "items": "0.42%",
+        "buildings": "0.10%",
+        "resources": "-0.03%"
+      },
+      "needsOtherAlternate": true,
+      "machine": {
+        "id": "Build_OilRefinery_C",
+        "ko": "정제소",
+        "unlockTier": 5
+      },
+      "usableFromTier": 5,
+      "ingredients": [
+        {
+          "ko": "고무",
+          "perMinute": 30
+        },
+        {
+          "ko": "연료",
+          "perMinute": 30
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_CoatedIronPlate_C",
+      "ko": "코팅된 철판",
+      "en": "Coated Iron Plate",
+      "makes": {
+        "item": "Desc_IronPlate_C",
+        "ko": "철판",
+        "perMinute": 75
+      },
+      "tier": "B",
+      "score": 55.8,
+      "effect": {
+        "power": "-0.07%",
+        "items": "-0.48%",
+        "buildings": "-1.26%",
+        "resources": "-0.49%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 5,
+      "ingredients": [
+        {
+          "ko": "철 주괴",
+          "perMinute": 37.5
+        },
+        {
+          "ko": "플라스틱",
+          "perMinute": 7.5
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_AdheredIronPlate_C",
+      "ko": "접착된 철판",
+      "en": "Adhered Iron Plate",
+      "makes": {
+        "item": "Desc_IronPlateReinforced_C",
+        "ko": "보강된 철판",
+        "perMinute": 3.75
+      },
+      "tier": "B",
+      "score": 55.7,
+      "effect": {
+        "power": "-0.01%",
+        "items": "-0.94%",
+        "buildings": "-0.20%",
+        "resources": "-0.13%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 5,
+      "ingredients": [
+        {
+          "ko": "철판",
+          "perMinute": 11.25
+        },
+        {
+          "ko": "고무",
+          "perMinute": 3.75
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_ReinforcedIronPlate_2_C",
+      "ko": "용접된 철판",
+      "en": "Stitched Iron Plate",
+      "makes": {
+        "item": "Desc_IronPlateReinforced_C",
+        "ko": "보강된 철판",
+        "perMinute": 5.625
+      },
+      "tier": "B",
+      "score": 53.7,
+      "effect": {
+        "power": "-0.03%",
+        "items": "-0.51%",
+        "buildings": "-0.24%",
+        "resources": "-0.04%"
+      },
+      "needsOtherAlternate": true,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 2,
+      "ingredients": [
+        {
+          "ko": "철판",
+          "perMinute": 18.75
+        },
+        {
+          "ko": "전선",
+          "perMinute": 37.5
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_Cable_1_C",
+      "ko": "절연 케이블",
+      "en": "Insulated Cable",
+      "makes": {
+        "item": "Desc_Cable_C",
+        "ko": "케이블",
+        "perMinute": 100
+      },
+      "tier": "B",
+      "score": 53.7,
+      "effect": {
+        "power": "-0.04%",
+        "items": "-0.43%",
+        "buildings": "-0.74%",
+        "resources": "-0.06%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 5,
+      "ingredients": [
+        {
+          "ko": "전선",
+          "perMinute": 45
+        },
+        {
+          "ko": "고무",
+          "perMinute": 30
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_CoatedCable_C",
+      "ko": "코팅된 케이블",
+      "en": "Coated Cable",
+      "makes": {
+        "item": "Desc_Cable_C",
+        "ko": "케이블",
+        "perMinute": 67.5
+      },
+      "tier": "B",
+      "score": 53.3,
+      "effect": {
+        "power": "0.04%",
+        "items": "-0.38%",
+        "buildings": "-0.62%",
+        "resources": "-0.07%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_OilRefinery_C",
+        "ko": "정제소",
+        "unlockTier": 5
+      },
+      "usableFromTier": 5,
+      "ingredients": [
+        {
+          "ko": "전선",
+          "perMinute": 37.5
+        },
+        {
+          "ko": "중유 잔여물",
+          "perMinute": 15
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_FusedWire_C",
+      "ko": "융합된 전선",
+      "en": "Fused Wire",
+      "makes": {
+        "item": "Desc_Wire_C",
+        "ko": "전선",
+        "perMinute": 90
+      },
+      "tier": "B",
+      "score": 53.2,
+      "effect": {
+        "power": "-0.03%",
+        "items": "-0.34%",
+        "buildings": "-1.07%",
+        "resources": "-0.42%"
+      },
+      "needsOtherAlternate": true,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 3,
+      "ingredients": [
+        {
+          "ko": "구리 주괴",
+          "perMinute": 12
+        },
+        {
+          "ko": "카테리움 주괴",
+          "perMinute": 3
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_PlasticSmartPlating_C",
+      "ko": "플라스틱 지능형 도금판",
+      "en": "Plastic Smart Plating",
+      "makes": {
+        "item": "Desc_SpaceElevatorPart_1_C",
+        "ko": "지능형 도금판",
+        "perMinute": 5
+      },
+      "tier": "B",
+      "score": 53.2,
+      "effect": {
+        "power": "0.00%",
+        "items": "-0.17%",
+        "buildings": "-0.54%",
+        "resources": "-0.05%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_ManufacturerMk1_C",
+        "ko": "제조기",
+        "unlockTier": 6
+      },
+      "usableFromTier": 6,
+      "ingredients": [
+        {
+          "ko": "보강된 철판",
+          "perMinute": 2.5
+        },
+        {
+          "ko": "회전자",
+          "perMinute": 2.5
+        },
+        {
+          "ko": "플라스틱",
+          "perMinute": 7.5
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_CopperRotor_C",
+      "ko": "구리 회전자",
+      "en": "Copper Rotor",
+      "makes": {
+        "item": "Desc_Rotor_C",
+        "ko": "회전자",
+        "perMinute": 11.25
+      },
+      "tier": "B",
+      "score": 53.2,
+      "effect": {
+        "power": "-0.01%",
+        "items": "-0.27%",
+        "buildings": "-0.51%",
+        "resources": "0.17%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 2,
+      "ingredients": [
+        {
+          "ko": "구리판",
+          "perMinute": 22.5
+        },
+        {
+          "ko": "나사",
+          "perMinute": 195
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_SteelCastedPlate_C",
+      "ko": "주강 철판",
+      "en": "Steel Cast Plate",
+      "makes": {
+        "item": "Desc_IronPlate_C",
+        "ko": "철판",
+        "perMinute": 45
+      },
+      "tier": "B",
+      "score": 53.1,
+      "effect": {
+        "power": "0.00%",
+        "items": "-0.33%",
+        "buildings": "-0.97%",
+        "resources": "-0.40%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_FoundryMk1_C",
+        "ko": "주조소",
+        "unlockTier": 3
+      },
+      "usableFromTier": 3,
+      "ingredients": [
+        {
+          "ko": "철 주괴",
+          "perMinute": 15
+        },
+        {
+          "ko": "강철 주괴",
+          "perMinute": 15
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_RocketFuel_Nitro_C",
+      "ko": "니트로 로켓 연료",
+      "en": "Nitro Rocket Fuel",
+      "makes": {
+        "item": "Desc_RocketFuel_C",
+        "ko": "로켓 연료",
+        "perMinute": 150
+      },
+      "tier": "B",
+      "score": 53,
+      "effect": {
+        "power": "-1.39%",
+        "items": "0.03%",
+        "buildings": "-2.35%",
+        "resources": "2.23%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_Blender_C",
+        "ko": "혼합기",
+        "unlockTier": 7
+      },
+      "usableFromTier": 7,
+      "ingredients": [
+        {
+          "ko": "연료",
+          "perMinute": 100
+        },
+        {
+          "ko": "질소 가스",
+          "perMinute": 75
+        },
+        {
+          "ko": "황",
+          "perMinute": 100
+        },
+        {
+          "ko": "석탄",
+          "perMinute": 50
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_SteamedCopperSheet_C",
+      "ko": "가압된 구리판",
+      "en": "Steamed Copper Sheet",
+      "makes": {
+        "item": "Desc_CopperSheet_C",
+        "ko": "구리판",
+        "perMinute": 22.5
+      },
+      "tier": "B",
+      "score": 52.9,
+      "effect": {
+        "power": "0.47%",
+        "items": "-0.43%",
+        "buildings": "-2.36%",
+        "resources": "0.08%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_OilRefinery_C",
+        "ko": "정제소",
+        "unlockTier": 5
+      },
+      "usableFromTier": 5,
+      "ingredients": [
+        {
+          "ko": "구리 주괴",
+          "perMinute": 22.5
+        },
+        {
+          "ko": "물",
+          "perMinute": 22.5
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_OCSupercomputer_C",
+      "ko": "오버클럭 슈퍼컴퓨터",
+      "en": "OC Supercomputer",
+      "makes": {
+        "item": "Desc_ComputerSuper_C",
+        "ko": "슈퍼컴퓨터",
+        "perMinute": 3
+      },
+      "tier": "B",
+      "score": 52.8,
+      "effect": {
+        "power": "-0.73%",
+        "items": "0.95%",
+        "buildings": "-1.76%",
+        "resources": "0.64%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 8,
+      "ingredients": [
+        {
+          "ko": "무선 제어 장치",
+          "perMinute": 6
+        },
+        {
+          "ko": "냉각 시스템",
+          "perMinute": 6
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_Rotor_C",
+      "ko": "강철 회전자",
+      "en": "Steel Rotor",
+      "makes": {
+        "item": "Desc_Rotor_C",
+        "ko": "회전자",
+        "perMinute": 5
+      },
+      "tier": "B",
+      "score": 52.5,
+      "effect": {
+        "power": "0.04%",
+        "items": "-0.51%",
+        "buildings": "-0.14%",
+        "resources": "0.13%"
+      },
+      "needsOtherAlternate": true,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 3,
+      "ingredients": [
+        {
+          "ko": "강철 파이프",
+          "perMinute": 10
+        },
+        {
+          "ko": "전선",
+          "perMinute": 30
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_CateriumIngot_Tempered_C",
+      "ko": "단련된 카테리움 주괴",
+      "en": "Tempered Caterium Ingot",
+      "makes": {
+        "item": "Desc_GoldIngot_C",
+        "ko": "카테리움 주괴",
+        "perMinute": 22.5
+      },
+      "tier": "B",
+      "score": 52.2,
+      "effect": {
+        "power": "-0.04%",
+        "items": "-0.87%",
+        "buildings": "1.39%",
+        "resources": "-1.48%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_FoundryMk1_C",
+        "ko": "주조소",
+        "unlockTier": 3
+      },
+      "usableFromTier": 5,
+      "ingredients": [
+        {
+          "ko": "카테리움 광석",
+          "perMinute": 45
+        },
+        {
+          "ko": "석유 코크스",
+          "perMinute": 15
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_CoolingDevice_C",
+      "ko": "냉각 장치",
+      "en": "Cooling Device",
+      "makes": {
+        "item": "Desc_CoolingSystem_C",
+        "ko": "냉각 시스템",
+        "perMinute": 5
+      },
+      "tier": "B",
+      "score": 51.9,
+      "effect": {
+        "power": "0.08%",
+        "items": "0.01%",
+        "buildings": "0.24%",
+        "resources": "-0.23%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_Blender_C",
+        "ko": "혼합기",
+        "unlockTier": 7
+      },
+      "usableFromTier": 8,
+      "ingredients": [
+        {
+          "ko": "방열판",
+          "perMinute": 10
+        },
+        {
+          "ko": "모터",
+          "perMinute": 2.5
+        },
+        {
+          "ko": "질소 가스",
+          "perMinute": 60
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_PureQuartzCrystal_C",
+      "ko": "순수한 석영 수정",
+      "en": "Pure Quartz Crystal",
+      "makes": {
+        "item": "Desc_QuartzCrystal_C",
+        "ko": "석영 수정",
+        "perMinute": 52.5
+      },
+      "tier": "B",
+      "score": 51.9,
+      "effect": {
+        "power": "0.36%",
+        "items": "0.27%",
+        "buildings": "-1.21%",
+        "resources": "0.61%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_OilRefinery_C",
+        "ko": "정제소",
+        "unlockTier": 5
+      },
+      "usableFromTier": 5,
+      "ingredients": [
+        {
+          "ko": "석영 원석",
+          "perMinute": 67.5
+        },
+        {
+          "ko": "물",
+          "perMinute": 37.5
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_ElectromagneticControlRod_1_C",
+      "ko": "전자기 연결봉",
+      "en": "Electromagnetic Connection Rod",
+      "makes": {
+        "item": "Desc_ElectromagneticControlRod_C",
+        "ko": "전자기 제어봉",
+        "perMinute": 8
+      },
+      "tier": "B",
+      "score": 51.8,
+      "effect": {
+        "power": "0.01%",
+        "items": "-0.21%",
+        "buildings": "-0.36%",
+        "resources": "-0.01%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 6,
+      "ingredients": [
+        {
+          "ko": "고정자",
+          "perMinute": 8
+        },
+        {
+          "ko": "고속 커넥터",
+          "perMinute": 4
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_Cable_2_C",
+      "ko": "고속 전선 케이블",
+      "en": "Quickwire Cable",
+      "makes": {
+        "item": "Desc_Cable_C",
+        "ko": "케이블",
+        "perMinute": 27.5
+      },
+      "tier": "B",
+      "score": 51.7,
+      "effect": {
+        "power": "0.04%",
+        "items": "-0.50%",
+        "buildings": "-0.25%",
+        "resources": "-0.08%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 5,
+      "ingredients": [
+        {
+          "ko": "고속 전선",
+          "perMinute": 7.5
+        },
+        {
+          "ko": "고무",
+          "perMinute": 5
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_Wire_2_C",
+      "ko": "카테리움 전선",
+      "en": "Caterium Wire",
+      "makes": {
+        "item": "Desc_Wire_C",
+        "ko": "전선",
+        "perMinute": 120
+      },
+      "tier": "B",
+      "score": 51.7,
+      "effect": {
+        "power": "-0.06%",
+        "items": "-0.28%",
+        "buildings": "-1.03%",
+        "resources": "-0.33%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_ConstructorMk1_C",
+        "ko": "제작기",
+        "unlockTier": 0
+      },
+      "usableFromTier": 3,
+      "ingredients": [
+        {
+          "ko": "카테리움 주괴",
+          "perMinute": 15
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_Stator_C",
+      "ko": "고속 전선 고정자",
+      "en": "Quickwire Stator",
+      "makes": {
+        "item": "Desc_Stator_C",
+        "ko": "고정자",
+        "perMinute": 8
+      },
+      "tier": "B",
+      "score": 51.6,
+      "effect": {
+        "power": "-0.14%",
+        "items": "-0.21%",
+        "buildings": "-0.34%",
+        "resources": "0.01%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 3,
+      "ingredients": [
+        {
+          "ko": "강철 파이프",
+          "perMinute": 16
+        },
+        {
+          "ko": "고속 전선",
+          "perMinute": 60
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_BoltedFrame_C",
+      "ko": "볼트 골조",
+      "en": "Bolted Frame",
+      "makes": {
+        "item": "Desc_ModularFrame_C",
+        "ko": "모듈식 골조",
+        "perMinute": 5
+      },
+      "tier": "B",
+      "score": 51.5,
+      "effect": {
+        "power": "-0.39%",
+        "items": "1.39%",
+        "buildings": "-1.60%",
+        "resources": "-0.12%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 2,
+      "ingredients": [
+        {
+          "ko": "보강된 철판",
+          "perMinute": 7.5
+        },
+        {
+          "ko": "나사",
+          "perMinute": 140
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_ReinforcedIronPlate_1_C",
+      "ko": "결합된 철판",
+      "en": "Bolted Iron Plate",
+      "makes": {
+        "item": "Desc_IronPlateReinforced_C",
+        "ko": "보강된 철판",
+        "perMinute": 15
+      },
+      "tier": "B",
+      "score": 51.4,
+      "effect": {
+        "power": "-0.11%",
+        "items": "0.25%",
+        "buildings": "-0.44%",
+        "resources": "0.00%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 2,
+      "ingredients": [
+        {
+          "ko": "철판",
+          "perMinute": 90
+        },
+        {
+          "ko": "나사",
+          "perMinute": 250
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_Gunpowder_1_C",
+      "ko": "고운 흑색 화약",
+      "en": "Fine Black Powder",
+      "makes": {
+        "item": "Desc_Gunpowder_C",
+        "ko": "흑색 화약",
+        "perMinute": 45
+      },
+      "tier": "B",
+      "score": 51.1,
+      "effect": {
+        "power": "-0.04%",
+        "items": "-0.03%",
+        "buildings": "-0.12%",
+        "resources": "-0.03%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 8,
+      "ingredients": [
+        {
+          "ko": "황",
+          "perMinute": 7.5
+        },
+        {
+          "ko": "압축 석탄",
+          "perMinute": 15
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_HeavyOilResidue_C",
+      "ko": "중유 잔여물",
+      "en": "Heavy Oil Residue",
+      "makes": {
+        "item": "Desc_HeavyOilResidue_C",
+        "ko": "중유 잔여물",
+        "perMinute": 40
+      },
+      "tier": "B",
+      "score": 51,
+      "effect": {
+        "power": "0.05%",
+        "items": "0.08%",
+        "buildings": "-0.08%",
+        "resources": "-0.14%"
+      },
+      "needsOtherAlternate": true,
+      "machine": {
+        "id": "Build_OilRefinery_C",
+        "ko": "정제소",
+        "unlockTier": 5
+      },
+      "usableFromTier": 5,
+      "ingredients": [
+        {
+          "ko": "원유",
+          "perMinute": 30
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_FlexibleFramework_C",
+      "ko": "유연한 골조",
+      "en": "Flexible Framework",
+      "makes": {
+        "item": "Desc_SpaceElevatorPart_2_C",
+        "ko": "다용도 골조",
+        "perMinute": 7.5
+      },
+      "tier": "B",
+      "score": 50.8,
+      "effect": {
+        "power": "0.04%",
+        "items": "-0.14%",
+        "buildings": "-0.15%",
+        "resources": "-0.06%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_ManufacturerMk1_C",
+        "ko": "제조기",
+        "unlockTier": 6
+      },
+      "usableFromTier": 6,
+      "ingredients": [
+        {
+          "ko": "모듈식 골조",
+          "perMinute": 3.75
+        },
+        {
+          "ko": "강철 빔",
+          "perMinute": 22.5
+        },
+        {
+          "ko": "고무",
+          "perMinute": 30
+        }
+      ]
     },
     {
       "id": "Recipe_Alternate_TurboHeavyFuel_C",
-      "verdict": "trap",
-      "hunt": "-",
-      "reason": "원유 효율은 희석 연료와 비슷한데 유황(노드 16개)을 대량 소모한다."
+      "ko": "터보 중유 연료",
+      "en": "Turbo Heavy Fuel",
+      "makes": {
+        "item": "Desc_LiquidTurboFuel_C",
+        "ko": "터보 연료",
+        "perMinute": 30
+      },
+      "tier": "B",
+      "score": 50.7,
+      "effect": {
+        "power": "-0.31%",
+        "items": "-0.20%",
+        "buildings": "-0.44%",
+        "resources": "-0.21%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_OilRefinery_C",
+        "ko": "정제소",
+        "unlockTier": 5
+      },
+      "usableFromTier": 8,
+      "ingredients": [
+        {
+          "ko": "중유 잔여물",
+          "perMinute": 37.5
+        },
+        {
+          "ko": "압축 석탄",
+          "perMinute": 30
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_Screw_C",
+      "ko": "주조된 나사",
+      "en": "Cast Screw",
+      "makes": {
+        "item": "Desc_IronScrew_C",
+        "ko": "나사",
+        "perMinute": 50
+      },
+      "tier": "B",
+      "score": 50.7,
+      "effect": {
+        "power": "-0.01%",
+        "items": "-0.05%",
+        "buildings": "-1.51%",
+        "resources": "0.65%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_ConstructorMk1_C",
+        "ko": "제작기",
+        "unlockTier": 0
+      },
+      "usableFromTier": 0,
+      "ingredients": [
+        {
+          "ko": "철 주괴",
+          "perMinute": 12.5
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_IngotIron_C",
+      "ko": "철합금 주괴",
+      "en": "Iron Alloy Ingot",
+      "makes": {
+        "item": "Desc_IronIngot_C",
+        "ko": "철 주괴",
+        "perMinute": 75
+      },
+      "tier": "B",
+      "score": 50.3,
+      "effect": {
+        "power": "0.01%",
+        "items": "-0.06%",
+        "buildings": "-0.28%",
+        "resources": "-0.14%"
+      },
+      "needsOtherAlternate": true,
+      "machine": {
+        "id": "Build_FoundryMk1_C",
+        "ko": "주조소",
+        "unlockTier": 3
+      },
+      "usableFromTier": 3,
+      "ingredients": [
+        {
+          "ko": "철 광석",
+          "perMinute": 40
+        },
+        {
+          "ko": "구리 광석",
+          "perMinute": 10
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_PolymerResin_C",
+      "ko": "폴리머 수지",
+      "en": "Polymer Resin",
+      "makes": {
+        "item": "Desc_PolymerResin_C",
+        "ko": "폴리머 수지",
+        "perMinute": 130
+      },
+      "tier": "B",
+      "score": 50.1,
+      "effect": {
+        "power": "0.00%",
+        "items": "-0.01%",
+        "buildings": "-0.01%",
+        "resources": "0.01%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_OilRefinery_C",
+        "ko": "정제소",
+        "unlockTier": 5
+      },
+      "usableFromTier": 5,
+      "ingredients": [
+        {
+          "ko": "원유",
+          "perMinute": 60
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_PureIronIngot_C",
+      "ko": "순수한 철 주괴",
+      "en": "Pure Iron Ingot",
+      "makes": {
+        "item": "Desc_IronIngot_C",
+        "ko": "철 주괴",
+        "perMinute": 65
+      },
+      "tier": "C",
+      "score": 49.7,
+      "effect": {
+        "power": "0.06%",
+        "items": "-0.02%",
+        "buildings": "-0.23%",
+        "resources": "-0.05%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_OilRefinery_C",
+        "ko": "정제소",
+        "unlockTier": 5
+      },
+      "usableFromTier": 5,
+      "ingredients": [
+        {
+          "ko": "철 광석",
+          "perMinute": 35
+        },
+        {
+          "ko": "물",
+          "perMinute": 20
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_IronIngot_Leached_C",
+      "ko": "침출된 철 주괴",
+      "en": "Leached Iron ingot",
+      "makes": {
+        "item": "Desc_IronIngot_C",
+        "ko": "철 주괴",
+        "perMinute": 100
+      },
+      "tier": "C",
+      "score": 49.7,
+      "effect": {
+        "power": "0.04%",
+        "items": "-0.03%",
+        "buildings": "-0.29%",
+        "resources": "-0.12%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_OilRefinery_C",
+        "ko": "정제소",
+        "unlockTier": 5
+      },
+      "usableFromTier": 8,
+      "ingredients": [
+        {
+          "ko": "철 광석",
+          "perMinute": 50
+        },
+        {
+          "ko": "황산",
+          "perMinute": 10
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_Wire_1_C",
+      "ko": "철 전선",
+      "en": "Iron Wire",
+      "makes": {
+        "item": "Desc_Wire_C",
+        "ko": "전선",
+        "perMinute": 22.5
+      },
+      "tier": "C",
+      "score": 49.5,
+      "effect": {
+        "power": "0.04%",
+        "items": "-0.04%",
+        "buildings": "0.61%",
+        "resources": "-0.17%"
+      },
+      "needsOtherAlternate": true,
+      "machine": {
+        "id": "Build_ConstructorMk1_C",
+        "ko": "제작기",
+        "unlockTier": 0
+      },
+      "usableFromTier": 0,
+      "ingredients": [
+        {
+          "ko": "철 주괴",
+          "perMinute": 12.5
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_CoatedIronCanister_C",
+      "ko": "코팅된 철통",
+      "en": "Coated Iron Canister",
+      "makes": {
+        "item": "Desc_FluidCanister_C",
+        "ko": "빈 통",
+        "perMinute": 60
+      },
+      "tier": "C",
+      "score": 49.4,
+      "effect": {
+        "power": "0.01%",
+        "items": "0.06%",
+        "buildings": "0.06%",
+        "resources": "0.06%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 2,
+      "ingredients": [
+        {
+          "ko": "철판",
+          "perMinute": 30
+        },
+        {
+          "ko": "구리판",
+          "perMinute": 15
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_ClassicBattery_C",
+      "ko": "고전식 배터리",
+      "en": "Classic Battery",
+      "makes": {
+        "item": "Desc_Battery_C",
+        "ko": "배터리",
+        "perMinute": 30
+      },
+      "tier": "C",
+      "score": 49.3,
+      "effect": {
+        "power": "0.03%",
+        "items": "0.19%",
+        "buildings": "0.54%",
+        "resources": "-0.45%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_ManufacturerMk1_C",
+        "ko": "제조기",
+        "unlockTier": 6
+      },
+      "usableFromTier": 7,
+      "ingredients": [
+        {
+          "ko": "황",
+          "perMinute": 45
+        },
+        {
+          "ko": "알클래드 알루미늄 판",
+          "perMinute": 52.5
+        },
+        {
+          "ko": "플라스틱",
+          "perMinute": 60
+        },
+        {
+          "ko": "전선",
+          "perMinute": 90
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_SteelCanister_C",
+      "ko": "강철통",
+      "en": "Steel Canister",
+      "makes": {
+        "item": "Desc_FluidCanister_C",
+        "ko": "빈 통",
+        "perMinute": 40
+      },
+      "tier": "C",
+      "score": 49.1,
+      "effect": {
+        "power": "-0.01%",
+        "items": "0.17%",
+        "buildings": "0.11%",
+        "resources": "0.12%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_ConstructorMk1_C",
+        "ko": "제작기",
+        "unlockTier": 0
+      },
+      "usableFromTier": 3,
+      "ingredients": [
+        {
+          "ko": "강철 주괴",
+          "perMinute": 40
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_Quickwire_C",
+      "ko": "융합된 고속 전선",
+      "en": "Fused Quickwire",
+      "makes": {
+        "item": "Desc_HighSpeedWire_C",
+        "ko": "고속 전선",
+        "perMinute": 90
+      },
+      "tier": "C",
+      "score": 49,
+      "effect": {
+        "power": "0.22%",
+        "items": "0.93%",
+        "buildings": "-1.53%",
+        "resources": "1.07%"
+      },
+      "needsOtherAlternate": true,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 3,
+      "ingredients": [
+        {
+          "ko": "카테리움 주괴",
+          "perMinute": 7.5
+        },
+        {
+          "ko": "구리 주괴",
+          "perMinute": 37.5
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_Silica_C",
+      "ko": "저렴한 이산화규소",
+      "en": "Cheap Silica",
+      "makes": {
+        "item": "Desc_Silica_C",
+        "ko": "이산화규소",
+        "perMinute": 52.5
+      },
+      "tier": "C",
+      "score": 49,
+      "effect": {
+        "power": "0.30%",
+        "items": "0.53%",
+        "buildings": "-0.47%",
+        "resources": "1.25%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 2,
+      "ingredients": [
+        {
+          "ko": "석영 원석",
+          "perMinute": 22.5
+        },
+        {
+          "ko": "석회석",
+          "perMinute": 37.5
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_SteelBeam_Molded_C",
+      "ko": "성형된 빔",
+      "en": "Molded Beam",
+      "makes": {
+        "item": "Desc_SteelPlate_C",
+        "ko": "강철 빔",
+        "perMinute": 45
+      },
+      "tier": "C",
+      "score": 48.5,
+      "effect": {
+        "power": "0.02%",
+        "items": "0.03%",
+        "buildings": "-0.34%",
+        "resources": "0.24%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_FoundryMk1_C",
+        "ko": "주조소",
+        "unlockTier": 3
+      },
+      "usableFromTier": 3,
+      "ingredients": [
+        {
+          "ko": "강철 주괴",
+          "perMinute": 120
+        },
+        {
+          "ko": "콘크리트",
+          "perMinute": 80
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_AlcladCasing_C",
+      "ko": "알클래드 케이스",
+      "en": "Alclad Casing",
+      "makes": {
+        "item": "Desc_AluminumCasing_C",
+        "ko": "알루미늄 케이스",
+        "perMinute": 112.5
+      },
+      "tier": "C",
+      "score": 48.5,
+      "effect": {
+        "power": "0.10%",
+        "items": "0.15%",
+        "buildings": "-0.53%",
+        "resources": "0.58%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 7,
+      "ingredients": [
+        {
+          "ko": "알루미늄 주괴",
+          "perMinute": 150
+        },
+        {
+          "ko": "구리 주괴",
+          "perMinute": 75
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_IronIngot_Basic_C",
+      "ko": "기초 철 주괴",
+      "en": "Basic Iron Ingot",
+      "makes": {
+        "item": "Desc_IronIngot_C",
+        "ko": "철 주괴",
+        "perMinute": 50
+      },
+      "tier": "C",
+      "score": 48.3,
+      "effect": {
+        "power": "0.05%",
+        "items": "0.06%",
+        "buildings": "-0.17%",
+        "resources": "0.14%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_FoundryMk1_C",
+        "ko": "주조소",
+        "unlockTier": 3
+      },
+      "usableFromTier": 3,
+      "ingredients": [
+        {
+          "ko": "철 광석",
+          "perMinute": 25
+        },
+        {
+          "ko": "석회석",
+          "perMinute": 40
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_Silica_Distilled_C",
+      "ko": "증류된 이산화규소",
+      "en": "Distilled Silica",
+      "makes": {
+        "item": "Desc_Silica_C",
+        "ko": "이산화규소",
+        "perMinute": 270
+      },
+      "tier": "C",
+      "score": 48.2,
+      "effect": {
+        "power": "0.24%",
+        "items": "0.72%",
+        "buildings": "-0.85%",
+        "resources": "0.25%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_Blender_C",
+        "ko": "혼합기",
+        "unlockTier": 7
+      },
+      "usableFromTier": 7,
+      "ingredients": [
+        {
+          "ko": "용해된 이산화규소",
+          "perMinute": 120
+        },
+        {
+          "ko": "석회석",
+          "perMinute": 50
+        },
+        {
+          "ko": "물",
+          "perMinute": 100
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_Quartz_Fused_C",
+      "ko": "융합 석영 수정",
+      "en": "Fused Quartz Crystal",
+      "makes": {
+        "item": "Desc_QuartzCrystal_C",
+        "ko": "석영 수정",
+        "perMinute": 54
+      },
+      "tier": "C",
+      "score": 48.1,
+      "effect": {
+        "power": "0.15%",
+        "items": "0.28%",
+        "buildings": "-1.29%",
+        "resources": "0.66%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_FoundryMk1_C",
+        "ko": "주조소",
+        "unlockTier": 3
+      },
+      "usableFromTier": 3,
+      "ingredients": [
+        {
+          "ko": "석영 원석",
+          "perMinute": 75
+        },
+        {
+          "ko": "석탄",
+          "perMinute": 36
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_SteelPipe_Molded_C",
+      "ko": "성형된 강철 파이프",
+      "en": "Molded Steel Pipe",
+      "makes": {
+        "item": "Desc_SteelPipe_C",
+        "ko": "강철 파이프",
+        "perMinute": 50
+      },
+      "tier": "C",
+      "score": 46.5,
+      "effect": {
+        "power": "0.10%",
+        "items": "0.00%",
+        "buildings": "-1.55%",
+        "resources": "0.49%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_FoundryMk1_C",
+        "ko": "주조소",
+        "unlockTier": 3
+      },
+      "usableFromTier": 3,
+      "ingredients": [
+        {
+          "ko": "강철 주괴",
+          "perMinute": 50
+        },
+        {
+          "ko": "콘크리트",
+          "perMinute": 30
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_CateriumIngot_Leached_C",
+      "ko": "침출된 카테리움 주괴",
+      "en": "Leached Caterium Ingot",
+      "makes": {
+        "item": "Desc_GoldIngot_C",
+        "ko": "카테리움 주괴",
+        "perMinute": 36
+      },
+      "tier": "C",
+      "score": 46.4,
+      "effect": {
+        "power": "0.31%",
+        "items": "0.27%",
+        "buildings": "-0.34%",
+        "resources": "0.15%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_OilRefinery_C",
+        "ko": "정제소",
+        "unlockTier": 5
+      },
+      "usableFromTier": 8,
+      "ingredients": [
+        {
+          "ko": "카테리움 광석",
+          "perMinute": 54
+        },
+        {
+          "ko": "황산",
+          "perMinute": 30
+        }
+      ]
     },
     {
       "id": "Recipe_Alternate_TurboBlendFuel_C",
-      "verdict": "trap",
-      "hunt": "-",
-      "reason": "위와 같다. 물류 밀도가 꼭 필요할 때만."
+      "ko": "터보 혼합 연료",
+      "en": "Turbo Blend Fuel",
+      "makes": {
+        "item": "Desc_LiquidTurboFuel_C",
+        "ko": "터보 연료",
+        "perMinute": 45
+      },
+      "tier": "C",
+      "score": 46.1,
+      "effect": {
+        "power": "-0.53%",
+        "items": "-0.02%",
+        "buildings": "-1.13%",
+        "resources": "0.60%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_Blender_C",
+        "ko": "혼합기",
+        "unlockTier": 7
+      },
+      "usableFromTier": 7,
+      "ingredients": [
+        {
+          "ko": "연료",
+          "perMinute": 15
+        },
+        {
+          "ko": "중유 잔여물",
+          "perMinute": 30
+        },
+        {
+          "ko": "황",
+          "perMinute": 22.5
+        },
+        {
+          "ko": "석유 코크스",
+          "perMinute": 22.5
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_ElectrodeCircuitBoard_C",
+      "ko": "전극 회로 기판",
+      "en": "Electrode Circuit Board",
+      "makes": {
+        "item": "Desc_CircuitBoard_C",
+        "ko": "회로 기판",
+        "perMinute": 5
+      },
+      "tier": "C",
+      "score": 45.3,
+      "effect": {
+        "power": "-0.20%",
+        "items": "-0.24%",
+        "buildings": "0.23%",
+        "resources": "-1.05%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 5,
+      "ingredients": [
+        {
+          "ko": "고무",
+          "perMinute": 20
+        },
+        {
+          "ko": "석유 코크스",
+          "perMinute": 40
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_PureCateriumIngot_C",
+      "ko": "순수한 카테리움 주괴",
+      "en": "Pure Caterium Ingot",
+      "makes": {
+        "item": "Desc_GoldIngot_C",
+        "ko": "카테리움 주괴",
+        "perMinute": 12
+      },
+      "tier": "C",
+      "score": 44.1,
+      "effect": {
+        "power": "0.68%",
+        "items": "0.32%",
+        "buildings": "0.47%",
+        "resources": "0.68%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_OilRefinery_C",
+        "ko": "정제소",
+        "unlockTier": 5
+      },
+      "usableFromTier": 5,
+      "ingredients": [
+        {
+          "ko": "카테리움 광석",
+          "perMinute": 24
+        },
+        {
+          "ko": "물",
+          "perMinute": 24
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_EncasedIndustrialBeam_C",
+      "ko": "포장된 산업용 파이프",
+      "en": "Encased Industrial Pipe",
+      "makes": {
+        "item": "Desc_SteelPlateReinforced_C",
+        "ko": "포장된 산업용 빔",
+        "perMinute": 4
+      },
+      "tier": "C",
+      "score": 42.6,
+      "effect": {
+        "power": "0.43%",
+        "items": "0.60%",
+        "buildings": "1.83%",
+        "resources": "0.24%"
+      },
+      "needsOtherAlternate": true,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 3,
+      "ingredients": [
+        {
+          "ko": "강철 파이프",
+          "perMinute": 24
+        },
+        {
+          "ko": "콘크리트",
+          "perMinute": 20
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_RecycledRubber_C",
+      "ko": "재활용 고무",
+      "en": "Recycled Rubber",
+      "makes": {
+        "item": "Desc_Rubber_C",
+        "ko": "고무",
+        "perMinute": 60
+      },
+      "tier": "C",
+      "score": 42.1,
+      "effect": {
+        "power": "0.96%",
+        "items": "2.06%",
+        "buildings": "2.81%",
+        "resources": "1.41%"
+      },
+      "needsOtherAlternate": true,
+      "machine": {
+        "id": "Build_OilRefinery_C",
+        "ko": "정제소",
+        "unlockTier": 5
+      },
+      "usableFromTier": 5,
+      "ingredients": [
+        {
+          "ko": "플라스틱",
+          "perMinute": 30
+        },
+        {
+          "ko": "연료",
+          "perMinute": 30
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_IngotSteel_2_C",
+      "ko": "압축 강철 주괴",
+      "en": "Compacted Steel Ingot",
+      "makes": {
+        "item": "Desc_SteelIngot_C",
+        "ko": "강철 주괴",
+        "perMinute": 10
+      },
+      "tier": "D",
+      "score": 38,
+      "effect": {
+        "power": "0.15%",
+        "items": "1.58%",
+        "buildings": "0.48%",
+        "resources": "-0.85%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_FoundryMk1_C",
+        "ko": "주조소",
+        "unlockTier": 3
+      },
+      "usableFromTier": 8,
+      "ingredients": [
+        {
+          "ko": "철 광석",
+          "perMinute": 5
+        },
+        {
+          "ko": "압축 석탄",
+          "perMinute": 2.5
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_Quartz_Purified_C",
+      "ko": "석영 정제",
+      "en": "Quartz Purification",
+      "makes": {
+        "item": "Desc_QuartzCrystal_C",
+        "ko": "석영 수정",
+        "perMinute": 75
+      },
+      "tier": "D",
+      "score": 37.2,
+      "effect": {
+        "power": "0.73%",
+        "items": "1.13%",
+        "buildings": "-2.74%",
+        "resources": "1.04%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_OilRefinery_C",
+        "ko": "정제소",
+        "unlockTier": 5
+      },
+      "usableFromTier": 8,
+      "ingredients": [
+        {
+          "ko": "석영 원석",
+          "perMinute": 120
+        },
+        {
+          "ko": "질산",
+          "perMinute": 10
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_PlutoniumFuelUnit_C",
+      "ko": "플루토늄 연료 장치",
+      "en": "Plutonium Fuel Unit",
+      "makes": {
+        "item": "Desc_PlutoniumFuelRod_C",
+        "ko": "플루토늄 연료봉",
+        "perMinute": 0.5
+      },
+      "tier": "D",
+      "score": 36.4,
+      "effect": {
+        "power": "0.19%",
+        "items": "0.95%",
+        "buildings": "0.74%",
+        "resources": "0.91%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_AssemblerMk1_C",
+        "ko": "조립기",
+        "unlockTier": 2
+      },
+      "usableFromTier": 8,
+      "ingredients": [
+        {
+          "ko": "포장된 플루토늄 전지",
+          "perMinute": 10
+        },
+        {
+          "ko": "압력 변환 큐브",
+          "perMinute": 0.5
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_Diamond_Pink_C",
+      "ko": "분홍 다이아몬드",
+      "en": "Pink Diamonds",
+      "makes": {
+        "item": "Desc_Diamond_C",
+        "ko": "다이아몬드",
+        "perMinute": 15
+      },
+      "tier": "D",
+      "score": 35.8,
+      "effect": {
+        "power": "0.27%",
+        "items": "-0.88%",
+        "buildings": "2.31%",
+        "resources": "-4.14%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_Converter_C",
+        "ko": "변환기",
+        "unlockTier": 9
+      },
+      "usableFromTier": 9,
+      "ingredients": [
+        {
+          "ko": "석탄",
+          "perMinute": 120
+        },
+        {
+          "ko": "석영 수정",
+          "perMinute": 45
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_InstantPlutoniumCell_C",
+      "ko": "즉석 플루토늄 전지",
+      "en": "Instant Plutonium Cell",
+      "makes": {
+        "item": "Desc_PlutoniumCell_C",
+        "ko": "포장된 플루토늄 전지",
+        "perMinute": 10
+      },
+      "tier": "D",
+      "score": 34.9,
+      "effect": {
+        "power": "1.04%",
+        "items": "0.62%",
+        "buildings": "0.53%",
+        "resources": "0.56%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_HadronCollider_C",
+        "ko": "입자 가속기",
+        "unlockTier": 8
+      },
+      "usableFromTier": 8,
+      "ingredients": [
+        {
+          "ko": "비분열성 우라늄",
+          "perMinute": 75
+        },
+        {
+          "ko": "알루미늄 케이스",
+          "perMinute": 10
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_SteelPipe_Iron_C",
+      "ko": "철 파이프",
+      "en": "Iron Pipe",
+      "makes": {
+        "item": "Desc_SteelPipe_C",
+        "ko": "강철 파이프",
+        "perMinute": 25
+      },
+      "tier": "D",
+      "score": 33,
+      "effect": {
+        "power": "0.24%",
+        "items": "1.46%",
+        "buildings": "0.60%",
+        "resources": "2.02%"
+      },
+      "needsOtherAlternate": true,
+      "machine": {
+        "id": "Build_ConstructorMk1_C",
+        "ko": "제작기",
+        "unlockTier": 0
+      },
+      "usableFromTier": 0,
+      "ingredients": [
+        {
+          "ko": "철 주괴",
+          "perMinute": 100
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_InstantScrap_C",
+      "ko": "즉석 조각",
+      "en": "Instant Scrap",
+      "makes": {
+        "item": "Desc_AluminumScrap_C",
+        "ko": "알루미늄 조각",
+        "perMinute": 300
+      },
+      "tier": "F",
+      "score": 23.1,
+      "effect": {
+        "power": "1.48%",
+        "items": "-2.71%",
+        "buildings": "1.04%",
+        "resources": "-0.73%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_Blender_C",
+        "ko": "혼합기",
+        "unlockTier": 7
+      },
+      "usableFromTier": 8,
+      "ingredients": [
+        {
+          "ko": "보크사이트",
+          "perMinute": 150
+        },
+        {
+          "ko": "석탄",
+          "perMinute": 100
+        },
+        {
+          "ko": "황산",
+          "perMinute": 50
+        },
+        {
+          "ko": "물",
+          "perMinute": 60
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_PureCopperIngot_C",
+      "ko": "순수한 구리 주괴",
+      "en": "Pure Copper Ingot",
+      "makes": {
+        "item": "Desc_CopperIngot_C",
+        "ko": "구리 주괴",
+        "perMinute": 37.5
+      },
+      "tier": "F",
+      "score": 19.5,
+      "effect": {
+        "power": "12.56%",
+        "items": "-4.06%",
+        "buildings": "-4.44%",
+        "resources": "-11.41%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_OilRefinery_C",
+        "ko": "정제소",
+        "unlockTier": 5
+      },
+      "usableFromTier": 5,
+      "ingredients": [
+        {
+          "ko": "구리 광석",
+          "perMinute": 15
+        },
+        {
+          "ko": "물",
+          "perMinute": 10
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_FertileUranium_C",
+      "ko": "핵원료 우라늄",
+      "en": "Fertile Uranium",
+      "makes": {
+        "item": "Desc_NonFissibleUranium_C",
+        "ko": "비분열성 우라늄",
+        "perMinute": 100
+      },
+      "tier": "F",
+      "score": 13,
+      "effect": {
+        "power": "2.76%",
+        "items": "2.25%",
+        "buildings": "2.19%",
+        "resources": "2.45%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_Blender_C",
+        "ko": "혼합기",
+        "unlockTier": 7
+      },
+      "usableFromTier": 8,
+      "ingredients": [
+        {
+          "ko": "우라늄",
+          "perMinute": 25
+        },
+        {
+          "ko": "우라늄 폐기물",
+          "perMinute": 25
+        },
+        {
+          "ko": "질산",
+          "perMinute": 15
+        },
+        {
+          "ko": "황산",
+          "perMinute": 25
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_RadioControlUnit_1_C",
+      "ko": "무선 연결 장치",
+      "en": "Radio Connection Unit",
+      "makes": {
+        "item": "Desc_ModularFrameLightweight_C",
+        "ko": "무선 제어 장치",
+        "perMinute": 3.75
+      },
+      "tier": "F",
+      "score": 9.1,
+      "effect": {
+        "power": "0.62%",
+        "items": "2.71%",
+        "buildings": "3.92%",
+        "resources": "2.19%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_ManufacturerMk1_C",
+        "ko": "제조기",
+        "unlockTier": 6
+      },
+      "usableFromTier": 8,
+      "ingredients": [
+        {
+          "ko": "방열판",
+          "perMinute": 15
+        },
+        {
+          "ko": "고속 커넥터",
+          "perMinute": 7.5
+        },
+        {
+          "ko": "석영 수정",
+          "perMinute": 45
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_Diamond_Cloudy_C",
+      "ko": "혼탁한 다이아몬드",
+      "en": "Cloudy Diamonds",
+      "makes": {
+        "item": "Desc_Diamond_C",
+        "ko": "다이아몬드",
+        "perMinute": 20
+      },
+      "tier": "F",
+      "score": 5.2,
+      "effect": {
+        "power": "4.19%",
+        "items": "5.40%",
+        "buildings": "1.43%",
+        "resources": "11.85%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_HadronCollider_C",
+        "ko": "입자 가속기",
+        "unlockTier": 8
+      },
+      "usableFromTier": 8,
+      "ingredients": [
+        {
+          "ko": "석탄",
+          "perMinute": 240
+        },
+        {
+          "ko": "석회석",
+          "perMinute": 480
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_IonizedFuel_Dark_C",
+      "ko": "암흑 이온 연료",
+      "en": "Dark-Ion Fuel",
+      "makes": {
+        "item": "Desc_IonizedFuel_C",
+        "ko": "이온화 연료",
+        "perMinute": 200
+      },
+      "tier": "F",
+      "score": 4.2,
+      "effect": {
+        "power": "-0.23%",
+        "items": "4.33%",
+        "buildings": "2.59%",
+        "resources": "3.75%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_Converter_C",
+        "ko": "변환기",
+        "unlockTier": 9
+      },
+      "usableFromTier": 9,
+      "ingredients": [
+        {
+          "ko": "포장된 로켓 연료",
+          "perMinute": 240
+        },
+        {
+          "ko": "암흑 물질 수정",
+          "perMinute": 80
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_DarkMatter_Crystallization_C",
+      "ko": "암흑 물질 결정화",
+      "en": "Dark Matter Crystallization",
+      "makes": {
+        "item": "Desc_DarkMatter_C",
+        "ko": "암흑 물질 수정",
+        "perMinute": 20
+      },
+      "tier": "F",
+      "score": 3.2,
+      "effect": {
+        "power": "4.62%",
+        "items": "3.00%",
+        "buildings": "3.19%",
+        "resources": "3.38%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_HadronCollider_C",
+        "ko": "입자 가속기",
+        "unlockTier": 8
+      },
+      "usableFromTier": 9,
+      "ingredients": [
+        {
+          "ko": "암흑 물질 잔여물",
+          "perMinute": 200
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_Diamond_Petroleum_C",
+      "ko": "석유 다이아몬드",
+      "en": "Petroleum Diamonds",
+      "makes": {
+        "item": "Desc_Diamond_C",
+        "ko": "다이아몬드",
+        "perMinute": 30
+      },
+      "tier": "F",
+      "score": 2.9,
+      "effect": {
+        "power": "3.73%",
+        "items": "6.85%",
+        "buildings": "11.75%",
+        "resources": "-9.73%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_HadronCollider_C",
+        "ko": "입자 가속기",
+        "unlockTier": 8
+      },
+      "usableFromTier": 8,
+      "ingredients": [
+        {
+          "ko": "석유 코크스",
+          "perMinute": 720
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_CopperIngot_Leached_C",
+      "ko": "침출된 구리 주괴",
+      "en": "Leached Copper Ingot",
+      "makes": {
+        "item": "Desc_CopperIngot_C",
+        "ko": "구리 주괴",
+        "perMinute": 110
+      },
+      "tier": "F",
+      "score": 2,
+      "effect": {
+        "power": "5.20%",
+        "items": "2.18%",
+        "buildings": "-18.87%",
+        "resources": "-4.65%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_OilRefinery_C",
+        "ko": "정제소",
+        "unlockTier": 5
+      },
+      "usableFromTier": 8,
+      "ingredients": [
+        {
+          "ko": "구리 광석",
+          "perMinute": 45
+        },
+        {
+          "ko": "황산",
+          "perMinute": 25
+        }
+      ]
+    },
+    {
+      "id": "Recipe_Alternate_CopperIngot_Tempered_C",
+      "ko": "단련된 구리 주괴",
+      "en": "Tempered Copper Ingot",
+      "makes": {
+        "item": "Desc_CopperIngot_C",
+        "ko": "구리 주괴",
+        "perMinute": 60
+      },
+      "tier": "F",
+      "score": 0.2,
+      "effect": {
+        "power": "7.99%",
+        "items": "9.95%",
+        "buildings": "-3.63%",
+        "resources": "-16.70%"
+      },
+      "needsOtherAlternate": false,
+      "machine": {
+        "id": "Build_FoundryMk1_C",
+        "ko": "주조소",
+        "unlockTier": 3
+      },
+      "usableFromTier": 5,
+      "ingredients": [
+        {
+          "ko": "구리 광석",
+          "perMinute": 25
+        },
+        {
+          "ko": "석유 코크스",
+          "perMinute": 40
+        }
+      ]
     }
-  ]
+  ],
+  "$tierNote": "「언제부터」는 만드는 기계의 해금 티어와 재료가 등장하는 티어 중 늦은 쪽으로 계산한 값이다. 하드 드라이브에서 뽑는 시점과는 별개다 — 뽑아 두고 나중에 쓸 수 있다."
 }

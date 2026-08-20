@@ -1,0 +1,200 @@
+---
+/**
+ * 대체 제작법 우선순위 — 하드 드라이브에서 무엇을 먼저 뽑을 것인가.
+ *
+ * 순위와 점수는 **우리가 매긴 것이 아니다.** 커뮤니티 분석글(1.0 기준, 선형계획 모형)에서
+ * 그대로 옮겼고, 레시피 id·한글명·재료·해금 티어만 게임 데이터에서 붙였다.
+ * 출처와 방법은 화면 아래에 밝힌다.
+ *
+ * 「언제부터」는 하드 드라이브를 뽑는 시점이 아니라 **실제로 쓸 수 있게 되는 시점**이다.
+ * 재료가 아직 안 열렸으면 뽑아 둬도 못 쓴다.
+ */
+import Base from '../../layouts/Base.astro';
+import priority from '../../data/curated/alternate-priority.json';
+
+const doc = priority as {
+  $source: {
+    title: string;
+    author: string;
+    url: string;
+    date: string;
+    gameVersion: string;
+    method: string;
+  };
+  $note: string;
+  $tierNote: string;
+  $unranked: { id: string; ko: string; en: string }[];
+  recipes: {
+    id: string;
+    ko: string;
+    en: string;
+    makes: { ko: string; perMinute: number };
+    tier: string;
+    score: number;
+    usableFromTier: number;
+    machine: { ko: string };
+    ingredients: { ko: string; perMinute: number }[];
+    needsOtherAlternate: boolean;
+  }[];
+};
+
+const TIER_KO: Record<string, string> = {
+  S: '무조건',
+  A: '적극 권장',
+  B: '권장',
+  C: '때에 따라',
+  D: '거의 안 씀',
+  F: '안 씀',
+};
+
+/** 언제부터 쓸 수 있는지로 묶는다. 리세마라할 때 지금 뽑아야 할 것이 위로 온다 */
+const tiers = [...new Set(doc.recipes.map((r) => r.usableFromTier))].sort((a, b) => a - b);
+const groups = tiers.map((t) => ({
+  tier: t,
+  list: doc.recipes
+    .filter((r) => r.usableFromTier === t)
+    .sort((a, b) => b.score - a.score),
+}));
+
+const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').length;
+const num = (n: number) => (Number.isInteger(n) ? String(n) : String(Math.round(n * 100) / 100));
+---
+
+<Base
+  title="대체 제작법 우선순위 — 무엇을 먼저 뽑을까"
+  description="하드 드라이브 대체 제작법 104건을 쓸 수 있게 되는 티어별로 묶고 커뮤니티 순위를 붙였습니다."
+  section="recipes"
+>
+  <div class="wrap page">
+    <header class="page-head">
+      <p class="marker"><span class="num">대체 제작법</span></p>
+      <h1>무엇을 먼저 뽑을까</h1>
+      <p class="lede prose">
+        하드 드라이브는 후보 <strong>2개 중 1개</strong>를 고르고 리롤이 한 번 있습니다.
+        아래는 <strong>실제로 쓸 수 있게 되는 티어</strong>로 묶은 목록입니다 — 재료가 아직
+        안 열렸으면 뽑아 둬도 못 씁니다.
+      </p>
+    </header>
+
+    <div class="facts">
+      <div class="fact"><span class="fact-k">순위가 있는 것</span><span class="fact-v n">{doc.recipes.length}</span></div>
+      <div class="fact"><span class="fact-k">무조건 · 적극 권장</span><span class="fact-v n">{topPicks}</span></div>
+      <div class="fact"><span class="fact-k">순위 미확보</span><span class="fact-v n">{doc.$unranked.length}</span></div>
+    </div>
+
+    {groups.map((g) => (
+      <section class="section">
+        <p class="marker">
+          <span class="num">{g.tier === 0 ? '허브' : `티어 ${g.tier}`}</span> 부터 쓸 수 있음
+        </p>
+        <div class="scroll-x">
+          <table>
+            <thead>
+              <tr>
+                <th>제작법</th>
+                <th>등급</th>
+                <th class="n">점수</th>
+                <th>만드는 것</th>
+                <th>재료</th>
+                <th>기계</th>
+              </tr>
+            </thead>
+            <tbody>
+              {g.list.map((r) => (
+                <tr>
+                  <td>
+                    <strong>{r.ko}</strong> <span class="en">{r.en}</span>
+                    {r.needsOtherAlternate && (
+                      <span class="rownote">다른 대체 제작법이 함께 있어야 제값을 합니다</span>
+                    )}
+                  </td>
+                  <td>
+                    <span class={`grade is-${r.tier.toLowerCase()}`}>{r.tier}</span>
+                    <span class="grade-ko">{TIER_KO[r.tier]}</span>
+                  </td>
+                  <td class="n">{num(r.score)}</td>
+                  <td>{r.makes.ko} <span class="n">{num(r.makes.perMinute)}/분</span></td>
+                  <td class="small muted">
+                    {r.ingredients.map((g2) => (
+                      <span class="chip">{g2.ko} <span class="n">{num(g2.perMinute)}</span></span>
+                    ))}
+                  </td>
+                  <td class="small muted nowrap">{r.machine.ko}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    ))}
+
+    {doc.$unranked.length > 0 && (
+      <section class="section">
+        <p class="marker"><span class="num">순위 미확보</span></p>
+        <p class="caption">
+          출처의 표에 없어 순위를 붙이지 못한 것들입니다. 지어내지 않고 그대로 둡니다.
+        </p>
+        <ul class="unranked">
+          {doc.$unranked.map((r) => (
+            <li class="chip">{r.ko} <span class="en">{r.en}</span></li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <section class="section">
+      <p class="marker"><span class="num">출처</span></p>
+      <div class="src">
+        <p>
+          <a href={doc.$source.url}>{doc.$source.title}</a> — {doc.$source.author},
+          {' '}{doc.$source.date} · 게임 <span class="n">{doc.$source.gameVersion}</span> 기준
+        </p>
+        <p class="caption">{doc.$source.method}</p>
+        <p class="caption">{doc.$note}</p>
+        <p class="caption">{doc.$tierNote}</p>
+      </div>
+    </section>
+  </div>
+
+  <style>
+    .page { padding-block: var(--s16) 0; }
+    .page-head { margin-bottom: var(--s8); }
+    .page-head h1 { margin-bottom: var(--s4); }
+    .lede { font-size: var(--t-body-l); color: var(--ink-2); }
+    .lede strong { color: var(--ink); font-weight: 600; }
+
+    .facts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+      gap: var(--hair);
+      background: var(--line);
+      border: var(--hair) solid var(--line);
+    }
+    .fact { background: var(--bg); padding: var(--s4) var(--s5); }
+    .fact-k { display: block; margin-bottom: var(--s1); font-size: var(--t-label); color: var(--ink-3); }
+    .fact-v { font-size: var(--t-body-l); font-weight: 500; }
+
+    .section { padding-block: var(--s12) 0; }
+    .rownote { display: block; font-size: var(--t-caption); color: var(--ink-3); }
+    .nowrap { white-space: nowrap; }
+    td .chip { margin: 1px 2px 1px 0; }
+
+    /* 등급은 글자로 읽힌다. 색은 보조 신호일 뿐이다 */
+    .grade {
+      display: inline-block;
+      min-width: 1.5rem;
+      padding: 0.05em 0.35em;
+      border: var(--hair) solid var(--line-strong);
+      border-radius: var(--radius);
+      font-family: var(--font-mono);
+      font-weight: 600;
+      text-align: center;
+    }
+    .grade.is-s, .grade.is-a { border-color: var(--accent); color: var(--accent); }
+    .grade.is-d, .grade.is-f { color: var(--ink-3); }
+    .grade-ko { margin-left: var(--s2); font-size: var(--t-caption); color: var(--ink-2); }
+
+    .unranked { display: flex; flex-wrap: wrap; gap: var(--s2); margin: var(--s4) 0 0; padding: 0; list-style: none; }
+    .src p { max-width: var(--measure-wide); }
+  </style>
+</Base>

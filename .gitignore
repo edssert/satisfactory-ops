@@ -1,19 +1,19 @@
-node_modules/
-.DS_Store
-Thumbs.db
-*.log
-.env
-.vscode/
-.idea/
-/tmp/
+
 
 # Astro
-dist/
-.astro/
-
 # Claude Code 개인 설정 (커밋하지 않음)
-.claude/settings.local.json
-.cache/
-
+# 레딧 원문 덤프 — 조사 근거는 docs/research/ 에 정리해 남긴다
 # 조사 에이전트가 만드는 임시 수집물
+*.log
+.astro/
+.cache/
+.claude/settings.local.json
+.DS_Store
+.env
+.idea/
 .tmp-research/
+.vscode/
+/tmp/
+dist/
+node_modules/
+Thumbs.db
