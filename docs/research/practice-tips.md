@@ -77,7 +77,9 @@
 | **Alt + 우클릭** | **지도를 열지 않고 바라보는 곳에 스탬프.** Alt 꾹 = 이미 찍은 스탬프가 실세계에 홀로그램 기둥으로 보인다 | Reddit 댓글(bargle0, Troldann) + 나무위키 10.1 **2건**. 슬러그·하드드라이브 마킹에 직결. ⚠️ 스탬프 **최대 개수 제한**이 있다(나무위키, 수치 미기재) |
 | P (포토 모드) | 망원경 대용. 멀리 있는 추락정·슬러그를 확대해 찾는다 | Steam okurimono748 **단일** |
 | Tab → 화면 우측 끝 | **인게임 메모장 / 할 일 목록.** 굵게·체크박스 서식, 인벤토리를 닫아도 화면 옆에 남는다 | Reddit im-d3 + Steam Miles Away + Steam giggles **3건** |
-| 건설 메뉴에서 스페이스 | 검색창으로 커서 이동 → 타이핑 후 엔터 | Reddit 댓글(Vinnie420) **단일**. ⚠️ 같은 스레드에서 "제트팩 비행 중에 하면 죽는다"는 농담 섞인 경고가 붙었다 |
+| 건설 메뉴에서 스페이스 | 검색창으로 커서 이동 → 타이핑 후 엔터 | Reddit 댓글(Vinnie420). ⚠️ **인벤토리·차원 창고 검색창에는 안 먹는다** — 다른 스레드에서 직접 확인한 사람이 있다(*PSA: after hundreds of hours…* 2024-10-31, White__Lando: "works for the build menu but not for the inventory"). "제트팩 비행 중에 하면 떨어져 죽는다"는 경고도 붙었다 |
+| **Tab → 숫자 → Tab** | **장비 빠른 교체.** 인벤토리를 열면 상단에 장비 퀵슬롯 줄이 뜨고 **그 순서가 숫자키에 대응**한다. 제트팩 ↔ 호버팩 ↔ 낙하산 전환이 순식간 | Reddit *PSA: after hundreds of hours I finally learned…*(2024-10-31, SKISM0 원글 + Donko98·Mr_Beletal 설명) — **원글이 "이걸 알려준 사람 고맙다"로 시작할 만큼 잘 안 알려진 조작**. ⚠️ 슬롯 번호는 **인벤토리에 든 다른 장비 순서에 따라 바뀐다**(베릴 너트가 있으면 제트팩이 2번이 되는 식) |
+| 집라인 우클릭 | **한 번 누르면 잠긴다.** 계속 누르고 있을 필요 없다 | Reddit im-d3 + Reddit 1gg5mkn 원글 — **2건** |
 | **전신주를 기존 전선에 조준해서 설치** | 전선 중간에 전신주·벽 콘센트를 끼워 넣으면 전선이 그쪽으로 재배선되며 연결 슬롯이 늘어난다 | Reddit im-d3 + Reddit *160 hours in and just learned…*(2023-03-29) 댓글(Whiptail84, triplegerms) + 디시 20가지 팁 #01 — **3건.** Update 6.0.5에 추가됐다는 댓글 증언(Cinch24) |
 | **Ctrl+C / Ctrl+V** | 기계 설정(클럭 값 등) 복사·붙여넣기. **기계를 열 필요 없이** "E로 설정" 프롬프트가 뜨는 거리면 조준만으로 된다 → 설정 하나 잡고 나머지를 **지나가면서 Ctrl+V 연타**. 클립보드는 **오브젝트 종류별로 따로 기억**한다 | Steam okurimono748(기본 동작) + Reddit 125egis 댓글(ThickestRooster, 상세) — **2건.** 오버클럭 값을 붙여넣으면 인벤토리의 동력 조각이 자동 소모된다(okurimono748) |
 
@@ -104,6 +106,15 @@
 - **바닥에 떨어뜨린 아이템은 사라지지 않는다.** 컨테이너 옆에 내용물 1개를 떨어뜨려 라벨 대용으로 쓴다. (Steam giggles + 나무위키 10.3 **2건**)
 - **[차원 창고 이전의 장거리 운반 요령]** 일괄 해체 시 **인벤토리를 넘치는 분량은 "마지막으로 지정한 건물" 자리에 상자로 떨어진다.** 이걸 이용해 이사를 한 번에 끝낼 수 있다 — 옮길 자재를 컨테이너들에 채워 넣고 전부 해체 대상으로 지정한 뒤, **목적지까지 걸어가서 거기 있는 토대 하나를 마지막으로 지정하고 해체**하면 짐이 목적지에 쏟아진다. (Reddit 125egis 댓글 IlyBoySwag·Kidiri90 **2명이 독립적으로 서술**, 미검증)
 - 차원 창고를 열면 인벤토리 관리 자체가 거의 사라진다 → 2.5절.
+
+**이동 (초반 순서)**
+
+- **맨몸: 슬라이딩 점프 연쇄가 기본.** 이것만으로 분배기·파이프를 넘어다니고, 바닥에 깔린 벨트·파이프 **밑으로 슬라이딩해 지나갈 수 있다.** (1절 표, 5건)
+- **블레이드 러너(MAM 석영, 실리카 50 + 모듈식 골조 10)를 최대한 빨리.** 이동속도 9 → 13.5 m/s, 점프 2 → 4 m, 안전 낙하 13.5 → 20.5 m. (`exploration.md` 검증치. 디시 *1.1 기초 가이드 2*: **"이동속도·점프 거리·낙하 피해 감소 등 알짜배기만 모아둔 장비이니 최대한 빠르게 만들어야 한다"** — 마일스톤이 아니라 **MAM 석영 트리**에 있어서 못 찾는 사람이 많다고 지적한다)
+- **수직 이동은 어썸 상점 사다리가 제일 편하다.** 쿠폰이 모자라면 **적층식 컨베이어 기둥**을 쌓아 대용으로 쓴다. 저장 컨테이너 옆면 사다리도 쓸 수 있다. (나무위키 10.3 + 디시 20가지 팁 #05 **2건**)
+- **집라인 + 송전탑 조합이 초반 장거리 이동의 실질 해법이다.** 송전탑을 세우는 행위 자체가 미지 지역에 전력망을 까는 일이므로 **추가 작업이 없고 한 번에 300 m씩** 뻗는다. 나중에 레이더 타워·호버팩·양자 포털이 전부 그 전력망을 그대로 쓴다. (나무위키 10.1·10.3) — Reddit *Finished and 100% the game today*(2025-10-26)의 회고도 같은 방식을 실제로 썼다고 진술한다("I used power line towers to get around as soon as I got the zip line")
+- **낙하산은 활공 중 상호작용 거리가 크게 늘어난다.** 이 상태에서는 **바위 안에 박힌 머서 스피어·파워 슬러그를 집을 수 있다.** (Steam giggles 가이드 댓글 제보(normaalnewood381) + 나무위키 10.1 "체공하는 동안 상호작용 거리가 대폭 늘어난다" — **2건**)
+- **하이퍼튜브·제트팩·호버팩 비교는 이 문서 범위 밖이다.** `exploration.md`의 이동 수단 해금 표를 볼 것.
 
 ### 2.3 바이오매스·전력 초반 운용
 
@@ -315,9 +326,9 @@
 ## 5. 확인 못 함
 
 - **Reddit 게시물 4건**과 **Reddit 검색 6건**은 레이트리밋 때문에 이번 회차에 끝내지 못했다. **URL과 접근 방법은 위 "조사 방법" 절에 남겼으므로 그대로 이어서 하면 된다.**
-  - 못 읽은 게시물: *Actually obscure tips*(`1fy4i6g`, 2024-10-07, **429로 두 번 실패**), *PSA: after hundreds of hours I finally learned…*(`1gg5mkn`, 2024-10-31, **429로 두 번 실패**), *Finished and 100% the game today, my thoughts*(`1ogleeg`, 2025-10-26), *First time playing … completed after 113 hours*(`1v7dvy7`, 2026-07-26)
+  - 못 읽은 게시물: *Actually obscure tips*(`1fy4i6g`, 2024-10-07, **429로 세 번 실패**), *First time playing … completed after 113 hours*(`1v7dvy7`, 2026-07-26)
   - 못 돌린 검색: 바이오매스 자동화 / 기지 위치 / 시간 낭비 / 슬러그 우선순위 / 차원 창고 / 하드드라이브 우선순위
-  - 읽었으나 **실전 요령이 거의 없어 인용하지 않은 것**: *1,100 hours later…*(`g2m6v3`, 2020-04-16) — 청사진·텔레포터 위시리스트 글이라 이 문서 범위 밖이다
+  - 읽었으나 **실전 요령이 거의 없어 인용을 줄인 것**: *1,100 hours later…*(`g2m6v3`, 2020-04-16)는 청사진·텔레포터 위시리스트 글이라 범위 밖. *Finished and 100% the game today*(`1ogleeg`, 2025-10-26)는 후회가 전부 후반부(월드 순환 열차망·원자력)라 이동 수단 한 줄만 인용했다
 - **"MAM 연구를 미리 하면 초반 하드 드라이브 확정 3종이 깨진다"**는 디시 *진행 로드맵*의 서술. 원문이 압축돼 있어 해석이 두 갈래로 갈린다. **인게임 확인 필요.** 확정되면 앱의 "지금 뭘 해야 하나"에 직접 들어갈 만한 고가치 정보다.
 - **초반 하드 드라이브 3개로 나오는 대체 제작법 풀이 정확히 무엇인지.** "티어2에는 주조된 나사 / 철 전선 / 인벤토리 +6칸 셋뿐"이라는 주장이 **단일 출처**다. `alternate-recipes.md`의 106개 목록과 각 레시피의 해금 선행조건을 대조하면 계산으로 검증할 수 있을 것 같은데 이번엔 못 했다.
 - **위키 두 문서의 상충:** `Settings`는 "Keep Inventory"를 일반 게임플레이 옵션으로, `Creative Mode`(구 Advanced Game Settings)는 같은 이름을 크리에이티브 모드 옵션으로 나열한다. **도전과제가 막히는지 여부가 걸려 있어 실제로 중요하다.** 검색 스니펫 수준에서는 "일반 옵션이라 도전과제와 무관"이 우세하지만 **1차 확인 못 함**.
@@ -363,6 +374,9 @@
 - https://www.reddit.com/r/SatisfactoryGame/comments/1fzwsdk/ — *Waste is the highest form of efficiency* (2024-10-09) — 뜯지 말고 새로 지어라, 1 m 토대 그리드 함정
 - https://www.reddit.com/r/SatisfactoryGame/comments/zen6hf/ — *Satisfactory Progression Guide Checklist and Tips* (2022-12-07, Garrala28) — 부피가 커지는 부품은 소비 지점 앞에서
 - https://www.reddit.com/r/SatisfactoryGame/comments/1fe4bs0/ — *By far my favorite Quality of Life update* (2024-09-11) — 1.0 출시 직후 석탄 발전기 급유 버그와 우회법
+- https://www.reddit.com/r/SatisfactoryGame/comments/1gg5mkn/ — *PSA: after hundreds of hours I finally learned…* (2024-10-31) — Tab-숫자-Tab 장비 교체, 집라인 우클릭 잠금, 스페이스 검색이 인벤토리엔 안 먹는다는 확인
+- https://www.reddit.com/r/SatisfactoryGame/comments/1ogleeg/ — *Finished and 100% the game today, my thoughts* (2025-10-26) — 대부분 후반 회고, 집라인+송전탑 이동 진술만 인용
+- https://www.reddit.com/r/SatisfactoryGame/comments/g2m6v3/ — *1,100 hours later…* (2020-04-16) — 읽었으나 범위 밖이라 미인용
 
 **Steam 커뮤니티 (HTML 직접 파싱, 작성·갱신일 확인)**
 - https://steamcommunity.com/sharedfiles/filedetails/?id=3004127434 — *Beginner & Intermediate Quick Tips* (ApathicAlpaca, 2023-07/09)
