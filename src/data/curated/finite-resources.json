@@ -74,6 +74,21 @@
       "confidence": "consensus",
       "source": "docs/research/alternate-recipes-ranking.md",
       "note": "이 아이템은 게임 배포 데이터의 아이템 목록에 없다(스키매틱 비용에만 등장). 그래서 클래스 참조를 두지 않는다."
+    },
+    {
+      "id": "Desc_Wood_C",
+      "ko": "나무와 이파리",
+      "what": "맵에 놓인 나무·덤불. 톱이나 손으로 거둔다.",
+      "becomes": "바이오매스 → 고체 바이오 연료 (연소기 연료)",
+      "usedFor": [
+        "바이오매스 연소기 연료",
+        "초반 전력 전체"
+      ],
+      "warning": "**한 번 벤 나무는 절대 다시 자라지 않는다.** 공식 위키의 표현 그대로 \"Foliage cannot be planted and will never regrow\" 다. 즉 공장 주변의 숲은 쓰면 없어지는 연료 창고다.",
+      "advice": "석탄 발전(티어 3)까지 버티는 데만 쓴다. 바이오매스를 **고체 바이오 연료로 바꿔서** 태우면 같은 나무로 훨씬 오래 간다. 공장 부지 안의 나무부터 베어라 — 어차피 건설하며 밀어야 하고, 멀리 가서 벨 이유가 없다.",
+      "confidence": "verified",
+      "source": "satisfactory.wiki.gg/wiki/Flora · docs/research/finite-and-respawn.md"
     }
-  ]
+  ],
+  "$contrast": "동물은 다르다. 죽이면 그 스폰 지점이 인게임 3일 동안 잠겼다가 다시 살아난다 — 다만 그 자리에 건물을 충분히 지어 두면 다시 열리지 않는다. 그래서 외계 단백질·DNA 캡슐 계열은 사실상 재생 자원이고, 공장 부지 안의 개체만 영구히 사라진다. 나무와는 정반대다."
 }

@@ -15,6 +15,7 @@ import FlowChart from '../../components/FlowChart.astro';
 import { building, buildings, defaultRecipeOf, item, milestones } from '../../lib/gamedata';
 import spine from '../../data/curated/spine.json';
 import finite from '../../data/curated/finite-resources.json';
+import exploration from '../../data/curated/exploration.json';
 import { biomassLine, ironLine, smartPlatingLine, type FlowDef } from '../../lib/flows';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -32,6 +33,14 @@ const finiteDoc = finite as {
     amplified?: { ko: string; base: number; withSloop: number }[];
     slots?: string;
   }[];
+  /** 동물군은 반대다 — 되살아난다. 나란히 놓아야 오해가 안 생긴다 */
+  $contrast: string;
+};
+
+const exploreDoc = exploration as {
+  $key: string;
+  steps: { order: number; ko: string; when: string; cost: string; what: string; why: string }[];
+  gear: { ko: string; when: string; cost: string; effect: string; priority: string; why: string }[];
 };
 
 /** 소수점이 붙을 때만 보여준다. 5.00 대신 5 */
@@ -299,6 +308,64 @@ const FLOWS: Record<string, FlowDef> = {
               </article>
             ))}
           </div>
+
+          <p class="contrast prose">
+            <span class="contrast-tag">반대로</span>
+            {finiteDoc.$contrast}
+          </p>
+        </section>
+
+        <section class="step" id="explore">
+          <p class="marker"><span class="num">편의</span> 탐험</p>
+          <h2>탐험이 곧 편의성이다</h2>
+          <p class="prose muted">{exploreDoc.$key.replace(/\*\*/g, '')}</p>
+
+          <ol class="ex-steps">
+            {exploreDoc.steps.map((x) => (
+              <li class="ex">
+                <p class="ex-head">
+                  <span class="ex-n n">{x.order}</span>
+                  <span class="ex-ko">{x.ko}</span>
+                  <span class="ex-when n">{x.when}</span>
+                </p>
+                <p class="ex-what">{x.what}</p>
+                <p class="ex-why">{x.why.replace(/\*\*/g, '')}</p>
+                <p class="ex-cost n">{x.cost}</p>
+              </li>
+            ))}
+          </ol>
+
+          <h3 class="ex-h3">장비 — 무엇부터 열 것인가</h3>
+          <div class="scroll-x">
+            <table class="ex-gear">
+              <thead>
+                <tr>
+                  <th>장비</th>
+                  <th>어디서</th>
+                  <th>무엇이 달라지나</th>
+                  <th>우선</th>
+                </tr>
+              </thead>
+              <tbody>
+                {exploreDoc.gear.map((g) => (
+                  <tr>
+                    <th scope="row">
+                      {g.ko}
+                      <small>{g.cost}</small>
+                    </th>
+                    <td class="n">{g.when}</td>
+                    <td>
+                      {g.effect}
+                      <small>{g.why}</small>
+                    </td>
+                    <td class={`ex-pri is-${g.priority === '높음' ? 'hi' : g.priority === '중간' ? 'mid' : 'low'}`}>
+                      {g.priority}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </section>
 
         <section class="step is-open">
@@ -426,6 +493,79 @@ const FLOWS: Record<string, FlowDef> = {
     .keep-body { margin: 0; font-weight: 600; max-width: var(--measure); }
 
     .step.is-open h2 { color: var(--ink-2); }
+
+    .contrast {
+      margin: var(--s5) 0 0;
+      padding: var(--s4) var(--s5);
+      border-left: 3px solid var(--primary);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      background: color-mix(in oklab, var(--primary) 7%, transparent);
+      font-size: var(--t-small);
+      line-height: 1.8;
+      color: var(--ink-2);
+      word-break: keep-all;
+    }
+    .contrast-tag {
+      display: inline-block;
+      margin-right: var(--s2);
+      color: var(--primary);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+    }
+
+    .ex-steps {
+      display: grid;
+      gap: var(--s3);
+      margin: var(--s6) 0 var(--s8);
+      padding: 0;
+      list-style: none;
+    }
+    .ex {
+      padding: var(--s4) var(--s5);
+      border-radius: var(--radius);
+      background: var(--raised);
+      box-shadow: var(--lit);
+    }
+    .ex-head { display: flex; align-items: baseline; gap: var(--s3); margin: 0 0 var(--s2); }
+    .ex-n { color: var(--accent); font-family: var(--font-mono); font-weight: 600; }
+    .ex-ko { font-size: var(--t-body-l); font-weight: 600; }
+    .ex-when { margin-left: auto; color: var(--ink-3); font-family: var(--font-mono); font-size: var(--t-caption); }
+    .ex-what { margin: 0 0 var(--s2); max-width: var(--measure); word-break: keep-all; }
+    .ex-why {
+      margin: 0 0 var(--s3);
+      max-width: var(--measure);
+      font-size: var(--t-small);
+      line-height: 1.8;
+      color: var(--ink-2);
+      word-break: keep-all;
+    }
+    .ex-cost { margin: 0; color: var(--ink-3); font-family: var(--font-mono); font-size: var(--t-caption); }
+
+    .ex-h3 { margin: 0 0 var(--s4); font-size: var(--t-body-l); }
+    .ex-gear { width: 100%; border-collapse: collapse; font-size: var(--t-small); }
+    .ex-gear th, .ex-gear td {
+      padding: var(--s3) var(--s4);
+      border-bottom: var(--hair) solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      word-break: keep-all;
+    }
+    .ex-gear thead th { color: var(--ink-3); font-family: var(--font-mono); font-size: 11px; font-weight: 500; }
+    .ex-gear tbody th { font-weight: 600; white-space: nowrap; }
+    .ex-gear small {
+      display: block;
+      margin-top: 3px;
+      color: var(--ink-3);
+      font-size: var(--t-caption);
+      font-weight: 400;
+      white-space: normal;
+    }
+    .ex-pri { font-family: var(--font-mono); white-space: nowrap; }
+    .ex-pri.is-hi { color: var(--accent); }
+    .ex-pri.is-mid { color: var(--ink-2); }
+    .ex-pri.is-low { color: var(--ink-3); }
 
     .finite { display: grid; gap: var(--s4); }
     @media (min-width: 900px) { .finite { grid-template-columns: 1fr 1fr; } }

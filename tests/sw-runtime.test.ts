@@ -154,7 +154,7 @@ test('온라인에서 각 화면이 자기 문서를 돌려준다', { skip: !fs.
     [`${BASE}/`, '지금 무엇을'],
     [`${BASE}/guide/`, '해금 순서대로'],
     [`${BASE}/tools/`, '레퍼런스'],
-    [`${BASE}/versions/`, '버전 연혁'],
+    [`${BASE}/versions/`, 'Release Notes'],
   ];
   for (const [pathname, expected] of cases) {
     const res = await sw.navigate(pathname);
