@@ -587,3 +587,35 @@
   background: color-mix(in oklab, var(--accent) 18%, transparent);
   color: var(--accent);
 }
+
+/* 세이브 불러오기 — 파일 고르기를 단추처럼 */
+.rm-load {
+  display: block;
+  margin-top: var(--s3);
+  padding: 8px 10px;
+  border: var(--hair) solid var(--primary);
+  border-radius: 4px;
+  color: var(--ink);
+  font-size: var(--t-body-s);
+  text-align: center;
+  cursor: pointer;
+}
+.rm-load:hover { background: color-mix(in oklab, var(--primary) 14%, transparent); }
+.rm-load.is-busy { border-color: var(--line-strong); color: var(--ink-3); cursor: progress; }
+.rm-load input { display: none; }
+
+.rm-where {
+  margin: 5px 0 0;
+  color: var(--ink-3);
+  font-size: var(--t-caption);
+  line-height: 1.55;
+  word-break: keep-all;
+}
+.rm-where code {
+  display: block;
+  overflow-wrap: anywhere;
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+.rm-ok { margin: 6px 0 0; color: var(--ink-2); font-size: var(--t-caption); word-break: keep-all; }
+.rm-bad { margin: 6px 0 0; color: var(--danger, #e0623c); font-size: var(--t-caption); }

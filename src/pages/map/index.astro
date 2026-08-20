@@ -13,6 +13,7 @@ import '../../styles/fx.css';
 import '../../styles/map.css';
 import nodesJson from '../../data/app/resource-nodes.json';
 import collectiblesJson from '../../data/app/collectibles.json';
+import saveUnlocks from '../../data/app/save-unlocks.json';
 import manifestJson from '../../../public/assets/map/manifest.json';
 import { items } from '../../lib/gamedata';
 import { areas } from '../../lib/start-areas';
@@ -101,6 +102,7 @@ const payloadBelts = buildings
 
     <ResourceMap
       client:load
+      unlockMap={saveUnlocks.map}
       drops={drops}
       dropKinds={dropKinds}
       belts={payloadBelts}

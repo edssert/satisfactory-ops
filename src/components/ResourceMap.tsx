@@ -15,6 +15,8 @@
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { loadCollected, saveCollected } from '../lib/collected';
+import { loadOwned, saveOwned } from '../lib/owned-recipes';
+import type { SaveReport } from '../lib/save-import';
 
 export interface MapPoint {
   r: string;
@@ -59,6 +61,8 @@ export interface MapDropKind {
 }
 
 interface Props {
+  /** 세이브의 스키매틱을 대체 제작법으로 옮기는 지도 */
+  unlockMap: Record<string, string[]>;
   drops: MapDrop[];
   dropKinds: MapDropKind[];
   belts: MapBelt[];
@@ -110,6 +114,7 @@ const KIND: Record<string, string> = {
 };
 
 export default function ResourceMap({
+  unlockMap,
   drops,
   dropKinds,
   belts: BELTS,
@@ -138,6 +143,10 @@ export default function ResourceMap({
    */
   const [got, setGot] = useState<Set<string>>(new Set());
   const [gotView, setGotView] = useState<'all' | 'left' | 'got'>('all');
+  /** 세이브 읽기 결과. null 이면 아직 안 읽었다 */
+  const [imported, setImported] = useState<SaveReport | null>(null);
+  const [importing, setImporting] = useState(false);
+  const [importErr, setImportErr] = useState<string | null>(null);
   const [showGrid, setShowGrid] = useState(true);
   const [showAreas, setShowAreas] = useState(true);
   const [sel, setSel] = useState<MapPoint | null>(null);
@@ -327,6 +336,36 @@ export default function ResourceMap({
   useEffect(() => {
     setGot(loadCollected());
   }, []);
+
+  /*
+   * 세이브에는 손댄 것만 적힌다 — 세이브에 있는 수집품 = 이미 주운 것.
+   * 파일은 브라우저 밖으로 나가지 않는다.
+   */
+  const onSaveFile = async (e: Event) => {
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    setImporting(true);
+    setImportErr(null);
+    try {
+      const { readSave } = await import('../lib/save-import');
+      const r = await readSave(file, unlockMap);
+      /* 아는 id 만 받는다 — 모르는 것을 넣어 두면 개수가 어긋난다 */
+      const known = new Set(drops.map((d) => d.i));
+      const next = new Set([...got, ...r.collected.filter((id) => known.has(id))]);
+      setGot(next);
+      saveCollected(next);
+      /* 불러왔는데 종류가 꺼져 있으면 아무것도 안 보인다. 찾은 종류를 켜 준다 */
+      setDropsOn((v) => new Set([...v, ...Object.keys(r.byKind)]));
+      /* 딴 대체 제작법도 같이 채운다. 설계판과 사전이 같은 저장소를 본다 */
+      if (r.alternates.length) saveOwned(new Set([...loadOwned(), ...r.alternates]));
+      setImported(r);
+    } catch (err) {
+      setImportErr(err instanceof Error ? err.message : '읽지 못했습니다');
+    } finally {
+      setImporting(false);
+      (e.target as HTMLInputElement).value = '';
+    }
+  };
 
   const markGot = (id: string) => {
     setGot((v) => {
@@ -638,6 +677,22 @@ export default function ResourceMap({
               </li>
             ))}
           </ul>
+          <label class={`rm-load${importing ? ' is-busy' : ''}`}>
+            <input type="file" accept=".sav" onChange={onSaveFile} disabled={importing} />
+            {importing ? '읽는 중…' : '세이브 불러오기'}
+          </label>
+          <p class="rm-where">
+            내 PC 안에서만 읽습니다.
+            <code>%LOCALAPPDATA%\FactoryGame\Saved\SaveGames</code>
+          </p>
+          {importErr && <p class="rm-bad">{importErr}</p>}
+          {imported && (
+            <p class="rm-ok">
+              {imported.session} · {imported.hours}시간 · 수집품{' '}
+              {Object.values(imported.byKind).reduce((a, b) => a + b, 0)}건
+              {imported.alternates.length > 0 && ` · 대체 제작법 ${imported.alternates.length}가지`}
+            </p>
+          )}
           {got.size > 0 && (
             <button
               type="button"
@@ -646,6 +701,7 @@ export default function ResourceMap({
                 if (confirm('주웠다고 표시한 것을 모두 지웁니다.')) {
                   setGot(new Set());
                   saveCollected(new Set());
+                  setImported(null);
                 }
               }}
             >

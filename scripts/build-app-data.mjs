@@ -458,8 +458,32 @@ const meta = {
   conventions: en.meta?.conventions ?? {},
 };
 
+/*
+ * 세이브를 읽어 "딴 대체 제작법"을 자동으로 채우려면 스키매틱 → 제작법 지도가 필요하다.
+ * 세이브에는 산 스키매틱 목록만 있고 어떤 제작법이 딸려 오는지는 없다.
+ * 대체 제작법은 하드 드라이브(Schematic_Alternate_*)와 MAM(Research_*) 양쪽에서 나온다 —
+ * 그래서 이름 규칙으로 유추하지 않고 배포 데이터의 unlocks 를 그대로 뒤집는다.
+ */
+const altIds = new Set(recipes.filter((r) => r.isAlternate).map((r) => r.id));
+const saveUnlocks = {};
+for (const sc of en.schematics) {
+  const got = (sc.unlocks?.recipes ?? []).filter((r) => altIds.has(r));
+  if (got.length) saveUnlocks[sc.className] = got;
+}
+const coveredAlts = new Set(Object.values(saveUnlocks).flat());
+if (coveredAlts.size !== altIds.size) {
+  const miss = [...altIds].filter((r) => !coveredAlts.has(r));
+  die(4, `스키매틱으로 못 얻는 대체 제작법 ${miss.length}건: ${miss.slice(0, 5).join(', ')}`);
+}
+
 const outputs = {
   'meta.json': meta,
+  'save-unlocks.json': {
+    $comment:
+      '세이브의 mPurchasedSchematics 를 우리 대체 제작법 id 로 옮기는 지도. 게임 배포 데이터의 unlocks.recipes 를 뒤집은 것이다.',
+    $counts: { schematics: Object.keys(saveUnlocks).length, alternates: coveredAlts.size },
+    map: saveUnlocks,
+  },
   'items.json': items,
   'recipes.json': recipes,
   'buildings.json': buildings,
