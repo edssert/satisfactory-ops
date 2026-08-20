@@ -18,6 +18,7 @@ import Base from '../layouts/Base.astro';
 import FlowChart from '../components/FlowChart.astro';
 import { building, item, meta, milestonesByTier, recipe } from '../lib/gamedata';
 import spine from '../data/curated/spine.json';
+import { ironLine } from '../lib/flows';
 import versionHistory from '../data/curated/version-history.json';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -49,12 +50,12 @@ const gensPerBelt = Math.floor(beltMk1Rate / coalPerGen);
  */
 const LINES: Record<string, { now: string; scale: string; keep: string }> = {
   hub: {
-    now: '철 노드를 하나 고르고, 허브를 그 옆에 놓는다',
-    scale: `아직 채굴기가 없다. ${smelter.ko}가 열릴 때까지 손으로 만든다`,
-    keep: '이동 중 E를 눌러 잎·나무를 줍는다. 따로 채집하러 가지 않는다',
+    now: '철 노드 옆에 허브를 놓고, 허브 6까지 민다',
+    scale: '허브 6에서 바이오매스 연소기와 바이오매스 레시피가 같이 열린다 — 급유 자동화가 되는 시점이 정확히 여기다',
+    keep: '이파리보다 나무를 먼저 챙긴다. 나무 하나가 바이오매스 5개, 이파리는 0.5개다',
   },
   't1-iron': {
-    now: `채굴기 1대 → ${smelter.ko} ${smeltersPerBelt}대`,
+    now: `채굴기 1대 → ${smelter.ko} ${smeltersPerBelt}대 → 제작기 4대`,
     scale: `${smelter.ko} 한 대가 철광석 ${smeltIn}개/분을 먹는다. 벨트 Mk.1 한 줄(${beltMk1Rate}개/분)이 정확히 ${smeltersPerBelt}대분이다`,
     keep: '제련기 줄 옆을 비워 둔다. 티어 2에서 조립기가 여기 붙는다',
   },
@@ -78,63 +79,8 @@ const options = spine.steps.map((s) => ({
   ...(LINES[s.id] ?? { now: '', scale: '', keep: '' }),
 }));
 
-// ------------------------------------------------------------------ 실물: 티어 1 철 라인
-/**
- * 랜딩에 그림을 하나 싣는 이유: 신뢰는 실물을 보여주거나 정량 지표를 깔아서 만든다.
- * 이 프로젝트는 후기·사용자수가 없으므로 **실물** 쪽이다.
- * 아래 수치는 전부 레시피에서 읽어 계산한다.
- */
-const rIngot = recipe('Recipe_IngotIron_C');
-const rPlate = recipe('Recipe_IronPlate_C');
-const rRod = recipe('Recipe_IronRod_C');
-const rScrew = recipe('Recipe_Screw_C');
-
-const per = (r: typeof rIngot, side: 'in' | 'out') =>
-  (side === 'in' ? r.ingredients[0]?.perMinute : r.products[0]?.perMinute) ?? 0;
-
-const oreIn = beltMk1Rate; // 채굴기 한 대가 벨트 Mk.1 로 낼 수 있는 최대
-const smelterCount = Math.floor(oreIn / per(rIngot, 'in'));
-const ingotOut = smelterCount * per(rIngot, 'out');
-const ingotToPlate = per(rPlate, 'in');
-const ingotToRod = per(rRod, 'in');
-const ingotSpare = ingotOut - ingotToPlate - ingotToRod;
-const rodOut = per(rRod, 'out');
-const rodToScrew = per(rScrew, 'in');
-const rodSpare = rodOut - rodToScrew;
-
-const flowNodes = [
-  { id: 'smelt', machineKo: smelter.ko, machineId: smelter.id, count: smelterCount, layer: 0 },
-  {
-    id: 'plate',
-    machineKo: `${building('Build_ConstructorMk1_C').ko} · ${item('Desc_IronPlate_C').ko}`,
-    machineId: 'Build_ConstructorMk1_C',
-    count: 1,
-    layer: 1,
-    out: { itemKo: item('Desc_IronPlate_C').ko, itemId: 'Desc_IronPlate_C', perMinute: per(rPlate, 'out') },
-  },
-  {
-    id: 'rod',
-    machineKo: `${building('Build_ConstructorMk1_C').ko} · ${item('Desc_IronRod_C').ko}`,
-    machineId: 'Build_ConstructorMk1_C',
-    count: 1,
-    layer: 1,
-    out: { itemKo: item('Desc_IronRod_C').ko, itemId: 'Desc_IronRod_C', perMinute: rodSpare },
-  },
-  {
-    id: 'screw',
-    machineKo: `${building('Build_ConstructorMk1_C').ko} · ${item('Desc_IronScrew_C').ko}`,
-    machineId: 'Build_ConstructorMk1_C',
-    count: 1,
-    layer: 2,
-    out: { itemKo: item('Desc_IronScrew_C').ko, itemId: 'Desc_IronScrew_C', perMinute: per(rScrew, 'out') },
-  },
-];
-
-const flowEdges = [
-  { from: 'smelt', to: 'plate', itemKo: item('Desc_IronIngot_C').ko, itemId: 'Desc_IronIngot_C', perMinute: ingotToPlate, split: true },
-  { from: 'smelt', to: 'rod', itemKo: item('Desc_IronIngot_C').ko, itemId: 'Desc_IronIngot_C', perMinute: ingotToRod },
-  { from: 'rod', to: 'screw', itemKo: item('Desc_IronRod_C').ko, itemId: 'Desc_IronRod_C', perMinute: rodToScrew, split: true },
-];
+/** 랜딩에 싣는 실물 — 가이드와 같은 정의를 쓴다 */
+const showcase = ironLine();
 
 const tiers = milestonesByTier();
 const laterMilestones = tiers
@@ -263,17 +209,7 @@ const buildFacts = [
 
     <div class="showcase">
       <p class="showcase-tag">가이드가 실제로 주는 것 — 티어 1 철 라인</p>
-      <FlowChart
-        nodes={flowNodes}
-        edges={flowEdges}
-        input={{
-          itemKo: item('Desc_OreIron_C').ko,
-          itemId: 'Desc_OreIron_C',
-          perMinute: oreIn,
-          note: `채굴기 1대 · 벨트 Mk.1 상한`,
-        }}
-        caption={`철괴 ${ingotOut}개/분 중 ${ingotSpare}개/분이 남습니다. 상자로 빼서 손 제작에 쓰거나, 철판 라인을 한 대 늘릴 때 씁니다.`}
-      />
+      <FlowChart nodes={showcase.nodes} edges={showcase.edges} caption={showcase.caption} />
     </div>
   </section>
 

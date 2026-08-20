@@ -11,15 +11,9 @@
  */
 import Base from '../../layouts/Base.astro';
 import FlowChart from '../../components/FlowChart.astro';
-import {
-  building,
-  buildings,
-  defaultRecipeOf,
-  item,
-  milestones,
-  recipe,
-} from '../../lib/gamedata';
+import { building, buildings, defaultRecipeOf, item, milestones } from '../../lib/gamedata';
 import spine from '../../data/curated/spine.json';
+import { biomassLine, ironLine, smartPlatingLine, type FlowDef } from '../../lib/flows';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -87,114 +81,10 @@ const steps = spine.steps.map((s) => ({
   })),
 }));
 
-// ---------------------------------------------------------------- 흐름도: 티어 1 철 라인
-const beltMk1Rate = building('Build_ConveyorBeltMk1_C').beltItemsPerMinute ?? 60;
-const smelter = building('Build_SmelterMk1_C');
-const constructor = building('Build_ConstructorMk1_C');
-const assembler = building('Build_AssemblerMk1_C');
-
-const rIngot = recipe('Recipe_IngotIron_C');
-const rPlate = recipe('Recipe_IronPlate_C');
-const rRod = recipe('Recipe_IronRod_C');
-const rScrew = recipe('Recipe_Screw_C');
-const inOf = (r: typeof rIngot) => r.ingredients[0]?.perMinute ?? 0;
-const outOf = (r: typeof rIngot) => r.products[0]?.perMinute ?? 0;
-
-const smelterCount = Math.floor(beltMk1Rate / inOf(rIngot));
-const ingotOut = smelterCount * outOf(rIngot);
-const ingotSpare = ingotOut - inOf(rPlate) - inOf(rRod);
-const rodSpare = outOf(rRod) - inOf(rScrew);
-
-const ironFlow = {
-  nodes: [
-    { id: 'smelt', machineKo: smelter.ko, machineId: smelter.id, count: smelterCount, layer: 0 },
-    {
-      id: 'plate',
-      machineKo: `${constructor.ko} · ${item('Desc_IronPlate_C').ko}`,
-      machineId: constructor.id,
-      count: 1,
-      layer: 1,
-      out: { itemKo: item('Desc_IronPlate_C').ko, itemId: 'Desc_IronPlate_C', perMinute: outOf(rPlate) },
-    },
-    {
-      id: 'rod',
-      machineKo: `${constructor.ko} · ${item('Desc_IronRod_C').ko}`,
-      machineId: constructor.id,
-      count: 1,
-      layer: 1,
-      out: { itemKo: item('Desc_IronRod_C').ko, itemId: 'Desc_IronRod_C', perMinute: rodSpare },
-    },
-    {
-      id: 'screw',
-      machineKo: `${constructor.ko} · ${item('Desc_IronScrew_C').ko}`,
-      machineId: constructor.id,
-      count: 1,
-      layer: 2,
-      out: { itemKo: item('Desc_IronScrew_C').ko, itemId: 'Desc_IronScrew_C', perMinute: outOf(rScrew) },
-    },
-  ],
-  edges: [
-    { from: 'smelt', to: 'plate', itemKo: item('Desc_IronIngot_C').ko, itemId: 'Desc_IronIngot_C', perMinute: inOf(rPlate), split: true },
-    { from: 'smelt', to: 'rod', itemKo: item('Desc_IronIngot_C').ko, itemId: 'Desc_IronIngot_C', perMinute: inOf(rRod) },
-    { from: 'rod', to: 'screw', itemKo: item('Desc_IronRod_C').ko, itemId: 'Desc_IronRod_C', perMinute: inOf(rScrew), split: true },
-  ],
-};
-
-// ---------------------------------------------------------------- 흐름도: 티어 2 도금판
-const rRotor = recipe('Recipe_Rotor_C');
-const rRip = recipe('Recipe_IronPlateReinforced_C');
-const rSmart = recipe('Recipe_SpaceElevatorPart_1_C');
-const TARGET = 5;
-
-const rotorPlan = machinesFor('Desc_Rotor_C', TARGET)!;
-const ripPlan = machinesFor('Desc_IronPlateReinforced_C', TARGET)!;
-const smartPlan = machinesFor('Desc_SpaceElevatorPart_1_C', TARGET)!;
-
-const smartFlow = {
-  nodes: [
-    {
-      id: 'rip',
-      machineKo: `${assembler.ko} · ${item('Desc_IronPlateReinforced_C').ko}`,
-      machineId: assembler.id,
-      count: ripPlan.count,
-      clock: ripPlan.clock,
-      layer: 0,
-    },
-    {
-      id: 'rotor',
-      machineKo: `${assembler.ko} · ${item('Desc_Rotor_C').ko}`,
-      machineId: assembler.id,
-      count: rotorPlan.count,
-      clock: rotorPlan.clock,
-      layer: 0,
-    },
-    {
-      id: 'smart',
-      machineKo: `${assembler.ko} · ${item('Desc_SpaceElevatorPart_1_C').ko}`,
-      machineId: assembler.id,
-      count: smartPlan.count,
-      clock: smartPlan.clock,
-      layer: 1,
-      out: {
-        itemKo: item('Desc_SpaceElevatorPart_1_C').ko,
-        itemId: 'Desc_SpaceElevatorPart_1_C',
-        perMinute: TARGET,
-      },
-    },
-  ],
-  edges: [
-    { from: 'rip', to: 'smart', itemKo: item('Desc_IronPlateReinforced_C').ko, itemId: 'Desc_IronPlateReinforced_C', perMinute: TARGET },
-    { from: 'rotor', to: 'smart', itemKo: item('Desc_Rotor_C').ko, itemId: 'Desc_Rotor_C', perMinute: TARGET },
-  ],
-};
-
-const FLOWS: Record<string, typeof ironFlow> = {
-  't1-iron': ironFlow,
-  't2-assembler': smartFlow,
-};
-const FLOW_CAPS: Record<string, string> = {
-  't1-iron': `철괴 ${num(ingotOut)}개/분 중 ${num(ingotSpare)}개/분이 남습니다. 상자로 빼서 손 제작에 쓰거나, 철판 라인을 한 대 늘릴 때 씁니다.`,
-  't2-assembler': `${assembler.ko} 두 대면 충분합니다. 대수를 늘리는 대신 클럭을 내립니다 — 전력이 지수로 오르기 때문입니다.`,
+const FLOWS: Record<string, FlowDef> = {
+  hub: biomassLine(),
+  't1-iron': ironLine(),
+  't2-assembler': smartPlatingLine(),
 };
 ---
 
@@ -208,8 +98,7 @@ const FLOW_CAPS: Record<string, string> = {
       <p class="marker"><span class="num">가이드</span></p>
       <h1>해금 순서대로<br />무엇을 얼마나</h1>
       <p class="lede prose">
-        각 단계는 그 시점에 <strong>실제로 열려 있는 것만</strong> 다룹니다. 생산량은 마일스톤
-        요구량이 아니라 커뮤니티가 실제로 쓰는 규모입니다.
+        각 단계는 그 시점에 <strong>실제로 열려 있는 것만</strong> 다룹니다.
       </p>
     </header>
 
@@ -300,19 +189,9 @@ const FLOW_CAPS: Record<string, string> = {
             {FLOWS[s.id] && (
               <div class="flowwrap">
                 <FlowChart
-                  nodes={FLOWS[s.id].nodes}
-                  edges={FLOWS[s.id].edges}
-                  input={
-                    s.id === 't1-iron'
-                      ? {
-                          itemKo: item('Desc_OreIron_C').ko,
-                          itemId: 'Desc_OreIron_C',
-                          perMinute: beltMk1Rate,
-                          note: '채굴기 1대 · 벨트 Mk.1 상한',
-                        }
-                      : undefined
-                  }
-                  caption={FLOW_CAPS[s.id]}
+                  nodes={FLOWS[s.id]!.nodes}
+                  edges={FLOWS[s.id]!.edges}
+                  caption={FLOWS[s.id]!.caption}
                 />
               </div>
             )}

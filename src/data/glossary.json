@@ -15,7 +15,9 @@
         "overflow-sink",
         "splitter"
       ],
-      "unlock": "티어 1 · 물류"
+      "unlock": "티어 1 · 물류",
+      "origin": "industry",
+      "originNote": "배관에서 주관 하나에 여러 분기를 다는 부품·배열. 자동차 흡기 매니폴드가 같은 말이다."
     },
     {
       "id": "load-balancer",
@@ -29,7 +31,9 @@
       "see": [
         "manifold"
       ],
-      "unlock": "티어 1 · 물류"
+      "unlock": "티어 1 · 물류",
+      "origin": "industry",
+      "originNote": "전산·전력에서 부하를 여러 경로에 고르게 나누는 장치나 기법."
     },
     {
       "id": "main-bus",
@@ -44,7 +48,9 @@
         "manifold",
         "foundation-grid"
       ],
-      "unlock": "티어 1 · 물류"
+      "unlock": "티어 1 · 물류",
+      "origin": "community",
+      "originNote": "전기공학의 모선(bus bar)에서 온 말을 공장 게임 커뮤니티가 컨베이어 간선에 옮겨 쓴 것이다."
     },
     {
       "id": "overflow-sink",
@@ -59,7 +65,9 @@
         "manifold",
         "smart-splitter"
       ],
-      "unlock": "티어 2 · 자원 싱크 보너스 프로그램"
+      "unlock": "티어 2 · 자원 싱크 보너스 프로그램",
+      "origin": "community",
+      "originNote": "게임의 A.W.E.S.O.M.E. 싱크를 넘침 처리에 쓰는 패턴에 커뮤니티가 붙인 이름."
     },
     {
       "id": "smart-splitter",
@@ -73,7 +81,9 @@
       "see": [
         "overflow-sink"
       ],
-      "unlock": "MAM 연구 · 카테리움"
+      "unlock": "MAM 연구 · 카테리움",
+      "origin": "game",
+      "gameKo": "선별 분배기"
     },
     {
       "id": "foundation-grid",
@@ -88,7 +98,9 @@
         "blueprint-module",
         "main-bus"
       ],
-      "unlock": "티어 1 · 기초 건축물"
+      "unlock": "티어 1 · 기초 건축물",
+      "origin": "community",
+      "originNote": "게임에 이런 이름의 기능은 없다. 토대를 먼저 깔아 격자를 만드는 관행에 붙은 이름이다."
     },
     {
       "id": "blueprint-module",
@@ -102,7 +114,9 @@
       "see": [
         "foundation-grid"
       ],
-      "unlock": "티어 4 · FICSIT 청사진"
+      "unlock": "티어 4 · FICSIT 청사진",
+      "origin": "community",
+      "originNote": "게임이 주는 것은 청사진 설계소까지다. 무엇을 한 덩어리로 묶을지는 플레이어 관행이다."
     },
     {
       "id": "head-lift",
@@ -116,7 +130,9 @@
       "see": [
         "fluid-buffer"
       ],
-      "unlock": "티어 3 · 석탄 동력"
+      "unlock": "티어 3 · 석탄 동력",
+      "origin": "industry",
+      "originNote": "펌프가 유체를 밀어 올릴 수 있는 높이. 유체역학에서 양정(揚程)이라 부른다."
     },
     {
       "id": "fluid-buffer",
@@ -131,7 +147,9 @@
         "head-lift",
         "byproduct-deadlock"
       ],
-      "unlock": "티어 3 · 석탄 동력"
+      "unlock": "티어 3 · 석탄 동력",
+      "origin": "game",
+      "gameKo": "유체 완충기"
     },
     {
       "id": "byproduct-deadlock",
@@ -146,7 +164,9 @@
         "fluid-buffer",
         "overflow-sink"
       ],
-      "unlock": "티어 5 · 원유 처리"
+      "unlock": "티어 5 · 원유 처리",
+      "origin": "industry",
+      "originNote": "전산의 교착(deadlock)과 같은 구조다. 서로가 서로를 기다려 둘 다 못 움직인다."
     },
     {
       "id": "priority-power",
@@ -160,7 +180,9 @@
       "see": [
         "power-storage"
       ],
-      "unlock": "MAM 연구 · 카테리움"
+      "unlock": "MAM 연구 · 카테리움",
+      "origin": "game",
+      "gameKo": "우선전력 스위치"
     },
     {
       "id": "power-storage",
@@ -174,7 +196,9 @@
       "see": [
         "priority-power"
       ],
-      "unlock": "티어 4 · 확장 동력 인프라"
+      "unlock": "티어 4 · 확장 동력 인프라",
+      "origin": "game",
+      "gameKo": "전력 저장고"
     },
     {
       "id": "block-signal",
@@ -185,7 +209,9 @@
       "why": "신호가 없으면 열차 한 대만 굴려야 한다. 신호를 이해하는 순간 물류망 규모가 달라진다.",
       "how": "직선 구간에는 블록 신호, 복잡한 교차로 직전에는 경로 신호, 교차로를 지난 뒤 다시 블록 신호. 이 세 줄이 전부다.",
       "gotcha": "신호 두 개 사이의 구역은 반드시 열차 전체 길이보다 길어야 한다. 짧으면 열차가 구역에 다 못 들어가 교착이 난다. 역 승강장 앞뒤에는 항상 블록 신호를 단다.",
-      "see": []
+      "see": [],
+      "origin": "industry",
+      "originNote": "실제 철도의 폐색(block) 신호 방식 그대로다. 한 구간에 열차 하나만 들인다."
     },
     {
       "id": "purity",
@@ -198,7 +224,8 @@
       "gotcha": "순수 노드는 벨트 등급도 함께 올려야 받을 수 있다. 채굴기 Mk.3 + 순수 노드는 480/분이라 Mk.5 벨트(780)가 필요하다.",
       "see": [
         "overclock"
-      ]
+      ],
+      "origin": "game"
     },
     {
       "id": "splitter",
@@ -215,7 +242,8 @@
         "overflow-sink",
         "smart-splitter"
       ],
-      "unlock": "티어 1 · 물류"
+      "unlock": "티어 1 · 물류",
+      "origin": "game"
     },
     {
       "id": "overclock",
@@ -229,7 +257,9 @@
       "see": [
         "purity"
       ],
-      "unlock": "언더클럭은 해금 불필요 · 오버클럭은 MAM 파워 슬러그 연구 + 동력 조각"
+      "unlock": "언더클럭은 해금 불필요 · 오버클럭은 MAM 파워 슬러그 연구 + 동력 조각",
+      "origin": "industry",
+      "originNote": "컴퓨터 하드웨어에서 정격 이상으로 돌리는 것을 부르던 말."
     },
     {
       "id": "somersloop",
@@ -244,7 +274,8 @@
         "overclock",
         "power-storage"
       ],
-      "unlock": "탐험으로 획득 · MAM 외계 기술 연구"
+      "unlock": "탐험으로 획득 · MAM 외계 기술 연구",
+      "origin": "game"
     }
   ]
 }

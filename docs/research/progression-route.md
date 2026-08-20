@@ -208,3 +208,12 @@ wiki.gg에서 1차로 직접 확인(2026-08-19 조회)했다. `progression.md` B
 - 컴퓨터 레시피에서 "나사가 빠졌다"는 **변경 이력**의 1차 확증 — 현재 레시피에 나사가 없다는 것은 저장소 데이터로 검증했으나, EA 레시피 데이터가 없어 "빠졌다(변경)"는 서술 자체는 2차 출처 의존.
 - 마일스톤 소속 티어 재배치(8건)가 **의도된 밸런싱**인지 **단순 표시상의 우연**인지 — 저장소 데이터 분석으로 불일치 패턴만 확인했고, 왜/언제 바뀌었는지에 대한 1차 문서(패치노트 원문의 티어별 상세 목록)는 확보하지 못함.
 - 바이오매스 전력을 "정확히 티어3 진입 시점까지만" 쓰라는 조언이 **EA 시절과 다른지** — 구조가 EA부터 동일했다는 정황은 있으나 명시적으로 비교한 출처를 찾지 못함.
+
+## 추가 확인 — 허브 이동 가능 여부 (2026-08-20)
+
+| 주장 | 판정 | 근거 |
+|---|---|---|
+| "허브는 한 번 놓으면 옮길 수 없다" | **거짓** | 공식 위키 The HUB 문서: "Dismantling the HUB returns the Iron Ore required to build it, retaining all upgrades and Milestone progress, including inserted parts... it can be freely relocated, just like all other player-built structures." (문서 최종 갱신 2026-08-12, [satisfactory.wiki.gg/wiki/The_HUB](https://satisfactory.wiki.gg/wiki/The_HUB)) |
+
+허브 위치 조언은 "못 옮기니 신중하라"가 아니라 **"채굴기 해금 전까지 손 운반 거리를 줄여라"**가 되어야 한다.
+개인 저장 상자에 든 물건은 철거 시 인벤토리로 옮겨진다.

@@ -48,12 +48,35 @@ const fluidExtractors = buildings
   .sort((a, b) => (a.extraction!.perMinuteAtNormalPurity ?? 0) - (b.extraction!.perMinuteAtNormalPurity ?? 0));
 
 const generators = buildings
-  .filter((b) => (b.powerGenMW ?? 0) > 0)
-  .sort((a, b) => (a.powerGenMW ?? 0) - (b.powerGenMW ?? 0));
+  .filter((b) => b.category === 'generator')
+  .sort((a, b) => (a.unlockTier ?? -1) - (b.unlockTier ?? -1) || (a.powerGenMW ?? 0) - (b.powerGenMW ?? 0));
 
-const machines = buildings
-  .filter((b) => b.category === 'manufacturer')
-  .sort((a, b) => (a.powerMW ?? a.powerMaxMW ?? 0) - (b.powerMW ?? b.powerMaxMW ?? 0));
+/*
+ * 전력을 먹는 건물 **전부**. 앞선 판본은 category === 'manufacturer' 로 걸러
+ * 채굴기·A.W.E.S.O.M.E. 싱크·펌프가 통째로 빠졌다.
+ *
+ * 구버전 세이브 호환용으로만 남아 있는 점프 패드 두 개는 뺀다 — 지금은 지을 수 없다.
+ */
+const LEGACY = new Set(['Build_JumpPad_C', 'Build_JumpPadTilted_C']);
+const consumers = buildings
+  .filter((b) => !LEGACY.has(b.id) && ((b.powerMW ?? 0) > 0 || b.powerIsVariable))
+  .sort(
+    (a, b) =>
+      (a.unlockTier ?? -1) - (b.unlockTier ?? -1) ||
+      (a.powerMW ?? a.powerMaxMW ?? 0) - (b.powerMW ?? b.powerMaxMW ?? 0)
+  );
+
+/** 분류 라벨. 데이터의 category 값을 화면 말로 옮긴다 */
+const CATEGORY_KO: Record<string, string> = {
+  extractor: '채굴·추출',
+  manufacturer: '생산',
+  logistics: '물류',
+  transport: '운송',
+  hub: '허브',
+  decoration: '조명',
+  structure: '구조물',
+  other: '기타',
+};
 
 const beltCaps = beltRows.map((b) => b.rate);
 
@@ -74,11 +97,22 @@ const terms = (
   term: string;
   en: string;
   unlock?: string;
+  /** game = 게임이 정한 이름 · industry = 실제 산업·공학 용어 · community = 플레이어들이 만든 말 */
+  origin?: 'game' | 'industry' | 'community';
+  originNote?: string;
+  /** 게임 공식 로케일 표기가 통용어와 다를 때만 (ADR-0017) */
+  gameKo?: string;
   short: string;
   why: string;
   how: string;
   gotcha: string;
 }[];
+
+const ORIGIN_KO: Record<string, string> = {
+  game: '게임 용어',
+  industry: '실제 산업 용어',
+  community: '커뮤니티 용어',
+};
 ---
 
 <Base
@@ -121,7 +155,6 @@ const terms = (
           </tbody>
         </table>
       </div>
-      <p class="caption">컨베이어 리프트는 같은 등급의 벨트와 처리량이 동일합니다.</p>
     </section>
 
     <section class="section">
@@ -152,11 +185,6 @@ const terms = (
           </tbody>
         </table>
       </div>
-      <p class="caption">
-        순도 배율은 불순 ×0.5 · 보통 ×1 · 순수 ×2입니다. 채굴기 출력구는 하나이므로 실제로 받는 양은
-        벨트 처리량이 상한입니다 — 순수 노드에 Mk.1 채굴기를 꽂아도 벨트가 Mk.1이면
-        <span class="n">{beltCaps[0]}</span>개/분에서 잘립니다.
-      </p>
     </section>
 
     <section class="section">
@@ -197,7 +225,6 @@ const terms = (
           </table>
         </div>
       </div>
-      <p class="caption">유체 노드에는 순도가 없습니다. 표의 값이 고정 산출량입니다.</p>
     </section>
 
     <section class="section">
@@ -211,8 +238,11 @@ const terms = (
           <tbody>
             {generators.map((g) => (
               <tr>
-                <td>{g.ko} <span class="en">{g.en}</span></td>
-                <td class="n">{g.powerGenMW}</td>
+                <td>
+                  {g.ko} <span class="en">{g.en}</span>
+                  {g.powerGenMW == null && <span class="rownote">간헐천 순도에 따라 달라 배포 데이터에 값이 없습니다</span>}
+                </td>
+                <td class="n">{g.powerGenMW ?? '—'}</td>
                 <td class="n">{tierOf(g.unlockTier)}</td>
                 <td class="small muted">
                   {g.supplementalToPowerRatio ? `비율 ${g.supplementalToPowerRatio}` : '—'}
@@ -225,22 +255,24 @@ const terms = (
     </section>
 
     <section class="section">
-      <p class="marker"><span class="num">05</span> 생산 건물</p>
-      <h2>전력 소비</h2>
+      <p class="marker"><span class="num">05</span> 전력 소비</p>
+      <h2>전기를 먹는 건물 <span class="n">{consumers.length}</span>개</h2>
       <div class="scroll-x">
         <table>
           <thead>
             <tr>
               <th>건물</th>
+              <th>분류</th>
               <th class="n">전력 (MW)</th>
               <th class="n">해금</th>
               <th>건설 비용</th>
             </tr>
           </thead>
           <tbody>
-            {machines.map((b) => (
+            {consumers.map((b) => (
               <tr>
                 <td>{b.ko} <span class="en">{b.en}</span></td>
+                <td class="small muted">{CATEGORY_KO[b.category ?? 'other'] ?? b.category}</td>
                 <td class="n">
                   {b.powerIsVariable
                     ? `${num(b.powerMinMW ?? 0)}~${num(b.powerMaxMW ?? 0)}`
@@ -258,8 +290,8 @@ const terms = (
         </table>
       </div>
       <p class="caption">
-        클럭 100% 기준입니다. 오버클럭 시 전력은 지수(약 1.32)로 오릅니다. 범위로 적힌 건물은
-        가동 상태에 따라 소비가 변합니다.
+        해금 티어순입니다. 클럭 100% 기준이고, 오버클럭 시 전력은 지수(약 1.32)로 오릅니다.
+        범위로 적힌 건물은 가동 상태에 따라 소비가 변합니다.
       </p>
     </section>
 
@@ -272,9 +304,21 @@ const terms = (
             <summary>
               <span class="term-ko">{t.term}</span>
               <span class="en">{t.en}</span>
+              {t.origin && (
+                <span class={`term-origin is-${t.origin}`}>{ORIGIN_KO[t.origin]}</span>
+              )}
               {t.unlock && <span class="term-unlock">{t.unlock}</span>}
             </summary>
             <div class="term-body">
+              {t.gameKo && (
+                <p class="term-l">
+                  <span class="term-k">게임 표기</span>
+                  <strong>{t.gameKo}</strong> — 위 이름은 커뮤니티 통용어입니다.
+                </p>
+              )}
+              {t.originNote && (
+                <p class="term-l"><span class="term-k">바깥 뜻</span>{t.originNote}</p>
+              )}
               <p>{t.short}</p>
               <p class="term-l"><span class="term-k">왜</span>{t.why}</p>
               <p class="term-l"><span class="term-k">어떻게</span>{t.how}</p>
@@ -322,6 +366,16 @@ const terms = (
     }
     .term[open] summary::before { content: '−'; }
     .term-ko { font-weight: 600; }
+    .term-origin {
+      padding: 0.1em 0.45em;
+      border: var(--hair) solid var(--line);
+      border-radius: var(--radius);
+      font-size: var(--t-label);
+      color: var(--ink-2);
+      white-space: nowrap;
+    }
+    /* 실제 산업에서 그대로 쓰는 말만 강조색을 준다 — 게임 밖에서도 통하는 지식이라서다 */
+    .term-origin.is-industry { border-color: var(--accent); color: var(--accent); }
     .term-unlock {
       margin-left: auto;
       font-family: var(--font-mono);

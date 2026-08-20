@@ -57,6 +57,12 @@
   font-size: 13px;
   font-weight: 500;
 }
+.fc-product {
+  fill: var(--ink-2);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+}
 .fc-sub {
   fill: var(--ink-3);
   font-family: var(--font-mono);

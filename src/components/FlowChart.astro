@@ -17,6 +17,11 @@ export interface FlowNode {
   id: string;
   /** 기계 이름 */
   machineKo: string;
+  /**
+   * 이 기계가 무엇을 만드는가. 기계 이름과 같은 줄에 붙이면 상자를 넘치므로 줄을 나눠 적는다.
+   * (`제작기 · 철판 ×1` 처럼 한 줄로 쓰다가 글자가 상자 밖으로 나갔다.)
+   */
+  productKo?: string;
   /** 몇 대 */
   count: number;
   /** 클럭 (100 이면 표시하지 않는다) */
@@ -62,7 +67,7 @@ const iIcon = `${base}/assets/items`;
 
 // ── 계층 배치. 좌표가 아니라 순서만 정한다.
 const NODE_W = 176;
-const NODE_H = 66;
+const NODE_H = 80;
 const GAP_X = 26;
 const GAP_Y = 86;
 const PAD = 28;
@@ -265,16 +270,20 @@ for (const e of edges) outCount.set(e.from, (outCount.get(e.from) ?? 0) + 1);
         {n.machineId && (
           <image href={`${bIcon}/${n.machineId}.png`} x={x + 8} y={y + 8} width="50" height="50" preserveAspectRatio="xMidYMid meet" />
         )}
+        {/* 기계 · 산출물 · 클럭을 각각 다른 줄에. 한 줄에 몰면 상자를 넘친다 */}
         <text x={x + (n.machineId ? 66 : 12)} y={y + 26} class="fc-name">
           {n.machineKo} <tspan class="fc-count">×{n.count}</tspan>
         </text>
-        {/*
-          상자에는 **기계와 클럭만** 적는다. 산출은 이미 화살표 칩과 출력 칩에 있다.
-          둘 다 적었더니 글자가 상자를 넘어갔다 — 미니멀한 그림에서 글자가 넘치면 그것부터 눈에 띈다.
-        */}
-        <text x={x + (n.machineId ? 66 : 12)} y={y + 46} class="fc-sub">
-          {n.clock != null && n.clock < 100 ? `${fmt(n.clock)}%` : '100%'}
-        </text>
+        {n.productKo && (
+          <text x={x + (n.machineId ? 66 : 12)} y={y + 46} class="fc-product">
+            {n.productKo}
+          </text>
+        )}
+        {n.clock != null && n.clock < 100 && (
+          <text x={x + (n.machineId ? 66 : 12)} y={y + (n.productKo ? 64 : 46)} class="fc-sub">
+            {fmt(n.clock)}%
+          </text>
+        )}
       </g>
     ))}
 
