@@ -279,10 +279,7 @@ const facts = [
       {facts.map((f) => (
         <div class="fact">
           <span class="fact-k">{f.k}</span>
-          <span class="fact-v n">
-            <span class="fx-ticker" style={`--to:${f.v}`}></span>
-            <span class="fx-ticker-fallback">{f.v}</span>
-          </span>
+          <span class="fact-v n" data-tick={f.v}>{f.v}</span>
         </div>
       ))}
     </div>
@@ -302,6 +299,51 @@ const facts = [
       <a class="btn is-primary fx-shimmer" href={`${base}/guide/`}>가이드 열기</a>
     </div>
   </section>
+
+  <script is:inline>
+    /*
+     * 숫자가 올라가는 효과. 값은 이미 HTML 에 박혀 있고 여기서는 잠깐 낮췄다 되돌릴 뿐이라,
+     * 스크립트가 안 돌아도 화면에는 맞는 수가 남는다. (전에는 CSS 로 했다가 0 이 그대로 남았다)
+     */
+    (function () {
+      var els = [].slice.call(document.querySelectorAll('[data-tick]'));
+      if (!els.length) return;
+      if (
+        typeof IntersectionObserver === 'undefined' ||
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      )
+        return;
+
+      function run(el) {
+        var to = Number(el.dataset.tick);
+        if (!(to > 0)) return;
+        var t0 = performance.now();
+        var dur = 900;
+        (function frame(now) {
+          var p = Math.min(1, (now - t0) / dur);
+          /* 끝에서 부드럽게 멈춘다 */
+          var e = 1 - Math.pow(1 - p, 3);
+          el.textContent = String(Math.round(to * e));
+          if (p < 1) requestAnimationFrame(frame);
+          else el.textContent = String(to);
+        })(t0);
+      }
+
+      var io = new IntersectionObserver(
+        function (rows) {
+          rows.forEach(function (r) {
+            if (!r.isIntersecting) return;
+            io.unobserve(r.target);
+            run(r.target);
+          });
+        },
+        { threshold: 0.4 }
+      );
+      els.forEach(function (el) {
+        io.observe(el);
+      });
+    })();
+  </script>
 
   <script is:inline define:vars={{ options }}>
     (function () {

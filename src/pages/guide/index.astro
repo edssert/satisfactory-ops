@@ -760,11 +760,11 @@ const FLOWS: Record<string, FlowDef> = {
       font-weight: 400;
     }
     .synth-when { color: var(--ink-3); font-size: var(--t-caption); font-weight: 400; }
+    /* 식은 좁은 칸에서 잘리느니 줄바꿈되는 편이 낫다 */
     .synth-eq {
-      overflow-x: auto;
       font-family: var(--font-mono);
       font-size: var(--t-caption) !important;
-      white-space: nowrap;
+      line-height: 1.9 !important;
     }
     .synth-catch { color: var(--warn, #e0a13c) !important; }
 
@@ -979,6 +979,11 @@ const FLOWS: Record<string, FlowDef> = {
     .finite { display: grid; gap: var(--s4); }
     @media (min-width: 900px) { .finite { grid-template-columns: 1fr 1fr; } }
     .fin {
+      /*
+       * 안에 줄바꿈 없는 긴 줄(레시피 식)이 있으면 칸이 그만큼 벌어져 옆 칸을 눌러 버린다.
+       * 그리드 칸의 최소 너비를 풀어 준다 — 긴 줄은 자기 상자 안에서만 가로로 넘긴다.
+       */
+      min-width: 0;
       padding: var(--s5);
       border-radius: calc(var(--radius) * 2);
       background: var(--glass);

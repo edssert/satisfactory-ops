@@ -161,42 +161,23 @@
 
 /* -------------------------------------------------------- Number Ticker */
 /*
- * 숫자가 0 에서 목표까지 올라간다. `--to` 를 인라인 스타일로 준다.
- * @property 를 지원하지 않으면 `.fx-ticker-fallback` 의 정적 숫자가 그대로 보인다.
+ * 숫자가 0 에서 목표까지 올라간다.
+ *
+ * 전에는 CSS counter + animation-timeline: view() 로 했는데, 화면에 0 이 그대로 남았다.
+ * 스크롤 구동 애니메이션의 진행도가 안 잡히면 카운터가 초기값에서 멈추기 때문이다.
+ * 숫자가 틀리게 보이는 것보다 안 움직이는 편이 낫다 — 값은 HTML 에 그대로 두고,
+ * 움직임은 JS 가 붙을 때만 얹는다.
  */
-.fx-ticker {
-  display: none;
-  font-variant-numeric: tabular-nums;
-}
-@supports (animation-timeline: view()) and (background: paint(x)) {
-  /* 위 조건은 형식적이다 — 실제로는 아래 @property 지원 여부로 갈린다 */
-}
-@supports at-rule(@property) {
-  .fx-ticker { display: inline; }
-  .fx-ticker-fallback { display: none; }
-  .fx-ticker::after {
-    content: counter(fx-n);
-    counter-reset: fx-n var(--tick);
-    animation: fx-count 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
-    animation-timeline: view();
-    animation-range: entry 0% cover 30%;
-  }
-  @keyframes fx-count {
-    from { --tick: 0; }
-    to { --tick: var(--to); }
-  }
-}
+.fx-ticker { display: none; }
+.fx-ticker-fallback { font-variant-numeric: tabular-nums; }
 
 /* ------------------------------------------------------------ 접근성 */
 @media (prefers-reduced-motion: reduce) {
   .fx-beam::before,
   .fx-retrogrid::before,
   .fx-shimmer::after,
-  .fx-gradient-text,
-  .fx-ticker::after {
+  .fx-gradient-text {
     animation: none !important;
   }
   .fx-gradient-text { background-position: 0 0; }
-  .fx-ticker { display: none; }
-  .fx-ticker-fallback { display: inline; }
 }

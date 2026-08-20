@@ -270,6 +270,22 @@ if (!toolsPage) {
   if (!bad) pass(`넘겨보내는 주소 ${seen}개가 전부 존재`);
 }
 
+// ─────────────────────────────────────── 숫자가 화면에 0 으로 남지 않는가
+/*
+ * 랜딩의 집계 숫자를 CSS 카운터로 올리다가 화면에 0 이 그대로 남은 적이 있다.
+ * 값은 HTML 에 박혀 있어야 하고, 스크립트가 없어도 맞는 수가 보여야 한다.
+ */
+{
+  const rows = [...allHtml.flatMap((h) => [...h.s.matchAll(/data-tick="(\d+)"[^>]*>([^<]*)</g)])];
+  if (!rows.length) {
+    fail('랜딩 집계 숫자를 찾지 못했습니다');
+  } else {
+    const bad = rows.filter((m) => m[1] !== m[2].trim() || m[1] === '0');
+    if (bad.length) fail(`집계 숫자가 값과 다릅니다: ${bad.map((m) => m[1] + '→' + m[2]).join(', ')}`);
+    else pass(`집계 숫자 ${rows.length}개가 HTML 에 그대로 있음`);
+  }
+}
+
 // ─────────────────────────────────────────────── 지도가 수집품까지 담았는가
 {
   const hit = allHtml.find((h) => h.p.includes(`map${path.sep}index.html`));
