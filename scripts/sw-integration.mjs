@@ -1,7 +1,7 @@
 /**
  * sw-integration.mjs — 빌드 산출물 목록으로 서비스워커를 생성하는 Astro 통합.
  *
- * Workbox를 쓰지 않는다. 이 앱의 자산 총량이 작아(1~2MB) 전량 프리캐시가 성립하므로,
+ * Workbox를 쓰지 않는다. 앱 껍데기가 작아 전량 프리캐시가 성립하므로,
  * 필요한 것은 "파일 목록 + 버전 해시 + 원자적 install"뿐이다. 그 코드가 60줄이다.
  * 의존성을 하나 줄이는 대신 이 코드를 우리가 소유한다 (arch-offline.md §11-9의 트레이드오프를 인지하고 선택).
  *
@@ -29,7 +29,16 @@ export function navigationCacheKey(pathname) {
   return pathname;
 }
 
-/** 프리캐시에서 제외할 것: 소스맵, 라이선스 텍스트 등 런타임에 필요 없는 파일 */
+/**
+ * 프리캐시에서 제외할 것.
+ *
+ * install 은 **원자적**이다 — 목록 전체를 받아야 이 버전이 설치된다. 그래서 목록에 넣는 것은
+ * "첫 화면에 반드시 필요한가"로 골라야 한다. 재 보니 15MB 였고, 그중 7.6MB 가 아이콘 611장,
+ * 4.2MB 가 그림이었다. 첫 방문자가 도감을 열지도 않았는데 그걸 다 받고 있었다.
+ *
+ * 뺀 것은 사라지지 않는다. 아래 fetch 처리기가 **쓰는 순간 받아 캐시에 넣는다.**
+ * 한 번 본 화면은 그다음부터 오프라인에서도 열린다.
+ */
 const EXCLUDE = [
   /\.map$/i,
   /LICENSE/i,
@@ -39,6 +48,20 @@ const EXCLUDE = [
    * 미리보기 한 장이면 지도 화면이 열린다. 오프라인에서도 전체 보기는 된다.
    */
   /assets[\/]map[\/][a-z]+[\/]\d+-\d+\.webp$/i,
+  /*
+   * 아이템·설비 아이콘 611장 7.6MB. 한 화면이 쓰는 것은 수십 장이고, 대부분의 방문자는
+   * 대부분을 평생 안 본다. 쓸 때 받아서 캐시에 남긴다.
+   */
+  /assets[\/](items|buildings-png|buildings)[\/]/i,
+  /*
+   * 큰 그림(키아트·배경). 첫 화면 것 하나면 되고 나머지는 스크롤해야 나온다.
+   */
+  /assets[\/]art[\/]/i,
+  /*
+   * 세이브 파서 청크 2.6MB. 일부러 지연 import 로 만들어 뒀는데 프리캐시가 그걸 무력화했다 —
+   * 세이브를 열 생각이 없는 사람도 받고 있었다. 파일을 고르는 순간 받는다.
+   */
+  /_astro[\/]build\.[A-Za-z0-9_-]+\.js$/,
 ];
 
 function walk(dir, out = []) {
@@ -143,10 +166,27 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  event.respondWith(
-    caches.match(req, { ignoreSearch: true }).then((hit) => hit || fetch(req))
-  );
+  event.respondWith(handleAsset(req));
 });
+
+/**
+ * 자산은 캐시 우선. 캐시에 없으면 받아서 **넣어 둔다**.
+ *
+ * 프리캐시에서 뺀 아이콘·그림·파서가 여기로 온다. 한 번 본 것은 그다음부터 오프라인에서도 열린다.
+ * 넣기에 실패해도(용량 초과 등) 응답은 그대로 돌려준다 — 캐시는 부가물이지 조건이 아니다.
+ */
+async function handleAsset(req) {
+  const hit = await caches.match(req, { ignoreSearch: true });
+  if (hit) return hit;
+  const res = await fetch(req);
+  if (res && res.ok && res.type === 'basic') {
+    try {
+      const cache = await caches.open(CACHE);
+      await cache.put(req, res.clone());
+    } catch (e) { /* 캐시에 못 넣어도 화면은 떠야 한다 */ }
+  }
+  return res;
+}
 
 // 페이지가 요청하면 즉시 전환한다 (사용자가 "새로고침"을 눌렀을 때).
 self.addEventListener('message', (event) => {

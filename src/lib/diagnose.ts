@@ -23,13 +23,67 @@ export interface Finding {
   severity: Severity;
   /** 한 줄 결론. 수치를 포함한다 */
   title: string;
-  /** 왜 그런가 */
+  /** 왜 그런가. 이 항목에만 해당하는 말만 담는다 (계열 공통 배경은 basis 로 뺀다) */
   detail: string;
-  /** 무엇을 하면 되나 */
+  /** 무엇을 하면 되나. 이 항목에서 실제로 할 일만 담는다 */
   fix: string;
+  /** 이 규칙 계열 전체에 공통으로 붙는 설명. 화면이 계열마다 한 번만 보여 준다 */
+  basis?: string;
+  /** 계열 식별자. 같은 group 이면 같은 basis 다 — 화면이 이 값으로 항목을 묶는다 */
+  group?: string;
   /** 해당하는 설비·물건 목록. 화면이 표로 그린다 */
   rows?: { ko: string; note: string }[];
 }
+
+/**
+ * 계열 공통 설명.
+ *
+ * 왜 나눠 두나:
+ *   병목 항목이 다섯 개 나오면 "측정 창이 무엇인가"를 다섯 번 읽게 된다. 열 개를 읽는
+ *   사람에게 그것은 잡음이다. 배경은 계열마다 한 번만 보이면 되고, 항목에는 그 항목에만
+ *   해당하는 수치와 처방만 남아야 한다.
+ *
+ * 규칙: 같은 group 을 쓰는 항목은 반드시 같은 basis 를 쓴다. 화면이 그 전제로 묶는다.
+ */
+const BASIS = {
+  bottleneck:
+    '게임은 설비마다 직전 측정 창(약 5분) 동안 실제로 생산한 시간을 세이브에 적어 둔다. ' +
+    '가동률이 100%보다 낮다는 것은 그만큼 멈춰 서 있었다는 뜻이고, 멈추는 이유는 둘뿐이다 — ' +
+    '재료가 안 오거나(굶음), 만든 것이 빠져나가지 못하거나(막힘). 둘은 대처가 정반대라 어느 쪽인지부터 갈라야 한다. ' +
+    '설비 앞뒤 벨트를 보면 갈린다. 입력 벨트가 비어 있으면 굶는 것이고, 출력 벨트가 물건으로 꽉 차 있으면 막힌 것이다. ' +
+    '같이 나온 굶음·막힘 항목이 어느 설비가 어느 쪽인지 이미 갈라 두었다.',
+  blocked:
+    '출력이 어느 설비로도 이어지지 않은 설비다. 내부 출력칸이 차면 설비는 그대로 멈추므로, ' +
+    '여기서 가동률이 낮은 이유는 재료 부족이 아니라 배출구가 없기 때문이다 — 상류를 아무리 늘려도 숫자는 그대로다. ' +
+    '부산물이 나오는 설비는 부산물 출력구만 막혀도 설비 전체가 선다.',
+  starved:
+    '출력은 이어져 있는데 벨트를 거슬러 올라간 상류 설비가 자기보다 더 낮은 가동률로 돌고 있는 설비다. ' +
+    '멈추는 원인이 이 설비가 아니라 상류에 있다는 뜻이다. 라인의 처리량은 가장 느린 칸이 정하므로, ' +
+    '이 설비를 더 짓거나 클럭을 올려도 산출은 늘지 않고 전력만 더 든다.',
+  dangling:
+    '벨트를 끝까지 따라가 봤지만 어떤 설비에도 닿지 않는 출력구다. 벨트를 아직 안 깐 자리, ' +
+    '중간에 끊긴 벨트, 창고에서 끝나는 줄이 모두 여기 든다. 지금 가동률이 멀쩡해도 앞의 창고가 차는 순간 ' +
+    '설비가 그대로 멈추므로, 지금 문제가 아니라 곧 문제가 될 자리다.',
+  power:
+    '세이브의 순간 소비는 저장된 그 순간에 재료를 기다리며 서 있던 설비를 거의 0으로 잡는다. ' +
+    '그래서 지어 둔 설비가 전부 동시에 돌 때의 정격 소비를 따로 계산해 함께 본다. ' +
+    '막힌 라인을 고치는 순간 놀던 설비가 함께 깨어나므로, 문제를 고치는 바로 그때 전력망이 내려앉는다. ' +
+    '한 번 내려간 전력망은 자동으로 복구되지 않는다. 설비 클럭을 내리면 소비는 클럭보다 빠르게 줄고 산출은 클럭만큼만 준다.',
+  noRecipe:
+    '레시피가 비어 있는 설비는 아무것도 만들지 않는다. 세이브의 생산 목록에도 나타나지 않아서, ' +
+    '지은 개수와 레시피가 걸린 개수를 맞춰 봐야만 드러난다. 짓다 만 자리이거나 라인을 옮기고 되돌려 놓지 않은 자리다. ' +
+    '해체하면 건설비를 전액 돌려받으므로 놀려 두는 것보다 낫다.',
+  piling:
+    '재고가 늘기만 한다는 것은 만드는 쪽은 있는데 쓰는 쪽이 없다는 뜻이다. 창고가 차면 만드는 설비가 그대로 멈추므로, ' +
+    '지금은 문제로 안 보여도 라인 하나가 곧 서는 자리다. 창고를 더 붙이는 것은 문제를 며칠 미루는 것일 뿐이다.',
+  overclock:
+    '오버클럭은 산출을 클럭만큼 늘리지만 소비는 그보다 가파르게 늘린다(지수는 건물마다 다르다). ' +
+    '대신 자리와 건설비를 아끼고 전력 슬러그를 쓴다 — 공간이 급한 자리에서는 남는 거래지만, ' +
+    '발전이 빠듯하면 가장 먼저 되돌릴 곳이다.',
+  allClear:
+    '가동률, 벨트 연결, 전력 여유, 레시피가 빈 설비, 쌓이기만 하는 재고를 모두 확인한 결과다. ' +
+    '가동률은 게임이 직전 약 5분을 잰 값이므로, 방금 라인을 바꿨다면 몇 분 뒤에 다시 보는 편이 정확하다.',
+} as const;
 
 /* ------------------------------------------------------------------ 임계값 */
 
@@ -189,6 +243,12 @@ function bottlenecks(ctx: Ctx): Scored[] {
     if (avg >= UPTIME_WARN - EPS) continue;
     const lost = (1 - avg) * n;
     const severity: Severity = avg < UPTIME_STOP ? 'stop' : 'warn';
+    /* 지금 들어오는 양이면 몇 대로 충분한가 — 나머지는 놀고 있는 셈이다 */
+    const keep = Math.max(1, Math.ceil(n * avg - EPS));
+    /* 올림 때문에 keep 이 n 과 같아지는 일이 흔하다. 그때는 "몇 대면 된다"는 말이 공허하다 */
+    const spare = n - keep;
+    /* 100%로 돌리려면 공급이 몇 배여야 하나. 처리량은 가동률에 비례한다 */
+    const times = avg > 0 ? trim((1 / avg).toFixed(1)) : null;
     const title =
       n === 1
         ? `${g.label} 설비 한 대가 ${pct(avg)}만 돌고 있습니다`
@@ -199,16 +259,21 @@ function bottlenecks(ctx: Ctx): Scored[] {
         id: `bottleneck-${kebab(key)}`,
         severity,
         title,
+        group: 'bottleneck',
+        basis: BASIS.bottleneck,
         detail:
-          `게임은 설비마다 직전 측정 창(약 5분) 동안 실제로 생산한 시간을 세이브에 적어 둔다. ` +
-          `${pct(avg)}는 그 시간의 ${pct(1 - avg)}를 멈춰 있었다는 뜻이고, 지금 이 공정은 ` +
-          `${machines(n)}를 지어 두고 ${trim(lost.toFixed(1))}대분을 버리고 있는 셈이다. ` +
-          `설비가 멈추는 이유는 둘뿐이다 — 재료가 안 오거나(굶음), 만든 것이 빠져나가지 못하거나(막힘). ` +
-          `둘은 대처가 정반대라서 어느 쪽인지부터 갈라야 한다.`,
+          (n === 1
+            ? `이 한 대는 ${pct(1 - avg)}의 시간 동안 멈춰 서 있었다.`
+            : `${machines(n)}를 지어 두고 ${trim(lost.toFixed(1))}대분을 버리고 있다.`) +
+          (spare > 0 ? ` 지금 들어오는 양이면 ${machines(keep)}로 같은 산출이 나온다.` : ''),
         fix:
-          `설비 앞뒤 벨트를 본다. 입력 벨트가 비어 있으면 굶는 것이므로 상류 설비를 늘리거나 상류 클럭을 올린다. ` +
-          `출력 벨트가 물건으로 꽉 차 있으면 막힌 것이므로 하류 소비처를 늘리거나 남는 것을 창고로 뺀다. ` +
-          `같이 나온 굶음·막힘 항목이 어느 설비가 어느 쪽인지 이미 갈라 두었다.`,
+          (times
+            ? `굶는 쪽이면 상류 공급을 ${times}배로 늘려야 100%가 된다. `
+            : `굶는 쪽이면 상류에서 아무것도 오지 않고 있으니 공급 라인부터 잇는다. `) +
+          (spare > 0
+            ? `막힌 쪽이면 하류 소비를 그만큼 늘리거나, 남는 ${machines(spare)}의 클럭을 내려 전력을 아껴라.`
+            : `막힌 쪽이면 하류 소비를 늘리거나, ${n === 1 ? '이 설비' : '이 설비들'}의 클럭을 ` +
+              `${pct(avg)} 근처로 내려 전력을 아껴라.`),
         rows: capRows(
           [...g.list].sort((a, b) => (a.uptime ?? 0) - (b.uptime ?? 0)).map(machineRow)
         ),
@@ -243,13 +308,12 @@ function blocked(ctx: Ctx): Scored[] {
         id: 'output-blocked',
         severity: avg < UPTIME_STOP ? 'stop' : 'warn',
         title: `${machines(list.length)}가 만든 것을 내보내지 못해 평균 ${pct(avg)}로 떨어졌습니다`,
-        detail:
-          `이 설비들은 출력이 어느 설비로도 이어져 있지 않다. 내부 출력칸이 차면 설비는 그대로 멈춘다. ` +
-          `가동률이 낮은 이유가 재료 부족이 아니라 배출구가 없기 때문이므로, 상류를 아무리 늘려도 숫자는 그대로다. ` +
-          `굶는 설비와 정반대의 상황이라 대처도 반대다.`,
+        group: 'blocked',
+        basis: BASIS.blocked,
+        detail: `${machines(list.length)}가 평균 ${pct(avg)}로 떨어져 ${trim(lost.toFixed(1))}대분을 버리고 있다.`,
         fix:
-          `출력 벨트를 소비처까지 잇는다. 당장 쓸 곳이 없으면 창고로 빼서 설비가 계속 돌게 한다. ` +
-          `부산물이 나오는 설비라면 부산물 쪽 출력구가 비어 있는지도 같이 본다 — 부산물이 막혀도 설비 전체가 선다.`,
+          `출력 벨트를 소비처까지 잇는다. ` +
+          `당장 쓸 곳이 없으면 창고를 붙여서라도 ${machines(list.length)}가 계속 돌게 한다.`,
         rows: capRows([...list].sort((a, b) => (a.uptime ?? 0) - (b.uptime ?? 0)).map(machineRow)),
       },
     },
@@ -262,6 +326,8 @@ function blocked(ctx: Ctx): Scored[] {
 function starved(ctx: Ctx): Scored[] {
   const rows: { ko: string; note: string }[] = [];
   const hit: FactoryMachine[] = [];
+  /* 원인이 된 상류 설비. 여럿이 한 상류를 가리키는 일이 흔해서 따로 센다 */
+  const causes = new Set<string>();
   for (const m of ctx.makers) {
     if (m.uptime == null || m.uptime >= UPTIME_WARN - EPS) continue;
     const ups = (ctx.up.get(m.key) ?? [])
@@ -272,6 +338,7 @@ function starved(ctx: Ctx): Scored[] {
       .sort((a, b) => a.uptime! - b.uptime!)[0];
     if (!cause) continue;
     hit.push(m);
+    causes.add(cause.key);
     const item = ctx.edgeItem.get(`${cause.key}>${m.key}`);
     const short = item ? `${iga(ctx.catalog.items[item] ?? item)} 모자람 · ` : '';
     rows.push({
@@ -289,13 +356,14 @@ function starved(ctx: Ctx): Scored[] {
         id: 'input-starved',
         severity: avg < UPTIME_STOP ? 'stop' : 'warn',
         title: `${machines(hit.length)}가 재료를 못 받아 평균 ${pct(avg)}로 돌고 있습니다`,
+        group: 'starved',
+        basis: BASIS.starved,
         detail:
-          `이 설비들은 출력은 이어져 있지만, 벨트를 거슬러 올라간 상류 설비가 자기보다 더 낮은 가동률로 돌고 있다. ` +
-          `즉 여기서 멈추는 원인은 이 설비가 아니라 상류다. 라인의 처리량은 가장 느린 칸이 정하므로, ` +
-          `이 설비를 더 짓거나 클럭을 올려도 산출은 늘지 않고 전력만 더 든다.`,
+          `${machines(hit.length)}가 평균 ${pct(avg)}로 돌아 ${trim(lost.toFixed(1))}대분을 버리고 있고, ` +
+          `원인이 되는 상류 설비는 ${machines(causes.size)}다.`,
         fix:
-          `표의 상류 설비부터 고친다. 상류가 또 굶고 있으면 계속 거슬러 올라가 채굴기나 원자재 공급까지 간다. ` +
-          `상류를 늘릴 수 없다면 이 설비의 클럭을 실제로 들어오는 양에 맞춰 내려서 전력을 아끼는 편이 낫다.`,
+          `표의 상류 설비부터 고친다 — 그 상류가 또 굶고 있으면 채굴기까지 거슬러 올라간다. ` +
+          `늘릴 수 없다면 이 설비들의 클럭을 ${pct(avg)} 근처로 내려 전력을 아껴라.`,
         rows: capRows(rows),
       },
     },
@@ -318,13 +386,14 @@ function dangling(ctx: Ctx, blockedKeys: Set<string>): Scored[] {
         id: 'dangling-output',
         severity: list.length ? 'warn' : 'info',
         title,
-        detail:
-          `벨트를 끝까지 따라가 봤지만 이 출력구들은 어떤 설비에도 닿지 않는다. ` +
-          `세이브 전체에서 이런 출력구가 ${dangles}개 잡혔다(벨트를 아직 안 깐 자리, 중간에 끊긴 벨트, 창고에서 끝나는 줄이 모두 여기에 들어간다). ` +
-          `지금 가동률이 멀쩡한 설비라도 앞의 창고가 차는 순간 그대로 멈추므로, 지금 문제가 아니라 곧 문제가 될 자리다.`,
+        group: 'dangling',
+        basis: BASIS.dangling,
+        detail: list.length
+          ? `산출이 어디로도 가지 않는 설비가 ${machines(list.length)}, 이어지지 않은 출력구가 ${dangles}개다.`
+          : `이어지지 않은 출력구가 ${dangles}개다.`,
         fix:
-          `쓸 물건이면 소비처까지 벨트를 잇고, 당장 쓸 데가 없으면 창고를 붙여 두고 나중에 라인을 뺀다. ` +
-          `일부러 비워 둔 출력구라면 그대로 두어도 되지만, 그 설비는 창고가 차는 순간 멈춘다는 것을 알고 두어야 한다.`,
+          `쓸 물건이면 소비처까지 벨트를 잇고, 아니면 창고를 붙여 둔다. ` +
+          `일부러 비워 둔 자리라면 그 설비가 창고 차는 순간 멈춘다는 것만 알고 두면 된다.`,
         rows: list.length ? capRows(list.map(machineRow)) : undefined,
       },
     },
@@ -404,17 +473,16 @@ function power(ctx: Ctx): Scored[] {
           margin >= 0
             ? `발전 ${mw(genMW)}에 정격 소비 ${mw(rated.total)} — 여유가 ${pct(margin)}뿐입니다`
             : `정격 소비 ${mw(rated.total)}가 발전 ${mw(genMW)}보다 ${mw(rated.total - genMW)} 많습니다`,
+        group: 'power',
+        basis: BASIS.power,
         detail:
-          `세이브에 적힌 순간 소비는 ${mw(useMW)}지만 그 값은 믿을 수 없다. 저장된 순간에 재료를 기다리며 ` +
-          `서 있던 설비는 거의 0으로 잡히기 때문이다. 지어 둔 설비가 전부 동시에 돌면 ${mw(rated.total)}가 필요하고, ` +
-          `이는 지금 발전량의 ${pct(rated.total / genMW)}다. 막힌 라인을 고치는 순간 놀던 설비가 함께 깨어나므로, ` +
-          `문제를 고치는 바로 그 순간 전력망이 내려앉는다. 게다가 오버클럭한 설비는 소비가 클럭에 비례하지 않고 ` +
-          `그보다 가파르게 오른다(지수는 건물마다 카탈로그에 들어 있다). 전력망이 한 번 내려가면 자동으로 복구되지 않는다.`,
+          `순간 소비는 ${mw(useMW)}로 잡혔지만 전부 동시에 돌면 ${mw(rated.total)}로, ` +
+          `지금 발전량의 ${pct(rated.total / genMW)}다.`,
         fix: gen
-          ? `여유 25%를 만들려면 ${mw(Math.max(0, need))}가 더 필요하다. 지금 가장 많이 쓰는 발전기로 ${machines(more)} 분량이다. ` +
-            `당장 못 짓겠으면 표 위쪽의 큰 소비 설비부터 클럭을 내려라 — 소비는 클럭보다 빠르게 줄고 산출은 클럭만큼만 준다.`
-          : `여유 25%를 만들려면 ${mw(Math.max(0, need))}가 더 필요하다. 발전기를 늘리거나, 표 위쪽의 큰 소비 설비부터 클럭을 내려라 — ` +
-            `소비는 클럭보다 빠르게 줄고 산출은 클럭만큼만 준다.`,
+          ? `여유 25%를 만들려면 ${mw(Math.max(0, need))}가 더 필요하다 — 지금 가장 많이 쓰는 발전기로 ${machines(more)} 분량이다. ` +
+            `당장 못 짓겠으면 표 위쪽의 큰 소비 설비부터 클럭을 내려라.`
+          : `여유 25%를 만들려면 ${mw(Math.max(0, need))}가 더 필요하다. ` +
+            `발전기를 늘리거나 표 위쪽의 큰 소비 설비부터 클럭을 내려라.`,
         rows: capRows(rated.rows.slice(0, 8).map(({ ko, note }) => ({ ko, note }))),
       },
     },
@@ -436,12 +504,14 @@ function noRecipe(ctx: Ctx): Scored[] {
   }
   const rows: { ko: string; note: string }[] = [];
   let idle = 0;
+  let built = 0;
   for (const [id, n] of Object.entries(ctx.model.counts)) {
     const b = ctx.catalog.buildings[id];
     if (!b || b.cat !== 'manufacturer') continue;
     const gap = n - (withRecipe.get(id) ?? 0);
     if (gap <= 0) continue;
     idle += gap;
+    built += n;
     rows.push({ ko: b.ko, note: `${machines(gap)} · 지은 것 ${machines(n)} 중` });
   }
   if (!idle) return [];
@@ -452,13 +522,10 @@ function noRecipe(ctx: Ctx): Scored[] {
         id: 'no-recipe',
         severity: 'warn',
         title: `레시피를 고르지 않은 생산 설비가 ${machines(idle)} 있습니다`,
-        detail:
-          `레시피가 비어 있는 설비는 아무것도 만들지 않는다. 세이브의 생산 목록에도 나타나지 않아서 ` +
-          `지은 개수와 레시피가 걸린 개수를 맞춰 봐야만 드러난다. 짓다 만 자리이거나, 라인을 옮기고 ` +
-          `되돌려 놓지 않은 자리다. 자재를 이미 쓴 설비이므로 놀려 두면 그만큼 손해다.`,
-        fix:
-          `레시피를 걸어 라인에 넣거나, 쓸 계획이 없으면 해체해서 자재를 돌려받는다. ` +
-          `해체하면 건설비를 전액 돌려받으므로 놀리는 것보다 낫다. 다시 지을 자리를 옮길 때도 마찬가지다.`,
+        group: 'no-recipe',
+        basis: BASIS.noRecipe,
+        detail: `지어 둔 ${machines(built)} 가운데 ${machines(idle)}에 레시피가 걸려 있지 않다.`,
+        fix: `라인에 넣을 것이면 레시피를 걸고, 아니면 해체해 ${machines(idle)} 분량의 자재를 돌려받아라.`,
         rows: capRows(rows),
       },
     },
@@ -502,13 +569,14 @@ function piling(ctx: Ctx): Scored[] {
         id: `piling-${kebab(item)}`,
         severity: 'warn',
         title: `${ko} ${qty(n)}개가 쌓이기만 하고 있습니다`,
+        group: 'piling',
+        basis: BASIS.piling,
         detail:
-          `이 공장에서 ${eul(ko)} 만드는 설비는 ${machines(makers.length)}인데, 그 산출이 다른 설비로 이어진 곳이 하나도 없다. ` +
-          `창고나 끊긴 벨트에서 끝나고 있고, 재고가 ${qty(n)}개까지 늘었다. 창고가 차면 만드는 설비가 그대로 멈추므로 ` +
-          `지금은 문제로 안 보여도 라인 하나가 곧 서는 자리다. 설비와 전력은 계속 쓰면서 결과는 쓰이지 않고 있다.`,
+          `${eul(ko)} 만드는 ${machines(makers.length)}의 산출이 어느 설비로도 가지 않고, ` +
+          `재고가 ${qty(n)}개까지 늘었다.`,
         fix:
-          `쓸 곳이 있으면 벨트를 그쪽으로 잇는다. 쓸 곳이 없으면 만드는 설비의 클럭을 내려 소비 속도에 맞추거나, ` +
-          `그 설비를 지금 필요한 다른 것으로 돌린다. 창고를 더 붙이는 것은 문제를 며칠 미루는 것일 뿐이다.`,
+          `쓸 곳이 있으면 그쪽으로 벨트를 잇는다. ` +
+          `없으면 이 ${machines(makers.length)}의 클럭을 내리거나 지금 필요한 것으로 레시피를 돌려라.`,
         rows: capRows(
           makers.map((m) => {
             const row = machineRow(m);
@@ -554,13 +622,12 @@ function overclock(ctx: Ctx): Scored[] {
         id: 'overclock-power',
         severity: 'info',
         title: `오버클럭한 ${machines(n)} 때문에 전력이 ${mw(extra)} 더 듭니다`,
-        detail:
-          `오버클럭은 산출을 클럭만큼 늘리지만 소비는 그보다 가파르게 늘린다. 같은 산출을 설비를 더 지어서 얻었다면 ` +
-          `이 ${mw(extra)}는 들지 않았을 것이다. 대신 오버클럭은 자리와 건설비를 아끼고 전력 슬러그를 쓴다. ` +
-          `공간이 급한 자리에서는 남는 거래지만, 발전이 빠듯한 시점에는 가장 먼저 되돌릴 곳이기도 하다.`,
+        group: 'overclock',
+        basis: BASIS.overclock,
+        detail: `오버클럭한 ${machines(n)}가 같은 산출을 대수로 냈을 때보다 ${mw(extra)}를 더 먹고 있다.`,
         fix:
-          `전력이 빠듯하면 이 설비들의 클럭을 100%로 되돌리고 대수를 늘려라 — 같은 산출에 ${mw(extra)}를 아낀다. ` +
-          `반대로 자리가 없어 일부러 올린 것이라면 그대로 두고, 발전 여유를 이만큼 더 잡아 두면 된다.`,
+          `전력이 빠듯하면 클럭을 100%로 되돌리고 대수를 늘려라 — 같은 산출에 ${mw(extra)}를 아낀다. ` +
+          `자리가 없어 일부러 올린 것이면 발전 여유만 이만큼 더 잡아 두면 된다.`,
         rows: capRows(rows.sort((a, b) => a.ko.localeCompare(b.ko))),
       },
     },
@@ -581,16 +648,16 @@ function allClear(ctx: Ctx): Finding {
     id: 'all-clear',
     severity: 'info',
     title,
-    detail:
-      `가동률, 벨트 연결, 전력 여유, 레시피가 빈 설비, 쌓이기만 하는 재고를 모두 확인했지만 걸리는 것이 없다. ` +
-      (measured.length
-        ? `가동률은 게임이 직전 약 5분을 잰 값이므로, 방금 라인을 바꿨다면 몇 분 뒤에 다시 보는 편이 정확하다.`
-        : `다만 아직 가동률이 기록된 설비가 없다. 설비를 짓고 몇 분 돌린 뒤 다시 읽으면 병목까지 볼 수 있다.`),
+    group: 'all-clear',
+    basis: BASIS.allClear,
+    detail: measured.length
+      ? `설비 ${machines(measured.length)}가 모두 ${pct(UPTIME_WARN)} 이상으로 돌고 있고, 걸리는 규칙이 하나도 없다.`
+      : `걸리는 규칙이 하나도 없다 — 다만 아직 가동률이 기록된 설비가 없어 병목은 보지 못했다.`,
     fix:
       gen > 0
-        ? `늘릴 때다. 지금 발전 여유는 ${mw(head)}이고, 이 안에서 새 라인을 올리면 전력망을 내리지 않는다. ` +
+        ? `지금 발전 여유 ${mw(head)} 안에서 새 라인을 올리면 전력망을 내리지 않는다. ` +
           `여유를 넘길 것 같으면 라인보다 발전기를 먼저 짓는다.`
-        : `늘릴 때다. 다음 라인을 올리기 전에 발전 여유부터 확인하고, 모자라면 발전기를 먼저 짓는다.`,
+        : `다음 라인을 올리기 전에 발전 여유부터 확인하고, 모자라면 발전기를 먼저 짓는다.`,
   };
 }
 

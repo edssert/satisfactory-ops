@@ -157,7 +157,7 @@ test('온라인에서 각 화면이 자기 문서를 돌려준다', { skip: !fs.
     [`${BASE}/dex/tiers/0/`, '티어 0'],
     [`${BASE}/dex/mam/quartz/`, 'MAM 도감'],
     [`${BASE}/dex/shop/parts/`, '싱크 상점 도감'],
-    [`${BASE}/versions/`, 'Release Notes'],
+    [`${BASE}/versions/`, '업데이트 기록'],
   ];
   for (const [pathname, expected] of cases) {
     const res = await sw.navigate(pathname);

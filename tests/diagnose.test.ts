@@ -90,6 +90,12 @@ function model(over: ModelOver = {}): FactoryModel {
   return { ...base, ...over, machines, edges, counts: over.counts ?? counts };
 }
 
+/**
+ * 문장 수. 마침표 뒤에 공백이나 끝이 와야 문장으로 센다 —
+ * "3.3대분", "채굴기 Mk.1", "66.6%" 의 점은 문장 끝이 아니기 때문이다.
+ */
+const sentences = (text: string) => (text.match(/[.!?](\s|$)/g) ?? []).length;
+
 const byId = (list: Finding[], prefix: string) => list.filter((f) => f.id.startsWith(prefix));
 const one = (list: Finding[], prefix: string): Finding => {
   const hit = byId(list, prefix);
@@ -576,13 +582,80 @@ test('모든 문장이 규약을 지킨다 — 한국어, 별표 없음, 빈 말
       assert.match(text, /[가-힣]/, `${f.id}.${field} 에 한국어가 없다`);
     }
     assert.match(f.title, /\d/, `${f.id}.title 에 수치가 없다`);
-    assert.ok(f.detail.length > 40, `${f.id}.detail 이 근거를 설명하기에 너무 짧다`);
-    assert.ok(f.fix.length > 30, `${f.id}.fix 가 구체적이지 않다`);
+    assert.match(f.detail, /\d/, `${f.id}.detail 에 수치가 없다`);
+    assert.ok(f.fix.length > 20, `${f.id}.fix 가 구체적이지 않다`);
     assert.ok(!/^확인하세요|확인해 보세요$/.test(f.fix), `${f.id}.fix 가 빈 말이다`);
+
+    /* 항목 문장은 짧아야 한다. 배경 설명은 basis 로 빠져 있어야 한다 */
+    assert.ok(
+      sentences(f.detail) <= 2,
+      `${f.id}.detail 이 ${sentences(f.detail)}문장이다 (2문장 이하여야 한다): ${f.detail}`
+    );
+    assert.ok(
+      sentences(f.fix) <= 2,
+      `${f.id}.fix 가 ${sentences(f.fix)}문장이다 (2문장 이하여야 한다): ${f.fix}`
+    );
+
+    /* 계열 공통 설명은 basis 에 있고, 근거 자체는 어딘가에 반드시 있어야 한다 */
+    assert.ok(f.group, `${f.id} 에 group 이 없다`);
+    assert.ok((f.basis ?? '').length > 60, `${f.id}.basis 가 근거를 설명하기에 너무 짧다`);
+    assert.ok(!(f.basis ?? '').includes('**'), `${f.id}.basis 에 마크다운 별표가 있다`);
     for (const row of f.rows ?? []) {
       assert.ok(row.ko.length > 0 && row.note.length > 0, `${f.id} 의 표에 빈 칸이 있다`);
     }
   }
+});
+
+test('같은 계열은 basis 가 똑같다 — 화면이 한 번만 보여 줄 수 있어야 한다', () => {
+  const machines = [
+    machine({ key: 'a', uptime: 0.4 }),
+    machine({ key: 'b', id: SMELTER, recipe: INGOT_RECIPE, uptime: 0.6 }),
+    machine({ key: 'c', uptime: 0.8 }),
+  ];
+  const found = diagnose(
+    model({
+      machines,
+      edges: machines.map((m) => ({ from: m.key, to: 'sink' })),
+    }),
+    catalog
+  );
+
+  const bottleneck = byId(found, 'bottleneck-');
+  assert.ok(bottleneck.length >= 2, '계열이 여러 개 나와야 비교가 된다');
+  assert.equal(new Set(bottleneck.map((f) => f.group)).size, 1, '같은 계열인데 group 이 갈렸다');
+  assert.equal(new Set(bottleneck.map((f) => f.basis)).size, 1, '같은 계열인데 basis 가 갈렸다');
+
+  /* 공통 배경은 basis 에만 있고 항목마다 반복되지 않는다 */
+  for (const f of bottleneck) {
+    assert.ok(!f.detail.includes('측정 창'), `${f.id}.detail 에 계열 공통 설명이 남아 있다`);
+    assert.match(f.basis!, /측정 창/);
+  }
+
+  /* group 이 같으면 basis 도 같다 — 전체 결과에 대해서도 성립해야 한다 */
+  const byGroup = new Map<string, Set<string>>();
+  for (const f of found) {
+    const set = byGroup.get(f.group!) ?? new Set<string>();
+    set.add(f.basis ?? '');
+    byGroup.set(f.group!, set);
+  }
+  for (const [g, set] of byGroup) assert.equal(set.size, 1, `${g} 계열의 basis 가 여러 벌이다`);
+});
+
+test('항목 문장은 이 항목에만 해당하는 수치를 담는다', () => {
+  const found = diagnose(
+    model({
+      machines: Array.from({ length: 5 }, (_, i) => machine({ key: `c${i}`, uptime: 0.6 })),
+      edges: Array.from({ length: 5 }, (_, i) => ({ from: `c${i}`, to: 'sink' })),
+    }),
+    catalog
+  );
+  const f = one(found, 'bottleneck-');
+  /* 5대를 60%로 돌리고 있으니 2대분을 버리고 있고, 지금 공급이면 3대면 된다 */
+  assert.match(f.detail, /5대/);
+  assert.match(f.detail, /2대분/);
+  assert.match(f.detail, /3대/);
+  /* 100%로 올리려면 공급이 1.7배 필요하다 (1 / 0.6) */
+  assert.match(f.fix, /1\.7배/);
 });
 
 test('같은 입력이면 같은 결과가 나온다', () => {

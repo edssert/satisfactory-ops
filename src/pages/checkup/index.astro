@@ -121,7 +121,16 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       empty.hidden = true;
 
       finds.replaceChildren();
+      /* 같은 계열의 공통 설명은 한 번만 그린다. 항목마다 반복하면 잡음이 된다 */
+      const shown = new Set<string>();
       for (const f of list) {
+        if (f.basis && f.group && !shown.has(f.group)) {
+          shown.add(f.group);
+          const p = document.createElement('p');
+          p.className = 'basis';
+          p.textContent = f.basis;
+          finds.append(p);
+        }
         const node = tpl.content.cloneNode(true) as DocumentFragment;
         const art = node.querySelector('.find') as HTMLElement;
         art.classList.add(`is-${f.severity}`);
@@ -279,6 +288,18 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       font-family: var(--font-mono);
       font-size: var(--t-caption);
     }
+
+    /* 계열 공통 설명 — 아래 항목들이 무엇을 근거로 하는지 한 번만 말한다 */
+    .basis {
+      margin: var(--s4) 0 calc(var(--s2) * -1);
+      padding-left: var(--s3);
+      border-left: 2px solid var(--line);
+      color: var(--ink-3);
+      font-size: var(--t-caption);
+      line-height: 1.7;
+      word-break: keep-all;
+    }
+    .finds > .basis:first-child { margin-top: 0; }
 
     .empty { color: var(--ink-2); font-size: var(--t-body-s); }
     [hidden] { display: none !important; }
