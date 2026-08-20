@@ -24,7 +24,7 @@ import '../styles/flow.css';
 import { NODE_W, GAP_X, PAD, chipWidth, fmtRate } from '../lib/flow-layout';
 
 /** 네 줄(기계·입력·출력·클럭)을 담아야 하므로 flow-layout 기본값보다 높다 */
-const NODE_H = 96;
+const NODE_H = 88;
 
 export interface MachineBox {
   /** 기계 이름. 같은 기계가 여러 대면 상자를 여러 개 만든다 */
@@ -388,7 +388,8 @@ function connectors(row: Row): number[] {
                 </text>
               )}
               {m.note && <text x={tx} y={p.y + 45} class="fc-product">{m.note}</text>}
-              {m.clock != null && (
+              {/* 100% 는 기본값이라 적지 않는다. 적으면 상자마다 같은 글자가 반복돼 잡음이 된다 */}
+              {m.clock != null && m.clock < 100 && (
                 <text x={tx} y={p.y + 83} class="fc-sub">클럭 {fmtRate(m.clock)}%</text>
               )}
             </g>
