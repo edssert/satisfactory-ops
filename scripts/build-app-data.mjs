@@ -136,6 +136,17 @@ const buildings = en.buildings.map((x) => ({
     ? { perMinuteAtNormalPurity: round(x.extraction.perMinuteAtNormalPurity), allowedForms: x.extraction.allowedForms }
     : null,
   supplementalToPowerRatio: round(x.supplementalToPowerRatio),
+  /*
+   * 발전기가 무엇을 태우는가. 발전기는 레시피가 없어서 이게 없으면 계획 화면에서
+   * 발전기를 아예 놓을 수 없다. 소비량은 여기서 계산하지 않는다 —
+   * 연료 열량(MJ)과 발전량(MW)에서 나오므로 화면에서 구한다.
+   */
+  fuels: (x.fuels ?? []).map((f) => ({
+    fuel: f.fuel,
+    supplemental: f.supplemental ?? null,
+    byproduct: f.byproduct ?? null,
+    byproductAmount: f.byproductAmount ?? null,
+  })),
   storageSlots: x.storageSlots ?? null,
   // 배치 도면용 (FRD F13). 게임 충돌 박스 합집합, m 단위
   footprint: x.footprint

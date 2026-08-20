@@ -1,6 +1,6 @@
 ---
 /**
- * 버전 연혁 — 커뮤니티 공략을 읽을 때 어느 부분만 다시 확인하면 되는지.
+ * Release Notes — 커뮤니티 공략을 읽을 때 어느 부분만 다시 확인하면 되는지.
  *
  * 이 앱의 게임 수치는 설치본에서 직접 뽑으므로 언제나 현재 버전 기준이다.
  * 낡을 위험은 데이터가 아니라 바깥 자료 쪽에 있다. 그래서 이 표는 바깥 자료용이다.
@@ -45,13 +45,13 @@ const facts = [
 ---
 
 <Base
-  title="버전 연혁, 어느 부분을 다시 확인할까"
+  title="Release Notes — 어느 부분을 다시 확인할까"
   description="Satisfactory 버전별 진행·설계 관련 변경. 오래된 공략을 읽을 때 무엇만 다시 확인하면 되는지."
   section="versions"
 >
   <div class="wrap page">
     <header class="page-head">
-      <p class="marker"><span class="num">연혁</span></p>
+      <p class="marker"><span class="num">Release Notes</span></p>
       <h1><span class="fx-gradient-text">어느 부분을<br />다시 확인할까</span></h1>
       <p class="lede prose">
         오래된 공략도 대부분 그대로 유효합니다. 아래 표에 <strong>올라온 항목만</strong> 다시
@@ -70,7 +70,7 @@ const facts = [
     </div>
     {!baselineMatches && liveBuild && (
       <p class="caption warn">
-        연혁 파일의 빌드({doc.$dataBaseline.steamBuildId})와 현재 데이터의 빌드({liveBuild})가
+        릴리스 노트의 빌드({doc.$dataBaseline.steamBuildId})와 현재 데이터의 빌드({liveBuild})가
         다릅니다.
       </p>
     )}

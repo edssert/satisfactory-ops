@@ -1,0 +1,148 @@
+---
+/**
+ * 설계 — 건물을 놓고, 레시피를 고르고, 선으로 이으면 처리량이 계산되는 화면.
+ *
+ * `/builder` 와 다르다. 거기는 목표를 넣으면 공정을 펼쳐 주는 자동 계산이고,
+ * 여기는 사람이 직접 배치를 그린다. 인게임에서 짓기 전에 미리 짜 보고,
+ * 짠 것을 남에게 보여 주기 위한 화면이다.
+ *
+ * 페이지가 데이터 서브셋을 만들어 아일랜드에 props 로 넘긴다(ADR-0009).
+ * 대체 제작법도 전부 넣는다 — 설계 화면은 "지금 가진 것"이 아니라 "짤 수 있는 것"을 다룬다.
+ */
+import Base from '../../layouts/Base.astro';
+import '../../styles/fx.css';
+import '../../styles/planner.css';
+import FactoryPlanner from '../../components/FactoryPlanner';
+import { buildings, index, items, recipes } from '../../lib/gamedata';
+import { isUnpackaging } from '../../lib/recipe-select';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const itemById = new Map(items.map((i) => [i.id, i]));
+const buildingById = new Map(buildings.map((b) => [b.id, b]));
+
+/** 레시피를 돌리는 기계 — index.byBuilding 에 들어 있는 것이 정본이다 */
+const recipeMachineIds = Object.keys(index.byBuilding).filter((id) => buildingById.has(id));
+const extractorIds = buildings.filter((b) => b.extraction != null).map((b) => b.id);
+const generatorIds = buildings.filter((b) => b.fuels.length > 0).map((b) => b.id);
+
+const machineIds = [...new Set([...recipeMachineIds, ...extractorIds, ...generatorIds])];
+
+const usedItems = new Set<string>();
+
+const payloadRecipes = machineIds.flatMap((mid) =>
+  (index.byBuilding[mid] ?? [])
+    .map((rid) => recipes.find((r) => r.id === rid)!)
+    .filter((r) => r && !r.isBuildingRecipe && !isUnpackaging(r))
+    .map((r) => {
+      for (const g of r.ingredients) usedItems.add(g.item);
+      for (const p of r.products) usedItems.add(p.item);
+      return {
+        i: r.id,
+        k: r.ko,
+        m: mid,
+        ...(r.isAlternate ? { a: 1 as const } : {}),
+        g: r.ingredients.map((g) => [g.item, g.perMinute] as [string, number]),
+        o: r.products.map((p) => [p.item, p.perMinute] as [string, number]),
+      };
+    })
+);
+
+/** 채굴기가 캘 수 있는 자원 — 형태(고체·액체·기체)가 맞아야 한다 */
+const resourcesByForm = new Map<string, string[]>();
+for (const it of items) {
+  if (it.kind !== 'resource') continue;
+  const form = it.form;
+  if (!resourcesByForm.has(form)) resourcesByForm.set(form, []);
+  resourcesByForm.get(form)!.push(it.id);
+}
+
+const payloadMachines = machineIds.map((id) => {
+  const b = buildingById.get(id)!;
+  const canExtract = b.extraction
+    ? [...new Set(b.extraction.allowedForms.flatMap((f) => resourcesByForm.get(f) ?? []))]
+    : [];
+  for (const r of canExtract) usedItems.add(r);
+  for (const f of b.fuels) {
+    usedItems.add(f.fuel);
+    if (f.supplemental) usedItems.add(f.supplemental);
+    if (f.byproduct) usedItems.add(f.byproduct);
+  }
+  return {
+    i: id,
+    k: b.ko,
+    t: b.unlockTier,
+    /* 가변 전력 건물(입자 가속기 등)은 상한을 쓴다. 낮춰 잡으면 발전 계획이 어긋난다 */
+    p: b.powerMW ?? b.powerMaxMW ?? null,
+    ...(b.powerIsVariable ? { v: 1 as const } : {}),
+    ...(b.extraction
+      ? { e: b.extraction.perMinuteAtNormalPurity ?? 0, res: canExtract }
+      : {}),
+    ...(b.fuels.length
+      ? {
+          gen: b.powerGenMW ?? 0,
+          sr: b.supplementalToPowerRatio ?? null,
+          f: b.fuels.map((f) => ({
+            f: f.fuel,
+            s: f.supplemental,
+            b: f.byproduct,
+            ba: f.byproductAmount,
+          })),
+        }
+      : {}),
+    n: (index.byBuilding[id] ?? []).length,
+  };
+});
+
+const payloadItems = [...usedItems]
+  .map((id) => itemById.get(id))
+  .filter((x): x is NonNullable<typeof x> => !!x)
+  .map((it) => ({
+    i: it.id,
+    k: it.ko,
+    ...(it.isFluid ? { fl: 1 as const } : {}),
+    /* 연료 열량. 발전기가 분당 몇 개를 태우는지는 여기서 나온다 */
+    ...(it.energyMJ ? { mj: it.energyMJ } : {}),
+  }));
+
+const bytes = JSON.stringify({ payloadRecipes, payloadMachines, payloadItems }).length;
+---
+
+<Base
+  title="설계 — 놓고, 잇고, 계산한다"
+  description="건물과 레시피를 직접 골라 놓고 선으로 이으면 처리량과 전력이 계산됩니다. 인게임에서 짓기 전에 먼저 짜 보세요."
+  section="planner"
+>
+  <div class="wrap page">
+    <header class="page-head">
+      <p class="marker"><span class="num">설계</span></p>
+      <h1><span class="fx-gradient-text">짓기 전에 먼저 짠다</span></h1>
+      <p class="lede prose">
+        왼쪽에서 건물과 레시피를 골라 놓고, 산출구를 눌러 다음 기계의 투입구로 이으세요.
+        대수와 클럭을 바꾸면 처리량·전력·모자란 재료가 그 자리에서 다시 계산됩니다.
+      </p>
+    </header>
+
+    <FactoryPlanner
+      client:load
+      machines={payloadMachines}
+      recipesList={payloadRecipes}
+      itemsList={payloadItems}
+      iconBase={`${base}/assets`}
+    />
+
+    <p class="caption foot">
+      1.2 게임 데이터 기준입니다. 대체 제작법도 전부 들어 있습니다. 전력은 생산 건물이
+      클럭의 1.321928 제곱, 발전기는 클럭에 비례합니다. 데이터 {Math.round(bytes / 1024)}KB 를
+      화면과 함께 보내므로 조작에 네트워크 요청이 없고, 짠 것은 이 브라우저에만 남습니다.
+    </p>
+  </div>
+
+  <style>
+    .page { padding-block: var(--s16) 0; }
+    .page-head { margin-bottom: var(--s8); }
+    .page-head h1 { margin-bottom: var(--s4); }
+    .lede { font-size: var(--t-body-l); color: var(--ink-2); }
+    .foot { margin-top: var(--s10); }
+  </style>
+</Base>

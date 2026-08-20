@@ -54,6 +54,15 @@ export interface Building {
   pipeFlowM3PerMinute: number | null;
   extraction: { perMinuteAtNormalPurity: number | null; allowedForms: string[] } | null;
   supplementalToPowerRatio: number | null;
+  /** 발전기가 태울 수 있는 연료. 발전기는 레시피가 없어서 이게 정본이다 */
+  fuels: {
+    fuel: string;
+    /** 같이 넣어야 하는 것 (석탄 발전기의 물, 원자로의 물) */
+    supplemental: string | null;
+    /** 나오는 것 (원자로의 핵폐기물) */
+    byproduct: string | null;
+    byproductAmount: number | null;
+  }[];
   storageSlots: number | null;
   /** 이 건물이 처음 해금되는 티어. 모르면 null. */
   unlockTier: number | null;
