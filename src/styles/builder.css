@@ -1,0 +1,188 @@
+/*
+ * builder.css — 직접 만들기 화면.
+ *
+ * 도면이 아니라 **작업 목록**이다. 어느 기계를 몇 대 놓고 무엇을 얼마나 넣는지가
+ * 한눈에 들어와야 한다. 장식을 넣지 않는다.
+ */
+
+.fb {
+  display: grid;
+  gap: var(--s8);
+}
+
+/* ------------------------------------------------------------------ 입력 */
+.fb-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--s4);
+  padding: var(--s5);
+  border: var(--hair) solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.fb-field {
+  display: grid;
+  gap: var(--s2);
+  min-width: 0;
+}
+.fb-field label {
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+}
+.fb-field select,
+.fb-field input {
+  padding: var(--s2) var(--s3);
+  border: var(--hair) solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--t-body);
+  font-weight: 600;
+}
+.fb-field select { min-width: 16rem; }
+.fb-field.is-num input {
+  width: 7rem;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+.fb-reset { margin-left: auto; }
+
+.fb-warn {
+  margin: 0;
+  padding: var(--s3) var(--s4);
+  border-left: 2px solid var(--danger);
+  background: var(--raised);
+  color: var(--danger);
+  font-size: var(--t-small);
+}
+
+/* ------------------------------------------------------------------ 합계 */
+.fb-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  gap: var(--hair);
+  background: var(--line);
+  border: var(--hair) solid var(--line);
+}
+.fb-stat { background: var(--bg); padding: var(--s4) var(--s5); }
+.fb-k {
+  display: block;
+  margin-bottom: var(--s1);
+  font-size: var(--t-label);
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+}
+.fb-v { font-size: var(--t-h3); font-weight: 600; }
+
+/* ------------------------------------------------------------------ 본문 */
+.fb-cols { display: grid; gap: var(--s8); }
+@media (min-width: 980px) {
+  .fb-cols {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 20rem);
+    gap: var(--s10);
+    align-items: start;
+  }
+}
+
+.fb-h {
+  margin-bottom: var(--s4);
+  font-size: var(--t-body);
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.fb-steps { margin: 0; padding: 0; list-style: none; }
+.fb-step {
+  padding-block: var(--s4);
+  border-top: var(--hair) solid var(--line);
+}
+.fb-step:last-child { border-bottom: var(--hair) solid var(--line); }
+
+.fb-step-head {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  flex-wrap: wrap;
+}
+.fb-icon { flex: none; image-rendering: auto; }
+.fb-step-name {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s2);
+  min-width: 11rem;
+}
+.fb-rate { color: var(--accent); }
+.fb-machine {
+  margin-left: auto;
+  font-size: var(--t-small);
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.fb-clock { color: var(--ink-3); }
+
+.fb-cut {
+  flex: none;
+  padding: 0.2em 0.6em;
+  border: var(--hair) solid var(--line);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--ink-3);
+  font: inherit;
+  font-size: var(--t-caption);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+}
+.fb-cut:hover { color: var(--ink); border-color: var(--line-strong); }
+.fb-cut.is-on {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.fb-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+  margin: var(--s3) 0 0;
+  padding: 0 0 0 calc(28px + var(--s3));
+  list-style: none;
+}
+.fb-chip {
+  padding: 0.15em 0.5em;
+  border: var(--hair) solid var(--line);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--ink-2);
+  font: inherit;
+  font-size: var(--t-caption);
+  cursor: pointer;
+}
+.fb-chip:hover { border-color: var(--line-strong); color: var(--ink); }
+.fb-chip.is-on { border-color: var(--accent); color: var(--accent); }
+
+.fb-empty { color: var(--ink-2); font-size: var(--t-small); }
+
+/* ------------------------------------------------------------------ 옆 단 */
+.fb-side { display: grid; gap: var(--s8); }
+.fb-raw { margin: 0; padding: 0; list-style: none; }
+.fb-raw li {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  padding-block: var(--s2);
+  border-top: var(--hair) solid var(--line);
+  font-size: var(--t-small);
+}
+.fb-raw li:last-child { border-bottom: var(--hair) solid var(--line); }
+.fb-raw-ko { flex: 1; min-width: 0; }
+.fb-tag {
+  padding: 0.05em 0.4em;
+  border: var(--hair) solid var(--line);
+  border-radius: var(--radius);
+  font-size: var(--t-label);
+  color: var(--ink-3);
+}
