@@ -122,9 +122,16 @@ for (const W of WIDTHS) {
        *    글자가 없는 상자는 뺀다. 배경 격자·흐르는 띠 같은 장식은 일부러 넘치게 만들고
        *    잘라 쓰는 것이 정상이라, 넣으면 목록이 장식으로 가득 차 진짜를 덮는다.
        */
-      const scrolls = /auto|scroll/.test(cs.overflowX);
-      if (t.length > 0 && !scrolls && el.scrollWidth > el.clientWidth + 2 && el.clientWidth > 0) {
+      const wide = el.scrollWidth > el.clientWidth + 2 && el.clientWidth > 0 && t.length > 0;
+      if (wide && cs.overflowX === 'visible') {
         overflowing.push({ el, sel: selOf(el), inner: el.scrollWidth, box: el.clientWidth, text: t });
+      }
+      /*
+       * 잘라 내는 상자(hidden·clip)는 대개 일부러 그런 것이다 — 배경이 화면 밖으로
+       * 흘러나가게 두는 히어로처럼. 다만 **자식이 없는 글자 상자**가 잘리고 있으면 그건 사고다.
+       */
+      if (wide && /hidden|clip/.test(cs.overflowX) && el.children.length === 0) {
+        out.clipped.push({ sel: selOf(el), inner: el.scrollWidth, box: el.clientWidth, text: t });
       }
 
       // 4) 잘린 글자 — 세로로 넘치는데 hidden 이다

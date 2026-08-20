@@ -85,6 +85,7 @@ function model(over: ModelOver = {}): FactoryModel {
     danglingOutputs: 0,
     storageKeys: [...new Set(edges.map((e) => e.to))].filter((k) => !keys.has(k)),
     objects: 1000,
+    hazards: [],
   };
   return { ...base, ...over, machines, edges, counts: over.counts ?? counts };
 }

@@ -73,7 +73,20 @@ export interface FactoryModel {
   storageKeys: string[];
   /** 세이브에 든 객체 수 — 제대로 읽었는지 눈으로 확인하는 값 */
   objects: number;
+  /**
+   * 가 본 곳에서 확인된 위험 지점.
+   *
+   * 세이브는 월드의 사본이 아니라 지나간 지역의 기록이다. 그래서 이 목록은
+   * "여기에 있다"는 말은 되지만 "여기 말고는 없다"는 말은 못 된다. 화면이 그렇게 밝혀야 한다.
+   */
+  hazards: { kind: 'gas' | 'spore'; fx: number; fy: number }[];
 }
+
+/** 세이브에 그대로 들어 있는 위험 지점. 클래스명으로 가른다 */
+const HAZARD: Record<string, 'gas' | 'spore'> = {
+  BP_VolumeGas_01_C: 'gas',
+  BP_SporeFlower_C: 'spore',
+};
 
 /* 파서가 주는 객체는 형태가 느슨하다. 필요한 부분만 좁게 적는다 */
 interface Ref {
@@ -289,6 +302,15 @@ export async function readFactory(
     for (const to of hits) edges.push({ from: owner, to, item: outItemOf.get(owner) ?? null });
   }
 
+  /* ---------------------------------------------------------------- 위험 지점 */
+  const hazards: { kind: 'gas' | 'spore'; fx: number; fy: number }[] = [];
+  for (const o of all) {
+    const kind = HAZARD[tail(o.typePath)];
+    const t = o.transform?.translation;
+    if (!kind || !t) continue;
+    hazards.push({ kind, fx: (t.x - X0) / X_RANGE, fy: (t.y - Y0) / Y_RANGE });
+  }
+
   const header = save.header ?? {};
   return {
     session: header.sessionName || name,
@@ -301,5 +323,6 @@ export async function readFactory(
     danglingOutputs,
     storageKeys: [...graphKeys].filter((k) => !machines.some((m) => m.key === k)),
     objects: all.length,
+    hazards,
   };
 }
