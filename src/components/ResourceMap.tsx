@@ -805,9 +805,6 @@ export default function ResourceMap({
                         rx={s(4)}
                         vector-effect="non-scaling-stroke"
                       />
-                      <text x={b.x + b.w / 2} y={b.y + b.h / 2} font-size={s(Math.max(14, labelPx * 1.5))}>
-                        {a.ko}
-                      </text>
                     </g>
                   );
                 })
@@ -937,6 +934,38 @@ export default function ResourceMap({
                   {Math.ceil((totalKm * 1000) / BELT_SEGMENT_M)}개 · 전신주{' '}
                   {Math.ceil((totalKm * 1000) / POLE_SPAN_M)}개
                 </text>
+              </g>
+            )}
+
+            {/*
+              시작 지역 이름은 **맨 위**에 그린다.
+              칸 안에 같이 두었더니 노드가 몰린 자리에서 마커에 통째로 덮여 글자가 사라졌다.
+              레이어를 올리고 배경판을 깐다 — 외곽선만으로는 점 위에서 안 읽힌다.
+            */}
+            {showAreas && (
+              <g class="rm-arealabels">
+                {areas.map((a) =>
+                  a.cells.map((c) => {
+                    const b = cellBox(c);
+                    if (!b) return null;
+                    const fs = s(Math.max(14, labelPx * 1.5));
+                    return (
+                      <g key={`al-${a.key}-${c}`}>
+                        <rect
+                          x={b.x + b.w / 2 - (a.ko.length * fs) / 2 - fs * 0.4}
+                          y={b.y + b.h / 2 - fs * 0.9}
+                          width={a.ko.length * fs + fs * 0.8}
+                          height={fs * 1.5}
+                          rx={s(3)}
+                          class="rm-areaplate"
+                        />
+                        <text x={b.x + b.w / 2} y={b.y + b.h / 2} font-size={fs}>
+                          {a.ko}
+                        </text>
+                      </g>
+                    );
+                  })
+                )}
               </g>
             )}
 

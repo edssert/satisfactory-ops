@@ -56,6 +56,11 @@ interface SaveShape {
   floorHeight?: number;
 }
 
+interface PlanSnapshot {
+  nodes: PlanNode[];
+  edges: PlanEdge[];
+}
+
 /* ------------------------------------------------------------------ 치수 */
 
 /** 토대 한 칸. 게임의 격자 단위다 */
@@ -145,6 +150,12 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, belts
   const [pick, setPick] = useState<{ node: number; item: string } | null>(null);
   const [sel, setSel] = useState<number | null>(null);
   const [copied, setCopied] = useState(false);
+  const [projectName, setProjectName] = useState('새 공장 설계');
+  const fileInput = useRef<HTMLInputElement>(null);
+  const past = useRef<PlanSnapshot[]>([]);
+  const future = useRef<PlanSnapshot[]>([]);
+  const restoring = useRef(false);
+  const historyTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   /** 지금 보고 있는 층. 다른 층은 흐리게 남는다 — 위아래를 보면서 짜야 한다 */
   const [floor, setFloor] = useState(0);
@@ -213,6 +224,28 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, belts
       /* 저장 공간이 없어도 화면은 계속 쓸 수 있어야 한다 */
     }
   }, [nodes, edges, floorHeight, ready]);
+
+  /* 이동 중 매 프레임을 쌓지 않고, 조작이 잠깐 멎었을 때 한 번만 기록한다. */
+  useEffect(() => {
+    if (!ready) return;
+    if (restoring.current) {
+      restoring.current = false;
+      return;
+    }
+    if (historyTimer.current) clearTimeout(historyTimer.current);
+    historyTimer.current = setTimeout(() => {
+      const snap = { nodes, edges };
+      const prev = past.current[past.current.length - 1];
+      if (!prev || JSON.stringify(prev) !== JSON.stringify(snap)) {
+        past.current.push(snap);
+        if (past.current.length > 80) past.current.shift();
+        future.current = [];
+      }
+    }, 260);
+    return () => {
+      if (historyTimer.current) clearTimeout(historyTimer.current);
+    };
+  }, [nodes, edges, ready]);
 
   useEffect(() => {
     const el = host.current;
@@ -285,6 +318,36 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, belts
       return { w: swap ? l : w, h: swap ? w : l };
     },
     [machineById]
+  );
+
+  /** 같은 층에서 실제 충돌 상자가 겹치는 노드. 접하는 것은 정상 배치다. */
+  const collisions = useMemo(() => {
+    const hit = new Set<number>();
+    for (let i = 0; i < nodes.length; i++) {
+      const a = nodes[i]!;
+      const sa = sizeOf(a);
+      for (let j = i + 1; j < nodes.length; j++) {
+        const b = nodes[j]!;
+        if (a.floor !== b.floor) continue;
+        const sb = sizeOf(b);
+        if (a.x < b.x + sb.w && a.x + sa.w > b.x && a.y < b.y + sb.h && a.y + sa.h > b.y) {
+          hit.add(a.id);
+          hit.add(b.id);
+        }
+      }
+    }
+    return hit;
+  }, [nodes, sizeOf]);
+
+  const powerNodes = useMemo(
+    () =>
+      nodes
+        .filter((n) => {
+          const m = machineById.get(n.machine);
+          return n.floor === floor && ((m?.p ?? 0) > 0 || (m?.gen ?? 0) > 0);
+        })
+        .sort((a, b) => a.x - b.x || a.y - b.y),
+    [nodes, machineById, floor]
   );
 
   /**
@@ -590,6 +653,85 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, belts
     }
   };
 
+  const restore = (snap: PlanSnapshot) => {
+    restoring.current = true;
+    setNodes(snap.nodes);
+    setEdges(snap.edges);
+    setPick(null);
+    setEdit(null);
+    setSel(null);
+  };
+
+  const undo = () => {
+    if (past.current.length < 2) return;
+    const current = past.current.pop()!;
+    future.current.push(current);
+    restore(past.current[past.current.length - 1]!);
+  };
+
+  const redo = () => {
+    const next = future.current.pop();
+    if (!next) return;
+    past.current.push(next);
+    restore(next);
+  };
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (target?.matches('input, select, textarea')) return;
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
+        e.preventDefault();
+        if (e.shiftKey) redo();
+        else undo();
+      } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'y') {
+        e.preventDefault();
+        redo();
+      } else if ((e.key === 'Delete' || e.key === 'Backspace') && sel != null) {
+        e.preventDefault();
+        removeNode(sel);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [sel, nodes, edges]);
+
+  const exportPlan = () => {
+    const payload = JSON.stringify(
+      { version: SAVE_VERSION, name: projectName, exportedAt: new Date().toISOString(), floorHeight, nodes, edges },
+      null,
+      2
+    );
+    const url = URL.createObjectURL(new Blob([payload], { type: 'application/json' }));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${projectName.trim().replace(/[^0-9A-Za-z가-힣_-]+/g, '-') || 'factory-plan'}.sfops.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const importPlan = async (file: File | undefined) => {
+    if (!file) return;
+    try {
+      const parsed = JSON.parse(await file.text()) as SaveShape & { name?: string };
+      if (!Array.isArray(parsed.nodes) || !Array.isArray(parsed.edges)) throw new Error('shape');
+      const live = parsed.nodes.filter((n) => machineById.has(n.machine));
+      const ids = new Set(live.map((n) => n.id));
+      const linked = parsed.edges.filter((e) => ids.has(e.from) && ids.has(e.to));
+      restore({ nodes: live, edges: linked });
+      past.current = [{ nodes: live, edges: linked }];
+      future.current = [];
+      seq.current = Math.max(1, ...live.map((n) => n.id + 1), ...linked.map((e) => e.id + 1));
+      if (parsed.floorHeight) setFloorHeight(parsed.floorHeight);
+      if (parsed.name) setProjectName(parsed.name);
+      setTimeout(fitAll, 0);
+    } catch {
+      alert('이 파일은 올바른 satisfactory-ops 설계 파일이 아닙니다.');
+    } finally {
+      if (fileInput.current) fileInput.current.value = '';
+    }
+  };
+
   /* ---------------------------------------------------------------- 이름 */
 
   const nameOf = (id: string) => itemById.get(id)?.k ?? id;
@@ -783,7 +925,7 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, belts
           />
         </label>
 
-        <div class="pl-groups">
+        <div class="pl-groups" data-lenis-prevent>
           {palette.map((g) => (
             <section key={g.key}>
               <h3>{g.ko}</h3>
@@ -813,6 +955,29 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, belts
       </aside>
 
       <div class="pl-main">
+        <div class="pl-projectbar">
+          <label>
+            <span class="sr-only">설계 이름</span>
+            <input
+              class="pl-projectname"
+              value={projectName}
+              onInput={(e) => setProjectName((e.currentTarget as HTMLInputElement).value)}
+            />
+          </label>
+          <span class="pl-projectstate">브라우저에 자동 저장됨</span>
+          <span class="pl-spacer" />
+          <button type="button" class="pl-btn is-quiet" onClick={undo} title="실행 취소 (Ctrl+Z)">↶ 실행 취소</button>
+          <button type="button" class="pl-btn is-quiet" onClick={redo} title="다시 실행 (Ctrl+Y)">↷ 다시 실행</button>
+          <button type="button" class="pl-btn" onClick={exportPlan}>설계 파일 저장</button>
+          <button type="button" class="pl-btn" onClick={() => fileInput.current?.click()}>설계 파일 열기</button>
+          <input
+            ref={fileInput}
+            class="sr-only"
+            type="file"
+            accept=".json,.sfops.json,application/json"
+            onChange={(e) => importPlan((e.currentTarget as HTMLInputElement).files?.[0])}
+          />
+        </div>
         <div class="pl-bar">
           <span class="pl-floor">
             <button type="button" class="pl-sq" title="아래 층" onClick={() => setFloor((f) => f - 1)}>
@@ -840,7 +1005,7 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, belts
           </span>
 
           <span class="pl-stat">
-            <b>{nodes.length}</b> 대 · <b>{edges.length}</b> 벨트
+            <b>{nodes.length}</b> 설비 · <b>{edges.length}</b> 연결
           </span>
           <span class="pl-stat">
             소비 <b>{fmt(round1(solved.power))}</b> MW
@@ -851,6 +1016,9 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, belts
               </>
             )}
           </span>
+          {collisions.size > 0 && (
+            <span class="pl-stat is-danger" role="status"><b>{collisions.size}</b>개 설비 충돌</span>
+          )}
 
           <span class="pl-spacer" />
 
@@ -885,7 +1053,7 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, belts
         </div>
 
         {altOpen && (
-          <div class="pl-alts">
+          <div class="pl-alts" data-lenis-prevent>
             <div class="pl-altbar">
               <input
                 type="search"
@@ -947,7 +1115,7 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, belts
           </div>
         )}
 
-        <div class="pl-stage" ref={host} onWheel={onWheel as never}>
+        <div class="pl-stage" ref={host} onWheel={onWheel as never} data-lenis-prevent>
           <svg
             class="pl-svg"
             viewBox={vb}
@@ -991,12 +1159,34 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, belts
               fill="url(#pl-grid8)"
             />
 
+            {/* 계획용 전력 간선. 실제 전주 위치를 확정하기 전에도 전력 경로를 놓치지 않게 한다. */}
+            {powerNodes.slice(1).map((n, i) => {
+              const a = powerNodes[i]!;
+              const sa = sizeOf(a);
+              const sn = sizeOf(n);
+              const x1 = a.x + sa.w / 2;
+              const y1 = a.y + sa.h / 2;
+              const x2 = n.x + sn.w / 2;
+              const y2 = n.y + sn.h / 2;
+              return (
+                <path
+                  key={`power-${a.id}-${n.id}`}
+                  d={`M${x1},${y1} L${x1},${y2} L${x2},${y2}`}
+                  class="pl-powerline"
+                  stroke-width={fs(1.6)}
+                />
+              );
+            })}
+
             {edges.map((e) => {
               const rt = routeOf(e);
               if (!rt) return null;
               const v = solved.flow.get(e.id) ?? 0;
               return (
-                <g key={e.id} class={v > 1e-6 ? 'pl-belt' : 'pl-belt is-dry'}>
+                <g
+                  key={e.id}
+                  class={`${v > 1e-6 ? 'pl-belt' : 'pl-belt is-dry'}${itemById.get(e.item)?.fl ? ' is-fluid' : ''}`}
+                >
                   <path d={rt.d} class="pl-belt-shell" stroke-width={fs(9)} />
                   <path d={rt.d} class="pl-belt-core" stroke-width={fs(3.5)} />
                   {rt.lift !== 0 && (
@@ -1011,7 +1201,7 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, belts
                     </g>
                   )}
                   <text x={rt.mid.x} y={rt.mid.y - fs(10)} font-size={fs(11)} class="pl-beltrate">
-                    {fmt(Math.round(v * 100) / 100)}/분
+                    {fmt(Math.round(v * 100) / 100)}{itemById.get(e.item)?.fl ? ' m³/분' : '/분'}
                   </text>
                   <circle
                     class="pl-cut"
@@ -1038,6 +1228,7 @@ export default function FactoryPlanner({ machines, recipesList, itemsList, belts
                   key={n.id}
                   class={
                     `pl-b${here ? '' : ' is-off'}` +
+                    `${collisions.has(n.id) ? ' is-collision' : ''}` +
                     `${sel === n.id ? ' is-sel' : ''}` +
                     `${unset(n) ? ' is-unset' : ''}` +
                     `${short ? ' is-short' : ''}`

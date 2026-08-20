@@ -159,15 +159,24 @@
 
 .mam {
   display: grid;
+  /*
+   * 한 열일 때도 minmax(0, 1fr) 을 명시한다. 암시적 열은 auto 라서
+   * 안에 든 연구 트리 SVG(1276px)의 max-content 만큼 열이 벌어졌고,
+   * 390px 화면에서 목록 폭이 1308px 이 되어 활성 항목의 주황 배경이
+   * 화면 밖까지 뻗고 오른쪽 개수가 전부 잘렸다.
+   */
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s4);
   align-items: start;
 }
+.mam > * { min-width: 0; }
 @media (min-width: 900px) {
   .mam { grid-template-columns: 210px minmax(0, 1fr); }
 }
+.mam-nav { width: 100%; min-width: 0; }
 
 /* 게임의 왼쪽 트리 목록. 고른 것만 강조색 띠 */
-.mam-list { margin: 0; padding: 0; list-style: none; }
+.mam-list { width: 100%; margin: 0; padding: 0; list-style: none; }
 .mam-list a {
   display: flex;
   align-items: baseline;
@@ -188,6 +197,19 @@
 .mam-list .n { color: var(--ink-3); font-family: var(--font-mono); font-size: 11px; }
 .mam-list a[aria-current='page'] .n { color: var(--on-accent); opacity: 0.75; }
 
+/* 트리가 화면보다 넓다는 것을 오른쪽 페이드로 알린다. 없으면 잘린 줄 안다 */
+.mam-stage-wrap { position: relative; }
+.mam-fade {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 44px;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  background: linear-gradient(to right, transparent, var(--bg) 85%);
+  pointer-events: none;
+}
 .mam-stage {
   overflow-x: auto;
   padding: var(--s4);
@@ -306,19 +328,26 @@
 .shop-thumb img { max-width: 100%; max-height: 100%; object-fit: contain; }
 .shop-name {
   margin: 0;
-  padding-bottom: 8px;
-  border-bottom: var(--hair) solid var(--line-strong);
   width: 82%;
   color: var(--ink);
   font-size: var(--t-body-s);
   line-height: 1.4;
   word-break: keep-all;
 }
+/*
+ * 이름이 1~3줄로 접히는데 가격이 이름 바로 밑에 붙어 있어서, 한 줄에 늘어선 카드마다
+ * 가격이 층층이 어긋났다. 남는 공간을 가격 위쪽이 먹게 해 바닥에 맞춘다.
+ * 가로줄도 이름이 아니라 가격에 붙인다 — 그래야 줄과 가격이 늘 붙어 다닌다.
+ */
 .shop-price {
-  display: inline-flex;
+  display: flex;
   gap: 6px;
   align-items: center;
-  margin: 0;
+  justify-content: center;
+  width: 82%;
+  margin: auto 0 0;
+  padding-top: 8px;
+  border-top: var(--hair) solid var(--line-strong);
   color: var(--accent);
   font-family: var(--font-mono);
   font-size: var(--t-body-s);
@@ -362,10 +391,23 @@
 
 /* ------------------------------------------------------------------ 도감 첫 화면 */
 
+/*
+ * 다섯 장이다. auto-fit 에 맡기면 넉 장이 한 줄에 들어가고 마지막 한 장이
+ * 다음 줄에 혼자 떠서 고아처럼 보였다. 줄이 늘 꽉 차도록 열 수를 직접 정하고,
+ * 첫 장(티어 — 가장 많이 여는 화면)을 두 칸으로 넓힌다.
+ */
 .dex-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s4);
+}
+@media (min-width: 620px) {
+  .dex-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dex-cards > :first-child { grid-column: span 2; }
+}
+@media (min-width: 980px) {
+  .dex-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .dex-cards > :first-child { grid-column: span 2; }
 }
 .dex-card {
   display: block;

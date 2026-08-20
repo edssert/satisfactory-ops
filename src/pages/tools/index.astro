@@ -1,8 +1,40 @@
 ---
-/** 옛 주소. 도감으로 합치면서 옮겼다 */
+/**
+ * 옛 주소. 도감으로 합치면서 옮겼다.
+ *
+ * 문서 골격을 직접 쓴다 — Base 레이아웃을 태우면 넘겨보내기만 하는 화면에 서체와
+ * 스타일시트를 통째로 받게 된다. 대신 `lang` 과 배경색은 반드시 있어야 한다.
+ * 없으면 넘어가기 전 한 프레임 동안 「흰 화면」이 번쩍인다.
+ *
+ * 색을 여기에만 직접 적는 것은 이 화면이 토큰 파일을 안 받기 때문이다.
+ * 값은 `src/styles/tokens.css` 의 `--bg`·`--ink-2`·`--primary-ink` 와 같다.
+ */
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const to = `${base}/dex/reference/`;
 ---
-<meta http-equiv="refresh" content={`0; url=${to}`} />
-<link rel="canonical" href={to} />
-<p><a href={to}>새 주소로 이동</a></p>
+
+<!doctype html>
+<html lang="ko" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="refresh" content={`0; url=${to}`} />
+    <meta name="robots" content="noindex" />
+    <title>새 주소로 이동</title>
+    <link rel="canonical" href={to} />
+    <style is:inline>
+      :root { color-scheme: dark; background: #0a0d12; }
+      body {
+        margin: 0;
+        padding: 2rem;
+        background: #0a0d12;
+        color: #9aa6b6;
+        font: 15px/1.7 system-ui, -apple-system, 'Segoe UI', sans-serif;
+      }
+      a { color: #8fdce8; }
+    </style>
+  </head>
+  <body>
+    <p><a href={to}>새 주소로 이동</a></p>
+  </body>
+</html>

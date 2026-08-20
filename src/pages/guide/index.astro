@@ -503,6 +503,7 @@ const FLOWS: Record<string, FlowDef> = {
           <h2>순수 노드를 찾아 멀리 가지 않는다</h2>
           <p class="prose muted">{purityDoc.$key}</p>
 
+          <div class="scroll-x">
           <table class="pur">
             <thead>
               <tr>
@@ -530,6 +531,7 @@ const FLOWS: Record<string, FlowDef> = {
               ))}
             </tbody>
           </table>
+          </div>
           <p class="caption">단위는 분당 개수입니다. 250%는 동력 조각 3개를 꽂은 최대치입니다.</p>
 
           <div class="pur-pts">
@@ -913,7 +915,15 @@ const FLOWS: Record<string, FlowDef> = {
     .toc-t { font-weight: 600; }
     .toc-tier { grid-column: 2; font-size: var(--t-caption); color: var(--accent); }
 
-    .step { padding-bottom: var(--s20); }
+    /*
+     * 본문은 그리드 칸이다. 그리드 칸의 자동 최소 너비는 min-content 라서,
+     * 안에 든 표 하나가 넓으면 **칸 전체가 그만큼 벌어져** 페이지가 옆으로 밀린다.
+     * 390px 에서 본문이 536px 로 굳어 모든 문단의 오른쪽이 잘렸다. 최소 너비를 푼다 —
+     * 넘치는 것은 자기 상자(.scroll-x · .flowwrap) 안에서만 가로로 넘긴다.
+     */
+    .body { min-width: 0; max-width: 100%; }
+
+    .step { min-width: 0; max-width: 100%; padding-bottom: var(--s20); }
     .step + .step { border-top: var(--hair) solid var(--line); padding-top: var(--s16); }
     .step h2 { margin-bottom: var(--s4); }
     .goal {
@@ -974,7 +984,40 @@ const FLOWS: Record<string, FlowDef> = {
     .rownote { display: block; font-size: var(--t-caption); color: var(--ink-3); }
     td .chip { margin: 1px 2px 1px 0; }
 
+    /*
+     * 공정 흐름도는 좁은 화면에서 줄이면 글자가 안 읽힌다. 줄이지 말고 **자기 상자 안에서만**
+     * 옆으로 굴린다. 페이지 본문은 절대 가로로 밀리지 않는다.
+     * 오른쪽 끝을 흐리게 해서 "더 있다"는 것을 알린다 — 안 그러면 잘린 그림처럼 보인다.
+     */
     .flowwrap { margin-top: var(--s10); }
+    /* 굴리는 것은 그림뿐이다. 설명글은 제자리에서 접혀야 읽힌다 */
+    .flowwrap > :global(.fc) {
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+    }
+    /*
+     * 그림의 진짜 폭은 FlowChart 가 인라인 `max-width` 로 준다. `width: 100%` 만 주면
+     * 좁은 화면에서 그 폭까지 **줄어들어** 글자가 6px 이 됐다. 바닥을 640px 로 깔아
+     * 그 아래로는 안 줄이고 대신 옆으로 굴린다. 넓은 화면에서는 전과 똑같이 맞춰 들어간다.
+     */
+    .flowwrap :global(.fc-svg) { width: max(100%, 640px); }
+    @media (max-width: 660px) {
+      /* 오른쪽 끝을 흐리게 해 "옆으로 더 있다"를 알린다. 안 그러면 잘린 그림으로 보인다 */
+      .flowwrap > :global(.fc) {
+        -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 20px), transparent);
+        mask-image: linear-gradient(to right, #000 calc(100% - 20px), transparent);
+      }
+      /* 흐려지는 자리에 글자가 걸리지 않게 설명글 오른쪽을 비운다 */
+      .flowwrap :global(.fc-cap) { padding-right: 30px; }
+    }
+
+    /* 표도 같다 — 좁을 때만 상자 안에서 굴리고, 굴릴 수 있다는 것을 오른쪽 끝으로 알린다 */
+    @media (max-width: 520px) {
+      .step :global(.scroll-x) {
+        -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 16px), transparent);
+        mask-image: linear-gradient(to right, #000 calc(100% - 16px), transparent);
+      }
+    }
 
     .keep {
       margin-top: var(--s10);
@@ -999,6 +1042,11 @@ const FLOWS: Record<string, FlowDef> = {
     .step.is-open h2 { color: var(--ink-2); }
 
     /* 내 진행 상황 */
+    /*
+     * `display` 를 준 요소에는 `hidden` 이 안 먹는다. 세이브를 안 올렸는데도
+     * 테두리만 있고 「지우기」 단추 하나 든 빈 상자가 떠 있었다. 여기서 확실히 끊는다.
+     */
+    .prog[hidden] { display: none; }
     .prog {
       display: flex;
       flex-wrap: wrap;

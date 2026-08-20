@@ -9,14 +9,31 @@
  */
 import techJson from '../data/app/tech.json';
 import shopLayoutJson from '../data/curated/shop-layout.json';
+import dexNames from '../data/curated/dex-names.json';
 import assetIndex from '../data/app/assets.json';
 
 export interface Unlocks {
   buildings: { id: string; ko: string }[];
-  recipes: { id: string; ko: string; isAlternate: boolean; makes: { ko: string; perMinute: number } | null }[];
-  items: { id: string; ko: string }[];
+  recipes: {
+    id: string;
+    ko: string;
+    isAlternate: boolean;
+    makes: { id: string; ko: string; perMinute: number; kind: string | null } | null;
+  }[];
+  items: { id: string; ko: string; kind?: string | null }[];
   slots: number;
   other: string[];
+}
+
+/**
+ * 스키매틱이 게임 화면에서 쓰는 그림. `dir` 은 public/assets 의 하위 폴더다.
+ *
+ * 게임 배포 데이터가 스키매틱마다 아이콘 텍스처를 하나 갖고 있고(`mSchematicIcon`),
+ * build-tech.mjs 가 그것을 실제 파일 자리로 풀어 둔다. 화면은 이름을 다시 추측하지 않는다.
+ */
+export interface IconRef {
+  dir: 'schematics' | 'items' | 'buildings-png';
+  id: string;
 }
 export interface Cost {
   item: string;
@@ -46,10 +63,87 @@ export interface ShopEntry {
   unlocks: Unlocks;
 }
 
-export const tech = techJson as unknown as {
+/**
+ * 내부 클래스명인가.
+ *
+ * 로케일 조회가 실패하면 `Desc_BoomBox_C` 같은 식별자가 이름 자리에 그대로 남는다.
+ * 실제로 싱크 상점 카드 11장이 그렇게 나갔다. 이름 자리에 식별자를 쓰느니 비운다.
+ */
+export const isInternalId = (s: string) => /^[A-Za-z][A-Za-z0-9]*(?:_[A-Za-z0-9]+)+_C$/.test(s.trim());
+
+const CURATED_NAMES = (dexNames as { names: Record<string, { ko: string }> }).names;
+const NAMELESS = new Set(
+  Object.keys((dexNames as { nameless: Record<string, unknown> }).nameless).filter((k) => k[0] !== '$')
+);
+
+/**
+ * 화면에 올릴 이름. 로케일에 없으면 큐레이션 표를 보고, 거기에도 없으면 빈 문자열.
+ * 이름을 지어내지 않는다 — 근거 없는 한글 이름은 게임 화면과 대조가 안 된다.
+ */
+function label(ko: string | null | undefined, id?: string): string {
+  const s = (ko ?? '').trim();
+  if (s && !isInternalId(s)) return s;
+  return CURATED_NAMES[id ?? s]?.ko ?? CURATED_NAMES[s]?.ko ?? '';
+}
+
+/**
+ * 도감이 쓰기 전에 이름을 한 번 걸러 둔다.
+ *
+ * 화면마다 따로 거르면 새 화면을 만들 때마다 또 샌다. 데이터가 들어오는 문 하나에서 막는다.
+ * 이름을 못 찾은 항목은 목록에서 빼고, 제목처럼 비울 수 없는 자리만 「이름 없음」으로 둔다.
+ */
+function scrub(raw: unknown) {
+  const t = raw as {
+    hub: { id: string; ko: string; cost?: Cost[]; unlocks?: Unlocks }[];
+    milestones: { id: string; ko: string; cost?: Cost[]; unlocks?: Unlocks }[];
+    mam: { id: string; ko: string; cost?: Cost[]; unlocks?: Unlocks }[];
+    shop: { id: string; ko: string; cost?: Cost[]; unlocks?: Unlocks }[];
+  };
+  const named = <T extends { id: string; ko: string }>(xs: T[]) =>
+    xs.map((x) => ({ ...x, ko: label(x.ko, x.id) })).filter((x) => x.ko !== '');
+
+  for (const list of [t.hub, t.milestones, t.mam, t.shop]) {
+    for (const e of list) {
+      e.ko = label(e.ko, e.id) || (NAMELESS.has(e.id) ? '이름 없음' : e.ko);
+      if (isInternalId(e.ko)) e.ko = '이름 없음';
+      if (e.cost) {
+        e.cost = e.cost
+          .map((c) => ({ ...c, ko: label(c.ko, c.item) }))
+          .filter((c) => c.ko !== '');
+      }
+      const u = e.unlocks;
+      if (u) {
+        u.buildings = named(u.buildings);
+        u.items = named(u.items);
+        u.recipes = named(u.recipes).map((r) => ({
+          ...r,
+          makes: r.makes ? { ...r.makes, ko: label(r.makes.ko) } : null,
+        }));
+        u.other = u.other.filter((o) => !isInternalId(o));
+      }
+    }
+  }
+  return raw;
+}
+
+export const tech = scrub(techJson) as unknown as {
   $counts: { hub: number; milestones: number; mam: number; shop: number };
-  hub: { id: string; ko: string; order: number; cost: Cost[]; unlocks: Unlocks }[];
-  milestones: { id: string; ko: string; tier: number; cost: Cost[]; unlocks: Unlocks }[];
+  hub: {
+    id: string;
+    ko: string;
+    order: number;
+    cost: Cost[];
+    iconRef: IconRef | null;
+    unlocks: Unlocks;
+  }[];
+  milestones: {
+    id: string;
+    ko: string;
+    tier: number;
+    cost: Cost[];
+    iconRef: IconRef | null;
+    unlocks: Unlocks;
+  }[];
   mamTrees: {
     key: string;
     ko: string;
@@ -68,9 +162,97 @@ export const tech = techJson as unknown as {
   shop: ShopEntry[];
 };
 
-const assets = assetIndex as { items: string[]; buildings: string[] };
+const assets = assetIndex as {
+  items: string[];
+  buildings: string[];
+  schematics: string[];
+  badges: string[];
+};
 export const hasItemIcon = (id: string) => assets.items.includes(id);
 export const hasBuildingIcon = (id: string) => assets.buildings.includes(id);
+export const hasBadge = (kind: string) => assets.badges.includes(kind);
+
+/** 파일이 실제로 있는 것만 돌려준다. 없는 그림을 걸면 빈칸이 나간다 */
+export function iconPath(ref: IconRef | null | undefined): string | null {
+  if (!ref) return null;
+  const there =
+    ref.dir === 'schematics'
+      ? assets.schematics.includes(ref.id)
+      : ref.dir === 'items'
+        ? assets.items.includes(ref.id)
+        : assets.buildings.includes(ref.id);
+  return there ? `${ref.dir}/${ref.id}.png` : null;
+}
+
+/**
+ * 보상 한 줄. 게임의 「보상」 칸이 이 모양이다 — 그림 + 이름 + 오른쪽 위 종류 배지.
+ *
+ * **그림이 없어도 줄은 나온다.** 예전에는 그림 있는 것만 그려서, 허브 업그레이드 1 의
+ * 「손 장비 슬롯 +1」처럼 그림 없는 보상이 화면에서 통째로 사라졌다. 게임은 셋 다 보여 준다.
+ */
+export type RewardKind = 'building' | 'item' | 'equipment' | 'vehicle' | 'scanner' | 'upgrade';
+export interface Reward {
+  key: string;
+  ko: string;
+  /** public/assets 아래 상대 경로. 없으면 그림 없이 이름만 */
+  icon: string | null;
+  kind: RewardKind;
+  /** 색만으로 구분하지 않는다 — 배지 옆에 늘 글자를 같이 둔다 */
+  kindKo: string;
+}
+
+const KIND_KO: Record<RewardKind, string> = {
+  building: '건물',
+  item: '아이템',
+  equipment: '장비',
+  vehicle: '차량',
+  scanner: '탐색기',
+  upgrade: '업그레이드',
+};
+
+/**
+ * 아이템 분류(게임 데이터의 kind) → 보상 배지.
+ *
+ * `building-descriptor` 는 아이템처럼 생겼지만 실제로는 건물이다 — 제련기가 그렇다.
+ * 레시피 이름이 `Recipe_SmelterBasicMk1_C` 라 건물 매칭에서 새고, 그대로 두면
+ * 게임에서 「건물」로 나오는 것이 우리 화면에서만 「아이템」이 된다.
+ */
+function badgeOfItem(kind: string | null | undefined): RewardKind {
+  if (kind === 'building-descriptor') return 'building';
+  if (kind === 'equipment') return 'equipment';
+  if (kind === 'vehicle') return 'vehicle';
+  return 'item';
+}
+
+const reward = (key: string, ko: string, icon: string | null, kind: RewardKind): Reward => ({
+  key,
+  ko,
+  icon,
+  kind,
+  kindKo: KIND_KO[kind],
+});
+
+export function rewardsOf(u: Unlocks): Reward[] {
+  const out: Reward[] = [];
+  for (const b of u.buildings) {
+    out.push(reward(b.id, b.ko, iconPath({ dir: 'buildings-png', id: b.id }), 'building'));
+  }
+  for (const r of u.recipes) {
+    /* 레시피는 만드는 물건의 그림으로 보여 준다. 게임도 그렇다 */
+    const icon = r.makes ? iconPath({ dir: 'items', id: r.makes.id }) : null;
+    const ko = r.isAlternate ? `${r.ko} (대체 제작법)` : r.ko;
+    out.push(reward(r.id, ko, icon, badgeOfItem(r.makes?.kind)));
+  }
+  for (const i of u.items) {
+    out.push(reward(i.id, i.ko, iconPath({ dir: 'items', id: i.id }), badgeOfItem(i.kind)));
+  }
+  if (u.slots > 0) out.push(reward('slots', `인벤토리 +${u.slots}칸`, null, 'upgrade'));
+  for (const o of u.other) {
+    /* 「탐색 대상 N종」은 자원 탐색기가 늘어나는 것이라 게임도 탐색기 배지를 쓴다 */
+    out.push(reward(`other:${o}`, o, null, o.startsWith('탐색 대상') ? 'scanner' : 'upgrade'));
+  }
+  return out;
+}
 
 /** 해금 내용을 한 줄짜리 조각들로 */
 export function summarize(u: Unlocks): string[] {
@@ -102,6 +284,8 @@ export interface TierEntry {
   id: string;
   ko: string;
   cost: Cost[];
+  /** 게임의 스키매틱 전용 아이콘. 해금 목록의 첫 건물 그림을 대신 쓰면 게임과 대조가 안 된다 */
+  iconRef: IconRef | null;
   unlocks: Unlocks;
 }
 export interface Tier {
@@ -114,7 +298,13 @@ export function tiers(): Tier[] {
   const t0: Tier = {
     tier: 0,
     ko: '티어 0',
-    list: tech.hub.map((h) => ({ id: h.id, ko: h.ko, cost: h.cost, unlocks: h.unlocks })),
+    list: tech.hub.map((h) => ({
+      id: h.id,
+      ko: h.ko,
+      cost: h.cost,
+      iconRef: h.iconRef ?? null,
+      unlocks: h.unlocks,
+    })),
   };
   const rest = [...new Set(tech.milestones.map((m) => m.tier))]
     .sort((a, b) => a - b)
@@ -123,7 +313,13 @@ export function tiers(): Tier[] {
       ko: `티어 ${n}`,
       list: tech.milestones
         .filter((m) => m.tier === n)
-        .map((m) => ({ id: m.id, ko: m.ko, cost: m.cost, unlocks: m.unlocks })),
+        .map((m) => ({
+          id: m.id,
+          ko: m.ko,
+          cost: m.cost,
+          iconRef: m.iconRef ?? null,
+          unlocks: m.unlocks,
+        })),
     }));
   return [t0, ...rest];
 }

@@ -541,6 +541,18 @@ function normalizeUnlocks(raw) {
   return u;
 }
 
+/**
+ * 스키매틱이 게임 화면에서 쓰는 아이콘 텍스처 이름.
+ *
+ * `mSchematicIcon` 은 슬레이트 브러시 구조체 문자열이고 그 안의 `ResourceObject` 가
+ * `.../SchematicIcons/TXUI_SIcon_Logistics.TXUI_SIcon_Logistics` 꼴이다. 마지막 마디만 남긴다.
+ * 아이템의 `mSmallIcon` 과 같은 규칙이라 두 곳을 같은 이름 공간에서 맞출 수 있다.
+ */
+function schematicIcon(c) {
+  const m = /ResourceObject="[^"]*?\.([A-Za-z0-9_]+)'"/.exec(String(c.mSchematicIcon ?? ''));
+  return m ? m[1] : null;
+}
+
 function buildSchematics(groups, itemIndex) {
   const grp = findGroup(groups, 'FGSchematic');
   if (!grp) return [];
@@ -563,6 +575,7 @@ function buildSchematics(groups, itemIndex) {
       cost,
       timeToCompleteSec: num(c.mTimeToComplete),
       menuPriority: num(c.mMenuPriority),
+      icon: schematicIcon(c),
       dependencies: parseClassList(c.mSchematicDependencies).filter((x) => x.startsWith('Schematic')),
       unlocks: normalizeUnlocks(c.mUnlocks),
     };

@@ -1,0 +1,90 @@
+{
+  "$schemaVersion": 2,
+  "$method": "연결된 벨트·파이프·전력선 끝점을 설비 로컬 좌표로 역변환하고, 5 cm 합의 군집과 현재 게임 충돌 상자로 검증",
+  "$coordinateSystem": "설비 원점 기준 미터, +X 오른쪽, +Y 전면, +Z 위",
+  "$toleranceM": 0.05,
+  "$sources": {
+    "local-current-save": {
+      "kind": "save",
+      "buildVersion": 502094,
+      "sha256": "02ca45163dde1c8fe1db6b2b82140e5b558936e26c43b888d323fcc735b55c25",
+      "privacy": "경로와 액터 식별자를 보존하지 않음"
+    },
+    "public-save-1897uoc": {
+      "kind": "save",
+      "buildVersion": 264901,
+      "sha256": "5217a24af351e7e7b0711b269c78e17b3e2d7bac0d04915d8123291b74a10258",
+      "url": "https://www.reddit.com/r/SatisfactoryGame/comments/1897uoc/"
+    },
+    "blueprint-11980": {
+      "kind": "blueprint",
+      "buildVersion": 488068,
+      "sha256": "a9d116c8b26c9e43af195b332168a38164399341d660600532b65019cdef2cbe",
+      "url": "https://satisfactory-calculator.com/en/blueprints/index/details/id/11980/name/BB%2BPlastics%2BFactory%2B90%2B1.2V1"
+    },
+    "blueprint-12350": {
+      "kind": "blueprint",
+      "buildVersion": 495413,
+      "sha256": "ffe782263ea9a3aadc30fc72a9107e026b682b208a58226db2106f7215ed99c7",
+      "url": "https://satisfactory-calculator.com/en/blueprints/index/details/id/12350/name/Motors%2FStators%2FRotors"
+    },
+    "blueprint-8353": {
+      "kind": "blueprint",
+      "buildVersion": 384038,
+      "sha256": "9184f31f20c2c7d49d337abea53bcd35c618ed04a163ef3625af18c8d42e3d98",
+      "url": "https://satisfactory-calculator.com/en/blueprints/index/details/id/8353/name/8x%2BRefinery%2B%28universal%2Bsetup%29"
+    },
+    "blueprint-8753": {
+      "kind": "blueprint",
+      "buildVersion": 395236,
+      "sha256": "f046e804ca24056514af4387f0967ebcebb730e3afaf2ccfda516c547777d4a4",
+      "url": "https://satisfactory-calculator.com/en/blueprints/index/details/id/8753/name/Aluminum%2BCasing%2B195%2Fmin%2BMK.3"
+    }
+  },
+  "$completeBuildings": [
+    "Build_AssemblerMk1_C",
+    "Build_ConstructorMk1_C",
+    "Build_GeneratorBiomass_Automated_C",
+    "Build_MinerMk1_C",
+    "Build_OilRefinery_C",
+    "Build_PowerPoleMk1_C",
+    "Build_PowerPoleWall_C",
+    "Build_PowerPoleWallDouble_C",
+    "Build_SmelterMk1_C",
+    "Build_StorageContainerMk1_C"
+  ],
+  "ports": [
+    { "buildingClass": "Build_AssemblerMk1_C", "id": "Input0", "medium": "solid", "direction": "input", "positionM": { "x": 2, "y": -6, "z": 1 }, "sampleCount": 380, "maxDeviationM": 0.001, "confidence": "verified", "sources": ["local-current-save", "public-save-1897uoc", "blueprint-12350"] },
+    { "buildingClass": "Build_AssemblerMk1_C", "id": "Input1", "medium": "solid", "direction": "input", "positionM": { "x": -2, "y": -6, "z": 1 }, "sampleCount": 377, "maxDeviationM": 0.001, "confidence": "verified", "sources": ["local-current-save", "public-save-1897uoc", "blueprint-12350"] },
+    { "buildingClass": "Build_AssemblerMk1_C", "id": "Output0", "medium": "solid", "direction": "output", "positionM": { "x": 0, "y": 5, "z": 1 }, "sampleCount": 379, "maxDeviationM": 0.001, "confidence": "verified", "sources": ["local-current-save", "public-save-1897uoc", "blueprint-12350"] },
+    { "buildingClass": "Build_AssemblerMk1_C", "id": "PowerInput", "medium": "power", "direction": "bidirectional", "positionM": { "x": 4.8354, "y": 0.7359, "z": 6.7498 }, "sampleCount": 392, "maxDeviationM": 0.001, "confidence": "verified", "sources": ["local-current-save", "public-save-1897uoc", "blueprint-12350"] },
+
+    { "buildingClass": "Build_ConstructorMk1_C", "id": "Input0", "medium": "solid", "direction": "input", "positionM": { "x": 0, "y": -3, "z": 1 }, "sampleCount": 499, "maxDeviationM": 0.001, "confidence": "verified", "sources": ["local-current-save", "public-save-1897uoc", "blueprint-12350"] },
+    { "buildingClass": "Build_ConstructorMk1_C", "id": "Output0", "medium": "solid", "direction": "output", "positionM": { "x": 0, "y": 3, "z": 1 }, "sampleCount": 475, "maxDeviationM": 0.001, "confidence": "verified", "sources": ["local-current-save", "public-save-1897uoc", "blueprint-12350"] },
+    { "buildingClass": "Build_ConstructorMk1_C", "id": "PowerInput", "medium": "power", "direction": "bidirectional", "positionM": { "x": 2.1, "y": -4.7, "z": 6.8717 }, "sampleCount": 495, "maxDeviationM": 0.001, "confidence": "verified", "sources": ["local-current-save", "public-save-1897uoc", "blueprint-12350"] },
+
+    { "buildingClass": "Build_GeneratorBiomass_Automated_C", "id": "Input0", "medium": "solid", "direction": "input", "positionM": { "x": 0, "y": 3, "z": 1 }, "sampleCount": 8, "maxDeviationM": 0, "confidence": "verified", "sources": ["local-current-save"] },
+    { "buildingClass": "Build_GeneratorBiomass_Automated_C", "id": "PowerConnection", "medium": "power", "direction": "bidirectional", "positionM": { "x": 1.5693, "y": 3.1578, "z": 6.4 }, "sampleCount": 8, "maxDeviationM": 0, "confidence": "verified", "sources": ["local-current-save"] },
+
+    { "buildingClass": "Build_MinerMk1_C", "id": "Output0", "medium": "solid", "direction": "output", "positionM": { "x": 0, "y": 8, "z": 1 }, "sampleCount": 4, "maxDeviationM": 0, "confidence": "verified", "sources": ["local-current-save"] },
+    { "buildingClass": "Build_MinerMk1_C", "id": "PowerInput", "medium": "power", "direction": "bidirectional", "positionM": { "x": 1.2616, "y": 0.1579, "z": 17.9981 }, "sampleCount": 5, "maxDeviationM": 0.0001, "confidence": "verified", "sources": ["local-current-save"] },
+
+    { "buildingClass": "Build_OilRefinery_C", "id": "Input0", "medium": "solid", "direction": "input", "positionM": { "x": 2, "y": 9, "z": 1 }, "sampleCount": 11, "maxDeviationM": 0.0004, "confidence": "verified", "sources": ["public-save-1897uoc", "blueprint-11980", "blueprint-8353"] },
+    { "buildingClass": "Build_OilRefinery_C", "id": "Output1", "medium": "solid", "direction": "output", "positionM": { "x": 2, "y": -9, "z": 1 }, "sampleCount": 281, "maxDeviationM": 0.0005, "confidence": "verified", "sources": ["public-save-1897uoc", "blueprint-11980", "blueprint-8753"] },
+    { "buildingClass": "Build_OilRefinery_C", "id": "PipeInputFactory", "medium": "fluid", "direction": "input", "positionM": { "x": -2, "y": 9, "z": 1.75 }, "sampleCount": 17, "maxDeviationM": 0.0004, "confidence": "verified", "sources": ["public-save-1897uoc", "blueprint-11980", "blueprint-8353", "blueprint-8753"] },
+    { "buildingClass": "Build_OilRefinery_C", "id": "PipeOutputFactory", "medium": "fluid", "direction": "output", "positionM": { "x": -2, "y": -9, "z": 1.75 }, "sampleCount": 9, "maxDeviationM": 0, "confidence": "verified", "sources": ["blueprint-11980", "blueprint-8353"] },
+    { "buildingClass": "Build_OilRefinery_C", "id": "PowerConnection", "medium": "power", "direction": "bidirectional", "positionM": { "x": 0, "y": -9.6904, "z": 18.7247 }, "sampleCount": 561, "maxDeviationM": 0.0001, "confidence": "verified", "sources": ["public-save-1897uoc", "blueprint-11980", "blueprint-8353", "blueprint-8753"] },
+
+    { "buildingClass": "Build_PowerPoleMk1_C", "id": "PowerConnection", "medium": "power", "direction": "bidirectional", "positionM": { "x": 0, "y": 0, "z": 7 }, "sampleCount": 1143, "maxDeviationM": 0.0001, "confidence": "verified", "sources": ["local-current-save", "public-save-1897uoc"] },
+    { "buildingClass": "Build_PowerPoleWall_C", "id": "PowerConnection", "medium": "power", "direction": "bidirectional", "positionM": { "x": 0.8, "y": 0, "z": 0 }, "sampleCount": 3430, "maxDeviationM": 0, "confidence": "verified", "sources": ["local-current-save", "public-save-1897uoc"] },
+    { "buildingClass": "Build_PowerPoleWallDouble_C", "id": "PowerConnection1", "medium": "power", "direction": "bidirectional", "positionM": { "x": 0.7, "y": 0, "z": 0 }, "sampleCount": 103, "maxDeviationM": 0, "confidence": "verified", "sources": ["local-current-save", "public-save-1897uoc"] },
+    { "buildingClass": "Build_PowerPoleWallDouble_C", "id": "PowerConnection2", "medium": "power", "direction": "bidirectional", "positionM": { "x": -0.7, "y": 0, "z": 0 }, "sampleCount": 85, "maxDeviationM": 0, "confidence": "verified", "sources": ["local-current-save", "public-save-1897uoc"] },
+
+    { "buildingClass": "Build_SmelterMk1_C", "id": "Input0", "medium": "solid", "direction": "input", "positionM": { "x": 0, "y": -3, "z": 1 }, "sampleCount": 222, "maxDeviationM": 0.0005, "confidence": "verified", "sources": ["local-current-save", "public-save-1897uoc", "blueprint-12350"] },
+    { "buildingClass": "Build_SmelterMk1_C", "id": "Output2", "medium": "solid", "direction": "output", "positionM": { "x": 0, "y": 2, "z": 1 }, "sampleCount": 211, "maxDeviationM": 0.0005, "confidence": "verified", "sources": ["local-current-save", "public-save-1897uoc", "blueprint-12350"] },
+    { "buildingClass": "Build_SmelterMk1_C", "id": "PowerConnection", "medium": "power", "direction": "bidirectional", "positionM": { "x": 2.2, "y": -3.1, "z": 4.8 }, "sampleCount": 214, "maxDeviationM": 0.0003, "confidence": "verified", "sources": ["local-current-save", "public-save-1897uoc", "blueprint-12350"] },
+
+    { "buildingClass": "Build_StorageContainerMk1_C", "id": "Input0", "medium": "solid", "direction": "input", "positionM": { "x": 0, "y": -4, "z": 1 }, "sampleCount": 21, "maxDeviationM": 0.0001, "confidence": "verified", "sources": ["local-current-save", "public-save-1897uoc"] },
+    { "buildingClass": "Build_StorageContainerMk1_C", "id": "Output1", "medium": "solid", "direction": "output", "positionM": { "x": 0, "y": 4, "z": 1 }, "sampleCount": 18, "maxDeviationM": 0.0001, "confidence": "verified", "sources": ["local-current-save", "public-save-1897uoc"] }
+  ]
+}

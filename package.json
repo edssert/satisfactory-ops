@@ -12,13 +12,13 @@
     "data:game": "node scripts/build-data.mjs",
     "data:game:ko": "node scripts/build-data.mjs --locale=ko --out=src/data/ko",
     "data:app": "node scripts/build-app-data.mjs",
-    "data": "npm run data:game && npm run data:game:ko && npm run data:app && npm run tech && npm run assets",
+    "data": "npm run data:game && npm run data:game:ko && npm run data:app && npm run tech && npm run icons:schematic && npm run assets",
     "data:check": "node scripts/build-app-data.mjs --check",
     "dev": "astro dev",
     "build": "npm run data:check && astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "test": "node --test tests/solver.test.ts tests/planner.test.ts tests/planner-ui.test.ts tests/sw.test.ts tests/sw-runtime.test.ts tests/recipe-select.test.ts tests/layout.test.ts tests/floorplan.test.ts tests/module-plan.test.ts tests/diagnose.test.ts",
+    "test": "node --test tests/solver.test.ts tests/planner.test.ts tests/planner-ui.test.ts tests/sw.test.ts tests/sw-runtime.test.ts tests/recipe-select.test.ts tests/layout.test.ts tests/floorplan.test.ts tests/module-plan.test.ts tests/diagnose.test.ts tests/factory-domain.test.ts",
     "verify": "npm run data:check && npm test && astro check --minimumSeverity error && npm run db:check && npm run build && npm run check:coverage",
     "test:sw": "node --test tests/sw-runtime.test.ts",
     "render": "astro build && node scripts/render-plan.mjs",
@@ -28,12 +28,16 @@
     "check:coverage": "node scripts/check-coverage.mjs",
     "tech": "node scripts/build-tech.mjs",
     "assets": "node scripts/build-asset-index.mjs",
+    "icons:schematic": "node scripts/fetch-schematic-icons.mjs",
     "test:save": "node scripts/test-save-import.mjs"
   },
   "dependencies": {
     "@astrojs/preact": "6.0.3",
     "@preact/signals": "2.11.1",
     "astro": "7.2.3",
+    "gsap": "^3.15.0",
+    "lenis": "^1.3.26",
+    "motion": "^13.1.1",
     "preact": "10.29.8"
   },
   "devDependencies": {

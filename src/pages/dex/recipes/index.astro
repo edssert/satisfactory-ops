@@ -9,9 +9,12 @@
  * 순위와 점수는 우리가 매긴 것이 아니다. 커뮤니티 분석글(1.0 기준)에서 옮겼고 출처를 밝힌다.
  */
 import Base from '../../../layouts/Base.astro';
+import TechNav from '../../../components/TechNav.astro';
 import '../../../styles/fx.css';
+import '../../../styles/tech.css';
 import priority from '../../../data/curated/alternate-priority.json';
 import saveUnlocks from '../../../data/app/save-unlocks.json';
+import { recipes as allRecipes } from '../../../lib/gamedata';
 
 interface Ing {
   ko: string;
@@ -95,7 +98,23 @@ const TIER_KO: Record<string, string> = {
 const GRADE_ORDER = ['S', 'A', 'B', 'C', 'D', 'F'];
 const gradeRank = (g: string | null) => (g ? GRADE_ORDER.indexOf(g) : 99);
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+/*
+ * 「몇 가지인가」가 도감 첫 화면(110)과 이 화면(104)에서 달라 보였다. 두 수가 세는 것이 다르다:
+ *   - 110 = 게임 데이터가 `Alternate:` 로 표시한 제작법 전부
+ *   - 104 = 그중 기본 제작법과 나란히 비교해 등급까지 매긴 것
+ * 총계는 게임 데이터에서 세고, 비교하지 못한 것은 아래에 이름을 그대로 남긴다.
+ */
+const gameAlternates = allRecipes.filter((r) => r.isAlternate);
+const covered = new Set([...doc.recipes.map((r) => r.id), ...doc.$unranked.map((r) => r.id)]);
+/** 게임에는 있는데 순위 자료 어디에도 없는 것. 조용히 빠지지 않게 화면에 낸다 */
+const uncovered = gameAlternates
+  .filter((r) => !covered.has(r.id))
+  .map((r) => ({ id: r.id, ko: r.ko, en: (r.en ?? '').replace(/^Alternate:\s*/i, '') }));
+/** 「순위 미확보」 목록 = 출처 표에 없던 것 + 아예 빠져 있던 것 */
+const unlisted = [...doc.$unranked, ...uncovered];
+
 const counts = {
+  game: gameAlternates.length,
   total: doc.recipes.length,
   s: doc.recipes.filter((r) => r.grades.own === 'S').length,
   a: doc.recipes.filter((r) => r.grades.own === 'A').length,
@@ -122,43 +141,52 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
 
 <Base
   title="대체 제작법, 무엇이 어떻게 달라지나"
-  description="대체 제작법 104건을 기본 제작법과 나란히 비교합니다. 산출 1개당 재료량으로 정규화했습니다."
+  description={`대체 제작법 ${counts.game}가지 가운데 ${doc.recipes.length}가지를 기본 제작법과 나란히 비교합니다. 산출 1개당 재료량으로 정규화했습니다.`}
   section="dex"
 >
   <div class="wrap page">
+    <TechNav here="recipes" />
+
     <header class="page-head">
-      <p class="marker"><span class="num">대체 제작법</span></p>
+      <p class="marker"><span class="num">도감</span> 대체 제작법</p>
       <h1><span class="fx-gradient-text">무엇이 어떻게 달라지나</span></h1>
       <p class="lede prose">
         하드 드라이브는 후보 <strong>2개 중 1개</strong>를 고르고 리롤이 한 번 있습니다.
         아래는 <strong>실제로 쓸 수 있게 되는 티어</strong>로 묶었습니다. 재료가 아직 안 열렸으면
-        뽑아 둬도 못 씁니다.
+        뽑아 둬도 못 씁니다. 게임의 대체 제작법 <strong>{counts.game}가지</strong> 가운데{' '}
+        <strong>{doc.recipes.length}가지</strong>를 기본 제작법과 나란히 놓았습니다.
       </p>
     </header>
 
     <div class="facts">
-      <div class="fact"><span class="fact-k">비교한 제작법</span><span class="fact-v n">{doc.recipes.length}</span></div>
+      <div class="fact"><span class="fact-k">게임의 대체 제작법</span><span class="fact-v n">{counts.game}</span></div>
+      <div class="fact"><span class="fact-k">나란히 비교한 것</span><span class="fact-v n">{doc.recipes.length}</span></div>
       <div class="fact is-ok"><span class="fact-k">S 등급</span><span class="fact-v n">{counts.s}</span></div>
       <div class="fact is-ok"><span class="fact-k">A 등급</span><span class="fact-v n">{counts.a}</span></div>
       <div class="fact is-warn"><span class="fact-k">외부와 크게 다름</span><span class="fact-v n">{counts.conflict}</span></div>
     </div>
 
-    <section class="note-box">
+    {/*
+      * 등급을 어떻게 매겼는지는 결론이 아니라 근거다. 본문에 다섯 문단으로 깔면
+      * 정작 "무엇을 고를까"가 밀려난다. 접어서 각주로 내린다.
+      */}
+    <details class="note-box">
+      <summary>등급을 어떻게 매겼나</summary>
       <p>
-        등급은 <strong>1.2 게임 데이터로 직접 계산</strong>했습니다. 우주 엘리베이터를 끝까지
+        1.2 게임 데이터로 직접 계산했습니다. 우주 엘리베이터를 끝까지
         납품하는 데 드는 총량을 기본 제작법으로 한 번 풀고, 대체 제작법을 하나씩 끼워 다시 푼 뒤
-        차이를 봅니다. 원자재는 <strong>실제 맵의 노드 수</strong>로 희소도를 매겨 곱합니다. 우라늄 6개와 철 70여 개를 같은 무게로 셈하지 않습니다.
+        차이를 봅니다. 원자재는 실제 맵의 노드 수로 희소도를 매겨 곱합니다. 우라늄 6개와 철 70여 개를 같은 무게로 셈하지 않습니다.
       </p>
       <p>
-        점수는 <strong>두 축</strong>입니다. <strong>효율</strong>은 {doc.$axes.efficiency}{' '}
-        <strong>편의</strong>는 {doc.$axes.convenience}
+        점수는 두 축입니다. 효율은 {doc.$axes.efficiency}{' '}
+        편의는 {doc.$axes.convenience}
       </p>
       <p class="caption">{doc.$axes.note}</p>
       <p class="caption">
-        커뮤니티 순위 두 건과 대조했고 <strong>{counts.conflict}건</strong>이 크게 갈립니다.
+        커뮤니티 순위 두 건과 대조했고 {counts.conflict}건이 크게 갈립니다.
         그 항목은 카드에서 왜 갈리는지 펼쳐 볼 수 있습니다. {doc.$note}
       </p>
-    </section>
+    </details>
 
     <div class="ownbar" data-ownbar hidden>
       <p class="ownbar-n">
@@ -333,12 +361,14 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
       </section>
     ))}
 
-    {doc.$unranked.length > 0 && (
+    {unlisted.length > 0 && (
       <section class="section">
-        <p class="marker"><span class="num">순위 미확보</span></p>
-        <p class="caption">출처의 표에 없어 순위를 붙이지 못한 것들입니다.</p>
+        <p class="marker"><span class="num">비교하지 못함</span><span class="marker-count n">{unlisted.length}건</span></p>
+        <p class="caption">
+          기본 제작법이 없거나 순위 자료에 없어 나란히 놓지 못한 것들입니다. 게임에는 있습니다.
+        </p>
         <ul class="unranked">
-          {doc.$unranked.map((r) => (
+          {unlisted.map((r) => (
             <li class="chip">{r.ko} <span class="en">{r.en}</span></li>
           ))}
         </ul>
@@ -632,6 +662,23 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
       backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
     }
     .note-box p { max-width: var(--measure-wide); }
+    /* 근거는 접어 둔다. 펼치기 전에는 한 줄만 보인다 */
+    .note-box > summary {
+      color: var(--ink-2);
+      font-size: var(--t-body-s);
+      font-weight: 600;
+      cursor: pointer;
+      list-style: none;
+    }
+    .note-box > summary::-webkit-details-marker { display: none; }
+    .note-box > summary::before {
+      content: '+ ';
+      color: var(--accent);
+      font-family: var(--font-mono);
+    }
+    .note-box[open] > summary::before { content: '− '; }
+    .note-box[open] > summary { margin-bottom: var(--s4); }
+    .note-box > summary:hover { color: var(--ink); }
     .fact.is-ok .fact-v { color: var(--ok); }
     .fact.is-warn .fact-v { color: var(--accent); }
     .src-item { margin-bottom: var(--s5); }

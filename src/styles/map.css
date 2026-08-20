@@ -199,7 +199,19 @@
   stroke: var(--accent);
   stroke-width: 2;
 }
-.rm-area text {
+/*
+ * 시작 지역 이름은 노드 마커보다 **위** 레이어에 따로 그린다(`.rm-arealabels`).
+ * 칸 안에 두었더니 노드가 몰린 자리에서 마커에 덮여 글자가 통째로 사라졌다.
+ * 외곽선만으로는 점 위에서 안 읽혀 반투명 배경판을 같이 깐다.
+ */
+.rm-arealabels { pointer-events: none; }
+.rm-areaplate {
+  fill: rgb(10 13 18 / 0.72);
+  stroke: color-mix(in oklab, var(--accent) 45%, transparent);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.rm-arealabels text {
   fill: var(--accent);
   font-family: var(--font-body);
   font-weight: 700;
@@ -346,6 +358,23 @@
   .rm-body { flex-wrap: wrap; }
   .rm-side { width: calc(50% - var(--s2)); }
   .rm-stage { order: -1; width: 100%; }
+}
+
+/*
+ * 폰에서는 한 줄에 한 서랍이다.
+ *
+ * 반씩 나누면 자원 서랍은 절반, 수집품 서랍은 292px 고정이라 폭이 서로 다르고,
+ * 가운데 정렬 탓에 왼쪽 여백까지 서랍마다 달라졌다(105px · 50px). 게다가 칸이 좁아
+ * 「카테리움 광석」이 「카테…」로 잘려 무엇인지 알 수 없었다. 폭을 전부 펴서 맞춘다.
+ */
+@media (max-width: 760px) {
+  .rm-body { justify-content: stretch; }
+  .rm-side,
+  .rm-side.is-left,
+  .rm-side.is-right {
+    width: 100%;
+    min-width: 0;
+  }
 }
 
 /* 자원 검색 */
@@ -558,7 +587,15 @@
   font-weight: 600;
 }
 
-.rm-side b em { color: var(--ink-3); font-size: 10px; font-style: normal; opacity: 0.7; }
+/*
+ * 「남은 개수/전체」의 전체 쪽. 10px 에 가장 흐린 회색을 반투명으로 얹어 대비가 2.55 였다 —
+ * 이 저장소 규약상 12px 미만에 가장 흐린 토큰을 쓰지 않는다. 12px 로 올리고 한 단계 진하게.
+ */
+.rm-side b em {
+  color: var(--ink-2);
+  font-size: var(--t-label);
+  font-style: normal;
+}
 
 .rm-clear {
   width: 100%;

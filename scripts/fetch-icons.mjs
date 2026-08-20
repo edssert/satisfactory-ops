@@ -138,7 +138,22 @@ async function fetchBuildings() {
    */
   const COSMETICS = argv.includes('--cosmetics');
   const SKIP_CAT = COSMETICS ? new Set() : new Set(['structure', 'decoration']);
-  const wanted = buildings.filter((b) => !SKIP_CAT.has(b.category));
+  /*
+   * 분류로 걸러도 **티어 보상 칸에 나오는 건물은 예외 없이 받는다.**
+   * 「기초 건설」의 보상이 토대·경사로·기본 벽인데 그게 전부 structure 라서,
+   * 게임에서는 그림이 있는 보상 여덟 개가 우리 화면에서만 빈칸이었다.
+   */
+  const rewardBuildings = new Set();
+  {
+    const tech = read('tech.json');
+    for (const e of [...tech.hub, ...tech.milestones]) {
+      for (const b of e.unlocks.buildings) rewardBuildings.add(b.id);
+      for (const r of e.unlocks.recipes) {
+        if (r.makes?.id) rewardBuildings.add(r.makes.id.replace(/^Desc_/, 'Build_'));
+      }
+    }
+  }
+  const wanted = buildings.filter((b) => !SKIP_CAT.has(b.category) || rewardBuildings.has(b.id));
 
   let got = 0;
   const missing = [];
@@ -146,7 +161,13 @@ async function fetchBuildings() {
     const dest = path.join(OUT_B, `${b.id}.png`);
     if (fs.existsSync(dest)) continue;
     let url = null;
-    for (const c of [b.en, b.en.replace(/\s+/g, '_'), b.en.replace(/\./g, '')]) {
+    /*
+     * 구조물은 위키 파일 이름이 게임 표시명과 다르다 —
+     * 게임의 `Foundation (4 m)` 이 위키에서는 `Foundation 4m (FICSIT)` 이다.
+     * 이 규칙을 몰라서 토대·경사로·벽이 통째로 「위키에 없음」으로 기록돼 있었다.
+     */
+    const ficsit = b.en.replace(/\s*\((\d+)\s*m\)\s*$/, ' $1m (FICSIT)');
+    for (const c of [b.en, ficsit, b.en.replace(/\s+/g, '_'), b.en.replace(/\./g, '')]) {
       url = await wikiThumb(c, 128);
       if (url) break;
     }
@@ -167,6 +188,46 @@ async function fetchBuildings() {
   }
   console.log(`
 건물 아이콘: 받음 ${got}개 · 못 찾음 ${missing.length}개${missing.length ? ' — ' + missing.slice(0, 10).join(', ') : ''}`);
+}
+
+/**
+ * 건물 실체 없이 **부재 서술자로만** 존재하는 보상들.
+ *
+ * 차량 경로·하이퍼튜브 입구는 `Build_*` 클래스가 없어서 건물 아이콘 경로로는 못 받고,
+ * 아이템 쪽에서는 영문 표시명이 비어 있어 이름으로도 못 찾는다. 위키에는 그림이 있다.
+ * 그래서 여기만 손으로 이어 준다 — 넉 장이고, 티어 보상 칸에 실제로 나온다.
+ */
+const DESCRIPTOR_ONLY = {
+  Desc_VehiclePath_Truck_C: 'Truck Vehicle Path',
+  Desc_VehiclePath_Tractor_C: 'Tractor Vehicle Path',
+  Desc_VehiclePath_Universal_C: 'Universal Vehicle Path',
+  Desc_PipeHyperStart_C: 'Hypertube Entrance',
+};
+
+async function fetchDescriptorOnly() {
+  let got = 0;
+  const missing = [];
+  for (const [id, wikiName] of Object.entries(DESCRIPTOR_ONLY)) {
+    const dest = path.join(OUT, `${id}.png`);
+    if (fs.existsSync(dest)) continue;
+    const url = await wikiThumb(wikiName, 96);
+    if (!url) {
+      missing.push(`${id} (File:${wikiName}.png)`);
+      continue;
+    }
+    const res = await fetch(url, { headers: { 'User-Agent': UA } });
+    if (!res.ok) {
+      missing.push(`${id} (File:${wikiName}.png)`);
+      continue;
+    }
+    fs.writeFileSync(dest, Buffer.from(await res.arrayBuffer()));
+    got++;
+    await new Promise((r) => setTimeout(r, 120));
+  }
+  console.log(
+    `부재 서술자 아이콘: 받음 ${got}개 · 못 찾음 ${missing.length}개` +
+      (missing.length ? ' — ' + missing.join(', ') : '')
+  );
 }
 
 async function main() {
@@ -233,6 +294,7 @@ async function main() {
 
 main()
   .then(() => fetchBuildings())
+  .then(() => fetchDescriptorOnly())
   .catch((e) => {
     console.error(e);
     process.exit(1);

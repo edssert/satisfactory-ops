@@ -1,0 +1,42 @@
+{
+  "$comment": "보상 종류 배지. 게임이 보상 아이콘 오른쪽 위에 얹는 표식이고, 위키 Template:MilestoneTable 이 쓰는 것과 같은 파일이다. Coffee Stain Studios 자산이며 공식 위키(satisfactory.wiki.gg)에서 가져왔습니다. MIT 라이선스 대상이 아닙니다. 상업적 사용·게임사 사칭을 하지 않습니다. (CLAUDE.md §4)",
+  "source": "https://satisfactory.wiki.gg/",
+  "fetchedBy": "scripts/fetch-schematic-icons.mjs",
+  "badges": [
+    {
+      "kind": "building",
+      "file": "building.png",
+      "wikiFile": "File:Recipe_Icon_Building.png"
+    },
+    {
+      "kind": "item",
+      "file": "item.png",
+      "wikiFile": "File:Recipe_Icon_Item.png"
+    },
+    {
+      "kind": "equipment",
+      "file": "equipment.png",
+      "wikiFile": "File:Recipe_Icon_Equipment.png"
+    },
+    {
+      "kind": "vehicle",
+      "file": "vehicle.png",
+      "wikiFile": "File:Recipe_Icon_Vehicle.png"
+    },
+    {
+      "kind": "scanner",
+      "file": "scanner.png",
+      "wikiFile": "File:Recipe_Icon_Scanner.png"
+    },
+    {
+      "kind": "upgrade",
+      "file": "upgrade.png",
+      "wikiFile": "File:Recipe_Icon_Upgrade.png"
+    },
+    {
+      "kind": "resource",
+      "file": "resource.png",
+      "wikiFile": "File:Recipe_Icon_Resource.png"
+    }
+  ]
+}

@@ -11,7 +11,7 @@ import TechNav from '../../../components/TechNav.astro';
 import ItemChip from '../../../components/ItemChip.astro';
 import '../../../styles/fx.css';
 import '../../../styles/tech.css';
-import { hasBuildingIcon, hasItemIcon, iconOf, tiers, type TierEntry } from '../../../lib/tech';
+import { hasBadge, iconPath, rewardsOf, tiers } from '../../../lib/tech';
 
 export function getStaticPaths() {
   return tiers().map((t) => ({ params: { tier: String(t.tier) }, props: { tier: t } }));
@@ -24,21 +24,14 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 /** 지금 펼쳐 볼 항목. 주소의 해시로 고르는 게 아니라 목록 전체를 미리 그려 두고 스크립트가 하나만 보인다 */
 const list = tier.list;
 
-/** 보상 하나하나를 그림으로. 게임의 「보상」 칸이 이 모양이다 */
-function rewards(e: TierEntry) {
-  const out: { id: string; ko: string; kind: 'items' | 'buildings-png'; tag: string }[] = [];
-  for (const b of e.unlocks.buildings) {
-    if (hasBuildingIcon(b.id)) out.push({ id: b.id, ko: b.ko, kind: 'buildings-png', tag: '건물' });
-  }
-  for (const i of e.unlocks.items) {
-    if (hasItemIcon(i.id)) out.push({ id: i.id, ko: i.ko, kind: 'items', tag: '아이템' });
-  }
-  for (const r of e.unlocks.recipes) {
-    /* 레시피는 만드는 물건의 그림으로 보여 준다. 게임도 그렇다 */
-    if (r.makes && hasItemIcon(r.id)) continue;
-  }
-  return out;
-}
+/*
+ * 보상 목록은 lib/tech.ts 의 rewardsOf 가 만든다.
+ *
+ * 예전에는 이 파일이 「그림 있는 것만」 골라 담았다. 그래서 허브 업그레이드 1 의 보상 셋
+ * (장비 작업장 · 휴대용 채굴기 · 손 장비 슬롯 +1) 중 둘이 화면에서 사라졌다 —
+ * 손 제작 레시피는 아예 담지 않았고, 슬롯 보상은 그림이 없다는 이유로 빠졌다.
+ * 게임은 셋 다 보여 준다. 그림이 없으면 이름만이라도 나와야 한다.
+ */
 ---
 
 <Base
@@ -51,7 +44,7 @@ function rewards(e: TierEntry) {
 
     <header class="dex-head">
       <p class="marker"><span class="num">도감</span> 허브 · 마일스톤</p>
-      <h1>{tier.ko}</h1>
+      <h1><span class="fx-gradient-text">{tier.ko}</span></h1>
     </header>
 
     <nav class="tabs" aria-label="티어">
@@ -69,7 +62,8 @@ function rewards(e: TierEntry) {
 
     <div class="tiles" data-tiles>
       {list.map((e, i) => {
-        const ic = iconOf(e.unlocks);
+        /* 게임이 이 스키매틱에 붙여 둔 전용 아이콘. 해금 목록의 첫 건물 그림이 아니다 */
+        const ic = iconPath(e.iconRef);
         return (
           <a
             class="tile"
@@ -78,13 +72,7 @@ function rewards(e: TierEntry) {
             aria-current={i === 0 ? 'page' : undefined}
           >
             {ic ? (
-              <img
-                src={`${base}/assets/${ic.kind === 'building' ? 'buildings-png' : 'items'}/${ic.src}.png`}
-                alt=""
-                width="52"
-                height="52"
-                loading="lazy"
-              />
+              <img src={`${base}/assets/${ic}`} alt="" width="52" height="52" loading="lazy" />
             ) : (
               <span class="tile-fb" aria-hidden="true">{e.ko.slice(0, 1)}</span>
             )}
@@ -98,28 +86,44 @@ function rewards(e: TierEntry) {
       <section class="detail" id={e.id} data-detail={e.id} hidden={i !== 0}>
         <div>
           <h2>{e.ko}</h2>
-          <p class="panel-k">보상</p>
-          {rewards(e).length > 0 ? (
-            <ul class="rewards">
-              {rewards(e).map((r) => (
-                <li class="reward">
-                  <ItemChip id={r.id} ko={r.ko} kind={r.kind} size={56} />
-                  <span>{r.ko}</span>
-                  <span class="tag">{r.tag}</span>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p class="detail-note">그림이 있는 보상이 없습니다.</p>
-          )}
-          {(e.unlocks.recipes.length > 0 || e.unlocks.slots > 0 || e.unlocks.other.length > 0) && (
-            <p class="detail-note">
-              {[
-                ...e.unlocks.recipes.map((r) => (r.isAlternate ? `${r.ko} (대체 제작법)` : r.ko)),
-                ...(e.unlocks.slots > 0 ? [`인벤토리 +${e.unlocks.slots}칸`] : []),
-                ...e.unlocks.other,
-              ].join(' · ')}
-            </p>
+          {/*
+            * 보상은 하나도 버리지 않는다. 그림이 없는 것도 이름으로 나온다 —
+            * 게임 화면이 그렇다. 각 그림 오른쪽 위의 배지가 종류를 말해 준다.
+            */}
+          {rewardsOf(e.unlocks).length > 0 && (
+            <>
+              <p class="panel-k">보상</p>
+              <ul class="rewards">
+                {rewardsOf(e.unlocks).map((r) => (
+                  <li class="reward">
+                    <span class="rw-icon">
+                      {r.icon ? (
+                        <ItemChip
+                          id={r.icon.slice(r.icon.indexOf('/') + 1, -4)}
+                          ko={r.ko}
+                          kind={r.icon.slice(0, r.icon.indexOf('/')) as 'items' | 'buildings-png'}
+                          size={56}
+                        />
+                      ) : (
+                        <span class="rw-blank" aria-hidden="true">{r.ko.slice(0, 1)}</span>
+                      )}
+                      {hasBadge(r.kind) && (
+                        <img
+                          class="rw-badge"
+                          src={`${base}/assets/badges/${r.kind}.png`}
+                          alt=""
+                          width="16"
+                          height="16"
+                          loading="lazy"
+                        />
+                      )}
+                    </span>
+                    <span>{r.ko}</span>
+                    <span class="tag">{r.kindKo}</span>
+                  </li>
+                ))}
+              </ul>
+            </>
           )}
         </div>
 
@@ -139,6 +143,42 @@ function rewards(e: TierEntry) {
     ))}
 
   </div>
+
+  <style>
+    /* 게임처럼 보상 그림 오른쪽 위에 종류 배지를 얹는다 */
+    .rw-icon {
+      position: relative;
+      display: inline-flex;
+    }
+    .rw-badge {
+      position: absolute;
+      z-index: 3;
+      top: -6px;
+      right: -6px;
+      width: 16px;
+      height: 16px;
+      padding: 2px;
+      border: var(--hair) solid var(--line-strong);
+      border-radius: 3px;
+      background: var(--bg);
+      object-fit: contain;
+    }
+    /* 그림을 못 구한 보상. 빈칸 대신 이름 첫 글자가 남는다 */
+    .rw-blank {
+      display: inline-flex;
+      width: 56px;
+      height: 56px;
+      align-items: center;
+      justify-content: center;
+      border: var(--hair) dashed var(--line-strong);
+      border-radius: 3px;
+      background: var(--surface);
+      color: var(--ink-3);
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+    }
+  </style>
 
   <script is:inline>
     (function () {

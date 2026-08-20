@@ -250,7 +250,14 @@ tbody tr:hover td { background: var(--raised); }
   line-height: 1.6;
 }
 .stack > * + * { margin-top: var(--s4); }
-.visually-hidden {
+/*
+ * 화면에서만 감추고 스크린리더에는 남기는 글. 이름이 둘인 것은 실수가 아니라 **복구**다 —
+ * 마크업 쪽에서 `sr-only`(부트스트랩·테일윈드 관행)를 쓴 곳이 있는데 여기에는
+ * `visually-hidden` 만 있어서 숨김이 안 걸렸고, 레시피 카드 104장에서 「딴 것으로 표시」가
+ * 제목 위에 겹쳐 찍혔다. 마크업을 한 이름으로 몰기보다 두 이름을 다 받는 편이 안전하다.
+ */
+.visually-hidden,
+.sr-only {
   position: absolute;
   width: 1px; height: 1px;
   margin: -1px; padding: 0;

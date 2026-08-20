@@ -11,11 +11,24 @@ import TechNav from '../../components/TechNav.astro';
 import '../../styles/fx.css';
 import '../../styles/tech.css';
 import { shopTabs, tech } from '../../lib/tech';
-import { recipes } from '../../lib/gamedata';
+import { buildings, recipes } from '../../lib/gamedata';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const shopCount = shopTabs().tabs.reduce((a, t) => a + t.count, 0);
 const altCount = recipes.filter((r) => r.isAlternate).length;
+/*
+ * 「표」 카드만 숫자가 없어 넉 장 사이에서 혼자 떠 보였다.
+ * 레퍼런스 화면이 실제로 다루는 설비 수를 센다 — 벨트·파이프·채굴기·발전기·전력을 쓰는 건물.
+ */
+const tableCount = buildings.filter(
+  (b) =>
+    b.extraction ||
+    b.category === 'generator' ||
+    (b.powerMW ?? 0) > 0 ||
+    b.powerIsVariable ||
+    b.beltItemsPerMinute != null ||
+    b.pipeFlowM3PerMinute != null
+).length;
 
 const cards = [
   {
@@ -52,8 +65,8 @@ const cards = [
   {
     href: `${base}/dex/reference/`,
     ko: '표',
-    n: null,
-    unit: '',
+    n: tableCount,
+    unit: '설비',
     what: '건물별 전력·처리량, 발전기, 채굴 설비 같은 수치를 표로. 계산이 아니라 대조용입니다.',
   },
 ];

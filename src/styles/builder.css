@@ -33,9 +33,15 @@
   letter-spacing: 0.1em;
   color: var(--ink-3);
 }
+/*
+ * 두 입력의 **높이를 못 박는다.** 브라우저가 select 와 number 에 각각 다른 기본 높이를
+ * 주는 탓에 40px 과 47px 이 나란히 섰고, 아래를 맞추는 정렬이라 라벨 기준선까지
+ * 7px 어긋나 있었다. 높이를 정하면 라벨도 저절로 한 줄에 선다.
+ */
 .fb-field select,
 .fb-field input {
-  padding: var(--s2) var(--s3);
+  height: 44px;
+  padding: 0 var(--s3);
   border: var(--hair) solid var(--line-strong);
   border-radius: var(--radius);
   background: var(--bg);
@@ -43,6 +49,7 @@
   font: inherit;
   font-size: var(--t-body);
   font-weight: 600;
+  line-height: 1;
 }
 .fb-field select { min-width: 256px; }
 .fb-field.is-num input {

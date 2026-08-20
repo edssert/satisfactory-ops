@@ -1,25 +1,6 @@
 /*
- * tokens.css — 이 사이트의 모든 색·서체·간격은 여기서만 정의한다.
- *
- * 시각 언어: **기술 사양서**. SaaS 랜딩이 아니라 현장에서 꺼내 보는 도면 표지에 가깝다.
- *   - 구조는 카드가 아니라 얇은 괘선과 여백으로 만든다. 그림자를 쓰지 않는다.
- *   - 색은 하나만 쓴다(FICSIT 주황). 나머지는 전부 무채색이다.
- *   - 수치는 전부 고정폭 서체, 자릿수 고정.
- *
- * 근거: docs/research/design-landing-craft.md(회피 목록·KRDS 타이포),
- *       docs/research/design-game-identity.md(FICSIT 주황).
- */
-
-/* ------------------------------------------------------------------ 서체 */
-/*
- * 역할을 셋으로 나눈다. 하나로 통일하면 위계가 안 생긴다.
- *
- *   표시  Wanted Sans     기하학적이고 획이 단단하다. 한글 UI 용으로 만들어진 서체다
- *   본문  Pretendard      KRDS 가 국문·영문 공통 기본으로 지정. 긴 글 가독성이 가장 낫다
- *   수치  JetBrains Mono  숫자 구분이 뚜렷하고 0 에 사선이 있다. 표에서 자릿수를 세기 좋다
- *
- * 셋 다 SIL Open Font License 1.1 이다. 상업 사용·수정·재배포가 되고 웹 임베딩에 제약이 없다.
- * 쓰는 글자만 담은 서브셋을 빌드 때 만든다(`npm run font`).
+ * 제품 시각 시스템의 단일 정본.
+ * 원시 팔레트 → 의미 토큰 → 기존 컴포넌트 호환 별칭의 세 층으로 나눈다.
  */
 @font-face {
   font-family: 'Wanted Sans';
@@ -44,68 +25,117 @@
 }
 
 :root {
-  --font-display: 'Wanted Sans', 'Pretendard', -apple-system, 'Segoe UI',
-    'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
-  --font-body: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-display: 'Wanted Sans', 'Pretendard', -apple-system, 'Segoe UI', sans-serif;
+  --font-body: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Consolas, monospace;
 
-  /* ---------------------------------------------------------------- 색 */
-  /*
-   * 색 — 다크 하나만 쓴다.
-   *
-   * 밝은 테마를 반쯤 만들어 두는 것은 없느니만 못하다. 유리 계층·발광 테두리·배경 광원이
-   * 전부 어두운 바닥을 전제로 설계돼 있어서, 흰 배경에 그대로 얹으면 탁해질 뿐이다.
-   * 제대로 만들 때까지는 토글을 두지 않는다.
-   */
-  --bg: #0a0d12;
-  --bg-grid: #121722;
-  --surface: #111722;
-  --raised: #18202c;
-  --ink: #e8ecf1;
-  --ink-2: #9aa6b6;
-  --ink-3: #6b7889;
-  --line: #1f2733;
-  --line-strong: #38455a;
-  /* 강조를 둘로 나눈다 — 수치는 호박색, 구조·상호작용은 청록 */
-  --accent: #ffb457;
-  --accent-ink: #ffc987;
-  --accent-soft: #241a10;
-  --primary: #5ec8d8;
-  --primary-ink: #8fdce8;
-  --on-accent: #0a0d12;
-  --ok: #7fd88f;
-  --danger: #ff7a6b;
-  --res-unverified: #8b8b8b;
+  /* raw palette — 색상 리터럴은 이 파일을 벗어나지 않는다 */
+  --raw-ink-1000: #080b0f;
+  --raw-ink-950: #0d1117;
+  --raw-ink-900: #131922;
+  --raw-ink-850: #19212c;
+  --raw-ink-800: #202a37;
+  --raw-ink-700: #344153;
+  --raw-ink-500: #748196;
+  --raw-ink-400: #98a4b5;
+  --raw-ink-200: #d4dbe4;
+  --raw-ink-100: #edf1f5;
+  --raw-paper-50: #f7f5ef;
+  --raw-paper-100: #eeeae0;
+  --raw-paper-200: #ddd7ca;
+  --raw-orange-700: #a9430d;
+  --raw-orange-600: #d65a12;
+  --raw-orange-500: #f47a24;
+  --raw-orange-400: #ff9a4e;
+  --raw-cyan-600: #087d91;
+  --raw-cyan-500: #10a8bf;
+  --raw-cyan-300: #67d5e3;
+  --raw-green-500: #2ea66a;
+  --raw-red-500: #d9544d;
+  --raw-yellow-500: #d89a19;
+  --raw-shadow-dark: #000000;
+  --raw-mask: #000000;
 
-  /* ------------------------------------------------------------ 타이포 */
-  /*
-   * 스케일은 **정수 px** 로 쓴다. rem 로 옮기면 17px 이 1.0625rem 이 되는데,
-   * 사람이 디자인 명세를 그렇게 쓰지 않는다. 소수점이 늘어선 토큰 파일은
-   * "계산해서 채워 넣은 것"처럼 읽힌다 — 그게 실제로 티가 나는 지점이다.
-   * KRDS 도 px 로 명세한다.
-   *
-   * 배수는 한 눈에 잡히는 값으로: 12 · 13 · 15 · 17 · 19 · 24 · 32 · 40 · 60
-   */
-  --t-display: clamp(36px, 5vw, 60px);
-  --t-h1: clamp(28px, 3.5vw, 40px);
-  --t-h2: clamp(24px, 2.5vw, 32px);
-  --t-h3: clamp(19px, 1.6vw, 24px);
+  /* semantic roles — 기본은 어두운 현장 제어실 */
+  --canvas: var(--raw-ink-1000);
+  --canvas-grid: var(--raw-ink-900);
+  --layer-1: var(--raw-ink-950);
+  --layer-2: var(--raw-ink-900);
+  --layer-3: var(--raw-ink-850);
+  --layer-accent: #24150c;
+  --text-primary: var(--raw-ink-100);
+  --text-secondary: var(--raw-ink-400);
+  --text-tertiary: #8794a7;
+  --text-inverse: var(--raw-ink-1000);
+  --border-subtle: var(--raw-ink-800);
+  --border-strong: var(--raw-ink-700);
+  --brand: var(--raw-orange-500);
+  --brand-strong: var(--raw-orange-400);
+  --action: var(--raw-cyan-500);
+  --action-strong: var(--raw-cyan-300);
+  --on-action: var(--raw-ink-1000);
+  --status-ok: var(--raw-green-500);
+  --status-danger: #f06f65;
+  --status-warning: #f0b43b;
+  --media-canvas: #4f5147;
+  --hero-canvas: #090d12;
+  --hero-ink: #f4f6f8;
+  --hero-muted: #b2bdca;
+  --blueprint-paper: #dedbd1;
+  --blueprint-ink: #252b31;
+  --blueprint-muted: #616a70;
+  --blueprint-grid: #aeb5b3;
+  --blueprint-belt: #1e262c;
+  --blueprint-accent: var(--raw-orange-600);
+  --shadow-color: color-mix(in oklab, var(--raw-shadow-dark) 56%, transparent);
+  --shadow-header: 0 14px 30px -24px var(--shadow-color);
+  --shadow-card: 0 22px 50px -36px var(--shadow-color);
+  --ambient-cool: color-mix(in oklab, var(--action) 7%, transparent);
+  --ambient-warm: color-mix(in oklab, var(--brand) 6%, transparent);
+  --mask-solid: var(--raw-mask);
+
+  /* legacy role aliases — 기존 79개 화면을 새 의미 체계로 즉시 이행 */
+  --bg: var(--canvas);
+  --bg-grid: var(--canvas-grid);
+  --surface: var(--layer-1);
+  --raised: var(--layer-2);
+  --ink: var(--text-primary);
+  --ink-2: var(--text-secondary);
+  --ink-3: var(--text-tertiary);
+  --line: var(--border-subtle);
+  --line-strong: var(--border-strong);
+  --accent: var(--brand);
+  --accent-ink: var(--brand-strong);
+  --accent-soft: var(--layer-accent);
+  --primary: var(--action);
+  --primary-ink: var(--action-strong);
+  --on-accent: var(--text-inverse);
+  --ok: var(--status-ok);
+  --danger: var(--status-danger);
+  --res-unverified: var(--text-tertiary);
+  --glass: var(--layer-2);
+  --glass-raised: var(--layer-3);
+  --glass-blur: 16px;
+  --glass-sat: 1.2;
+  --lit: inset 0 0 0 1px var(--border-subtle);
+  --lit-strong: inset 0 0 0 1px var(--border-strong);
+
+  /* type */
+  --t-display: clamp(42px, 6.6vw, 88px);
+  --t-h1: clamp(32px, 4vw, 52px);
+  --t-h2: clamp(26px, 3vw, 40px);
+  --t-h3: clamp(20px, 1.8vw, 27px);
   --t-body-l: 19px;
   --t-body: 17px;
+  --t-body-s: 15px;
   --t-small: 15px;
   --t-caption: 13px;
   --t-label: 12px;
+  --lh-tight: 1.12;
+  --lh-heading: 1.3;
+  --lh-body: 1.72;
 
-  /* 행간 — 소수 둘째 자리를 쓰지 않는다 */
-  --lh-tight: 1.2;
-  --lh-heading: 1.35;
-  --lh-body: 1.7;
-
-  /*
-   * 간격 — 4px 배수. 이름이 곧 배수다(s2 = 8px, s6 = 24px).
-   * 이 밖의 값을 쓰지 않는다. 여백이 어긋나는 것은 값을 즉흥으로 정할 때 생긴다.
-   */
+  /* space */
   --s1: 4px;
   --s2: 8px;
   --s3: 12px;
@@ -120,36 +150,50 @@
   --s24: 96px;
   --s32: 128px;
 
-  /* -------------------------------------------------------------- 형태 */
+  /* shape/layout */
   --radius: 3px;
+  --radius-m: 7px;
+  --radius-l: 14px;
   --hair: 1px;
-  --page: 1180px;
-  /** 머리띠 높이. sticky 표 머리행이 이 아래에 선다 */
-  --head-h: 56px;
-  /*
-   * 한 줄 길이 상한. 38em 으로 잡았더니 두세 문장짜리 짧은 문단이 화면 2/3 에서 끊겨
-   * 오른쪽이 통째로 비었다. 한글은 글자 폭이 커서 같은 em 이라도 라틴보다 글자 수가 적다.
-   */
-  --measure: 52em;
-  /** 주석·각주처럼 짧고 부수적인 글은 더 넓게 흘려도 읽힌다 */
-  --measure-wide: 66em;
+  --page: 1240px;
+  --head-h: 94px;
+  --measure: 48em;
+  --measure-wide: 68em;
 
-  /* -------------------------------------------------------------- 모션 */
-  --dur-fast: 90ms;
-  --dur: 160ms;
-  --ease: cubic-bezier(0.32, 0.72, 0, 1);
-
+  /* motion */
+  --dur-fast: 120ms;
+  --dur: 220ms;
+  --dur-slow: 680ms;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
   color-scheme: dark;
 }
 
-/*
- * 어두운 테마 — 현장 HUD. 밝은 테마의 반전이 아니라 따로 정한 값이다.
- * 주황은 어두운 배경에서 더 밝게 가야 같은 무게로 읽힌다.
- */
+:root[data-theme='light'] {
+  --canvas: var(--raw-paper-50);
+  --canvas-grid: var(--raw-paper-100);
+  --layer-1: #ffffff;
+  --layer-2: var(--raw-paper-100);
+  --layer-3: var(--raw-paper-200);
+  --layer-accent: #fff0e4;
+  --text-primary: #171a1f;
+  --text-secondary: #4f5863;
+  --text-tertiary: #68737e;
+  --text-inverse: #ffffff;
+  --border-subtle: #d7d2c8;
+  --border-strong: #a9a398;
+  --brand: var(--raw-orange-600);
+  --brand-strong: var(--raw-orange-700);
+  --action: var(--raw-cyan-600);
+  --action-strong: #06677a;
+  --on-action: #ffffff;
+  --status-danger: var(--raw-red-500);
+  --status-warning: var(--raw-yellow-500);
+  --shadow-color: color-mix(in oklab, var(--raw-shadow-dark) 18%, transparent);
+  --ambient-cool: color-mix(in oklab, var(--action) 5%, transparent);
+  --ambient-warm: color-mix(in oklab, var(--brand) 5%, transparent);
+  color-scheme: light;
+}
 
 @media (prefers-reduced-motion: reduce) {
-  :root {
-    --dur-fast: 0.01ms;
-    --dur: 0.01ms;
-  }
+  :root { --dur-fast: 0.01ms; --dur: 0.01ms; --dur-slow: 0.01ms; }
 }

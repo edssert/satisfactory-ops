@@ -27,7 +27,11 @@ const fmt = (n: number) => (Number.isInteger(n) ? String(n) : String(Math.round(
 const find = (list: Count[], res: string) => list.find((c) => c.res === res);
 const total = (a: (typeof stats)[number], res: string) =>
   (find(a.near, res)?.n ?? 0) + (find(a.wide, res)?.n ?? 0);
+/*
+ * 별점은 기호만으로 정보를 주면 안 된다(색각 이상·화면 낭독). 숫자를 같이 적는다.
+ */
 const star = (n: number) => '★'.repeat(n) + '☆'.repeat(5 - n);
+const rating = (n: number) => `${star(n)} ${n}/5`;
 
 /** 이 화면이 실제로 하는 말 — 게임이 안 해 주는 판단 */
 const VERDICT: Record<string, { one: string; why: string }> = {
@@ -110,9 +114,9 @@ const VERDICT: Record<string, { one: string; why: string }> = {
                 <small>+{find(a.wide, 'Desc_Water_C')?.n ?? 0}</small>
               </td>
               <td class="stars">
-                평탄 {star(a.stars.flat)}
+                평탄 {rating(a.stars.flat)}
                 <br />
-                자원량 {star(a.stars.amount)}
+                자원량 {rating(a.stars.amount)}
               </td>
             </tr>
           ))}
@@ -145,10 +149,10 @@ const VERDICT: Record<string, { one: string; why: string }> = {
         <p class="blurb">게임 안내문 — {a.blurb}</p>
 
         <div class="stars-row">
-          <span>평탄도 {star(a.stars.flat)}</span>
-          <span>바이오매스 {star(a.stars.biomass)}</span>
-          <span>자원량 {star(a.stars.amount)}</span>
-          <span>자원 다양성 {star(a.stars.variety)}</span>
+          <span>평탄도 {rating(a.stars.flat)}</span>
+          <span>바이오매스 {rating(a.stars.biomass)}</span>
+          <span>자원량 {rating(a.stars.amount)}</span>
+          <span>자원 다양성 {rating(a.stars.variety)}</span>
         </div>
 
         <div class="cols">
@@ -228,6 +232,14 @@ const VERDICT: Record<string, { one: string; why: string }> = {
     .page-head h1 { margin-bottom: var(--s4); }
     .lede { font-size: var(--t-body-l); color: var(--ink-2); }
 
+    /* 좁은 화면에서 표는 자기 상자 안에서만 굴린다. 오른쪽 끝을 흐리게 해 굴릴 수 있음을 알린다 */
+    @media (max-width: 520px) {
+      .page :global(.scroll-x) {
+        -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 16px), transparent);
+        mask-image: linear-gradient(to right, #000 calc(100% - 16px), transparent);
+      }
+    }
+
     .cmp { width: 100%; border-collapse: collapse; font-size: var(--t-small); }
     .cmp th, .cmp td {
       padding: var(--s3);
@@ -237,6 +249,14 @@ const VERDICT: Record<string, { one: string; why: string }> = {
       word-break: keep-all;
     }
     .cmp thead th { color: var(--ink-3); font-family: var(--font-mono); font-size: 11px; font-weight: 500; }
+    /*
+     * 수치 열은 값이 오른쪽 맞춤이라 머리글도 오른쪽에 붙어야 한다.
+     * 위의 `.cmp th { text-align: left }` 가 base.css 의 `th.n` 을 덮어 머리글만
+     * 자기 열 왼쪽 끝에 떠 있었다 — 시작 지역 열과 첫 숫자 사이가 통째로 비었다.
+     */
+    .cmp thead th.n, .cmp td.n { text-align: right; }
+    /* 별점 열은 줄이 길어 붙어 버린다. 한 줄씩 떨어뜨린다 */
+    .cmp .stars { white-space: nowrap; }
     .cmp tbody th { font-weight: 600; white-space: nowrap; }
     .cmp tbody th small { display: block; color: var(--ink-3); font-size: 11px; font-weight: 400; }
     .cmp td.n { font-family: var(--font-mono); text-align: right; }

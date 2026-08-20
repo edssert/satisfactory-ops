@@ -1,0 +1,131 @@
+{
+  "$comment": "스키매틱(허브 업그레이드·마일스톤) 전용 아이콘. Coffee Stain Studios 자산이며 공식 위키(satisfactory.wiki.gg)에서 가져왔습니다. MIT 라이선스 대상이 아닙니다. 상업적 사용·게임사 사칭을 하지 않습니다. (CLAUDE.md §4)",
+  "source": "https://satisfactory.wiki.gg/",
+  "fetchedBy": "scripts/fetch-schematic-icons.mjs",
+  "icons": [
+    {
+      "texture": "SchematicIcon_Hub_1",
+      "file": "SchematicIcon_Hub_1.png"
+    },
+    {
+      "texture": "SchematicIcon_Hub_2",
+      "file": "SchematicIcon_Hub_2.png"
+    },
+    {
+      "texture": "SchematicIcon_Hub_3",
+      "file": "SchematicIcon_Hub_3.png"
+    },
+    {
+      "texture": "SchematicIcon_Hub_4",
+      "file": "SchematicIcon_Hub_4.png"
+    },
+    {
+      "texture": "SchematicIcon_Hub_5",
+      "file": "SchematicIcon_Hub_5.png"
+    },
+    {
+      "texture": "TXUI_SIcon_BaseBuilding",
+      "file": "TXUI_SIcon_BaseBuilding.png"
+    },
+    {
+      "texture": "TXUI_SIcon_Logistics",
+      "file": "TXUI_SIcon_Logistics.png"
+    },
+    {
+      "texture": "TXUI_SIcon_Exploration",
+      "file": "TXUI_SIcon_Exploration.png"
+    },
+    {
+      "texture": "TXUI_SIcon_Production",
+      "file": "TXUI_SIcon_Production.png"
+    },
+    {
+      "texture": "TXUI_SIcon_Coupon",
+      "file": "TXUI_SIcon_Coupon.png"
+    },
+    {
+      "texture": "TXUI_SIcon_Chainsaw",
+      "file": "TXUI_SIcon_Chainsaw.png"
+    },
+    {
+      "texture": "TXUI_SIcon_JumpPad",
+      "file": "TXUI_SIcon_JumpPad.png"
+    },
+    {
+      "texture": "TXUI_SIcon_XenoBasher",
+      "file": "TXUI_SIcon_XenoBasher.png"
+    },
+    {
+      "texture": "TXUI_SIcon_ProductionGenerator",
+      "file": "TXUI_SIcon_ProductionGenerator.png"
+    },
+    {
+      "texture": "TXUI_SIcon_Vehicle",
+      "file": "TXUI_SIcon_Vehicle.png"
+    },
+    {
+      "texture": "TXUI_SIcon_HyperTubes",
+      "file": "TXUI_SIcon_HyperTubes.png"
+    },
+    {
+      "texture": "TXUI_SIcon_PowerTower",
+      "file": "TXUI_SIcon_PowerTower.png"
+    },
+    {
+      "texture": "TXUI_SIcon_Blueprints",
+      "file": "TXUI_SIcon_Blueprints.png"
+    },
+    {
+      "texture": "TXUI_SIcon_ProductionFluid",
+      "file": "TXUI_SIcon_ProductionFluid.png"
+    },
+    {
+      "texture": "TXUI_SIcon_ProductionPackager",
+      "file": "TXUI_SIcon_ProductionPackager.png"
+    },
+    {
+      "texture": "TXUI_SIcon_TraversalEquipment",
+      "file": "TXUI_SIcon_TraversalEquipment.png"
+    },
+    {
+      "texture": "TXUI_SIcon_Train",
+      "file": "TXUI_SIcon_Train.png"
+    },
+    {
+      "texture": "TXUI_SIcon_TrainSignals",
+      "file": "TXUI_SIcon_TrainSignals.png"
+    },
+    {
+      "texture": "TXUI_SIcon_Pipes",
+      "file": "TXUI_SIcon_Pipes.png"
+    },
+    {
+      "texture": "TXUI_SIcon_HazmatSuit",
+      "file": "TXUI_SIcon_HazmatSuit.png"
+    },
+    {
+      "texture": "TXUI_SIcon_ProductionQuantum",
+      "file": "TXUI_SIcon_ProductionQuantum.png"
+    },
+    {
+      "texture": "TXUI_SIcon_ProductionMiner",
+      "file": "TXUI_SIcon_ProductionMiner.png"
+    },
+    {
+      "texture": "TXUI_SIcon_Drone",
+      "file": "TXUI_SIcon_Drone.png"
+    },
+    {
+      "texture": "TXUI_SIcon_Portal",
+      "file": "TXUI_SIcon_Portal.png"
+    },
+    {
+      "texture": "TXUI_SIcon_Logistics2",
+      "file": "TXUI_SIcon_Logistics2.png"
+    },
+    {
+      "texture": "TXUI_SIcon_ProductionAlien",
+      "file": "TXUI_SIcon_ProductionAlien.png"
+    }
+  ]
+}

@@ -317,8 +317,15 @@ const buildingIds = new Set(buildings.map((x) => x.id));
 const recipeIds = new Set(recipes.map((x) => x.id));
 const knownIds = new Set([...itemIds, ...buildingIds, ...recipeIds, ...en.schematics.map((s) => s.className)]);
 
+/*
+ * dex-names.json 은 **일부러** 앱 데이터에 없는 클래스만 담는다.
+ * 게임 로케일 산출물에 이름이 없어 화면에 내부 식별자가 새던 것들의 목록이라,
+ * "존재하는 클래스인가" 검사를 그대로 걸면 이 파일은 늘 실패한다.
+ */
+const REF_CHECK_EXEMPT = new Set(['dex-names']);
 const missingRefs = [];
 for (const [file, data] of Object.entries(curated)) {
+  if (REF_CHECK_EXEMPT.has(file)) continue;
   for (const ref of new Set(collectClassRefs(data))) {
     if (!knownIds.has(ref)) missingRefs.push(file + '.json → ' + ref);
   }

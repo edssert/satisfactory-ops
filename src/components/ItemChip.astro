@@ -18,10 +18,20 @@ const { id, ko, amount = null, kind = 'items', size = 52, fallback = true } = As
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
-<span class="chip" style={`--s:${size}px`} title={amount == null ? ko : `${ko} ${amount}`}>
-  <img src={`${base}/assets/${kind}/${id}.png`} alt={ko} loading="lazy" />
+{/*
+  * 그림과 숫자만으로는 이름이 안 읽힌다 — 아이콘이 안 뜨거나 화면 낭독기로 볼 때 빈칸이 된다.
+  * 칸 전체를 하나의 그림으로 선언하고 이름과 개수를 라벨로 붙인다. 인게임 모양은 그대로 둔다.
+  */}
+<span
+  class="chip"
+  style={`--s:${size}px`}
+  role="img"
+  title={amount == null ? ko : `${ko} ${amount}개`}
+  aria-label={amount == null ? ko : `${ko} ${amount}개`}
+>
+  <img src={`${base}/assets/${kind}/${id}.png`} alt="" loading="lazy" />
   {fallback && <span class="chip-fb" aria-hidden="true">{ko.slice(0, 1)}</span>}
-  {amount != null && <b class="chip-n">{amount}</b>}
+  {amount != null && <b class="chip-n" aria-hidden="true">{amount}</b>}
 </span>
 
 <style>

@@ -9,7 +9,6 @@
  * 대체 제작법도 전부 넣는다 — 화면에서 딴 것만 걸러 보여 준다.
  */
 import Base from '../../layouts/Base.astro';
-import '../../styles/fx.css';
 import '../../styles/planner.css';
 import FactoryPlanner from '../../components/FactoryPlanner';
 import { buildings, index, items, recipes } from '../../lib/gamedata';
@@ -170,16 +169,16 @@ const bytes = JSON.stringify({
   description="건물을 게임의 실제 치수로 놓고, 돌리고, 층을 나눠 이으면 처리량과 전력이 계산됩니다. 짓기 전에 먼저 짜 보세요."
   section="planner"
 >
-  <div class="wrap plan-head">
+  <div class="plan-w plan-head">
     <p class="marker"><span class="num">설계</span></p>
-    <h1><span class="fx-gradient-text">짓기 전에 실제 크기로</span></h1>
+    <h1>짓기 전에 <span>실제 크기로</span></h1>
     <p class="lede prose">
       건물 크기는 게임의 실제 치수이고 바닥 격자는 토대 한 칸(8 m)입니다. 놓고, 돌리고,
       층을 나눠 이으면 처리량·전력·모자란 재료가 그 자리에서 계산됩니다.
     </p>
   </div>
 
-  <div class="plan-stage">
+  <div class="plan-w plan-stage">
     <FactoryPlanner
       client:load
       machines={payloadMachines}
@@ -190,7 +189,7 @@ const bytes = JSON.stringify({
     />
   </div>
 
-  <div class="wrap">
+  <div class="plan-w">
     <p class="caption foot">
       1.2 게임 데이터 기준입니다. 건물 크기는 충돌 박스, 전력은 생산 건물이 클럭의 1.321928 제곱,
       발전기는 클럭에 비례합니다. 데이터 {Math.round(bytes / 1024)}KB 를 화면과 함께 보내므로
@@ -199,15 +198,26 @@ const bytes = JSON.stringify({
   </div>
 
   <style>
+    /*
+     * 제목과 도면판이 같은 세로선에서 시작해야 한다.
+     * 제목만 `.wrap`(1180px 상한)을 쓰고 도면판은 화면 폭을 쓰는 바람에, 1440px 에서
+     * h1 은 x=162 인데 왼쪽 「건물 찾기」 서랍은 x=25 에서 시작했다. 컨테이너를 하나로 묶는다.
+     *
+     * `100vw` 를 쓰지 않는다 — 세로 스크롤막대 폭이 포함돼 그만큼 가로로 밀린다.
+     */
+    .plan-w {
+      width: min(2200px, 100%);
+      margin-inline: auto;
+      padding-inline: var(--s5);
+    }
+    @media (min-width: 720px) {
+      .plan-w { padding-inline: var(--s8); }
+    }
+
     .plan-head { padding-block: var(--s14) var(--s6); }
     .plan-head h1 { margin-bottom: var(--s4); }
+    .plan-head h1 span { color: var(--brand); }
     .lede { font-size: var(--t-body-l); color: var(--ink-2); }
-    /* 도면판은 화면을 다 쓴다. 좁으면 짤 수가 없다 */
-    .plan-stage {
-      width: min(2200px, calc(100vw - var(--s6)));
-      margin-inline: auto;
-      padding-inline: var(--s3);
-    }
     .foot { margin-top: var(--s6); }
   </style>
 </Base>

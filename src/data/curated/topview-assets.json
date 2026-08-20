@@ -1,0 +1,18 @@
+{
+  "$schemaVersion": 1,
+  "$source": {
+    "author": "AndersPottemager",
+    "reddit": "https://www.reddit.com/user/AndersPottemager/",
+    "releaseThread": "https://www.reddit.com/r/SatisfactoryGame/comments/12gskwe/can_we_get_a_new_anders_pottemager_asset_set/",
+    "download": "https://www.dropbox.com/scl/fi/fjso2avbeocyqyvchlecg/Assets.zip?dl=1&rlkey=6ut90yf5j7614acf9on95f42g",
+    "sheet": "Texture 02.png"
+  },
+  "assets": [
+    { "buildingClass": "Build_AssemblerMk1_C", "candidateId": 1, "cropPx": { "x": 1004, "y": 152, "width": 700, "height": 1040 } },
+    { "buildingClass": "Build_FoundryMk1_C", "candidateId": 2, "cropPx": { "x": 216, "y": 168, "width": 592, "height": 708 } },
+    { "buildingClass": "Build_ManufacturerMk1_C", "candidateId": 3, "cropPx": { "x": 2016, "y": 172, "width": 1216, "height": 1304 } },
+    { "buildingClass": "Build_ConstructorMk1_C", "candidateId": 5, "cropPx": { "x": 172, "y": 992, "width": 680, "height": 704 } },
+    { "buildingClass": "Build_SmelterMk1_C", "candidateId": 6, "cropPx": { "x": 3500, "y": 1004, "width": 424, "height": 744 } },
+    { "buildingClass": "Build_OilRefinery_C", "candidateId": 7, "cropPx": { "x": 980, "y": 1356, "width": 728, "height": 1372 } }
+  ]
+}

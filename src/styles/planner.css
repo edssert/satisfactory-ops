@@ -8,9 +8,13 @@
  * 포트에는 아이콘과 이름이 같이 붙는다.
  */
 
+/*
+ * 서랍 폭 262px 에서는 이름 칸이 132px 밖에 안 남아 「산업용 저장 컨테이너」(141px)가
+ * 「산업용 저장 컨테…」로 잘렸다. 무슨 건물인지 못 읽으면 목록이 아니다. 칸을 넓힌다.
+ */
 .pl {
   display: grid;
-  grid-template-columns: 262px minmax(0, 1fr);
+  grid-template-columns: 296px minmax(0, 1fr);
   gap: var(--s3);
 }
 
@@ -126,6 +130,27 @@
   min-width: 0;
 }
 
+.pl-projectbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s2);
+  padding: var(--s2) var(--s3);
+  border: var(--hair) solid var(--border-subtle);
+  border-radius: var(--radius-m);
+  background: var(--layer-1);
+}
+.pl-projectname {
+  width: min(280px, 46vw);
+  border: 0;
+  border-bottom: var(--hair) solid transparent;
+  background: transparent;
+  color: var(--text-primary);
+  font: 700 var(--t-small) var(--font-display);
+}
+.pl-projectname:focus { border-bottom-color: var(--brand); outline: 0; }
+.pl-projectstate { color: var(--text-tertiary); font-size: var(--t-label); }
+
 .pl-bar {
   display: flex;
   flex-wrap: wrap;
@@ -150,6 +175,8 @@
   font-family: var(--font-mono);
   font-weight: 600;
 }
+.pl-stat.is-danger { color: var(--status-danger); }
+.pl-stat.is-danger b { color: currentColor; }
 .pl-fh {
   display: flex;
   gap: 4px;
@@ -295,6 +322,17 @@
   stroke: var(--line-strong);
   stroke-dasharray: 3 2.5;
 }
+.pl-belt.is-fluid .pl-belt-core {
+  stroke: var(--action-strong);
+  stroke-dasharray: 5 2;
+}
+.pl-powerline {
+  fill: none;
+  stroke: var(--brand);
+  stroke-dasharray: 2 2.5;
+  opacity: 0.65;
+  pointer-events: none;
+}
 .pl-beltrate {
   fill: var(--ink-2);
   font-family: var(--font-mono);
@@ -305,6 +343,12 @@
   stroke-linejoin: round;
 }
 .pl-belt.is-dry .pl-beltrate { fill: var(--ink-3); }
+
+.pl-b.is-collision .pl-bbody {
+  stroke: var(--status-danger);
+  stroke-width: 2px;
+  filter: drop-shadow(0 0 5px color-mix(in oklab, var(--status-danger) 46%, transparent));
+}
 
 /* 층이 다르면 리프트다. 높이를 같이 적는다 */
 .pl-lift circle {

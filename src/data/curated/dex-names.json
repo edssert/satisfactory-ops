@@ -1,0 +1,55 @@
+{
+  "$comment": "도감 화면이 이름을 못 찾았을 때 쓰는 표. 게임 공식 한국어 로케일(src/data/ko/)에 표기가 없는 클래스만 들어간다. 여기 없는 것은 이름을 지어내지 않고 그 자리를 비운다 — 내부 클래스명을 화면에 내보내지 않는다.",
+  "$rule": "src/lib/tech.ts 의 label() 만 이 파일을 읽는다. 새 이름을 넣을 때는 sources 를 반드시 붙인다.",
+  "names": {
+    "Desc_HardDrive_C": {
+      "ko": "하드 드라이브",
+      "confidence": "consensus",
+      "why": "게임 배포 데이터의 아이템 목록에 없어 로케일 산출물에도 없다. 인게임·공식 위키 모두 같은 물건을 이 이름으로 부르고, 이 저장소의 지도·수집품 데이터도 같은 표기를 쓴다.",
+      "sources": [
+        "satisfactory.wiki.gg/wiki/Hard_Drive",
+        "src/data/app/collectibles.json (rockfactory/satisfactory-logistics, MIT)"
+      ]
+    }
+  },
+  "untranslated": {
+    "$comment": "게임 공식 한국어 로케일에 한글 표기가 아예 없는 것들. 영문을 그대로 둔다 — 임의로 번역하면 사용자가 게임 화면과 대조할 수 없다.",
+    "Schematic_Ficsday2025_C": {
+      "en": "FICSIT Anniversary Boombox Tape",
+      "why": "ko.json 의 값이 영문과 같다. 게임이 이 항목만 번역하지 않았다.",
+      "checked": "2026-08-21"
+    },
+    "Research_Quartz_3_3_C": { "en": "Discontinued - Radio Control Unit", "why": "게임에서 삭제된 연구. 로케일에 한글이 없다." },
+    "Research_AOrgans_1_C": { "en": "Discontinued - Organic Properties", "why": "게임에서 삭제된 연구. 로케일에 한글이 없다." },
+    "Research_AOrganisms_1_C": { "en": "Discontinued - Object Scanner Improvements", "why": "게임에서 삭제된 연구. 로케일에 한글이 없다." },
+    "Research_ACarapace_1_C": { "en": "Discontinued - Structural Analysis", "why": "게임에서 삭제된 연구. 로케일에 한글이 없다." },
+    "Research_ACarapace_2_1_C": { "en": "Discontinued - Spiked Rebars", "why": "게임에서 삭제된 연구. 로케일에 한글이 없다." },
+    "Research_Sulfur_3_2_1_C": { "en": "Discontinued - Nobelisk Explosives", "why": "게임에서 삭제된 연구. 로케일에 한글이 없다." },
+    "Research_Sulfur_4_2_1_C": { "en": "Discontinued - Rifle Cartridges", "why": "게임에서 삭제된 연구. 로케일에 한글이 없다." },
+    "Research_Alien_SAM_C": { "en": "S.A.M.", "why": "게임 안에서도 약어 그대로다. 번역하지 않는다." },
+    "Research_Alien_PortalPotty_C": { "en": "S.P.W.N.", "why": "게임 안에서도 약어 그대로다. 번역하지 않는다." }
+  },
+  "nameless": {
+    "$comment": "게임 배포 데이터에 이름 자체가 비어 있는 것. 화면에는 「이름 없음」으로 나가고 클래스명은 내보내지 않는다.",
+    "Research_Sulfur_3_2_C": {
+      "why": "ko.json·Docs.json 양쪽 모두 name 이 빈 문자열이다. 게임 화면에도 이름이 없는 중간 노드로 보인다.",
+      "checked": "2026-08-21"
+    }
+  },
+  "blank": {
+    "$comment": "이름을 못 찾아 화면에서 그 줄을 비우는 클래스. 전부 장식·장비 디스크립터라 게임 배포 데이터의 아이템 목록에 없다. 상점 카드 이름(붐박스, 골든 너트 …)이 같은 물건을 이미 한국어로 가리키므로 줄을 비워도 잃는 정보가 없다.",
+    "ids": [
+      "BP_EquipmentDescriptorCup_C",
+      "BP_EquipmentDescriptorCupGold_C",
+      "Desc_BoomBox_C",
+      "Desc_CharacterRunStatue_C",
+      "Desc_CharacterClap_Statue_C",
+      "Desc_CharacterSpin_Statue_C",
+      "Desc_Hog_Statue_C",
+      "Desc_DoggoStatue_C",
+      "Desc_SpaceGiraffeStatue_C",
+      "Desc_GoldenNut_Statue_C"
+    ],
+    "checked": "2026-08-21"
+  }
+}

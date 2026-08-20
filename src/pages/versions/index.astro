@@ -1,6 +1,6 @@
 ---
 /**
- * Release Notes — 커뮤니티 공략을 읽을 때 어느 부분만 다시 확인하면 되는지.
+ * 업데이트 기록 — 커뮤니티 공략을 읽을 때 어느 부분만 다시 확인하면 되는지.
  *
  * 이 앱의 게임 수치는 설치본에서 직접 뽑으므로 언제나 현재 버전 기준이다.
  * 낡을 위험은 데이터가 아니라 바깥 자료 쪽에 있다. 그래서 이 표는 바깥 자료용이다.
@@ -45,13 +45,13 @@ const facts = [
 ---
 
 <Base
-  title="Release Notes — 어느 부분을 다시 확인할까"
+  title="업데이트 기록 — 어느 부분을 다시 확인할까"
   description="Satisfactory 버전별 진행·설계 관련 변경. 오래된 공략을 읽을 때 무엇만 다시 확인하면 되는지."
   section="versions"
 >
   <div class="wrap page">
     <header class="page-head">
-      <p class="marker"><span class="num">Release Notes</span></p>
+      <p class="marker"><span class="num">업데이트 기록</span></p>
       <h1><span class="fx-gradient-text">어느 부분을<br />다시 확인할까</span></h1>
       <p class="lede prose">
         오래된 공략도 대부분 그대로 유효합니다. 아래 표에 <strong>올라온 항목만</strong> 다시
@@ -70,7 +70,7 @@ const facts = [
     </div>
     {!baselineMatches && liveBuild && (
       <p class="caption warn">
-        릴리스 노트의 빌드({doc.$dataBaseline.steamBuildId})와 현재 데이터의 빌드({liveBuild})가
+        업데이트 기록의 빌드({doc.$dataBaseline.steamBuildId})와 현재 데이터의 빌드({liveBuild})가
         다릅니다.
       </p>
     )}
@@ -83,6 +83,15 @@ const facts = [
         <h2>{v.headline}</h2>
         <div class="scroll-x">
           <table>
+            {/*
+              열 폭을 여기서 못 박는다. 표마다 auto 로 두면 판마다 「이전」·「이후」의
+              가로 위치가 달라져, 훑어 내려갈 때 열이 계속 좌우로 흔들린다.
+            */}
+            <colgroup>
+              <col class="c-what" />
+              <col class="c-before" />
+              <col class="c-after" />
+            </colgroup>
             <thead>
               <tr>
                 <th>무엇이</th>
@@ -94,8 +103,9 @@ const facts = [
               {v.changes.map((c) => (
                 <tr>
                   <td><strong>{c.what}</strong></td>
-                  <td class="muted">{c.before ?? ''}</td>
-                  <td>{c.after ?? ''}</td>
+                  {/* 빈 칸은 비워 두지 않는다 — 「해당 없음」인지 「조사가 안 끝났는지」 구분이 안 된다 */}
+                  <td class="muted">{c.before || '—'}</td>
+                  <td>{c.after || '—'}</td>
                 </tr>
               ))}
             </tbody>
@@ -153,5 +163,21 @@ const facts = [
 
     .section { padding-block: var(--s16) 0; }
     .section h2 { margin-bottom: var(--s5); }
+
+    /*
+     * 판 이름은 데이터에 적힌 그대로 둔다. 기본형은 마커를 대문자로 바꾸는데,
+     * 그러면 「Update 2」는 UPDATE 2 가 되고 「얼리액세스」는 그대로여서
+     * 같은 줄 목록이 표기 규칙 두 종류로 갈린다. 한글이 섞이는 목록에서는 안 쓴다.
+     */
+    .marker { text-transform: none; letter-spacing: 0.06em; }
+
+    /*
+     * 열 폭 고정. `table-layout: fixed` 가 없으면 colgroup 의 폭이 내용에 밀려 무시된다.
+     * 좁은 화면에서는 세 열이 다 들어가지 않으므로 최소 폭을 주고 `.scroll-x` 에 맡긴다.
+     */
+    table { table-layout: fixed; min-width: 34rem; }
+    .c-what { width: 26%; }
+    .c-before { width: 30%; }
+    .c-after { width: 44%; }
   </style>
 </Base>

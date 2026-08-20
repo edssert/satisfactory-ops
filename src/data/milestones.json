@@ -25,6 +25,7 @@
     ],
     "timeToCompleteSec": 120,
     "menuPriority": 1,
+    "icon": "TXUI_SIcon_BaseBuilding",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -72,6 +73,7 @@
     ],
     "timeToCompleteSec": 240,
     "menuPriority": 2,
+    "icon": "TXUI_SIcon_Logistics",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -115,6 +117,7 @@
     ],
     "timeToCompleteSec": 180,
     "menuPriority": 3,
+    "icon": "TXUI_SIcon_Exploration",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -163,6 +166,7 @@
     ],
     "timeToCompleteSec": 360,
     "menuPriority": 1,
+    "icon": "TXUI_SIcon_Production",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -206,6 +210,7 @@
     ],
     "timeToCompleteSec": 180,
     "menuPriority": 2,
+    "icon": "TXUI_SIcon_Chainsaw",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -246,6 +251,7 @@
     ],
     "timeToCompleteSec": 240,
     "menuPriority": 3,
+    "icon": "TXUI_SIcon_JumpPad",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -291,6 +297,7 @@
     ],
     "timeToCompleteSec": 300,
     "menuPriority": 4,
+    "icon": "TXUI_SIcon_Coupon",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -341,6 +348,7 @@
     ],
     "timeToCompleteSec": 360,
     "menuPriority": 5,
+    "icon": "TXUI_SIcon_Logistics",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -382,6 +390,7 @@
     ],
     "timeToCompleteSec": 480,
     "menuPriority": 1,
+    "icon": "TXUI_SIcon_ProductionGenerator",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -437,6 +446,7 @@
     ],
     "timeToCompleteSec": 240,
     "menuPriority": 2,
+    "icon": "TXUI_SIcon_Vehicle",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -484,6 +494,7 @@
     ],
     "timeToCompleteSec": 480,
     "menuPriority": 3,
+    "icon": "TXUI_SIcon_Production",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -529,6 +540,7 @@
     ],
     "timeToCompleteSec": 180,
     "menuPriority": 4,
+    "icon": "TXUI_SIcon_XenoBasher",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -573,6 +585,7 @@
     ],
     "timeToCompleteSec": 300,
     "menuPriority": 1,
+    "icon": "TXUI_SIcon_Blueprints",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -615,6 +628,7 @@
     ],
     "timeToCompleteSec": 300,
     "menuPriority": 2,
+    "icon": "TXUI_SIcon_Logistics",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -662,6 +676,7 @@
     ],
     "timeToCompleteSec": 600,
     "menuPriority": 3,
+    "icon": "TXUI_SIcon_Production",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -710,6 +725,7 @@
     ],
     "timeToCompleteSec": 300,
     "menuPriority": 4,
+    "icon": "TXUI_SIcon_PowerTower",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -751,6 +767,7 @@
     ],
     "timeToCompleteSec": 600,
     "menuPriority": 5,
+    "icon": "TXUI_SIcon_HyperTubes",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -795,6 +812,7 @@
     ],
     "timeToCompleteSec": 300,
     "menuPriority": 1,
+    "icon": "TXUI_SIcon_TraversalEquipment",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -839,6 +857,7 @@
     ],
     "timeToCompleteSec": 600,
     "menuPriority": 2,
+    "icon": "TXUI_SIcon_ProductionFluid",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -893,6 +912,7 @@
     ],
     "timeToCompleteSec": 300,
     "menuPriority": 3,
+    "icon": "TXUI_SIcon_Logistics",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -937,6 +957,7 @@
     ],
     "timeToCompleteSec": 300,
     "menuPriority": 4,
+    "icon": "TXUI_SIcon_ProductionPackager",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -990,6 +1011,7 @@
     ],
     "timeToCompleteSec": 600,
     "menuPriority": 5,
+    "icon": "TXUI_SIcon_ProductionGenerator",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -1039,6 +1061,7 @@
     ],
     "timeToCompleteSec": 900,
     "menuPriority": 1,
+    "icon": "TXUI_SIcon_Production",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -1087,6 +1110,7 @@
     ],
     "timeToCompleteSec": 600,
     "menuPriority": 2,
+    "icon": "TXUI_SIcon_Train",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -1134,6 +1158,7 @@
     ],
     "timeToCompleteSec": 300,
     "menuPriority": 3,
+    "icon": "TXUI_SIcon_TrainSignals",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -1174,6 +1199,7 @@
     ],
     "timeToCompleteSec": 300,
     "menuPriority": 4,
+    "icon": "TXUI_SIcon_Pipes",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -1219,6 +1245,7 @@
     ],
     "timeToCompleteSec": 600,
     "menuPriority": 5,
+    "icon": "TXUI_SIcon_Blueprints",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -1263,6 +1290,7 @@
     ],
     "timeToCompleteSec": 600,
     "menuPriority": 1,
+    "icon": "TXUI_SIcon_Production",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -1317,6 +1345,7 @@
     ],
     "timeToCompleteSec": 300,
     "menuPriority": 2,
+    "icon": "TXUI_SIcon_TraversalEquipment",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -1356,6 +1385,7 @@
     ],
     "timeToCompleteSec": 300,
     "menuPriority": 3,
+    "icon": "TXUI_SIcon_Logistics",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -1396,6 +1426,7 @@
     ],
     "timeToCompleteSec": 300,
     "menuPriority": 4,
+    "icon": "TXUI_SIcon_HazmatSuit",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -1441,6 +1472,7 @@
     ],
     "timeToCompleteSec": 900,
     "menuPriority": 5,
+    "icon": "TXUI_SIcon_Production",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -1495,6 +1527,7 @@
     ],
     "timeToCompleteSec": 600,
     "menuPriority": 1,
+    "icon": "TXUI_SIcon_Drone",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -1540,6 +1573,7 @@
     ],
     "timeToCompleteSec": 900,
     "menuPriority": 2,
+    "icon": "TXUI_SIcon_ProductionGenerator",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -1590,6 +1624,7 @@
     ],
     "timeToCompleteSec": 900,
     "menuPriority": 3,
+    "icon": "TXUI_SIcon_Production",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -1641,6 +1676,7 @@
     ],
     "timeToCompleteSec": 300,
     "menuPriority": 4,
+    "icon": "TXUI_SIcon_ProductionMiner",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -1687,6 +1723,7 @@
     ],
     "timeToCompleteSec": 1200,
     "menuPriority": 5,
+    "icon": "TXUI_SIcon_ProductionQuantum",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -1737,6 +1774,7 @@
     ],
     "timeToCompleteSec": 900,
     "menuPriority": 1,
+    "icon": "TXUI_SIcon_ProductionAlien",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -1792,6 +1830,7 @@
     ],
     "timeToCompleteSec": 1200,
     "menuPriority": 2,
+    "icon": "TXUI_SIcon_ProductionQuantum",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -1842,6 +1881,7 @@
     ],
     "timeToCompleteSec": 900,
     "menuPriority": 3,
+    "icon": "TXUI_SIcon_Blueprints",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -1886,6 +1926,7 @@
     ],
     "timeToCompleteSec": 600,
     "menuPriority": 4,
+    "icon": "TXUI_SIcon_Portal",
     "dependencies": [],
     "unlocks": {
       "recipes": [
@@ -1933,6 +1974,7 @@
     ],
     "timeToCompleteSec": 600,
     "menuPriority": 5,
+    "icon": "TXUI_SIcon_Logistics2",
     "dependencies": [],
     "unlocks": {
       "recipes": [

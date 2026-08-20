@@ -29,6 +29,48 @@ const koList = (() => {
 const koName = new Map(koList.map((s2) => [s2.className, s2.name]));
 const nameOf = (s2) => koName.get(s2.className) || s2.name || s2.className;
 
+/**
+ * 스키매틱 아이콘 텍스처 → 앱이 실제로 걸 수 있는 그림 파일.
+ *
+ * 게임은 스키매틱마다 아이콘 텍스처 이름을 하나 갖는다(`mSchematicIcon`). 두 부류다:
+ *   - `TXUI_SIcon_*` / `SchematicIcon_*` — 허브·마일스톤 전용 스키매틱 아이콘.
+ *     공식 위키가 `Schematic_Icon_*.png` 로 갖고 있어 따로 받아 둔다(fetch-schematic-icons.mjs).
+ *   - `IconDesc_*` 등 — 그냥 아이템·건물 아이콘이다. 이미 받아 둔 것을 그대로 가리키면 된다.
+ * 그래서 텍스처 이름을 {dir, id} 로 풀어 tech.json 에 박아 둔다. 화면은 이름을 다시 추측하지 않는다.
+ */
+const rawItems = read('src/data/items.json');
+/*
+ * 같은 그림인데 해상도 꼬리표가 다르다 — 스키매틱은 `IconDesc_Mycelia_64`,
+ * 아이템의 mSmallIcon 은 `IconDesc_Mycelia_256` 이다. 꼬리표(숫자 조각)와 대소문자를
+ * 지우고 맞춘다. 그냥 문자열로 비교했더니 MAM 120건 중 105건이 빗나갔다.
+ */
+const texKey = (t) =>
+  String(t ?? '')
+    .split('.')
+    .pop()
+    .toLowerCase()
+    .replace(/_\d+(?=$|_)/g, '')
+    .replace(/_+/g, '_');
+const textureToItem = new Map();
+for (const it of rawItems) {
+  const tex = texKey(it.icon);
+  if (tex && !textureToItem.has(tex)) textureToItem.set(tex, it);
+}
+const buildingIds = new Set(buildings.map((b) => b.id));
+const appItemIds = new Set(items.map((i) => i.id));
+
+function iconRefOf(texture) {
+  if (!texture) return null;
+  if (/^(TXUI_SIcon_|SchematicIcon_)/.test(texture)) return { dir: 'schematics', id: texture };
+  const it = textureToItem.get(texKey(texture));
+  if (!it) return null;
+  if (it.kind === 'building-descriptor') {
+    const bid = it.className.replace(/^Desc_/, 'Build_');
+    return buildingIds.has(bid) ? { dir: 'buildings-png', id: bid } : null;
+  }
+  return appItemIds.has(it.className) ? { dir: 'items', id: it.className } : null;
+}
+
 const itemById = new Map(items.map((i) => [i.id, i]));
 const recipeById = new Map(recipes.map((r) => [r.id, r]));
 /** 레시피 → 그 레시피가 만드는 건물 */
@@ -55,11 +97,18 @@ function unlocksOf(s) {
         id: rid,
         ko: (r.ko || r.en || rid).replace(/^(대체|Alternate):\s*/i, ''),
         isAlternate: /^Alternate:/i.test(r.en ?? ''),
-        makes: p ? { ko: ko(p.item), perMinute: p.perMinute } : null,
+        /*
+         * 만드는 물건의 **id** 까지 남긴다. 보상 칸이 게임처럼 그림으로 나오려면
+         * 이름이 아니라 클래스명이 있어야 한다 — 이게 없어서 「휴대용 채굴기」 같은
+         * 손 제작 보상이 화면에서 통째로 빠져 있었다.
+         */
+        makes: p
+          ? { id: p.item, ko: ko(p.item), perMinute: p.perMinute, kind: itemById.get(p.item)?.kind ?? null }
+          : null,
       });
     }
   }
-  for (const iid of u.items ?? []) out.items.push({ id: iid, ko: ko(iid) });
+  for (const iid of u.items ?? []) out.items.push({ id: iid, ko: ko(iid), kind: itemById.get(iid)?.kind ?? null });
   out.slots = u.inventorySlots ?? 0;
   if ((u.armSlots ?? 0) > 0) out.other.push(`장비 슬롯 +${u.armSlots}`);
   if ((u.scannables ?? []).length) out.other.push(`탐색 대상 ${u.scannables.length}종`);
@@ -75,6 +124,8 @@ const milestones = list
     tier: s.techTier,
     cost: cost(s.cost),
     seconds: s.timeToCompleteSec ?? 0,
+    icon: s.icon ?? null,
+    iconRef: iconRefOf(s.icon),
     unlocks: unlocksOf(s),
   }))
   .sort((a, b) => a.tier - b.tier || a.ko.localeCompare(b.ko, 'ko'));
@@ -87,6 +138,8 @@ const hub = list
     ko: nameOf(s),
     order: Number((s.className.match(/(\d+)/) ?? [, 0])[1]),
     cost: cost(s.cost),
+    icon: s.icon ?? null,
+    iconRef: iconRefOf(s.icon),
     unlocks: unlocksOf(s),
   }))
   .sort((a, b) => a.order - b.order);
@@ -134,6 +187,8 @@ for (const s of list.filter((x) => x.type === 'mam')) {
     col: nums.length > 1 ? Number(nums[1]) : 1,
     cost: cost(s.cost),
     seconds: s.timeToCompleteSec ?? 0,
+    icon: s.icon ?? null,
+    iconRef: iconRefOf(s.icon),
     unlocks: unlocksOf(s),
     discontinued: /^Discontinued|중단/i.test(`${s.name ?? ''}${nameOf(s)}`),
   });
@@ -220,6 +275,8 @@ const shop = list
     /* 영문 이름이 있어야 위키의 상점 분류표와 맞출 수 있다 */
     en: s.name,
     coupons: (s.cost ?? []).find((c) => /Coupon/i.test(c.item))?.amount ?? 0,
+    icon: s.icon ?? null,
+    iconRef: iconRefOf(s.icon),
     unlocks: unlocksOf(s),
   }))
   .sort((a, b) => a.coupons - b.coupons || a.ko.localeCompare(b.ko, 'ko'));

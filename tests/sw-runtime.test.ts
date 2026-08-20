@@ -151,7 +151,7 @@ test('설치 시 프리캐시가 채워진다', { skip: !fs.existsSync(SW) }, as
 test('온라인에서 각 화면이 자기 문서를 돌려준다', { skip: !fs.existsSync(SW) }, async () => {
   const sw = await bootServiceWorker();
   const cases: [string, string][] = [
-    [`${BASE}/`, '지금 무엇을'],
+    [`${BASE}/`, '설계 가능한 시스템'],
     [`${BASE}/guide/`, '해금 순서대로'],
     [`${BASE}/dex/reference/`, '레퍼런스'],
     [`${BASE}/dex/tiers/0/`, '티어 0'],

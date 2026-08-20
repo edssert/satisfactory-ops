@@ -1,17 +1,11 @@
 ---
-/**
- * 문서 골격. 모든 페이지가 이것을 쓴다.
- *
- * 아일랜드를 쓰지 않는다(ADR-0009). 인라인 스크립트는 테마 토글 하나뿐이고,
- * 그것도 렌더 전에 실행돼 깜빡임을 막는 목적이다.
- */
+/** 모든 화면의 문서 골격. 콘텐츠는 서버에서 완성하고, 테마와 스크롤만 향상한다. */
 import '../styles/tokens.css';
 import '../styles/base.css';
 
 interface Props {
   title: string;
   description: string;
-  /** 현재 위치 표시용 — 'guide' | 'tools' | 'versions' | null */
   section?: string | null;
 }
 const { title, description, section = null } = Astro.props;
@@ -22,8 +16,9 @@ const nav = [
   { key: 'planner', href: `${base}/planner/`, ko: '설계' },
   { key: 'builder', href: `${base}/builder/`, ko: '직접 만들기' },
   { key: 'map', href: `${base}/map/`, ko: '지도' },
+  { key: 'checkup', href: `${base}/checkup/`, ko: '진단' },
   { key: 'dex', href: `${base}/dex/`, ko: '도감' },
-  { key: 'versions', href: `${base}/versions/`, ko: 'Release Notes' },
+  { key: 'versions', href: `${base}/versions/`, ko: '변경 기록' },
 ];
 ---
 
@@ -34,143 +29,242 @@ const nav = [
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="color-scheme" content="dark" />
+    <meta name="color-scheme" content="light dark" />
     <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
+    <script is:inline>
+      (function () {
+        try {
+          /*
+           * 이 앱은 어두운 화면이 기본이다(DESIGN-BRIEF). 운영체제 설정을 따라가지 않는다 —
+           * 밝은 테마를 화면마다 다 맞춰 두기 전까지는 머리 띠만 밝아지는 어긋남이 난다.
+           * 사용자가 직접 고른 값(sfops-theme)만 존중한다.
+           */
+          var saved = localStorage.getItem('sfops-theme');
+          document.documentElement.dataset.theme = saved === 'light' ? 'light' : 'dark';
+        } catch (_) {}
+      })();
+    </script>
   </head>
 
   <body>
     <a class="skip" href="#main">본문으로 건너뛰기</a>
 
     <header class="site-head">
-      <div class="wrap head-inner">
-        <a class="brand" href={`${base}/`}>
-          <span class="brand-mark" aria-hidden="true"></span>
-          <span class="brand-name">satisfactory<span class="brand-dim">-ops</span></span>
+      <div class="wrap head-row">
+        <a class="brand" href={`${base}/`} aria-label="satisfactory-ops 홈">
+          <span class="brand-mark" aria-hidden="true"><i></i></span>
+          <span class="brand-name">satisfactory<span class="brand-dim">/ops</span></span>
         </a>
-
-        <nav aria-label="주요">
-          <ul class="nav">
-            {nav.map((n) => (
-              <li>
-                <a href={n.href} aria-current={section === n.key ? 'page' : undefined}>{n.ko}</a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
+        <p class="head-status"><span aria-hidden="true"></span> 1.0 데이터 동기화</p>
+        <button class="theme-toggle" type="button" aria-label="색상 테마 전환" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 3v2m0 14v2M3 12h2m14 0h2M5.6 5.6 7 7m10 10 1.4 1.4M18.4 5.6 17 7M7 17l-1.4 1.4" />
+            <circle cx="12" cy="12" r="4" />
+          </svg>
+          <span>테마</span>
+        </button>
       </div>
+
+      <nav class="nav-rail" aria-label="주요" data-lenis-prevent>
+        <ul class="wrap nav">
+          {nav.map((n) => (
+            <li>
+              <a href={n.href} aria-current={section === n.key ? 'page' : undefined}>{n.ko}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
     </header>
 
-    <main id="main">
-      <slot />
-    </main>
+    <main id="main"><slot /></main>
 
     <footer class="site-foot">
       <div class="wrap foot-inner">
-        <p class="caption">
-          게임 수치는 Satisfactory 설치본의 배포 데이터에서 직접 생성합니다.
-          아이콘·지도 그림을 비롯한 게임 자산의 저작권은 Coffee Stain Studios 에 있습니다.
-          이 사이트는 팬 제작물이며 공식 제품이 아닙니다.
-        </p>
-        <p class="caption">
-          <a href="https://github.com/edssert/satisfactory-ops">소스 · GitHub</a>
+        <div>
+          <p class="foot-brand">satisfactory/ops</p>
+          <p class="caption">게임 설치본에서 수치를 생성하는 비공식 한국어 공장 설계 플레이북.</p>
+        </div>
+        <p class="caption foot-legal">
+          아이콘·지도·게임 자산의 저작권은 Coffee Stain Studios에 있습니다.<br />
+          <a href="https://github.com/edssert/satisfactory-ops">소스 보기</a>
         </p>
       </div>
     </footer>
 
+    <script is:inline>
+      (function () {
+        var button = document.querySelector('.theme-toggle');
+        if (!button) return;
+        function sync() {
+          var dark = document.documentElement.dataset.theme === 'dark';
+          button.setAttribute('aria-pressed', dark ? 'true' : 'false');
+          button.title = dark ? '밝은 테마로 전환' : '어두운 테마로 전환';
+        }
+        button.addEventListener('click', function () {
+          var next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+          document.documentElement.dataset.theme = next;
+          try { localStorage.setItem('sfops-theme', next); } catch (_) {}
+          sync();
+        });
+        sync();
+      })();
+    </script>
 
-    <style>
-      .skip {
-        position: absolute;
-        left: -9999px;
-        z-index: 10;
-        padding: var(--s3) var(--s4);
-        background: var(--accent);
-        color: var(--on-accent);
-      }
-      .skip:focus { left: var(--s4); top: var(--s4); }
+    <script>
+      import Lenis from 'lenis';
+      import 'lenis/dist/lenis.css';
 
-      .site-head {
-        position: sticky;
-        top: 0;
-        z-index: 5;
-        border-bottom: var(--hair) solid var(--line);
-        /*
-         * 반투명하게 두면 스크롤할 때 뒤 내용이 비쳐 메뉴 글자가 묻힌다.
-         * 머리띠는 항상 읽혀야 하는 요소라 불투명하게 간다.
-         */
-        background: var(--bg);
-        box-shadow:
-          inset 0 -1px 0 color-mix(in oklab, var(--primary) 16%, transparent),
-          0 8px 24px -16px rgb(0 0 0 / 0.9);
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const lenis = new Lenis({
+          autoRaf: true,
+          anchors: { offset: -96 },
+          duration: 1.05,
+          smoothWheel: true,
+          syncTouch: false,
+          prevent: (node) => node instanceof HTMLElement && Boolean(node.closest('[data-lenis-prevent]')),
+        });
+        window.addEventListener('pagehide', () => lenis.destroy(), { once: true });
       }
-      .head-inner {
-        display: flex;
-        align-items: center;
-        gap: var(--s6);
-        height: var(--head-h);
-      }
-
-      .brand {
-        display: inline-flex;
-        align-items: center;
-        gap: var(--s2);
-        font-family: var(--font-mono);
-        font-size: var(--t-small);
-        font-weight: 500;
-        letter-spacing: -0.01em;
-        text-decoration: none;
-      }
-      /* 브랜드 마크 — 파운데이션 한 장을 위에서 본 모양. 8m 격자가 이 게임의 기본 단위다 */
-      .brand-mark {
-        width: 12px;
-        height: 12px;
-        border: 2px solid var(--primary);
-        border-radius: 1px;
-      }
-      .brand-dim { color: var(--ink-3); }
-
-      .nav {
-        display: flex;
-        gap: var(--s5);
-        margin: 0;
-        padding: 0;
-        list-style: none;
-      }
-      .nav a {
-        font-size: var(--t-small);
-        font-weight: 500;
-        text-decoration: none;
-        color: var(--ink-2);
-      }
-      .nav a:hover { color: var(--ink); }
-      .nav a[aria-current='page'] { color: var(--ink); }
-      .nav a[aria-current='page']::after {
-        content: '';
-        display: block;
-        height: 2px;
-        margin-top: 0.35rem;
-        background: var(--primary);
-      }
-
-
-      .site-foot {
-        margin-top: var(--s24);
-        border-top: var(--hair) solid var(--line);
-        padding-block: var(--s8);
-      }
-      .foot-inner {
-        display: flex;
-        flex-wrap: wrap;
-        gap: var(--s4) var(--s8);
-        justify-content: space-between;
-      }
-      .foot-inner .caption { max-width: 46em; }
-
-      @media (max-width: 560px) {
-        .head-inner { gap: var(--s4); }
-        .nav { gap: var(--s4); }
-      }
-    </style>
+    </script>
   </body>
 </html>
+
+<style>
+  .skip {
+    position: fixed;
+    top: var(--s3);
+    left: var(--s3);
+    z-index: 100;
+    translate: 0 -200%;
+    padding: var(--s3) var(--s4);
+    border-radius: var(--radius-m);
+    background: var(--action);
+    color: var(--on-action);
+  }
+  .skip:focus { translate: 0; }
+
+  .site-head {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    border-bottom: var(--hair) solid var(--border-subtle);
+    background: color-mix(in oklab, var(--canvas) 92%, transparent);
+    box-shadow: var(--shadow-header);
+    backdrop-filter: blur(18px) saturate(1.25);
+  }
+  .head-row {
+    display: flex;
+    align-items: center;
+    gap: var(--s4);
+    min-height: 54px;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s3);
+    white-space: nowrap;
+    font-family: var(--font-mono);
+    font-size: var(--t-small);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+  }
+  .brand-mark {
+    position: relative;
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--brand);
+    rotate: 45deg;
+  }
+  .brand-mark i {
+    position: absolute;
+    inset: 5px;
+    background: var(--brand);
+  }
+  .brand-dim { color: var(--text-tertiary); }
+  .head-status {
+    display: flex;
+    align-items: center;
+    gap: var(--s2);
+    margin: 0 auto 0 0;
+    font-family: var(--font-mono);
+    font-size: var(--t-label);
+    color: var(--text-tertiary);
+  }
+  .head-status span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--status-ok);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--status-ok) 15%, transparent);
+  }
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s2);
+    padding: 7px 10px;
+    border: var(--hair) solid var(--border-subtle);
+    border-radius: var(--radius-m);
+    background: var(--layer-1);
+    color: var(--text-secondary);
+    font: inherit;
+    font-size: var(--t-caption);
+    cursor: pointer;
+  }
+  .theme-toggle:hover { border-color: var(--border-strong); color: var(--text-primary); }
+  .theme-toggle svg { width: 16px; fill: none; stroke: currentColor; stroke-width: 1.7; }
+
+  .nav-rail { border-top: var(--hair) solid var(--border-subtle); }
+  .nav {
+    display: flex;
+    gap: var(--s8);
+    margin-block: 0;
+    padding-block: 0;
+    list-style: none;
+  }
+  .nav li { flex: none; }
+  .nav a {
+    position: relative;
+    display: block;
+    padding-block: 10px 11px;
+    white-space: nowrap;
+    font-size: var(--t-caption);
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-decoration: none;
+  }
+  .nav a:hover,
+  .nav a[aria-current='page'] { color: var(--text-primary); }
+  .nav a[aria-current='page']::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 -1px;
+    height: 2px;
+    background: var(--brand);
+  }
+
+  .site-foot {
+    margin-top: var(--s24);
+    border-top: var(--hair) solid var(--border-subtle);
+    padding-block: var(--s10);
+    background: var(--layer-1);
+  }
+  .foot-inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s6); }
+  .foot-brand { margin-bottom: var(--s1); font: 700 var(--t-small) var(--font-mono); }
+  .foot-legal { text-align: right; }
+
+  @media (max-width: 680px) {
+    .head-row { min-height: 52px; }
+    .head-status { display: none; }
+    .theme-toggle { margin-left: auto; }
+    .theme-toggle span { display: none; }
+    .nav-rail {
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scrollbar-width: none;
+    }
+    .nav-rail::-webkit-scrollbar { display: none; }
+    .nav { width: max-content; gap: var(--s6); padding-right: var(--s8); }
+    .foot-legal { text-align: left; }
+  }
+</style>

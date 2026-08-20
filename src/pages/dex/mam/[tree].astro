@@ -48,14 +48,14 @@ const { w: TW, h: TH } = MAM_TILE;
 
     <header class="dex-head">
       <p class="marker"><span class="num">도감</span> 분자 분석기</p>
-      <h1>MAM</h1>
+      <h1><span class="fx-gradient-text">MAM</span></h1>
       <p class="lede prose">
         마일스톤과 달리 표본을 주워 스캔해야 열립니다. 그래서 탐험이 곧 해금입니다.
       </p>
     </header>
 
     <div class="mam">
-      <nav aria-label="연구 트리">
+      <nav class="mam-nav" aria-label="연구 트리">
         <ul class="mam-list">
           {tech.mamTrees
             .filter((t) => !t.event)
@@ -102,6 +102,7 @@ const { w: TW, h: TH } = MAM_TILE;
           {tree.event && <span class="mam-open is-event">기간 한정 이벤트</span>}
         </div>
 
+        <div class="mam-stage-wrap">
         <div class="mam-stage">
           <svg
             class="mam-svg"
@@ -143,6 +144,12 @@ const { w: TW, h: TH } = MAM_TILE;
               );
             })}
           </svg>
+        </div>
+        {/*
+          * 트리가 판보다 넓을 때만 오른쪽을 흐린다. 넓지 않은 트리에까지 걸면
+          * 잘리지도 않은 자리를 흐려 놓는 꼴이다. 판은 데스크톱에서 약 880px 다.
+          */}
+        {layout.width > 820 && <span class="mam-fade" aria-hidden="true"></span>}
         </div>
 
         <details class="mam-table">
