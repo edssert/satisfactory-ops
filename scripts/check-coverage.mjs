@@ -69,6 +69,38 @@ const pass = (msg) => notes.push(`  PASS  ${msg}`);
   }
 }
 
+// ─────────────────────────────────────────────── 1-b. 쓸 만한 자산이 미리 다 모여 있는가
+{
+  /*
+   * "지금 화면이 참조하는 것"만 있으면 되는 게 아니다. 도면에 새 기계를 넣는 순간
+   * 또 빈칸이 나온다. 실제 아이템(건축 부재 제외)과 실제 설비(구조물·장식 제외)는
+   * 미리 전부 받아 둔다.
+   */
+  const wantItems = items.filter((i) => i.kind !== 'building-descriptor');
+  const SKIP_CAT = new Set(['structure', 'decoration']);
+  /** 구버전 세이브 호환용으로만 남은 것은 위키에도 문서가 없다 */
+  const LEGACY = new Set(['Build_JumpPad_C', 'Build_JumpPadTilted_C']);
+  const wantBuildings = buildings.filter((b) => !SKIP_CAT.has(b.category) && !LEGACY.has(b.id));
+
+  const gone = (dir, list) =>
+    list.filter((x) => !fs.existsSync(path.join(ROOT, 'public/assets', dir, `${x.id}.png`)));
+
+  const mi = gone('items', wantItems);
+  const mb = gone('buildings-png', wantBuildings);
+  if (mi.length || mb.length) {
+    fail(
+      `미리 받아 둬야 할 자산이 없습니다 — 아이템 ${mi.length}/${wantItems.length} · ` +
+        `설비 ${mb.length}/${wantBuildings.length}
+` +
+        `      ${[...mi, ...mb].slice(0, 8).map((x) => x.ko).join(', ')}
+` +
+        `      → node scripts/fetch-icons.mjs`
+    );
+  } else {
+    pass(`자산 미리 확보 — 아이템 ${wantItems.length}개 · 설비 ${wantBuildings.length}개`);
+  }
+}
+
 // ─────────────────────────────────────────────── 2. 표가 행을 말없이 버리지 않았는가
 const toolsPage = allHtml.find(({ p }) => p.includes(`tools${path.sep}index.html`));
 if (!toolsPage) {

@@ -49,7 +49,12 @@ const milestones = read('milestones.json');
 
 /** 어떤 아이템을 받을 것인가 — 초반 티어의 마일스톤 비용과 그 재료 전부 */
 function wanted() {
-  if (ALL) return items;
+  /*
+   * items.json 750개 중 547개는 `building-descriptor` — 벽·경사로·통로 같은 건축 부재다.
+   * 위키에 같은 이름의 아이콘 파일이 없고 도면에도 등장하지 않는다. 받으려 하면
+   * "못 찾음 542개" 같은 소음만 남는다. 실제 부품·자원·장비만 받는다.
+   */
+  if (ALL) return items.filter((i) => i.kind !== 'building-descriptor');
   const need = new Set();
   const byProduct = new Map();
   for (const r of recipes) {
@@ -76,6 +81,28 @@ function wanted() {
 /** 파일명 — 클래스 id 로 저장한다. 표시명이 바뀌어도 참조가 안 깨진다. */
 const fileFor = (item) => `${item.id}.png`;
 
+/**
+ * 문서의 대표 이미지를 받는다.
+ *
+ * 파일명을 이름에서 추측하는 방식은 한계가 있다 — 위키의 실제 파일명이 표시명과 달라
+ * "Conveyor Belt Mk.1" 같은 것들이 통째로 실패했다. 문서를 찾아 그 문서가 쓰는 이미지를
+ * 받는 쪽이 이름 규칙에 덜 의존한다.
+ */
+async function wikiPageImage(title, width) {
+  const url =
+    `${WIKI}?action=query&format=json&prop=pageimages&piprop=thumbnail&pithumbsize=${width}` +
+    `&redirects=1&titles=${encodeURIComponent(title)}`;
+  const res = await fetch(url, { headers: { 'User-Agent': UA } });
+  if (!res.ok) return null;
+  const json = await res.json();
+  const pages = json?.query?.pages ?? {};
+  for (const key of Object.keys(pages)) {
+    const t = pages[key]?.thumbnail?.source;
+    if (t) return t;
+  }
+  return null;
+}
+
 async function wikiThumb(title, width) {
   const url =
     `${WIKI}?action=query&format=json&prop=imageinfo&iiprop=url|size&iiurlwidth=${width}` +
@@ -101,21 +128,24 @@ async function wikiThumb(title, width) {
 async function fetchBuildings() {
   fs.mkdirSync(OUT_B, { recursive: true });
   /*
-   * 장식·구조 부재(벽·토대·경사로 등)는 도면에 등장하지 않으므로 제외하고, 나머지는 전부 받는다.
-   * 예전에는 건물 이름을 정규식으로 골라 받았는데, 도면에 새 건물이 등장할 때마다 빠졌다.
+   * 이름 정규식으로 고르던 것을 분류로 바꾼다. 정규식은 벨트·파이프·싱크까지 걷어냈고,
+   * 그것들은 레퍼런스 표와 도면에 실제로 등장한다.
+   * 구조물(벽·경사로·통로 388개)과 장식만 뺀다 — 위키에 같은 이름의 아이콘이 없고 쓰지도 않는다.
    */
-  const SKIP = /^Build_(Wall|Foundation|Ramp|Pillar|Beam|Catwalk|Stair|Fence|Roof|Sign|Barrier|Gate|Window|Door|Ladder|Walkway|QuarterPipe|Half|Corner|Frame_|Pipe(Support|Hyper)|ConveyorPole|ConveyorBelt|ConveyorLift|Pipeline|PowerLine|PowerPole|Lights|StreetLight|FloodLight|Decor|Paint)/i;
-  const wanted = buildings.filter((b) => !SKIP.test(b.id));
+  const SKIP_CAT = new Set(['structure', 'decoration']);
+  const wanted = buildings.filter((b) => !SKIP_CAT.has(b.category));
+
   let got = 0;
   const missing = [];
   for (const b of wanted) {
     const dest = path.join(OUT_B, `${b.id}.png`);
     if (fs.existsSync(dest)) continue;
     let url = null;
-    for (const c of [b.en, b.en.replace(/\s+/g, '_')]) {
+    for (const c of [b.en, b.en.replace(/\s+/g, '_'), b.en.replace(/\./g, '')]) {
       url = await wikiThumb(c, 128);
       if (url) break;
     }
+    if (!url) url = await wikiPageImage(b.en, 128);
     if (!url) {
       missing.push(b.en);
       continue;
@@ -158,6 +188,7 @@ async function main() {
       url = await wikiThumb(c, 96);
       if (url) break;
     }
+    if (!url) url = await wikiPageImage(item.en, 96);
     if (!url) {
       missing.push(item.en);
       continue;
