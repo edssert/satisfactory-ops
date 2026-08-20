@@ -1,0 +1,83 @@
+{
+  "$comment": "게임이 새 게임 시작 때 고르게 하는 네 지역. 안내문과 별점은 게임 선택 화면의 것이고, 주변 자원은 여기 적지 않는다 — resource-nodes.json 좌표에서 계산한다.",
+  "$source": "https://satisfactory.wiki.gg/wiki/World (게임 선택 화면 문구·별점) · 격자 위치는 https://www.bisecthosting.com/blog/satisfactory-spawn-locations-resources-tips-tricks",
+  "$confidence": "mixed",
+  "$note": "격자는 인게임 지도의 X#Y# 이고 한 칸이 약 1.09 km 다(지도 폭 7.972 km ÷ 7.3칸). Y0 이 남쪽, Y5 가 북쪽이다 — 좌표계는 북서 (-3246, -3750), 남동 (4253, 3750).",
+  "areas": [
+    {
+      "key": "grass",
+      "ko": "초원",
+      "en": "Grass Fields",
+      "cells": [
+        "X2Y0"
+      ],
+      "where": "지도 남쪽 한가운데",
+      "forWhom": "처음 하는 사람에게 가장 알맞음",
+      "blurb": "FICSIT 이 처음 확보한 건설 가능 지역. 트이고 평평한 벌판이 특징이다. 다만 채굴 지점 사이가 멀어서 결국 전초기지나 긴 수송로가 필요해진다.",
+      "stars": {
+        "flat": 5,
+        "biomass": 3,
+        "amount": 3,
+        "variety": 3
+      },
+      "landmark": "돌 아치"
+    },
+    {
+      "key": "rocky",
+      "ko": "바위 사막",
+      "en": "Rocky Desert",
+      "cells": [
+        "X0Y3"
+      ],
+      "where": "지도 서쪽 끝, 바다에 붙어 있음",
+      "forWhom": "처음 하는 사람에게 무난함",
+      "blurb": "자원·공간·거리가 고르게 잡힌 교과서 같은 자리. 바다가 바로 옆이라 물을 쉽게 얻는다.",
+      "stars": {
+        "flat": 4,
+        "biomass": 3,
+        "amount": 3,
+        "variety": 4
+      },
+      "landmark": "세계 최고 지점(488 m)과 가장 긴 동굴"
+    },
+    {
+      "key": "forest",
+      "ko": "북부 숲",
+      "en": "Northern Forest",
+      "cells": [
+        "X3Y3"
+      ],
+      "where": "지도 한가운데에서 북쪽",
+      "forWhom": "해 본 사람에게",
+      "blurb": "높낮이가 심하고 트인 곳이 적어 여느 건설 방식이 잘 안 통한다. 그래도 자원이 풍부해서 고를 만하다.",
+      "stars": {
+        "flat": 1,
+        "biomass": 5,
+        "amount": 4,
+        "variety": 5
+      },
+      "landmark": "숲과 급격한 고저차"
+    },
+    {
+      "key": "dune",
+      "ko": "사구 사막",
+      "en": "Dune Desert",
+      "cells": [
+        "X5Y4",
+        "X6Y4"
+      ],
+      "where": "지도 북동쪽",
+      "forWhom": "익숙한 사람에게",
+      "blurb": "크게 트인 사막이고 채굴 지점이 많다. 대신 나무와 물이 드물고 오아시스에 몰려 있어 초반 전력이 까다롭다.",
+      "stars": {
+        "flat": 4,
+        "biomass": 2,
+        "amount": 5,
+        "variety": 4
+      },
+      "landmark": "모래 언덕과 바위 지대"
+    }
+  ],
+  "$confidenceNote": "게임 선택 화면의 안내문과 별점은 verified 다(공식 위키가 그대로 옮겨 적었고 게임 화면과 대조된다). 시작 지역이 어느 격자 칸인가는 커뮤니티 자료 한 곳에서 나온 것이라 consensus 로 둔다 — 칸 하나가 약 1.09 km 라 실제 드롭 포드는 그 칸 어딘가다.",
+  "$water": "물 노드는 전부 자원정이다. 초반에 쓰는 물은 바다·호수 수면에 물 추출기를 놓는 것이라 노드 수에 안 잡힌다 — 바위 사막이 물 노드 0개인데도 물이 가장 쉬운 이유가 그것이다."
+}

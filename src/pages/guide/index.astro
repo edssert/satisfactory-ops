@@ -135,7 +135,12 @@ const FLOWS: Record<string, FlowDef> = {
       <p class="lede prose">
         각 단계는 그 시점에 <strong>실제로 열려 있는 것만</strong> 다룹니다.
       </p>
-    </header>
+    
+      <p class="startlink">
+        아직 시작도 안 했다면 — <a href={`${base}/guide/start/`}>어디서 시작할 것인가</a>부터 보세요.
+        네 시작 지역의 철·구리·석회석·S.A.M. 노드 수를 세어 비교합니다.
+      </p>
+</header>
 
     <div class="layout">
       <nav class="toc" aria-label="단계 목차">
@@ -665,6 +670,19 @@ const FLOWS: Record<string, FlowDef> = {
       border-top: var(--hair) solid color-mix(in oklab, var(--primary) 22%, transparent);
       font-size: var(--t-small);
       line-height: 1.8;
+      word-break: keep-all;
+    }
+
+    .startlink {
+      margin: var(--s5) 0 0;
+      padding: var(--s3) var(--s4);
+      border-left: 3px solid var(--primary);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      background: color-mix(in oklab, var(--primary) 7%, transparent);
+      font-size: var(--t-small);
+      line-height: 1.8;
+      color: var(--ink-2);
+      max-width: var(--measure);
       word-break: keep-all;
     }
 
