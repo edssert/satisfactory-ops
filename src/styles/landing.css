@@ -12,7 +12,7 @@
 .hero {
   position: relative;
   isolation: isolate;
-  min-height: min(92vh, 60rem);
+  min-height: min(92vh, 960px);
   display: grid;
   align-items: center;
   padding-block: var(--s24) var(--s20);
@@ -63,7 +63,7 @@
 }
 @media (min-width: 980px) {
   .hero-inner {
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 27rem);
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 432px);
     grid-template-areas: 'copy demo' 'cta demo';
     align-items: center;
     column-gap: var(--s16);
@@ -79,7 +79,7 @@
   align-items: center;
   gap: var(--s2);
   margin-bottom: var(--s5);
-  padding: 0.35em 0.8em;
+  padding: 6px 14px;
   border-radius: 999px;
   background: var(--glass-raised);
   box-shadow: var(--lit);
@@ -90,8 +90,8 @@
   color: var(--ink-2);
 }
 .eyebrow .dot {
-  width: 0.45em;
-  height: 0.45em;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: var(--ok);
   box-shadow: 0 0 0 3px color-mix(in oklab, var(--ok) 22%, transparent);
@@ -118,7 +118,7 @@
 }
 
 .lede {
-  max-width: 34em;
+  max-width: 36em;
   font-size: var(--t-body-l);
   color: var(--ink-2);
   margin-bottom: 0;
@@ -203,8 +203,8 @@
   animation: strip-scroll 90s linear infinite;
 }
 .strip img {
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
   opacity: 0.62;
   filter: saturate(0.85);
   transition: opacity var(--dur) var(--ease), filter var(--dur) var(--ease);
@@ -218,7 +218,7 @@
 }
 
 /* ------------------------------------------------------------------ 절 공통 */
-.section { padding-block: var(--s20) 0; }
+.section { padding-block: var(--s16) 0; }
 .section h2 { margin-bottom: var(--s3); }
 .section > .muted { margin-bottom: var(--s8); }
 
@@ -270,7 +270,7 @@
 .spine { position: relative; margin: 0; padding: 0; list-style: none; }
 .spine-rail {
   position: absolute;
-  left: 2.55rem;
+  left: 41px;
   top: 0;
   bottom: 0;
   width: 2px;
@@ -303,7 +303,7 @@
 
 .spine-step {
   display: grid;
-  grid-template-columns: 5.5rem minmax(0, 1fr);
+  grid-template-columns: 88px minmax(0, 1fr);
   gap: var(--s5);
   padding-block: var(--s5);
   border-top: var(--hair) solid var(--line);
@@ -314,7 +314,7 @@
 .spine-tier::after {
   content: '';
   position: absolute;
-  right: -1.02rem;
+  right: -17px;
   top: 0.85em;
   width: 8px;
   height: 8px;

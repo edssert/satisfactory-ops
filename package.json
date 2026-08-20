@@ -12,7 +12,7 @@
     "data:game": "node scripts/build-data.mjs",
     "data:game:ko": "node scripts/build-data.mjs --locale=ko --out=src/data/ko",
     "data:app": "node scripts/build-app-data.mjs",
-    "data": "npm run data:game && npm run data:game:ko && npm run data:app",
+    "data": "npm run data:game && npm run data:game:ko && npm run data:app && npm run tech",
     "data:check": "node scripts/build-app-data.mjs --check",
     "dev": "astro dev",
     "build": "npm run data:check && astro build",
@@ -25,7 +25,8 @@
     "db": "node scripts/db.mjs",
     "db:check": "node scripts/db.mjs --check",
     "font": "node scripts/build-font.mjs",
-    "check:coverage": "node scripts/check-coverage.mjs"
+    "check:coverage": "node scripts/check-coverage.mjs",
+    "tech": "node scripts/build-tech.mjs"
   },
   "dependencies": {
     "@astrojs/preact": "6.0.3",

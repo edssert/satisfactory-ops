@@ -21,6 +21,7 @@ const nav = [
   { key: 'guide', href: `${base}/guide/`, ko: '가이드' },
   { key: 'builder', href: `${base}/builder/`, ko: '직접 만들기' },
   { key: 'recipes', href: `${base}/recipes/`, ko: '대체 제작법' },
+  { key: 'tech', href: `${base}/tech/`, ko: '테크 사전' },
   { key: 'tools', href: `${base}/tools/`, ko: '도구' },
   { key: 'versions', href: `${base}/versions/`, ko: '연혁' },
 ];
@@ -123,7 +124,7 @@ const nav = [
         display: flex;
         align-items: center;
         gap: var(--s6);
-        height: 3.5rem;
+        height: var(--head-h);
       }
 
       .brand {
@@ -138,8 +139,8 @@ const nav = [
       }
       /* 브랜드 마크 — 파운데이션 한 장을 위에서 본 모양. 8m 격자가 이 게임의 기본 단위다 */
       .brand-mark {
-        width: 0.75rem;
-        height: 0.75rem;
+        width: 12px;
+        height: 12px;
         border: 2px solid var(--primary);
         border-radius: 1px;
       }
@@ -172,8 +173,8 @@ const nav = [
         margin-left: auto;
         display: grid;
         place-items: center;
-        width: 2rem;
-        height: 2rem;
+        width: 32px;
+        height: 32px;
         padding: 0;
         border: var(--hair) solid var(--line);
         border-radius: var(--radius);
@@ -182,8 +183,8 @@ const nav = [
       }
       .theme:hover { border-color: var(--line-strong); }
       .theme-dot {
-        width: 0.6rem;
-        height: 0.6rem;
+        width: 10px;
+        height: 10px;
         border-radius: 50%;
         border: 2px solid var(--ink-2);
         border-right-color: transparent;

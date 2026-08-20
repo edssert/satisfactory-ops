@@ -90,12 +90,12 @@
 .fc-io {
   fill: var(--ink-2);
   font-family: var(--font-body);
-  font-size: 11.5px;
+  font-size: 12px;
 }
 .fc-iolabel {
   fill: var(--ink-3);
   font-family: var(--font-mono);
-  font-size: 9.5px;
+  font-size: 10px;
 }
 .fc-iosep { fill: var(--ink-3); }
 .fc-num {

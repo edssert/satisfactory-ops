@@ -1,0 +1,126 @@
+/*
+ * tech.css — 테크 사전.
+ *
+ * 341건을 한 페이지에 담는다. 카드가 작고 촘촘해야 훑을 수 있다.
+ */
+
+.page { padding-block: var(--s16) 0; }
+.page-head { margin-bottom: var(--s8); }
+.page-head h1 { margin-bottom: var(--s4); }
+.lede { font-size: var(--t-body-l); color: var(--ink-2); }
+.lede strong { color: var(--ink); font-weight: 600; }
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--s3);
+}
+.fact {
+  padding: var(--s5);
+  border-radius: calc(var(--radius) * 2);
+  background: var(--glass);
+  box-shadow: var(--lit);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+}
+.fact-k { display: block; margin-bottom: var(--s2); font-size: var(--t-label); color: var(--ink-3); }
+.fact-v { font-size: var(--t-h3); font-weight: 600; }
+
+/* 절 사이를 뛰어다니는 고정 링크 */
+.jump {
+  position: sticky;
+  top: var(--head-h);
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+  margin-top: var(--s8);
+  padding-block: var(--s3);
+  background: color-mix(in oklab, var(--bg) 82%, transparent);
+  backdrop-filter: blur(var(--glass-blur));
+}
+.jump a {
+  padding: 4px 12px;
+  border: var(--hair) solid var(--line);
+  border-radius: 999px;
+  font-size: var(--t-caption);
+  text-decoration: none;
+  color: var(--ink-2);
+}
+.jump a:hover { border-color: var(--primary); color: var(--primary-ink); }
+
+.section { padding-block: var(--s16) 0; scroll-margin-top: 112px; }
+.section h2 { margin-bottom: var(--s5); }
+.section > .muted { margin-bottom: var(--s6); }
+
+.tier-block { margin-bottom: var(--s8); }
+.tier-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s3);
+  margin-bottom: var(--s3);
+  padding-bottom: var(--s2);
+  border-bottom: var(--hair) solid var(--line-strong);
+  font-family: var(--font-mono);
+  font-size: var(--t-caption);
+  letter-spacing: 0.06em;
+  color: var(--primary);
+}
+.tier-note { color: var(--ink-3); letter-spacing: 0; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--s3);
+}
+
+.node {
+  padding: var(--s4);
+  border-radius: var(--radius);
+  background: var(--glass);
+  box-shadow: var(--lit);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+}
+.node h3 {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s2);
+  margin-bottom: var(--s2);
+  font-size: var(--t-body);
+}
+.node.is-old { opacity: 0.55; }
+.tag {
+  padding: 1px 6px;
+  border: var(--hair) solid var(--line);
+  border-radius: var(--radius);
+  font-size: var(--t-label);
+  font-weight: 400;
+  color: var(--ink-3);
+}
+.cost {
+  margin: 0 0 var(--s3);
+  font-size: var(--t-caption);
+  color: var(--ink-2);
+}
+.sep { color: var(--ink-3); margin-inline: 0.35em; }
+.unlocks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.unlocks .chip { font-size: var(--t-label); }
+
+.tier-row th {
+  padding-top: var(--s5);
+  border-bottom: var(--hair) solid var(--line-strong);
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.1em;
+  color: var(--primary);
+  background: var(--bg);
+}
+tbody tr.tier-row:hover th { background: var(--bg); }
+
+.foot { margin-top: var(--s12); }

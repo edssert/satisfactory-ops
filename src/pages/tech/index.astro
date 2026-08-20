@@ -1,0 +1,234 @@
+---
+/**
+ * 테크 사전 — 게임의 모든 해금을 진행도와 상관없이 보여준다.
+ *
+ * 허브 6 · 마일스톤 42 · MAM 120 · 어썸 싱크 상점 173.
+ *
+ * 왜 전부 보여주는가: 흩어져 있으면 "이건 언제 열리나"를 물을 때마다 다시 뒤져야 하고,
+ * 실제로 그러다 여러 번 틀렸다 — 석탄 발전을 초반에 두고, 고체 바이오 연료를 허브 단계에 넣고,
+ * 오버클럭을 티어 4 라고 했다. 한 곳에 모아 두면 그런 실수가 안 난다.
+ */
+import Base from '../../layouts/Base.astro';
+import '../../styles/fx.css';
+import '../../styles/tech.css';
+import tech from '../../data/app/tech.json';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+interface Unlocks {
+  buildings: { id: string; ko: string }[];
+  recipes: { id: string; ko: string; isAlternate: boolean; makes: { ko: string; perMinute: number } | null }[];
+  items: { id: string; ko: string }[];
+  slots: number;
+  other: string[];
+}
+interface Cost {
+  item: string;
+  ko: string;
+  amount: number;
+}
+const doc = tech as unknown as {
+  $counts: { hub: number; milestones: number; mam: number; shop: number };
+  hub: { id: string; ko: string; order: number; cost: Cost[]; unlocks: Unlocks }[];
+  milestones: { id: string; ko: string; tier: number; cost: Cost[]; unlocks: Unlocks }[];
+  mamTrees: { key: string; ko: string; opens: string; count: number }[];
+  mam: {
+    id: string;
+    ko: string;
+    tree: string;
+    treeKo: string;
+    row: number;
+    cost: Cost[];
+    unlocks: Unlocks;
+    discontinued: boolean;
+  }[];
+  shop: { id: string; ko: string; coupons: number; unlocks: Unlocks }[];
+};
+
+const tiers = [...new Set(doc.milestones.map((m) => m.tier))].sort((a, b) => a - b);
+const shopTiers = [...new Set(doc.shop.map((s) => s.coupons))].sort((a, b) => a - b);
+
+/** 해금 내용을 한 줄로 */
+function summarize(u: Unlocks): string[] {
+  const out: string[] = [];
+  for (const b of u.buildings) out.push(b.ko);
+  for (const r of u.recipes) out.push(r.isAlternate ? `${r.ko} (대체)` : r.ko);
+  for (const i of u.items) out.push(i.ko);
+  if (u.slots > 0) out.push(`인벤토리 +${u.slots}칸`);
+  out.push(...u.other);
+  return out;
+}
+---
+
+<Base
+  title="테크 사전 — 모든 해금을 한 곳에"
+  description="허브·마일스톤·MAM·어썸 싱크 상점의 모든 해금을 진행도와 상관없이 볼 수 있습니다."
+  section="tech"
+>
+  <div class="wrap page">
+    <header class="page-head">
+      <p class="marker"><span class="num">테크 사전</span></p>
+      <h1><span class="fx-gradient-text">모든 해금을 한 곳에</span></h1>
+      <p class="lede prose">
+        진행도와 상관없이 전부 보입니다. 아직 못 여는 것도 무엇을 얼마나 내야 열리는지
+        미리 볼 수 있습니다.
+      </p>
+    </header>
+
+    <div class="facts">
+      <div class="fact"><span class="fact-k">허브 업그레이드</span><span class="fact-v n">{doc.$counts.hub}</span></div>
+      <div class="fact"><span class="fact-k">마일스톤</span><span class="fact-v n">{doc.$counts.milestones}</span></div>
+      <div class="fact"><span class="fact-k">MAM 연구</span><span class="fact-v n">{doc.$counts.mam}</span></div>
+      <div class="fact"><span class="fact-k">싱크 상점</span><span class="fact-v n">{doc.$counts.shop}</span></div>
+    </div>
+
+    <nav class="jump">
+      <a href="#hub">허브</a>
+      <a href="#milestones">마일스톤</a>
+      <a href="#mam">MAM</a>
+      <a href="#shop">싱크 상점</a>
+    </nav>
+
+    <section class="section" id="hub">
+      <p class="marker"><span class="num">01</span> 허브 업그레이드</p>
+      <h2>손으로 만드는 구간</h2>
+      <div class="grid">
+        {doc.hub.map((h) => (
+          <article class="node">
+            <h3>{h.ko}</h3>
+            <p class="cost">
+              {h.cost.map((c, i) => (
+                <>
+                  {i > 0 && <span class="sep">·</span>}
+                  {c.ko} <span class="n">{c.amount}</span>
+                </>
+              ))}
+            </p>
+            <ul class="unlocks">
+              {summarize(h.unlocks).map((u) => <li class="chip">{u}</li>)}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section" id="milestones">
+      <p class="marker"><span class="num">02</span> 마일스톤</p>
+      <h2>티어 1 – 9</h2>
+      {tiers.map((t) => (
+        <div class="tier-block">
+          <p class="tier-head"><span class="n">티어 {t}</span></p>
+          <div class="grid">
+            {doc.milestones
+              .filter((m) => m.tier === t)
+              .map((m) => (
+                <article class="node">
+                  <h3>{m.ko}</h3>
+                  <p class="cost">
+                    {m.cost.map((c, i) => (
+                      <>
+                        {i > 0 && <span class="sep">·</span>}
+                        {c.ko} <span class="n">{c.amount}</span>
+                      </>
+                    ))}
+                  </p>
+                  <ul class="unlocks">
+                    {summarize(m.unlocks).map((u) => <li class="chip">{u}</li>)}
+                  </ul>
+                </article>
+              ))}
+          </div>
+        </div>
+      ))}
+    </section>
+
+    <section class="section" id="mam">
+      <p class="marker"><span class="num">03</span> MAM 연구</p>
+      <h2>표본을 주워야 열린다</h2>
+      <p class="prose muted">
+        MAM 트리는 마일스톤과 달리 <strong>표본을 주워 스캔해야</strong> 열립니다. 그래서
+        탐험이 곧 해금입니다 — 석영과 카테리움을 일찍 주우면 편의 장비가 그만큼 빨리 열립니다.
+      </p>
+
+      {doc.mamTrees.map((tree) => (
+        <div class="tier-block">
+          <p class="tier-head">
+            <span class="n">{tree.ko}</span>
+            <span class="tier-note">{tree.opens} · {tree.count}건</span>
+          </p>
+          <div class="grid">
+            {doc.mam
+              .filter((m) => m.tree === tree.key)
+              .map((m) => (
+                <article class={`node${m.discontinued ? ' is-old' : ''}`}>
+                  <h3>
+                    {m.ko}
+                    {m.discontinued && <span class="tag">더 이상 안 나옴</span>}
+                  </h3>
+                  <p class="cost">
+                    {m.cost.length === 0 ? (
+                      <span class="muted">비용 없음</span>
+                    ) : (
+                      m.cost.map((c, i) => (
+                        <>
+                          {i > 0 && <span class="sep">·</span>}
+                          {c.ko} <span class="n">{c.amount}</span>
+                        </>
+                      ))
+                    )}
+                  </p>
+                  <ul class="unlocks">
+                    {summarize(m.unlocks).map((u) => <li class="chip">{u}</li>)}
+                  </ul>
+                </article>
+              ))}
+          </div>
+        </div>
+      ))}
+    </section>
+
+    <section class="section" id="shop">
+      <p class="marker"><span class="num">04</span> A.W.E.S.O.M.E. 싱크 상점</p>
+      <h2>쿠폰으로 바꾸는 것</h2>
+      <p class="prose muted">
+        남는 부품을 싱크에 넣으면 쿠폰이 나오고, 그 쿠폰으로 아래를 삽니다.
+        대부분은 꾸미기용이지만 <strong>장비와 청사진</strong>도 여기 있습니다.
+      </p>
+      <div class="scroll-x">
+        <table>
+          <thead>
+            <tr>
+              <th class="n">쿠폰</th>
+              <th>이름</th>
+              <th>해금</th>
+            </tr>
+          </thead>
+          <tbody>
+            {shopTiers.map((c) => (
+              <>
+                <tr class="tier-row">
+                  <th colspan="3" scope="colgroup">쿠폰 {c}장</th>
+                </tr>
+                {doc.shop
+                  .filter((s) => s.coupons === c)
+                  .map((s) => (
+                    <tr>
+                      <td class="n">{s.coupons}</td>
+                      <td>{s.ko}</td>
+                      <td class="small muted">{summarize(s.unlocks).join(' · ') || '—'}</td>
+                    </tr>
+                  ))}
+              </>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <p class="caption foot prose">
+      MAM 의 선행 관계는 게임 배포 데이터에 들어 있지 않습니다(120건 전부 비어 있음).
+      트리와 깊이는 내부 클래스명에서 뽑은 것이라 게임 화면의 배치와 다를 수 있습니다.
+      비용과 해금 내용은 배포 데이터 그대로입니다.
+    </p>
+  </div>
+</Base>

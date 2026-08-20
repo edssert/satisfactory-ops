@@ -44,9 +44,9 @@
   font-size: var(--t-body);
   font-weight: 600;
 }
-.fb-field select { min-width: 16rem; }
+.fb-field select { min-width: 256px; }
 .fb-field.is-num input {
-  width: 7rem;
+  width: 112px;
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
 }
@@ -87,7 +87,7 @@
 .fb-cols { display: grid; gap: var(--s8); }
 @media (min-width: 980px) {
   .fb-cols {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 20rem);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 320px);
     gap: var(--s10);
     align-items: start;
   }
@@ -118,7 +118,7 @@
   display: flex;
   align-items: baseline;
   gap: var(--s2);
-  min-width: 11rem;
+  min-width: 176px;
 }
 .fb-rate { color: var(--accent); }
 .fb-machine {
@@ -153,7 +153,7 @@
   flex-wrap: wrap;
   gap: var(--s2);
   margin: var(--s3) 0 0;
-  padding: 0 0 0 calc(28px + var(--s3));
+  padding: 0 0 0 40px;
   list-style: none;
 }
 .fb-chip {

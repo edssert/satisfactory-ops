@@ -230,7 +230,7 @@ const FLOWS: Record<string, FlowDef> = {
 
     .layout { display: grid; gap: var(--s10); }
     @media (min-width: 1000px) {
-      .layout { grid-template-columns: 15rem minmax(0, 1fr); gap: var(--s16); align-items: start; }
+      .layout { grid-template-columns: 240px minmax(0, 1fr); gap: var(--s16); align-items: start; }
       .toc { position: sticky; top: 5rem; }
     }
     @media (max-width: 999px) { .toc { display: none; } }
@@ -239,7 +239,7 @@ const FLOWS: Record<string, FlowDef> = {
     .toc li + li { border-top: var(--hair) solid var(--line); }
     .toc a {
       display: grid;
-      grid-template-columns: 1.6rem minmax(0, 1fr);
+      grid-template-columns: 24px minmax(0, 1fr);
       gap: var(--s2);
       padding-block: var(--s3);
       text-decoration: none;
@@ -284,7 +284,7 @@ const FLOWS: Record<string, FlowDef> = {
     .actions { margin: 0 0 var(--s4); padding: 0; list-style: none; counter-reset: a; }
     .actions li {
       display: grid;
-      grid-template-columns: 1.75rem minmax(0, 1fr);
+      grid-template-columns: 32px minmax(0, 1fr);
       gap: var(--s3);
       padding-block: var(--s4);
       border-top: var(--hair) solid var(--line);

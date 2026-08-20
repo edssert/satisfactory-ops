@@ -66,78 +66,58 @@
   --danger: #a52218;
 
   /* ------------------------------------------------------------ 타이포 */
-  /* KRDS 스케일. PC → 모바일 축소는 clamp 로 처리한다 */
-  --t-display: clamp(2.25rem, 1.2rem + 4.6vw, 3.75rem);
-  --t-h1: clamp(1.75rem, 1.15rem + 2.6vw, 2.5rem);
-  --t-h2: clamp(1.375rem, 1.05rem + 1.4vw, 2rem);
-  --t-h3: clamp(1.1875rem, 1.06rem + 0.55vw, 1.5rem);
-  --t-body-l: 1.1875rem; /* 19px */
-  --t-body: 1.0625rem;   /* 17px */
-  --t-small: 0.9375rem;  /* 15px */
-  --t-caption: 0.8125rem; /* 13px */
-  --t-label: 0.75rem;    /* 12px */
+  /*
+   * 스케일은 **정수 px** 로 쓴다. rem 로 옮기면 17px 이 1.0625rem 이 되는데,
+   * 사람이 디자인 명세를 그렇게 쓰지 않는다. 소수점이 늘어선 토큰 파일은
+   * "계산해서 채워 넣은 것"처럼 읽힌다 — 그게 실제로 티가 나는 지점이다.
+   * KRDS 도 px 로 명세한다.
+   *
+   * 배수는 한 눈에 잡히는 값으로: 12 · 13 · 15 · 17 · 19 · 24 · 32 · 40 · 60
+   */
+  --t-display: clamp(36px, 5vw, 60px);
+  --t-h1: clamp(28px, 3.5vw, 40px);
+  --t-h2: clamp(24px, 2.5vw, 32px);
+  --t-h3: clamp(19px, 1.6vw, 24px);
+  --t-body-l: 19px;
+  --t-body: 17px;
+  --t-small: 15px;
+  --t-caption: 13px;
+  --t-label: 12px;
 
-  /* 한글은 라틴보다 행간을 한 단계 여유 있게 잡는다 (KRDS 최소 150%) */
+  /* 행간 — 소수 둘째 자리를 쓰지 않는다 */
   --lh-tight: 1.2;
   --lh-heading: 1.35;
-  --lh-body: 1.75;
+  --lh-body: 1.7;
 
-  /* -------------------------------------------------------------- 간격 */
-  --s1: 0.25rem;
-  --s2: 0.5rem;
-  --s3: 0.75rem;
-  --s4: 1rem;
-  --s5: 1.25rem;
-  --s6: 1.5rem;
-  --s8: 2rem;
-  --s10: 2.5rem;
-  --s12: 3rem;
-  --s16: 4rem;
-  --s20: 5rem;
-  --s24: 6rem;
-  --s32: 8rem;
-
-  /* ------------------------------------------------------------ 유리 계층 */
   /*
-   * 시각 방향: **FICSIT HUD — 어두운 유리 계층.**
-   *
-   * 앞선 판본은 "AI 티 회피 목록"만 따랐다. 하지 말 것만 있고 할 것이 없어서 밋밋했다.
-   * 2026년 어두운 데이터 밀집 UI 의 주류는 은은한 반투명 계층으로 깊이를 만들고,
-   * 테두리를 살짝 발광시켜 어둠 속에서 경계를 읽히게 하는 방식이다.
-   * 초기 글래스모피즘의 과한 블러와는 다르다 — 블러는 약하게, 불투명도는 높게 가서
-   * 글자 대비를 지킨다.
-   *
-   * 깊이는 세 단계만 쓴다: 바닥(페이지) / 패널 / 떠 있는 것(머리띠·카드).
+   * 간격 — 4px 배수. 이름이 곧 배수다(s2 = 8px, s6 = 24px).
+   * 이 밖의 값을 쓰지 않는다. 여백이 어긋나는 것은 값을 즉흥으로 정할 때 생긴다.
    */
-  --glass-blur: 14px;
-  --glass-sat: 1.25;
-  /* 패널 — 뒤가 살짝 비치되 글자는 또렷해야 한다 */
-  --glass: color-mix(in oklab, var(--surface) 86%, transparent);
-  --glass-raised: color-mix(in oklab, var(--raised) 88%, transparent);
-  /* HUD 베젤 — 위 모서리가 밝고 둘레에 옅은 주황 실선 */
-  --lit:
-    inset 0 1px 0 color-mix(in oklab, white 8%, transparent),
-    0 0 0 1px color-mix(in oklab, var(--accent) 9%, transparent);
-  --lit-strong:
-    inset 0 1px 0 color-mix(in oklab, white 14%, transparent),
-    0 0 0 1px color-mix(in oklab, var(--accent) 22%, transparent);
-  /*
-   * 배경 광원. 유리 패널이 뒤에서 무언가를 걷어와야 유리로 보인다 —
-   * 평평한 배경 위에서는 블러를 아무리 걸어도 그냥 반투명 사각형이다.
-   * 두 색을 서로 다른 자리에 옅게 깔아 패널이 지나갈 때 색이 변하게 한다.
-   */
-  --ambient-cool: color-mix(in oklab, var(--primary) 10%, transparent);
-  --ambient-warm: color-mix(in oklab, var(--accent) 8%, transparent);
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 20px;
+  --s6: 24px;
+  --s8: 32px;
+  --s10: 40px;
+  --s12: 48px;
+  --s16: 64px;
+  --s20: 80px;
+  --s24: 96px;
+  --s32: 128px;
 
   /* -------------------------------------------------------------- 형태 */
   --radius: 3px;
   --hair: 1px;
   --page: 1180px;
+  /** 머리띠 높이. sticky 표 머리행이 이 아래에 선다 */
+  --head-h: 56px;
   /*
    * 한 줄 길이 상한. 38em 으로 잡았더니 두세 문장짜리 짧은 문단이 화면 2/3 에서 끊겨
    * 오른쪽이 통째로 비었다. 한글은 글자 폭이 커서 같은 em 이라도 라틴보다 글자 수가 적다.
    */
-  --measure: 50em;
+  --measure: 52em;
   /** 주석·각주처럼 짧고 부수적인 글은 더 넓게 흘려도 읽힌다 */
   --measure-wide: 66em;
 
