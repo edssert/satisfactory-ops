@@ -535,16 +535,6 @@ export default function ResourceMap({
       </div>
 
       <div class="rm-body">
-        <div
-          class={`rm-stage${measure ? ' is-measuring' : ''}`}
-          ref={host}
-          onPointerDown={(e) => onDown(e as unknown as PointerEvent)}
-          onPointerMove={(e) => onMove(e as unknown as PointerEvent)}
-          onPointerUp={onUp}
-          onPointerLeave={onUp}
-          onClick={(e) => onStageClick(e as unknown as MouseEvent)}
-          onDblClick={onStageDouble}
-        >
         <aside class="rm-side is-left" onPointerDown={(e) => e.stopPropagation()}>
           <p class="rm-k">자원</p>
           <input
@@ -600,6 +590,17 @@ export default function ResourceMap({
           </ul>
 
         </aside>
+
+        <div
+          class={`rm-stage${measure ? ' is-measuring' : ''}`}
+          ref={host}
+          onPointerDown={(e) => onDown(e as unknown as PointerEvent)}
+          onPointerMove={(e) => onMove(e as unknown as PointerEvent)}
+          onPointerUp={onUp}
+          onPointerLeave={onUp}
+          onClick={(e) => onStageClick(e as unknown as MouseEvent)}
+          onDblClick={onStageDouble}
+        >
 
           <svg class="rm-svg" viewBox={`${vb.x} ${vb.y} ${vb.w} ${vh}`} role="img" aria-label="자원 지도">
             <image href={`${mapBase}/${baseLayer(layer)}/preview.webp`} x="0" y="0" width={SIZE} height={SIZE} />

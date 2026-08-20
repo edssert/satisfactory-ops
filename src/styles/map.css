@@ -78,8 +78,11 @@
  * 지도는 정사각형이다. 판을 화면 폭에 맞춰 늘리면 양옆에 검은 띠만 생긴다.
  * 판을 정사각형으로 두고 서랍과 함께 가운데에 세운다.
  */
+/* 자원 · 지도 · 수집품을 나란히. 서랍이 지도를 안 가린다 */
 .rm-body {
   display: flex;
+  gap: var(--s3);
+  align-items: flex-start;
   justify-content: center;
 }
 
@@ -88,25 +91,23 @@
  * 무엇이 있는지 한눈에 안 들어온다.
  */
 /*
- * 서랍을 판 옆에 두면 지도가 밀린다. 판 위에 띄워서 지도를 한가운데에 둔다.
- * 자원은 왼쪽, 수집품은 오른쪽 — 접었다 폈다 하지 않아도 둘 다 늘 보인다.
+ * 서랍은 지도 밖 좌우에 둔다. 판 위에 띄우면 지도를 가린다.
+ * 한 열로 늘어놓아 이름이 안 잘리게 한다.
  */
+/* 지도를 가운데 두려고 차례를 정해 준다 — 마크업에서는 서랍 둘이 먼저 온다 */
+.rm-side.is-left { order: 1; }
+.rm-stage { order: 2; }
+/* 수집품 이름이 길어 조금 넓다 — 「파란색 파워 슬러그」가 안 잘리게 */
+.rm-side.is-right { order: 3; width: 292px; }
+
 .rm-side {
-  position: absolute;
-  z-index: 5;
-  top: var(--s3);
-  overflow-y: auto;
-  max-height: calc(100% - var(--s6));
+  flex: none;
+  width: 226px;
   padding: var(--s3);
-  border: var(--hair) solid var(--line-strong);
   border-radius: var(--radius);
-  background: color-mix(in oklab, var(--raised) 92%, transparent);
-  box-shadow: 0 18px 40px -24px rgb(0 0 0 / 0.95);
-  backdrop-filter: blur(8px);
+  background: var(--raised);
+  box-shadow: var(--lit);
 }
-.rm-side.is-left { left: var(--s3); width: 352px; }
-.rm-side.is-right { right: var(--s3); width: 264px; }
-.rm-side.is-right ul { grid-template-columns: 1fr; }
 .rm-k {
   margin: 0 0 6px;
   color: var(--ink-3);
@@ -114,16 +115,7 @@
   font-size: 11px;
   letter-spacing: 0.06em;
 }
-.rm-side ul {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0 var(--s2);
-  margin: 0 0 var(--s4);
-  padding: 0;
-  list-style: none;
-}
-/* 순도·종류는 짧아서 한 줄이 낫다 */
-.rm-side ul.rm-pur { grid-template-columns: 1fr; }
+.rm-side ul { margin: 0 0 var(--s3); padding: 0; list-style: none; }
 .rm-side label {
   display: flex;
   gap: 7px;
@@ -163,11 +155,11 @@
 .rm-stage {
   position: relative;
   overflow: hidden;
-  /* 지도가 정사각형이라 판도 정사각형이다. 남는 띠 없이 딱 들어간다 */
-  height: min(78vh, 980px);
-  min-height: 460px;
-  aspect-ratio: 1;
+  /* 지도가 정사각형이라 판도 정사각형이다. 좁아지면 같이 줄어든다 */
+  width: min(78vh, 980px);
   max-width: 100%;
+  aspect-ratio: 1;
+  min-width: 320px;
   border-radius: var(--radius);
   background: var(--bg);
   box-shadow: var(--lit);
@@ -350,16 +342,10 @@
 }
 .rm-info button:hover { color: var(--ink); }
 
-@media (max-width: 1000px) {
-  .rm-stage { aspect-ratio: auto; height: 64vh; }
-  .rm-side.is-left,
-  .rm-side.is-right {
-    position: static;
-    width: 100%;
-    max-height: none;
-    margin-bottom: var(--s2);
-  }
-  .rm-body { flex-direction: column; }
+@media (max-width: 1180px) {
+  .rm-body { flex-wrap: wrap; }
+  .rm-side { width: calc(50% - var(--s2)); }
+  .rm-stage { order: -1; width: 100%; }
 }
 
 /* 자원 검색 */
