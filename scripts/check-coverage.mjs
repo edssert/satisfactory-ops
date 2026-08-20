@@ -114,7 +114,7 @@ const pass = (msg) => notes.push(`  PASS  ${msg}`);
 // ─────────────────────────────────────────────── 2. 표가 행을 말없이 버리지 않았는가
 /* 도구 표는 도감 안으로 옮겼다 (/dex/reference/) */
 const toolsPage = allHtml.find(({ p }) =>
-  p.includes(`dex${path.sep}reference${path.sep}index.html`)
+  p.includes(`${path.sep}dex${path.sep}reference${path.sep}index.html`)
 );
 if (!toolsPage) {
   fail('레퍼런스 페이지(dist/dex/reference/index.html)를 찾지 못했습니다');
