@@ -1,0 +1,37 @@
+{{patch
+|stable=1
+|ex=1
+|build=442229
+|date=2025-10-07
+|discord=https://discord.com/channels/370472939054956546/557603412565426196/1425177218186743908
+|reddit=1o0lqd2
+|steam=https://store.steampowered.com/news/app/526870/view/499459531596630667
+}}
+
+==Intro==
+Hi Pioneers!
+
+Hello everyone, Today we’re reopening experimental with several changes, but the most important one of them is an optimization we’ve done a refactor of how we handle Spline Collision in-game, so now Conveyor Belts, Pipelines and Hypertubes should only have collision when a player is near them, this should also result in memory optimizations for bigger saves that use a lot of them.
+
+This could potentially have unintended effects in both Singleplayer and Multiplayer/Dedicated Server so we wanted to release this in Experimental first to see if there’s anything we need to address before these changes come to the default version
+
+If you notice any weird behaviour after this update, please let us know over at our QA Site https://questions.satisfactorygame.com/ We read your feedback every day
+
+See you all again soon <3
+
+==Optimization==
+* Refactored Spline Collision
+** This affects [[Conveyor Belts]], [[Pipelines]], [[Hypertube|Hypertubes]]
+
+==Bug fixes==
+* Fixed “Let’s see what’s out there” [[Achievements|achievement]] did not work when playing in languages other than English
+* Fix for a specific crash when loading saves that contain Conveyor Belts built by [[Blueprint#Auto-connect|blueprint auto-connect]] during 1.1 Experimental when it was not working correctly and have not been resaved since
+* Fixed null pointer crash when logging discrepancy between picked up items on client and [[Dedicated servers|server]]
+
+== [[Controller#Steam_Deck|Steam Deck]] ==
+* Fixed controller support not working with the Server Manager
+* Verified support:
+** First time install now properly supports Steam Deck in-built controls during the first time setup elements (Microsoft Visual C++ Runtime)
+** Steam Deck built-in controls are now always usable and available even when an External Controller is connected
+
+{{PatchesNav}}

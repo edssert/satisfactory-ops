@@ -116,6 +116,16 @@ const buildings = en.buildings.map((x) => ({
   buildCost: (x.buildCost ?? []).map((c) => ({ item: c.item, amount: c.amount })),
   powerMW: x.power?.consumptionMW ?? null,
   powerGenMW: x.power?.productionMW ?? null,
+  /*
+   * 전력이 **가변**인 건물이 있다. 입자 가속기·양자 인코더·변환기는 mPowerConsumption 이 0이고
+   * 실제 소비는 레시피마다 달라서 추정 최소/최대에만 들어 있다 (가속기 250~1500 MW).
+   * 이걸 버렸더니 후반 전력 추정이 실제의 1/3로 나왔다 — 페이즈 5에서 9.3 GW vs 27.7 GW.
+   * 지열 발전기는 노드 순도에 따라 출력이 변해 추정치조차 없다.
+   */
+  powerMinMW: x.power?.estimatedMinMW ?? null,
+  powerMaxMW: x.power?.estimatedMaxMW ?? null,
+  /** 전력이 고정값이 아닌가 — 화면에서 범위로 표기해야 한다 */
+  powerIsVariable: x.power?.consumptionMW == null && x.power?.estimatedMaxMW != null,
   powerExponent: round(x.power?.consumptionExponent),
   manufacturingSpeed: x.manufacturingSpeed ?? null,
   somersloopSlots: x.somersloopSlots ?? null,
@@ -378,6 +388,16 @@ checks.push(
     buildings.find((b) => b.id === 'Build_ConstructorMk1_C')?.footprint?.visualHeightM === 8.5],
   ['복합 클리어런스 건물의 개별 박스가 보존됨 (정제소)',
     (buildings.find((b) => b.id === 'Build_OilRefinery_C')?.footprint?.boxes?.length ?? 0) >= 2],
+  // 가변 전력 건물이 추정 범위를 잃지 않는지. 실제로 잃어서 후반 전력이 1/3로 나온 적이 있다.
+  ['입자 가속기 전력 범위 250~1500 MW (가변 전력 보존)',
+    buildings.find((b) => b.id === 'Build_HadronCollider_C')?.powerMinMW === 250 &&
+    buildings.find((b) => b.id === 'Build_HadronCollider_C')?.powerMaxMW === 1500],
+  ['양자 인코더 최대 2000 MW · 변환기 100~400 MW',
+    buildings.find((b) => b.id === 'Build_QuantumEncoder_C')?.powerMaxMW === 2000 &&
+    buildings.find((b) => b.id === 'Build_Converter_C')?.powerMinMW === 100],
+  ['가변 전력 건물이 그렇게 표시된다',
+    buildings.filter((b) => b.powerIsVariable).length >= 3,
+    () => '가변 표시된 건물 ' + buildings.filter((b) => b.powerIsVariable).length + '개'],
   ['물 추출기 120 m³/분',
     buildings.find((b) => b.id === 'Build_WaterPump_C')?.extraction?.perMinuteAtNormalPurity === 120]
 );

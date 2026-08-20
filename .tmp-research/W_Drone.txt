@@ -1,0 +1,137 @@
+{{Infobox building|className=Desc_DroneTransport_C
+| inventorySize = 9 slots
+| size_width = 16
+| size_length = 6
+| size_height = 3
+| maxSpeed = 252
+}}
+A '''Drone''' is an aerial vehicle that flies items between its home and selected [[Drone Port]].
+
+== Usage ==
+Each Drone can only be assigned to 1 home [[Drone Port]], and that home Drone Port can only be linked to 1 other Drone Port (that Drone Port, in turn, doesn't necessarily need to be linked back to this Drone Port). There is no limitation on the number of assigned Drones unloading on a Drone Port, but only one can unload at a time. Waiting Drones will circle above the Drone Port.
+
+When flying from one Port to another, a Drone will show a take-off animation, wiggling around; rise vertically, turning mid-air then fly roughly in a straight or 90 degree curved line to the destination. It then descends, followed by some wiggling animation and finally docks. Drones will attempt to navigate around obstacles mid-flight. As the take-off and landing animation can take a considerable amount of time, the efficiency of Drones increases with distance.
+
+Drones can potentially, though unreliably, be used as a means of player transportation. [[Pioneer]]s can stand on the Drone for a ride, but fall protection [[equipment]], (namely the [[Parachute]] [[Jetpack|or Jetpack]]), is necessary, as the Pioneer is likely or guaranteed to fall off mid-air when the Drone starts accelerating forward or changes direction. It is recommended to stand on the wing near the circular hinge part close to the main body as it is the most consistent in preventing falls.
+
+=== Fuel ===
+In contrast to its in-game description, Drones actually do not accept every fuel type. Drones must use {{itemLink|Battery|Batteries}}, {{itemLink|Packaged Fuel}}, {{itemLink|Packaged Turbofuel}}, {{itemLink|Packaged Rocket Fuel}}, {{itemLink|Packaged Ionized Fuel}}, {{itemLink|Uranium Fuel Rod|Uranium Fuel Rods}}, or {{itemLink|Plutonium Fuel Rod|Plutonium Fuel Rods}} as fuel. Drones will use different fuels at different rates depending on their path, the given fuel's energy value, and the speed of the drone, which also varies based on fuel type. When the "No Fuel" [[Advanced Game Settings|Advanced Game Setting]] is active, drones that are not supplied with a specific fuel type default to a speed of 70 m/s and display the Battery jet colors.
+
+Use this table below to compare the different fuels' energy density (and thus how long one lasts) to each other. The table also lists the approximate speeds Drones go, and the jet color seen, depending on the different fuel type used.
+{| class="wikitable sortable"
+|+
+! data-sort-type="text" | [[Fuels|Fuel Type]]
+! data-sort-type="number" | Fuel Value<br>([[MJ]])
+!Speed (m/s)
+!Jet
+!Jet Color
+!Jet Tip Color
+|-
+|{{itemLink|Packaged Fuel}}
+|750
+|50
+|<div style="width:3em;height:1.5em;background-color:#ff9500;border-right:1em solid #ffd47d"></div>
+|#ff9500
+|#ffd47d
+|-
+|{{itemLink|Packaged Turbofuel}}
+|2,000
+|60
+|<div style="width:3em;height:1.5em;background-color:#ff2000;border-right:1em solid #ff6464"></div>
+|#ff2000
+|#ff6464
+|-
+|{{itemLink|Battery}}
+|6,000
+|75
+|<div style="width:3em;height:1.5em;background-color:#0080ff;border-right:1em solid #ffc840"></div>
+|#0080ff
+|#ffc840
+|-
+|{{itemLink|Packaged Rocket Fuel}}
+|7,200
+|75
+|<div style="width:3em;height:1.5em;background-color:#ff0000;border-right:1em solid #fff000"></div>
+|#ff0000
+|#fff000
+|-
+|{{itemLink|Packaged Ionized Fuel}}
+|10,000
+|100
+|<div style="width:3em;height:1.5em;background-color:#ff6600;border-right:1em solid #ffb600"></div>
+|#ff6600
+|#ffb600
+|-
+|{{itemLink|Uranium Fuel Rod}}
+|750,000
+|90
+|<div style="width:3em;height:1.5em;background-color:#00ff00;border-right:1em solid #c0ff40"></div>
+|#00ff00
+|#c0ff40
+|-
+|{{itemLink|Plutonium Fuel Rod}}
+|1,500,000
+|100
+|<div style="width:3em;height:1.5em;background-color:#00f8ff;border-right:1em solid #5f97ff"></div>
+|#00f8ff
+|#5f97ff
+|}
+
+=== Logistics ===
+Drones can be used for long-range low-throughput transportation, such as of high-end products, which usually come in small per-minute quantities. Drones can only transport between two Drone Ports, the home Port and any other Port. At least one of the Drone Ports require a supply of fuel to power the Drone(s), or else it will eventually halt. Unlike [[Electric Locomotive|trains]], Drones don't block the input of items during the cargo loading animation. Unlike other vehicles, a single Drone specimen has an input and output chest. This provides the ability to pickup a material, send it to a destination, pickup the produced goods, and return. Excluding a certain bug, only two drones can be doing this at once (one at each port). 
+
+=== Behavior ===
+Drones will try to fly from Drone Ports to other Drone Ports as straight as possible. When terrain is in the path, the Drone will try to avoid the object. Drones use a 64 x 64 grid of the [[world]] to generate their path.
+
+Drones have only one home Port, which is the Port the Drone is built on. No additional Drones can be built onto a Drone Port*(see footnote below), but multiple Drones can use it as their destination Port. If multiple Drones are awaiting to be unloaded at the same time, they will fly around the Port at a 20m radius, stacking vertically with an 8m gap in between.
+
+<nowiki>*</nowiki>Note: There is a current bug in the latest steam version which allows you to override this.
+
+A Drone will initially take the required amount of fuel for a round trip from its home Port, consuming the fuel immediately upon takeoff. If the Drone is being supplied with fuel at its destination (non-home) Port instead, it will take the required amount of fuel for a round trip, but not consume it until it returns to its home Port and takes off from it, taking no fuel from the home Port. Thus, it is possible to have 2 drones on a line with 2 drone ports, even if one of them doesn't have fuel. In this scenario, it has to be manually supplied with fuel for its first trip, as it would not take off from the home Port to start transporting otherwise. After that, fuel only needs to be supplied at one of the two drone ports for both drones to function. 
+
+While hovering in the queue waiting to land the drone will not consume any fuel.
+
+=== Efficiency ===
+After the first round trip is finished, the stack throughput of the Drone will be shown in the Drone's home Port, alongside its maximum throughput and fuel required per round trip. The efficiency of Drones increases with travel distance, as the landing and take-off animation takes 51 seconds each. If the route is too short, most of it will be the landing animations; it would take 102 seconds to move items from two Drone Ports immediately next to each other.
+
+== External links ==
+* [https://www.reddit.com/r/SatisfactoryGame/comments/mbqex4/the_ultimate_drone_guide/ Elaborate Drone guide on Reddit]
+
+== Trivia ==
+* The development of Drones was vaguely alluded to on May 15th, 2020: "There's going to be a new vehicle in Tier 7 or 8".<ref>https://youtu.be/NlIVwoRqjVk?t=850</ref>
+* The inclusion of Drones was jokingly "confirmed" on July 23rd, 2020, via [[Jace]]'s high quality screenshots/mspaint art video.<ref>https://youtu.be/JOBcS413hwY?t=271</ref>
+* During Update 5 and some of Update 6, the drones used the spirit of the portable miner in their recipe to drill straight under the ground, ignoring the world grid and flying under the map. This was fixed during Update 6's Experimental Period.
+* The drones have a theoretically unlimited queue for the holding pattern on drone ports if the port is unpowered and can remain in the air in the holding pattern for an extremely long time
+
+== History ==
+* [[Patch 1.2.3.0]]: Fixed memory leak due to multiple issues related to Drones
+* [[Patch 1.2.0.0]]: Undocumented change - Fixed issue with drones randomly stalling and stopping.<ref name="yt-5W4FvGgfLwA@1094">[https://www.youtube.com/watch?v=5W4FvGgfLwA&t=1094s YouTube - March 10th 2026 Livestream - Fixed Issue with Drone stalling / stopping]</ref>
+* [[Patch 1.1.0.0]]: Many improvements to drone movement and pathing which should improve the way drones interact with their automated routes
+* [[Patch 1.0.0.4]]: Potential fix for a rare crash when dismantling a [[drone]] at the end of its takeoff sequence
+* [[Patch 1.0.0.3]]: Fixed a crash on load in saves with corrupted Drones in them
+* [[Patch 1.0]]
+** Can now use almost all types of [[Fuels]] instead of only [[Battery|batteries]].
+** The speed of the Drones is different based on the fuel used, with better fuels providing higher speed.
+* [[Patch 0.8.2.0]]: Fixed a bug where drones would sometimes consume batteries multiple times when starting a new trip, especially when the player is far away
+* [[Patch 0.8.0.0]]: Fixed a potential bug with drone queue processing
+* [[Patch 0.6.0.12]]: Potential fix to a crash related to DroneAction
+* [[Patch 0.6.0.7]]: Fixed flying through cliffs and similar terrain
+* [[Patch 0.6.0.1]]: Potential fix when returning to the main menu when having built Drones
+* [[Patch 0.4.3.1]]: Fixed minor issue related to the world grid
+* [[Patch 0.4.0.11]]: Reduced default round-trip [[Battery]] cost for Drones to 4 (from 5) and reduced cost/distance from 1.66 to 1 Battery per kilometre.
+* [[Patch 0.4.0.10]]: Fixed bug where the distance between Drone stations wouldn’t be calculated properly, causing incorrect round-trip time estimates and battery consumption, Battery consumption should now properly increase over larger distances.
+* [[Patch 0.4.0.6]]:
+** Drone Pathfinding and [[World]] Grid improvements. Drones will now fly to the closest cell if trying to pathfind outside of the grid instead of crashing. Building outside of the grid might have some weird behaviour but shouldn’t cause crashes anymore
+** Removed an ensure that caused many crashes when loading a big save
+** Fixed a bug where Drones would skip a station if saving when it’s docking, causing it to take off and bring the items back again when loading
+* [[Patch 0.4.0.4]]:
+** Potential fix for a scenario where the Drones would take a nonsensical path to their destination
+** Fixed a bug where Drones would teleport when dismantling a Drone Station they are about to dock on
+** Fixed a rare crash related to Drones
+** Fixed Drone Ports allowing duplicate names
+* [[Patch 0.4.0.0]]: Introduced
+
+== References ==
+{{Reflist}}
+
+{{VehicleNav}}

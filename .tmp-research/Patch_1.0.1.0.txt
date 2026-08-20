@@ -1,0 +1,91 @@
+{{Patch
+|stable=1
+|build=382498
+|date=2024-11-28
+|discord=https://discord.com/channels/370472939054956546/557603412565426196/1311709475375419484
+|reddit=1h1xuiv
+|steam=https://store.steampowered.com/news/app/526870/view/4456970437737317052
+}}
+== Intro ==
+Hi Pioneers!
+
+Hello again everyone, here’s a big patch with some important fixes that we didn’t want to hold off until later
+
+Some highlights are the fix for a crash on startup for lower spec GPUs which required using the -dx11 command on launch, this should no longer be necessary to do. 
+
+Other inclusions are the much requested copy paste setting also working on Generators and Extractors now and some more tweaks to the Clearance Boxes
+
+There’s a lot of crash fixes and some bug fixes like Frame Windows not allowing snapping, as well as plenty of performance optimizations as well as some more options requested by our modding community.
+
+This patch also includes a new setting called “Voice Chat Detection” in the options menu under Audio, this is a setting for Audio Attenuation so you can choose whether external applications or microphone input can lower the in-game volume so everything is easier to hear.
+
+And we’ve also updated the community translations, so Thai language is now added back into the game.
+
+With a big patch like this, there’s some room for unexpected issues so if we introduced anything new please let us know over at our QA Site https://questions.satisfactorygame.com/. We read your posts every day!
+
+See you all again very soon ❤️
+
+== Gameplay ==
+* [[Controls|Copy pasting settings]], using {{key|Right Ctrl}}+{{key|C}} and {{key|Right Ctrl}}+{{key|V}}, now works on [[Power|Generators]] and Extractors ([[Water Extractor|Water]],[[Oil Extractor|Oil]],[[Resource Well Pressurizer|Resource Well]])
+* [[Settings#General|Clearance Boxes (White Outlines)]] no longer show up for [[Unreal_Engine#Lightweight_Actors|lightweight buildable's]] ([[Foundations]]/[[Walls]]) which are built inside of a [[Blueprint Designer]]
+* Clearance Box for the Blueprint designer no longer shows if you’re building inside of it
+
+== Bugfixes ==
+* Fixed a crash related to [[Settings#Advanced|Upscalers]] on lower spec GPUs when using FXAA (CompilePipelineStateTask::CompilePSO). This was the crash on startup that would require using '-dx11' as a launch option for a workaround, using this command to avoid this crash should no longer be necessary
+* Fixed a crash in [[Multiplayer]] when entering a vehicle with another player already inside of it
+* Fixed [[Creatures|Creature Spawners]] not being visible on [[Radar Tower]]s
+* Fixed Creature Spawners being loaded causing performance hitches
+* Fixed build mode status carrying over when sampling in Multiplayer, meaning you would sample an entire blueprint when trying to only sample a part of it in some scenarios
+* Fixed [[Customizer]] Quick Switch not working for Clients in Multiplayer
+* Fixed a crash when a player attempts to pause the [[Boom Box]] music before being loaded in all the way. Also safeguarded against other input crashes with the Boom Box
+* Fixed a Crash when there is a Failure to open [[Save files|Save game]] and [[Blueprint|Blueprint]] files for reading
+* Fixed white boxes appearing in the compass when [[Train Station]]s would be built from Blueprints in some scenarios
+* Fixed [[Walls#Not_Customizable-0|Frame Windows]] not allowing other buildings to snap to them
+* Fixed [[Hard Drive]]s being voided from drop pods if they are left there and the game is saved and reloaded
+* Fixed [[Power Line|Wires]] not being upgradable
+* Fixed issue where [[Conveyor Belts|MK6 belts]] would sometimes not transport the proper amount as displayed in the UI and end up clogging
+* Fixed crash on shutdown related to [[Unreal_Engine#Game_audio|WWise]]
+* Fixed performance issues in huge factories related to Wwise voice starvation
+* Fixed [[Power Poles|Power Pole]] wire splitting dismantling highlight displaying for everyone, it should now only show for the player that is building the hologram
+
+== Tech Art ==
+* Fixed a few places where the [[World|Ocean]] was clipping
+* Tweaked the [[Customizer]] logic for Conveyor belts and [[Pipelines]]
+* Updated Physics of the [[Power Line|Cables]] on the [[Constructor]]
+* Optimizations to the [[Build Gun|Buildable Subsystem]] and Tick System
+
+== Audio ==
+* Voice Chat Detection (Volume attenuation) is a new setting under 'Options > Audio'. This setting will reduce the game-volume when input from other applications or from your microphone is detected, full explanation is on the in-game tooltips in the options menu
+
+== Modding ==
+* The following command line ini overrides are now allowed: '(-CustomConfig= and -ini:Config:[Section]:Value=)'
+* Fixed FFGDynamicStruct missing a NetSerializer
+
+== Localisation ==
+* Fix for Compass displaying labels in Right-To-Left languages as Left-To-Right
+* Updated community translated languages with the latest translations
+* Updated language completion rates
+* The following languages are now partially translated by community, the percentage number represents how much is translated so far: Thai – ภาษาไทย – 72%
+
+== Known Issues ==
+
+; There are languages missing
+* These are the only officially supported languages: English, French, Italian, German, Spanish, Japanese, Korean, Polish, Portuguese, Russian, Simplified & Traditional Chinese.
+
+A lot of translations for Satisfactory have been community driven, which means that every other language previously available (and potential new ones) needs to be translated by the community, before being added as community translations once more. 
+
+A lot of people in the community have already shown interest in helping us out with translations and we are ever so grateful to you all and we'll update translations in game as they come in! If you want to help out check out info on our Discord. Please note that you need to have been part of the server for a time to be eligible for this. 
+
+; I Can't Switch supported Languages (workaround available)
+* If you still have any issue switching between officially supported languages, a quick fix for this is to exit the game, rename the '%LOCALAPPDATA%\FactoryGame\Saved\Config' folder to '%LOCALAPPDATA%\FactoryGame\Saved\Old_Config', then launch the game.
+
+; Plugin Error on launch
+* This is related to mods installed, Mods have been updated and now work with 1.0 so please make sure to update all your mods!. Keep in mind that not all mods have been updated yet.
+
+; Mouse sensitivity feeling sluggish with V-Sync turned on
+We’re currently investigating an issue where some players experience very sluggish mouse movement with V-Sync turned on. In the meantime, we recommend playing with V-Sync turned off if the mouse controls feel overly annoying.
+
+; Players starting at tier 2 on Dedicated Servers
+Players are currently starting off at tier 2 upon entering the game on Dedicated Servers, skipping past tier 1. We’re currently looking into limiting the skipped parts of the game on Dedicated Servers to the intro sequence only (tier 0), and possibly even enabling players to experience tier 0 on Dedicated Servers as well.
+
+{{PatchesNav}}

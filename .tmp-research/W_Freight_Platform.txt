@@ -1,0 +1,166 @@
+<div class="infobox-tabber"><tabber>
+Solid=
+{{Infobox building|className=Desc_TrainDockingStation_C
+| overclockable = 0
+| beltInputs = 2
+| beltOutputs = 2
+| size_width = 34
+| size_length = 16
+| size_height = 20
+}}
+|-|
+Fluid=
+{{Infobox building|className=Desc_TrainDockingStationLiquid_C
+| overclockable = 0
+| pipeInputs = 2
+| pipeOutputs = 2
+| size_width = 34
+| size_length = 16
+| size_height = 20
+}}
+</tabber></div>
+A '''Freight Platform''' is a building on the [[Railway]] where [[Freight Car]]s can be loaded or unloaded, based on the setting of each Freight Platform.
+
+It has to be attached to a [[Train Station]] to work and only snaps to it (alongside other platforms). 
+It has two inputs and two outputs and 48 item slots for Solid Freight Platforms or 3200 m{{cubic}}<ref name="Reddit-1rz57bx">[https://www.reddit.com/r/SatisfactoryGame/comments/1rz57bx/comment/objhvyg/ Reddit - Fluid Trucks Physically Smaller, More Fluid than Train Fluid Car, Other Comparisons]</ref> of capacity for Fluid Freight Platforms, which is 1.5× the capacity of a single Freight Car.
+
+== Usage ==
+=== UI ===
+The Freight Platform UI <ref name="yt-CskxkIepX6Y">[https://youtu.be/CskxkIepX6Y?t=870 YouTube - Update 5 Trains Collisions, Signals, New "Stop Settings" & more - Freight Station UI Changes]</ref> has a similar look and feel to the [[Truck_Station#UI|Truck Station UI]], and depending on if the Freight Platform is set to LOAD or UNLOAD will include information about:
+* Outgoing Transfer Rate (Load)
+* Incoming Transfer Rate (Unload)
+
+There is NO OPTION to have Freight Platforms do both Loading and Unloading in one cycle.
+
+The Freight Platform is set to LOAD by default. Just toggle the button to set it to UNLOAD (or vice versa).
+
+<gallery>
+File:Freight platform UI.png|Update 4 (and earlier) - Example of Freight Platform UI
+File:Freight Platform UI.png|Update 5 - Example of Freight Platform UI
+</gallery>
+
+=== Setting up freight stations ===
+To make a working freight station, the station and freight platforms have to be set up in a specific way. The facing direction of the [[Train Station]] is important, and is indicated with a ▶. When placed, the facing direction can still be identified by the ledge on the front side of the roof.
+
+[[File:Freight1.png|frameless|325x325px]]
+
+
+The freight platforms must be behind the train station building as shown in the graphic.
+
+To set up the station so that only, say, the second carriage is accessed (loading/unloading), use [[Empty Platform]] (or the with catwalks variant, the result is the same) to act as a spacer. 
+
+[[File:Freight with skipped.png|frameless|325x325px]]
+
+
+For example, if the train is intended to take quartz from one station and steel from another station. Each station has an assigned carriage on the train.
+
+In this example, the steel is deposited only to the first carriage behind the locomotive. The train then travels to the second station to collect quartz in the second carriage. Since the quartz station is only depositing into the second carriage, an empty platform is used to create a spacer so that the freight platform is aligned with the second carriage. This removes the need to build freight platforms that aren't needed. Note that using a [[railway]] piece between the train station and freight platform won't work because the freight platform will not function.
+
+Recolouring carriages can be used to aid in keeping track of which carriage contains which material.
+
+=== Loading and unloading ===
+During the 27.08 seconds of automatic cargo transfers:
+* Manual interactions with Freight Platforms and Cars aren't allowed unless that Platform has nothing to transfer.
+* All belts connected to a Platform stop and no items enter or exit.
+*Partial transfers only occur when the receiver has a free slot.  
+
+=== Animation ===
+Each of the following transfer animations takes 27.08 seconds:
+* Full loading: The 20T crane hoists the container up and out of the freight platform and puts it onto the freight car.
+* Partial loading: The 20T crane hoists the entire storage module up from the freight platform and hovers it over the freight car. The doors below the module open and the contents flow from the bottom of the module into the top of freight car container. The storage module is then put back to the freight platform.
+**While the platform storage module is being lifted, the pioneer can walk on the shelf where it normally rests. This is dangerous since the pioneer can be trapped there when the module is returned.
+* Full unloading: The 20T crane hoists up the container from the freight car and drops it into the storage module.
+* Partial unloading: The 20T crane hoists up the container from the freight car and hovers it over the freight platform's storage module. The doors below the container open and the contents flow from the container to the storage module. The container is then placed back on the freight car.
+In all cases, the animation is complete only after the crane moves back to its original position. ''Continue reading: [[Train Station#Docking]]''
+
+==== Viable path requirements ====
+Freight Platforms are only usable when the train has a viable path along the forward direction of the track. One way to avoid this being a problem with terminating stations is to use a loop in your track. Once the path is viable you can begin to insert cargo into the Freight Platforms.
+
+=== Power ===
+* Freight Platforms only consume full power when transferring cargo with the Freight Car. At rest they only consume 0.1 MW.
+* Transferring fluids with Fluid Freight Platforms requires connected powered Train Stations.
+
+=== Flushing ===
+A Fluid Freight Platform has the 'Flushing' option, similar to [[Pipelines]] and [[Fluid Buffer]]s.
+
+== Train throughput ==
+{{Main|Tutorial:Train throughput}}
+== Head lift ==
+{{Main|Head lift}}
+Fluid Freight Platforms apply head lift differently than any other building:
+* The bottom output applies a head lift of 10 meters and an actual head lift of 12 meters measured from the platform base (the platform is one meter tall).
+* The top output, placed four meters above the bottom output, applies a head lift of 14 meters and an actual head lift of 16 meters measured from the platform base.
+
+Head lift is applied regardless of the Freight Platform's load/unload setting. The generated head lift does not depend on its remaining fluid content, which means it can easily empty itself into [[Fluid Buffer]]s located at the same level.
+
+Fluid Freight Platforms do not generate opposing head lift when being filled up, and thus a fluid source can easily fill them up as long as the pipe inlet level of the Fluid Platform is within the source's head lift. Because of this, it is advised to always use its lower pipe inlet first, followed by the upper inlet if the desired input rate is higher than a single pipe can handle.
+
+== Use of external buffers ==
+
+It is recommended to build out from Freight Platforms some [[Storage Container]]s to act as "buffers". <ref name="yt-4bQakQJ_aY4-1">[https://www.youtube.com/watch?v=4bQakQJ_aY4&t=38s YouTube - October 3rd, 2023 Livestream - Q&A: Will the delay in throughput when loading/unloading of Trains be removed? - Use Storage Container Buffers]</ref>
+
+== Trivia ==
+
+* The stopping (delay) of item loading / unloading was added to prevent issues <ref name="yt-4bQakQJ_aY4-0">[https://www.youtube.com/watch?v=4bQakQJ_aY4 YouTube - October 3rd, 2023 Livestream - Q&A: Will the delay in throughput when loading/unloading of Trains be removed?]</ref> and is similar in some respects to the delay seen during Autosaves. 
+
+== See also ==
+* {{BuildingLink|Electric Locomotive}}
+* {{BuildingLink|Freight Car}}
+* {{BuildingLink|Empty Platform}}
+* {{BuildingLink|Railway}}
+* {{BuildingLink|Train Station}}
+
+== Gallery ==
+<gallery>
+File:Freight Platform E3.png|A train docking with three train loading cranes (as seen in the E3 trailer).
+File:Freight Platform buffer.png|[[Industrial Storage Container]] with 2 belts connected to a [[Freight Platform]] is necessary to maintain the full throughput of a [[Freight Car]].
+</gallery>
+
+== History ==
+* [[Patch 1.2.0.0]]: Undocumented change - Increased Fluid Freight Platform to 3200 m{{Cubic}}.
+* [[Patch 1.1.0.4]]: Potential fixes for crashes related to Building [[Railway]]s and [[Train Station]]s/Freight Platforms in [[Multiplayer]]
+* [[Patch 1.1.0.2]]: Fixed train tracks being able to be branched and create [[Railroad Switch Control|switches]] from the end of a [[Train Station]] or Freight Platform which would result in issues
+* [[Patch 1.0.0.4]]: Fixed measurement unit being missing in the Fluid Freight platform transfer rate
+* [[Patch 1.0]]: Changed cost from 6 Heavy Modular Frame, 2 Computer, 5 Motor, 50 Concrete and 25 Cable to 10 Encased Industrial Beams, 25 Plastic, 5 Motor, 50 Concrete and 100 Wire
+* [[Patch 0.6.0.0]]: Optimized Freight Platform loading
+* [[Patch 0.5.1.7]]: Fixed Freight Cars failing to load/unload correctly with the rule set to Fully Load/Unload which lead to them getting stuck in docking until force cancelled
+* [[Patch 0.3.4.16]]: Fixed too large Track clearance
+* [[Patch 0.3.4.15]]: Integrated Station Track should no longer rotate separately from the main building
+* [[Patch 0.3.4.14]]: Icon updated
+* [[Patch 0.3.4.13]]:
+** Added a few more details to the meshes
+** Now does the partial load animation when applicable instead of triggering the wrong animation and clipping containers through each other
+** Conveyor Belts and Pipes now connect properly and no longer leave a gap when reconnecting
+* [[Patch 0.3.4.12]]: Added new meshes
+* [[Patch 0.3.4.6]]: Now state the correct capacity in their description
+* [[Patch 0.3.4.0]]: 
+** Increased capacity of Fluid Freight Platforms from 500 to 2400 m{{cubic}}
+** Performance improvements
+* [[Patch 0.3.2.0]]: Changed name from Freight Platform Fluid to Fluid Freight Platform, updated UI
+* [[Patch 0.3.1.1]]: Increased capacity of Fluid Freight Platforms from 50 to 500 m{{cubic}} (properly implemented)
+* [[Patch 0.3.1.0]]: <s>Increased capacity of Fluid Freight Platforms from 50 to 500 m{{cubic}}</s> (announced but not actually implemented)
+* [[Patch 0.3]]:
+** Introduced Fluid Freight Platform
+** Clients can now access inventories
+* [[Patch 0.2.1.14]]: Fixed ladder collision
+* [[Patch 0.1.19]]: 
+** Updated animations and visuals
+** Changed input/outputs of Freight Platforms
+* [[Patch 0.1.17 build 101353]]:
+** Now can be dismantled again
+** Shift-click support for the inventory implemented
+** Now stops if a power outage occurs, and resumes when powered up again
+* [[Patch 0.1.17]]: Freight station in the middle of animation work
+* [[Patch 0.1.16]]: Made the Freight Platform available
+
+== Early game development ==
+Prior to Closed Alpha, in Sprint 23 (week 46) trains were first shown, to include an early version of the Freight Platform called a Train Docking Station.
+* See also: [[Early_game_development#Trains|Game Development - Trains]]
+
+==References==
+{{Reflist}}
+
+{{VehicleNav}}
+{{BuildingNav}}
+
+[[fr:Plateforme de chargement]]

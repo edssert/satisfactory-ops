@@ -1,0 +1,107 @@
+{{Infobox simple
+| image = PowerSlug_Cycle.gif
+| description = A strange slug radiating a strange power.
+| researchTier = [[Power Slugs Research]]
+| stackSize = 50
+}}
+{{Quote|The crystals on these slugs can be harvested and converted into power shards that function with current FICSIT technology.|[[ADA]]}}
+
+'''Power Slugs''' are collectibles which are used to craft {{ItemLink|Power Shard|Power Shards}}, which enable [[overclocking]] of buildings. They appear as glowing immobile slugs and can found around the [[world]]. They do not respawn and there is a limited number in the world, but a small number of renewable Power Slugs can be found with the aid of tamed [[Lizard Doggo]]s. They can be [[research]]ed at the [[MAM]] to unlock [[overclocking]] of buildings, along with recipes to craft slugs into Power Shards at a [[Craft Bench]] or [[Constructor]].
+
+== Variants ==
+There are blue, yellow, and purple slugs scattered around the map, which can be crafted into one, two and five {{ItemLink|Power Shard|Power Shards}} respectively, with increasing rarity.
+
+=== Blue ===
+There are 596 Blue Power Slugs in the world. They are often found in plain sight on small stone spires, on the trees or hills that rarely require a [[ladder]] or a {{ItemLink|Jetpack}} to reach. You may find a few of them hidden inside crackable [[boulder]]s which can be detonated with a {{ItemLink|Nobelisk Detonator}}.
+
+Blue Power Slugs have replaced Green Power Slugs. They are functionally identical and only differ in name and color.
+
+'''Produces:''' One {{ItemLink|Power Shard}}
+
+=== Yellow ===
+There are 389 Yellow Power Slugs in the world. They are often found in and around the [[Gas Pillar]], on trees, near/on cliff faces, and other difficult-to-traverse places. Most of them are guarded by a [[combat|strong creature]], or surrounded by [[Poison Gas]]. (You can use a {{ItemLink|Gas Mask}} to get through the poison gas easily.) You will often need to construct a tall [[ladder]] to reach them.
+
+'''Produces:''' Two {{ItemLink|Power Shard|Power Shards}}
+
+=== Purple ===
+There are 257 Purple Power Slugs in the world. They are usually found high up on cave walls, on top of mountains, inside ravines, on cliff faces and other hard to notice/reach places. You will usually need to construct a long [[ramp]] or [[walkway]] or have access to use the {{ItemLink|Jetpack}} to reach them. Some Purple Power Slugs are heavily guarded by strong creatures or surrounded by several [[radioactive]] [[deposit]]s.
+
+'''Produces:''' Five {{ItemLink|Power Shard|Power Shards}}
+
+== Obtaining ==
+Power Slugs can be searched for using the {{ItemLink|Object Scanner}}, with one setting searching for slugs of any color. They are luminescent and can be easily spotted at night. Picking up a Power Slug requires the player to hold down the interact button (default {{key|E}}) for three seconds while facing it. Using the photo mode {{key|P}} and zoom in {{mouse|middle}} can act like a binocular which helps the search.
+
+Some slugs are in difficult-to-reach locations, with the difficulty caused through such aspects of gameplay as traversing the geography, dealing with hostile [[fauna]]e, or traversing environmental hazard (e.g. two Purple Power Slugs in the [[Red Jungle]], require the player to enter a 'cave entrance' that leads to an underground void scattered with several [[Uranium]] [[deposit]]s. [[Foundations]] can be built to retrieve them safely. [[Hazmat Suit]] is required.)
+
+{{PowerSlugCount|blue = 596|yellow = 389|purple = 257}}
+
+It is also worth noting that another 10 [[Power Shard|Power Shards]] are required to unlock the [[Synthetic Power Shard]] recipe in the [[MAM]], 100 to unlock [[Ionized Fuel]], and another 100 to unlock the [[Alien Power Augmenter]]. If only using non-renewable Power Shards, this would drop the total limit to 5091, after the use of [[Somersloop|Somersloops]].
+
+=== Unlocking ===
+{{MAMunlock|chain=Power Slugs|ingredient1=Blue Power Slug|quantity1=1|name=Power Slugs|plural=1}}Additional researches unlock recipes for each kind of slug, overclocking and scanning using the Object Scanner.
+
+== Usage ==
+=== Research ===
+{{MAMusage|chain1=Power Slugs}}
+
+=== Crafting ===
+{{Recipes using|Desc_Crystal_C|Desc_Crystal_mk2_C|Desc_Crystal_mk3_C}}
+
+=== AWESOME Sink ===
+{{Sinkusage|Power Slug}}
+
+==Achievements==
+{{Achievement|PICKED_UP_SLUG}}
+{{Achievement|GATHERED_ALL_SLUG_TYPES}}
+
+== Trivia ==
+* It appears that these are amphibian slugs, as they can also be found in shallow lakes.
+* Power Slugs have two small, beady black eyes on their front, most easily observed when below them.
+* Power Slugs were originally gemstones, but were changed to slugs shortly before release.<ref name="ytc-UgkxGYafsOSqNq0FcWcVuMWHxf9W4MX3nSKk">[https://youtube.com/clip/UgkxGYafsOSqNq0FcWcVuMWHxf9W4MX3nSKk YouTube - Coffee Stain - March 18th, 2022 - We pick apart our Community Wiki and talk about unreleased content - Snutt & Jace Talk: Object Scanner article]</ref>
+
+* While slugs can be found widely scattered around the map they tend to be found in concentrated clusters along and around the stony, plant like tendrils that weave across the landscape with some locations having as many as ten in a small area. What relationship the slugs have to these are currently unknown.
+* The Spire Coast is one of the biomes with a high Power Slug density, making it a good source for mid-late game, when the Jetpack is unlocked. Be careful as there are more hostile creatures around the slugs themselves.
+
+== Current issues ==
+The coordinates below are measured in centimeters. (A foundation size = 800 x 800)
+* There is a Blue Power Slug buried below ground that is impossible to collect without clipping, at [[Rocky Desert]]. (-169150, 86, 400)
+* Two impossible Yellow Power Slugs are buried within a [[Gas Pillar]] at [[Lake Forest]] and [[Desert Canyons]], at (65494, -2077, 13600) and (-11592, -149477, 12200) respectively. Unlike the above cases, clipping will not work as the slugs are embedded inside a solid structure, making all sorts of interaction impossible. However, as of Update 8, it is possible to blow up the gas pillars, making these slugs now possible to collect.
+
+== Gallery ==
+<gallery>
+File:Dropped Power Slug.png|A Power Slug after being placed on the ground
+File:Green Power Slug.png|Green Power Slug from earlier versions, replaced by the Blue Power Slug
+</gallery>
+
+== History ==
+* [[Patch 1.1.0.0]]: Received some polish so you can marvel at as you pick them up before you unavoidably turn them into power shards
+* [[Patch 1.0.0.4]]: Fixed some Slugs being out of bounds and unobtainable
+* [[Patch 0.6.0.0]]: Added sound effect when collecting Power Slugs
+* [[Patch 0.5.0.0]]: Color and textures of the Power Slugs have been updated to be more easily distinguishable
+** Green Power Slugs are now Blue Power Slugs
+** Undocumented change: Inventory icon and name updated
+* [[Patch 0.3.6]]: Can no longer be trashed with the inventory trash slot.
+* [[Patch 0.3]]?: Made Power Slugs more distinguishable in colors. Made them easier to spot by adding misty clouds around them and a beam effect that shoots out from its back
+* [[Patch 0.2.1.8]]: Ensured that Power Slugs don’t lose their color on distance
+* [[Patch 0.2.1.5]]: Added LODs
+* [[Patch 0.1]]:
+** Added a special pick-up sound
+** Made the Yellow Power Slug more yellow
+
+== Early game development ==
+Prior to Closed Alpha, in the early game development there were no power slugs, but instead there were Quartz Crystals which were used in production of items. Quartz Crystals eventually became power slugs.
+* See also: [[Early_game_development#Power_Slug|Game Development - Power Slug]]
+
+== Upcoming ==
+Based on information shown on the [https://satisfactory-calculator.com/en/interactive-map?switchGameBranch=Stable Satisfactory-Calculator Interactive Map - Stable Branch] (Version 1.0) there '''may be''' increases to Power Slug Counts, ''but these have not been validated as of yet and might change.''
+
+== References ==
+{{Reflist}}
+
+{{ItemNav}}
+
+[[Category:Items]]
+[[Category:Fauna]]
+
+[[fr:Électrolimace]]
+[[zh:{{PAGENAME}}/zh]]

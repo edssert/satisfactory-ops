@@ -1,0 +1,2793 @@
+{{Ambox|border=red|type=<div style="font-size: 1.3em;">'''This article contains many images'''</div>Beware loading this article on metered connections.}}
+[[File:Sprint 0 - Game Jam Prototype.png|thumb|Game Jam Prototype that inspired the development of ''Satisfactory'']]
+
+This article covers the development of  ''[[Satisfactory]]'' from the game's inception to the release of the Closed Alpha.
+
+''Satisfactory'' started development as a game jam game.<ref name="yt-7I3NGAm3j_4@70">[https://youtu.be/7I3NGAm3j_4?t=70 YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Game Jam Game #1]</ref><ref name="yt-7I3NGAm3j_4@515">[https://youtu.be/7I3NGAm3j_4?t=515 YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Game Jam Game #2]</ref><ref name="yt-HUmedz9mghE">[https://www.youtube.com/watch?v=HUmedz9mghE YouTube - March 19, 2024 Livestream - Q&A: How much time did it take to develop a playable concept of Satisfactory initially?]</ref> According to [[Coffee_Stain_Studios#Coffee_Stain_Studios|CSS UI/UX Designer Nathalie Verweij]] the Game Jam Game in 2016 was called "Base Defense" which inspired a new game that eventually became "Satisfactory" in 2018.<ref name="yt-1GH5SZkrv2M@4795">[https://www.youtube.com/watch?v=1GH5SZkrv2M&t=4795s YouTube - Satisfactory 1.0 Release Stream! - Game Jam Game called Base Defense]</ref>
+
+The first year (52 weeks) of game development was done in "sprints" of 2 weeks each<ref group="S1" name="yt-7I3NGAm3j_4@143">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=143s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Game Sprints]</ref> with a development team that initially consisted of 16 individuals.<ref group="S1" name="yt-7I3NGAm3j_4@223">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=223s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Initial Game Development Team]</ref>
+
+{{Tocright}}
+
+== Early gameplay ==
+A lot of the early game systems, like those related to equipment, build gun, building, etc., were based on previous game development in the Sanctum Series.<ref group="S8" name="yt-7I3NGAm3j_4@1112">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1112s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Game Systems Copied From Sanctum]</ref>
+
+Much of the early game allowed you to build and mine anywhere. By Sprint 6 (week 12) this ability was being evaluated, along with looking at the scale and experience of the game to see if that is what they wanted.<ref group="S6" name="yt-7I3NGAm3j_4@1020">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1020s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Early gameplay style decisions]</ref>
+
+In Sprint 12 (week 24), using {{Key|E}} (Interact) outlined the building or machine being interacted with.<ref group="S12" name="yt-7I3NGAm3j_4@1291">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1291s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Use of Key E (Interact)]</ref> Additionally at this time with the introduction of the Portable Miner, combined with the hand-mining ability, the development team began to consider things like how fast or slow should mining be. <ref group="S12" name="yt-7I3NGAm3j_4@1405">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1405s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Portable Miner Introduced]</ref>
+
+In Sprint 20 (week 40) the use of the "build effect" was seen.<ref group="S20" name="yt-7I3NGAm3j_4@1614">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1614s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Assembler - Advanced Constructor]</ref>
+
+Sometime between Sprint 20 and Sprint 23 (week 46) the name of the game of "Satisfactory" was added to Main Menu.<ref group="S23" name="yt-7I3NGAm3j_4@1750">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1750s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Game Initially Called Satisfactory]</ref>
+
+By Sprint 26 (week 52), the individual buildings and production lines looked much like they do now but more "cartoony".<ref group="S26" name="yt-7I3NGAm3j_4@2195">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=2195s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Early Game Basic Production Line]</ref><ref group="PA" name="yt-ZW0OOikcWN0@1187">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=1187s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Pre-Alpha Large Factory]</ref>
+
+<gallery>
+File:Sprint 23 - Main Menu.png|Sprint 23 - Early Version of Main Menu
+File:Sprint 26 - Factory.png|Sprint 26 - Early game development basic production
+File:Sprint 26 - Factory 1.png|Sprint 26 - Early game development basic production line 1
+File:Sprint 26 - Factory 2.png|Sprint 26 - Early game development basic production line 2
+File:Sprint PA - Factory 1.png|Pre-Alpha - Large Factory 1
+File:Sprint PA - Factory 2.png|Pre-Alpha - Large Factory 2
+File:Sprint PA - Factory 3.png|Pre-Alpha - Large Factory 3
+File:Sprint PA - Factory 4.png|Pre-Alpha - Large Factory seen while jumping down
+</gallery>
+
+== [[World]] ==
+The first Biome worked on in the game was the Northern Forest Biome.<ref name="yt--INOqzrvPOw@56">[https://www.youtube.com/watch?v=-INOqzrvPOw&t=56s YouTube - August 3rd, 2021 Livestream - Q&A: What inspired the new look of the Northern Forest?]</ref><ref name="yt-HUmedz9mghE@218">[https://youtu.be/HUmedz9mghE?t=218 YouTube - March 19, 2024 Livestream - Q&A: How much time did it take to develop a playable concept of Satisfactory initially? - First Biome Created]</ref>.
+
+{| class="wikitable"
+!Sprint
+!Image
+!Remarks
+!Reference
+|-
+|rowspan="2" style="text-align: center;"|Sprint 3<br/>(Week 6)
+|[[File:Sprint 3 - Landscape 1.png|200px]]
+|rowspan="2" style="text-align: center;"|The first time that world landscape was seen.
+|rowspan="2" style="text-align: center;"|<ref group="S3" name="yt-7I3NGAm3j_4@296">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=296s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - World Landscape Improvements #1]</ref>
+|-
+|[[File:Sprint 3 - Landscape 2.png|200px]]
+|-
+|rowspan="2" style="text-align: center;"|Sprint 6<br/>(Week 12)
+|[[File:Sprint 6 - Landscape.png|200px]]
+|rowspan="2" style="text-align: center;"|Landscape saw more improvements to include the first use of environmental water. The player could fall or fly through the water surface, and often other things (foliage, creatures, etc.) would be seen beneath.
+|rowspan="2" style="text-align: center;"|<ref group="S6" name="yt-7I3NGAm3j_4@544">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=544s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - World Landscape Improvements #2]</ref><br/><ref group="S6" name="yt-7I3NGAm3j_4@1049">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1049s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - World Landscape Improvements - Water]</ref>
+|-
+|[[File:Sprint 6 - Water.png|200px]]
+|-
+|rowspan="5" style="text-align: center;"|Sprint 8<br/>(Week 16)
+|[[File:Sprint 8 - Landscape 1.png|200px]]
+|rowspan="5" style="text-align: center;"|More changes seen to both landscape and water, and the addition of poison gas.
+|rowspan="5" style="text-align: center;"|<ref group="S8" name="yt-7I3NGAm3j_4@1063">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1063s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - World Landscape Improvements #3]</ref><br/><ref group="S8" name="yt-7I3NGAm3j_4@1148">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1148s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - World Landscape Improvements #4]</ref>
+|-
+|[[File:Sprint 8 - Landscape 2.png|200px]]
+|-
+|[[File:Sprint 8 - Landscape 3.png|200px]]
+|-
+|[[File:Sprint 8 - Landscape 4.png|200px]]
+|-
+|[[File:Sprint 8 - Poison Gas.png|200px]]
+|-
+|rowspan="7" style="text-align: center;"|Sprint 12<br/>(Week 24)
+|[[File:Sprint 12 - Landscape 1.png|200px]]
+|rowspan="7" style="text-align: center;"|Landscape continued to improve.
+|rowspan="7" style="text-align: center;"|<ref group="S12" name="yt-7I3NGAm3j_4@1219">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1219s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - World Landscape Improvements #5]</ref>
+|-
+|[[File:Sprint 12 - Landscape 2.png|200px]]
+|-
+|[[File:Sprint 12 - Landscape 3.png|200px]]
+|-
+|[[File:Sprint 12 - Landscape 4.png|200px]]
+|-
+|[[File:Sprint 12 - Resource Scanner 1.png|200px]]
+|-
+|[[File:Sprint 12 - Resource Scanner 2.png|200px]]
+|-
+|[[File:Sprint 12 - Resource Scanner 3.png|200px]]
+|-
+|rowspan="6" style="text-align: center;"|Sprint 20<br/>(Week 40)
+|[[File:Sprint 20 - Landscape 1.png|200px]]
+|rowspan="6" style="text-align: center;"|In the 4 months (16 weeks) since Sprint 12, the world landscape had massively changed to show a lot more foliage and overall environmental improvements.
+|rowspan="6" style="text-align: center;"|<ref group="S20" name="yt-7I3NGAm3j_4@1441">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1441s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - World Landscape Improvements #6]</ref>
+|-
+|[[File:Sprint 20 - Landscape 2.png|200px]]
+|-
+|[[File:Sprint 20 - Landscape 3.png|200px]]
+|-
+|[[File:Sprint 20 - Landscape 4.png|200px]]
+|-
+|[[File:Sprint 20 - Landscape 5.png|200px]]
+|-
+|[[File:Sprint 20 - Landscape 6.png|200px]]
+|-
+|rowspan="3" style="text-align: center;"|Sprint 23<br/>(Week 46)
+|[[File:Sprint 23 - Landscape 1.png|200px]]
+|rowspan="3" style="text-align: center;"|World landscape improved more.
+|rowspan="3" style="text-align: center;"|<ref group="S23" name="yt-7I3NGAm3j_4@1770">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1770s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - World Landscape Improvements #7]</ref>
+|-
+|[[File:Sprint 23 - Landscape 2.png|200px]]
+|-
+|[[File:Sprint 23 - Landscape 3.png|200px]]
+|-
+|rowspan="3" style="text-align: center;"|Sprint 26<br/>(Week 52)
+|[[File:Sprint 26 - Landscape 1.png|200px]]
+|rowspan="3" style="text-align: center;"|By Sprint 26 the world landscape in the initial biome of the Northern Forest, appeared more vibrant with saturated colors.
+|rowspan="3" style="text-align: center;"|<ref group="S26" name="yt-7I3NGAm3j_4@1982">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1982s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - World Landscape Improvements #8 and Biomass Collection]</ref>
+|-
+|[[File:Sprint 26 - Landscape 2.png|200px]]
+|-
+|[[File:Sprint 26 - Landscape 3.png|200px]]
+|-
+|rowspan="14" style="text-align: center;"|Pre-Alpha<br/>(Week 52+)
+|[[File:Sprint PA - Landscape 1.png|200px]] 
+|rowspan="14" style="text-align: center;"|Just prior to release in Closed Alpha the world landscape improved some more with appearance of the non-harvestable [[Flora|Balloon Plants]], and the addition of the [[Space Giraffe-Tick-Penguin-Whale Thing]], and [[Spitter]] creatures.
+|rowspan="14" style="text-align: center;"|<ref group="PA" name="yt-ZW0OOikcWN0@60">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=60s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - World Landscape Improvements]</ref>
+|-
+|[[File:Sprint PA - Landscape 2.png|200px]]
+|-
+|[[File:Sprint PA - Landscape 3.png|200px]]
+|-
+|[[File:Sprint PA - Landscape 4.png|200px]]
+|-
+|[[File:Sprint PA - Landscape 5.png|200px]]
+|-
+|[[File:Sprint PA - Landscape 6.png|200px]]
+|-
+|[[File:Sprint PA - Landscape 7.png|200px]]
+|-
+|[[File:Sprint PA - Landscape 8.png|200px]]
+|-
+|[[File:Sprint PA - Landscape 9.png|200px]]
+|-
+|[[File:Sprint PA - Tractor - Explore 1.png|200px]]
+|-
+|[[File:Sprint PA - Tractor - Explore 2.png|200px]]
+|-
+|[[File:Sprint PA - Tractor - Explore 3.png|200px]]
+|-
+|[[File:Sprint PA - Tractor - Explore 4.png|200px]]
+|-
+|[[File:Sprint PA - Tractor - Explore 5.png|200px]]
+|}
+
+== [[Biomass]] ==
+With the addition of the biomass burner generator after 40 weeks of development came the ability to collect biomass from foliage.<ref group="S20" name="yt-7I3NGAm3j_4@1630">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1630s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Biomass Collection]</ref>
+
+In Sprint 20 (week 40) the ability to collect biomass by using {{Key|E}} was introduced. Collected biomass was used in a biomass burner generator and had an initial Stack Size of 100.
+
+In Sprint 26 (week 52) with more foliage to interact with, there were more places to collect Biomass, to include removing trees without the aid of a chainsaw.<ref group="S26" name="yt-7I3NGAm3j_4@1982"></ref>
+
+<gallery>
+File:Sprint 20 - Biomass 1.png|Sprint 20 - First appearance of the ability to collect Biomass
+File:Sprint 20 - Biomass 2.png|Sprint 20 - Use of Biomass in Biomass Burner Generator
+File:Sprint 26 - Biomass.png|Sprint 26 - Collecting Biomass from trees
+File:Sprint PA - Biomass.png|Pre-Alpha - Collecting Biomass from bushes
+</gallery>
+
+== [[Paleberry]] ==
+In Sprint 26 (week 52), at the end of early development, the paleberry bush was introduced.<ref group="S26" name="yt-7I3NGAm3j_4@1998">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1998s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Early Version of Paleberry Bush]</ref> and looked like a snail or worm with hanging fruit. Each paleberry bush could have two to four berries shown but you could only pick up 2 using {{Key|E}}.
+
+<gallery>
+File:Sprint 26 - Paleberry 1.png|Initial look at Paleberry bush with berries
+File:Sprint 26 - Paleberry 2.png|Initial Paleberry bush with no berries
+</gallery>
+
+== [[Pioneer]] ==
+The Pioneer model changed as the game developed.
+
+In the beginning, and shown in Sprint 1 (week 2), the game used the default Unreal Engine mannequin.<ref group="S1" name="yt-7I3NGAm3j_4@179">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=179s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Pioneer - Default UE Mannequin Model]</ref>
+
+By Sprint 12 (week 24) there had been some work on the Pioneer model,<ref group="S12" name="yt-7I3NGAm3j_4@1226">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1226s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Pioneer - Model Development #1]</ref> and by Sprint 26 (week 52) the Pioneer model had received even more improvements.<ref group="S26" name="yt-7I3NGAm3j_4@2163">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=2163s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Pioneer - Model Development #2]</ref>
+
+<gallery>
+File:Sprint 1 - Default UE Mannequin.png|Sprint 1 - Pioneer using default UE Mannequin Model (hand)
+File:Sprint 12 - Pioneer 1.png|Sprint 12 - Pioneer Model Improvement (lower torso)
+File:Sprint 12 - Pioneer 2.png|Sprint 12 - Pioneer Model Improvement (hand)
+File:Sprint 26 - Pioneer 1.png|Sprint 26 - Pioneer Model Improvement (front view)
+File:Sprint 26 - Pioneer 2.png|Sprint 26 - Pioneer Model Improvement (rear view)
+File:Sprint PA - Pioneer 1.png|Pre-Alpha - Pioneer (Back) and third person view
+File:Sprint PA - Pioneer 2.png|Pre-Alpha - Pioneer (Right Side)
+File:Sprint PA - Pioneer 3.png|Pre-Alpha - Pioneer (Left Side)
+</gallery>
+
+=== Points of view ===
+Most of the time in early development the Pioneer used only first person view, but later the ability to use both first and third person views were allowed as part of a test.
+
+In Sprint 20 (week 40) the Pioneer used only third Person view to get more feedback from CSS "players".<ref group="S20" name="yt-7I3NGAm3j_4@1441"></ref>. They did for a while have a way to switch from first person view to third person view.<ref group="S20" name="yt-7I3NGAm3j_4@1469">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1469s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Ability to use both first and third person views]</ref>.
+
+In Sprint 23 (week 46) the Pioneer now used only first person view as part of getting more feedback.<ref group="S23" name="yt-7I3NGAm3j_4@1771">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1771s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Pioneer uses first Person View and Compass Changes]</ref>
+
+In Sprint 26 (week 52) the Pioneer could be switched from first person view and third person view by using the {{Mouse|middle}} (MMB).<ref group="S26" name="yt-7I3NGAm3j_4@2158">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=2158s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Pioneer uses 1st Person and 3rd Person Views]</ref><ref group="PA" name="yt-ZW0OOikcWN0@73">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=73s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Pioneer Camera Change]</ref>
+
+=== Health ===
+In Sprint 8, when taking damage, like from Poison Gas, you would hear sound effect like someone punching you, and would see blood splatter on the HUD (visor).<ref group="S8" name="yt-7I3NGAm3j_4@1162">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1162s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Poison Gas and Combat]</ref>
+
+Even after 36+ more weeks of development, prior to Closed Alpha, while the "damage" sound was changed, when taking damage, from falling, or Poison Gas, or Creatures, you would still see the blood splatter on the HUD ''(albeit a bit less graphic).''<ref group="PA" name="yt-ZW0OOikcWN0@1296">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=1296s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Damage and Combat Fighting Fluffy-tail Hog]</ref><ref group="PA" name="yt-ZW0OOikcWN0@1364">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=1364s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Damage and Combat Fighting Spitter]</ref><ref group="PA" name="yt-ZW0OOikcWN0@1463">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=1463s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Damage from falling]</ref>
+
+<gallery>
+File:Sprint 8 - Poison Gas Damage.mp4|Sprint 8 - Example video snippet of Pioneer damage from Poison Gas
+File:Sprint PA - Pioneer Damage 1.png|Pre-Alpha - Example of blood damage from falling
+File:Sprint PA - Pioneer Damage 2.png|Pre-Alpha - Example of blood damage from Poison Gas
+File:Sprint PA - Pioneer Damage 3.png|Pre-Alpha - Example of blood damage from Fluffy-tail Hog attack
+File:Sprint PA - Pioneer Damage 4.png|Pre-Alpha - Example of blood damage from Spitter attack
+</gallery>
+
+== [[HUD]] ==
+The Heads Up Display (HUD) developed as the game developed.
+
+In Sprint 8 (week 16) the HUD saw some major improvements. Some of the changes noted was the use of a Hotbar near the bottom for Build Gun, Pickaxe, and Nail Gun, and a Health Bar located in the upper right.<ref group="S8" name="yt-7I3NGAm3j_4@1162"></ref>
+
+By Sprint 12 (week 24), the Hotbar had been removed, and replaced with a Compass.<ref group="S12" name="yt-7I3NGAm3j_4@1230">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1230s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - HUD - Compass]</ref> Activiation of the in-game escape/pause menu would also show an early version of the To-Do List on the left, and current Controls on the right.
+
+By Sprint 23 (week 46) the HUD Compass had been improved but still appeared on the bottom.<ref group="S23" name="yt-7I3NGAm3j_4@1771"></ref> Also during Sprint 23 there was the use of a Health Bar and Stamina Bar.<ref group="S23" name="yt-7I3NGAm3j_4@1811">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1811s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - HUD - Health Bar and Stamina Bar]</ref> The Stamina Bar would decrease as you sprinted. The Stamina Bar was removed before Early Access (Update 1) release.
+
+By Sprint 26 (week 52) the Compass had been moved to the top of the HUD.<ref group="S26" name="yt-7I3NGAm3j_4@1982"></ref>
+
+During Pre-Alpha (week 52 and after), the To-Do List could be activated by using {{Key|Left Shift}} while hovering over Build Menu item.<ref group="PA" name="yt-ZW0OOikcWN0@500">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=500s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Example To-Do List Enable]</ref>. The To-Do List would appear in the upper left corner of the HUD.
+
+<gallery>
+File:Sprint 8 - HUD.png|Sprint 8 - Example of HUD Improvements
+File:Sprint 12 - HUD - Compass.png|Sprint 12 - Example use of the HUD Compass (see bottom)
+File:Sprint 23 - HUD - Compass 1.png|Sprint 23 - Example use of the HUD Compass showing North
+File:Sprint 23 - HUD - Compass 2.png|Sprint 23 - Example use of the HUD Compass showing East
+File:Sprint 23 - HUD - Health and Stamina Bars.png|Sprint 23 - Example use of the HUD Health and Stamina Bars
+File:Sprint 26 - Landscape 1.png|Sprint 26 - Example showing Compass now on top of HUD
+File:Sprint PA - Trading Post 1.png|Pre-Alpha - Trading Post (HUB) - Example of To-Do List (upper left corner)
+</gallery>
+
+== [[Jetpack]] ==
+A basic "Jetpack" or flying mode was first used in Sprint 3 (week 6)<ref group="S3" name="yt-7I3NGAm3j_4@318">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=318s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Early Jetpack (Flying) Function]</ref> which allowed flying without using any equipment like the Jetpack. While removed in Closed Alpha, it was re-introduced in Update 8 in the form of the [[Advanced_Game_Settings#Gameplay|Advanced Game Settings Flight Mode]].
+
+<gallery>
+File:Sprint 3 - Jetpack.png|Sprint 3 - Early Flying Function (Green Usage Bar)
+</gallery>
+
+== [[Blade Runners|Jet Boots]] ==
+In Sprint 20 (week 40) the use of Jet Boots to help in jumping was shown<ref group="S20" name="yt-7I3NGAm3j_4@1647">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1647s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Biomass Collection]</ref> which most likely led to creation of the [[Blade Runners]] in later game development.
+
+<gallery>
+File:Sprint 20 - Jet Boots.png|First appearance use of Jet Boots
+</gallery>
+
+== [[Game menus]] ==
+For most of the first year of game development there were no game menus other than individual menus for Build Gun or buildings.
+
+=== Main menu ===
+By Sprint 23 (week 46) the early game started using a Main Menu which included the game name Satisfactory, along with an improved in-game escape/pause menu.<ref group="S23" name="yt-7I3NGAm3j_4@1750"></ref> The Main Menu at this time consisted of:
+
+* Continue (New)
+* Play
+* Load
+* Multiplayer
+* Options
+* Mods
+* Exit
+
+Prior to Closed Alpha the Main Menu defaulted to the Swedish language<ref group="PA" name="yt-ZW0OOikcWN0@24">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=24s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Main Menu Default Language]</ref> but could be changed to local native language by clicking on "Val" (Choice) which opened the game options (settings) menu.
+
+=== Escape menu ===
+In Sprint 12 (week 24) an in-game escape menu was used<ref group="S12" name="yt-7I3NGAm3j_4@1247">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1247s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Early Game Escape-Pause Menu and Use of Scanner]</ref> which consisted of the menu, along with an early version of the To-Do List on the left, and the current Controls on the right. The In-Game Escape-Pause Menu consisted of:
+
+* Resume
+* Respawn
+* Save
+* Main Menu
+* Exit
+
+In Sprint 23 (week 46) the improved in-game escape menu at this time had "Pause" on top and consisted of the following menu items (changes in '''bold'''):
+
+* '''Pause''' (on top)
+* Resume Game
+* '''Load Game'''
+* Save Game
+* '''Options'''
+* Exit To Main Menu
+* Exit To Desktop
+* Respawn ''(moved down to bottom)''
+
+<gallery>
+File:Sprint 12 - Escape Menu.png|Sprint 12 - Early Version of Escape-Pause Menu
+File:Sprint 23 - Escape Menu.png|Sprint 23 - Improved Version of Escape-Pause Menu
+File:Sprint PA - Main Menu 1.png|Pre-Alpha - Early Game Main Menu in Swedish
+File:Sprint PA - Main Menu 2.png|Pre-Alpha - Early Game Main Menu in English
+File:Sprint PA - Options Menu 1.png|Pre-Alpha - Early Game Options (Settings) Menu
+File:Sprint PA - Options Menu 2.png|Pre-Alpha - Early Gameplay Settings
+File:Sprint PA - Options Menu 3.png|Pre-Alpha - Early Options Warning
+</gallery>
+
+== [[Controls]] ==
+The first look at the keybinds for the Controls was seen in Sprint 12 (week 24)<ref group="S12" name="yt-7I3NGAm3j_4@1247"></ref> when activating the escape menu (see above), and consisted of the following:
+
+{| class="wikitable"
+!Keyboard/mouse
+!Function
+!Other function/note
+|-
+|{{Key|Mouse|None}} 
+|Move Camera
+|Not re-bindable
+|-
+|{{Key|W}}
+|Move Forward
+|
+|-
+|{{Key|A}}
+|Move Left
+|
+|-
+|{{Key|S}}
+|Move Backward
+|
+|-
+| {{Key|D}}
+|Move Right
+|
+|-
+|{{Key|Space}}
+|Jump
+|Hold to activate [[Early_game_development#Jetpack|Jetpack]]
+|-
+|{{Key|I}} or;<br />{{Key|Tab}}
+|Open Player Inventory
+|
+|-
+|{{Key|E}}
+|To open the building inventory
+|Recipe selector<br />Get in/get out of vehicle
+|-
+|{{Mouse|left}}
+|Choose recipe
+|
+|-
+|{{Mouse|middle}} ''(scroll)''
+|Scroll in building selector
+|Recipe selector
+|-
+|{{Key|Ctrl}} + {{Mouse|middle}} ''(scroll)''
+|Rotate building holograms
+|
+|-
+|{{Key|Alt}} + {{Mouse|left}}
+|Ping
+|
+|-
+|{{key|Enter}}
+|Chat
+|
+|-
+|{{Key|F}}
+|Scanner
+|
+|-
+|{{Key|R}}
+|Reload when gun is empty
+|
+|-
+|{{Key|Q}}
+|Dismantle Mode when needed
+|
+|}
+
+== [[Inventory]] ==
+The display of the Inventory changed as the early game was developed.
+
+At the beginning of game development in Sprint 1 (week 2) the Inventory consisted of just 16 fillable slots in a 4 by 4 grid.<ref group="S1" name="yt-7I3NGAm3j_4@189">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=189s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Burnt Bacon Coal Icon]</ref>
+
+By Sprint 12 (week 24) the look of the Inventory dramatically changed with the use of a brown background for inventory items, and the inclusion of Body Slots on top for Hands, Back, and Head.
+
+In Sprint 20 (week 40) the look of the Inventory had changed with removal of brown background and addition of an Equipment Section placed below it with 3 slots for Head, Hands, and Back.
+
+Prior to Closed Alpha, the Inventory pop-up looked the same, but the ability to split items in half by using {{Mouse|right}} (RMB) was seen.<ref group="PA" name="yt-ZW0OOikcWN0@283">[https://youtu.be/ZW0OOikcWN0?t=283s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Pioneer Inventory]</ref> 
+
+<gallery>
+File:Sprint 1 - Miner 4.png|Sprint 1 -Initial look of Player Inventory (Left)
+File:Sprint 12 - Trading Post 12.png|Sprint 12 - Early version of Player Inventory with Body Slots
+File:Sprint 20 - Trading Post - Workbench 2.png|Sprint 20 - Player Inventory Improvement
+File:Sprint PA - Inventory.png|Pre-Alpha - Player Inventory Improvement showing item splitting
+</gallery>
+
+== [[Ping]] ==
+Since Sprint 3 the Ping Function {{Key|Alt}} + {{Mouse|left}} (LMB) had been available<ref group="S3" name="yt-7I3NGAm3j_4@1890">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1890s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Ping Function]</ref> and displayed a large "X" on location being pinged instead of the current exclamation point "!" which was however shown in the Compass. The Ping Function was imported from [https://store.steampowered.com/app/91600/Sanctum/ Sanctum], also produced by Coffee Stain Studios.
+
+Prior to Closed Alpha the Ping Function was improved to show a colored diamond ⬙ with bottom half filled in the Compass. A different diamond color could be assigned to each co-op player in a  multiplayer session.<ref group="PA" name="yt-ZW0OOikcWN0@100">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=100s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Ping Function]</ref>
+
+<gallery>
+File:Sprint 23 - Ping.png|Early Ping Function showing exclamations ! in compass
+File:Sprint PA - Ping 1.png|Early version of Ping Function showing diamonds in compass
+File:Sprint PA - Ping 2.png|Early Ping Function showing multiple pings on object
+</gallery>
+
+== [[Controls|Chat]] ==
+Prior to Closed Alpha the Chat Function was introduced where by using the {{Key|Enter}} one player could chat with each co-op player in a multiplayer session.<ref group="PA" name="yt-ZW0OOikcWN0@144">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=144s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - In-Game Chat]</ref>
+
+<gallery>
+File:Sprint PA - Chat Function 1.png|Pre-Alpha - Use of the Chat Function while typing (see lower left corner)
+File:Sprint PA - Chat Function 2.png|Pre-Alpha - Use of the Chat Function after typing (see lower left corner)
+</gallery>
+
+== [[Resource Scanner]] ==
+The ability to scan for resources was added early in game development, but illustrated in Sprint 12 (week 24).<ref group="S12" name="yt-7I3NGAm3j_4@1247"></ref> The scan marked nearby resources using small colored laser spikes going up, but did not show there location on the Compass. The color of the spike determined what type of resource it was. Green might have been Stone (Limestone).
+
+In Sprint 26 (week 52), and prior to Closed Alpha, the ability to scan for specific resources was added where by using {{Key|F}} you opened a radial menu and had to pick an item to scan for.<ref group="S26" name="yt-7I3NGAm3j_4@2013">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=2013s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Use of Resource Scanner]</ref><ref group="PA" name="yt-ZW0OOikcWN0@155">[https://youtu.be/ZW0OOikcWN0?t=155 YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Resource Scanner Radial Menu]</ref>
+
+The "scan" graphic effect was changed to be similar to what happens now. After a ping, you would see the location of the specific resource scanned for appear in the Compass (but did not show distance). Individual Resource Nodes was indicated on the Compass by the use of a circle ◯, and a 3-letter abbreviations for Resources, like "IRN" for Iron, "CPR" for Copper" and "STN" for Stone (Limestone).
+
+If close by, during the scan, the Pioneer would see a line flash with each ping and a white marker placed on the Resource Node.<ref group="PA" name="yt-ZW0OOikcWN0@187">[https://youtu.be/ZW0OOikcWN0?t=187 YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Resource Node Marker]</ref>
+
+<gallery>
+File:Sprint 12 - Resource Scanner 1.png|Sprint 12 - Early version of Resource Scanner (Scan)
+File:Sprint 12 - Resource Scanner 2.png|Sprint 12 - Resource Scanner Results 1
+File:Sprint 12 - Resource Scanner 3.png|Sprint 12 - Resource Scanner Results 2
+File:Sprint PA - Resource Scanner 1.png|Pre-Alpha - Improved Resource Scanner
+File:Sprint PA - Resource Scanner 2.png|Pre-Alpha - Resource scan for iron
+File:Sprint PA - Resource Scanner 3.png|Pre-Alpha - Resource scan for copper
+File:Sprint PA - Resource Scanner 4.png|Pre-Alpha - Resource scan for stone (limestone)
+</gallery>
+
+== [[Build Gun]] ==
+The Build Gun first appeared in game by Sprint 6.
+
+In Sprint 3 (week 6) the Build Menu could be accessed using {{Key|B}} (for Build Gun).<ref group="S3" name="yt-7I3NGAm3j_4@323">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=323s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Early Build Menu]</ref> The Dismantle Mode use to be selectable in the Build Menu but later that ability to select it was removed and replaced by simply using {{Key|F}}.
+
+=== Sprint 3 ===
+The early Build Menu consisted of the following selectable items:
+
+{| class="wikitable"
+!Menu Item
+!Remarks / Notes
+|-
+|Dismantle
+|
+|-
+|Conveyor Belt
+|
+|-
+|Conveyor Hub
+|7 to 1 Merger
+|-
+|Miner
+|
+|-
+|Manufacturing Plant
+|Multi-use Building that acts as a Smelter, Constructor, or Refinery.
+|-
+|Assembler
+|
+|-
+|Conveyor Splitter
+|
+|-
+|Wind Turbine
+|
+|-
+|Power Line
+|
+|}
+
+<gallery>
+File:Sprint 3 - Build Menu.png|Early game Build Menu
+</gallery>
+
+=== Sprint 6 ===
+By Sprint 6 (week 12) the player actually had a "Build Gun"<ref group="S6" name="yt-7I3NGAm3j_4@575">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=575s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Build Gun]</ref> which consisted of a pink block with a red button held in the Pioneers hand.
+
+The Build Menu changed and consisted of the following selectable items (new items in '''bold'''):
+
+{| class="wikitable"
+!Menu Item
+!Remarks / Notes
+|-
+|Dismantle
+|
+|-
+|'''Workbench'''
+|
+|-
+|Conveyor Belt
+|
+|-
+|'''Conveyor Pole'''
+|
+|-
+|Conveyor Hub
+|7 to 1 Merger
+|-
+|Conveyor Splitter
+|
+|-
+|'''Oil Pump'''
+|{{NoteTag|name="Note 6.1"}}
+|-
+|'''Oil Refinery'''
+|{{NoteTag|name="Note 6.1"}}
+|-
+|Miner
+|
+|-
+|'''Smelter'''
+|
+|-
+|Manufacturing Plant
+|Now only a Constructor
+|-
+|Assembler
+|{{NoteTag|name="Note 6.2"}}
+|-
+|Wind Turbine
+|{{NoteTag|name="Note 6.2"}}
+|-
+|Power Line
+|{{NoteTag|name="Note 6.2"}}
+|-
+|'''Storage Container'''
+|{{NoteTag|name="Note 6.3"}}
+|-
+|'''Coal Generator'''
+|{{NoteTag|name="Note 6.3"}}
+|}
+
+Notes:
+{{Reflist|group=note|refs=
+{{NoteTag|name="Note 6.1"|text=This generated or processed Dry Goods Oil and not Fluid Oil which was introduced in Update 3.}}
+{{NoteTag|name="Note 6.2"|text=This menu item was in Sprint 3, so its presumed to be in Sprint 6.}}
+{{NoteTag|name="Note 6.3"|text=This menu item was in Sprint 8, and was shown used in Sprint 6.}}
+}}
+
+<gallery>
+File:Sprint 6 - Build Gun.png|Early Game Build Gun
+</gallery>
+
+=== Sprint 8 ===
+During Sprint 8 (week 16) the Build Menu "floated" in the environment.<ref group="S8" name="yt-7I3NGAm3j_4@1072">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1072s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Floating Build Menu]</ref>
+
+The Build Menu changed and consisted of the following selectable items (new items in '''bold'''):
+
+{| class="wikitable"
+!Menu Item
+!Cost
+!Remarks / Notes
+|-
+|Dismantle
+|
+|
+|-
+|'''Work Bench'''
+|5 Stone
+|Stone became Limestone
+|-
+|Conveyor Belt
+|1 Iron Pipe
+|
+|-
+|Conveyor Pole
+|1 Iron Pipe, 1 Iron Plate
+|
+|-
+|Conveyor Hub
+|3 Iron Pipe, 3 Iron Plate, 5 Wire
+|7 to 1 Merger
+|-
+|Conveyor Splitter 
+|3 Iron Pipe, 3 Wire
+|
+|-
+|Oil Pump
+|8 Steel Beams, 20 Steel Plates, 5 Steel Pipes,<br/>3 Cable, ?? Iron Screws
+|
+|-
+|Oil Refinery
+|30 Steel Plates, 15 Steel Pipes, 12 Steel Beams,<br/>10 Cable, 5 Wire, 160 Iron Screw
+|
+|-
+|Miner
+|3 Iron Pipe, 3 Iron Plate
+|
+|-
+|Smelter
+|''(Unknown)''
+|
+|-
+|Manufacturing Plant
+|6 Iron Plates, 10 Iron Pipes, 3 Cable
+|Constructor
+|-
+|Assembler
+|''(Unknown)''
+|
+|-
+|Wind Turbine
+|3 Iron Pipe, 3 Iron Plates, 5 Wire
+|
+|-
+|'''Power Pole'''
+|3 Wire, 1 Iron Pipe
+|
+|-
+|Power Line
+|1 Cable
+|
+|-
+|Storage Container
+|''(Unknown)''
+|
+|-
+|Coal Generator 
+|10 Iron Pipes, 6 Aluminum Pipes, 10 Aluminum Gears
+|Row 10 - Col 3 Text
+|-
+|'''Foundation'''
+|1 Stone Brick
+|Had a description of ''A solid foundation to build on.''
+|-
+|'''Wall'''
+|4 Iron Plates
+|Had a description of ''Lets build a wall.''
+|-
+|'''Floor'''
+|1 Stone Brick
+|Had a description of ''Expand your factory along the Z-axis!''
+|}
+
+<gallery>
+File:Sprint 8 - Build Menu 1.png|Early game floating Build Menu (Top)
+File:Sprint 8 - Build Menu 2.png|Early game floating Build Menu (Bottom)
+</gallery>
+
+=== Sprint 12 ===
+By Sprint 12 (week 24) the Build Menu had been simplified, no longer "floated".<ref group="S12" name="yt-7I3NGAm3j_4@1278">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1278s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Simple Build Menu / Trading Post (HUB)]</ref>
+
+The Build Menu changed to only show things you had enough resources to build, and consisted of the following known selectable items {{NoteTag|name="Note 12.1"}} (new items in '''bold'''):
+
+{| class="wikitable"
+!Menu Item
+!Cost
+!Remarks / Notes
+|-
+|Dismantle
+|
+|Now as a red button.
+|-
+|Floor
+|1 Stone Brick
+|
+|-
+|Foundation
+|1 Stone Brick
+|
+|-
+|Power Line
+|1 Cable
+|
+|-
+|Power Pole
+|3 Wire, 1 Iron Rod
+|
+|-
+|'''Trading Post'''
+|1 Trading Post
+|Early version of the [[The HUB|HUB]].
+|-
+|Wind Turbine
+|3 Iron Rod, 3 Iron Plate, 5 Wire
+|''Iron Pipe was changed to Iron Rod''
+|}
+
+Notes:
+{{Reflist|group=note|refs=
+{{NoteTag|name="Note 12.1"|text=The full Sprint 12 Build Menu was not shown in reference video but is presumed to include other items seen in Sprint 8 not shown in the illustrative image.}}
+}}
+
+<gallery>
+File:Sprint 12 - Build Menu 1.png|Early game Build Menu (Before)
+File:Sprint 12 - Build Menu 2.png|Early game Build Menu (After) Note addition of Floor and Foundation.
+</gallery>
+
+=== Sprint 20 ===
+In Sprint 20 (week 40) the early game development still used the pink block with a red button Build Gun held in the Pioneers hand introduced in Sprint 6.
+
+The Build Menu changed to begin using tabs at the top and consisted of the following selectable items:
+
+{| class="wikitable"
+!Group
+!Item
+!Remarks / Notes
+|-
+|rowspan="8" style="text-align: center;"|Production
+|Advanced Constructor
+|Equivalent of the Assembler
+|-
+|Complex Constructor
+|Equivalent of the Manufacturer
+|-
+|Miner
+|
+|-
+|Oil Pump
+|
+|-
+|Oil Refinery
+|
+|-
+|Simple Constructor
+|
+|-
+|Smelter
+|
+|-
+|Work Bench
+|''(Craft Bench)''
+|-
+|Organization
+|''(See Sprint 23 for description of menu items)''
+|
+|-
+|rowspan="4" style="text-align: center;"|Power
+|Biomass Burner
+|
+|-
+|Coal Generator
+|
+|-
+|Power Line
+|
+|-
+|Power Pole
+|
+|-
+|style="text-align: center;"|Transporation
+|''(See Sprint 23 for description of menu items)''
+|
+|-
+|style="text-align: center;"|Decor
+|''(See Sprint 23 for description of menu items)''
+|
+|-
+|style="text-align: center;"|Trading Post
+|''(See Sprint 23 for description of menu items)''
+|
+|}
+
+<gallery>
+File:Sprint 20 - Build Gun 1.png|Use of Build Gun
+File:Sprint 20 - Build Gun 2.png|Build Menu for Power
+File:Sprint 20 - Build Gun 3a.png|Build Menu for Production showing Advanced Constructor (Assembler)
+File:Sprint 20 - Build Gun 3b.png|Build Menu for Production showing Complex Constructor (Manufacturer)
+</gallery>
+
+=== Sprint 23 ===
+By Sprint 23 (week 46) the Build Menu had been dramatically improved and expanded.<ref group="S23" name="yt-7I3NGAm3j_4@1863">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1863s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Improved Build Menu]</ref>
+
+The Build Menu changed the order of the tabs at the top and consisted of the following sub-menu selectable items (new items in '''bold'''):
+
+{| class="wikitable"
+!Group
+!Item
+!Remarks / Notes
+|-
+|rowspan="9" style="text-align: center;"|Transport
+|Conveyor Belt
+|
+|-
+|Conveyor Hub
+|7 to 1 Merger but being phased out.
+|-
+|Conveyor Merger
+|
+|-
+|Conveyor Pole
+|
+|-
+|Conveyor Splitter
+|
+|-
+|'''Splitter Advanced'''
+|Became the [[Smart Splitter]].
+|-
+|'''Splitter Complex'''
+|Became the [[Programmable Splitter]].
+|-
+|Tractor
+|
+|-
+|Truck Station Load
+|
+|-
+|rowspan="7" style="text-align: center;"|Production<br/>{{NoteTag|name="Note 23.1"}}
+|Simple Constructor
+|
+|-
+|Advanced Constructor
+|Became the [[Assembler]].
+|-
+|Complex Constructor
+|Became the [[Manufacturer]].
+|-
+|Basic Smelter
+|
+|-
+|Miner
+|
+|-
+|Oil Pump
+|
+|-
+|Oil Refinery
+|
+|-
+|rowspan="10" style="text-align: center;"|Organization
+|Beacon
+|
+|-
+|Expanded Storage Container
+|Became the [[Storage_Container#Industrial-0|Industrial Storage Container]].
+|-
+|Floors
+|''Multiple types''.
+|-
+|Foundations
+|''Multiple types''.
+|-
+|'''Lookout Tower'''
+|
+|-
+|'''Powered Wall'''
+|{{NoteTag|name="Note 23.2"}}
+|-
+|'''Ramp'''
+|''Only one type''.
+|-
+|'''Stair'''
+|''Only one type''.
+|-
+|Storage Container
+|
+|-
+|'''Walls'''
+|''New Types added, both FICSIT and Metal.''
+|-
+|rowspan="9" style="text-align: center;"|Power
+|Big Power Pole
+|Became the [[Power_Poles#Mk.2-0|Mk.2 Power Pole]].
+|-
+|Biomass Burner
+|
+|-
+|Coal Generator
+|
+|-
+|Fuel Generator
+|
+|-
+|Huge Power Pole
+|Became the [[Power_Poles#Mk.3-0|Mk.3 Power Pole]].
+|-
+|Multi-Connector Power Pole
+|Removed in Closed Alpha. Eventually re-introduced as the [[Power Tower]].
+|-
+|Nuclear Power Plant
+|
+|-
+|Power Line
+|
+|-
+|Power Pole
+|Became the [[Power_Poles#Mk.1-0|Mk.1 Power Pole]].
+|-
+|rowspan="4" style="text-align: center;"|Cheat<br/>{{NoteTag|name="Note 23.3"}}
+|Cheat Power Sink
+|
+|-
+|Cheat Power Source
+|
+|-
+|Cheat Resource Sink
+|
+|-
+|Cheat Resource Spawner
+|
+|-
+|rowspan="4" style="text-align: center;"|'''Railroad'''
+|'''Electric Locomotive'''
+|
+|-
+|'''Freight Car'''
+|
+|-
+|'''Track'''
+|
+|-
+|'''Train Docking Station'''
+|
+|-
+|style="text-align: center;"|'''None'''
+|'''Speed Sign'''
+|''Only one item''.
+|-
+|style="text-align: center;"|Trading Post
+|Trading Post
+|''Only one item''.
+|-
+|style="text-align: center;"|'''Decor'''
+|'''Trophy'''
+|''Only one item''.
+|}
+
+Notes:
+{{Reflist|group=note|refs=
+{{NoteTag|name="Note 23.1"|text=This Menu Tab was not shown Sprint 23 but is presumed to be similar to Sprint 20.}}
+{{NoteTag|name="Note 23.2"|text=One interesting thing noted in Sprint 23 was the use of a [[Old_unreleased_content#Powered_Wall|Powered Wall]] that could power a whole building.}}
+{{NoteTag|name="Note 23.3"|text=The Cheat Menu was a development tool and was removed by Closed Alpha}}
+}}
+
+<gallery>
+File:Sprint 23 - Build Menu 1.png|Transport Menu 
+File:Sprint 23 - Build Menu 2.png|Production Menu ''(shows Transport Menu Items)''
+File:Sprint 23 - Build Menu 3a.png|Organization Menu
+File:Sprint 23 - Build Menu 3b.png|Organization Menu - Powered Wall
+File:Sprint 23 - Build Menu 4.png|Power Menu
+File:Sprint 23 - Build Menu 5.png|Cheat Menu
+File:Sprint 23 - Build Menu 6.png|Railroad Menu
+File:Sprint 23 - Build Menu 7.png|None Menu ''(only 1 item)''
+File:Sprint 23 - Build Menu 8.png|Trading Post Menu ''(only 1 item)''
+File:Sprint 23 - Build Menu 9.png|Decor Menu ''(only 1 item)''
+</gallery>
+
+=== Sprint 26 ===
+By Sprint 26 the Build Menu continued to improve<ref group="S26" name="yt-7I3NGAm3j_4@2214">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=2214s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Improved Build Menu]</ref> and in some situations show buildable's in red that could not be built due to insufficient parts in the Pioneers Inventory.
+
+The Build Menu changed the tabs at the top, and with the exception the removed items and the QR Code in Transport{{NoteTag|name="Note 26.1"}}, the tabs consisted of the following sub-menu selectable items (new items in '''bold'''):
+
+{| class="wikitable"
+!Group
+!Item
+!Remarks / Notes
+|-
+|rowspan="9" style="text-align: center;"|Production
+|Basic Smelter
+|
+|-
+|Constructor
+|{{NoteTag|name="Note 26.2"}}
+|-
+|Assembler
+|{{NoteTag|name="Note 26.3"}}
+|-
+|Manufacturer
+|{{NoteTag|name="Note 26.3"}}
+|-
+|Foundry
+|{{NoteTag|name="Note 26.4"}}
+|-
+|Miner
+|
+|-
+|Oil Pump
+|{{NoteTag|name="Note 26.5"}}
+|-
+|Oil Refinery
+|{{NoteTag|name="Note 26.5"}}
+|-
+|Workbench
+|
+|-
+|rowspan="9" style="text-align: center;"|Transport
+|Basic Conveyor Merger
+|Formerly called "Conveyor Merger"
+|-
+|'''Conveyor Belts Mk.1 thru Mk. 6'''
+|{{NoteTag|name="Note 26.6"}}
+|-
+|Conveyor Pole
+|
+|-
+|Conveyor Splitter
+|
+|-
+|Mega Conveyor Merger
+|Formerly called Conveyor Hub, a 7 to 1 Merger
+|-
+|Programmable Splitter
+|Formerly called Splitter Complex
+|-
+|Smart Splitter
+|Formerly called Splitter Advanced
+|-
+|Tractor
+|
+|-
+|Truck Station
+|
+|-
+|style="text-align: center;"|None
+|'''Beacon'''
+|{{NoteTag|name="Note 26.7"}}
+|-
+|rowspan="4" style="text-align: center;"|Railroad<br/>''(See Sprint 23)''
+|Electric Locomotive
+|
+|-
+|Freight Car
+|
+|-
+|Track
+|
+|-
+|Train Docking Station
+|
+|-
+|rowspan="9" style="text-align: center;"|Power
+|Big Power Pole
+||Became the [[Power_Poles#Mk.2-0|Mk.2 Power Pole]]. {{NoteTag|name="Note 26.8"}}
+|-
+|Biomass Burner
+|
+|-
+|Coal Generator
+|{{NoteTag|name="Note 26.8"}}
+|-
+|Fuel Generator
+|{{NoteTag|name="Note 26.8"}}
+|-
+|Huge Power Pole
+|Became the [[Power_Poles#Mk.3-0|Mk.3 Power Pole]]. {{NoteTag|name="Note 26.8"}}
+|-
+|Multi-Connector Power Pole
+|Removed in Closed Alpha. Eventually re-introduced as the [[Power Tower]]. {{NoteTag|name="Note 26.8"}}
+|-
+|Nuclear Power Plant
+|''Development WiP'' {{NoteTag|name="Note 26.8"}}
+|-
+|Power Line
+|
+|-
+|Power Pole
+|Became the [[Power_Poles#Mk.1-0|Mk.1 Power Pole]].
+|-
+|rowspan="4" style="text-align: center;"|Cheat<br/>{{NoteTag|name="Note 26.9"}}
+|Cheat Power Sink
+|
+|-
+|Cheat Power Source
+|
+|-
+|Cheat Resource Sink
+|
+|-
+|Cheat Resource Spawner
+|
+|-
+|rowspan="14" style="text-align: center;"|Organization
+|'''Fence'''
+|
+|-
+|Floors
+|''4 Types''
+|-
+|Foundations
+|''5 Types''
+|-
+|'''Jump Pad'''
+|
+|-
+|Lookout Tower
+|
+|-
+|'''Personal Storage Box'''
+|
+|-
+|Ramp
+|''1 Type''
+|-
+|Stair
+|
+|-
+|'''Stair 2'''
+|
+|-
+|Storage Container
+|
+|-
+|Storage Container Mk. 2
+|Formerly called Expanded Storage Container. Became the [[Storage_Container#Industrial-0|Industrial Storage Container]].
+|-
+|'''Tilted Jump Pad'''
+|
+|-
+|'''U-Jelly Landing Pad'''
+|
+|-
+|Walls
+|''Various Types both FICSIT and Metal''
+|}
+
+Notes:
+{{Reflist|group=note|refs=
+{{NoteTag|name="Note 26.1"|text=Removed Tabs and Items noted were, Speed Sign (Item), Trading Post (Tab/Item), Decor (Tab) and Trophy (Item). The QR Code in the Build Menu for Transport was not explained and can be considered to be no longer valid.}}
+{{NoteTag|name="Note 26.2"|text=Manufacturing Plant was removed and replaced with Constructor}}
+{{NoteTag|name="Note 26.3"|text=Trading Post, Tier 4 Schematic, had Advanced Construction, so presumed Assembler and Manufacturer was available.}}
+{{NoteTag|name="Note 26.4"|text=Trading Post, Tier 6 Schematic, had Steel Production, so presumed Foundry was available.}}
+{{NoteTag|name="Note 26.5"|text=Trading Post, Tier 7 Schematic, had Oil Processing, so presumed Oil Pump and Oil Refinery was available.}}
+{{NoteTag|name="Note 26.6"|text=Mk.6 Conveyor Belts were removed by Closed Alpha.}}
+{{NoteTag|name="Note 26.7"|text=Beacons were moved from Organization Menu to None Menu.}}
+{{NoteTag|name="Note 26.8"|text=Sprint 23 had this menu item so presumed it was also available in Sprint 26}}
+{{NoteTag|name="Note 26.9"|text=Sprint 23 had this menu tab so presumed same menu items were also available in Sprint 26. The Cheat Menu was a development tool and was removed by Closed Alpha}}
+}}
+
+<gallery>
+File:Sprint 26 - Build Menu 1a.png|Production Menu ''(not enough items to allow construction)''
+File:Sprint 26 - Build Menu 1b.png|Production Menu ''(enough items to allow construction)''
+File:Sprint 26 - Build Menu 2a.png|Transport Menu
+File:Sprint 26 - Build Menu 2b.png|Transport Menu - Mega Conveyor Merger (Conveyor Hub)
+File:Sprint 26 - Build Menu 3.png|None Menu ''(only 1 item)''
+File:Sprint 26 - Build Menu 5.png|Power Menu
+File:Sprint 26 - Build Menu 7.png|Organization Menu
+</gallery>
+
+==== Cheat board ====
+In Sprint 26 it was shown the devs had access to a "Cheat Board" to help in testing game development.<ref group="S26" name="yt-7I3NGAm3j_4@2074">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=2074s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Cheat Board]</ref> This was removed by Closed Alpha.
+
+<gallery>
+File:Sprint 26 - Cheat Board.png|Cheat Board ''(used during development)'''
+</gallery>
+
+=== Pre-Alpha ===
+After Sprint 26 but before Closed Alpha the Build Menu was changed to make it more simplified. The Build Menu was still opened using {{Key|B}} followed by selecting a tab and item to build.<ref group="PA" name="yt-ZW0OOikcWN0@319">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=319s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Build Menu]</ref> The Build Menu continued to show buildable's in red that could not be built due to insufficient parts in the Pioneers Inventory.
+
+Instead of having a separate Menu item for dismantle, the Build Menu used a hammer and wrench icon was used to activate the dismantle function.<ref group="PA" name="yt-ZW0OOikcWN0@916">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=916s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Dismantle Function]</ref>
+
+While maintaining most of Sprint 26 Build Menu for individual selectable items (see above), the menu tabs at the top change, and with the exception of the removed tabs {{NoteTag|name="Note PA.1"}}, consisted of the following:
+
+{| class="wikitable"
+!Group
+!Item
+!Remarks / Notes
+|-
+|style="text-align: center;"|Production
+|rowspan="5" style="text-align: center;"|''(See Sprint 23)''
+|
+|-
+|style="text-align: center;"|Power
+|{{NoteTag|name="Note PA.2"}}
+|-
+|style="text-align: center;"|Transport
+|{{NoteTag|name="Note PA.2"}}{{NoteTag|name="Note PA.3"}}
+|-
+|style="text-align: center;"|Organization
+|
+|-
+|style="text-align: center;"|Trading Post
+|{{NoteTag|name="Note PA.4"}}
+|}
+
+Notes:
+{{Reflist|group=note|refs=
+{{NoteTag|name="Note PA.1"|text=Removed Tabs and Items noted were, None (Tab) and Beacon (Item), Cheat (Tab)}}
+{{NoteTag|name="Note PA.2"|text=Power was moved to Tab 2, and Transport moved to Tab 3.}}
+{{NoteTag|name="Note PA.3"|text=Mk.6 Conveyor Belts were removed by Closed Alpha.}}
+{{NoteTag|name="Note PA.4"|text=The Trading Post Menu return after Sprint 26 but was removed in Closed Alpha.}}
+}}
+
+<gallery>
+File:Sprint PA - Build Menu 1.png|Production Menu
+File:Sprint PA - Build Menu 2.png|Power Menu
+File:Sprint PA - Build Menu 3.png|Transport Menu
+File:Sprint PA - Build Menu 4.png|Organization Menu
+File:Sprint PA - Build Menu 5.png|Trading Post Menu
+File:Sprint PA - Dismantle 1.png|Dismantle Function Enable
+File:Sprint PA - Dismantle 2.png|Dismantle Function Use - Power Line
+</gallery>
+
+== [[The HUB|HUB]] ==
+For most of the early game development there was no HUB.
+
+=== Sprint 12 ===
+In Sprint 12 (week 24) they added an equivalent of the HUB called a Trading Post.<ref group="S12" name="yt-7I3NGAm3j_4@1278"></ref>
+
+==== Market ====
+The Trading Post had a "Market" that allowed player to unlock things and progress in the game by selling items and buying upgrades you wanted.<ref group="S12" name="yt-7I3NGAm3j_4@1316">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1316s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Trading Post Purpose]</ref>
+
+Individual Items has a VALUE using a virtual currency of "Rubles", based on currency used in in the [https://store.steampowered.com/app/91600/Sanctum/ Sanctum] game also produced by Coffee Stain Studios, as shown in the following examples:
+
+* Nail Gun (272 Rubles)
+* Stone Brick (6 Rubles)
+* Wire (1 Ruble)
+* Cable (5 Rubles)
+* Portable Miner (0 Rubles)
+* Standard Cartridge (11 Rubles)
+* Fuel (9 Rubles)
+* Jetpack (2000 Rubles)
+
+The Trading Post had two Conveyor Input Ports that could be connected to some Production Lines that would allow you to automatically sell items without having to drag them from your inventory.<ref group="S12" name="yt-7I3NGAm3j_4@1375">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1375s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Trading Post Automation]</ref> This was replicated in later game development by use of both the [[AWESOME Sink]] and [[AWESOME Shop]] introduced in Update 3.
+
+The Market had a menu which included the following categories:<ref group="S12" name="yt-7I3NGAm3j_4@1300">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1300s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Trading Post Market Categories]</ref>
+
+{| class="wikitable"
+!Market Menu Item
+|-
+|Factory Organization.
+|-
+|Resource Processing.
+|-
+|Part Manufacturing.
+|-
+|Automatic Mining + Conveyor Belt.
+|-
+|Conveyor Logistics.
+|-
+|Adv. Part Assembly.
+|-
+|Truck Automation.
+|-
+|Coal Power.
+|-
+|Basic Storage.
+|-
+|Expanded Storage.
+|-
+|Dirty Energy.
+|-
+|Steel Processing.
+|-
+|Oil Processing.
+|-
+|Jetpack.
+|-
+|Complex Assembly.
+|-
+|Rifle Manufacturing.
+|-
+|Armor Piercing Rounds.
+|-
+|Truck Construction.
+|-
+|Gas Mask.
+|-
+|Train Transport.
+|-
+|Particle Collision Research.
+|-
+|Advanced Electronics.
+|-
+|Advanced Power Management.
+|-
+|Complex Power Management.
+|-
+|Next-Level Power Management.
+|-
+|Advanced Infrastructure.
+|-
+|Data-Driven Logistics.
+|-
+|Nuclear Power.
+|-
+|Heavy Water.
+|-
+|Weaponized Uranium.
+|-
+|Bayer Process.
+|-
+|Quad-Bike Manufacturing.{{NoteTag|name="Note 1"}}
+|-
+|Explorer Jeep Manufacturing.
+|-
+|Hookshot.
+|-
+|Reinforced Aluminum Use.
+|-
+|Industrial Miner.
+|-
+|Industrial Smelter.
+|-
+|Industrial Simple Constructor.
+|-
+|Industrial Advanced Constructor.
+|-
+|Advanced Space Rifle.
+|-
+|Hollow Point Rounds.
+|-
+|Radar Technology.
+|-
+|Super Space Rifle!
+|-
+|Quantum Mechanics.
+|-
+|Quantum Rounds.
+|}
+
+Notes:
+{{Reflist|group=note|refs=
+{{NoteTag|name="Note 1"|text=This is related to the Factory Cart.<ref name="yt-kiVI8W14Ec0@213">[https://www.youtube.com/watch?v=kiVI8W14Ec0&t=213s Youtube - February 15th, 2022 Livestream - Q&A: Any chance of an Update for the Vehicles?]</ref>}}
+}}
+
+<gallery>
+File:Sprint 12 - Trading Post 1.png|Trading Post - Base
+File:Sprint 12 - Trading Post 2.png|Trading Post - Tower
+File:Sprint 12 - Trading Post 3.png|Trading Post - Market Menu 1
+File:Sprint 12 - Trading Post 4.png|Trading Post - Market Menu 2
+File:Sprint 12 - Trading Post 5.png|Trading Post - Market Menu 3
+File:Sprint 12 - Trading Post 6.png|Trading Post - Market Menu 4
+File:Sprint 12 - Trading Post 7.png|Trading Post - Market Menu 5
+File:Sprint 12 - Trading Post 8.png|Trading Post - Market Menu 6
+File:Sprint 12 - Trading Post 9.png|Trading Post - Market Use 1
+File:Sprint 12 - Trading Post 10.png|Trading Post - Market Use 2
+File:Sprint 12 - Trading Post 11.png|Trading Post - Market Use 3
+File:Sprint 12 - Trading Post 12.png|Early version of Player Inventory with Body Slots
+</gallery>
+
+=== Sprint 20 ===
+By Sprint 20 (week 40) The Trading Post (HUB) had greatly improved in the 4 months (16 weeks) since Sprint 12.<ref group="S20" name="yt-7I3NGAm3j_4@1498">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1498s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Trading Post Improvement #1]</ref>
+
+The Trading Post now had a description of ''The Trade Post is the heart of your base. You will put in orders for schematics which you pay for with specific parts.''
+
+==== Tech Onion ====
+Early game had an equivalent of the HUB Terminal and Milestones that was called the "Tech Onion"<ref group="S20" name="yt-7I3NGAm3j_4@1537">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1537s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Tech Onion]</ref> which consisted of a set of rings for individual tier levels starting at Tier 1 in the center and moving to higher tier levels as you moved outward.
+
+The Tech Onion was proposed by CSS UI/UX Designer Nathalie Verweij.<ref name="yt-HUmedz9mghE@157">[https://youtu.be/HUmedz9mghE?t=157 YouTube - March 19, 2024 Livestream - Q&A: How much time did it take to develop a playable concept of Satisfactory initially? - MAM Prototype]</ref>.
+
+Starting in Sprint 12, the game had an economic aspect where you would sell parts to get Rubles (a Sanctum Reference) which were used to purchased upgrades in the Tech Onion. By Sprint 20 this function had been removed.<ref group="S20" name="yt-7I3NGAm3j_4@1588">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1588s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Tech Onion - Money Removed]</ref>
+
+The individual tier levels, milestones, and unlocks, were as follows:
+
+{| class="wikitable"
+!Tier
+!Milestone
+!Unlocks
+|-
+|rowspan="13" style="text-align: center;"|Tier 1
+|rowspan="4" style="text-align: center;"|First
+|Portable Miner
+|-
+|Smelter
+|-
+|Biomass Burner
+|-
+|''Other Unknown''
+|-
+|rowspan="4" style="text-align: center;"|Second
+|Miner
+|-
+|Simple Constructor
+|-
+|Conveyor Belt
+|-
+|''Other Unknown''
+|-
+|rowspan="5" style="text-align: center;"|Third
+|Advanced Constructor
+|-
+|Reinforced Iron Plate
+|-
+|Conveyor Spitter
+|-
+|Conveyor Merger
+|-
+|''Other Unknown''
+|-
+|rowspan="4" style="text-align: center;"|Tier 2
+|rowspan="4" style="text-align: center;"|Fourth
+|Nail Gun
+|-
+|Nailgun Spike
+|-
+|Beacon
+|-
+|''Other Unknown''
+|-
+|rowspan="9" style="text-align: center;"|Tier 3
+|rowspan="2" style="text-align: center;"|Fifth
+|Tractor
+|-
+|Tractor Station Load
+|-
+|style="text-align: center;"|Sixth
+|Coal Generator
+|-
+|style="text-align: center;"|Seventh
+|''Unknown''
+|-
+|rowspan="5" style="text-align: center;"|Eighth
+|Oil Pump
+|-
+|Oil Refinery
+|-
+|Plastic
+|-
+|''Other Unknown''
+|-
+|''Other Unknown''
+|-
+|rowspan="3" style="text-align: center;"|Tier 4
+|rowspan="3" style="text-align: center;"|Ninth
+|Complex Constructor
+|-
+|Expanded Storage Container
+|-
+|Computer
+|}
+
+==== Tier progression list ==== 
+Sprint 20 showed the Tier Progression list.<ref group="S20" name="yt-7I3NGAm3j_4@1588"></ref>.
+
+It was noted that Iron Rods had the following information:
+
+* Description: "Iron Rod is one of the most common Iron parts. It's used in most early game buildings."
+* Total Stack Size: 50
+
+<gallery>
+File:Sprint 20 - Trading Post Menu.png|Trading Post Menu
+File:Sprint 20 - Trading Post 0a.png|Trading Post Build Menu
+File:Sprint 20 - Trading Post 0b.png|Trading Post Build Hologram
+File:Sprint 20 - Trading Post 1.png|Trading Post Base
+File:Sprint 20 - Trading Post 2.png|Trading Post Full
+File:Sprint 20 - Trading Post - Workbench 1.png|Trading Post Workbench 1
+File:Sprint 20 - Trading Post - Workbench 2.png|Trading Post Workbench 2
+File:Sprint 20 - Trading Post - Tech Onion 1.png|Tech Onion 1
+File:Sprint 20 - Trading Post - Tech Onion 2.png|Tech Onion 2
+File:Sprint 20 - Trading Post - Tech Onion 3.png|Tech Onion 3
+File:Sprint 20 - Trading Post - Tech Onion 4.png|Tech Onion 4
+File:Sprint 20 - Trading Post - Tech Onion 5.png|Tech Onion 5
+File:Sprint 20 - Trading Post - Tech Onion 6.png|Tech Onion 6
+File:Sprint 20 - Trading Post - Tech Onion 7.png|Tech Onion 7
+File:Sprint 20 - Trading Post - Tech Onion 8.png|Tech Onion 8
+File:Sprint 20 - Trading Post - Tech Onion 9.png|Tech Onion 9
+File:Sprint 20 - Tier Progression List 1.png|Tier Progression To-Do List
+File:Sprint 20 - Tier Progression List 2.png|Tier Progression To-Do List - Iron Rods
+</gallery>
+
+=== Sprint 26 ===
+In Sprint 26 (week 52) the Trading Post saw more improvements in the 3 months (12 weeks) since Sprint 20.<ref group="S26" name="yt-7I3NGAm3j_4@2105">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=2105s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Trading Post Improvement #2]</ref>
+
+The Workbench (Craft Bench) during this time still looked like a forge, and required you to click once for each "craft action" which was jokingly called the "break your finger version".
+
+==== Tech Onion ====
+The equivalent of the HUB Terminal and Milestones called the "Tech Onion" still existed in Sprint 26, and added 8 more tiers (5 to 12).<ref group="S26" name="yt-7I3NGAm3j_4@2170">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=2170s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Tech Onion Improvement]</ref> The Tech Onion was abandoned prior to Closed Alpha in favor of a simplified schematic system used for tier progression (see below).
+
+Some of the interesting milestones noted in Sprint 26 were the following:
+
+* Tier 8 - Industrial Smelting where you unlocked the Basic Smelter Mk.2 and [[Old_unreleased_content#Mk.2_variants_of_buildings|Smelter Mk.2]](which became the Foundry).
+* Tier 8 - Quartz Crystals where you unlocked ability to collect Quartz Crystals which later became Power Slugs.<ref group="S26" name="yt-7I3NGAm3j_4@2189">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=2189s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Quartz Crystal (Power Slugs)]</ref> You also unlocked Crystal Oscillator.
+* Tier 10 - Electric Foundation which gave you Foundations that transmitted power.
+* Tier 11 - Advanced Assembly Line where you unlocked [[Old_unreleased_content#Mk.2_variants_of_buildings|Assembler Mk.2]], [[Old_unreleased_content#Mk.2_variants_of_buildings|Manufacturer Mk.2]], and [[Old_unreleased_content#Conveyor_Belt_and_Lift_Mk.6|Conveyor Belt Mk.6]].
+
+<gallery>
+File:Sprint 26 - Trading Post - Workbench Menu.png|Trading Post Menu
+File:Sprint 26 - Trading Post 1.png|Trading Post Base
+File:Sprint 26 - Trading Post 2.png|Trading Post - Workbench 1
+File:Sprint 26 - Trading Post 3.png|Trading Post - Workbench 2
+File:Sprint 26 - Trading Post - Tech Onion 1.png|Tech Onion - Tier 1
+File:Sprint 26 - Trading Post - Tech Onion 8a.png|Tech Onion - Tier 8 - Industrial Smelting
+File:Sprint 26 - Trading Post - Tech Onion 8b.png|Tech Onion - Tier 8 - Quartz Crystals
+File:Sprint 26 - Trading Post - Tech Onion 10.png|Tech Onion - Tier 10 - Electric Foundation
+File:Sprint 26 - Trading Post - Tech Onion 11.png|Tech Onion - Tier 11 - Advanced Assembly Line
+</gallery>
+
+=== Pre-Alpha ===
+After Sprint 26. but before Closed Alpha, the Trading Post could be built with no parts needed, and was improved by removal of the "forge" which was replaced with a Work Bench (Craft Bench).<ref group="PA" name="yt-ZW0OOikcWN0@307">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=307s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Trading Post]</ref>
+
+<gallery>
+File:Sprint PA - Trading Post 0a.png|Trading Post Build Menu
+File:Sprint PA - Trading Post 0b.png|Trading Post Build Hologram
+File:Sprint PA - Trading Post 1.png|Trading Post Base
+</gallery>
+
+==== Configuration ====
+The Trading Post configuration screen had the following areas:
+
+* Tabs showing Schematics, Inventory, and Trading.
+* Timer in red showing the amount of time before Trade Ship returns.
+* Ship showing Trade Ship Inventory sent next via the Trade Ship to pay (purchase) the active Schematic.
+* Storage used to store items prior to placement in Trade Ship Inventory.
+* Schematic Active shown just below Tabs and to right of Storage.
+
+<gallery>
+File:Sprint PA - Trading Post UI.png|Trading Post Configuration UI
+</gallery>
+
+==== Schematics ====
+The Tech Onion used previously was replaced with a simplified schematic system used for tier progression.<ref group="PA" name="yt-ZW0OOikcWN0@337">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=337s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Trading Post - Schematics]</ref>
+
+Schematics could be activated and then paid for (purchased) by sending the required parts via the Trade Ship.<ref group="PA" name="yt-ZW0OOikcWN0@347">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=347s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Trading Post (HUB) - Activating Milestone and Purchase of Schematics]</ref>
+
+When a schematic purchase was completed by the sending of the Trade Ship the player would be notified by an on-screen notice in orange.<ref group="PA" name="yt-ZW0OOikcWN0@784">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=784s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Trading Post - Trading Ship Sent Notice (Schematic Purchased)]</ref>
+
+The following tiers and schematics were available:
+
+{| class="wikitable"
+!Tier
+!Schematic
+!Unlocks
+|-
+|rowspan="2" style="text-align: center;"|Tier 1
+|style="text-align: center;"|Everything
+|''Unknown''
+|-
+|style="text-align: center;"|Cheat
+|''Unknown''
+|-
+|rowspan="7" style="text-align: center;"|Tier 2
+|rowspan="3" style="text-align: center;"|Automated Construction
+|Constructor
+|-
+|Conveyor Belt
+|-
+|Conveyor Pole
+|-
+|rowspan="4" style="text-align: center;"|Advanced Manual Construction
+|Workshop
+|-
+|Personal Storage Box
+|-
+|Color Gun
+|-
+|Color Cartridge
+|-
+|rowspan="15" style="text-align: center;"|Tier 3
+|rowspan="3" style="text-align: center;"|Logistics #1
+|Conveyor Splitter
+|-
+|Conveyor Merger
+|-
+|Storage Container
+|-
+|rowspan="3" style="text-align: center;"|Exploration Basics
+|Nail Gun
+|-
+|Nailgun Spike
+|-
+|Beacon
+|-
+|rowspan="8" style="text-align: center;"|Factory Organization #1
+|Foundation (Type 1)
+|-
+|Foundation (Type 2)
+|-
+|Ramp
+|-
+|Floor
+|-
+|Stair
+|-
+|Wall (FICSIT)
+|-
+|Wall (Metal)
+|-
+|''(Others Unknown)''
+|-
+|style="text-align: center;"|Trade Ship Expansion #1
+|''+2 Inventory Slots''
+|-
+|rowspan="3" style="text-align: center;"|Tier 4
+|style="text-align: center;"|Advanced Construction
+|''(Unknown)''
+|-
+|style="text-align: center;"|Factory Transversal
+|''(Unknown)''
+|-
+|style="text-align: center;"|Factory Organization #2
+|''(Unknown)''
+|-
+|rowspan="4" style="text-align: center;"|Tier 5
+|style="text-align: center;"|Coal Power
+|Coal Power Plant ''(presumed)''
+|-
+|style="text-align: center;"|Harm Reduction
+|''(Unknown)''
+|-
+|style="text-align: center;"|Factory Organization #3
+|''(Unknown)''
+|-
+|style="text-align: center;"|Trade Ship Expansion #2
+|''+2 Inventory Slots''
+|-
+|rowspan="4" style="text-align: center;"|Tier 6
+|style="text-align: center;"|Steel Production
+|Mk.2 Smelter ''(presumed)''
+|-
+|style="text-align: center;"|Trade Ship Expansion #3
+|''+2 Inventory Slots''
+|-
+|style="text-align: center;"|Chainsaw
+|Chainsaw ''(presumed)''
+|-
+|style="text-align: center;"|Factory Organization #3
+|''(Unknown)''
+|-
+|rowspan="5" style="text-align: center;"|Tier 7
+|rowspan="2" style="text-align: center;"|Oil Processing
+|Oil Pump ''(presumed)''
+|-
+|Oil Refinery ''(presumed)''
+|-
+|style="text-align: center;"|Logistics #2
+|''(Unknown)''
+|-
+|style="text-align: center;"|Factory Organization #4
+|''(Unknown)''
+|-
+|style="text-align: center;"|Self Defense Tools
+|''(Unknown)''
+|-
+|Tier 8+
+|style="text-align: center;"|''(Unknown)''
+|''(Unknown)''
+|}
+
+<gallery>
+File:Sprint PA - Trading Post - Schematics 1.png|Trading Post (HUB) Schematics - Cheat
+File:Sprint PA - Trading Post - Schematics 2a.png|Trading Post (HUB) Schematics - Automated Construction
+File:Sprint PA - Trading Post - Schematics 2aa.png|Trading Post (HUB) Schematics - Automated Construction (Activated)
+File:Sprint PA - Trading Post - Schematics 2b.png|Trading Post (HUB) Schematics - Advanced Manual Construction
+File:Sprint PA - Trading Post - Schematics 3a.png|Trading Post (HUB) Schematics - Logistics
+File:Sprint PA - Trading Post - Schematics 3aa.png|Trading Post (HUB) Schematics - Automated Construction (Completed) and Logistics (Activated)
+File:Sprint PA - Trading Post - Schematics 3b.png|Trading Post (HUB) Schematics - Exploration Basics
+File:Sprint PA - Trading Post - Schematics 3c.png|Trading Post (HUB) Schematics - Factory Organization
+File:Sprint PA - Trading Post - Schematics 3d.png|Trading Post (HUB) Schematics - Trade Ship Expansion
+File:Sprint PA - Trading Post - Trade Ship.png|Notice of Trade Ship delivery completion (Automated Construction)
+</gallery>
+
+== [[Craft Bench]] ==
+In early game development there was an equivalent to the Craft Bench called a '''Workbench''' which had the description of ''Time to do some manual labor'' when selected in the Build Menu.
+
+In Sprint 6 (week 12) there was a Workbench, accessible from the Build Menu<ref group="S6" name="yt-7I3NGAm3j_4@692">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=692s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Workbench (Craft Bench)]</ref> that later became the Craft Bench.
+
+To craft (produce) more advanced items you moved items from inventory to a 3 by 3 grid ''(similar to'' [https://www.minecraft.net/ ''Minecraft'']'')'' and held down {{Key|Space}} key to craft item. This "movement" from Inventory to Workbench Menu was later reevaluated and determined the extra step was not needed, leading to its removal from the game.<ref group="S6" name="yt-7I3NGAm3j_4@738">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=738s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Workbench Crafting Procedure Change]</ref>
+
+In Sprint 20 (week 40), the Trading Post came with an early version of the HUB Craft Bench which was called Workbench that looked like an old time forge with fire.<ref group="S20" name="yt-7I3NGAm3j_4@1509">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1509s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Trading Post (HUB) Workbench]</ref> You could also build another free standing Work Bench ''(two words)'' that could be used by the pioneer or another co-op player.
+
+The Trading Post Workbench craft menu in Sprint 20 contained the following selectable items:
+
+{| class="wikitable"
+!Item
+!Cost
+|-
+|Iron Ingot
+|2 Iron Ore
+|-
+|Iron Plate
+|2 Iron Ingot
+|-
+|Iron Rod
+|1 Iron Ingot
+|-
+|Iron Screw
+|1 Iron Rod
+|-
+|Iron Cog
+|1 Iron Plate
+|-
+|Copper Ingot
+|2 Copper Ore
+|-
+|Wire
+|1 Copper Ingot
+|-
+|Cable
+|3 Wire
+|-
+|Stone Brick
+|4 Stone ''(Limestone)''
+|}
+
+After Sprint 26, but before Closed Alpha, the Trading Post replaced old time forge used before with a Workbench.<ref group="PA" name="yt-ZW0OOikcWN0@400">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=400s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Trading Post Workbench Improvement]</ref>
+
+The Trading Post Workbench enabled you to make items that could be hand crafted by selecting recipe and manually clicking on the [Produce] button which would show blue along with a lighter blue progress bar showing the crafting progress immediately below it. If you didn't have the ingredients in your inventory you would see a [Can't Produce] button in gray.
+
+Another free standing Workbench could be created if desired to be used by the pioneer or another co-op player.
+
+<gallery>
+File:Sprint 6 - Workbench 0.png|Sprint 6 - Workbench Hologram
+File:Sprint 6 - Workbench 1.png|Sprint 6 - Workbench
+File:Sprint 6 - Workbench 2.png|Sprint 6 - Workbench Menu
+File:Sprint 6 - Workbench 3.png|Sprint 6 - Workbench Crafting
+File:Sprint 20 - Workbench 1.png|Sprint 20 - Work Bench also showing Mk.2 Smelter to left
+File:Sprint 20 - Workbench 2.png|Sprint 20 - Work Bench also showing flag on Compass noting position of Trading Post
+File:Sprint 20 - Workbench 3.png|Sprint 20 - Work Bench (close up)
+File:Sprint 20 - Trading Post - Workbench 1.png|Sprint 20 - Trading Post Workbench looking like a old time forge
+File:Sprint 20 - Trading Post - Workbench 2.png|Sprint 20 - Trading Post Workbench Craft Menu
+File:Sprint PA - Trading Post - Workbench 1.png|Pre-Alpha - Trading Post Workbench
+File:Sprint PA - Trading Post - Workbench 2.png|Pre-Alpha - Free Standing Workbench
+File:Sprint PA - Trading Post - Workbench Menu 1.png|Pre-Alpha - Workbench Menu showing Iron Ingots being made
+File:Sprint PA - Trading Post - Workbench Menu 2.png|Pre-Alpha - Workbench Menu showing no Iron Ore left in inventory
+</gallery>
+
+== [[Foundations]] ==
+The foundation during game development had only one type and had the description of ''A solid foundation to build on'' when selected in the Build Menu<ref group="S8" name="yt-7I3NGAm3j_4@1101">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1101s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Foundations]</ref> and could be built using 1 Stone Brick.
+
+In Sprint 8 (week 16) the foundation used in the early game was based on similar foundations used in the Sanctum Series.<ref group="S8" name="yt-7I3NGAm3j_4@1112"></ref>
+
+By Sprint 12 (week 24) the look of foundations changed to include the 1 meter "grid" markings.<ref group="S12" name="yt-7I3NGAm3j_4@1298">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1298s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Foundation Improvement #1]</ref>
+
+In Sprint 23 (week 46), 22+ weeks since Sprint 12, the look of foundations had improved and came in five types of thin and thick which are presumed to be the 1 Meter and 2 Meter Foundations, four types had a solid version and a version elevated on "legs", and one type was a special version. Also the Ramp ''(only one type)'' was introduced.<ref group="S23" name="yt-7I3NGAm3j_4@1863"></ref>
+
+In Sprint 26, 6+ weeks since Sprint 23, foundations continued to come in five types as before, but the special version was called Mega Foundation 1a presumed to be 4 normal foundations in one buildable.<ref group="S26" name="yt-7I3NGAm3j_4@2245">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=2245s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Use of Foundations]</ref>
+
+In Pre-Alpha foundations had yellow guidelines for placement of walls and other buildable's<ref group="PA" name="yt-ZW0OOikcWN0@1100">[https://www.youtube.com/watch?v=ZW0OOikcWN0?t=1100s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Foundations]</ref> and could be built using 2 Cement.
+
+<gallery>
+File:Sprint 8 - Foundation.png|Sprint 8 - First appearance of Foundation
+File:Sprint 12 - Foundation.png|Sprint 12 - Improved Foundations
+File:Sprint 23 - Build Menu 3a.png|Sprint 23 - Organization Menu showing various Foundation types and the Ramp.
+File:Sprint 26 - Build Menu 7.png|Sprint 26 - Organization Menu showing various Foundation types and the Ramp.
+File:Sprint 26 - Foundation 0a.png|Sprint 26 = Foundation with legs Hologram
+File:Sprint 26 - Foundation 0b.png|Sprint 26 = Mega Foundation Hologram
+File:Sprint 26 - Foundation 1.png|Sprint 26 = Foundation Ramp
+File:Sprint PA - Foundation 0a.png|Pre-Alpha - Build Menu - Organization - Foundations
+File:Sprint PA - Foundation 0b.png|Pre-Alpha - Foundation Hologram
+File:Sprint PA - Foundation 1.png|Pre-Alpha - Foundation Guidelines
+</gallery>
+
+== Floor ==
+The Floor first appeared during Sprint 8 (week 16), had only one type, used the description of ''Expand your factory along the Z-axis!'' when selected in the Build Menu<ref group="S8" name="yt-7I3NGAm3j_4@1077"></ref> and could be built using 1 Stone Brick.
+
+In Sprint 23 (week 46), 30+ weeks since Sprint 8, floors came in five types including one type that looked like a wire grid which is presumed to be related to the Powered Wall.<ref group="S23" name="yt-7I3NGAm3j_4@1863"></ref>
+
+By Sprint 26 (week 52), 6+ weeks since Sprint 23, floors came in only 4 types, one of which was the "wired floor".
+
+Floors, including the wired floor, were removed in Closed Alpha in favor of using only foundations, and removal of the Powered Wall.
+
+<gallery>
+File:Sprint 8 - Floor.png|Sprint 8 - First appearance of Floor.
+File:Sprint 23 - Build Menu 3a.png|Sprint 23 - Organization Menu showing various Floor types
+File:Sprint 26 - Build Menu 7.png|Sprint 26 - Organization Menu showing various Floor types
+File:Sprint 26 - Floor.png|Sprint 26 - Floor (wired / hologram)
+File:Sprint PA - Foundation 0a.png|Pre-Alpha - Build Menu - Organization - Foundations
+</gallery>
+
+== [[Foundations#Stairs|Stair]] ==
+Not much is know about the development of the stair prior to Closed Alpha.
+
+In Sprint 23 (week 46) the build menu showed a stair.<ref group="S23" name="yt-7I3NGAm3j_4@1863"></ref>
+
+In Sprint 26 (week 52), 6+ weeks since Sprint 23, the build menu showed the stair and the addition of a stair 2.<ref group="S26" name="yt-7I3NGAm3j_4@2245"></ref>
+
+<gallery>
+File:Sprint 23 - Build Menu 3a.png|Sprint 23 - Organization Menu showing various Floor types
+File:Sprint 26 - Build Menu 7.png|Sprint 26 - Organization Menu showing various Floor types
+</gallery>
+
+== [[Walls]] ==
+The wall first appeared during Sprint 8 (week 16), had only one type, used the description of ''Lets build a wall'' when selected in the Build Menu<ref group="S8" name="yt-7I3NGAm3j_4@1077">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1077s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Walls and Floor]</ref> and could be built using 4 Iron Plate.
+
+By Sprint 23 (week 46), 30+ weeks since Sprint 8, walls has significantly improved and now appeared in two types, FICSIT and Metal.<ref group="S23" name="yt-7I3NGAm3j_4@1863"></ref> Also at this time there was a Powered Wall with a description of ''Power the whole building using this neat little thingy!''
+
+By Sprint 26 (week 52), 6+ weeks since Sprint 23, the Powered Wall had been removed.<ref group="PA" name="yt-ZW0OOikcWN0@1100"></ref>
+
+=== [[Walls#Other|Fence]] ===
+In Sprint 26 the build menu showed a Fence_01 which presumably is the start of development of the Modern Railing.
+
+<gallery>
+File:Sprint 8 - Wall.png|Sprint 8 - First appearance of Wall
+File:Sprint 23 - Build Menu 3b.png|Sprint 23 - Organization Menu showing improved Walls to include Powered Wall
+File:Sprint 26 - Build Menu 7.png|Sprint 26 - Organization Menu showing various Wall types ''(no Powered Wall)'' and Fence
+File:Sprint 26 - Wall 0.png|Sprint 26 - Wall Hologram (with door)
+File:Sprint 26 - Wall 1.png|Sprint 26 - Wall with door and new Wall (hologram)
+File:Sprint PA - Build Menu 4.png|Pre-Alpha - Organization Menu showing Walls
+</gallery>
+
+== [[Resource Node]] ==
+Resource Nodes were added as the game developed. Early on the look was more like large boulders but eventually were flattened to become what they look like now in game.
+
+In Sprint 1 (week 2) we got the first look at resource nodes, one iron node and one coal node.<ref group="S1" name="yt-7I3NGAm3j_4@146">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=146s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Resource Nodes - Iron and Coal]</ref>
+
+By Sprint 6 (week 12), mineable resource nodes had a Purity Percentage of 100%<ref group="S6" name="yt-7I3NGAm3j_4@621">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=621s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Pure Resource Node Percentage]</ref> as compared to mining same resource anywhere else (see Resource Deposit - Sprint 6) and the amount of resource nodes in the environment was procedurally generated.<ref group="S6" name="yt-7I3NGAm3j_4@634">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=634s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Resource Node Procedurally Generated]</ref>
+
+In Sprint 8 (week 16), mineable resource nodes, in addition to having varied purity levels (impure, normal, pure), also had '''finite resources''' which could be depleted.<ref group="S8" name="yt-7I3NGAm3j_4@1178">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1178s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Resource Node Finite Amounts]</ref> This applied to both when hand mining and when using Miners.
+
+Even in Sprint 26 (week 52) and prior to Closed Alpha, resource nodes continue to have finite resources.<ref group="S26" name="yt-7I3NGAm3j_4@2059">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=2059s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Resource Node Finite Amounts]</ref> 
+
+=== Resource deposit ===
+In early game development there were no resource deposits (only resource modes), but you did have the ability to mine anywhere for resources.
+
+=== Extraction ===
+Ore extraction could be done either by hand mining, or use of a Portable Miner, or full Miner.
+
+In Sprint 6 (week 12) the Pioneer had access to the Pick Axe<ref group="S6" name="yt-7I3NGAm3j_4@583">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=583s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Pickaxe (Chisel)]</ref> for hand mining. The Pickaxe later became the Hand Chisel (or Chisel).
+
+With the Pickaxe, after selecting from the Mine Menu shown on the left, you had the ability to hand mine anywhere and not on a specific Resource Deposits or Resource Node. The mining speed (number of hits with Pickaxe) was based on Purity Percentage with higher percentages being able to be hand mined faster (fewer hits) while lower percentages being able to be hand mined slower (more hits).
+
+In Sprint 26 (week 52), like the Workbench during this time, hand mining required you to click for each "mine action" in what was jokingly referred to as the "break your finger version".<ref group="S26" name="yt-7I3NGAm3j_4@2129">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=2129s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Resource Node Hand Mining]</ref>
+
+==== Mine list ====
+Early on, when equipping the Pickaxe it displayed a Mine List<ref group="S6" name="yt-7I3NGAm3j_4@587">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=587s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Pickaxe Mine List]</ref> shown in a box on the upper right which also shows the Purity Percentage for each type of resource available which consisted of:
+
+* Coal.
+* Iron.
+* Bauxite.
+* Copper.
+* Stone (Limestone).
+* Crude Oil.
+
+==== Hand mining mini-game ====
+During early game development the Pioneer could use a hand mining mini-game during which they had to click at just the right time in order to give them greater amounts ''(based on purity)'' then clicking at other times.<ref group="S26" name="yt-7I3NGAm3j_4@2143">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=2143s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Resource Node Hand Mining]</ref>
+
+After Sprint 26 but before Closed Alpha, the hand mining mini-game was improved, and only allowed resource extraction by clicking on [PICK] button during a specific time when the arrow was in the blue section which decreased in size with each rotation.<ref group="PA" name="yt-ZW0OOikcWN0@244">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=244s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Resource Hand Mining Mini Game]</ref> This resource hand mining mini-game got faster and faster the longer you hand minded.
+
+The hand mining mini-game was removed in Closed Alpha when it was decided that resource nodes would have infinite amounts regardless of purity level.
+
+<gallery>
+File:Sprint 1 - Resource Nodes.png|Sprint 1 - First Look of Iron and Coal Resource Nodes
+File:Sprint 6 - Pickaxe 1.png|Sprint 6 - Early game Pickaxe (Chisel)
+File:Sprint 6 - Pickaxe 2.png|Sprint 6 - Pickaxe Mine Menu (left) and Mine List (upper right)
+File:Sprint 6 - Pickaxe 3.png|Sprint 6 - Hand mine anything anywhere ''(example mining copper)''
+File:Sprint 8 - Mining Limited.png|Sprint 8 - Resources had finite amounts
+File:Sprint 8 - Mining Limited.mp4|Sprint 8 - Resources had finite amounts hand mining example (video)
+File:Sprint 26 - Mining Limited.png|Sprint 26 - Resources had finite amounts
+File:Sprint 26 - Hand Mining Game.png|Sprint 26 - Hand mining mini game
+File:Sprint PA - Resource Node Hand Mining Game.png|Pre-Alpha - Hand mining mini game (improved)
+File:Sprint PA - Resource Node Hand Mining Game.mp4|Pre-Alpha - Hand mining mini game use (video)
+</gallery>
+
+== [[Miner#Portable_Miner|Portable Miner]] ==
+Approximately 6 months into game development, by Sprint 12 (week 24), the Portable Miner was introduced.<ref group="S12" name="yt-7I3NGAm3j_4@1405">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1405s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Portable Miner Introduced]</ref> 
+
+In Sprint 20 (week 40) it is noted that the Portable Miner now had a stack size of 1.<ref group="S20" name="yt-7I3NGAm3j_4@1530">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1530s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Portable Miner Stack Size]</ref> 
+
+<gallery>
+File:Sprint 12 - Portable Miner 1.png|Sprint 12 - First look at the Portable Miner
+File:Sprint 12 - Portable Miner 2.png|Sprint 12 - Portable Miner interaction using {{Key|E}}
+File:Sprint 12 - Portable Miner 3.png|Portable Miner on a Pure Copper Resource Node
+File:Sprint 12 - Portable Miner 4.png|Portable Miner ''(with early version of Smelter in background)''
+File:Sprint 20 - Portable Miner.png|Sprint 20 - Portable Miner on a Copper Resource Node
+File:Sprint 20 - Trading Post - Workbench 2.png|Sprint 20 - Portable Miner in Inventory
+</gallery>
+
+== [[Miner]] ==
+The Miner was the first buildable created for the game.<ref group="S1" name="yt-7I3NGAm3j_4@162">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=162s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - First Buildable Developed]</ref>
+
+In Sprint 1 (week 2), the first version of the Miner was a simple block<ref group="S1" name="yt-7I3NGAm3j_4@162"></ref> that could be placed on a Resource Node (Coal or Iron). This version of the Miner also include inventory with the "burnt bacon" Coal Icon.<ref group="S1" name="yt-7I3NGAm3j_4@189">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=189s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Burnt Bacon Coal Icon]</ref>
+
+By Sprint 2 (week 4), the second version of the Miner was a vast improvement over the "block" used in Sprint 1, and used a animated unpainted shell that included two conveyor belt output ports.<ref group="S2" name="yt-7I3NGAm3j_4@257">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=257s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Miner Improvement #1]</ref>
+
+In Sprint 3 (week 6), the Miner could be selected using the Build Menu. The Miner build hologram could not be rotated, but the Miner could be placed on a Resource Nodes.<ref group="S3" name="yt-7I3NGAm3j_4@358">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=358s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Miner Placement on Resource Nodes]</ref> Additionally the Minor saw some graphical improvements to include adding color (green stripe).
+
+In Sprint 6 (week 12) the Miner's model received more improvement by addition of color, could be placed anywhere, not just on Resource Nodes.<ref group="S6" name="yt-7I3NGAm3j_4@782">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=782s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Miner Placement Anywhere]</ref> The Miner's placement used a two-step process, {{Mouse|left}} click to place, followed by using {{Mouse|middle}} (Scroll) to rotate into position.<ref group="S6" name="yt-7I3NGAm3j_4@815">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=815s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Miner Placement Rotation]</ref> You selected which resource to mine from the Miner's UI.
+
+By Sprint 26 (week 52), and before Closed Alpha, after 40+ more weeks of development, the Miner's model had improved greatly, but still initially looked much different than the current design.<ref group="PA" name="yt-ZW0OOikcWN0@570">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=570s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Miner Improvement #1]</ref> Eventually the Miner's look was changed to be similar to the Mk.1 Miner.<ref group="PA" name="yt-7I3NGAm3j_4@2078">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=2078s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Miner Improvement #2]</ref> 
+
+The cost for the Miner was 15 Iron Rods, 12 Iron Plate, 12 Wire.
+
+The Miner's UI was very simple showing only the extractor status, extraction progress bar, and if powered or not.<ref group="PA" name="yt-ZW0OOikcWN0@615">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=615s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Miner Improvement #1 - UI (General)]</ref><ref group="PA" name="yt-ZW0OOikcWN0@732">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=732s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Miner Improvement #1 - UI (Extraction)]</ref>
+
+If not connected to a conveyor belt, the max a Miner could extract was 50 Ore at which point it would stop.<ref group="PA" name="yt-ZW0OOikcWN0@778">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=778s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Miner Improvement #1 - Milestone Unlock]</ref>
+
+<gallery>
+File:Sprint 1 - Miner 1.png|Sprint 1 - First look of Miner.
+File:Sprint 1 - Miner 2.png|Sprint 1 - One Minor placed on a Resource Node
+File:Sprint 1 - Miner 3.png|Sprint 1 - Two Miners each placed on a Resource Node
+File:Sprint 1 - Miner 4.png|Sprint 1 - Miner Inventory with "Burnt Bacon Coal Icon"
+File:Sprint 2 - Miner 1.png|Sprint 2 - Miner Model 1 (left side)
+File:Sprint 2 - Miner 2.png|Sprint 2 - Miner Model 2 (drill close up)
+File:Sprint 2 - Miner 3.png|Sprint 2 - Miner Model 3 (rear)
+File:Sprint 2 - Miner 4.png|Sprint 2 - Miner Model 4 (right side)
+File:Sprint 2 - Conveyor Belt 1.png|Sprint 2 - First look of a Miner and Conveyor Belt usage
+File:Sprint 2 - Conveyor Belt 2.png|Sprint 2 - Example of full Miner and Conveyor Belt usage
+File:Sprint 2 - Conveyor Belt 3.png|Sprint 2 - Example use of Conveyor Belt "spline's"
+File:Sprint 3 - Miner.png|Sprint 3 - Miner placed on Iron Resource Node
+File:Sprint 6 - Miner 0.png|Sprint 6 - Miner Build Hologram
+File:Sprint 6 - Miner 1.png|Sprint 6 - Miner Model Improvement 2, placement possible anywhere
+File:Sprint 6 - Miner 2.png|Sprint 6 - Miner's UI showing Resource Mine List (upper left)
+File:Sprint PA - Miner 0.png|Pre-Alpha - Miner Improvement 3 - Hologram
+File:Sprint PA - Miner 1.png|Pre-Alpha - Miner Improvement 3 (Side)
+File:Sprint PA - Miner 1a.png|Pre-Alpha - Miner UI (Not Powered)
+File:Sprint PA - Miner 1b.png|Pre-Alpha - Miner UI (Powered / Extracting)
+File:Sprint PA - Miner 2.png|Pre-Alpha - Miner Improvement 4 (Side)
+File:Sprint PA - Power Line 2.png|Pre-Alpha - Connecting Power Line to Miner
+</gallery>
+
+== [[Oil Extractor]] ==
+The early game had an equivalent of the oil extractor which was called a oil pump.
+
+In Sprint 6 (week 12) the oil pump had the description of ''Gets them fluids out of the ground'' when selected in the Build Menu.<ref group="S6" name="yt-7I3NGAm3j_4@965">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=965s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Oil Pump (Extractor)]</ref> and could be build at the cost of 10 Iron Pipe and 10 Iron Plate. The Oil Pump could be build anywhere and not only on specific Oil Resource Nodes and extracted oil rich ore.
+
+<gallery>
+File:Sprint 6 - Oil Pump 0.png|Oil Pump Hologram
+File:Sprint 6 - Oil Pump 1.png|Oil Pump Body
+File:Sprint 6 - Oil Pump 2.png|Oil Pump Flare Stack
+File:Sprint 6 - Oil Pump 3.png|Oil Pump (Full) showing extraction of oil rich ore
+</gallery>
+
+== [[Conveyor Belts]] ==
+Conveyor belts were added in Sprint 2, and continued to be improved during early development.
+
+In Sprint 2 (week 4) the conveyor belts was nothing more than a block that could be placed in a spline.<ref group="S2" name="yt-7I3NGAm3j_4@273">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=273s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Early Conveyor Belt]</ref>
+
+By Sprint 3 (week 6), the conveyor belt started using a animated unpainted shell.<ref group="S3" name="yt-7I3NGAm3j_4@410">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=410s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Conveyor Belt Improvement #1]</ref>
+
+In Sprint 6 (week 12) conveyor belts had the description of ''Moves them resources where you want them to go'' when selected in the Build Menu<ref group="S6" name="yt-7I3NGAm3j_4@912">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=912s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Conveyor Belt Improvement #2]</ref> and could be built at the cost of 2 Iron Pipes (using burnt bacon icon).
+
+By Sprint 8 (week 16) conveyor belts saw some improvements in both design and placement<ref group="S8" name="yt-7I3NGAm3j_4@1131"></ref> and could be built using only 1 Iron Pipe (now with proper icon)/
+
+By Pre-Alpha, 36 weeks since Sprint 8, the look of conveyor belts had improved significantly<ref group="PA" name="yt-ZW0OOikcWN0@848">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=848s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Conveyor Belt Improvement]</ref> and could now be built using 1 Iron Plate instead of Iron Pipe. The conveyor belts could be dragged from output (or input) to anywhere, along with the ability to build them directly on the ground with an automatic starting conveyor pole.<ref group="PA" name="yt-ZW0OOikcWN0@1014">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=1014s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Conveyor Belt Construction]</ref> Conveyor belts at this time did not have the automatic ending conveyor pole, but free floated in the air.
+
+<gallery>
+File:Sprint 2 - Conveyor Belt 0.png|Sprint 2 - Conveyor Belt Hologram "Box"
+File:Sprint 2 - Conveyor Belt 1.png|Sprint 2 - First look of a Miner and Conveyor Belt usage
+File:Sprint 2 - Conveyor Belt 2.png|Sprint 2 - Example of full Miner and Conveyor Belt usage
+File:Sprint 2 - Conveyor Belt 3.png|Sprint 2 - Example use of Conveyor Belt "spline's"
+File:Sprint 3 - Conveyor Belt.png|Sprint 3 - First look at Conveyor Belt design
+File:Sprint 6 - Conveyor Belt 0.png|Sprint 6 - Conveyor Belt Improvement #2 - Hologram
+File:Sprint 6 - Conveyor Belt 1.png|Sprint 6 - Conveyor Belt Improvement #2 with Iron Ingots
+File:Sprint 8 - Conveyor Belt.png|Sprint 8 - Conveyor Belt Improvement #3
+File:Sprint PA - Build Menu 3.png|Pre-Alpha - Build Menu - Transport - Conveyor Belt and Conveyor Pole
+File:Sprint PA - Conveyor Belt 0a.png|Pre-Alpha - Conveyor Belt (Mk.1) - Hologram attached to Miner
+File:Sprint PA - Conveyor Belt 0b.png|Pre-Alpha - Conveyor Belt (Mk.1) - Hologram attached to Basic Smelter
+File:Sprint PA - Conveyor Belt 1.png|Pre-Alpha - Conveyor Belt (Mk.1) - Attached to Basic Smelter Input with Iron Ore
+File:Sprint PA - Conveyor Belt 2.png|Pre-Alpha - Conveyor Belt (Mk.1) - Attached to Basic Smelter Output with Iron Ingots (changed design)
+File:Sprint PA - Conveyor Belt 3.png|Pre-Alpha - Conveyor Belt (Mk.1) - Free floating in air at end (no end pole)
+</gallery>
+
+== [[Conveyor Poles]] ==
+Conveyor poles were added in Sprint 6, and during most early game development was very simplistic in design.
+
+In Sprint 6 (week 12) conveyor poles were selectable via the Build Menu<ref group="S6" name="yt-7I3NGAm3j_4@867">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=867s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Sprint 6 Conveyor Pole Description]</ref> and had the description of ''Buld conveyors in the air'' (misspelling in menu). Early game conveyor poles consisted of a basic "T" design with a green attachment block and had a cost of 1 Iron Pipe (using burnt bacon icon) and 1 Iron Plate.
+
+In Sprint 8 (week 16), placing conveyor poles on Foundations allowed for better placement<ref group="S8" name="yt-7I3NGAm3j_4@1131">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1131s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Conveyor Pole Placement Improved]</ref> and improved construction of conveyor belts. Conveyor poles still cost 1 Iron Pipe (now with proper icon) and 1 Iron Plate.
+
+By Pre-Alpha, 36 weeks since Sprint 8, the look of conveyor poles had improved significantly<ref group="PA" name="yt-ZW0OOikcWN0@1066">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=1066s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Conveyor Pole Improvement]</ref> and could now be built using 2 Iron Rods, 1 Iron Plate, and 2 Cement. The conveyor belts could be dragged from output (or input) to anywhere, along with the ability to build them directly on the ground with an automatic starting conveyor pole. In addition to the ability to rotate conveyor poles using {{Mouse|middle}}, the conveyor poles could be raised several meters prior to placement of conveyor belts.
+
+<gallery>
+File:Sprint 6 - Conveyor Pole.png|Sprint 6 - First look at Conveyor Pole
+File:Sprint 6 - Conveyor Belt 0.png|Sprint 6 - Conveyor Belt Hologram attaching to a Conveyor Pole.
+File:Sprint 8 - Conveyor Pole 1.png|Sprint 8 - Conveyor Pole Placement on Foundation.
+File:Sprint 8 - Conveyor Pole 2.png|Sprint 8 - Conveyor Belt Placement Improved
+File:Sprint PA - Build Menu 3.png|Pre-Alpha - Build Menu - Transport - Conveyor Belt and Conveyor Pole
+File:Sprint PA - Conveyor Pole 0.png|Pre-Alpha - Conveyor Pole Hologram
+File:Sprint PA - Conveyor Pole 1.png|Pre-Alpha - Conveyor Pole raised several meters
+</gallery>
+
+== [[Conveyor Splitter]] ==
+Early game development had a conveyor splitter in a "Y" configuration with one Input and two Outputs.
+
+In Sprint 3 (week 6) the conveyor Splitter started by dividing input in half.<ref group="S3" name="yt-7I3NGAm3j_4@514">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=514s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Conveyor Splitter Hologram]</ref>
+
+In Sprint 6 (week 12) the conveyor splitter had the description of ''Splits stuff'' when selected in the Build Menu<ref group="S6" name="yt-7I3NGAm3j_4@942">[https://youtu.be/7I3NGAm3j_4?t=942s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Sprint 6 - Conveyor Splitter Build Menu]</ref> and could be built using 3 Iron Pipe and 3 Wire.
+
+In Sprint 23 (week 46), the conveyor splitter graphic mesh and look had drastically changed.<ref group="S23" name="yt-7I3NGAm3j_4@1863"></ref>
+
+<gallery>
+File:Sprint 3 - Conveyor Splitter.png|Sprint 3 - Conveyor Splitter Hologram
+File:Sprint 3 - Factory 1.png|Sprint 3 - Early look of factories showing production of Iron Ingots and use of Conveyor Splitter.
+File:Sprint 6 - Conveyor Splitter.png|Sprint 6 - Conveyor Splitter Build Menu and Hologram
+File:Sprint 23 - Build Menu 1.png|Sprint 23 - Transport Menu showing Conveyor Splitter
+File:Sprint 26 - Build Menu 2c.png|Sprint 26 - Transport Menu showing Conveyor Splitter
+</gallery>
+
+== [[Smart Splitter]] ==
+In Sprint 23 (week 46) the early game had a Splitter Advanced, with two outputs, that became the smart splitter.<ref group="S23" name="yt-7I3NGAm3j_4@1863"></ref>
+
+By Sprint 26 (week 52), the splitter advanced was now called Smart Splitter<ref group="S26" name="yt-7I3NGAm3j_4@2214"></ref> and had a description of ''This Splitter lets you define a part that should be split to a specific side. All other parts that pass through will output to the other side.''
+
+<gallery>
+File:Sprint 23 - Build Menu 1.png|Sprint 23 - Transport Menu showing Splitter Advanced
+File:Sprint 26 - Build Menu 2c.png|Sprint 26 - Transport Menu showing Smart Splitter
+</gallery>
+
+== [[Programmable Splitter]] ==
+In Sprint 23 (week 46) the early game had a Splitter Complex, with two outputs, that became the programmable splitter.<ref group="S23" name="yt-7I3NGAm3j_4@1863"></ref>
+
+By Sprint 26 (week 52), the splitter complex was now called Programmable Splitter<ref group="S26" name="yt-7I3NGAm3j_4@2214"></ref> and had a description of ''This Splitter lets you define what side each part should be split to.''
+
+<gallery>
+File:Sprint 23 - Build Menu 1.png|Sprint 32 - Transport Menu showing Splitter Complex
+File:Sprint 26 - Build Menu 2d.png|Sprint 26 - Transport Menu showing Programmable Splitter
+</gallery>
+
+== [[Conveyor Merger]] ==
+In early game development there was a Conveyor Hub which in reality was a 7:1 conveyor merger.
+
+In Sprint 3 (week 6) the conveyor bub was a buildable that would combine 7 input conveyor belts into 1 output conveyor belt.<ref group="S3" name="yt-7I3NGAm3j_4@420">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=420s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Conveyor Hub (Merger)]</ref> Early on the Miner produced less, so the idea was to have multiple Miners connected to a central Conveyor Hub.
+
+In Sprint 6 (week 12) Conveyor Hubs had the description of "Hub that merges 7 conveyor belts" when selected in the Build Menu<ref group="S6" name="yt-7I3NGAm3j_4@942"></ref> and  could be built using 3 Iron Plate and 5 Copper Ingot.
+
+By Sprint 23 (week 46), the conveyor hub still existed, but there was also now a conveyor merger.<ref group="S23" name="yt-7I3NGAm3j_4@1863"></ref>
+
+In Sprint 26 (week 52), the conveyor hub was now called Mega Conveyor Merger and the conveyor merger was called Basic Conveyor Merger.<ref group="S26" name="yt-7I3NGAm3j_4@2214"></ref> 
+
+<gallery>
+File:Sprint 3 - Conveyor Hub 0.png|Sprint 3 - Conveyor Hub Hologram
+File:Sprint 3 - Conveyor Hub 1.png|Sprint 3 - Conveyor Hub initial look (ground level) showing output.
+File:Sprint 3 - Conveyor Hub 2.png|Sprint 3 - Conveyor Hub initial look (elevated)
+File:Sprint 3 - Conveyor Hub 3.png|Sprint 3 - Conveyor Hub initial look (overhead)
+File:Sprint 6 - Conveyor Hub.png|Sprint 6 - Conveyor Hub Build Menu and Hologram
+File:Sprint 23 - Build Menu 1.png|Sprint 23 - Transport Menu showing Conveyor Hub and Conveyor Merger
+File:Sprint 26 - Build Menu 2b.png|Sprint 26 - Transport Menu showing Basic Conveyor Merger and Mega Conveyor Merger (Conveyor Hub)
+</gallery>
+
+== Manufacturing Plant ==
+In early game development there was not a dedicated [[Smelter]], [[Constructor]], or [[Refinery]], but that function was combined in a multi-purpose Manufacturing Plant which had a description of ''Makes basic parts''.
+
+The "function" of the manufacturing plant was determined by the recipe chosen in the menu. What the manufacturing plant was being used for was displayed on the above the output port. The manufacturing plant was sometimes referred to as the "Darth Vader Helmet" building.<ref group="S3" name="yt-7I3NGAm3j_4@495">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=495s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Manufacturing Plant = Output Recipe Name and Building Joke Name]</ref>
+
+In Sprint 3 (week 6) the manufacturing plant was introduced and used as a Smelter<ref group="S3" name="yt-7I3NGAm3j_4@450">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=450s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Use of Manufacturing Plant (Smelter)]</ref>, but the build cost was unknown ''(reference shows confusing information)''.
+
+By Sprint 6 (week 12) the manufacturing plants "functions" were split into other buildable's with the exception of the constructor which still used the same graphic. The individual "functions" at this time did not have mark levels but ''that'' was being considered.<ref group="S6" name="yt-7I3NGAm3j_4@892">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=892s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Manufacturing Plant History]</ref>
+
+<gallery>
+File:Sprint 3 - Manufacturing Plant 0.png|Sprint 3 - Manufacturing Plant Recipe Menu
+File:Sprint 3 - Manufacturing Plant 1.png|Sprint 3 - First look at the Manufacturing Plant (Smelter Function)
+File:Sprint 3 - Manufacturing Plant 2.png|Sprint 3 - Manufacturing Plant (Smelter) receiving Iron Ore
+File:Sprint 3 - Manufacturing Plant 3.png|Sprint 3 - Manufacturing Plant (Smelter) outputting Iron Ingots (initial design)
+File:Sprint 3 - Factory 1.png|Sprint 3 - Early look of factories showing production of Iron Ingots and use of Conveyor Splitter.
+File:Sprint 3 - Factory 2.png|Sprint 3 - Early look of factories showing production of Iron Ingots.
+File:Sprint 6 - Constructor 1.png|Sprint 6 - Constructor using graphic of the Manufacturing Plant.
+</gallery>
+
+== [[Smelter]] ==
+In Sprint 6 (week 12) smelters become its own buildable and had the description of ''The long awaited smelter'' when selected in the Build Menu.
+
+Smelters were selectable via the Build Menu, had a black color and looked like a "face", and could be built using 6 Iron Plates and 8 Stone Bricks.<ref group="S6" name="yt-7I3NGAm3j_4@823">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=823s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Smelter]</ref> These early Smelters had two Inputs and during production the "mouth" was animated during production.<ref group="S6" name="yt-7I3NGAm3j_4@841">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=841s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Smelter Two Inputs]</ref>
+
+In Sprint 26 (week 52) the game still had two types of Smelters<ref group="S26" name="yt-7I3NGAm3j_4@2086">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=2086s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Smelter]</ref> which included the standard Basic Smelter and the Mk.2 Smelter (Basic Foundry).<ref group="S26" name="yt-7I3NGAm3j_4@2100">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=2100s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Smelter]</ref>
+
+During Pre-Alpha, when building a basic smelter the hologram had one input (green) and one output (orange).<ref group="PA" name="yt-ZW0OOikcWN0@819">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=819s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Basic Smelter Construction]</ref>
+
+The basic smelter UI consisted of two tabs.
+* Input and Output - Showed production status consisting of ore being inputed and ingots being outputted. If no conveyor belt was connected to either input or output the appropriate section would display red. Additionally there was a Power Status notification if no power was applied.<ref group="PA" name="yt-ZW0OOikcWN0@873">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=873s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Basic Smelter UI - Input and Output]</ref>
+* Recipes - Showed the available recipes to choose from.<ref group="PA" name="yt-ZW0OOikcWN0@969">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=969s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Basic Smelter UI - Input and Output]</ref>
+
+See also: [[Early_game_development#Variants|Closed Alpha Variants]]
+
+<gallery>
+File:Sprint 6 - Smelter 0.png|Sprint 6 - Initial look at the Smelter Hologram
+File:Sprint 6 - Smelter 1.png|Sprint 6 - Initial look at the Smelter (single single output)
+File:Sprint 6 - Smelter 2.png|Sprint 6 - Smelter {back double inputs)
+File:Sprint 6 - Smelter 3.png|Sprint 6 - Smelter Recipe Menu
+File:Sprint 26 - Smelter 1.png|Sprint 26 - Basic Smelter (side / front)
+File:Sprint 26 - Smelter 2.png|Sprint 26 - Basic Smelter (side / rear)
+File:Sprint 26 - Smelter.mp4|Sprint 26 - Build animation of Basic Smelter
+File:Sprint PA - Smelter 0.png|Pre-Alpha - Basic Smelter Hologram
+File:Sprint PA - Smelter 1.png|Pre-Alpha - Basic Smelter Front (left)
+File:Sprint PA - Smelter 2.png|Pre-Alpha - Basic Smelter UI (General)
+File:Sprint PA - Smelter 3.png|Pre-Alpha - Basic Smelter UI (Recipes)
+</gallery>
+
+== [[Foundry]] ==
+In Sprint 20 (week 40) there was a [[Old_unreleased_content#Mk.2_variants_of_buildings|Mk.2 Foundry]] that was an improved version of the Mk.2 Smelter.<ref group="S26" name="yt-7I3NGAm3j_4@2100"></ref> Both of these remained in the game through Sprint 26 (week 52) but were removed in Closed Alpha.
+
+See also: [[Early_game_development#Variants|Closed Alpha Variants]]
+
+<gallery>
+File:Sprint 20 - Foundry Mk2.mp4|Sprint 20 - Build animation of Mk.2 Foundry
+File:Sprint 26 - Smelter Mk2.png|Sprint 26 - Mk.2 Smelter (Foundry)
+File:Sprint 26 - Smelter Mk2 Menu.png|Sprint 26 - Mk.2 Smelter Menu
+</gallery>
+
+== [[Constructor]] ==
+In Sprint 6 (week 12), the constructors became its own buildable, was selected via the build menu as the Manufacturing Plant with the description of ''Makes basic parts''<ref group="S6" name="yt-7I3NGAm3j_4@877">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=877s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Constructor (Manufacturing Plant)]</ref> and could be built using 10 Iron Plate, 6 Iron Pipe, 3 Cable. The recipe menu for the constructor at this time consisted of the following selectable items:
+
+See also: [[Early_game_development#Variants|Closed Alpha Variants]]
+
+{| class="wikitable"
+!Item
+!Recipe (Cost)
+|-
+|Stone Brick
+|5 Stone (Limestone)
+|-
+|Iron Plate
+|2 Iron Ingot
+|-
+|Iron Pipe
+|1 Iron Ingot
+|-
+|Wire
+|1 Copper Ingot
+|-
+|Cable
+|3 Wire
+|}
+
+In Sprint 8, the manufacturing plant (constructor), did not change. The recipe menu for the constructor at this time consisted of the following selectable items (new items in '''bold'''):<ref group="S8" name="yt-7I3NGAm3j_4@1203">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1203s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Constructor Recipe Menu]</ref>
+
+{| class="wikitable"
+!Item
+!Recipe (Cost)
+|-
+|Stone Brick
+|5 Stone (Limestone)
+|-
+|Iron Plate
+|2 Iron Ingot
+|-
+|Iron Pipe
+|1 Iron Ingot
+|-
+|'''Iron Cog'''
+|1 Iron Plate
+|-
+|'''Iron Screw'''
+|1 Iron Pipe
+|-
+|Wire
+|1 Copper Ingot
+|-
+|Cable
+|3 Wire
+|-
+|'''Aluminum Plate'''
+|2 Aluminum Ingot
+|-
+|'''Steel Plate'''
+|1 Steel Ingot
+|-
+|'''Steel Beam'''
+|2 Steel Ingot
+|-
+|'''Steel Pipe'''
+|1 Steel Ingot
+|}
+
+In Sprint 20 (week 40), 36+ weeks since Sprint 8, the name of the constructor was called Simple Constructor. Additionally the graphic mesh and look of the constructor had dramatically changed.<ref group="S20" name="yt-7I3NGAm3j_4@1614"></ref>
+
+In Pre-Alpha, 12+ weeks since Sprint 20, it was noted that "Simple Constructor" had been changed to "Constructor", and that building the constructor include identifying the Input (green) and Output (orange).<ref group="PA" name="yt-ZW0OOikcWN0@1160">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=1160s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Conveyor Belt Improvement]</ref>
+
+<gallery>
+File:Sprint 6 - Constructor 0.png|Sprint 6 - Constructor (manufacturing plant) Hologram 
+File:Sprint 6 - Constructor 1.png|Sprint 6 - Constructor using manufacturing plant graphic mesh
+File:Sprint 6 - Constructor 2.png|Sprint 6 - Constructor "Mouth"
+File:Sprint 6 - Constructor 3.png|Sprint 6 - Constructor Recipe Menu
+File:Sprint 8 - Constructor Menu.png|Sprint 8 - Constructor (manufacturing plant) Recipes
+File:Sprint 20 - Build Gun 3a.png|Sprint 20 - Build Menu for Production showing Simple Constructor
+File:Sprint PA - Build Menu 1.png|Pre-Alpha - Build Menu - Production showing "Constructor"
+File:Sprint PA - Constructor.png|Pre-Alpha - Constructor Hologram
+</gallery>
+
+== [[Assembler]] ==
+In Sprint 6 (week 12) the assembler became its own buildable, had the description of ''Assembles stuff'' when selected in the build menu<ref group="S6" name="yt-7I3NGAm3j_4@971">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=971s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Assembler]</ref> and kept the same style of building until Early Access, Update 2. The assembler could be built using 25 Iron Ingots.
+
+The recipe menu for the assembler at this time consisted of the following selectable items:<ref group="S6" name="yt-7I3NGAm3j_4@998">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=998s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Assembler Recipe Menu]</ref>
+
+See also: [[Early_game_development#Variants|Closed Alpha Variants]]
+
+{| class="wikitable"
+!Item
+!Recipe (Cost)
+|-
+|Steel Ingot
+|Iron 1 Coal
+|-
+|Engine
+|5 Steel Gear, 3 Steel Pipe, 4 Steel Plate
+|-
+|Miniature Engine
+|6 Aluminum Gear, 3 Aluminum Pipe
+|-
+|AI Controller Chip
+|2 Plastic, 2 Cable, 1 Battery
+|-
+|Battery
+|1 Copper Ingot, 2 Coal, 2 Sulfur
+|-
+|Cable ''(also in Constructor Recipe Menu)''
+|3 Wire
+|-
+|Circuit Board
+|1 Wire, 1 Plastic
+|-
+|Drone Chassis
+|1 Aluminum Pipe, 2 Plastic, 4 Aluminum Gear
+|-
+|Drone Computer
+|1 AI Controller Chip, 2 Circuit Board, 4 Cable
+|-
+|Drone
+|1 Drone Chassis, 1 Drone Computer, 1 Miniature Engine
+|}
+
+In Sprint 20 (week 40) after 28 weeks of game development, the early game had a building called "Advanced Constructor" with the description of ''Takes two parts and turns them into one other part.''<ref group="S20" name="yt-7I3NGAm3j_4@1614"></ref>
+
+<gallery>
+File:Sprint 6 - Assembler 0.png|Sprint 6 - Assembler Hologram
+File:Sprint 6 - Assembler 1.png|Sprint 6 - Assembler Initial Look
+File:Sprint 6 - Assembler 2.png|Sprint 6 - Assembler (side)
+File:Sprint 6 - Assembler 3.png|Sprint 6 - Assembler Recipe Menu
+File:Sprint 20 - Build Gun 3a.png|Sprint 20 - Build Menu for Production showing Advanced Constructor (Assembler)
+File:Sprint 20 - Assembler.png|Sprint 20 - First appearance of the Advanced Constructor (Assembler).
+</gallery>
+
+== [[Manufacturer]] ==
+Not much is know about the development of the manufacturer prior to Closed Alpha.
+
+In Sprint 20 (week 40) the early game had a building called "Complex Constructor" with the description of ''The Complex Constructor takes three or four parts and turns them into one other part.''<ref group="S20" name="yt-7I3NGAm3j_4@1614"></ref>
+
+See also: [[Early_game_development#Variants|Closed Alpha Variants]]
+
+<gallery>
+File:Sprint 20 - Build Gun 3b.png|Sprint 20 - Build Menu for Production showing Complex Constructor (Manufacturer)
+</gallery>
+
+== Wind Turbine ==
+Early game development had access to Wind Turbines for power generation. These were eventually abandoned, due to the ability to place anywhere (nothing to deal with), and replaced with the use of [[Geothermal Generator|Geothermal Power Generators]] which are limited to being only used on Geysers.<ref name="yt-WEB9-SgYExg">[https://www.youtube.com/watch?v=WEB9-SgYExg YouTube - August 22nd, 2023 Livestream - Q&A: Will there be energy sources like solar & wind power?]</ref>
+
+In Sprint 3 (week 6) power was supplied by wind turbines which were eventually replaced by Geothermal Generators.<ref group="S3" name="yt-7I3NGAm3j_4@382">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=382s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Use of Wind Turbines #1]</ref>
+
+By Sprint 6 (week 12) in addition to Coal Power, the early game still used Wind Turbines.<ref group="S6" name="yt-7I3NGAm3j_4@1049"></ref>
+
+In Sprint 20 (week 40), after 40 weeks of development, wind turbines were removed and replaced by biomass burners.<ref group="S20" name="yt-7I3NGAm3j_4@1621">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1621s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Biomass Burner]</ref>
+
+<gallery>
+File:Sprint 3 - Wind Turbine.png|Sprint 3 - Wind Turbine (removed from game)
+File:Sprint 6 - Wind Turbine.png|Sprint 3 - Wind Turbine (removed from game)
+</gallery>
+
+== [[Biomass Burner]] ==
+In Sprint 20 (week 40) the biomass burner generator was introduced and its use shown.<ref group="S20" name="yt-7I3NGAm3j_4@1621">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1621s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Biomass Burner]</ref>
+
+During Sprint 26 (week 52), and after, the biomass burner generator saw some improvements<ref group="PA" name="yt-ZW0OOikcWN0@651">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=651s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Biomass Burner Improvement]</ref> and used a simplified UI consisting of both Fuel Quantity and Power Status. The biomass burner generator could be built using 15 Iron Plate, 15 x Iron Rod, and 20 Wire.
+
+<gallery>
+File:Sprint 20 - Biomass Burner 1a.png|Sprint 20 - First appearance of the Biomass Burner
+File:Sprint 20 - Biomass Burner 1b.png|Sprint 20 - Biomass Burner Generator
+File:Sprint 20 - Biomass Burner 2.png|Sprint 20 - Biomass Burner Generator Menu
+File:Sprint 20 - Biomass Burner 3.png|Sprint 20 - Biomass Burner Rear View
+File:Sprint 20 - Biomass Burner 4.png|Sprint 20 - Biomass Burner Connected to a Power Pole
+File:Sprint PA - Biomass Burner 0.png|Pre-Alpha - Biomass Burner Improvement = Hologram
+File:Sprint PA - Biomass Burner 1.png|Pre-Alpha - Biomass Burner Improvement (Front)
+File:Sprint PA - Biomass Burner 1a.png|Pre-Alpha - Biomass Burner UI
+File:Sprint PA - Biomass Burner 2.png|Pre-Alpha - Biomass Burner (Front)
+File:Sprint PA - Power Line 1.png|Pre-Alpha - Running Power Line from Biomass Burner
+</gallery>
+
+== [[Coal Generator]] ==
+In Sprint 6 (week 12) the coal generator was introduced with a more simplistic design, had a description of ''Produces dirty enegry'' (misspelling in menu) when selected in the build menu<ref group="S6" name="yt-7I3NGAm3j_4@954">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=954s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Coal Generator]</ref> and could be built using 5 Coal, 2 Iron Plate, and 2 Iron Pipe.
+
+<gallery>
+File:Sprint 6 - Coal Generator 0.png|Coal Generator Hologram
+File:Sprint 6 - Coal Generator 1.png|Coal Generator Smoke Stack
+File:Sprint 6 - Coal Generator 2.png|Coal Generator Body
+File:Sprint 6 - Coal Generator 3.png|Coal Generator (Full)
+</gallery>
+
+== [[Power Poles]] ==
+In Sprint 20 (week 40) the Power Pole was added to the game at the same time as biomass burner generators<ref group="S20" name="yt-7I3NGAm3j_4@1653">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1653s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Power Pole]</ref> and mentioned in the description that ''Each pole can handle can handle up to 4 connections and up to 50 MW flowing through it.''
+
+In Pre-Alpha, 12+ weeks since Sprint 20, the Power Pole look was improved.<ref group="PA" name="yt-ZW0OOikcWN0@933">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=933s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Power Pole]</ref>
+
+<gallery>
+File:Sprint 20 - Power Pole 0.png|Power Pole Build Menu
+File:Sprint 20 - Power Pole 1.png|Use of Power Pole to connect Power Cable to a Biomass Burner
+File:Sprint 20 - Power Pole 2.png|Use of Power Pole to connect Power Cable to a [[Old_unreleased_content#Mk.2_variants_of_buildings|Foundry Mk.2]] (unreleased Content in the background)
+File:Sprint PA - Power Pole 1.png|Power Pole Improvement
+File:Sprint PA - Power Pole 2.png|Use of Power Pole to connect Power Cable from Biomass Burner to a Miner and a Basic Smelter
+</gallery>
+
+== [[Power Line]] ==
+Early on, Power Lines did not need [[Cable]] to be crafted in order to use, but could be placed as needed.
+
+In Sprint 3 (week 6) the use of Power Lines required aiming and clicking on the Power Connectors on individual Buildings.<ref group="S3" name="yt-7I3NGAm3j_4@393">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=393s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Use Power Lines]</ref> Additionally there was the ability to daisy-chain power from building to building.<ref group="S3" name="yt-7I3NGAm3j_4@478">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=478s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Use Power Lines - Daisy Chaining]</ref>
+
+By Sprint 20 (week 40) Power Lines still required aiming and clicking on the Power Connectors on individual Buildings, did not require the use of Cable, but when a "connection" between two Power Connectors was made there was a "power up sound" that was also heard.<ref group="S20" name="yt-7I3NGAm3j_4@1653"></ref> The ability to daisy-chain power from building to building was removed with the addition of Power Poles.
+
+In Sprint 26 (week 52) and after, connecting the Power Line would show a large voltage ⚡ symbol above building or machine power connectors</ref><ref group="PA" name="yt-ZW0OOikcWN0@716">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=716s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Connecting Power Line]</ref> and require the use of Cable. After the connection is made the player would hear a bit of static sound.
+
+<gallery>
+File:Sprint 3 - Power Line.png|Sprint 3 - Use of Power Line
+File:Sprint 20 - Power Line.png|Sprint 20 - Power Line Build Menu
+File:Sprint 20 - Power Pole 1.png|Use of Power Pole to connect Power Line from a Biomass Burner Generator
+File:Sprint PA - Power Line 1.png|Running Power Line from Biomass Burner Generator
+File:Sprint PA - Power Line 2.png|Connecting Power Line to Miner
+</gallery>
+
+== [[Power Slug]] ==
+In the early game development there were no power slugs, but instead there were Quartz Crystals which were used in production of items. Quartz Crystals, which eventually became power slugs, is the reason a power slug could be turned into a [[Power Shard]].
+
+In Sprint 23 we got a glimpse of the Quartz Crystals placed in the world.<ref group="S23" name="yt-7I3NGAm3j_4@1783"></ref>
+
+In Sprint 26 (week 52), in the Tech Onion Tier 8, Quartz Crystals, you unlocked ability to collect Quartz Crystals which later became power slugs.<ref group="S26" name="yt-7I3NGAm3j_4@2189"></ref>
+
+<gallery>
+File:Sprint 23 - Quartz Crystal.png|Sprint 23 - Quartz Crystal
+File:Sprint 23 - Quartz Crystal 1.png|Sprint 23 - Quartz Crystal (center left) in the distance
+File:Sprint 23 - Quartz Crystal 2.png|Sprint 23 - Quartz Crystal (left)
+File:Sprint 26 - Trading Post - Tech Onion 8b.png|Tech Onion - Tier 8 - Quartz Crystals
+</gallery>
+
+== [[Walker]] ==
+In Sprint 6 (week 12) the Walker, an enemy from [https://store.steampowered.com/app/91600/Sanctum/ Sanctum] also produced by Coffee Stain Studios, was seen.<ref group="S6" name="yt-7I3NGAm3j_4@651">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=651s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Walker]</ref> became the first random hostile creature to appear in the game.
+
+In Sprint 8 (week 16) the Walker continued to be a random hostile creature found in the world.<ref group="S8" name="yt-7I3NGAm3j_4@1063"></ref>
+
+The Walker was finally relegated to just one instance in the [[World#Abyss_Cliffs|Abyss Cliffs]] and was eventually removed from the game sometime in Update 3.
+
+<gallery>
+File:Sprint 6 - Walker 1.png|First known appearance of the Walker
+File:Sprint 6 - Walker 2.png|Battling the Walker
+File:Sprint 8 - Walker.png|Walker
+</gallery>
+
+== [[Fluffy-tailed Hog]] ==
+In Sprint 23 (week 46) the fluffy-tail hog creature first appeared looking and acting much like it does now.<ref group="S23" name="yt-7I3NGAm3j_4@1783">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1783s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Fluffy-tail Hog]</ref> Some of their development was done by [[Coffee_Stain_Studios#Former_employees|Stefan Hanna]] before they became CEO of Coffee Stain Studios.
+
+<gallery>
+File:Sprint 23 - Fluffy-tail Hog 1.png|Fluffy-tail Hog walking
+File:Sprint 23 - Fluffy-tail Hog 2.png|Fluffy-tail Hog running
+</gallery>
+
+== [[Spitter]] ==
+Sprint 26 (week 52+), or prior to Closed Alpha, the Spitter was the third creature to be added.<ref group="PA" name="yt-ZW0OOikcWN0@1334">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=1334s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Spitter Introduction]</ref> The spitter at this time had only one look, and did not have the "variants" that were added in [[Patch_0.6.0.0#Creatures|Update 6]].
+
+The Spitter's fire attack consisted of 4 fire balls that exploded on contact, which could damage both the pioneer and vehicles if hit. The initial look of the fire ball explosions looked much like molten lava.
+
+<gallery>
+File:Sprint PA - Spitter 1.png|Pre-Alpha - First appearance of the Spitter
+File:Sprint PA - Spitter 2.png|Pre-Alpha - Spitter Fire Ball Attack
+File:Sprint PA - Spitter 3.png|Pre-Alpha - Spitter Fire Ball Lava Explosion (no vehicle damage)
+File:Sprint PA - Spitter 4.png|Pre-Alpha - Spitter Fire Ball Lava Explosion (vehicle damage)
+File:Sprint PA - Spitter 5.png|Pre-Alpha - Spitter Fire Ball Attack Beginning
+File:Sprint PA - Spitter 6.png|Pre-Alpha - Spitter Fire Ball Lava Explosion (close up)
+File:Sprint PA - Spitter 7.png|Pre-Alpha - Spitter (dead)
+</gallery>
+
+== [[Rebar Gun]] ==
+In Sprint 6 (week 12) the player had access to a nail gun<ref group="S6" name="yt-7I3NGAm3j_4@566">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=566s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Nail Gun]</ref> which later became the rebar gun.
+
+In Sprint 20 (week 40) the look of the nail gun changed as seen in the Trading Post Tech Onion for Tier 2, fourth milestone,<ref group="S20" name="yt-7I3NGAm3j_4@1537"></ref> and in Pre-Alpha Trading Post Schematics for Tier 3 Exploration Basics,<ref group="PA" name="yt-ZW0OOikcWN0@337"></ref> which showed the nail gun and its single ammo of nailgun spike.
+
+The nail gun was equipped in the single hand slot by accessing the inventory.<ref group="PA" name="yt-ZW0OOikcWN0@1227">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=1227s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Nail Gun Equipping]</ref>
+
+<gallery>
+File:Sprint 6 - Nail Gun.png|Sprint 6 - Nail Gun (Rebar Gun)
+File:Sprint 20 - Trading Post - Tech Onion 4.png|Sprint 20 - Tech Onion 4
+File:Sprint PA - Trading Post - Schematics 3b.png|Pre-Alpha - Trading Post (HUB) Schematics - Exploration Basics
+File:Sprint PA - Nail Gun 1.png|Pre-Alpha - Inventory Equip Nail Gun
+File:Sprint PA - Nail Gun 2.png|Pre-Alpha - Inventory Nail Gun Spike
+</gallery>
+
+== [[Truck]] ==
+Sprint 12 (week 24) the Truck was first seen and had a basic but developed design.<ref group="S12" name="yt-7I3NGAm3j_4@1216">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1216s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Vehicles - Truck]</ref>
+
+There are indications, when looking at the escape menu, that the truck was initially called a "car" and it took multiple parts in order to make. <ref group="S12" name="yt-7I3NGAm3j_4@1248">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1248s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Early Game Escape-Pause Menu]</ref>
+
+{| class="wikitable"
+!Item
+!Cost
+|-
+|Car (Truck)
+|1 Tire, 1 Engine, 1 Truck Chassis, 1 Car Computer
+|-
+|Tire
+|4 Vulcanized Rubber, 2 Reinforced Steel Plate
+|-
+|Engine
+|16 Iron Cog, 4 Steel Pipe, 10 Steel Plate, 50 Iron Screw
+|-
+|Truck Chassis
+|15 Steel Beam, 30 Steel Plate, 100 Iron Screw
+|-
+|Car Computer
+|5 Circuit Board, 15 Cable, 20 Plastic
+|}
+
+<gallery>
+File:Sprint 12 - Vehicles 1.png|Sprint 12 - First appearance of the Truck
+File:Sprint 12 - Vehicles 2.png|Sprint 12 - Truck side
+File:Sprint 12 - Vehicles 3.png|Sprint 12 - Truck driving
+File:Sprint 12 - Escape Menu.png|Sprint 12 - Escape Menu
+</gallery>
+
+== [[Tractor]] ==
+The Tractor was the second vehicle, after the Truck, that appeared in the game during early development.<ref group="S20" name="yt-7I3NGAm3j_4@1600">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1600s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Vehicles - Tractor]</ref>
+
+In Sprint 20 (week 40) the early version of the Tractor looks much like it does now but when driving it also had "speedometer" showing how fast you were going along with what "gear" you were in. You also saw what grid coordinate you were in ''(displayed below the Speedometer)'' along with an improvement to the compass on the bottom.
+
+By Pre-Alpha, 12+ weeks since Sprint 20, the Tractor improved a little bit.<ref group="PA" name="yt-ZW0OOikcWN0@1238">[https://www.youtube.com/watch?v=ZW0OOikcWN0&t=1238s YouTube - Pre-alpha Satisfactory Tutorial (August 2017) - Vehicles - Tractor Improvement]</ref>.
+
+The Tractor had a Workbench accessible in the back in which you could craft or store items, and also was used to fuel the vehicle.
+
+One of the primary purposes of the Tractor was its use while exploring the world. While manually driving the Tractor, on the left of the HUD, was shown fuel status and use along with current speed in kilometers per hour (KMH), and vehicle damage status (health).
+
+While driving the Tractor the Pioneer could not get hurt from hostile indigenous lifeforms.<ref group="PA" name="yt-ZW0OOikcWN0@1296"></ref>.
+
+<gallery>
+File:Sprint 20 - Tractor 1.png|Sprint 20 - First appearance of the Tractor
+File:Sprint 20 - Tractor 2.png|Sprint 20 - Driving Tractor at 0 kmh in Gear 1.
+File:Sprint 20 - Tractor 3.png|Sprint 20 - Driving Tractor with Speedometer, Coordinates, and improved Compass.
+File:Sprint PA - Tractor 1.png|Pre-Alpha - Tractor Improvement
+File:Sprint PA - Tractor 2.png|Pre-Alpha - Tractor Workbench
+File:Sprint PA - Tractor - Workbench 1.png|Pre-Alpha - Tractor Workbench UI
+File:Sprint PA - Tractor - Workbench 2.png|Pre-Alpha - Tractor Storage UI
+File:Sprint PA - Tractor - Workbench 3.png|Pre-Alpha - Tractor Fuel UI
+File:Sprint PA - Tractor - Explore 1.png|Pre-Alpha - Tractor Exploration 1
+File:Sprint PA - Tractor - Explore 2.png|Pre-Alpha - Tractor Exploration 2
+File:Sprint PA - Tractor - Explore 3.png|Pre-Alpha - Tractor Exploration 3
+File:Sprint PA - Tractor - Explore 4.png|Pre-Alpha - Tractor Exploration 4
+File:Sprint PA - Tractor - Explore 5.png|Pre-Alpha - Tractor Exploration 5
+</gallery>
+
+== [[Truck Station]] ==
+in Sprint 23 (week 46) Truck Stations were first seen, despite Trucks and Tractors added first in early game development.<ref group="S23" name="yt-7I3NGAm3j_4@1969">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1969s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Truck Station]</ref> Initially truck stations only had a "Load" function.
+
+<gallery>
+File:Sprint 23 - Truck Station 1.png|Sprint 23 - Transport Menu - Truck Station Load
+File:Sprint 23 - Truck Station 2.png|First appearance of the Truck Station Load building
+</gallery>
+
+== Trains ==
+In Sprint 23 (week 46) trains were first shown.<ref group="S23" name="yt-7I3NGAm3j_4@1904">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1904s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Trains - General]</ref> Trains at this time were very basic in both design and function, and consisted of the ability to build an [[Electric Locomotive]], [[Freight Car]], [[Freight Platform|Train Docking Station (Freight Platform)]] and [[Railway|Track (Railway)]].
+
+=== Electric Locomotive ===
+The early version of the Electric Locomotive was very basic to include block representations of two train engineers.<ref group="S23" name="yt-7I3NGAm3j_4@1929">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1929s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Trains - Electric Locomotive]</ref> 
+
+=== Freight Car ===
+While buildable in Sprint 23, there was no information or image showing their use.
+
+=== Freight Platform ===
+In Sprint 23 the Freight Platform was called Train Docking Station which had a very basic design with one Input (Unload) Port and one Output (Load) Port.<ref group="S23" name="yt-7I3NGAm3j_4@1912">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1912s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Trains - Docking Station]</ref> 
+
+=== Railway ===
+The first version of the Railway was a design consisting of two rails with wooden railroad ties (sleepers).<ref group="S23" name="yt-7I3NGAm3j_4@1904"></ref>
+
+<gallery>
+File:Sprint 23 - Railroad 1.png|Sprint 23 - First appearance of the Railroad Build Menu
+File:Sprint 23 - Railroad 4a.png|Sprint 23 - First appearance of the Electric Locomotive
+File:Sprint 23 - Railroad 4b.png|Sprint 23 - Electric Locomotive (side facing right)
+File:Sprint 23 - Railroad 4c.png|Sprint 23 - Electric Locomotive (side facing away)
+File:Sprint 23 - Railroad 4d.png|Sprint 23 - Electric Locomotive (side / above facing left)
+File:Sprint 23 - Railroad 3a.png|Sprint 23 - First appearance of the Train Docking Station (Freight Platform)
+File:Sprint 23 - Railroad 3b.png|Sprint 23 - Train Docking Station showing Input and Output Arrows
+File:Sprint 23 - Railroad 3c.png|Sprint 23 - Train Docking Station (side)
+File:Sprint 23 - Railroad 2a.png|Sprint 23 - First appearance of the Railroad Track (Railway)
+File:Sprint 23 - Railroad 2b.png|Sprint 23 - Railroad Track (closeup)
+</gallery>
+
+== Signs ==
+In Sprint 23 (week 46) we saw there use to be a Speed Sign<ref group="S23" name="yt-7I3NGAm3j_4@1958">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1958s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Speed Sign]</ref> which was removed. The description of the early speed sign read ''Limits speed for self driving vehicles'' but it was unclear if the "speed" could be adjusted or was different than the 30km/h shown.
+
+The speed sign was removed by [[Alpha Test Weekend]], though it remained in headers until an unknown patch after Update 3.<ref group="Alpha" name="yt-3ktJY78H018@741">[https://www.youtube.com/watch?v=3ktJY78H018&t=741s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Speed Signs]</ref>
+
+<gallery>
+File:Sprint 23 - Speed Sign 1.png|Speed Sign in None Menu
+File:Sprint 23 - Speed Sign 2.png|First appearance of the Train Speed Sign.
+File:Closed Alpha Signs.png|Closed Alpha Signs prior to Alpha Test Weekend.
+</gallery>
+
+== [[Storage Container]] ==
+In Sprint 6 (week 12) the storage container was first revealed<ref group="S6" name="yt-7I3NGAm3j_4@892"></ref> and could be build using 5 Iron Plate.
+
+The use (storage size) of storage containers in early game development in not known beyond the fact they were available, and had the description of "This stores stuff for you" when selected in the Build Menu.
+
+<gallery>
+File:Sprint 6 - Storage Container 0.png|Sprint 6 - Storage Container Hologram
+File:Sprint 6 - Storage Container 1.png|Sprint 6 - Use of a Storage Container
+</gallery>
+
+== [[U-Jelly Landing Pad]] ==
+In Sprint 26 (week 52) the U-Jelly Landing Pad first appeared along with the Jump Pad and Tilted Jump Pad.<ref group="S26" name="yt-7I3NGAm3j_4@2255">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=2255s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Organization Build Menu]</ref>
+
+<gallery>
+File:Sprint 26 - Build Menu 7.png|Sprint 26 - Build Menu - Organization - U-Jelly Pad
+File:Sprint 26 - U-Jelly Landing Pad 0.png|Sprint 26 - U-Jelly Pad Hologram
+File:Sprint 26 - U-Jelly Landing Pad 1.png|Sprint 26 - First appearance of the U-Jelly Pad.
+</gallery>
+
+== [[Statues]] ==
+Early game development has the equivalent of Statues in the form of a Trophy.
+
+In Sprint 20 (week 40) the Trophy could be created on the Workbench (Craft Bench) using the Decor Build Menu.<ref group="S20" name="yt-7I3NGAm3j_4@1718">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1718s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Trophy]</ref> and had the description of ''a trophy found while exploring''. It was a representation of the signs of life from another Coffee Stain Studio "project" that was not done after completion of [https://store.steampowered.com/app/265930/Goat_Simulator/ Goat Simulator].
+
+In Sprint 23 (week 46), the issue with giant items first appeared with a large version of the Trophy.<ref group="S23" name="yt-7I3NGAm3j_4@1835">[https://www.youtube.com/watch?v=7I3NGAm3j_4&t=1835s YouTube - Revisiting the FIRST YEAR of dev on Satisfactory (Game Dev Vlog) - Giant Trophy]</ref>. The "Giant Item Issue" reappeared in Update 4<ref group="S23" name="yt-sopgP-RQfrc@139">[https://www.youtube.com/watch?v=sopgP-RQfrc&t=139s YouTube - Example of Giant FICSIT Coffee Cup]</ref><ref group="S23" name="giant miner">[https://www.reddit.com/r/SatisfactoryGame/comments/n7lszb/thats_no_moon/ Reddit - Example of Giant Portable Miner]</ref> that was eventually fixed.
+
+The prototype Trophy/Statue was removed by [[Alpha Test Weekend]].<ref group="Alpha" name="yt-3ktJY78H018@1069">[https://www.youtube.com/watch?v=3ktJY78H018&t=1069s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Trophy / Statues]</ref> Statues were reintroduced in [[Patch 0.3|Update 3]].
+
+<gallery>
+File:Sprint 20 - Trophy 1.png|Sprint 20 - Decor Build Menu showing selection of the Trophy
+File:Sprint 20 - Trophy 2.png|Sprint 20 - The Trophy placed on the ground
+File:Sprint 20 - Trophy 3.png|Sprint 20 - The Trophy on the ground (close up)
+File:Sprint 23 - Giant Trophy.png|Sprint 23 - Giant Trophy looming in background
+File:Closed Alpha Prototype Trophy.png|Closed Alpha Prototype Trophy or Statue
+</gallery>
+
+== Closed Alpha Prototypes ==
+Prior to release of [[Alpha Test Weekend]] there were several areas where prototypes were tested. With few exceptions, most of these were removed and never made it into the [[Patch 0.1|Update 1 (Early Access)]].
+
+=== World ===
+In Closed Alpha there were several world related prototype events, flora, and weather that were tested.
+
+==== Events ====
+* There was an indication that the developers were testing the idea that the [[Pioneer]] could get '''Drowning Damage'''.<ref group="Alpha" name="yt-3ktJY78H018@972">[https://www.youtube.com/watch?v=3ktJY78H018&t=972s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Pioneer Drowning Damage]</ref> This was never implemented in game due to the games development shift away from any aquatic related gameplay other than swimming.
+* There was also something called '''Earthquake Manager''' that was used to trigger rock slides.<ref group="Alpha" name="yt-3ktJY78H018@1000">[https://www.youtube.com/watch?v=3ktJY78H018&t=1000s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Earthquake Manager and Rock Slides]</ref> This was never implemented in game most likely due to the work involved related to "rolling rocks" and game performance.
+
+==== Flora ====
+During Closed Alpha various type of flora were tested and with one exception these prototype creatures never made in to the game.
+
+===== Jungle Tree =====
+There was indication that a prototype form of jungle tree with vines and falling leaves you could ride on.<ref group="Alpha" name="yt-3ktJY78H018@1029">[https://www.youtube.com/watch?v=3ktJY78H018&t=1029s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Prototype Jungle Tree]</ref> These perhaps inspired in part the [[Vine ladder]]s that you could find in certain locations prior to [[Patch 1.0|Version 1.0]] when they were removed. The Jungle Tree vines and ridable falling leaves were never added to the game.
+
+<gallery>
+File:Closed Alpha Prototype Flora - Jungle Tree.png|Closed Alpha Prototype Flora - Jungle Tree
+File:Closed Alpha Prototype Flora - Jungle Tree Leaves and Vines.png|Closed Alpha Prototype Flora - Jungle Tree Leaves and Vines
+</gallery>
+
+===== Giant Mushrooms =====
+There was a prototype form of a giant Mushrooms that you could bounce on.<ref group="Alpha" name="yt-3ktJY78H018@1064">[https://www.youtube.com/watch?v=3ktJY78H018&t=1064s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Prototype Bouncy Mushrooms]</ref> While possibly planned for a way to traverse over some area of the map, these bouncy mushrooms never made it into the game, but perhaps inspired the behavior of the [[Space_Giraffe-Tick-Penguin-Whale_Thing#Behavior|Space Giraffe-Tick-Penguin-Whale Thing]] ''(aka "Mr. Bean")'' when jumped upon by the [[Pioneer]].
+
+<gallery>
+File:Closed Alpha Prototype Flora - Large Mushrooms.png|File:Closed Alpha Prototype Flora - Large Mushrooms.png
+</gallery>
+
+===== Pigment Plant =====
+Early on there was a Pigment Plant that could be collected and is thought to be a prototype for flower plants from which you could make [[Flower Petals]] that could be used to apply color to factories.<ref group="Alpha" name="yt-3ktJY78H018@474">[https://www.youtube.com/watch?v=3ktJY78H018&t=474s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Prototype Pigment Plant]</ref>
+
+<gallery>
+File:Closed Alpha Prototype Flora - Pigment Plant.png|Closed Alpha Prototype Flora - Pigment Plant
+</gallery>
+
+==== Weather ====
+In Closed Alpha the tested weather in the form of a '''Prototype Tornado'''.<ref group="Alpha" name="yt-3ktJY78H018@049">[https://www.youtube.com/watch?v=3ktJY78H018&t=049s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Weather (Tornado)]</ref>. While the tornado never made it into the game, [[Weather]] as a game feature was added in the form of rain in [[Patch 0.6.0.0|Update 6]], temporarily removed in [[Patch 0.8.0.0|Update 8]], and reintroduced in [[Patch 1.2.0.0|Version 1.2]] complete with wind, rain, storms and lightning.
+
+<gallery>
+File:Closed Alpha Prototype Weather - Tornado.png|Closed Alpha Prototype Weather - Tornado
+</gallery>
+
+=== Creatures ===
+During Closed Alpha various versions of wildlife were tested and with one exception these prototype creatures never made in to the game.
+
+==== Starfish ====
+There was a Starfish creature that carried a rock on its back. It would scuttle across the beach sand, and would increase in scuttle speed or bury itself in the sand when approached.<ref group="Alpha" name="yt-3ktJY78H018@071">[https://www.youtube.com/watch?v=3ktJY78H018&t=71s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Prototype Creature - Starfish]</ref>
+
+<gallery>
+File:Closed Alpha Prototype Creature - Starfish.png|Closed Alpha Prototype Starfish Creature
+</gallery>
+
+==== Beach Worms ====
+There were beach worms might have been called "Sand Snakes" by the community if they made it into the game. When threatened the beach worms disappear into their holes.<ref group="Alpha" name="yt-3ktJY78H018@087">[https://www.youtube.com/watch?v=3ktJY78H018&t=87s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Prototype Creature - Beach Worms]</ref>
+
+<gallery>
+File:Closed Alpha Prototype Creature - Beach Worms.png|Closed Alpha Prototype Beach Worm Creature
+</gallery>
+
+==== Sprouts ====
+There were Sprouts that like the beach worms when threatened disappear into their holes in the sand.<ref group="Alpha" name="yt-3ktJY78H018@101">[https://www.youtube.com/watch?v=3ktJY78H018&t=101s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Prototype Creature - Sprouts]</ref>
+
+<gallery>
+File:Closed Alpha Prototype Creature - Spouts.png|Closed Alpha Prototype Sprout Creature
+</gallery>
+
+==== Funnel Tree Tongue's ====
+The red and white [[Flora#Harvestable_plant_list|Funnel Trees ''(see image #61)'']] found in the [[World#Rocky_Desert|Rocky Desert Biome]] use to have "tongues" that when threatened disappear into their respective "funnel".<ref group="Alpha" name="yt-3ktJY78H018@106">[https://www.youtube.com/watch?v=3ktJY78H018&t=106s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Funnel Tree Tongues]</ref>
+
+<gallery>
+File:Closed Alpha Prototype Creature - Funnel Tree Tongue.png|Closed Alpha Prototype Creature - Funnel Tree Tongue
+File:Closed Alpha Prototype Creature - Funnel Tree Tongue Closeup.png|Closed Alpha Prototype Creature - Funnel Tree Tongue Closeup
+</gallery>
+
+==== Sea Centipede ====
+There was a Sea Centipede which was one of two aquatic creatures found in Closed Alpha.<ref group="Alpha" name="yt-3ktJY78H018@112">[https://www.youtube.com/watch?v=3ktJY78H018&t=112s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Sea Centipede]</ref> ''Not much more information is known about these other than they existed and appeared to live underwater.''
+
+<gallery>
+File:Closed Alpha Prototype Creature - Sea Centipede.png|Closed Alpha Prototype Sea Centipede Creature
+</gallery>
+
+==== Sea Slug ====
+{{Main|Lake Shark}}
+
+The Sea Slug was another aquatic creature found in Closed Alpha.<ref group="Alpha" name="yt-3ktJY78H018@120">[https://www.youtube.com/watch?v=3ktJY78H018&t=120s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Sea Slug (Lake Shark)]</ref> It actually made in into Early Access as the [[Lake Shark]], but was eventually removed in [[Patch 0.3|Update 3]].
+
+<gallery>
+File:Lake Shark.png|Closed Alpha Prototype Sea Slug Creature ''(renamed to Lake Shark)''
+</gallery>
+
+=== Equipment ===
+Various early versions of equipment were tested and eventually made it into the game in a different form.
+
+==== Assault Rifle ====
+There was an Assault Rifle that came in two variants that used cartridges, a Mk.1 that had two shots, and a Mk.2 that had 4 shots.<ref group="Alpha" name="yt-3ktJY78H018@273">[https://www.youtube.com/watch?v=3ktJY78H018&t=273s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Prototype Equipment - Assault Rifle]</ref> These eventually became the [[Rifle]] and [[Rifle Mk.2]], however the Rifle Mk.2 was eventually removed in [[Patch 0.1.6 build 98445|Update 1]].
+* TRIVIA: The inventory icon for the Assault Rifle Mk.2 variant show a picture of [[Coffee_Stain_Studios#Coffee_Stain_Studios|Simon Begby - Coffee Stain Studios VFX Artist]].
+
+<gallery>
+File:Closed Alpha Prototype Equipment - Assault Rifle Mk.1.png|Closed Alpha Prototype Equipment - Assault Rifle Mk.1
+File:Closed Alpha Prototype Equipment - Assault Rifle Mk.2.png|Closed Alpha Prototype Equipment - Assault Rifle Mk.2
+File:Closed Alpha Prototype Equipment - Assault Rifle Inventory.png|Closed Alpha Prototype Equipment - Assault Rifle Mk.2 Inventory
+</gallery>
+
+==== Machine Gun ====
+There was a Machine Gun that used cartridges that had 100 shots.<ref group="Alpha" name="yt-3ktJY78H018@291">[https://www.youtube.com/watch?v=3ktJY78H018&t=291s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Prototype Equipment - Machine Gun]</ref> This weapon was very bulky and so over powered that it ruined the "exploration aspect" of the game, and for that reason it was removed from the game. It return in [[Patch 0.6.0.0|Update 6]] in the form of [[Turbo Rifle Ammo]].
+
+<gallery>
+File:Closed Alpha Prototype Equipment - Machine Gun.png|Closed Alpha Prototype Equipment - Machine Gun
+File:Closed Alpha Prototype Equipment - Machine Gun Model.png|Closed Alpha Prototype Equipment - Machine Gun Model
+</gallery>
+
+==== Rebar Scatter Gun ====
+{{MainSub|Old_unreleased_content#Rebar_Scatter_Gun|0}}
+There was a Rebar Scatter Gun tested in Closed Alpha that used Spiked Rebar Ammo to shoot multiple spikes in a scattered pattern.<ref group="Alpha" name="yt-3ktJY78H018@327">[https://www.youtube.com/watch?v=3ktJY78H018&t=327s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Prototype Equipment - Rebar Scatter Gun]</ref> The Rebar Scatter Gun was eventually removed in [[Patch 0.1.6 build 98445|Update 1]] and return in [[Patch 0.6.0.0|Update 6]] in the form of [[Rebar_Gun#Shatter-0|Shatter Rebar Ammo]].
+
+<gallery>
+File:Closed Alpha Prototype Equipment - Scatter Rebar Gun.png|Example use of the Closed Alpha Prototype Scatter Rebar Gun showing "pattern" from one shot on the distant wall.
+</gallery>
+
+==== Nobelisk ====
+There was an early form of the [[Nobelisk_Detonator#Nobelisk-0|Nobelisk]] that looked like [https://en.wikipedia.org/wiki/C-4_(explosive) C-4] with a flashing warning light on it, along with an early version of the [[Nobelisk Detonator]] in the form of a walk-talky hand held device.<ref group="Alpha" name="yt-3ktJY78H018@335">[https://www.youtube.com/watch?v=3ktJY78H018&t=335s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Prototype Equipment - Nobelisk]</ref> This made it into the game in its current improved form in [[Patch_0.1.5#New_features|Update 1]].
+
+<gallery>
+File:Closed Alpha Prototype Equipment - Nobelisk.png|Closed Alpha Prototype Equipment - Nobelisk
+File:Closed Alpha Prototype Equipment - Nobelisk Detonator.png|Closed Alpha Prototype Equipment - Nobelisk Detonator
+</gallery>
+
+==== Sprinting Stilts ====
+{{Main|Blade Runners}}
+There was the Sprinting Stilts that was tested in Closed Alpha.<ref group="Alpha" name="yt-3ktJY78H018@349">[https://www.youtube.com/watch?v=3ktJY78H018&t=349s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Prototype Equipment - Sprinting Stilts (Blade Runners)]</ref> They were renamed as Blade Runners in [[Patch Closed Alpha 5.1]].
+
+<gallery>
+File:SprintingStilts.png|Closed Alpha Prototype Equipment - Sprinting Stilts
+</gallery>
+
+==== Eagle Eye Drone ====
+There was mention of a Eagle Eye Drone in Closed Alpha.<ref group="Alpha" name="yt-3ktJY78H018@363">[https://www.youtube.com/watch?v=3ktJY78H018&t=363s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Prototype Equipment - Eagle Eye Drone]</ref>. It could not be accessed, but its description read ''"Can be flown freely within an area around yourself. Good for scouting and building freely."''
+* This functionality was added to the game as [[Creative_Mode#Gameplay|Advanced Game Settings (AGS) Flight Mode]] in [[Patch 0.8.0.0|Update 8]].
+
+=== Parts and Resources ===
+During Closed Alpha there were early version of prototype parts, some of which did not make it into the game.
+
+==== Sheets and Cogs ====
+In Closed Alpha [[Copper Sheet]]s had a different look, and there was evidence of both an '''Iron Cog''' and a '''Aluminum Cog'''.<ref group="Alpha" name="yt-3ktJY78H018@464">[https://www.youtube.com/watch?v=3ktJY78H018&t=464s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Prototype Parts]</ref> The Aluminum Cog was removed prior this Closed Alpha build, while the Iron Cog remained until [[Patch 0.1|Update 1 (Early Access)]].
+
+<gallery>
+File:Closed Alpha Prototype Part - Copper Sheet.png|Closed Alpha Prototype Part - Copper Sheet
+File:Closed Alpha Prototype Part - Iron Cog.png|Closed Alpha Prototype Part - Iron Cog
+File:Closed Alpha Prototype Part - Aluminum Cog.png|Closed Alpha Prototype Part - Aluminum Cog
+</gallery>
+
+==== Resource Nodes ====
+In Closed Alpha there was a resource node called '''Gold Ore''' that was eventually was renamed to [[Caterium Ore]] after [[Caterina Parks]], the retconned CEO of [[FICSIT Inc.]].
+
+<gallery>
+File:Closed Alpha Prototype Resource - Gold.png|Closed Alpha version of Caterium Ore called Gold
+</gallery>
+
+=== Buildings ===
+{{Main|Old unreleased content}}
+During Closed Alpha several buildable's were prototyped and tested, with most either removed, or eventually making it into the game in a different form.
+
+==== Walls ====
+In Closed Alpha there were several Wall types that had decorations.<ref group="Alpha" name="yt-3ktJY78H018@530">[https://www.youtube.com/watch?v=3ktJY78H018&t=530s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Walls]</ref> Due to the repetitive nature when placing several decorated walls one after another, these early wall type version were removed in favor of [[Walls#Types|blank wall types]] upon which you could add your own decorations.
+
+<gallery>
+File:Closed Alpha Walls.png|Early version of Walls showing use of various decorations
+</gallery>
+
+==== Foundations and Floors ====
+The development of Foundations continued in Closed Alpha which had regular and large size foundations, to also include some ''thin versions'' that could be added to foundations for textures.<ref group="Alpha" name="yt-3ktJY78H018@572">[https://www.youtube.com/watch?v=3ktJY78H018&t=572s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Foundations]</ref>
+* See also: [[Early_game_development#Foundations| Early game development > Foundations]]
+
+==== Foundation Stair ====
+Closed Alpha featured a version of [[Foundations#Stairs|Foundation Stairs]] that included a railing. While the foundation stairs remained in the game until [[Patch 1.0|Version 1.0]] the railing was removed prior to [[Patch 0.1|Update 1 (Early Access)]].
+* See also: [[Early_game_development#Stair| Early game development > Stair]]
+
+<gallery>
+File:Closed Alpha Stairs.png|Early version of Foundation Stairs Right showing use of a railing
+</gallery>
+
+==== Variants ====
+In addition to Mk.1 regular variants of buildings and machines, Closed Alpha featured some that were constructed using '''Alternate Recipes''', along with some with Mk.2 and Mk.3 variants and others with no variants.
+
+===== Mk.1 Alternate Variant =====
+Closed Alpha featured Mk.1 variants of the [[Constructor]], [[Assembler]], and [[Manufacturer]] that used ''Alternate Recipes''.<ref group="Alpha" name="yt-3ktJY78H018@621">[https://www.youtube.com/watch?v=3ktJY78H018&t=621s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Closed Alpha Alternate Mk.1 Variants of Buildings/Machines]</ref> These variants were removed prior to [[Patch 0.1|Update 1 (Early Access)]].
+
+<gallery>
+File:Closed Alpha Constructor Mk.1 (Alternate).png|Closed Alpha Constructor Mk.1 (Alternate Recipe)
+File:Closed Alpha Assembler Mk.1 (Alternate).png|Closed Alpha Assembler Mk.1 (Alternate)
+</gallery>
+
+===== Mk.2 Variants =====
+{{MainSub|Old_unreleased_content#Mk.2_variants_of_buildings|0}}
+Closed Alpha had Mk.2 variants of the [[Constructor]], [[Assembler]], [[Foundry]], [[Manufacturer]] and [[Smelter]] that often looked markedly different then the Mk.1 variant.<ref group="Alpha" name="yt-3ktJY78H018@626">[https://www.youtube.com/watch?v=3ktJY78H018&t=626s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Closed Alpha Mk.2 Variants of Buildings/Machines]</ref> 
+* Of note is the Mk.2 Manufacturer had a room on top of the machine that could be used if desired.
+* All these Mk.2 variants of buildings/machines were removed prior to [[Patch 0.1|Update 1 (Early Access)]].
+
+<gallery>
+File:Closed Alpha Assembler Mk.2.png|Closed Alpha Assembler Mk.2
+File:Closed Alpha Manufacturer Mk.2.png|Closed Alpha Manufacturer Mk.2
+File:Closed Alpha Manufacturer Mk.2 Upper Room.png|Closed Alpha Manufacturer Mk.2 Upper Room
+File:Closed Alpha Manufacturer Mk.2 Upper Room Door.png|Closed Alpha Manufacturer Mk.2 Upper Room Door
+</gallery>
+
+===== Miner Variants =====
+{{Main|Miner}}
+In Closed Alpha the [[Miner]] had the standard 3 variants (Mk.1, Mk.2. Mk.3) but one key difference was that the Mk.3 Miner had '''two drill heads'''.<ref group="Alpha" name="yt-3ktJY78H018@648">[https://www.youtube.com/watch?v=3ktJY78H018&t=649s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Closed Alpha Miner Variants]</ref> The Mk.3 Miner was released with only '''one drill head''' in [[Patch 0.1|Update 1 (Early Access)]].
+
+<gallery>
+File:Closed Alpha Miner Mk.3 Double Drill Heads.png|Closed Alpha Miner Mk.3 Double Drill Heads
+</gallery>
+
+===== Other =====
+{{Main|Old unreleased content}}
+
+Closed Alpha also feature other early versions of the Hadron Collider<ref group="Alpha" name="yt-3ktJY78H018@679">[https://www.youtube.com/watch?v=3ktJY78H018&t=679s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Closed Alpha Hadron Collider]</ref>, Quantum Encoder<ref group="Alpha" name="yt-3ktJY78H018@711">[https://www.youtube.com/watch?v=3ktJY78H018&t=711s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Closed Alpha Hadron Collider]</ref>, Nuclear Power Plant<ref group="Alpha" name="yt-3ktJY78H018@726">[https://www.youtube.com/watch?v=3ktJY78H018&t=726s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Closed Alpha Nuclear Power Plant]</ref>, Powered Wall<ref group="Alpha" name="yt-3ktJY78H018@749">[https://www.youtube.com/watch?v=3ktJY78H018&t=749s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Closed Alpha Powered Wall]</ref>, Central Storage (Remote Storage)<ref group="Alpha" name="yt-3ktJY78H018@773">[https://www.youtube.com/watch?v=3ktJY78H018&t=773s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Closed Alpha Central Storage (Remote Storage)]</ref>, and Converter<ref group="Alpha" name="yt-3ktJY78H018@808">[https://www.youtube.com/watch?v=3ktJY78H018&t=808s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Closed Alpha Central Storage (Remote Storage)]</ref>.
+* ''See Main above for more information.''
+
+==== Teleporter ====
+In Closed Alpha there was a prototype teleporter<ref group="Alpha" name="yt-3ktJY78H018@1089">[https://www.youtube.com/watch?v=3ktJY78H018&t=1089s YouTube - We Found Coffee Stain's Secret Developer Map in Satisfactory - Teleporter]</ref> called the '''Ancient Portal'''. This was removed prior to [[Patch 0.1|Update 1 (Early Access)]], and reintroduced in a different form as the [[Portal]] in [[Patch 1.0|Version 1.0]].
+* There was no indication that the rune symbology shown on the Ancient Portal meant anything, and it is presumed to be purely decorative in nature.
+
+<gallery>
+File:Closed Alpha Prototype Building - Ancient Portal.png|Closed Alpha Prototype Building - Ancient Portal
+File:Closed Alpha Prototype Building - Ancient Portal Runes.png|Closed Alpha Prototype Building - Ancient Portal Runes
+</gallery>
+
+== Trivia ==
+* [[Coffee_Stain_Studios#Coffee_Stain_Studios|Snutt]], as one of the first things he worked on, was remaking Compass to become what it is now in the game on the top of the HUD.<ref group="S23" name="yt-7I3NGAm3j_4@1771"></ref> Snutt started playing game in Sprint 26 (week 52) of early game development.<ref group="S26" name="yt-7I3NGAm3j_4@1982"></ref>
+* [[Coffee_Stain_Studios#Former_employees|Stefan Hanna]] did some of the development of fluffy-tail hogs before they became CEO of Coffee Stain Studios.<ref group="S23" name="yt-7I3NGAm3j_4@1783"></ref>
+
+== History ==
+The following dates are based on a confirmed ''completion date'' for Sprint 1 of '''2 May 2016''' and working forward ending with the known date of Pre-Alpha of '''August 17, 2017'''.
+
+{| class="wikitable"
+!Date
+!Sprint
+|-
+|17 August 2017
+|Pre-Alpha
+|-
+|27 April 2017
+|Sprint 26
+|-
+|6 March 2017
+|Sprint 23
+|-
+|23 January 2017
+|Sprint 20
+|-
+|3 October 2016
+|Sprint 12
+|-
+|8 August 2016
+|Sprint 8
+|-
+|11 July 2016
+|Sprint 6
+|-
+|30 May 2016
+|Sprint 3
+|-
+|16 May 2016
+|Sprint 2
+|-
+|2 May 2016
+|Sprint 1
+|-
+|18 April 2016
+|''Development Started''
+|}
+
+==References==
+{{Reflist}}
+
+=== Sprint 1 ===
+<references group="S1" />
+
+=== Sprint 2 ===
+<references group="S2" />
+
+=== Sprint 3 ===
+<references group="S3" />
+
+=== Sprint 6 ===
+<references group="S6" />
+
+=== Sprint 8 ===
+<references group="S8" />
+
+=== Sprint 12 ===
+<references group="S12" />
+
+=== Sprint 20 ===
+<references group="S20" />
+
+=== Sprint 23 ===
+<references group="S23" />
+
+=== Sprint 26 ===
+<references group="S26" />
+
+=== Pre-Alpha ===
+<references group="PA" />
+
+=== Closed Alpha ===
+<references group="Alpha" />
+
+{{PatchesNav}}
+[[Category:Gameplay mechanics]]
+[[Category:Patch notes]]

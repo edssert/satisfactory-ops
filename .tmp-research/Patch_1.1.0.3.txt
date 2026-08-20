@@ -1,0 +1,36 @@
+{{patch
+|ex=1
+|stable=1
+|build=406341
+|date=2025-04-17
+|discord=https://discord.com/channels/370472939054956546/557603412565426196/1362366487154921472
+|reddit=1k190af
+|steam=https://store.steampowered.com/news/app/526870/view/520837042930712785
+}}
+
+== Intro ==
+'''Hi Pioneers!'''
+
+Hello again everyone, we wanted to address some of the more important issues we’ve heard from you all before we go on a long weekend from our office in Sweden (Easter holidays), so here’s a small but hopefully helpful patch
+
+If it’s your first time trying out the 1.1 Experimental, remember to BACKUP YOUR SAVE before you try it as there might be unexpected issues
+
+If we introduced any new issues or there’s anything that you would really like us to address, please let us know over at our QA Site https://questions.satisfactorygame.com/ We will read your posts as soon as we’re all back!
+
+And remember, If the Experimental release turns out to be too unstable for you, you can always switch back to the default version of the game and restore your save game and continue enjoying Satisfactory as usual
+
+See you all again soon <3 
+
+== Bug fixes ==
+* Fixed a memory leak that would lead to an [[Unreal Engine#Unreal Engine UObject Limit|Object Limit]] related crash when playing for prolonged amounts of time
+* Fixed [[Radar Tower]] UI not appearing at all when interacting with it
+* Fixed [[Blueprint#Blueprint_snapping|Auto Connect]] alignment so it also considers height differences between connections
+
+== Modding ==
+* Removed FACTORYGAME_API import / export from FGBlueprintOpenConnectionManager
+
+== Localization ==
+* Updated community translated languages with the latest translations
+* Updated language completion rates
+
+{{PatchesNav}}

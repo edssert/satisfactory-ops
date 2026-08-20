@@ -1,0 +1,32 @@
+{{Patch
+|stable=1
+|build=384038
+|date=2024-12-09
+|discord=https://discord.com/channels/370472939054956546/557603412565426196/1315751057460170762
+|reddit=1hagvw6
+|steam=https://store.steampowered.com/news/app/526870/view/512943879502168877
+}}
+== Intro ==
+'''Hi Pioneers!'''
+Hello again everyone, Today’s patch is potentially the last patch before we go out for FICS*MAS vacations and winter holidays at our office
+
+We wanted to do a last patch with some important fixes as we’ve noticed that some pioneers are still getting soft locked from the FICS*MAS calendar progression, so you can now handcraft the FICS*MAS Data Cartridges in the Workshop once you’ve unlocked them in case you ever lose them
+
+As always, if this patch brought any unexpected issues, please let us know over at our QA Site <nowiki>https://questions.satisfactorygame.com/</nowiki> We read your posts every day and even if we don’t address them right now, we will definitely look through your feedback after everyone is back :)
+
+See you all again soon, thank you for your incredible support and for being a fantastic community, hope everyone has a nice winter break and holiday season
+
+Merry FICS*MAS <3
+
+== FICSMAS ==
+* Added hand craft-able [[FICSMAS#FICSMAS_Data_Cartridges|FICSMAS Data Cartridge]] recipes
+** After unlocking a FICSMAS Data Cartridge in the Calendar, you will also receive a recipe to be able to craft them in the Workshop in case you happen to lose them
+* Increased the [[FICSMAS#Giant_FICSMAS_Gifts|ADA Gift pickup message]] chance to make up for them no longer repeating after playing once
+
+== [[Dedicated servers]] ==
+* Added a scroll bar to the Server Options in the Server Manager to prevent the “Disable Seasonal Events” option from flowing out of the UI and displaying over the description text
+
+== Localization ==
+* Updated community translated languages with the latest translations
+
+{{PatchesNav}}

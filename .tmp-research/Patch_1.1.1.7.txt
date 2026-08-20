@@ -1,0 +1,42 @@
+{{patch
+|stable=1
+|build=455399
+|date=2025-11-11
+|discord=https://discord.com/channels/370472939054956546/557603412565426196/1437865667977023620
+|reddit=1ougmg5
+|steam=https://store.steampowered.com/news/app/526870/view/614305130088500042
+}}
+
+== Intro ==
+
+Hi Pioneers!
+
+Hello again (hehe) everyone, We have been quite busy with the Console release for Satisfactory which if you weren’t aware is now out on PS5 and Xbox! 
+
+If you haven’t seen it, You can check out our release trailer for it below
+https://youtu.be/AcutI-YOLg4 
+
+At the same time we’ve been preparing some goodies for PC as well, so rest assured
+
+This patch has a few important things in it, We feel that the Spline Collision refactor can finally leave Experimental since it’s showed to be stable overall, on top of this, we have an assortment of fixes and improvements for Steam Deck which should hopefully finally push us to have the verified status 🙂 as well as a few extra bug fixes.
+
+If you happen to encounter any issues from this patch please let us know over at our QA Site https://questions.satisfactorygame.com/ We read your feedback every day
+
+Thank you for your continued support and see you all again soon ❤️
+
+==Optimization==
+* Refactored Spline Collision
+** This affects [[Conveyor Belts]], [[Pipelines]], [[Hypertube|Hypertubes]] and should lead to RAM usage improvements in big saves
+
+==[[Controller#Steam_Deck|Steam Deck]]==
+* First time experience improvements
+** Improved font size and UI scaling defaults across the board 
+** Added new values for the default graphical presets for Steam Deck only (Quality and Performance modes are available similar to console, with values you can tweak manually if preferred as well)
+* Changed confirm button to X on the Server Manager menu to avoid soft locks when inputting text using the Virtual Keyboard on Steam Deck
+
+==Bug fixes==
+* Fixed visual flickering in the sky around [[World#Northern_Forest|Northern Forest]] during nighttime
+* Fixed issues when saving a game with a custom name on Steam Deck
+* Fixed Conveyor Belt Item Frequency and Conveyor Belt Render Distance options not working properly in [[Settings#Advanced|Options menu > Video]]
+
+{{PatchesNav}}

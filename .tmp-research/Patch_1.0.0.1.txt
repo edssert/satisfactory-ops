@@ -1,0 +1,84 @@
+{{Patch
+|stable=1
+|build=366202
+|date=2024-09-12
+|discord=https://discord.com/channels/370472939054956546/557603412565426196/1283822451918377091
+|reddit=1ff6c45
+|steam=https://store.steampowered.com/news/app/526870/view/4615715344788357373
+}}
+
+== Intro ==
+Hi Pioneers!
+
+Hello again everyone, we want to say thanks for such an amazing reception to our 1.0 release. It has been incredible for all of us, and we really appreciate your enthusiasm
+
+With that said, we have noticed that some of you are having issues that might prevent you from playing, so here are some fixes that will hopefully allow you to enjoy the game as well
+
+If there are other problems that you still think need to be addressed, please let us know over at our QA Site https://questions.satisfactorygame.com/ Your posts have been extremely helpful so far and we read them all every day
+
+Most of the team is taking a small break this Friday and Monday to recharge our batteries after the release, so we might take a bit more time to prepare the next set of fixes
+
+In the meantime, you can check our Known Issues section below for information and workarounds if you’re still experiencing issues.
+
+We hope you all continue enjoying our game and have a lot of fun over the weekend. See you soon <3
+
+==Bug fixes==
+* Fixed an issue where [[Coal Generator]]s would stop working after interacting with them in some scenarios
+* Fixed a crash when [[Chainsaw|chainsawing]] certain foliage
+* Please note that some foliage cannot be removed with the chainsaw currently, but it is removable by the [[Nobelisk]]
+* Removed the remaining functionality to take high-res screenshots while using [[Photo Mode]] since it was previously broken and causing crashes
+* Fixed two crashes related to AbstractInstance that could occur when joining specific saves in [[Multiplayer]] or Dedicated Servers
+* Fixed several crashes related to both hosting and joining multiplayer sessions
+
+==UI==
+* Removed the suggested driver version popup for AMD drivers
+* Added a new tooltip on the [[Settings#Language|Language]] selection menu
+** Some community translated languages are missing due to new and rewritten content for 1.0 that hasn’t had time to be translated yet. These will be added over time as more gets translated. If you’d like to help with translations, please join our Discord!
+
+==Dedicated servers==
+* Fix for [[Dedicated Server]] Manager/HTTP API not binding to the correct bind address when there is only one network adapter in the system or multihome active, resulting in Server Manager not working.
+
+==Known issues==
+;[Installation] 1.0 doesn’t download
+:Please make sure to exit Steam or the EGS launcher fully, or try verifying the game's files, and reattempt downloading the game.
+
+;[Installation (Steam)] There is an .exe error when launching the game
+:Please restart Steam and verify the game's files.
+
+;There are languages missing
+:These are the only officially supported languages: English, French, Italian, German, Spanish, Japanese, Korean, Polish, Portuguese, Russian, Simplified & Traditional Chinese.
+:A lot of translations for Satisfactory have been community driven, which means that every other language previously available (and potential new ones) needs to be translated by the community, before being added as community translations once more.
+:A lot of people in the community have already shown interest in helping us out with translations and we are ever so grateful to you all and we'll update translations in game as they come in! If you want to help out check out info on our Discord. Please note that you need to have been part of the server for a time to be eligible for this.
+
+;I Can't Switch supported Languages (workaround available)
+:If you still have any issue switching between officially supported languages, a quick fix for this is to exit the game, rename the **%LOCALAPPDATA%\FactoryGame\Saved\Config* folder to **%LOCALAPPDATA%\FactoryGame\Saved\Old_Config*, then launch the game.
+
+;Plugin Error on launch (workaround available)
+:This is related to mods installed. Mods currently do not work with 1.0 so please make sure to disable or even delete all your mods, until they are updated!
+
+;[Crash] Shader Cache (workaround available)
+:Users may experience the following Fatal Error when booting up the game: [File: C:\BuildAgent\work\b731a33f2a691e17\UE4\Engine\Source\Runtime\RHI\Private\PipelineStateCache.cpp] [Line: 365] Shader compilation failures are Fatal.
+:This can be fixed by forcing DirectX 11 (dx11) as the rendering API via the launch command: -dx11
+:Video of how to set dx11 as a launch option: https://www.youtube.com/watch?v=cn3e-m4a-hU&t=438s
+:Text information on how to set launch options: https://www.pcgamingwiki.com/wiki/Glossary:Command_line_argument
+:See also [[Launch arguments]]
+
+;I can’t see the Early Access reward (Epic Games)
+:Everyone that has supported us during Early Access will receive some rewards upon starting up the game in 1.0, in the form of a new Helmet, Build Gun, and Trinket for said gun.
+:These rewards currently don’t appear on the EGS version of Satisfactory 1.0 - we know who you are and are currently working on getting this sorted! Thank you all so much for all the support!
+
+;White static effect over the game (AMD Radeon 5000 Series GPUs, possibly others)
+
+:This issue seems to be caused by broken AMD GPU drivers. Some workarounds on current drivers are:
+:* Try disabling upscaling
+:* If you really want to use upscaling, try using something other than FSR
+:* If you really want to use FSR, try changing the value of the FSR application by single digit increments towards either the lower or higher end of your current settings
+:* Force DirectX 11 as the rendering API through the launch command: -dx11
+
+;Mouse sensitivity feeling sluggish with V-Sync turned on
+:We’re currently investigating an issue where some players experience very sluggish mouse movement with V-Sync turned on. In the meantime, we recommend playing with V-Sync turned off if the mouse controls feel overly annoying.
+
+;Players starting at tier 2 on Dedicated Servers
+:Players are currently starting off at tier 2 upon entering the game on Dedicated Servers, skipping past tier 1. We’re currently looking into limiting the skipped parts of the game on Dedicated Servers to the intro sequence only (tier 0), and possibly even enabling players to experience tier 0 on Dedicated Servers as well.
+
+{{PatchesNav}}

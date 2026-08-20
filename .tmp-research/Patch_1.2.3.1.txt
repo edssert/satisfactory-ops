@@ -1,0 +1,41 @@
+{{patch
+|stable=1
+|build=495413
+|date=2026-06-24
+|discord=https://discord.com/channels/370472939054956546/557603412565426196/1519392566737633517
+|reddit=1uejuad
+|steam=https://store.steampowered.com/news/app/526870/view/712279347386384662
+}}
+== Intro ==
+Hi Pioneers!
+
+Hello again everyone, today we have a bunch of fixes to some more remaining issues with the 1.2 Update
+
+As usual, if you notice any new issues or you think there’s anything else we’re forgetting please let us know over at our QA Site https://questions.satisfactorygame.com/ We really appreciate your feedback
+
+We wanted to prepare at least one more patch before most people over here at Coffee Stain Studios head out for vacation so hopefully this makes everyone’s experience with Satisfactory more enjoyable
+
+Thank you all for your support and we hope you enjoy a nice summer ❤️
+
+== Bug Fixes ==
+* Fixed Decoupled Camera positioning not resetting after exiting [[Photo Mode]]
+* Fixed an issue where the inventory on a [[Storage Container]] would constantly change where the focus is when opening and closing it
+* Potential fix to crashes on [[Console release|Console]] related to suspending and resuming game sessions
+* Fixed initial UI focus on [[Freight Car|Freight Carts]] carrying fluids
+* Fixed [[Build Gun|Build Menu]] not reopening the Customizer tab after using the [[Customizer]]
+* Potential fixes to two of the highest frequency crashes on Consoles
+* Fixed loss of input after interacting with [[Portal]]s
+* Fixed loss of input after opening a [[Electric Locomotive|Locomotive UI]] and dismissing it by clicking the X
+* Fixed issues with [[Singularity Cell]]s disappearing when placed inside Portals and reopening them and their Icons overlapping
+* Fixed recipes in the [[Craft Bench]]/[[Workbench]] not getting updated when using the “Show Only Affordable” [[Settings|setting]]
+
+== Optimization ==
+* Updated texture LOD bias settings
+
+== [[Controller#Steam_Deck|Steam Deck]] ==
+* Steam Deck now properly uses Dynamic as the default input setting
+** This finally allows for using Gyro Behavior as Gyro to Mouse while also having controller functionality 🙂 
+* All [[Game menus|Server Manager]] popups should now properly use Square/X to confirm to avoid soft locks when exclusively using a [[Controller]]
+* Fixed Online Settings not having correctly sized text
+
+{{PatchesNav}}

@@ -1,0 +1,282 @@
+{{Quote|So you know how your FICSIT Inc. factory can be turned into this incredibly intricate maze of conveyor belts in every direction, merging, splitting, crossing each other above and below? Conveyor belts carry, after all, the life-blood of our company!|Caterina Parks's assistant [[Steve]]}}
+<div class="infobox-tabber"><tabber>
+Mk.1=
+{{Infobox building|className=Desc_ConveyorBeltMk1_C
+| size_width = 2
+| size_length = 1–56
+| size_height = 1
+}}
+|-|
+Mk.2=
+{{Infobox building|className=Desc_ConveyorBeltMk2_C
+| size_width = 2
+| size_length = 1–56
+| size_height = 1
+}}
+|-|
+Mk.3=
+{{Infobox building|className=Desc_ConveyorBeltMk3_C
+| size_width = 2
+| size_length = 1–56
+| size_height = 1
+}}
+|-|
+Mk.4=
+{{Infobox building|className=Desc_ConveyorBeltMk4_C
+| size_width = 2
+| size_length = 1–56
+| size_height = 1
+}}
+|-|
+Mk.5=
+{{Infobox building|className=Desc_ConveyorBeltMk5_C
+| size_width = 2
+| size_length = 1–56
+| size_height = 1
+}}
+|-|
+Mk.6=
+{{Infobox building|className=Desc_ConveyorBeltMk6_C
+| size_width = 2
+| size_length = 1–56
+| size_height = 1
+}}
+</tabber></div>
+'''Conveyor Belts''' are structures used to transport items between buildings. They come in six marks with different building costs, throughput, and appearance. Conveyor Belts can only be built between building connection ports or [[Conveyor Poles]]. Placing down a Conveyor Belt on the ground automatically places a Conveyor Pole with it.
+[[File:Conveyor Belts screenshot.png|thumb|Conveyor Belts in the world]]
+
+== Characteristics == 
+=== Item transportation ===
+Once a Conveyor Belt is connected to a [[building]]'s output (such as a [[Miner]]), it will begin to pull items out from the building's output slot. Conversely, a belt connected to a building's input port will attempt to push items into its input slot, provided it accepts the supplied item and there is enough storage space. Items on the belt can be manually picked up {{Key|E}}. Items cannot be manually dispensed onto a belt; this can be done by constructing a temporary [[Storage Container]].
+
+If the belt doesn't lead anywhere, items will not fall off the belt, instead, they will simply stop on the belt. The same occurs if the connected building is either full or cannot accept the item on the belt.
+
+Belts cannot transport items in stacks, each item (visually) on the belt represents one item. Lower mark Belts can also cause bottlenecks especially in the early game, where Miners are capable of producing more items per minute than the belt can transport.
+
+Each mark has higher throughput (measured in items/min) than its predecessor, and also appears more visually advanced.
+{| class="wikitable"
+! Mark !! Items/min !! Speed difference to Mk. beneath!! Mk.1 belt equivalent !! Visual appearance !! Unlocked at !! Ingredients
+|-
+| Mk.1 || 60 || N/A || 1 || [[File:Conveyor Belt Mk.1.png|64px]] Slim and thin. Small LEDs spaced half meters apart. || [[Tier 0]] - HUB Upgrade 4 || [[File:Iron Plate.png|64px|link=Iron Plate]] 1× [[Iron Plate]]
+|-
+| Mk.2 || 120 || 2× || 2 || [[File:Conveyor Belt Mk.2.png|64px]] Slightly higher edge. Slightly larger LEDs spaced further apart. || [[Tier 2]] - Logistics Mk.2 || [[File:Reinforced Iron Plate.png|64px|link=Reinforced Iron Plate]] 1× [[Reinforced Iron Plate]] 
+|-
+| Mk.3 || 270 || 2.25× || 4.5 || [[File:Conveyor Belt Mk.3.png|64px]] Added metal guardrail and guard bars on underside. Two bar LEDs. || [[Tier 4]] - Logistics Mk.3 || [[File:Steel Beam.png|64px|link=Steel Beam]] 1× [[Steel Beam]]
+|-
+| Mk.4 || 480 || 1.77778× || 8 || [[File:Conveyor Belt Mk.4.png|64px]] Thicker appearance, higher edge. Guardrail removed. Single large bar LED. Belt shows "Studs" on top. || [[Tier 5]] - Logistics Mk.4 || [[File:Encased Industrial Beam.png|64px|link=Encased Industrial Beam]] 1× [[Encased Industrial Beam]]
+|-
+| Mk.5 || 780 || 1.625× || 13 || [[File:Conveyor Belt Mk.5.png|64px]] Added metal guardrail. Reflective bars on the belt. Same LED as mark 4. || [[Tier 7]] - Logistics Mk.5 || [[File:Alclad Aluminum Sheet.png|64px|link=Alclad Aluminum Sheet]] 1× [[Alclad Aluminum Sheet]]
+|-
+| Mk.6 || 1200 || 1.53846× || 20 || [[File:Conveyor Belt Mk.6.png|64px]] Semitransparent design. Glows white or in the color the Belt was painted. || [[Tier 9]] - Peak Efficiency || [[File:Ficsite Trigon.png|64px|link=Ficsite Trigon]] 1× [[Ficsite Trigon]]<br>[[File:Time Crystal.png|64px|link=Time Crystal]] 1× [[Time Crystal]]
+|-
+|}
+
+=== Pioneer transportation ===
+{{Main|Movement}}
+Besides serving their primary purpose of transporting items, Conveyor Belts also move [[pioneer]]s. The transportation speed roughly matches how fast items are moving on the belt.
+{| class="wikitable"
+|-
+! !! Speed<br/>(Standing)!!Speed</br>(Running with Blade Runners)
+|-
+!Mk.1 
+|| 1.2 m/s <br/> 4.32 km/h || 52.92 km/h
+|-
+!Mk.2 
+|| 2.4 m/s <br/> 8.64 km/h || 57.24 km/h
+|-
+!Mk.3 
+|| 5.4 m/s <br/> 19.44 km/h || 68.04 km/h
+|-
+!Mk.4 
+|| 9.6 m/s <br/> 34.56 km/h || 83.16 km/h
+|-
+!Mk.5 
+|| 15.6 m/s <br/> 56.16 km/h || 104.76 km/h
+|-
+!Mk.6
+|| 24 m/s <br/> 86.4 km/h || 135.00 km/h
+|-
+|}
+
+== Construction ==
+A single Conveyor Belt segment can be from ~0.5 up to 56 meters long (exactly seven [[Foundations]]), calculated using the [[wikipedia:Euclidean_distance#Higher_dimensions|euclidean distance formula]] <math>\sqrt{(\Delta x)^2+(\Delta y)^2+(\Delta z)^2}</math>. The minimum turn radius is two meters. The building cost is roughly 0.5 materials per meter, rounded up to nearest integer.
+
+The maximum slope is 35°, calculated using <math display="inline">\arctan{\frac{z}{\sqrt{x^2+y^2}}}</math> (in degrees, where x, y, and z are the belt's displacement on the axes). Conveyor Belts cannot incline along the Z-axis while turning in the XY plane. They will do one, then the other. The greatest possible rise in the shortest distance is 31 meters vertically and 45 meters horizontally.
+
+When building between poles, the first snapping point will always be the input and the second the output, unless the first point is connecting to an input of another building or conveyor belt. Once constructed, the belt cannot be reversed, but can be directly up/downgraded into other conveyor marks by aiming at them with the other mark.
+
+Belts can be built on top of some buildings, such as [[Constructor]]s, provided there is a valid spot on which a conveyor pole can be automatically placed. They can also intersect each other, some non-colliding entities, and terrain freely.
+
+Conveyor Belts have three construction modes: Default, Straight and Curve. Different build modes can be cycled by either pressing or holding {{Key|R}}.
+
+*Default: The default build mode.
+*Straight: This build mode only constructs belts with straight lines and 90° turns, except when placing a belt in such a way that in and output are in the same direction but a few meters apart in which case it creates an S-shape.
+*Curve: The conveyor belt will be curved in a way similar to [[Railway|railways]], according to the position and orientation of the starting and ending points.
+
+=== Placement errors ===
+==== Encroaching other's clearance ====
+This means the belt is being constructed through other buildings. Conveyors have to be always constructed second, after the buildings they are being connected to are already built, with two exceptions:
+* The second Conveyor Pole can be built alongside the belt, once it is snapped to one end
+* [[Conveyor Splitter]]s and [[Conveyor Merger|Mergers]] can be built on existing belts, but this doesn't respect the foundation grid.
+This error may occur due to directional errors, such as connecting a building's output to another building's output.
+
+==== The floor is too steep ====
+This means the floor below where the Conveyor Pole would be built is too uneven. Using a flat surface, such as a Foundation, could help.
+
+==== The conveyor belt is too short/long/steep ====
+Refer to [[#Construction|§ Construction]] above.
+
+===Building upgrades and downgrades===
+* Once the higher tier Conveyor Belts are unlocked, you can upgrade (and downgrade, if you wish) the existing Conveyor Belts in-place.
+* Aim the hologram of the higher-mark Conveyor Belt (or lower-mark Conveyor Belt) at the existing Conveyor Belt and {{mouse|left}} to upgrade (or downgrade) it.
+* NOTE: Only the Conveyor Belt between two connections (Building / Machines or [[Conveyor Poles]]) will be upgraded (or downgraded). There is no "mass upgrade" or "mass-downgrade" of all Conveyor Belts.
+* Upgrading or downgrading a Conveyor Belt refunds the materials used for the existing segment and consumes the materials required for the new belt tier.
+** This applies in both directions (e.g. Mk.1 to Mk.2 and vice versa).
+
+== Tips ==
+* Conveyor ports on buildings display whether they are output or input. Outputs have green <span style="Color: light-dark(#000000, #66ffcc);">〕</span>  arrows, inputs have orange <span style="Color: light-dark(#000000, #ffe066);">≡</span> symbols.
+[[File:Conveyor_connectors.png|thumb|Examples of conveyor connectors (ports) with direction labelled.]]
+
+==Achievements==
+{{Achievement|BUILT_CONVEYOR_BELT}}
+
+== Trivia ==
+* Conveyor Belts were first showcased in the [https://www.youtube.com/watch?v=IeYAFCJ0N3I Conveyor Belt Speeds] teaser in 2018.
+** In the video, Conveyor Belts can be clearly heard from further away (especially higher marks), but they are quite quiet in-game.
+** A Mk.6 Conveyor Belt can be seen in the video, which was not released until version 1.0.
+* A single item occupies roughly 1.186 meters on a belt.
+** 843 items fit on a belt 1000 meters long.
+* Marks 1-3 show the belt reversed at the underside. Marks 4-5 have metal on the bottom, but still, show the reversed belt when clipped through. Higher tiers of belts generally have guards at the edges to protect items (and the [[pioneer]]) from slipping off the sides. Take note this does not totally protect the pioneer though, as one can be slingshot out from sharp turns.
+* Conveyor Poles supporting a Conveyor Belt can be deconstructed without affecting the now-floating belt.
+* Conveyor Belts themselves are drawn via a custom shader implemented to support the "spline" meshes to be instanced; the items are instanced meshes, making them expensive to update.
+* Items on a Conveyor Belt Mk.1 are out of sync from the top animation and can move at different speeds.
+
+== Current issues ==
+* TSR can cause visual issues (bug), mitigated by the <code>r.TSR.ShadingRejection.Flickering 0</code> [[console|console command]].
+* Straight mode can create some graphical glitches.<ref name="Reddit">[https://www.reddit.com/r/SatisfactoryGame/comments/1flo408/i_never_want_to_hear_about_my_belts_having/ Reddit - never want to hear about my belts having invalid shapes again]</ref>
+* Straight mode can sometimes cause the belt to become further and further strewed to one direction the further out it goes, usually after a turn, this can be mitigated by placing a conveyor support angled correctly in front of your current conveyor line
+
+== See also ==
+* {{BuildingLink|Conveyor Lift}}
+* {{BuildingLink|Conveyor Pole}}
+* {{BuildingLink|Pipeline}}
+* {{BuildingLink|Pipeline Pump}}
+* {{BuildingLink|Pipeline Support}}
+* {{BuildingLink|Pipeline Junction}}
+* {{BuildingLink|Hypertube}}
+* {{BuildingLink|Hypertube Entrance}}
+* {{BuildingLink|Hypertube Support}}
+* {{BuildingLink|Hypertube Junction}}
+
+== History ==
+* [[Patch 1.2.4.0]]
+** Fixed Conveyor Belts not properly building straight after previously building a segment with a 90 degree bend while using Straight belt build mode
+** Fixed [[Customizer]] setting not applying on Conveyor Belts or [[Pipelines]] when using [[Blueprint#Auto-connect|blueprint auto-connect]]
+* [[Patch 1.2.2.0]]
+** Fixed issues with hologram curvature for Conveyor Belts
+** Fixed conveyor belt customization disappearing after using a [[Splitter]] or [[Merger]]
+* [[Patch 1.1.1.5]]
+** Refactored Spline Collision
+*** This affects Conveyor Belts, [[Pipelines]], [[Hypertube|Hypertubes]]
+** Fix for a specific crash when loading saves that contain Conveyor Belts built by [[Blueprint#Auto-connect|blueprint auto-connect]] during 1.1 Experimental when it was not working correctly and have not been resaved since
+* [[Patch 1.1.1.2]]: Fix for a Crash on specific [[Save files|saves]] that had faulty [[Blueprint]]s using auto connected Conveyor Belts during a previous update during experimental
+* [[Patch 1.1.1.1]]
+** Fix for Conveyor Belts built using [[Blueprint]] Auto Connections not working after saving and reloading
+*** Existing Conveyor Belts that are affected by this issue will have to be rebuilt to work properly after this fix
+* [[Patch 1.1.0.4]]
+** Fixed items on Conveyor Belts visuals displaying incorrectly (Showing up in front of the exit instead of coming out of it) when attached to [[Conveyor Lifts]] that were built in reversed Conveyor Lifts mode
+*** Please note that Reversed Conveyor Lifts that are affected by this will have to be rebuilt in order to fix this, the issue is visual only however as it does not affect production of items
+** Upgrading/Downgrading Conveyor belts will now cause the [[Conveyor Throughput Monitor]]s to be dismantled and refunded, so they have to be rebuilt after
+* [[Patch 1.1.0.0]]: Added Curve build mode
+* [[Patch 1.0.1.5]]: Fixed a couple crashes related to Conveyor Belts
+* [[Patch 1.0.1.0]]:
+** Fixed issue where MK6 belts would sometimes not transport the proper amount as displayed in the UI and end up clogging
+** Tweaked the [[Customizer]] logic for Conveyor belts and [[Pipelines]]
+* [[Patch 1.0.0.5]]
+** Fixed a bug where it was possible to merge a [[Pipeline]] or a Conveyor Belt into itself by using a [[Pipeline Junction]] or [[Splitter]]/[[Merger]], which would cause duplications
+** Fixed crashes related to dismantling some parts of a [[Blueprint]], mostly affecting Conveyor Belts, [[Pipeline]]s and [[Railway]]s
+* [[Patch 1.0.0.4]]
+** Fixed a bug where the build mode would be displayed as N/A after sampling a Conveyor Belt while in Dismantle mode in [[Multiplayer]]
+** Fixed items in Conveyor Belts spinning when passing by the junction where two Conveyor Belt segments meet
+* [[Patch 1.0.0.3]]: Corrected the colors of Mk.5 [[Conveyor Belts]]
+* [[Patch 1.0.0.2]]: Potential fix for a crash in saves with Conveyor Belts/Lifts (AFGConveyorItemSubsystem)
+* [[Patch 1.1.0.0]]: Undocumented Change - Removed ability to "weld" two Conveyor Belts using a Merger.
+* [[Patch 1.0]]
+** Added Straight build mode.
+*** You can know build 90º turn conveyor belts in a straight shape, instead of the usual curved. Just change the build mode when building conveyor belts - available from the start, no unlocking required
+** Reintroduced Conveyor Belt Mk.6
+*** This is the final and fastest conveyor belt in the game, it can transport up to 1200 items per minute (up from 780 from Mk.5)
+*** This should be particularly exciting for those who want to utilize their Pure Node Overclocked Mk.3 Miners to their full capacity without being bottlenecked by Mk.5 Belts, or if you just like seeing items be transported as fast as possible
+** Improved the look of items traveling on conveyor belts in [[multiplayer]], as well as some significant improvements in performance for big saves with a lot of belts.
+* [[Patch 0.8.3.1]]: Fixed Conveyor Belts resetting to default customization when the belt was split
+* [[Patch 0.8.2.9]]: Fixed Conveyor Belts being able to be built in invalid shapes by using Nudge
+* [[Patch 0.8.2.8]]: Fixed SFX playback priorities for Conveyor Belts
+* [[Patch 0.8.2.4]]: Fixed a crash related to Conveyor Belt connection
+* [[Patch 0.8.2.0]]
+** Fixed so quick switching {{Key|E}} a Conveyor Belt doesn’t reset the hologram anymore.
+** Fixed bug where quick switching Conveyor hologram would reset pole rotation on the second build step
+* [[Patch 0.8.1.3]]: Potential fix for some crashes related to Conveyor Belt Conveyor Renderer
+* [[Patch 0.8.0.4]]: Potentially fixed a crash related to conveyor belt holograms
+* [[Patch 0.8.0.3]]: Fixed the Parachute visuals on Conveyor Belt or when dropped
+* [[Patch 0.8.0.1]]: Fixed issues with players being unable to slide under Conveyor Belts
+* [[Patch 0.8.0.0]]:
+** Added automatic placement of a Conveyor Pole when not building a Conveyor Belt from an existing connection point
+** Changed the Quick Switching of Conveyor Belt Mark Level to no longer revert back to the first placement step
+** Moved validation check for building to the final placement step
+** Re-implemented conveyor rendering system to work well with Nanite
+** Conveyor items now use Nanite for rendering
+** Minor optimizations for the Conveyor tick
+** Re-implemented conveyor rendering system to work well with Nanite
+* [[Patch 0.7.0.8 (Experimental)|Patch 0.7.0.8]]: Fixed issue with semi empty Conveyor belts entering stall mode while not allowed
+* [[Patch 0.7.0.7]]: Fixed a throughput issue that occurred during variable frame rates on high-speed Conveyor Belts
+* [[Patch 0.7.0.4]]: Fixed items getting stuck in multiplayer
+* [[Patch 0.7.0.3]]: Potential fix for items still getting stuck on belts on high FPS
+* [[Patch 0.7.0.2]]:
+** Fixed [[Pipeline|Pipes]] and Conveyor Belts getting weird split rotations after placing attachments on them
+** Fixed items not moving when reaching the end of a Conveyor Belt segment
+** Fixed some scenarios where [[Railway]]s, Conveyor Belts and [[Pipelines]] could be placed through the floor of the Blueprint Designer
+* [[Patch 0.7.0.1]]: Fixed holograms being out resulting in performance issues
+* [[Patch 0.6.0.5]]: Conveyor Belts and their related attachments should no longer be considered a base, therefore should not despawn any creatures when built by themselves
+* [[Patch 0.6.0.0]]: Optimized Conveyor rendering
+* [[Patch 0.5.1.3]]: Changes to priority and replication periods for conveyor base actors, should help reduce initial loading when spawning in around conveyors
+* [[Patch 0.5.0.9]]: Actually fixed invisible Conveyor Belts, [[Conveyor Lifts]] and [[Pipelines]] sometimes being invisible for [[Multiplayer]]/[[Dedicated Servers]] Clients (Triple for real!!!)
+* [[Patch 0.5.0.8]]:
+** Potential fix for invisible Conveyor Belts, [[Conveyor Lifts]] and [[Pipelines]] sometimes being invisible for [[Multiplayer]] / [[Dedicated Servers]] Clients
+** Fixed two rare crashes in the conveyor renderer
+* [[Patch 0.5.0.7]]:
+** Fixed Conveyor Belt items behaving incorrectly
+** Conveyor Belt optimizations on the conveyor item memory
+* [[Patch 0.5.0.2]] ''(Released again in [[Patch 0.5.0.3]])'': Fixed a crash related to conveyor items
+* [[Patch 0.5.0.0]]: Conveyor renderer optimisations
+* [[Patch 0.4.3.0]]: Introduced Experimental Conveyor Item Rendering option
+* [[Patch 0.4.0.12]]: Another attempt at fixing leaves looking weird in conveyor belts.
+* [[Patch 0.4.0.11]]: Fixed more conveyor belt items.
+* [[Patch 0.4.0.10]]: Fixed [[Aluminum Casing]] having the wrong texture in conveyor belts.
+* [[Patch 0.4.0.7]]: Fixed issues with items not rendering properly in conveyor belts #PraiseBen
+* [[Patch 0.4.0.4]]:
+** Fixed Aluminum Casing texture in conveyor belts
+** Improved conveyor belt renderer stability
+* [[Patch 0.4.0.0]]: Implemented a new Conveyor Item Renderer (Experimental)
+** We are testing this new system to reduce the cost of having many conveyors items moving. It is still work in progress but can already have positive effects depending on your system. We are continuing to work on this while Update 4 is on Experimental.
+** Known issue: Some conveyor belt items look odd due to the new Conveyor Subsystem, this will be fixed soon
+** Known issue: Conveyor belt items can visually disappear in some situations
+* [[Patch 0.3.8.6]]: Fixed jumping off Conveyor Belts not properly carrying momentum
+* [[Patch 0.3.6.6]] through [[Patch 0.3.6.13]]: Reworked conveyor networking and fixed conveyor replication glitches 
+* [[Patch 0.3.6]]: Increased maximum length from 48 to 56 meters
+* [[Patch 0.3.4.0]]: Renamed Conveyor Belt to Conveyor Belt Mk.1
+* [[Patch 0.3]]: Greatly nerfed the pioneers' walking and running speed on belts, making belt-launched jetpack flight inefficient. (work around by using [[Hyper Tube Cannon]])
+* [[Patch 0.1.15]]: Increased the capacity of Mk.4 and Mk.5 belts from 450 to 480 and 660 to 780 items per minute respectively.
+* [[Patch 0.1.14]]: Made Conveyor Belt Mk.5 available alongside [[Conveyor Lift|Conveyor Lift Mk.5]].
+
+== Early game development ==
+Prior to Closed Alpha, conveyor belts were added in Sprint 2 (week 4), and continued to be improved during early development.
+* See also: [[Early_game_development#Conveyor_Belts|Game Development - Conveyor Belts]]
+
+==References==
+{{Reflist}}
+
+{{BuildingNav}}
+
+[[fr:Convoyeur]]
+[[ko:Conveyor Belt/ko]]
+[[zh:{{PAGENAME}}/zh]]

@@ -71,7 +71,14 @@ const layers = [...new Set(nodes.map((n) => n.layer))].sort((a, b) => a - b);
 const byLayer = layers.map((l) => nodes.filter((n) => n.layer === l));
 const maxPerLayer = Math.max(...byLayer.map((r) => r.length), 1);
 
-const width = PAD * 2 + maxPerLayer * NODE_W + (maxPerLayer - 1) * GAP_X;
+/** 레이어를 건너뛰는 연결이 있으면 옆으로 우회할 여백이 필요하다 */
+const hasSkip = edges.some((e) => {
+  const a = nodes.find((n) => n.id === e.from);
+  const b = nodes.find((n) => n.id === e.to);
+  return a && b && Math.abs(b.layer - a.layer) > 1;
+});
+const SIDE = hasSkip ? 92 : 0;
+const width = PAD * 2 + SIDE * 2 + maxPerLayer * NODE_W + (maxPerLayer - 1) * GAP_X;
 const centerX = width / 2;
 
 /** 입력 칩이 맨 위에 한 줄, 그 아래 계층들, 맨 아래 출력 칩 */
@@ -100,6 +107,27 @@ const chipW = (t: string, withIcon = true) => {
   let w = withIcon ? 34 : 12;
   for (const ch of t) w += /[가-힣]/.test(ch) ? 12 : 7;
   return Math.ceil(w);
+};
+
+/**
+ * 레이어를 건너뛰는 연결은 **옆으로 우회**시킨다.
+ *
+ * 곧장 내려가면 중간 레이어의 유량 칩 위를 지나가 겹친다 — 철봉이 나사를 건너뛰고 회전자로
+ * 갈 때 실제로 그랬다. 블록 바깥으로 빼서 내려보내면 겹칠 것이 없다.
+ */
+const bypass = (x1: number, y1: number, x2: number, y2: number, side: number) => {
+  const r = 14;
+  return (
+    `M ${x1} ${y1} L ${x1} ${y1 + 18}` +
+    ` Q ${x1} ${y1 + 18 + r} ${x1 + (side > 0 ? r : -r)} ${y1 + 18 + r}` +
+    ` L ${side - (side > 0 ? r : -r)} ${y1 + 18 + r}` +
+    ` Q ${side} ${y1 + 18 + r} ${side} ${y1 + 18 + r * 2}` +
+    ` L ${side} ${y2 - 18 - r}` +
+    ` Q ${side} ${y2 - 18} ${side + (x2 > side ? r : -r)} ${y2 - 18}` +
+    ` L ${x2 - (x2 > side ? r : -r)} ${y2 - 18}` +
+    ` Q ${x2} ${y2 - 18} ${x2} ${y2 - 18 + r}` +
+    ` L ${x2} ${y2}`
+  );
 };
 
 /** 위에서 아래로 내려가는 연결선. 어긋나면 가운데서 한 번 꺾는다. */
@@ -190,17 +218,21 @@ for (const e of edges) outCount.set(e.from, (outCount.get(e.from) ?? 0) + 1);
       const y1 = a.y + NODE_H;
       const x2 = b.x + NODE_W / 2;
       const y2 = b.y;
+      // 레이어를 두 칸 이상 건너뛰면 옆으로 우회한다
+      const skips = Math.abs(b.n.layer - a.n.layer) > 1;
+      const sideX = a.x < width / 2 ? PAD - 8 : width - PAD + 8;
+      const d = skips ? bypass(x1, y1, x2, y2, sideX) : link(x1, y1, x2, y2);
       const t = `${e.itemKo} ${fmt(e.perMinute)}/분`;
       const w = chipW(t);
       /*
         라벨을 중점에 두면 갈래가 둘일 때 분배기 원 위에서 서로 겹친다.
         목적지 쪽(70%)으로 내리면 갈래마다 가로로 벌어져 겹칠 일이 없다.
       */
-      const mx = x1 + (x2 - x1) * 0.7;
-      const my = y1 + (y2 - y1) * 0.72;
+      const mx = skips ? sideX : x1 + (x2 - x1) * 0.7;
+      const my = skips ? (y1 + y2) / 2 : y1 + (y2 - y1) * 0.72;
       return (
         <g>
-          <path d={link(x1, y1, x2, y2)} class="fc-link" fill="none" marker-end={`url(#fc-arrow-${index})`} />
+          <path d={d} class="fc-link" fill="none" marker-end={`url(#fc-arrow-${index})`} />
           <rect x={mx - w / 2} y={my - CHIP_H / 2} width={w} height={CHIP_H} rx="4" class="fc-chip" />
           {e.itemId && (
             <image href={`${iIcon}/${e.itemId}.png`} x={mx - w / 2 + 4} y={my - CHIP_H / 2 + 3} width="24" height="24" />

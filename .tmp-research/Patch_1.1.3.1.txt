@@ -1,0 +1,48 @@
+{{patch
+|stable=1
+|ex=1
+|build=474567
+|date=2026-02-19
+|discord=https://discord.com/channels/370472939054956546/557603412565426196/1474101363188437043
+|reddit=1r961yx
+|steam=https://store.steampowered.com/news/app/526870/view/496095152751772888
+}}
+
+==Intro==
+Hi Pioneers!
+
+Today we are doing a small but necessary hotfix from our side for the current Experimental, there’s no new major fixes or additions; but this will help with our current way of parsing crash reports so we can better address more crashes in the future
+
+
+If you haven’t yet but are interested in giving the Experimental version a try remember to BACKUP YOUR SAVE before trying it to avoid losing any of your progress
+
+You can backup your save by copying the folders in:
+
+<code>C:\Users[YOUR USER]\AppData\Local\FactoryGame\Saved\SaveGames[YOUR ID FOLDERS]</code>
+
+To access the Experimental version on Steam:
+
+Right click Satisfactory on your ''Library > Properties > Game Versions & Betas > experimental''
+
+Then exit this menu and the experimental version will start downloading for you
+
+To access the Experimental version on Epic:
+
+In your Library, search for “Satisfactory Experimental” and install it, it’s a separate entry from the default version so you need to download it individually
+
+If you run into any new issues when trying the latest Experimental, please let us know over at our QA Site https://questions.satisfactorygame.com/ Your posts are extremely valuable for us and we read them every day
+
+Thank you for your support and feedback during this Experimental, See you next time ❤️
+
+==Hotfix==
+* Fixed internal issue with our crash reporter receiving significant log spam in some scenarios
+* I’m also attaching below the patch notes from the [[Patch 1.1.3.0|previous patch]] below for quick reference
+
+==New==
+*  [[Unreal Engine]] version to 5.6.1
+* Bringing the PC version to parity with the [[Console release|Console version]], Including:
+** Quality of life improvements and changes done to [[Controller|Controller support]]
+** Hundreds of bugfixes and polish across all elements in the game
+** Localization Updates to all official languages
+
+{{PatchesNav}}

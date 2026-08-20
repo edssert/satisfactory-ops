@@ -1,0 +1,35 @@
+{{Patch
+|stable=1
+|build=385279
+|date=2024-12-20
+|discord=https://discord.com/channels/370472939054956546/557603412565426196/1319631202402959380
+|reddit=https://www.reddit.com/r/SatisfactoryGame/comments/1hihzg9/patch_notes_v1014_build_385279/
+|steam=https://steamcommunity.com/games/526870/announcements/detail/520826430987174077
+}}
+== Intro ==
+Hi Pioneers!
+
+Hello again everyone, Today’s patch is a localization update so everyone can have the latest professional and community translations for Satisfactory
+
+If there’s any big issues you think we should address or we might be forgetting, please let us know over at our QA Site <nowiki>https://questions.satisfactorygame.com/</nowiki> We read your posts every day and it will be great to read all your feedback after we come back from vacation
+
+Once again, thank you for all your support, we’re super grateful to have such a dedicated community and we’re happy you’re enjoying our game, thank you so much for your nominations in the Steam Awards 2024!
+
+If you would like to read more about that, please check out this other post:
+
+== Voting ==
+VOTE FOR US [Steam Awards 2024]
+
+We are stoked to announce that Satisfactory has been nominated for the Steam Awards in two categories!
+
+We hope everyone has a nice winter break and holiday season
+
+Merry FICS*MAS and a happy new year <3
+
+== New ==
+* Improved [[The_HUB#Special_Decorations|HUB]]
+
+== Localization ==
+* Updated community translated languages with the latest translations
+
+{{PatchesNav}}

@@ -1,0 +1,32 @@
+{{patch
+|stable=1
+|build=432215
+|date=2025-09-02
+|discord=https://discord.com/channels/370472939054956546/557603412565426196/1412453070654406726
+|reddit=1n6lymd
+|steam=https://store.steampowered.com/news/app/526870/view/520849092932273233
+}}
+
+== Intro ==
+Hi Pioneers!
+
+Hello again everyone, We’re now back from vacation and we have finally wrapped up a few long awaited fixes for some of you
+
+If you’re curious what we’re up to now, make sure you check our latest video https://youtu.be/HOM0z0AXzD0
+
+If there’s anything new that might have been introduced from this update, please let us know over at our QA Site https://questions.satisfactorygame.com/ We read your posts every day
+
+See you all again soon <3
+
+== Bug fixes ==
+* Fixed disconnections in [[Multiplayer]] when multiplayer players interacted with the [[Boom Box|Boombox]]
+
+== [[Dedicated servers|Dedicated server]] ==
+* Potential fixes to desync and high CPU usage issues
+
+== Localization ==
+* Updated community translated languages with the latest translations
+
+{{PatchesNav}}
+
+[[fr:Patch 1.1.1.3]]

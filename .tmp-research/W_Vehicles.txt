@@ -1,0 +1,270 @@
+There are 7 types of '''vehicles''' that [[pioneer]]s can use for either personal travel, transporting items or both: [[Tractor]]s, [[Truck]]s, [[Explorer]]s, [[Cyber Wagon]]s, [[Factory Cart]]s, [[Train]]s and [[Drone|Drones]]. There is no limit on the number of vehicles in the world.<ref>"no there isnt varrili" - [[Jace]] on Discord when asked "Is there a cap of how many vehicles a player can have?" by Varrili</ref>
+
+[[Pioneer]]s can be run over by vehicles<ref>"you can run over people :smile:" - Jace on Discord</ref> but receive no [[damage]], however living creatures (such as [[Lizard Doggo]]s) that are run over by vehicles, will receive damage.
+
+Every vehicle except for the Drone can be driven by the Pioneer.
+
+== Motor vehicles ==
+[[File:Vehicles gallery.png|thumb|A gallery of wheeled vehicles.]]
+=== Fuel consumption ===
+Motor vehicles (excluding the [[Factory Cart]]) require [[fuels|fuel]] to operate, and can use every kind of fuel item. Fuel is input into a fuel slot by accessing the vehicle's inventory, which is usually a rectangular hatch located at the back of the vehicle. It can also be fueled by being in the loading/unloading area in front of a [[Truck Station]] given the fuel tank of the vehicle is empty or has the same fuel type as the station will load.
+
+Different fuels are consumed at different rates, based on the item's fuel value and the vehicle's energy consumption rate. The Tractor consumes the least fuel, followed by the Truck, then the Explorer, and finally the Cyber Wagon which consumes the most. Below is a table of how long, in seconds, each fuel type lasts at maximum acceleration.
+{{FuelConsumptionMasterTable}}
+
+Vehicles buffer energy in <math>Acceleration\ time</math>, which is a timer that counts down when the vehicle is trying to move. It does not count down when the vehicle is stationary or rolling downhill. If the timer reaches zero (it is zero initially when a vehicle is built) while it is trying to move, it will pull one item from its fuel tank, and increment the <math>Acceleration\ time</math> by the following formula:
+:<math>Acceleration\ time = \frac{Fuel\ energy\ MJ}{Vehicle\ power\ MW}</math>
+* <math>Fuel\ energy\ MJ</math> is determined by the fuel item being consumed, for example 300&nbsp;MJ for Coal or 6000&nbsp;MJ for Batteries.
+* <math>Vehicle\ power\ MW</math> is 55&nbsp;MW for the Tractor, 75&nbsp;MW for the Truck, 90&nbsp;MW for the Explorer and 150&nbsp;MW for the Cyber Wagon.
+
+The type of fuel being burned is not recorded, only the <math>Fuel\ energy\ MJ</math> is used to determine how much <math>Acceleration\ time</math> to increment. Fuels with more <math>Fuel\ energy\ MJ</math> add more <math>Acceleration\ time</math> and are consumed proportionally slower. Radioactive fuels (such as [[Plutonium Fuel Rod]]s) are only radioactive when in the fuel tank, but cease being radioactive once being burned and converted to <math>Acceleration\ time</math> (additional fuel rods in the tank or inventory will still generate radiation however). 
+
+Burning fuel in vehicles does not create byproducts: [[Empty Canister]]s/[[Empty Fluid Tank|Fluid Tanks]] used to package fluid fuels are not returned, while [[Uranium Waste|Uranium]]/[[Plutonium Waste]] is not produced (unlike in the [[Nuclear Power Plant]]).
+
+If the <math>Acceleration\ time</math> reaches zero and there is no fuel to replenish it, the vehicle will become unable to accelerate and ''brake'', only retaining the ability to steer. It can still be stopped by exiting the vehicle, which will force it to brake regardless.
+
+=== Piloting ===
+[[File:Wheeled vehicle UI.png|alt=|thumb|The Self-driving menu for a wheeled vehicle.]]
+[[Pioneer]]s can enter or exit vehicles by interacting {{key|E}} with it from any angle other than the rear side. Interacting a vehicle from its rear will open up its inventory slots instead, including the fuel slot.<ref name=":0">[https://www.youtube.com/watch?v=IxoCzb2M0vQ&t=90 - YouTube Dev Blog #1: Vehicles - Piloting]</ref> When piloting a vehicle, the camera switches to a third-person perspective.<ref name=":0" /> Pressing {{key|C}} while in a vehicle locks the view to straight ahead, a second press unlocks the view. Vehicles cannot be upgraded.<ref>"not at the moment" - [[Jace]] on Discord when asked "Is there plans to have these vehicles be upgrade-able?"</ref> Some small foliage can be destroyed when run into by a vehicle. In addition, the Tractors can destroy some smaller trees which Trucks cannot.
+
+=== Drifting ===
+[[Truck]]s and [[Explorer]]s can perform drift by pressing {{key|spacebar}} while driving. This allows for tighter, sliding turns, for greater control. It is also possible to "J" turn by backing up {{key|S}} quickly, steering {{key|A}} or {{key|D}}, and pressing {{key|spacebar}} at the same time, essentially a backwards drift. The [[Factory Cart]] has uncontrollable drift when driven forwards on any surface which is not perfectly flat.
+
+=== Creature interactions ===
+If a wheeled vehicle runs over any creatures such as [[Hog]]s or [[Spitter]]s, it will damage them and potentially kill them if enough damage is inflicted. Damage dealt is relative to vehicle speed and size.
+
+Most creatures ignore the pioneer while driving a vehicle. The exception are [[Flying Crab Hatcher|Flying Crab Hatchers]] will hatch when the pioneer approaches in a vehicle, and [[Flying Crab|Flying Crabs]] will fly at the vehicle, but deal no damage and die when hitting it.
+
+=== Damage ===
+==== Fall ====
+Pioneers do not take [[fall damage]] when riding in a vehicle, except when falling into the [[void]]. Additionally a pioneer falling from height with the vehicle at the lower ground can avoid the fall damage by entering the vehicle just before hitting the ground (such as, by spamming {{key|E}}).
+
+Vehicles themselves are immune to fall damage.
+
+==== Fire ====
+Wheeled vehicles can receive minor damage when hit by a [[Spitter]]'s fireball attacks. When the HP of the vehicle (displayed at bottom left) depletes to zero, the vehicle is dismantled.
+
+==== Poison ====
+Pioneers in vehicles do not receive poison damage from [[Poison Gas]], regardless of if they are wearing a [[Gas mask]] or not, even in vehicles that visually leave the Pioneer exposed, like Tractors, Factory Carts, and Explorers.
+
+==== Radiation ====
+Pioneers are immune to [[Radiation]] damage while inside a vehicle.
+
+=== Water ===
+Wheeled vehicles become disabled if they enter deep water, ejecting the pioneer and refusing to let them remount. This appears to happen when the water level reaches the center of the vehicle's hitbox, so Trucks can handle deeper water than Explorers or Tractors. If a vehicle does get stuck, it's sometimes possible to push a Truck back onto land, but usually the only solution is to dismantle the vehicle and rebuild it out of water.
+
+=== Out-of-bounds damage ===
+While in a vehicle the pioneer is not immune to [[World#Traversal|out-of-bounds damage]]. This was a glitch which was patched.
+
+=== Naming ===
+You can rename vehicles by accessing its inventory, and clicking on default name.<ref name="Reddit-1u0geiq">[https://www.reddit.com/r/SatisfactoryGame/comments/1u0geiq/comment/oqhydqu/ Reddit - Truck Naming]</ref>
+
+=== Automation ===
+{{Main|Vehicle Paths}}
+
+== Railed vehicles ==
+[[File:Train time table.png|thumb|In the Train Station UI, switch to timetable tab and set the train schedule.]]
+Monorail trains that consist of [[Electric Locomotive]]s and [[Freight Car]]s can be driven manually or automated using the vehicle menu {{key|V}}. Trains are bound to [[Railway]]s and cannot derail from them (with the exception of a train crash). Trains will drive off a dead end unless a buffer stop is put in place. The automated driving system will never drive off the edge, it will just show a no path error.
+
+It is not possible to couple or de-couple Freight Cars. Locomotives and Freight Cars have to be snapped to each other when being constructed, otherwise they will be counted as separate trains and will be able to collide with each other.
+
+=== Fuel ===
+Trains run exclusively on [[power]] which ranges between 25MW for each locomotive when it is idle up to 110 MW when speeding up. All train stations also consume 50 MW constantly, in addition +50 MW for every active [[Freight Platform]].
+
+=== Damage ===
+Trains and all pioneers riding in it are completely immune to all forms of damage, as they lack the Vehicle Health bar completely.
+
+* ''Continue reading: [[Electric Locomotive]]''
+
+=== Water ===
+* Trains cannot be built on [[water]], they can, however, be automated to pass through a Railway that is built underwater.
+* Pioneers will be ejected out of a Locomotive as soon as the train enter the water's surface.
+
+=== Naming ===
+You can rename the Electric Locomotive by entering train, then open the menu and click on the name on the left.<ref name="Q&A-61c0aba4831c8520523667de">[https://questions.satisfactorygame.com/post/61c0aba4831c8520523667de Satisfactory Q&A Post - Can we rename vehicles (tractors, trucks, trains etc) so we can differentiate between vehicles?]</ref>
+
+=== Automation ===
+A train can be automated by adding [[Train Station]]s to its schedule. Trains will cycle through them in loops according to their timetables. Automated Trains will always be stopped at a train station if they fail to brake in advance, for example when the station is right after a steep down slope.
+
+== Flying vehicles ==
+[[Drone]]s can be used for low throughput long-range transportation as they don't need any infrastructure besides two [[Drone Port]]s. Drone Ports only need to be [[power]]ed, and one of them supplied with fuel. Unlike motor vehicles or trucks, Drones aren't designed for pioneer transport.
+
+=== Fuel ===
+Drones can be supplied by various mid- and late-game fuels. Fuels with higher energy density last longer, and additionally affect the travel speed.
+
+It is useful to build Drone Port hubs to distribute fuel. In such a hub, one Drone line is responsible from importing fuel from the fuel factory, which is then distributed to other Drone Ports in the hub.
+
+=== Throughput ===
+The throughput of a Drone can be seen at its home port, listing the max throughput, current throughput and trip duration.
+
+* ''Continue reading: [[Drone]] {{*}} [[Drone Port]]''
+
+=== Naming ===
+Currently Drones cannot be named.
+
+=== Automation ===
+Drones can be automated to bring resources between two Drone Ports, no more or less. It takes 51 seconds for the drone to take off and land, which means a Drone becomes more efficient over longer distances.
+
+
+== Achievements ==
+{{Achievement|KNOCKED_CREATURE_WITH_VEHICLE}}
+{{Achievement|NUM_PLAYER_KNOCKED_OVER}}
+{{Achievement|RAILWAY_PLACED}}
+{{Achievement|SETUP_TRAIN_SCHEDULE}}
+{{Achievement|TOO_FAST}}
+
+== Gallery ==
+{{#ev:youtube|https://www.youtube.com/watch?v=IxoCzb2M0vQ}}
+
+<gallery>
+File:Vehicles showcase dev blog.png|Wheeled vehicles showcased in the dev blog
+</gallery>
+
+== History ==
+* [[Patch 1.2.4.0]]
+** Fixed situations in [[Multiplayer]] where you would be unable to move after riding inside a Self-Driving vehicle after a while
+** Fixed a Crash when leaving a multiplayer session while inside a vehicle
+** Fixed interaction outlines getting stuck when entering a Vehicle in Multiplayer
+* [[Patch 1.2.2.1]]: Fixed an issue were falling out of bounds while in a vehicle would result in a softlock
+* [[Patch 1.2.2.0]]: Fixed crash due to path nodes ''(old vehicle path system)'' having invalid connections when loading a save, either from save editing or invalid blueprints
+* [[Patch 1.2.1.0]]: Fixed focus loss issues in the Vehicle Menu when using Dynamic input
+* [[Patch 1.2.0.0]]: Manual driving has been improved as well on top of the self-driving controls, so not only automation will be improved but driving around and exploring the world should be more enjoyable as well!
+* [[Patch 1.1.0.2]]: Fixed Photo Mode Poses and Pioneer Positioning Nudge affecting Vehicles and [[Hypertube]]s
+* [[Patch 1.0.0.3]]: Fixed a crash when loading a save while a player was inside a Vehicle
+* [[Patch 1.0]]: Pioneers no longer take fall damage while within vehicles.
+* [[Patch 0.8.3.2]]: You can now enter occupied Vehicles and kick out the [[Pioneer|driver]] if the driver is offline
+* [[Patch 0.8.3.1]]: [[Settings#Controls|Invert Look]] option now also works on Vehicles and [[Trains]]
+* [[Patch 0.8.2.0]]
+** Refactored the way Vehicles are outlined
+** Camera should not now rubber band as much when driving vehicles as it is now allowed to clip through various objects
+** Vehicle engines will now shut down when the vehicle is submerged in water
+** Fixed Players being unable to enter a Vehicle if another Player was interacting with the inventory of the Vehicle
+** Fixed sliding not ending when entering Vehicles
+* [[Patch 0.8.0.0]]
+** Moved Vehicle physics to using Unreal Engine 5 Chaos
+** Overhauled all Vehicle sounds
+** Improved the manual driving of all Vehicles
+** Reworked all Vehicle trunks visually simplifying the animation and adding a new sound
+** Added functionality for Vehicles to deal damage to creatures by hitting them
+*** Damage dealt is relative to vehicle speed and size
+** Undocumented Change - Removed Air Control (ability to do stunts)<ref name="yt-dY__x2dq7Sk-1130">[https://www.youtube.com/watch?v=dY__x2dq7Sk&t=1130s YouTube - We're upgrading to UNREAL ENGINE 5 - Vehicle physics overhaul]</ref>
+* [[Patch 0.7.0.2]]:
+** Vehicles should work again :)
+** Enable Autopilot button now updates to the Disable Autopilot button after stopping a vehicle path recording
+* [[Patch 0.6.1.1]]: Polish on the Vehicle Path directional arrows in the Load Path Menu
+* [[Patch 0.6.0.14]]
+** Relevant items now shows fuel types
+** Record Vehicle Path button now updates properly
+** Editing a path node and setting the wait time to 0 now warns that the time needs to be over 0 seconds
+** Added a notification to indicate a path cannot be loaded because there are no paths
+** Fixed Vehicle paths being deleted from the Load Vehicle Path Menu not actually disappearing until the menu was closed
+** Added a warning when trying to record a vehicle path on a vehicle that has no [[Fuels|fuel]]
+* [[Patch 0.6.0.4]]: Fixed all [[Build Gun|build and dismantle interactions]] getting locked when entering a vehicle by pressing both Q and E at the same time
+* [[Patch 0.6.0.1]]: Fixed a crash when damaging a player inside a vehicle with explosive damage
+* [[Patch 0.5.1.12]]
+** Fixed a crash that could happen if there’s a deadlock near a non-automated vehicle
+** Decreased the collision-avoidance distance for automated vehicles
+** Fixed a crash for [[Multiplayer]] Clients and [[Dedicated Server]] Clients related to vehicle paths
+** Fixed an issue with vehicle path recording inside factories sometimes recording docking to [[Truck Station]] on floors above the vehicle
+** Fixed a crash related to the vehicle representation on the [[Map]]
+* [[Patch 0.5.1.11]]
+** Fixed a bug where Vehicles would sometimes get displaced for Clients when far away from other players
+** Fixed issue where vehicles would get stuck ghosting
+** Fixed bug where the Load Vehicle Path UI would display inaccurate path lengths
+** Fixed several minor issues related to vehicle automation
+** Fixed a bug where automated vehicles would sometimes be able to move without fuel
+** Fixed issue where automated vehicles would sometimes stop moving when about to enter a station right after loading a game
+** Fixed issue with automated vehicles sometimes continuing to drive despite being blocked
+** Fixed an issue where removing a vehicle target would result in collision avoidance not working anymore for that path
+** Fixed issue with automated vehicles sometimes driving into other automated vehicles that are waiting in line
+** A [[HUD]] message is now displayed every time an automated vehicle gets completely stuck (“deadlock”)
+* [[Patch 0.5.1.10]]
+** Fixed crash that would happen on startup if there was a vehicle path with zero targets
+** Fixed a crash related to Vehicle Automation for Clients
+** Fixed a bug in the Load Vehicle Path UI where the “Used by this vehicle” checkmark was missing for Clients
+** Fixed the Vehicle Craft Bench UI being a bit off center
+* [[Patch 0.5.1.9]]: Load/Save Path menu is now disabled when there are no paths
+* [[Patch 0.5.1.7]]
+** Overhauled the Vehicle Recording UI, no longer a radial menu
+** All Vehicle UIs (Trains and Vehicles) are now opened with {{key|Q}} key by default
+** Fixed some bugs with the Vehicle HUD not updating properly when stopping a recording midway without closing the loop
+** Fixed [[Freight Platform|Freight Cars]] failing to load/unload correctly with the rule set to Fully Load/Unload which lead to them getting stuck in docking until force cancelled
+** Fixed [[Multiplayer]] and [[Dedicated servers]] Clients not being able to cancel the docking sequence
+** Fixed the [[Map]] not being properly visible for some players who had previously unlocked more areas of it and added some future proofing so this hopefully doesn’t happen again
+** Fixed an issue with automated vehicle wait times being reset when loading a game
+** Vehicles should no longer claim targets outside of stations when docked
+** Fixed a bug where sometimes vehicle pauses would be longer than intended when they were far from any player
+** Fixed issue where automated vehicles in long-distance mode would sometimes get out of sync for Multiplayer and Dedicated servers Client
+** Fixed bug where Vehicles weren’t placeable in the [[Truck Station]] docking area
+** Fixed crash that would sometimes happen when Vehicle path recordings were finished
+* [[Patch 0.5.1.3]]
+** Fixed a bug where pause time on Vehicle Automation was not reset when manually overridden
+** Automated vehicles will stay docked until their inventory is empty if unloading cargo
+** Moved positions of “Cancel” and “Start/Stop Recording” in the Vehicle Record Menu to avert accidental selections of “Stop Recording
+* [[Patch 0.5.1.1]]
+** Vehicle path arrows in UI now have the correct positions
+** Fixed a possible exploit in Vehicle fuel calculations
+** Made Vehicles take available fuel for as long as they are docked
+** Fixed the fuel consumption metrics in the [[Truck Station|Truck Stations]] not accounting for pauses and docking times in the path time
+** Fixed a bug where a vehicle might be blocked indefinitely when in long distance mode
+* [[Patch 0.5.0.14]]
+** Vehicles now try to stop ghosting as soon as possible when blocked
+** Fixed a calculation error when fuel is added manually
+** Directional arrows for the Vehicle in the [[Map]] preview when loading a Vehicle Path are now displayed from the centre of the Vehicle
+** Added a tooltip for insufficient fuel
+* [[Patch 0.5.0.13]]
+** Fixed an issue where Vehicles would not receive fuel from a [[Truck Station|station]] if their fuel inventory was empty
+** Fixed an issue where Vehicle Paths were not updated after a station was built over them
+** Fixed issues with Vehicles getting out of sync with their Vehicle Stations after loading a game
+** Fixed Vehicles burning up fuel when standing still
+** Added directional arrows to the path in the [[Map]] preview when loading a Vehicle Path
+* [[Patch 0.5.0.12]]
+** Fixed an issue with vehicles being stuck docking forever if there were Fuel issues
+** Better detection for when vehicles fall through the ground
+** Fixed issue with vehicles sometimes teleporting upwards when loading a game
+* [[Patch 0.5.0.11]]
+** Fixed a crash related to Vehicle Automation
+** Fixed a crash when deleting Vehicle path nodes and trying to load that Vehicle Path
+** Removed “Delete Path” option from the Vehicle wheel as you can now use “Cancel Recording” does the same thing
+* [[Patch 0.5.0.9]]
+** Fixed Vehicle paths selected from the "All Vehicle Path" tab made by a different vehicle remaining selected when returning to the "Load Vehicle Path" tab
+** Fixed a crash in the Vehicle system
+** Fixed remaining issues with Fuel and Vehicles
+** Vehicle docking wait times are now saved
+* [[Patch 0.5.0.8]]
+** Manually driven Vehicles now take Fuel from [[Truck Station]]s
+** Fixed a Vehicle related crash
+** Hopefully fixed all issues with the Vehicle Refueling logic
+** Hopefully fixed all issues with Vehicles running out of fuel
+* [[Patch 0.5.0.7]]: Fixed Vehicles not docking properly when in long-distance simulation mode
+* [[Patch 0.5.0.6]]
+** Fixed Vehicle physics not working as intended on [[Foundations]]
+** Fixed Vehicle icons not rotating on the [[Map]
+* [[Patch 0.5.0.0]]:
+** Vehicles can now be [[Customizer|paint]]ed
+** Updated [[Truck]] visuals
+** Updated [[Truck Station]] visuals
+** Vehicle recording is now completed by driving back to the first created node
+** Vehicle self-driving AI overhaul, will now consider more than just the next waypoint and avoid obstacles when moving to their destination
+** A queue system between self-driving vehicles has been added so they don't run into each other at Truck Stations and on their routes
+** Vehicle self-driving path behavior has also been overhauled
+** Vehicles will now try to unstuck themselves as a last resort, ensuring that they get back on their route
+** You can now Save and Load recorded vehicle paths for vehicles of the same type
+** Additional Input and Output slots have been added to the Truck Station
+** Vehicles will now only take the proper amount of [[Fuels|fuel]] from a Truck Station that is needed to complete a full trip and they will not run out of fuel even when getting stuck or lost
+** Truck Station UI has been updated to show average fuel consumption and delivery throughput
+** Vehicles can now be sampled the same way [[buildings]] can with the build gun/dismantle gun
+** Fixed vehicles disappearing under the world
+** Vehicles that have disappeared under the world but were still visible on the map have been brought back
+** Fixed up storage boxes in vehicles not being interactable sometimes
+* [[Patch 2018-10-11]]: Introduced
+
+== Early game development ==
+Prior to Closed Alpha, in Sprint 23 (week 46) we saw there used to be a Speed Sign that would limit speed for self driving ground vehicles. The Speed Sign was removed.
+* See also: [[Early_game_development#Signs|Game Development - Signs]]
+
+== References ==
+{{Reflist}}
+
+{{VehicleNav}}
+[[Category:Vehicles]]

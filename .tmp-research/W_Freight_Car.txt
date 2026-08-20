@@ -1,0 +1,128 @@
+{{Infobox building|className=Desc_FreightWagon_C
+| inventorySize = 32 slots or 2400 m³
+| size_width = 6
+| size_length = 16
+| size_height = 6
+}}
+'''Freight Cars''' are non-motorized [[vehicles]] that can be attached to [[Electric Locomotive]]s or another Freight Car to form a train. They have a capacity of 32 item slots or 2,400 m{{Cubic}}<ref name="Reddit-1rwjnq9">[https://www.reddit.com/r/SatisfactoryGame/comments/1rwjnq9/12_fluid_train_stealth_buff_2400_capacity/ Reddit - Fluid train stealth buff 2400 capacity]</ref> for fluids and allow for the transportation of resources over [[Railway]]s. Freight Cars can be loaded and unloaded via [[Freight Platform]]s or [[Fluid Freight Platform]]s.
+
+== Appearance ==
+* If at least one item is loaded, a freight container will be shown. Items can be either loaded manually or with Freight Platforms.
+* If any fluid is loaded, a fluid tank will be shown. Fluids can be only loaded with Fluid Freight Platforms. Much like [[Pipeline]] networks, a single Freight Car can only carry one type of fluid at a time.
+** When carrying fluids, a flush option will appear similar to Pipelines. Flushing a fluid tank will remove all the fluid from the car, and the tank.
+** Only the selected car will be flushed. Other cars in the train and any Fluid Freight Platform will be unaffected.
+* A single Freight Car cannot carry fluid and items simultaneously.
+* If nothing is loaded, only the undercarriage is shown.
+
+== Weight ==
+<!-- Use tonnes as they are used in-game -->
+
+An empty Freight Car weighs 30 t<ref>Every single value is taken directly from the game using the dev [[Debug_console#ShowDebug_Parameters|Debug Console command <code>ShowDebug TRAINS</code>]].</ref>. The weight of its payload is determined by the following factors:
+
+* If any cargo is loaded at all, the weight increases by 14 t
+* For each full stack loaded, the weight increases by 1.75 t
+* For each 10m{{cubic}} of fluid, the weight increases by 0.35 t
+
+Therefore, the maximum weight of a Freight Car is 100 t while fully loaded with items or fluid. 
+
+The table below shows the number of Freight Cars a single Locomotive can pull, depending on the incline of the Railway (plus some additional resistances)
+
+Note that a Locomotive weighs 300 t:
+{| class="wikitable"
+!Data!!1m Ramp<br />(2m Double Ramp)!!2m Ramp<br />(4m Double Ramp)!!4m Ramp*<br />(8 m Double Ramp)*
+|-
+|Max. weight of Train||1644 t||800 t||580 t
+|-
+|Max. weight of Freight Cars||1344 t||500 t||280 t
+|-
+|Max. number of Freight Cars<br />(empty)||44||16||9
+|-
+|Max. number of Freight Cars<br />(half full)||18||7||3
+|-
+|Max. number of Freight Cars<br />(fully loaded)||13||5||2.8
+|}
+(*Note: Railways can't actually be constructed on 4m Ramps. Use these numbers as guideline for really steep inclines instead)
+
+Explanation:
+
+As listed on the [[Electric_Locomotive#Weights_and_forces|Electric Locomotive's section about forces]], Locomotives have a pulling force of 2000 kN.
+
+Different foundations have a different angle (7.125°, 14.03° and 26.56° for 1m, 2m and 4m Ramps respectively) and so do the tracks placed on them. When a mass is on such a slope, gravity pulls it not just directly down, but also down along the slope.
+
+The strength of this pull is given by the formula <math>F = m\times g\times sin(angle)</math> where:
+
+* <math>F</math> = The force acting parallel to the incline typically shown in units of Newtons (N). One kilonewton (kN) is equal to 1,000 Newtons or 1kN.
+* <math>m</math> = The mass of the object typically shown in units of kilograms (kg). 1 metric ton equals 1000kg. Example: One Electric Locomotive (300 metric tons) plus five fully loaded Freight Cars (500 metric tons) on a 2m Ramp = 800000kg.
+* <math>g</math> = The acceleration due to gravity on MASSAGE-2(A-B)b, and is 9.80665 meters per second squared (m/s²) ''that can be rounded up to 9.81.''
+* <math>angle</math> = The angle in degrees of the inclined plane with respect to the horizontal; essentially, the component of the gravitational force pulling the object down the slope.
+
+For a full freight car weighing 100t, this force is '''121.6 kN''', '''237.8 kN''' and '''438.6 kN''', depending on the angle.
+
+If the total sum of these forces exceeds 2000 kN, the Locomotive can no longer accelerate forwards (as the pulling force is completely canceled by this backwards pull.)
+
+Additionally, trains also experience a few other resistances such as rolling resistance, drag and curve resistance, which all work against the Locomotive.
+
+== Train throughput ==
+{{Main|Tutorial:Train throughput}}
+
+== Trivia ==
+*During the unloading animation, the crane at the (Fluid) Freight Platform will grab the container (tank) from the Freight Car and then drop at the cargo of the Freight Platform.
+*If the Freight Platform does not have enough free space to load/unload all items, a different animation will be played:
+**When unloading a Freight Car, the container/tank will be hoisted above the Freight Platform cargo. Its door is opened from below with its contents dropped into the Platform cargo. It will then be placed back onto the Freight Car undercarriage.
+**When loading a Freight Car, the Freight Platform crane will pick up the cargo of the platform, hoist it above the Freight Car and load it similarly.
+*If a player is standing on the undercarriage and loads an item, the freight container will spawn and instantly kill the player. If a Freight Platform loads a container over a player, the player will die the same way. However, players can ride the container when it's being unloaded.
+*Unlike motor vehicles, trains do not knock down the player upon contact; instead, the train phases through.
+*While docking, freight platforms performing a loading operation will pause belts and manual interactions, but platforms that do not load or unload anything do not pause. However, all freight cars in the docked train will refuse manual interaction during the docking sequence, regardless of loading.
+*Freight Cars are the only building in the game that can be loaded with ''either'' fluids or items. All others are restricted to one or the other, or else take both at once.
+
+== Current issues==
+*Dismantling a Freight Car carrying fluid will cause a [[Crate|dismantle crate]] with the fluid to appear, instead of deleting the fluid much like when a [[Pipeline]] or [[Fluid Buffer]] is dismantled. The fluid cannot be picked up into the inventory, so the only way to get rid of the crate is to drag the fluid within to the trash slot ({{Key|Ctrl}}+drag deletes all of the same type).
+*Loading items into an empty Freight Car while standing on the undercarriage will cause the freight container to appear over the [[pioneer]], causing instant death.
+
+== See also ==
+*[[Electric Locomotive]]
+*[[Railway]]
+*[[Train Station]]
+*[[Freight Platform]]
+* [[Fluid Freight Platform]]
+
+== Gallery ==
+<gallery>
+File:Freight_Platform_E3.png|A train with four Freight Cars at Freight Platforms (old graphic)
+File:Train_setup_one_way.png|An arriving Train with two Locomotives and seven empty Freight Cars
+File:Freight_car_variants.png|Three Freight Cars, one empty, one with a fluid tanker, and one with a cargo container
+</gallery>
+
+== History ==
+* [[Patch 1.2.4.0]]: Updated Freight Car description with correct liquid volume capacity
+* [[Patch 1.2.3.1]]: Fixed initial UI focus on Freight Carts carrying fluids
+* [[Patch 1.2.0.0]]: Undocumented change - Increased capacity of fluid freight cars to 2400 m{{Cubic}}.
+* [[Patch 1.0]]:
+** Changed 4 Heavy Modular Frame cost to 5 Modular Frame
+** Added 10 Steel Beam cost
+* [[Patch 0.8.2.9]]: You can now more easily interact with [[Electric Locomotive]]s and Freight Carts when they are docked on a [[Train Station]]
+* [[Patch 0.5.0.6]]: Improved interaction for Freight Car and automatic doors
+* [[Patch 0.5.0.2]] ''(Released again in [[Patch 0.5.0.3]])'': Fix for [[Trains]] with carts containing fluids not being able to go up hills
+* [[Patch 0.5.0.0]]: Freight Cars now have weight based on whether and how much cargo is loaded
+* [[Patch 0.3.7]]
+** Attempt at reducing Freight Car update costs
+** Fixed tick type for Freight Cars
+* [[Patch 0.3.4.14]] 
+** Trains and Freight Cars now snap better to each other at track intersections and turnouts
+** Fluid Freight Cars now display the proper capacity of the buildings in their description
+** Increased storage capacity for Fluid Freight Cars, from 500 to 1600 m{{cubic}}
+* [[Patch 0.3.2.0]] Fluid Freight Cars now have proper fluid UI
+* [[Patch 0.3.1.1]] Fluid Freight Cars can now handle 500 m{{cubic}} of fluid instead of 50 m{{cubic}}
+* [[Patch 0.3]]: Now supports fluid containers and allows fluids to be transported
+* [[Patch 0.1.16]]: Are now unlockable in game
+
+== Early game development ==
+Prior to Closed Alpha, in Sprint 23 (week 46) trains were first shown, but there was no information about freight cars other than their availability.
+* See also: [[Early_game_development#Trains|Game Development - Trains]]
+
+==References==
+{{Reflist}}
+
+{{VehicleNav}}
+
+[[fr:Wagon de fret]]

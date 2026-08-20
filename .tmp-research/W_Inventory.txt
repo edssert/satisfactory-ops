@@ -1,0 +1,274 @@
+{{Quote|R&D inflated your pocket-dimension.|[[ADA]]}}
+The '''Inventory''' {{key|tab}} is where [[pioneer]]s store [[:Category:Items|items]] and equip [[:Category:Equipment|equipment]] and consumables. Its size can be upgraded with various [[milestones]] and [[research]]. The starting size is 18 slots, and the current maximum size is 78 slots (81 prior to the release of [[Patch 1.0]]). There is also a trash slot that will destroy any items dragged into it, except for certain items such as [[Uranium Waste]].
+
+== Unlocking ==
+The inventory is unlocked after opening the [[Codex]] for the first time.
+
+== Control ==
+While the inventory is open the player can perform various functions by clicking on an item in the inventory.
+
+{| class="wikitable"
+!Function
+!Keyboard / Mouse
+!Notes / Other Functions
+|-
+|Stack Transfer
+|{{Key|Left Shift}} + {{mouse|left}}
+|Items can be quickly transferred as a stack to/from the inventory.
+|-
+|Mass Transfer
+|{{Key|Ctrl}} and drag</br>{{Key|Ctrl}} + {{mouse|left}}
+|All items of the same type will be transferred to/from the inventory.
+|-
+|Splitting Stacks
+|{{mouse|right}}
+|Will split a stack in half. Holding down {{mouse|right}} brings up a menu that allows splitting off specific amounts, either by using the slider or manual input. The menu also has a button to see the item's entry in the [[Codex]].
+|-
+|Sorting
+|{{mouse|left}}
+|Inventories (including storage buildings) have a button to sort all items.
+|-
+|Hotbar
+|None
+|Items in the inventory can't go into the [[HUD#Hotbar|Hotbar]] (only [[Vehicle]]s and [[Building]]s can)
+|}
+
+=== Relevant items ===
+* When viewing a [[Buildings]] UI, and if there are items relevant to a recipe or overclocking, the first 10 will be shown above the current inventory, and be inserted using {{key|1}} to {{key|0}} into the buildings '''Input Buffer Slot''', or [[Clock_speed#Configuration|Overclocking Slot]], or [[Production_amplifier#Somersloop_slots|Somersloop Slot]].
+* Building that don't use a recipe or can not be overclocked don't show relevant items above inventory.
+
+==== Example usage 1 ====
+[[File:Relevant Items hotkey 1.png|800px]]<br>
+⭑ ''UI image is from Update 7 but is still relevant as an example.''
+
+In the above example,
+* {{key|Keypad 1}} will transfer [[Modular Frame]]s to the [[Manufacturer]].
+* {{key|Keypad 2}} or {{key|3}} will transfer [[Steel Pipe]]s to the Manufacturer.
+* {{key|Keypad 4}} will do nothing, since the Manufacturer is full of [[Encased Industrial Beam]]s in that slot.
+* {{key|Keypad 5}} or {{key|6}} or {{key|7}} will transfer [[Screw]]s to the Manufacturer.
+* {{key|Keypad 8}} or {{key|9}} will do nothing, as you can't transfer items to the output slot using shortcuts. You can, however, drag items into it.
+* {{key|Keypad 0}} will insert one [[Power Shard]] into the Power Shard slot for [[overclock]]ing.
+* The 11th and 12th relevant item slots do not have shortcut keys.
+
+==== Example usage 2 ====
+[[File:Relevant Items hotkey 2.png|800px]]<br>
+⭑ ''UI image is from Version 1.0 (and after).''
+
+In the above example,
+* {{key|Keypad 1}} will transfer [[Power Slug|Purple Power Slug]]s to the [[Constructor]].
+* {{key|Keypad 2}} or {{key|3}} will insert one [[Power Shard]] into the Power Shard slot for [[overclock]]ing.
+* {{key|Keypad 4}} will insert one [[Somersloop]] into the Somersloop slot for [[Production amplifier|oversloop]]ing.
+
+== Upgrades ==
+At the start of the onboarding, the player has 18 inventory slots and one hand slot. These slots can be upgraded during the course of the game:
+{| class="wikitable"
+! Type !! Name !! Inventory slots !! Hand slots
+|-
+| [[Onboarding]] || Open the Codex || 0 || 1
+|-
+| [[Tier 0]] || HUB Upgrade 4 || 3 || -
+|-
+| [[Tier 0]] || HUB Upgrade 5 || 3 || -
+|-
+| [[Tier 0]] || HUB Upgrade 6 || 3 || -
+|-
+| [[Tier 1]] || Field Research || 3 || -
+|-
+| [[Tier 2]] || Obstacle Clearing || 3 || -
+|-
+| [[Tier 3]] || Vehicular Transport || 3 || -
+|-
+| [[Tier 4|Tier 3]]|| Improved Melee Combat || 3 || 1
+|-
+| [[Tier 5]]|| Jetpack || 3 || -
+|-
+| [[Tier 7]] || Hazmat Suit || 3 || -
+|-
+| [[Tier 7]] || Hover Pack || 3 || -
+|-
+| [[Alien Organisms]] || Expanded Toolbelt || - || 1
+|-
+| [[Alien Organisms]] || Inflated Pocket Dimension || 6 || -
+|-
+| [[MAM#Quartz|Quartz Research]]|| Inflated Pocket Dimension || 6 || -
+|-
+| [[Sulfur Research]] || Expanded Toolbelt || - || 1
+|-
+| [[Sulfur Research]] || Inflated Pocket Dimension || 6 || -
+|-
+| [[Mycelia Research]] || Expanded Toolbelt || - || 1
+|-
+| [[Hard Drive#Non-recipes from Hard Drives|Hard Drive]] || Inflated Pocket Dimension || 6 || -
+|-
+| [[Hard Drive#Non-recipes from Hard Drives|Hard Drive]] || Inflated Pocket Dimension || 6 || -
+|-
+! colspan="2" | Total || 78 || 6
+|}
+
+==Equipment slots==
+[[File:Inventory UI.png|thumb|An inventory from Update 5 (or earlier) with a Xeno-Basher equipped in the hand slot and an empty body slot]]
+Up to six hand slots can be unlocked, starting out with one. The player also has a Head, Body, Back and Legs slot for equipment by default.
+[[File:Empty Update 6 Inventory.jpg|alt=Empty Update 6 Inventory|thumb|An Inventory from Update 6 with a Xeno-Basher, Rebar Gun and Blade Runners equipped]]
+[[File:Jetpack Preferred Fuel - Inventory.png|thumb|Update 8 - Inventory UI with Jetpack Equipped showing gear cog]]
+[[File:Jetpack Preferred Fuel - UI.png|thumb|Version 1.0 - Inventory UI showing Jetpack Preferred Fuel Type UI and order of preference / use]]
+=== Control ===
+While the inventory is open the player can equip hand held items or equipment by clicking on an item in the inventory.
+
+{| class="wikitable"
+!Function
+!Keyboard / Mouse
+!Notes / Other Functions
+|-
+|rowspan="3"|Equip
+|{{mouse|left}} + drag
+|rowspan="3"|Will equip hand item or body equipment into slots.
+|-
+|{{key|Shift}} + {{mouse|left}}
+|-
+|Double {{mouse|left}}
+|}
+
+==== See also ====
+{{Main|Controls}}
+=== Equip-able items ===
+{| class="wikitable"
+!Item/Equipment!!Slot!!Type!!Consumes
+|-
+|{{ItemLink|Xeno-Zapper}}||Hand||Melee Weapon||-
+|-
+|{{ItemLink|Beryl Nut}}||Hand||Healing, consumable||-
+|-
+|{{ItemLink|Paleberry}}||Hand||Healing, consumable||-
+|-
+|{{ItemLink|Bacon Agaric}}||Hand||Healing, consumable||-
+|-
+|{{ItemLink|Portable Miner}}||Hand||Placeable||-
+|-
+|{{ItemLink|Chainsaw}}||Hand||Equipment||{{ItemLink|Solid Biofuel}}
+|-
+|{{ItemLink|Object Scanner}}||Hand||Equipment||-
+|-
+|{{ItemLink|Rebar Gun}}||Hand||Ranged Weapon||{{ItemLink|Iron Rebar}} (and variants)
+|-
+|{{ItemLink|Xeno-Basher}}||Hand||Melee Weapon||-
+|-
+|{{ItemLink|Medicinal Inhaler}}||Hand||Healing, consumable||-
+|-
+|{{ItemLink|Nobelisk Detonator}}||Hand||Ranged Weapon||{{ItemLink|Nobelisk}} (and variants)
+|-
+|{{ItemLink|Rifle}}||Hand||Ranged Weapon||{{ItemLink|Rifle Ammo}} (and variants)
+|-
+|{{ItemLink|Zipline}}||Hand||Equipment||-
+|-
+|{{ItemLink|Parachute}}||Back||Equipment||-
+|-
+|{{ItemLink|Blade Runners}}||Legs||Equipment||-
+|-
+|{{ItemLink|Jetpack}}||Back||Equipment||{{ItemLink|Packaged Fuel}} {{ItemLink|Solid Biofuel}}<br />{{ItemLink|Packaged Turbofuel}} {{ItemLink|Packaged Liquid Biofuel}}
+|-
+|{{ItemLink|Gas Mask}}||Head||Equipment||{{ItemLink|Filter}}
+|-
+|{{ItemLink|Hazmat Suit}}||Body||Equipment||{{ItemLink|Iodine Infused Filter}}
+|-
+|{{ItemLink|Hover Pack}}||Back||Equipment||100 MW [[Power]]
+|-
+|}
+
+Additionally, if desired, all [[Statues]] can be placed in an open Hand slot prior to placement in a location of choice.
+
+=== Shortcuts ===
+When NOT interacting with [[Buildings]] UI, and viewing the Inventory, if there are items relevant to the [[Pioneer|Pioneer']]s hand slot or another body slot (Head, Body, Back, Legs), the first 10 will be shown above the current inventory, and can be inserted using {{key|1}} to {{key|0}} into the appropriate slot.
+
+==== Example usage ====
+[[File:Equipment Shortcuts Hotkey.png]]</br>In the above example,
+* {{key|Keypad 1}} will insert [[Zipline]] into a open '''Hand Slot'''.
+* {{key|Keypad 2}} will insert [[Parachute]] into '''Back Slot''' replacing [[Jetpack]] which will return to Inventory.
+* {{key|Keypad 3}} will insert [[Xeno-Zapper]] into a open '''Hand Slot'''.
+* {{key|Keypad 4}} will insert [[Hover Pack]] into '''Back Slot''' replacing [[Jetpack]] which will return to Inventory.
+* {{key|Keypad 5}} or {{key|6}} or {{key|7}} or {{key|8}} or {{key|9}} will insert item into a open '''Hand Slot'''.
+* {{key|Keypad 0}} will insert [[Gas Mask]] into the '''Head Slot'''.
+* The 11th and 12th equip-able items do not have shortcut keys but could be inserted into a open '''Hand Slot'''.
+* If there was a [[Hazmat Suit]] or [[Blade Runners]] unused in the Inventory they would be shown above the Inventory and could be inserted in either the '''Back Slot''' (Hazmat Suit) or '''Legs Slot''' (Blade Runners).
+
+=== Jetpack preferred fuel type ===
+The Jetpack preferred fuel type can be chosen by viewing the inventory {{key|tab}}.
+
+{{Main|Jetpack#Fuel}}
+
+==See also== 
+* [[Clock speed]]
+* [[Production amplifier]]
+
+== History ==
+* [[Patch 1.2.3.0]]: Fixed an issue where the Inventory would become unusable after interacting with a [[Lizard Doggo]]
+* [[Patch 1.2.2.0]]
+** Fixed sometimes being granted additional hand and inventory slotswhen skipping the intro sequence which would later result in MAM/Hard Drive unlocks that interact with Hand or Inventory slots not working properly
+** Potential fix for stack sizes becoming 100 sometimes when they shouldn’t
+* [[Patch 1.2.1.0]]: Potential fix for the Preferred Fuel icons showing up randomly on non-fuel Inventory items
+* [[Patch 1.2.0.0]]: Undocumented change - Fixed issue when hovering over a piece of equipment to equip it, it would be sent to the Dimensional Depot.<ref name="yt-5W4FvGgfLwA@715">[https://www.youtube.com/watch?v=5W4FvGgfLwA&t=715s YouTube - March 10th 2026 Livestream - Fixed Equipment Being Sent To Dimensional Depot]</ref>
+* [[Patch 1.0.0.5]]: Fixed a bug where leaving a session without respawning would result in them losing their Inventory when rejoining
+* [[Patch 1.0.0.4]]
+** Fixed items still refunding materials and clogging up the Inventory when dismantling and using No Build Cost in [[Advanced Game Settings]]
+** Updated the Split Stack Slider to fix existing issues when splitting certain amounts
+** Removed double parenthesis and exclamation mark on the “Not Enough space to Pick up Ore” messages
+* [[Patch 1.0.0.3]]
+** Fixed some visual issues when looking upwards and crouching or sliding with some equipment
+** Fixed shift click not refilling Inventory slots if there was not enough space for the entire stack to fit
+* [[Patch 0.8.2.0]]
+* Fixed a bug where it was possible to accidentally delete items by [[Inventory|splitting]] them
+* Potential fix for bug where item stacks can not be split in the inventory for [[Multiplayer]] / [[Dedicated Servers]] Clients
+* [[Patch 0.8.0.0]]: Added functionality to change the preferred fuel of equipped Jetpack in Inventory window
+* [[Patch 0.6.1.1]]
+** Fixed Inventory is full prompt not showing up when trying to pick up [[Statues]]
+** Split Stack {{Mouse|right}} slider now has a visible editable text box so you can enter the amount to split into manually
+* [[Patch 0.6.0.5]]: Added a Close button to the Split Stack menu (When you right click on an Inventory stack)
+* [[Patch 0.6.0.0]]:
+** Added additional equipment slots for the Pioneer: Head, Back, and Legs in addition to Body for a total of four
+** Equipment tool tips have additional information such as slot type, compatible ammunition, and a damage indicator
+** Consumables now prioritize stacking with Hand Slots when picked up
+** Double clicking equipment in the inventory now equips it to the first empty slot if available and otherwise replaces the currently active equipment
+** Added an additional Hand Slot +1 unlock in the Mycelia research tree
+* [[Patch 0.5.0.6]]: Fixed Inventory slot abbreviated item text breaking the layout if the text was too long
+* [[Patch 0.4.0.0]]: 
+** Rebalanced progression of inventory slot increases
+** Right click menu on inventory slots and buildings in the Build Menu has option to open the appropriate Codex page
+* [[Patch 0.3.6.2]]: Sorting inventory should no longer result in items getting deleted in certain scenarios
+* [[Patch 0.3.4.14]]: It is no longer possible to duplicate items in storages or other inventories by opening them with both Host and Client
+* [[Patch 0.3.3.5]]: Fixed that mass-dismantle sometimes wouldn’t put refunded resources in your inventory if there is enough space
+* [[Patch 0.3.2.1]]: Players can no longer duplicate equipment stacks if their inventory is full
+* [[Patch 0.3.2.0]]: New items in Inventory notifications should not show anymore when moving resources around in the Inventory
+* [[Patch 0.3.1.0]]: 
+** Big inventory slots don’t significantly change window sizes anymore
+** Made sure the hitbox for the Inventory trash slot is correct
+* [[Patch 0.3]]: 
+** Added “relevant items” section over the inventory items, where you can see if the items you have in your inventory are usable/contextual in the UI you’re currently interacting with
+** Added the option to toggle large or small inventory slots.
+** Moving items in inventory while the split stack UI is active doesn’t affect the split number anymore
+* [[Patch 0.2.1.4]]: Added functionality to sort inventory by the item categories
+* [[Patch 0.1.15]]: 
+** Fixed the inventory notifications getting stuck on screen when picking up items
+** Inventory slots now anchor to the top left again when dragged.
+* [[Patch 0.1.14]]: 
+** Dragged inventory objects now centre on the cursor
+** Adjusted dropping items from inventory. They will now stack together if possible and should find clear places to be dropped around the player.
+* [[Patch 0.1.6]]: 
+** Fixed the bug where inventory size wasn’t updated until the player opened the inventory
+** Fixed a bug with moving inventory items to empty slots
+* [[Patch 0.1.5]]: Fixed that sorting the Inventory when in a building menu making the resource pick-up HUD appear
+* [[Patch Closed Alpha 4]]:
+** Added tooltips for Inventory
+** Increased drop areas for items in inventory
+* [[Patch Closed Alpha 3]]: 
+** Made all inventory slots smaller
+** Implemented sort functionality for the player inventory and storages
+* [[Patch Closed Alpha 2]]: Can't drop items anymore between the inventory & character equipment screen.
+
+== Early game development ==
+Prior to Closed Alpha, the display of the Inventory changed as the early game was developed.
+* See also: [[Early_game_development#Inventory|Game Development - Inventory]]
+
+==References==
+{{Reflist}}
+{{PioneerNav}}
+
+[[Category:Gameplay mechanics]]

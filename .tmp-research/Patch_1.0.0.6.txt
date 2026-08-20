@@ -1,0 +1,53 @@
+{{Patch
+|stable=1
+|build=378208
+|date=2024-11-07
+|discord=https://discord.com/channels/370472939054956546/557603412565426196/1304036023004565536
+|reddit=1glnqf1
+|steam=https://store.steampowered.com/news/app/526870/view/4456968534728114275
+}}
+
+== Intro ==
+Hi Pioneers!
+
+This week we pushed a patch that contained a pretty chonky issue, namely that a lot of stuff on the map respawned. This hotfix will address this issue, however, if you’ve saved your game since this last patch ([[Patch 1.0.0.5|1.0.0.5]]) then your save file will still have most items respawned. I.e. this hotfix will not revert the damage done from the last patch if you’ve already saved over it (sowee!). We’ve also resolved the issues related to the customizer with this hotfix!
+
+If we happened to introduce any new issues or missed anything important, please let us know over at our QA Site https://questions.satisfactorygame.com/ We read your posts every day!
+
+Sorry for the inconvenience last patch caused and hopefully we should be good for now! Thank you for your patience!
+
+== Bugfixes ==
+* Fixed so that items don’t respawn when loading [[save files]] created in [[Patch 1.0.0.4|1.0.0.4]]
+* Fixed issues where the [[Customizer]] would incorrectly apply customization
+
+== Known issues ==
+;There are languages missing
+These are the only officially supported languages: English, French, Italian, German, Spanish, Japanese, Korean, Polish, Portuguese, Russian, Simplified & Traditional Chinese.
+
+A lot of translations for Satisfactory have been community driven, which means that every other language previously available (and potential new ones) needs to be translated by the community, before being added as community translations once more.
+
+A lot of people in the community have already shown interest in helping us out with translations and we are ever so grateful to you all and we'll update translations in game as they come in! If you want to help out check out info on our Discord. Please note that you need to have been part of the server for a time to be eligible for this.
+
+;I Can't Switch supported Languages (workaround available)
+If you still have any issue switching between officially supported languages, a quick fix for this is to exit the game, rename the %LOCALAPPDATA%\FactoryGame\Saved\Config folder to %LOCALAPPDATA%\FactoryGame\Saved\Old_Config, then launch the game.
+
+;Plugin Error on launch
+This is related to mods installed, Mods have been updated and now work with 1.0 so please make sure to update all your mods!. Keep in mind that not all mods have been updated yet.
+
+;[Crash] Shader Cache (workaround available)
+Users may experience the following Fatal Error when booting up the game:
+ [File\BuildAgent\work\b731a33f2a691e17\UE4\Engine\Source\Runtime\RHI\Private\PipelineStateCache.cpp] [Line: 365] Shader compilation failures are Fatal.
+
+This can be fixed by forcing DirectX 11 (dx11) as the rendering API via the launch command: <code>-dx11</code>
+
+Video of how to set dx11 as a launch option: https://www.youtube.com/watch?v=cn3e-m4a-hU
+
+Text information on how to set launch options: [[Launch arguments]]
+
+;Mouse sensitivity feeling sluggish with V-Sync turned on
+We’re currently investigating an issue where some players experience very sluggish mouse movement with V-Sync turned on. In the meantime, we recommend playing with V-Sync turned off if the mouse controls feel overly annoying.
+
+;Players starting at tier 2 on Dedicated Servers
+Players are currently starting off at tier 2 upon entering the game on Dedicated Servers, skipping past tier 1. We’re currently looking into limiting the skipped parts of the game on Dedicated Servers to the intro sequence only (tier 0), and possibly even enabling players to experience tier 0 on Dedicated Servers as well.
+
+{{PatchesNav}}

@@ -1,0 +1,29 @@
+{{patch|ex=1|stable=1|build=416835|date=2025-06-09|discord=https://discord.com/channels/370472939054956546/557603412565426196/1381667137931972668|reddit=1l78v21|steam=https://store.steampowered.com/news/app/526870/view/520841474254834517}}
+
+== Intro ==
+Hi Pioneers!
+
+Hello again everyone, Here’s a small patch in preparation for tomorrow’s official release for 1.1 with some fixes we really wanted to get in as well as the latest community translations
+
+If you happen to encounter any new issues, please let us know over at our QA Site https://questions.satisfactorygame.com/  We read your posts every day
+
+See you all again tomorrow <3
+
+== Bug fixes ==
+* Fixed [[Settings|Invert Mouse]] look not working properly for [[Controls|KBM]] and [[Controller]] from the previous patch
+* Fixed Camera shake from the [[New game|Intro]] carrying over if the Intro was skipped
+* Fixed [[Blueprint]]s exiting [[Build_Gun#Hologram_lock_and_nudge_mode|Nudge Mode]] when confirming auto connections
+* Fixed Blueprint auto connections not appearing for connections behind the Blueprint
+* Fixed Blueprint auto connections incorrectly confirming connections that aren’t valid (Without the link icon in the hologram)
+* Potential fixes for multiple [[Dedicated servers|ReliableMessaging]] related crashes
+* Fixed the [[Chainsaw]] mode selection wheel being missing and the modes not working properly
+* Fixed being unable to search in the [[Drone Port]] destination list
+
+== [[Controller]] ==
+* Fixed being unable to close the UI after doing a search with no results and moving to the cost (Right Thumb-stick click) part of the UI
+
+== Localisation ==
+* Updated community translated languages with the latest translations
+* Updated language completion rates
+
+{{PatchesNav}}

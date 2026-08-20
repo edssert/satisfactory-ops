@@ -1,0 +1,54 @@
+{{Infobox item|className=BP_EquipmentDescriptorHoverPack_C
+| equipmentSlot = Back
+| range = ~64 m
+}}
+The '''Hoverpack''' is late-game personal flight equipment that feeds on nearby [[Power Line]] connectors (on [[Power Poles]] and [[Buildings]]) and [[Railway]]s. It allows [[pioneer]]s to hover endlessly, as long as they are within range of a powered structure. Pioneers can use it to gain elevation and increase their interaction range to make factory building easier.
+
+== Obtaining ==
+=== Crafting ===
+{{Recipes producing|BP_EquipmentDescriptorHoverPack_C}}
+
+== Usage ==
+=== Equipment ===
+The Hoverpack must be used within range of a power source. A power source is "attached" to the Hoverpack at about 64 meters measured in a straight line between the source and the pioneer. Once in flight the pioneer has a horizontal range of 64 meters and can fly up to about 62 to 64 meters above or below the power source. The UI at the bottom left indicates whether the pioneer is in range, similar to a wireless strength indicator. Whenever the pioneer comes within range of a new power source, a blue energy beam effect is briefly shown connecting the pioneer and the power source. Moving out of range mid-flight simply causes the pioneer to fall and allows slow-fall. If the pioneer comes back into range while falling hovering will automatically resume.
+
+The Power Line does not count as a valid power source for the Hoverpack. So, if Power Poles are constructed more than 128 meters apart the Hoverpack will lose connection between the Power Poles. This can be worked around by flying high enough before losing connection and then using slow-fall until the pioneer is within range of the next Power Pole. This may not work as well or at all if the second Power Pole is too high above the previous Power Pole. Powered train rails can also power the Hoverpack.
+
+While equipped, press and hold Jump {{key|space}} to start flying, hold Jump {{key|Space}} to ascend, hold Crouch {{key|C}} to descend, and double-tap Crouch {{key|C}} to exit hover mode. Navigation is done using the Directional keys {{key|W}}{{key|A}}{{key|S}}{{key|D}}. Sprinting {{key|Shift}} is also possible. If power is lost mid-flight, hold Jump {{key|Space}} to slow-fall; this also reduces horizontal speed.
+
+The Hoverpack has a normal flight speed of 23.4 km/h, and a sprinting flight speed of 46.8 km/h, the latter of which is similar to sprinting with [[Blade Runners]] equipped.
+
+=== Interaction ===
+While hovering, the interaction range with buildings increases from 3.5 meters to 20 meters.
+
+=== Power trip ===
+If wearing a Hoverpack, the pioneer can fall during a power trip, so having a [[Parachute]] handy is recommended.
+
+❗'''IMPORTANT:''' The Hoverpack draws 100 MW by default, but '''that power consumption does not appear on the power chart''', which can lead to confusing situations when trying to restart electric grids, especially small ones. If a Hoverpack is being used, it is '''strongly recommended''' that the Hoverpack be unequipped prior to [[Power#Power_trip|resetting circuit breaker]].
+
+=== AWESOME Sink ===
+{{Sinkusage|BP_EquipmentDescriptorHoverPack_C}}
+
+== History ==
+* [[Patch 1.2.0.0]]: Undocumented change - Fixed issue where equipped Hoverpack would cause factories to stall when near a [[Power Switch]].<ref name="yt-5W4FvGgfLwA@1251">[https://www.youtube.com/watch?v=5W4FvGgfLwA&t=1251s YouTube - March 10th 2026 Livestream - Fixed Issue with Equipped Hoverpack causing factory stalling]</ref>
+* [[Patch 1.0.0.5]]: Fixed [[Controls|Ascend/Descend]] inputs getting stuck when opening a menu while using the Hoverpack
+* [[Patch 1.0]]:
+** Renamed from Hover Pack to Hoverpack
+** Changed AWESOME Sink value from 413920 to 265632
+* [[Patch 0.8.2.0]]: Fixed Hoverpack not displaying properly when using a [[Settings#Camera_2|Field of View (FOV)]] when loading into a save where the Hoverpack was already equipped
+* [[Patch 0.7.0.1]]: Fixed Hoverpack not connecting to [[Railway|train tracks]]
+* [[Patch 0.4.0.11]]:
+** Moved Hoverpack from Tier 8 to Tier 7
+** Replaced [[Cooling System]] and [[Radio Control Unit]] by [[Heavy Modular Frame]] and [[Computer]] in its recipe to allow crafting earlier.
+* [[Patch 0.4.0.0]]: Introduced
+
+==References==
+{{Reflist}}
+
+{{ItemNav}}
+
+[[Category:Items]]
+[[Category:Equipment]]
+
+
+[[fr:Hoverpack]]

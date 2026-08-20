@@ -1,0 +1,52 @@
+{{Infobox item|className=Desc_Computer_C}}
+'''Computer''' is a mid-game crafting component commonly used for high-end products and some advanced [[vehicle]]s.
+
+== Obtaining ==
+=== Crafting ===
+{{Recipes producing|Desc_Computer_C}}
+
+===AWESOME Shop===
+{| class="wikitable"
+!Name!!Cost!!Contents
+|-
+|Computer||6||50x {{ItemLink|Computer}}
+|}
+
+== Usage ==
+=== Research ===
+{{MAMusage|chain1=Caterium|chain2=Quartz|chain3=Sulfur|chain4=Alien Technology}}
+
+=== Crafting ===
+{{Recipes using|Desc_Computer_C}}
+
+=== AWESOME Sink ===
+{{Sinkusage|Desc_Computer_C}}
+
+== History ==
+* [[Patch 1.0]]:
+** Changed AWESOME Sink value from 17260 to 8352
+** Default recipe
+*** Changed Circuit Board cost from 10 to 4
+*** Changed Cable cost from 9 to 8
+*** Changed Plastic cost from 18 to 16
+*** Removed 52 Screw cost
+** Caterium Computer
+*** Changed Circuit Board cost from 7 to 4
+*** Changed Quickwire cost from 28 to 14
+*** Changed Rubber cost from 12 to 6
+** Crystal Computer
+*** Changed recipe craft time from 64 to 36 seconds
+*** Changed Circuit Board cost from 8 to 3
+*** Changed Crystal Oscillator cost from 3 to 1
+*** Changed Computer product from 3 to 2
+
+* [[Patch Closed Alpha 4]]: Mesh updates: Computer
+
+{{ItemNav}}
+
+[[Category:Items]]
+[[Category:Crafting components]]
+[[Category:Building materials]]
+[[Category:Equipment materials]]
+
+[[fr:Ordinateur]]

@@ -1,0 +1,60 @@
+[[File:FICSMAS 2024 - Patch 1.0.1.1-1.png|frameless|800x259px]]
+
+{{Patch
+|stable=1
+|build=383233
+|date=2024-12-03
+|discord=https://discord.com/channels/370472939054956546/557603412565426196/1313588344101408892
+|reddit=1h5vqih
+|steam=https://store.steampowered.com/news/app/526870/view/4456970437737317392
+}}
+== Intro ==
+Hi Pioneers!
+
+It's once again that time of the year, and after seeing the overwhelmingly positive reaction from all of you over our 1.0 release, we wanted to give you all something special before we started to go on vacation for the holidays.
+
+[[File:FICSMAS 2024 - Patch 1.0.1.1-2.png|frameless|800x450px]]
+
+So, keeping with the holiday spirit, we decided to give FICS*MAS a bit of the 1.0 treatment which means all the previously released FICS*MAS content should now be looking and playing better than ever ! What this boils down to is that there are new surprises for all of you to unlock, explore and enjoy!
+
+If you would like to see a small teaser of what FICS*MAS is, take a look at this video from our community managers:
+
+[https://www.youtube.com/watch?v=7l7vnV1yUV8 YouTube - It's time for FICSMAS! ❄]
+
+The FICS*MAS event will be available in the 1.0 and Experimental versions of the game from December 1st 2024, until January 18th 2025! As always, we want to make sure no one feels pressured to rush their FICS*MAS projects while also dealing with work or the holidays in real life. By letting the event run into mid-January, there should be plenty of time to enjoy all of FICS*MAS even if you pick it up for the first time by the end of December as everything in the Calendar can be unlocked retroactively until the last day of FICS*MAS.
+
+For this year, we’ve also done gameplay updates to the Calendar and MAM FICS*MAS Research Tree to make it easier to progress and prevent soft-locking by losing items, as well as some rebalancing to FICS*MAS-related build costs and item stacks to make setting up the production line more fun.
+
+[[File:FICSMAS 2024 - Patch 1.0.1.1-3.png|frameless|800x450px]]
+
+As for the Calendar, like always, you'll be able to unlock new goodies daily that are crucial for your Pioneering needs as you progress through it. The updates we’ve done to it will be revealed when the day is right for it, quite literally. What’s December without some of that sweet, sweet waiting game?
+
+We could talk in more detail about the new stuff included in this year's FICS*MAS, but considering the nature of the event, we feel like that would be spoiling much of the fun.. So if you want to find out more, download the latest update and check the Calendar in the HUB to get started!
+
+[[File:FICSMAS_Northern_Lights_2.png|frameless|800x450px]]
+
+Also!
+
+In case you missed our previous post; with the FICS*MAS update we're also releasing bunch of fixes and optimizations, as well as answering some requests like the ability to copy paste settings on Generators and Extractors. These changes are more general and here to stay, unrelated to FICS*MAS, so if you're curious about those you can read more the changes here:
+
+[[Patch 1.0.1.0|Patch Notes: Release - v1.0.1.0 – Build 382498]]
+
+But that's not all!, Today we have a few highly requested fixes as well:
+
+== Gameplay ==
+* Reverted the snapping changes when building on the sides of [[Pillars]] to allow free placement again
+
+== Bug Fixes ==
+* Potential fix for a crash when [[Build Gun|replacing holograms]] with another (i.e. Replacing [[Pipelines|Pipe Hologram]] with a [[Hypertube]])
+* Fixed a crash when Upgrading [[Power Poles]] or splitting a [[Power Line|Wire]] from a Power Pole or Wall Outlets
+
+== UI ==
+* Fixed incorrect title in [[Dedicated servers|Network Errors]]
+
+== Localization ==
+* Updated community translated languages with the latest translations
+* Updated credits
+
+Merry FICS*MAS everyone, see you again soon <3
+
+{{PatchesNav}}

@@ -1,0 +1,44 @@
+{{patch
+|stable=1
+|build=493833
+|date=2026-06-11
+|discord=https://discord.com/channels/370472939054956546/557603412565426196/1514511572247249026
+|reddit=1u2qr8x
+|steam=https://store.steampowered.com/news/app/526870/view/686382380150161913
+}}
+== Intro ==
+Hi Pioneers!
+
+Hello everyone, Here’s a patch with various fixes and some important crash fixes as well
+
+This is the first patch where we have exactly the same build number and contents on all platforms so anything that you see here applies for PC, PS5 and XBS|XBX
+
+We’re still monitoring the stability of 1.2 across all platforms, so if there’s something that is hindering your playthrough or anything you think we’re forgetting, please let us know over at our QA Site https://questions.satisfactorygame.com/ We read your posts every day
+
+Have a great weekend and thank you for your support ❤️
+
+== Bug Fixes ==
+* Fixed memory leak due to multiple issues related to [[Drone]]s
+* Fixed issues when trying to save a new [[Customizer#Color_Manager|Color preset]] and being unable to do so due to a Name already in use popup not being dismissed
+* Fixed Camera settings not being reset after exiting [[Photo Mode]] with decoupled camera in [[Multiplayer]]
+* Fixed an issue where Milestone Progression icons would not properly refresh when [[Settings#HUD|Small Game Progression Slot Size]] in HUD was toggled
+* Fixed player visibility issues when switching between camera modes in Photo Mode
+* Fixed Pioneers always going into the Offline pose when using decoupled camera mode in Multiplayer
+* Fixed [[Game Modes|Recipe Cost Multiplier]] for x1.75 setting all the recipe costs to 0 for liquids
+* Fixed an issue where tooltips could not be opened in the [[MAM]] when using a [[Controller]]
+* Fixed virtual keyboards not properly opening and closing when using text fields while having a Keyboard plugged in on [[Console release|Consoles]]
+* Fixed multi-line text fields not blocking gameplay actions when typing with a Keyboard on Consoles
+* Fixed a crash on PS5 related to UFGBluperintFunctionLibrary
+* Fixed an issue where the [[Inventory]] would become unusable after interacting with a [[Lizard Doggo]]
+* Multiple fixes for incorrect default settings on Steam Deck
+* Fixed Confirm not working on the Join Game Menu when using a controller
+* Fixed To-Do List text size being incorrect on Steam Deck
+
+== Localization ==
+* Updated all languages with the latest translations
+* Updated language completion rates
+* Updated credits
+
+{{PatchesNav}}
+
+[[fr:Patch 1.2.3.0]]

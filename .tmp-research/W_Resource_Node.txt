@@ -1,0 +1,200 @@
+{{Distinguish|Resource Well}}
+[[File:Miner on Copper node.png|thumb|A [[Miner Mk.1]] on top of a copper Resource Node, producing [[Copper Ore]].]]
+'''Resource Nodes''' are specific locations spread across the [[world]] where resource extractors ([[Miner]]s and [[Oil Extractor]]s) can be placed to automate [[ore]] (or [[Crude Oil]]) harvesting, solid resources to be extracted manually by the [[pioneer]], or [[power]] to be generated using [[Geothermal Generator]]s on [[Geyser]] nodes. The three nearest Resource Nodes (or batches of them) from the pioneer can be located with the [[Resource Scanner]]. 
+
+Nodes have three possible purities, which affect how fast resources are extracted (see below). All Resource Nodes are <u>infinite</u>, which means they cannot be depleted.
+
+== Resource Deposit ==
+Resource Deposits are hand-mineable rocks that are found commonly on top of Resource Nodes as well as in the world. There can be a deposit on a node, which blocks the building of Miners, until removed.
+
+Deposits cannot be scanned for by any means, and do not show up on the resource scanner. Finding and mining some Resource Deposits (for example, [[Caterium Ore|Caterium]], [[Sulfur]], and [[Raw Quartz]]) is beneficial, as they can be used to unlock the corresponding [[MAM]] trees, as well as the ability to scan for permanent and automatable nodes.
+
+[[Uranium]] deposits are often found in areas of interest such as [[Crash Site|Crash Sites]] and [[SAM]] Nodes, to deter players from accessing the area. Some collectibles such as [[Power Slug|Power Slugs]] can be hidden behind deposits, that need to be mined out first.
+
+The locations of deposits in the world are fixed, however the resource type is randomized (some specific deposits, such as the aforementioned uranium deposits, will not be random). Deposits are always displayed to have a purity of pure, however the amount of items received when mining them is random and typically less than 100. 
+
+[[SAM]] cannot be found as a resource deposit and can only be hand-mined at a SAM Resource Node.
+
+Resource Deposits can only be extracted and destroyed by mining them manually, see [[#Extraction|§ Extraction]]. Resource Deposits can be destroyed by using a [[Nobelisk Detonator|Nobelisk]] or [[Explosive Rebar]].<ref name="Reddit-1s2esub">[https://www.reddit.com/r/SatisfactoryGame/comments/1s2esub/hidden_12_update_destructible_deposits/ Reddit - Hidden 1.2 Update: Destructible Deposits - Use of Nobelisk]</ref><ref name="Reddit-oc858i8">[https://www.reddit.com/r/SatisfactoryGame/comments/1s2esub/comment/oc858i8/ Reddit - Hidden 1.2 Update: Destructible Deposits - Use of Explosive Rebar]</ref>
+
+== Accessing ==
+Solid Resource Nodes will often have Resource Deposit(s) on top of them, which must be mined out by hand before a [[miner]] building can be placed on them. [[Portable Miner]]s can be placed on them without clearing the deposit. There are also often [[Combat|hostile creatures]] spawned nearby to make accessing the node more challenging.
+
+Some Resource Nodes, such as [[Caterium Ore]], can be blocked by large round [[boulder]]s with cracks on them. These boulders can be detonated using a [[Nobelisk Detonator]] or [[Rebar Gun#Explosive-0|Explosive Rebar]]. These boulders block the placement of buildings, but not the placement of [[Portable Miner]]s or the ability to manually mine the resource.
+<gallery>
+File:Iron deposit.png|An Iron deposit in the wild.
+File:Iron nodes with deposits.png|Three iron nodes, each with iron deposits which are to be mined out before miners can be placed on.
+File:Iron nodes.png|Iron nodes with deposits mined out.
+</gallery>
+
+== Extraction ==
+The extraction methods depend on whether the node or deposit produces a solid resource, fluid resource or is a Geyser.
+* Solid nodes and Resource Deposits:
+** Manual hand-mining with a chisel. Simply approach it and interact (default {{key|E}}). If your inventory is full, you will not be able to start mining.
+*** Tapping {{key|E}} will toggle mining until it is pressed again, while holding {{key|E}} will mine until it is released.
+** Placing a {{ItemLink|Portable Miner}} on it. Equip the Miner into your hand slot, {{Mouse|left}} to place down. You can place multiple Portable Miners on the same node. As the internal storage of a Portable Miner is limited, and it lacks an output, you need to take out the mined ore manually.
+** Placing a {{ItemLink|Miner|image=Miner Mk.1.png}} building on it. This is the only way to fully automate the mining process. Only one [[Miner]] can be built on each Resource Node.
+*** Miner buildings can be only placed on Resource Nodes that are clear of Resource Deposits. However, they work through [[foundations]].
+* Fluid nodes:
+** Building an {{ItemLink|Oil Extractor}} on an Oil node.
+** Building a {{ItemLink|Resource Well Pressurizer}} on the main node of a {{ItemLink|Resource Well}}, and [[Resource Well Pressurizer#Extractor-0|Resource Well Extractors]] on the surrounding nodes.
+*** Scanning a Resource Well will show a notched ring around the fluid icon. Hovering over the icon on the map will show the total number of impure, normal and pure nodes as circles - hollow circles are unclaimed, while filled circles are claimed.
+* Geyser:
+** Building a {{ItemLink|Geothermal Generator}} on it. This is the only purpose of Geysers.
+<gallery>
+File:Manual mining deposit.jpg|A deposit being manually mined by holding down {{key|E}}.
+</gallery>
+
+== Purity ==
+{| class="wikitable"
+! Node purity !! Building multiplier !! Manual mining amount
+|-
+| Impure || × 0.5 || 1
+|-
+| Normal || × 1.0 || 2
+|-
+| Pure || × 2.0 || 3
+|-
+| Resource Deposit || N/A (can only be hand mined) || 6
+|}
+
+== Types ==
+{| class="wikitable sortable"
+|+Solid resources
+!Resource!!Deposits on node!!Impure!!Normal!!Pure!!Maximum per min
+|-
+|{{ItemLink|Iron Ore}}||varies||39||42||46||92100
+|-
+|{{ItemLink|Caterium Ore}}||varies*||-||9||8||15000
+|-
+|{{ItemLink|Copper Ore}}||varies||13||29||13||36900
+|-
+|{{ItemLink|Limestone}}||varies||15||50||29||69300
+|-
+|{{ItemLink|Coal}}||no*||15||31||16||42300
+|-
+|{{ItemLink|Raw Quartz}}||no||3||7||7||13500
+|-
+|{{ItemLink|Sulfur}}||no||6||5||5||10800
+|-
+|{{ItemLink|Uranium}}||no||3||2||-||2100
+|-
+|{{ItemLink|Bauxite}}||no||5||6||6||12300
+|-
+|{{ItemLink|SAM}}||no||10||6||3||10200
+|}
+<nowiki>*</nowiki> Coal and Caterium nodes sometimes have [[cracked boulder]]s obstructing them, which must be destroyed using {{ItemLink|Nobelisk Detonator|Nobelisks}} or [[Rebar Gun#Explosive-0|Explosive Rebar]].
+
+All ores have their own Resource Deposits that are present all over the world. [[Uranium]] nodes and deposits, just like all Uranium-based items, are [[Radiation|radioactive]].
+{| class="wikitable"
+|+Other resources
+!Resource!!Impure!!Normal!!Pure!!Maximum per min!!Note
+|-
+|{{ItemLink|Crude Oil}}||10 nodes, 8 wells||12 nodes, 6 wells||8 nodes, 4 wells||12600 (9900 from nodes, 2700 from wells)||On nodes, extracted as a [[Fluids|fluid]] using [[Oil Extractor]]s. 600/min from pure, 300/min from normal, 150/min from impure. 
+On wells, extracted as a fluid using resource well extractors. 300/min from pure, 150/min from normal, 75/min from impure.
+|-
+|{{ItemLink|Geyser}}||9||13||9||-||Used for power generation using [[Geothermal Generator]]s
+|}
+These Resource Nodes do not allow the construction of [[Miner]]s or the usage of [[Portable Miner]]s on them.
+
+== Tips ==
+* Using an [[Online tools|online resource map]] to determine where to build a factory can be very useful.
+* When mining a pure deposit by hand, it will yield twice as much as a pure node.
+
+== See also ==
+* {{ItemLink|Geyser}}
+* {{ItemLink|Resource Well}}
+
+== History ==
+* [[Patch 1.2.1.0]]
+** Fixed missing Limestone node in Rocky Desert
+** Fixed spelling mistake on the Resource Node Purity description
+* [[Patch 1.2.0.0]]: Undocumented change - Resource Deposits can be destroyed using a [[Nobelisk Detonator|Nobelisk]] or [[Explosive Rebar]].
+* [[Patch 1.0.0.5]]: Fixed players not being able to mine Resource Deposits inside of the [[Spore Flower]] Gas
+* [[Patch 1.0.0.4]]: Fixed Iron Node under the terrain
+* [[Patch 1.0]]
+** Resource Nodes have received visual polish as well as significant changes to some placements. Various Nodes have been moved, changed, removed, and added to improve the overall experience and resource distribution across the world
+** Undocumented Change - The ability to obtain [[SAM]] from resource deposits was removed
+* [[Patch 0.8.2.9]]: Fixed incorrect text when mining resource nodes
+* [[Patch 0.8.2.8]]: You can now more easily pick up items dropped in resource nodes
+* [[Patch 0.8.2.0]]
+** [[Controls#Default_keybindings|Resource Miner]] (Hand Mining) can be started / stopped by tapping {{Key|E}} to Mine (Toggle) or by holding {{Key|E}} to Mine, depending on how long the button is held
+** Fixed a couple of issues with Resource Deposit mining lingering around when walking away from the node
+** Fixed Resource Miner (Hand Mining) having an incorrect animation in [[Multiplayer]] or when Holstering
+** Fixed a specific Copper Node producing Limestone if the miner was placed prior to Update 8
+** Removed a duplicate Coal Node
+* [[Patch 0.6.0.4]]
+** Fixed being able to place [[Miner]]s on top of Resource Deposits (They must be Gathered first)
+** Fixed Resource Deposits being Invisible/Non-interactable for [[Multiplayer]] Clients or [[Dedicated Server]] Clients
+* [[Patch 0.6.0.2]]
+** Fixed some [[Bauxite]] Resource Node that were missing
+** Fixed a [[Uranium]] node that was missing
+* [[Patch 0.5.0.5]]: Fixed some missing [[Uranium]] IDs
+* [[Patch 0.5.0.4]]
+** Re-added missing [[Bauxite]] nodes
+** Re-added missing [[Uranium]] node
+* [[Patch 0.4.0.0]]:
+** Geysers now have purity
+** One Uranium and several Bauxite nodes were added to the world
+* [[Patch 0.3.4.15]]: Fixed some Uranium and SAM nodes that had the Iron material on them instead of their own
+* [[Patch 0.3.4.11]]: Small visual tweaks on Limestone node meshes in the world
+* [[Patch 0.3.4.10]]: Fixed up some Limestone Resource Node locations 
+* [[Patch 0.3.3.2]]: Bauxite Resource Nodes now have their own textures
+* [[Patch 0.3.3.0]]: 
+** Fixed a crash on load when a Miner is placed on a removed Resource Node
+** Fixed a crash when upgrading a Miner built on a removed Resource Node 
+* [[Patch 0.3.2.1]]: Resource Deposits now have the correct materials again (Iron, Copper, Caterium etc. no longer look like Bauxite)
+* [[Patch 0.3.2.0]]: 
+** Portable Miners now only work on solid resources
+** Oil nodes show purity again
+** Switched out all Limestone Resource Nodes with new meshes
+** Quartz Resource Deposits now have their own mesh and material
+* [[Patch 0.3.1.0]]: Adjusted a few faulty Resource Nodes in the Dune Desert (not high enough hitbox, hidden in a cliff or that wasn’t removed from an earlier iteration of the Dune Desert)
+* [[Patch 0.3]]: 
+** Crude Oil and Geyser Resource Nodes no longer show "(resource) can not be picked up" when approached, and instead just tell the name of the node. Node purity is no longer shown on Crude Oil nodes, an Oil Extractor has to be built to detect it
+** Crude Oil is now extracted as fluid instead of in barrels
+** Overhauled Dune Desert visual & design as a new starting area
+** Tweaked mesh and colours for the Limestone Resource Node
+** Tweaked Limestone deposit textures to match the Resource Node better
+*** Complete resource & reward overhaul
+** Resource Deposits are far more likely to be MAM related resources
+* [[Patch 0.1.20]]: Uranium nodes and clusters now radiate
+* [[Patch 0.1.14]]: 
+** Tweaked resources in several areas
+*** Red Jungle (Plateau northwest of Grass Fields)
+**** Added Bauxite, Uranium and Coal
+*** Bamboo Fields (Plateau north of Grass Fields)
+**** Added Bauxite and Coal
+*** Swamp (Northeast of Grass Fields)
+**** Completely overhauled resource placements and added new nodes
+* [[Patch 0.1.5]]: 
+** Moved all Oil Nodes in the Dune Desert (northeast corner of the map) west to the Spire Coast
+** Adjusted purity of Oil Nodes in the Desert Canyons east and west of the Northern Forest
+** Adjusted and fixed gameplay and Resource Nodes in several locations - Northern Forest Limestone location
+* Unknown patch before [[Patch 0.1]]: Crude Oil can no longer be mined by hand
+* [[Patch Closed Alpha 5]]: Added sounds for Resource Deposits being destroyed
+* [[Patch Closed Alpha 4.1]]: 
+** Fixed Oil Node placements
+** Implemented Grass Fields Stone Node and grass fixes
+* [[Patch Closed Alpha 3]]: 
+** Playability pass over all Resource Nodes
+** New mesh for Sulfur Resource Nodes & deposits
+** Implemented the Significance Manager and added support for several elements of the game - Resource Nodes
+* [[Patch Closed Alpha 2]]: 
+** Updated Stone and Coal Resource Nodes mesh.
+** Updated Stone and Coal Resource Deposit material.
+* [[Patch 2018-10-11]]: Initial design. Various Resource Nodes were updated throughout Closed Alpha
+
+== Early game development ==
+Prior to Closed Alpha, resource nodes were added as the game developed, beginning with Iron and Coal.
+* See also: [[Early_game_development#Resource_Node|Game Development - Resource Node]]
+
+
+==References==
+{{Reflist}}
+
+{{PioneerNav}}
+
+[[Category:Gameplay mechanics]]
+[[fr:Gisement]]
+[[de:Rohstoffvorkommen]]

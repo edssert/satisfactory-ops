@@ -1,0 +1,852 @@
+{{Quote|To achieve company milestones according to satisfaction we expect you to construct your FICSIT Inc. factory in such a way that it allows for easy expansion and complexion. Not only will buildings grow more complex over time, so will the parts they produce. Project Assembly isn’t your average high-school science project. We’re making history here! Go big or go home! Of course, this requires both high-level and low-level power management, good luck getting to nuclear!|Caterina Parks' assistant [[Steve]]}}
+'''Milestones''' are the primary method of progression in the game, allowing the [[pioneer]] to unlock new [[buildings]], [[:Category:Items|recipes]], [[:Category:Equipment|equipment]], and more. They can be completed at the [[HUB Terminal]] by inputting the specified resources. To do so, move near the terminal (the PC-shaped booth inside the [[HUB]]), interact {{key|E}} with it, then {{key|Ctrl}}+{{mouse|left}} the required material in your [[inventory]]. 
+
+Sets of milestones are grouped into tiers. At the start of a new game session, only Tier 0 is available (unless [[Onboarding]] is skipped, which will skip Tier 0 as well). Completing Tier 0 unlocks Tiers 1 and 2, and completing phases of the [[Space Elevator]] unlocks higher tiers.
+
+Parts inserted into the HUB Terminal cannot be taken back.
+
+== Tier 0: Onboarding ==
+Tier 0 focuses on upgrading the [[HUB]]. Unlike milestones in later tiers, all the HUB upgrades must be completed in sequential order. Each milestone changes the HUB's appearance as well.
+
+Before HUB Upgrade 1, only the following is available:
+* [[Craft Bench]] recipes: {{ItemLink|Iron Ingot}}, {{ItemLink|Iron Plate}} and {{ItemLink|Iron Rod}}
+* [[Equipment Workshop]] recipe: {{ItemLink|Xeno-Zapper}} (appears in the Codex, but can't be crafted before the Equipment Workshop itself is unlocked in HUB Upgrade 1)
+* Buildings: {{ItemLink|The HUB}} and {{ItemLink|Craft Bench}}
+* [[Resource Scanner]]: {{ItemLink|Iron Ore}}
+
+Several [[Onboarding]] steps have to be completed before the HUB can be constructed and its terminal accessed to begin completing milestones.
+
+{{MilestoneTable
+|name = HUB Upgrade 1
+|icon = SchematicIcon_Hub_1.SchematicIcon_Hub_1.png
+|quantity1 = 10
+|cost1 = Iron Rod
+|time = 00:00
+|buildings = {{ItemLink|Equipment Workshop}}
+|equipment = {{ItemLink|Portable Miner}}
+|upgrades = +1 [[Inventory]] Slot, [[Personal Storage Box]] added to the [[HUB]]
+}}
+{{MilestoneTable
+|name = HUB Upgrade 2
+|icon = SchematicIcon_Hub_1.SchematicIcon_Hub_1.png
+|quantity1 = 20
+|cost1 = Iron Rod
+|quantity2 = 10
+|cost2 = Iron Plate
+|time = 00:00
+|buildings = {{ItemLink|Smelter}}, {{ItemLink|Power Line}}
+|recipes = {{ItemLink|Copper Ingot}}, {{ItemLink|Wire}}, {{ItemLink|Cable}}
+|scanner = {{ItemLink|Copper Ore}}
+|upgrades = First [[Biomass Burner]] added to the [[HUB]]
+}}
+{{MilestoneTable
+|name = HUB Upgrade 3
+|icon = SchematicIcon_Hub_2.SchematicIcon_Hub_2.png
+|quantity1 = 20
+|cost1 = Iron Plate
+|quantity2 = 20
+|cost2 = Iron Rod
+|quantity3 = 20
+|cost3 = Wire
+|time = 00:00
+|buildings = {{ItemLink|Constructor}}, {{ItemLink|Power Pole}}
+|recipes = {{ItemLink|Concrete}}, {{ItemLink|Screw}}, {{ItemLink|Reinforced Iron Plate}}
+|scanner = {{ItemLink|Limestone}}
+}}
+{{MilestoneTable
+|name = HUB Upgrade 4
+|icon = SchematicIcon_Hub_3.SchematicIcon_Hub_3.png
+|quantity1 = 75
+|cost1 = Iron Plate
+|quantity2 = 20
+|cost2 = Cable
+|quantity3 = 10
+|cost3 = Concrete
+|time = 00:00
+|buildings = {{ItemLink|Conveyor Pole}}, {{ItemLink|Conveyor Belt}}
+|upgrades = +3 [[Inventory]] Slots
+}}
+{{MilestoneTable
+|name = HUB Upgrade 5
+|icon = SchematicIcon_Hub_4.SchematicIcon_Hub_4.png
+|quantity1 = 75
+|cost1 = Iron Rod
+|quantity2 = 50
+|cost2 = Cable
+|quantity3 = 20
+|cost3 = Concrete
+|time = 00:00
+|buildings = {{ItemLink|Miner Mk.1}}, {{ItemLink|Storage Container}}
+|upgrades = +3 [[Inventory]] Slots, Second [[Biomass Burner]] added to the [[HUB]]
+}}
+{{MilestoneTable
+|name = HUB Upgrade 6
+|icon = {{#setmainimage:SchematicIcon_Hub_5.SchematicIcon_Hub_5.png}}
+|quantity1 = 100
+|cost1 = Iron Rod
+|quantity2 = 100
+|cost2 = Iron Plate
+|quantity3 = 100
+|cost3 = Wire
+|quantity4 = 50
+|cost4 = Concrete
+|time = 00:00
+|buildings = {{ItemLink|Space Elevator}}, {{ItemLink|Biomass Burner}}
+|recipes = {{ItemLink|Biomass}}
+|upgrades = +3 [[Inventory]] Slots, [[FICSIT Freighter]] added to the [[HUB]]
+|tableEnd = 1
+}}
+* Note: The two [[Biomass Burner]]s that are added to the HUB are smaller than the standalone version, each only produces 20 MW instead of 30 MW. They also burn fuel proportionally slower.
+
+== Tier 1 ==
+Tier 1 milestones are available starting in '''Phase 1'''.
+
+'''Requirements:''' All Milestones from Tier 0 completed (The HUB is completed) or [[Onboarding]] is skipped
+{{MilestoneTable
+|name = Base Building
+|icon = Schematic_Icon_Base_Building.png
+|quantity1 = 200
+|cost1 = Concrete
+|quantity2 = 100
+|cost2 = Iron Plate
+|quantity3 = 100
+|cost3 = Iron Rod
+|time = 02:00
+|buildings = {{ItemLink|Lookout Tower}}, {{ItemLink|Foundation 8m x 1m}}, {{ItemLink|Foundation 8m x 2m}}, {{ItemLink|Foundation 8m x 4m}},<br/>{{ItemLink|Ramp 8m x 1m}}, {{ItemLink|Ramp 8m x 2m}}, {{ItemLink|Ramp 8m x 4m}}, {{ItemLink|Basic Wall 4m|Basic Wall 4m|image=Basic Wall 4m (FICSIT).png}}, {{ItemLink|Basic Wall 1m|Basic Wall 1m|image=Basic Wall 1m (FICSIT).png}}
+}}
+{{MilestoneTable
+|name = Logistics
+|icon = Schematic_Icon_Logistics.png
+|quantity1 = 150
+|cost1 = Iron Plate
+|quantity2 = 150
+|cost2 = Iron Rod
+|quantity3 = 300
+|cost3 = Wire
+|time = 04:00
+|upgrades = [[Productivity Display]]
+|buildings={{ItemLink|Conveyor Splitter}}, {{ItemLink|Conveyor Merger}}, {{ItemLink|Conveyor Lift}}}}
+{{MilestoneTable
+|name = Field Research
+|icon = Schematic_Icon_Exploration.png
+|quantity1 = 300
+|cost1 = Wire
+|quantity2 = 300
+|cost2 = Screw
+|quantity3 = 100
+|cost3 = Iron Plate
+|time = 03:00
+|buildings = {{ItemLink|MAM}}, {{ItemLink|Personal Storage Box}}
+|equipment = {{ItemLink|Object Scanner}}
+|upgrades = New Feature: {{ItemLink|Map|image=Map Icon.png}}, +3 [[Inventory]] Slots
+|tableEnd = 1
+}}
+
+== Tier 2 ==
+Tier 2 milestones are available starting in '''Phase 1'''.
+
+'''Requirements:''' All Milestones from Tier 0 completed (The HUB is completed) or [[Onboarding]] is skipped
+{{MilestoneTable
+|name = Part Assembly
+|icon = Schematic_Icon_Production.png
+|quantity1 = 200
+|cost1 = Cable
+|quantity2 = 200
+|cost2 = Iron Rod
+|quantity3 = 500
+|cost3 = Screw
+|quantity4 = 300
+|cost4 = Iron Plate
+|time = 06:00
+|buildings = {{ItemLink|Assembler}}
+|recipes = {{ItemLink|Copper Sheet}}, {{ItemLink|Rotor}}, {{ItemLink|Modular Frame}}, {{ItemLink|Smart Plating}}
+}}
+{{MilestoneTable
+|name = Obstacle Clearing
+|icon = Schematic_Icon_Chainsaw.png
+|quantity1 = 500
+|cost1 = Screw
+|quantity2 = 100
+|cost2 = Cable
+|quantity3 = 100
+|cost3 = Concrete
+|time = 03:00
+|recipes = {{ItemLink|Solid Biofuel}}
+|upgrades = +3 [[Inventory]] slots
+|equipment = {{ItemLink|Chainsaw}}
+}}
+{{MilestoneTable
+|name = Jump Pads
+|icon = Schematic_Icon_Jump_Pad.png
+|quantity1 = 50
+|cost1 = Rotor
+|quantity2 = 300
+|cost2 = Iron Plate
+|quantity3 = 150
+|cost3 = Cable
+|time = 04:00
+|buildings = {{ItemLink|Jump Pad}}, {{ItemLink|U-Jelly Landing Pad}}
+}}
+{{MilestoneTable
+|name = Resource Sink Bonus Program
+|icon = Schematic_Icon_Coupon.png
+|quantity1 = 400
+|cost1 = Concrete
+|quantity2 = 500
+|cost2 = Wire
+|quantity3 = 200
+|cost3 = Iron Rod
+|quantity4 = 200
+|cost4 = Iron Plate
+|time = 05:00
+|buildings = {{ItemLink|AWESOME Sink}}, {{ItemLink|AWESOME Shop}}
+| upgrades = [[File:Build Gun Upgrade.png|20px|link=Customizer]] [[Build Gun]] Upgrade: [[Customizer]]
+}}
+{{MilestoneTable
+|name = Logistics Mk.2
+|icon = Schematic_Icon_Logistics.png
+|quantity1 = 50
+|cost1 = Reinforced Iron Plate
+|quantity2 = 200
+|cost2 = Concrete
+|quantity3 = 300
+|cost3 = Iron Rod
+|quantity4 = 300
+|cost4 = Iron Plate
+|time = 06:00
+|buildings = {{ItemLink|Conveyor Belt Mk.2}}, {{ItemLink|Stackable Conveyor Pole}}, {{ItemLink|Conveyor Lift Mk.2}}
+|tableEnd = 1
+}}
+
+== Tier 3 ==
+Tier 3 milestones are available starting in '''Phase 2'''.
+
+'''Requirements:''' [[Space Elevator]] Phase 1 completed
+{{MilestoneTable
+|name = Coal Power
+|icon = Schematic_Icon_Production_Generator.png
+|quantity1 = 150
+|cost1 = Reinforced Iron Plate
+|quantity2 = 50
+|cost2 = Rotor
+|quantity3 = 500
+|cost3 = Cable
+|time = 08:00
+|buildings = {{ItemLink|Coal-Powered Generator}}, {{ItemLink|Water Extractor}}, {{ItemLink|Pipeline Mk.1}}, {{ItemLink|Pipeline Support}},<br/>{{ItemLink|Pipeline Junction}}, {{ItemLink|Pipeline Pump Mk.1}}, {{ItemLink|Fluid Buffer}}
+|scanner = {{ItemLink|Coal}}
+}}
+{{MilestoneTable
+|name = Vehicular Transport
+|icon = Schematic_Icon_Vehicle.png
+|quantity1 = 25
+|cost1 = Modular Frame
+|quantity2 = 100
+|cost2 = Rotor
+|quantity3 = 200
+|cost3 = Cable
+|quantity4 = 400
+|cost4 = Iron Plate
+|time = 04:00
+|vehicles = {{ItemLink|Tractor}}
+|buildings = {{ItemLink|Truck Station}}
+|upgrades = +3 [[Inventory]] Slots
+}}
+{{MilestoneTable
+|name = Basic Steel Production
+|icon = Schematic_Icon_Production.png
+|quantity1 = 50
+|cost1 = Modular Frame
+|quantity2 = 150
+|cost2 = Rotor
+|quantity3 = 500
+|cost3 = Concrete
+|quantity4 = 1000
+|cost4 = Wire
+|time = 08:00
+|recipes = {{ItemLink|Steel Ingot}}, {{ItemLink|Steel Beam}}, {{ItemLink|Steel Pipe}}, {{ItemLink|Versatile Framework}}
+|buildings = {{ItemLink|Foundry}}
+}}
+{{MilestoneTable
+|name = Enhanced Asset Security
+|icon = Schematic_Icon_Xeno_Basher.png
+|quantity1 = 100
+|cost1 = Reinforced Iron Plate
+|quantity2 = 600
+|cost2 = Iron Rod
+|quantity3 = 1500
+|cost3 = Wire
+|time = 03:00
+|equipment = {{ItemLink|Xeno-Basher}}
+|upgrades= +1 Hand Slot, +3 [[Inventory]] Slots
+|tableEnd = 1
+}}
+
+==Tier 4==
+Tier 4 milestones are available starting in '''Phase 2'''.
+
+'''Requirements:''' [[Space Elevator]] Phase 1 completed
+{{MilestoneTable
+|name = FICSIT Blueprints
+|icon = Schematic_Icon_Blueprints.png
+|quantity1 = 100
+|cost1 = Modular Frame
+|quantity2 = 200
+|cost2 = Steel Beam
+|quantity3 = 500
+|cost3 = Cable
+|quantity4 = 1000
+|cost4 = Concrete
+|time = 05:00
+|buildings = {{ItemLink|Blueprint Designer Mk.1}}
+|upgrades= {{ItemLink|Build Gun}} Upgrade: [[Blueprint|Blueprints]]
+}}
+{{MilestoneTable
+|name = Logistics Mk.3
+|icon = Schematic_Icon_Logistics.png
+|quantity1 = 200
+|cost1 = Steel Beam
+|quantity2 = 200
+|cost2 = Steel Pipe
+|quantity3 = 400
+|cost3 = Reinforced Iron Plate
+|time = 05:00
+|buildings = {{ItemLink|Industrial Storage Container}}, {{ItemLink|Conveyor Belt Mk.3}}, {{ItemLink|Conveyor Lift Mk.3}}, {{ItemLink|Stackable Pipeline Support}}
+}}
+{{MilestoneTable
+|name = Advanced Steel Production
+|icon = Schematic_Icon_Production.png
+|quantity1 = 100
+|cost1 = Steel Pipe
+|quantity2 = 100
+|cost2 = Modular Frame
+|quantity3 = 200
+|cost3 = Rotor
+|quantity4 = 500
+|cost4 = Concrete
+|time = 10:00
+|buildings = {{ItemLink|Miner Mk.2}}
+|recipes = {{ItemLink|Encased Industrial Beam}}, {{ItemLink|Stator}}, {{ItemLink|Motor}}, {{ItemLink|Automated Wiring}}
+}}
+{{MilestoneTable
+|name = Expanded Power Infrastructure
+|icon = Schematic_Icon_Power_Tower.png
+|quantity1 = 50
+|cost1 = Encased Industrial Beam
+|quantity2 = 100
+|cost2 = Steel Beam
+|quantity3 = 200
+|cost3 = Modular Frame
+|quantity4 = 2000
+|cost4 = Wire
+|time = 05:00 
+|buildings = {{ItemLink|Power Storage}}, {{ItemLink|Power Tower}}, {{ItemLink|Power Tower Platform}}
+}}
+{{MilestoneTable
+|name = Hypertubes
+|icon = Schematic_Icon_HyperTubes.png
+|quantity1 = 50
+|cost1 = Encased Industrial Beam
+|quantity2 = 300
+|cost2 = Steel Pipe
+|quantity3 = 500
+|cost3 = Copper Sheet
+|time = 10:00
+|buildings = {{ItemLink|Hypertube Entrance}}, {{ItemLink|Hypertube}}, {{ItemLink|Hypertube Support}}, {{ItemLink|Stackable Hypertube Support}}
+|tableEnd = 1
+}}
+
+==Tier 5==
+Tier 5 milestones are available starting in '''Phase 3'''.
+
+'''Requirements:''' [[Space Elevator]] Phase 2 completed
+{{MilestoneTable
+|name = Jetpack
+|icon = Schematic_Icon_Traversal_Equipment.png
+|quantity1 = 50
+|cost1 = Motor
+|quantity2 = 1000
+|cost2 = Cable
+|quantity3 = 1000
+|cost3 = Iron Plate
+|time = 05:00
+|equipment= {{ItemLink|Jetpack}}
+|upgrades= +3 [[Inventory]] Slots
+}}
+{{MilestoneTable
+|name = Oil Processing
+|icon = Schematic_Icon_Production_Fluid.png
+|quantity1 = 50
+|cost1 = Motor
+|quantity2 = 100
+|cost2 = Encased Industrial Beam
+|quantity3 = 500
+|cost3 = Steel Pipe
+|quantity4 = 500
+|cost4 = Copper Sheet
+|time = 10:00
+|buildings = {{ItemLink|Oil Extractor}}, {{ItemLink|Refinery}}, {{ItemLink|Valve}}
+|recipes = {{ItemLink|Plastic}}, {{ItemLink|Rubber}}, {{ItemLink|Fuel}}, {{ItemLink|Heavy Oil Residue}}, {{ItemLink|Polymer Resin}}, {{ItemLink|Petroleum Coke}}, {{ItemLink|Circuit Board}}
+|scanner = {{ItemLink|Crude Oil}}
+}}
+{{MilestoneTable
+|name = Logistics Mk.4
+|icon = Schematic_Icon_Logistics.png
+|quantity1 = 200
+|cost1 = Rubber
+|quantity2 = 300
+|cost2 = Encased Industrial Beam
+|quantity3 = 400
+|cost3 = Modular Frame
+|time = 05:00
+|buildings = {{ItemLink|Conveyor Belt Mk.4}}, {{ItemLink|Conveyor Lift Mk.4}}
+|vehicles = {{ItemLink|Truck}}
+}}
+{{MilestoneTable
+|name = Fluid Packaging
+|icon = Schematic_Icon_Production_Packager.png
+|quantity1 = 200
+|cost1 = Plastic
+|quantity2 = 400
+|cost2 = Steel Beam
+|quantity3 = 1000
+|cost3 = Copper Sheet
+|time = 05:00
+|buildings = {{ItemLink|Packager}}
+|recipes = {{ItemLink|Empty Canister}}, {{ItemLink|Packaged Water}}, {{ItemLink|Packaged Oil}}, {{ItemLink|Packaged Fuel}},<br/>{{ItemLink|Packaged Heavy Oil Residue}}, {{ItemLink|Packaged Liquid Biofuel}}, {{ItemLink|Liquid Biofuel}}
+}}
+{{MilestoneTable
+|name = Petroleum Power
+|icon = Schematic_Icon_Production_Generator.png
+|quantity1 = 100
+|cost1 = Motor
+|quantity2 = 100
+|cost2 = Encased Industrial Beam
+|quantity3 = 200
+|cost3 = Rubber
+|quantity4 = 200
+|cost4 = Plastic
+|time = 10:00
+|buildings = {{ItemLink|Fuel Generator}}, {{ItemLink|Industrial Fluid Buffer}}
+|scanner = {{ItemLink|Caterium Ore}}
+|tableEnd = 1
+}}
+
+==Tier 6==
+Tier 6 milestones are available starting in '''Phase 3'''.
+
+'''Requirements:''' [[Space Elevator]] Phase 2 completed
+{{MilestoneTable
+|name = Industrial Manufacturing
+|icon = Schematic_Icon_Production.png
+|quantity1 = 200
+|cost1 = Motor
+|quantity2 = 200
+|cost2 = Modular Frame
+|quantity3 = 400
+|cost3 = Plastic
+|quantity4 = 1000
+|cost4 = Cable
+|time = 15:00
+|buildings = {{ItemLink|Manufacturer}}
+|recipes = {{ItemLink|Computer}}, {{ItemLink|Heavy Modular Frame}}, {{ItemLink|Modular Engine}}, {{ItemLink|Adaptive Control Unit}}
+}}
+{{MilestoneTable
+|name = Monorail Train Technology
+|icon = Schematic_Icon_Train.png
+|quantity1 = 250
+|cost1 = Motor
+|quantity2 = 500
+|cost2 = Encased Industrial Beam
+|quantity3 = 1000
+|cost3 = Steel Beam
+|quantity4 = 1000
+|cost4 = Steel Pipe
+|time = 10:00
+|buildings = {{ItemLink|Railway}}, {{ItemLink|Train Station}}, {{ItemLink|Freight Platform}}, {{ItemLink|Fluid Freight Platform}}, {{ItemLink|Empty Platform}}
+|vehicles = {{ItemLink|Electric Locomotive}}, {{ItemLink|Freight Car}} 
+}}
+{{MilestoneTable
+|name = Railway Signalling
+|icon = Schematic_Icon_Train_Signals.png
+|quantity1 = 50
+|cost1 = Computer
+|quantity2 = 400
+|cost2 = Steel Pipe
+|quantity3 = 1000
+|cost3 = Copper Sheet
+|time = 05:00
+|buildings = {{ItemLink|Block Signal}}, {{ItemLink|Path Signal}}
+}}
+{{MilestoneTable
+|name = Pipeline Engineering Mk.2
+|icon = Schematic_Icon_Pipes.png
+|quantity1 = 50
+|cost1 = Heavy Modular Frame
+|quantity2 = 1000
+|cost2 = Plastic
+|quantity3 = 1000
+|cost3 = Rubber
+|time = 05:00
+|buildings = {{ItemLink|Pipeline Mk.2}}, {{ItemLink|Pipeline Pump Mk.2}}
+}}
+{{MilestoneTable
+|name = FICSIT Blueprints Mk.2
+|icon = Schematic_Icon_Blueprints.png
+|quantity1 = 100
+|cost1 = Heavy Modular Frame
+|quantity2 = 100
+|cost2 = Computer
+|quantity3 = 400
+|cost3 = Rubber
+|quantity4 = 1500
+|cost4 = Concrete
+|time = 10:00
+|buildings = {{ItemLink|Blueprint Designer Mk.2}}
+|tableEnd = 1
+}}
+
+==Tier 7==
+Tier 7 milestones are available starting in '''Phase 4'''.
+
+'''Requirements:''' [[Space Elevator]] Phase 3 completed
+{{MilestoneTable
+|name = Bauxite Refinement
+|icon = Schematic_Icon_Production.png
+|quantity1 = 100
+|cost1 = Computer
+|quantity2 = 100
+|cost2 = Heavy Modular Frame
+|quantity3 = 250
+|cost3 = Motor
+|quantity4 = 500
+|cost4 = Rubber
+|time = 10:00
+|recipes = {{ItemLink|Alumina Solution}}, {{ItemLink|Packaged Alumina Solution}}, {{ItemLink|Aluminum Scrap}}, {{ItemLink|Aluminum Ingot}},<br>{{ItemLink|Alclad Aluminum Sheet}}, {{ItemLink|Aluminum Casing}}
+|scanner = {{ItemLink|Bauxite}}, {{ItemLink|Raw Quartz}}
+}}
+{{MilestoneTable
+|name = Hoverpack
+|icon = Schematic_Icon_Traversal_Equipment.png
+|quantity1 = 100
+|cost1 = Alclad Aluminum Sheet
+|quantity2 = 100
+|cost2 = Heavy Modular Frame
+|quantity3 = 100
+|cost3 = Computer
+|quantity4 = 250
+|cost4 = Motor
+|time = 05:00
+|equipment = {{ItemLink|Hoverpack}}
+|upgrades = +3 [[Inventory]] Slots
+}}
+{{MilestoneTable
+|name = Logistics Mk.5
+|icon = Schematic_Icon_Logistics.png
+|quantity1 = 200
+|cost1 = Alclad Aluminum Sheet
+|quantity2 = 400
+|cost2 = Encased Industrial Beam
+|quantity3 = 600
+|cost3 = Reinforced Iron Plate
+|time = 05:00
+|buildings = {{ItemLink|Conveyor Belt Mk.5}}, {{ItemLink|Conveyor Lift Mk.5}}
+}}
+{{MilestoneTable
+|name = Hazmat Suit
+|icon = Schematic_Icon_Hazmat_Suit.png
+|quantity1 = 50
+|cost1 = Gas Filter
+|quantity2 = 100
+|cost2 = Aluminum Casing
+|quantity3 = 500
+|cost3 = Quickwire
+|time = 05:00
+|equipment = {{ItemLink|Hazmat Suit}}
+|recipes = {{ItemLink|Iodine Infused Filter}}
+|upgrades = +3 [[Inventory]] slots
+}}
+{{MilestoneTable
+|name = Control System Development
+|icon = Schematic_Icon_Production.png
+|quantity1 = 200
+|cost1 = Alclad Aluminum Sheet
+|quantity2 = 400
+|cost2 = Aluminum Casing
+|quantity3 = 200
+|cost3 = Computer
+|quantity4 = 1000
+|cost4 = Plastic
+|time = 15:00
+|buildings = {{ItemLink|Blender}}
+|recipes = {{ItemLink|Sulfuric Acid}}, {{ItemLink|Packaged Sulfuric Acid}}, {{ItemLink|Battery}}, {{ItemLink|Radio Control Unit}}, {{ItemLink|Supercomputer}}, {{ItemLink|Assembly Director System}}
+|scanner = {{ItemLink|Sulfur}}
+|tableEnd = 1
+}}
+
+==Tier 8==
+Tier 8 milestones are available starting in '''Phase 4'''.
+
+'''Requirements:''' [[Space Elevator]] Phase 3 completed
+{{MilestoneTable
+|name = Aeronautical Engineering
+|icon = Schematic_Icon_Traversal_Equipment.png
+|quantity1 = 50
+|cost1 = Radio Control Unit
+|quantity2 = 100
+|cost2 = Alclad Aluminum Sheet
+|quantity3 = 200
+|cost3 = Aluminum Casing
+|quantity4 = 300
+|cost4 = Motor
+|time = 10:00
+|buildings = {{ItemLink|Drone Port}}
+|vehicles = {{ItemLink|Drone}}
+}}
+{{MilestoneTable
+|name = Nuclear Power
+|icon = Schematic_Icon_Production_Generator.png
+|quantity1 = 50
+|cost1 = Supercomputer
+|quantity2 = 200
+|cost2 = Heavy Modular Frame
+|quantity3 = 1000
+|cost3 = Cable
+|quantity4 = 2000
+|cost4 = Concrete
+|time = 15:00
+|buildings = {{ItemLink|Nuclear Power Plant}}
+|recipes = {{ItemLink|Encased Uranium Cell}}, {{ItemLink|Electromagnetic Control Rod}}, {{ItemLink|Uranium Fuel Rod}}, {{ItemLink|Magnetic Field Generator}}
+|scanner = {{ItemLink|Uranium}}
+}}
+{{MilestoneTable
+|name = Advanced Aluminum Production
+|icon = Schematic_Icon_Production.png
+|quantity1 = 50
+|cost1 = Radio Control Unit
+|quantity2 = 200
+|cost2 = Aluminum Casing
+|quantity3 = 400
+|cost3 = Alclad Aluminum Sheet
+|quantity4 = 3000
+|cost4 = Wire
+|time = 15:00
+|buildings = {{ItemLink|Resource Well Pressurizer}}, {{ItemLink|Resource Well Extractor}}
+|recipes = {{ItemLink|Empty Fluid Tank}}, {{ItemLink|Packaged Nitrogen Gas}}, {{ItemLink|Heat Sink}}, {{ItemLink|Cooling System}}, {{ItemLink|Fused Modular Frame}}
+|scanner = {{ItemLink|Water}} Well, {{ItemLink|Crude Oil}} Well, {{ItemLink|Nitrogen Gas}} Well
+}}
+{{MilestoneTable
+|name = Leading-edge Production
+|icon = Schematic_Icon_Production_Miner.png
+|quantity1 = 50
+|cost1 = Fused Modular Frame
+|quantity2 = 100
+|cost2 = Supercomputer
+|quantity3 = 1000
+|cost3 = Steel Pipe
+|time = 05:00
+|buildings = {{ItemLink|Miner Mk.3}}
+|recipes = {{ItemLink|Turbo Motor}}, {{ItemLink|Thermal Propulsion Rocket}}
+}}
+{{MilestoneTable
+|name = Particle Enrichment
+|icon = Schematic_Icon_Production_Quantum.png
+|quantity1 = 50
+|cost1 = Turbo Motor
+|quantity2 = 100
+|cost2 = Fused Modular Frame
+|quantity3 = 200
+|cost3 = Cooling System
+|quantity4 = 2500
+|cost4 = Quickwire
+|time = 20:00
+|buildings = {{ItemLink|Particle Accelerator}}
+|recipes = {{ItemLink|Nitric Acid}}, {{ItemLink|Packaged Nitric Acid}}, {{ItemLink|Non-Fissile Uranium}}, {{ItemLink|Plutonium Pellet}},<br>{{ItemLink|Encased Plutonium Cell}}, {{ItemLink|Plutonium Fuel Rod}}, {{ItemLink|Copper Powder}}, {{ItemLink|Pressure Conversion Cube}}, {{ItemLink|Nuclear Pasta}}
+|tableEnd = 1
+}}Note: Unlocking Particle Enrichment Grants access to unlimited [[Hard Drive|Hard drives]] from the [[AWESOME Shop|Awesome Shop]]
+
+==Tier 9==
+Tier 9 milestones are available starting in '''Phase 5'''.
+
+'''Requirements:''' [[Space Elevator]] Phase 4 completed
+{{MilestoneTable
+|name = Matter Conversion
+|icon = Schematic_Icon_Production_Alien.png
+|quantity1 = 100
+|cost1 = Fused Modular Frame
+|quantity2 = 250
+|cost2 = Radio Control Unit
+|quantity3 = 500
+|cost3 = Cooling System
+|time = 15:00
+|buildings = {{ItemLink|Converter}}
+|recipes = {{ItemLink|Diamonds}}, {{ItemLink|Time Crystal}}, {{ItemLink|Ficsite Ingot}}, {{ItemLink|Ficsite Trigon}}, {{ItemLink|Reanimated SAM}}, {{ItemLink|SAM Fluctuator}}, {{ItemLink|Biochemical Sculptor}}
+|scanner={{ItemLink|SAM}}}}
+{{MilestoneTable
+|name = Quantum Encoding
+|icon = Schematic_Icon_Production_Quantum.png
+|quantity1 = 50
+|cost1 = Time Crystal
+|quantity2 = 100
+|cost2 = Ficsite Trigon
+|quantity3 = 200
+|cost3 = Turbo Motor
+|quantity4 = 400
+|cost4 = Supercomputer
+|time = 20:00
+|buildings = {{ItemLink|Quantum Encoder}}
+| recipes = {{ItemLink|Excited Photonic Matter}}, {{ItemLink|Dark Matter Residue}}, {{ItemLink|Dark Matter Crystal}}, {{ItemLink|Superposition Oscillator}}, {{ItemLink|Neural-Quantum Processor}}, {{ItemLink|AI Expansion Server}}
+}}
+{{MilestoneTable
+|name = Ficsit Blueprints Mk.3
+|icon = Schematic_Icon_Blueprints.png
+|quantity1 = 100
+|cost1 = Neural-Quantum Processor
+|quantity2 = 250
+|cost2 = Time Crystal
+|quantity3 = 500
+|cost3 = Ficsite Trigon
+|quantity4 = 500
+|cost4 = Fused Modular Frame
+|time = 15:00
+|buildings = {{ItemLink|Blueprint Designer Mk.3}}
+}}
+{{MilestoneTable
+|name = Spatial Energy Regulation
+|icon = Schematic_Icon_Portal.png
+|quantity1 = 100
+|cost1 = Superposition Oscillator
+|quantity2 = 250
+|cost2 = Turbo Motor
+|quantity3 = 500
+|cost3 = Radio Control Unit
+|quantity4 = 1000
+|cost4 = SAM Fluctuator
+|time = 10:00
+|buildings = {{ItemLink|Main Portal}}, {{ItemLink|Satellite Portal}}
+| recipes = {{ItemLink|Singularity Cell}}, {{ItemLink|Ballistic Warp Drive}}
+}}
+{{MilestoneTable
+|name = Peak Efficiency
+|icon = Schematic_Icon_Logistics_2.png
+|quantity1 = 250
+|cost1 = Time Crystal
+|quantity2 = 250
+|cost2 = Ficsite Trigon
+|quantity3 = 5000
+|cost3 = Alclad Aluminum Sheet
+|quantity4 = 10000
+|cost4 = Iron Plate
+|time = 10:00
+|buildings = {{ItemLink|Conveyor Belt Mk.6}}, {{ItemLink|Conveyor Lift Mk.6}}
+|tableEnd = 1
+|recipes={{ItemLink|Ficsonium}}, {{ItemLink|Ficsonium Fuel Rod}}}}
+
+==Total materials needed==
+* {{ItemLink|Alclad Aluminum Sheet}} (6000)
+* {{ItemLink|Aluminum Casing}} (900)
+* {{ItemLink|Cable}} (4720)
+* {{ItemLink|Computer}} (550)
+* {{ItemLink|Concrete}} (6480)
+* {{ItemLink|Cooling System}} (700)
+* {{ItemLink|Copper Sheet}} (3000)
+* {{ItemLink|Encased Industrial Beam}} (1500)
+* {{ItemLink|Ficsite Trigon}} (850)
+* {{ItemLink|Fused Modular Frame}} (750)
+* {{ItemLink|Gas Filter}} (50)
+* {{ItemLink|Heavy Modular Frame}} (550)
+* {{ItemLink|Iron Plate}} (13055)
+* {{ItemLink|Iron Rod}} (1775)
+* {{ItemLink|Modular Frame}} (1075)
+* {{ItemLink|Motor}} (1450)
+* {{ItemLink|Neural-Quantum Processor}} (100)
+* {{ItemLink|Plastic}} (2800)
+* {{ItemLink|Quickwire}} (3000)
+* {{ItemLink|Radio Control Unit}} (850)
+* {{ItemLink|Reinforced Iron Plate}} (1300)
+* {{ItemLink|Rotor}} (550)
+* {{ItemLink|Rubber}} (2300)
+* {{ItemLink|SAM Fluctuator}} (1000)
+* {{ItemLink|Screw}} (1300)
+* {{ItemLink|Steel Beam}} (1900)
+* {{ItemLink|Steel Pipe}} (3500)
+* {{ItemLink|Supercomputer}} (550)
+* {{ItemLink|Superposition Oscillator}} (100)
+* {{ItemLink|Time Crystal}} (550)
+* {{ItemLink|Turbo Motor}} (500)
+* {{ItemLink|Wire}} (8720)
+
+==Achievements==
+{{Achievement|COMPLETE_ONBOARDING}}
+{{Achievement|UNLOCK_ALL_MILESTONES}}
+
+==Narrative==
+{{Spoilerbox|
+
+While completing individual milestones, for Tiers 0 through 9, the player will hear [[ADA]] speak.
+* View [[Story#Onboarding|Story Onboarding]] to read and hear individual Tier 0 Onboarding ADA messages.
+* View [[Story#Milestones|Story Milestones]] to read and hear individual ADA messages for Tiers 1 through 9.
+}}
+
+==Gallery==
+<gallery>
+File:Hub Internal UI.png|The UI of the HUB Terminal, displaying selected tier, milestone, rewards, and milestone cost. The option grayed out as the milestone is completed.
+</gallery>
+
+==History==
+{{HistoryMissing|incomplete}}
+* [[Patch 1.0.0.5]]: Fixed "Efficiency first" (Unlock All Milestones) [[Achievements|achievement]] not unlocking correctly on Epic Games Launcher
+* [[Patch 1.0]]:
+** Made Tier 9 available
+** Remade the HUB Terminal UI
+** Some milestone costs between Tier 3 and 8 have been slightly adjusted to improve progression flow
+** Added the 'Petroleum Power' milestone to Tier 5, and moved the [[Fuel-Powered Generator]] and [[Industrial Fluid Buffer]] there
+*** The Fuel-Powered Generator no longer requires [[Heavy Modular Frame]]s or [[Computer]]s to unlock
+** Added the 'Railway Signalling' milestone to Tier 6, and moved [[Block Signal|Block]] and [[Path Signal|Path Signals]] there
+** Added the 'FICSIT Blueprints Mk.2' milestone to Tier 6
+** Added the 'Control System Development' milestone to Tier 7, and moved the [[Blender]], [[Sulfuric Acid]], [[Packaged Sulfuric Acid]], [[Battery]], [[Supercomputer]], [[Radio Control Unit]] and [[Assembly Director System]] there
+** Moved the 'Industrial Manufacturing' milestone from Tier 5 to Tier 6
+** Moved the 'Aeronautical Engineering' milestone from Tier 7 to Tier 8
+** Moved the [[Truck]] unlock to 'Logistics Mk.4' in Tier 5
+** Changed the 'Jetpack' milestone in Tier 5 to allow it to be unlocked without [[Crude Oil]] resources
+** Changed the 'Monorail Trains' milestone in Tier 6 to allow it to be unlocked without Heavy Modular Frames or Computers
+** Removed the 'Gas Mask' Milestone
+** Renamed 'Alternative Fluid Transport' to 'Fluid Packaging'
+* [[Patch 0.8.0.3]]: Fixed the FICSIT Blueprints milestone not showing the Blueprint Designer in the unlock list
+* [[Patch 0.8.0.0]]: 
+** Added a new Tier 4 milestone 'Expanded Power Infrastructure'
+** Moved the Power Storage unlock to Tier 4: 'Expanded Power Infrastructure'
+** Added the Power Tower and Power Tower Platform to Tier 4: Expanded Power Infrastructure
+** Renamed the Tier 6 milestone previously named 'Expanded Power Infrastructure' to 'Logistics Mk.4'
+* [[Patch 0.6.0.0]]:
+** The [[Map]] is now unlocked in the 'Field Research' milestone in Tier 1
+** Updated the lock icon in the milestone menu
+** Added a new icon used in character related unlocks such as additional hand/equipment slots
+* [[Patch 0.5.0.0]]: Color Cartridges have now been moved to Tier 2 under the Resource Sink Bonus Program milestone, together with the AWESOME Shop and [[Customizer]]
+* [[Patch 0.4.0.11]]:
+** Moved the 'Hover Pack' milestone from Tier 8 to Tier 7
+** Removed Computers from the unlock cost for Tier 6: Jetpack
+* [[Patch 0.4.0.0]]:
+** Made Tier 8 available
+** Changed several milestones, including their tier placement, in previous tiers
+* [[Patch 0.3.6.3]]:
+** Added a new milestone to Tier 6: 'Pipeline Engineering Mk.2'
+** Moved [[Pipelines|Pipeline Mk.2]] and [[Pipeline Pump|Pump Mk.2]] to Tier 6: Pipeline Engineering Mk.2
+** Moved [[Valve]] from Tier 6: Expanded Power Infrastructure to Tier 5: Oil Processing
+* [[Patch 0.3.6]]: 
+** Added a new milestone to Tier 5: 'Alternate Fluid Transport'
+** Added [[Pipelines|Pipeline Mk.2]] and [[Pipeline Pump|Pump Mk.2]] to Tier 7: Bauxite Refinement
+** Added Valve to Tier 6: Expanded Power Infrastructure
+* [[Patch 0.3]]:
+** Tweaked Onboarding and milestone costs
+** Removed milestones for unlocking alternative recipes from Hard Drives, which are now unlocked instantly after being selected
+* [[Patch 0.1.14]]: Made Tier 7 available, including Nuclear Power and Bayer Process (aluminum manufacturing)
+* [[Patch Closed Alpha 5]]: Made Tier 6 milestones unlockable
+* [[Patch Closed Alpha 3]]: Made Tier 5 milestones unlockable
+* [[Early game development]]: Implemented schematics in a system called "Tech Onion"
+
+{{PioneerNav}}
+
+[[Category:Gameplay mechanics]]
+
+[[fr:Jalon]]
+[[ko:Milestones/ko]]

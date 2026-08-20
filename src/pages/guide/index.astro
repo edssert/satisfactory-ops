@@ -277,6 +277,75 @@ const ironFlow = (() => {
   };
 })();
 
+/*
+ * ── 회전자 · 지능형 도금판
+ *
+ * 이 절을 쓰면서 두 번 틀렸다. 기록해 둔다:
+ *   1) "조립기가 100%로 도는 게 깔끔하다"며 도금판 4/분을 잡아 조립기를 2대 세웠다.
+ *      기계 가동률을 목표로 착각한 것이다. 목표는 납품이지 가동률이 아니다.
+ *   2) "페이즈 1은 일회성이니 작게 지어라"라고 했는데, 페이즈 2가 같은 것을 1,000개 요구한다.
+ *      20배다. 그리고 보강된 철판은 벨트 Mk.2·조립기·석탄 발전기가 계속 먹으므로 여유가 아니다.
+ */
+const rotorRec = recipes.find((r) => r.id === 'Recipe_Rotor_C')!;
+const smartRec = recipes.find((r) => r.id === 'Recipe_SpaceElevatorPart_1_C')!;
+const screwRec = recipes.find((r) => r.id === 'Recipe_Screw_C')!;
+const rodRec = recipes.find((r) => r.id === 'Recipe_IronRod_C')!;
+const ripRec2 = recipes.find((r) => r.id === 'Recipe_IronPlateReinforced_C')!;
+
+const per = (rec: Recipe, itemId: string) =>
+  (rec.ingredients.find((g) => g.item === itemId)?.perMinute ?? 0) / rec.products[0]!.perMinute;
+
+/** 도금판 N개를 만들 때 드는 나사 — 페이즈 1과 2의 격차를 보여준다 */
+const screwsFor = (smartCount: number) => {
+  const rotors = smartCount * per(smartRec, 'Desc_Rotor_C');
+  const rips = smartCount * per(smartRec, 'Desc_IronPlateReinforced_C');
+  return {
+    rotors,
+    rips,
+    screws: rotors * per(rotorRec, 'Desc_IronScrew_C') + rips * per(ripRec2, 'Desc_IronScrew_C'),
+  };
+};
+const PHASE1 = 50;
+const PHASE2 = 1000;
+const p1 = screwsFor(PHASE1);
+const p2 = screwsFor(PHASE2);
+const screwPerConstructor = screwRec.products[0]!.perMinute;
+
+/** 보강된 철판을 먹는 초반 건물 — "여유분"이 아니라는 근거 */
+const ripEaters = buildings
+  .filter((b) => (b.unlockTier ?? 9) <= 3 && b.buildCost?.some((c) => c.item === 'Desc_IronPlateReinforced_C'))
+  .map((b) => ({
+    ko: b.ko,
+    tier: b.unlockTier ?? 0,
+    amount: b.buildCost!.find((c) => c.item === 'Desc_IronPlateReinforced_C')!.amount,
+  }))
+  .sort((a, b) => b.amount - a.amount)
+  .slice(0, 6);
+
+/** 회전자 2/분 최소 구성 — 조립기 1대를 50%로 */
+const rotorFlow = (() => {
+  const RATE = 2;
+  const rodDirect = RATE * per(rotorRec, 'Desc_IronRod_C');
+  const screwNeed = RATE * per(rotorRec, 'Desc_IronScrew_C');
+  const rodForScrew = (screwNeed / screwRec.products[0]!.perMinute) * screwRec.ingredients[0]!.perMinute;
+  const rodTotal = rodDirect + rodForScrew;
+  const ingotNeed = (rodTotal / rodRec.products[0]!.perMinute) * rodRec.ingredients[0]!.perMinute;
+  const smelt = recipes.find((r) => r.id === 'Recipe_IngotIron_C')!;
+  return {
+    rate: RATE,
+    rodDirect,
+    rodForScrew,
+    rodTotal,
+    screwNeed,
+    mRod: rodTotal / rodRec.products[0]!.perMinute,
+    mScrew: screwNeed / screwRec.products[0]!.perMinute,
+    mRotor: RATE / rotorRec.products[0]!.perMinute,
+    mSmelt: ingotNeed / smelt.products[0]!.perMinute,
+    ore: (ingotNeed / smelt.products[0]!.perMinute) * smelt.ingredients[0]!.perMinute,
+    ingot: ingotNeed,
+  };
+})();
+
 const fmt = (n: number) => (Number.isInteger(n) ? String(n) : String(Math.round(n * 100) / 100));
 const recipeOf = (id: string) => recipes.find((r) => r.id === id);
 const ripRecipe = recipeOf('Recipe_IronPlateReinforced_C')!;
@@ -650,7 +719,7 @@ const out = (r: Recipe) => r.products.map((g) => `${nameOf(g.item).ko} ${g.perMi
 
     <section class="section">
       <p class="section-label"><span class="num">05</span> 회전자 · 지능형 도금판</p>
-      <h2>페이즈 1의 벽은 나사입니다</h2>
+      <h2>여기서 나사가 벽이 됩니다</h2>
 
       <p class="prose">
         <strong>회전자</strong>: {ing(rotorRecipe)} → {out(rotorRecipe)}<br />
@@ -658,51 +727,124 @@ const out = (r: Recipe) => r.products.map((g) => `${nameOf(g.item).ko} ${g.perMi
       </p>
 
       <p class="prose">
-        회전자 하나에 나사가 <span class="n">
-          {rotorRecipe.ingredients.find((g) => g.item === 'Desc_IronScrew_C')?.perMinute}
-        </span>/분 들어갑니다. 보강된 철판의 <span class="n">
-          {ripRecipe.ingredients.find((g) => g.item === 'Desc_IronScrew_C')?.perMinute}
-        </span>/분보다 큽니다. <strong>초반에 처음 만나는 진짜 병목이 나사입니다.</strong>
+        회전자 하나에 나사가 <span class="n">{per(rotorRec, 'Desc_IronScrew_C')}</span>개,
+        보강된 철판 하나에 <span class="n">{per(ripRec2, 'Desc_IronScrew_C')}</span>개 들어갑니다.
+        도금판은 그 <strong>둘 다</strong>를 먹습니다.
       </p>
 
-      {smartChain && (
-        <div class="scroll-x">
-          <table class="table">
-            <caption class="footnote" style="text-align:left; padding-bottom: var(--s2)">
-              지능형 도금판 5/분을 밑에서부터 새로 짓는 경우
-            </caption>
-            <thead>
-              <tr><th>만드는 것</th><th class="n">필요량</th><th>기계</th><th class="n">대수</th></tr>
-            </thead>
-            <tbody>
-              {smartChain.steps.map((s) => (
-                <tr class={s.ko === '나사' ? 'total-row' : undefined}>
-                  <td>{s.ko}</td>
-                  <td class="n">{fmt(Math.round(s.rate * 100) / 100)}/분</td>
-                  <td>{s.machineKo}</td>
-                  <td class="n">{fmt(Math.round(s.machines * 100) / 100)}</td>
-                </tr>
-              ))}
-              <tr class="total-row">
-                <td colspan="3">철 광석</td>
-                <td class="n">{fmt(smartChain.ore)}/분</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      )}
+      <div class="scroll-x">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>납품</th>
+              <th class="n">도금판</th>
+              <th class="n">회전자</th>
+              <th class="n">보강된 철판</th>
+              <th class="n">나사</th>
+              <th class="n">제작기 1대로</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>페이즈 1</td>
+              <td class="n">{PHASE1}개</td>
+              <td class="n">{fmt(p1.rotors)}개</td>
+              <td class="n">{fmt(p1.rips)}개</td>
+              <td class="n">{Math.round(p1.screws).toLocaleString()}개</td>
+              <td class="n">{Math.round(p1.screws / screwPerConstructor)}분</td>
+            </tr>
+            <tr class="total-row">
+              <td>페이즈 2</td>
+              <td class="n">{PHASE2.toLocaleString()}개</td>
+              <td class="n">{fmt(p2.rotors).toLocaleString()}개</td>
+              <td class="n">{fmt(p2.rips).toLocaleString()}개</td>
+              <td class="n">{Math.round(p2.screws).toLocaleString()}개</td>
+              <td class="n">{(p2.screws / screwPerConstructor / 60).toFixed(1)}시간</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <div class="note" style="margin-top: var(--s5)">
-        <span class="note-title">페이즈 1은 지능형 도금판 {PHASE1_SMART}개입니다</span>
+        <span class="note-title">페이즈 2는 20배입니다 — 일회성이 아닙니다</span>
         <p>
-          도금판 <span class="n">2</span>/분이면 <span class="n">{PHASE1_SMART / 2}</span>분,
-          <span class="n">5</span>/분이면 <span class="n">{PHASE1_SMART / 5}</span>분입니다.
-          급하지 않다면 작게 지어 두고 다른 걸 하는 편이 낫습니다 — 어차피 다음 관문인
-          <strong>페이즈 2가 20배</strong>라, 페이즈 1을 빨리 끝내는 것 자체는 큰 이득이 아닙니다.
+          페이즈 1은 도금판 <span class="n">{PHASE1}</span>개, 페이즈 2는
+          <span class="n">{PHASE2.toLocaleString()}</span>개입니다. 나사로 환산하면
+          <span class="n">{Math.round(p1.screws).toLocaleString()}</span>개 →
+          <span class="n">{Math.round(p2.screws).toLocaleString()}</span>개.
+          표준 레시피 제작기 한 대로는 <strong>{(p2.screws / screwPerConstructor / 60).toFixed(1)}시간</strong>입니다.
         </p>
-        <p class="muted">
-          페이즈 요구량은 <code>docs/research/progression.md</code> 에서 확인한 값입니다.
-          커뮤니티 도구 중 일부가 구버전 수치를 그대로 두고 있어 서로 다를 수 있습니다.
+        <p>
+          그래서 지금 <strong>작게 짓되 옆자리를 비워 두세요.</strong> 페이즈 2에서 같은 모듈을
+          복제해 붙이는 편이, 돌아가는 라인을 뜯어 늘리는 것보다 항상 쉽습니다.
+        </p>
+        <p>
+          그리고 진짜 대비는 규모가 아니라 <strong>대체 레시피</strong>입니다 —
+          <strong>용접된 철판</strong>(보강된 철판에서 나사를 아예 없앰)과
+          <strong>강철 나사</strong>(나사당 철광석 −79%)가 최우선으로 꼽히는 이유가 이 표입니다.
+        </p>
+      </div>
+
+      <h3 style="margin-top: var(--s8)">최소 구성 — 조립기 2대</h3>
+      <p class="prose">
+        페이즈 1을 채우는 데 필요한 것은 도금판 <span class="n">2</span>/분이면 충분합니다
+        (<span class="n">{PHASE1 / 2}</span>분). 도금판 조립기 1대가 정확히 2/분을 내고,
+        회전자는 조립기 1대를 <span class="n">50</span>%로 돌리면 됩니다.
+      </p>
+
+      <FlowChart
+        input={{ itemKo: item('Desc_OreIron_C').ko, itemId: 'Desc_OreIron_C', perMinute: rotorFlow.ore }}
+        nodes={[
+          { id: 'sm', machineKo: smelter.ko, machineId: smelter.id, count: 1, clock: rotorFlow.mSmelt * 100, layer: 0 },
+          { id: 'rod', machineKo: constructor.ko, machineId: constructor.id, count: 2, clock: (rotorFlow.mRod / 2) * 100, layer: 1 },
+          { id: 'scr', machineKo: constructor.ko, machineId: constructor.id, count: 2, clock: (rotorFlow.mScrew / 2) * 100, layer: 2 },
+          { id: 'rot', machineKo: assembler.ko, machineId: assembler.id, count: 1, clock: rotorFlow.mRotor * 100, layer: 3 },
+          {
+            id: 'sp',
+            machineKo: assembler.ko,
+            machineId: assembler.id,
+            count: 1,
+            clock: 100,
+            layer: 4,
+            out: { itemKo: item('Desc_SpaceElevatorPart_1_C').ko, itemId: 'Desc_SpaceElevatorPart_1_C', perMinute: 2 },
+          },
+        ]}
+        edges={[
+          { from: 'sm', to: 'rod', itemKo: item('Desc_IronIngot_C').ko, itemId: 'Desc_IronIngot_C', perMinute: rotorFlow.ingot },
+          { from: 'rod', to: 'scr', itemKo: item('Desc_IronRod_C').ko, itemId: 'Desc_IronRod_C', perMinute: rotorFlow.rodForScrew },
+          { from: 'rod', to: 'rot', itemKo: item('Desc_IronRod_C').ko, itemId: 'Desc_IronRod_C', perMinute: rotorFlow.rodDirect },
+          { from: 'scr', to: 'rot', itemKo: item('Desc_IronScrew_C').ko, itemId: 'Desc_IronScrew_C', perMinute: rotorFlow.screwNeed },
+          { from: 'rot', to: 'sp', itemKo: item('Desc_Rotor_C').ko, itemId: 'Desc_Rotor_C', perMinute: 2 },
+        ]}
+        index={3}
+        caption={`철광석 ${fmt(rotorFlow.ore)}/분으로 지능형 도금판 2/분. 보강된 철판 2/분은 기존 라인에서 끌어옵니다.`}
+      />
+
+      <p class="prose">
+        철봉이 <strong>두 갈래</strong>로 갈라집니다 —
+        <span class="n">{fmt(rotorFlow.rodDirect)}</span>/분은 회전자로 직접,
+        <span class="n">{fmt(rotorFlow.rodForScrew)}</span>/분은 나사를 거쳐서 갑니다.
+        회전자가 먹는 나사가 철봉보다 많기 때문입니다.
+      </p>
+
+      <div class="note">
+        <span class="note-title">보강된 철판 5/분은 여유가 아닙니다</span>
+        <p>
+          도금판이 <span class="n">2</span>/분을 먹으면 3/분이 남는 것처럼 보이지만, 앞으로 지을
+          것들이 계속 먹습니다:
+        </p>
+        <div class="kv">
+          {ripEaters.map((e) => (
+            <div>
+              <span class="k">{e.ko} <span class="muted">T{e.tier}</span></span>
+              <span class="v n">{e.amount}개</span>
+            </div>
+          ))}
+        </div>
+        <p class="footnote">
+          특히 <strong>{beltMk2.ko}는 한 개당 보강된 철판 1개</strong>입니다. 벨트를 길게 깔면
+          그만큼 나갑니다. 티어 3까지 보강된 철판을 쓰는 건물이
+          <span class="n">{buildings.filter((b) => (b.unlockTier ?? 9) <= 3 && b.buildCost?.some((c) => c.item === 'Desc_IronPlateReinforced_C')).length}</span>개입니다.
         </p>
       </div>
     </section>

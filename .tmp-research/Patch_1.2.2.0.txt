@@ -1,0 +1,105 @@
+{{patch
+|stable=1
+|ex=1
+|build=488068
+|date=2026-04-28
+|discord=https://discord.com/channels/370472939054956546/557603412565426196/1498742297670717542
+|reddit=1sy8pjl
+|steam=https://store.steampowered.com/news/app/526870/view/512989355492508995
+}}
+
+==Intro==
+Hi Pioneers!
+
+Hello again everyone, it’s been a while since the last patch but we have a lot of fixes coming in this time around, this should cover the majority of issues and crashes we’ve seen so far so hopefully this will make the 1.2 Experimental a lot more stable
+
+If the 1.2 Experience has gotten better or if we have introduced any new issues please let us know over at our QA Site https://questions.satisfactorygame.com/ Your posts are extremely helpful for us
+
+If you heard about the 1.2 Update on Experimental and are interested trying it out, you can do so by following the instructions below:
+
+And remember, you can BACKUP YOUR SAVE before trying it to avoid losing any of your progress
+
+You can backup your save & blueprints by copying the folders in:
+
+<code>%LocalAppData%\FactoryGame\Saved\SaveGames-YOUR ID-</code>
+
+<code>%LocalAppData%\FactoryGame\Saved\SaveGames\blueprints</code>
+
+To access the Experimental version on Steam:
+Right click Satisfactory on your ''library > Properties > Game Versions & Betas > experimental''
+
+Then exit this menu and the experimental version will start downloading for you
+
+To access the Experimental version on Epic:
+In your Library, search for “Satisfactory Experimental” and install it, it’s a separate entry from the default version so you need to download it individually
+
+See you all next time, thank you so much for your continuous support ❤️
+
+==Bug Fixes==
+* Fixed rare [[Dedicated servers]] crash related to [[Conveyor Lifts|Conveyor Left]] and [[Pipelines|Pipeline]] connections
+* Fixed distorted audio which could happen when joining a [[Multiplayer|session]] that has ongoing [[Weather|rain weather]] states
+* Fixed a crash related to Clients joining late game [[multiplayer|multiplayer sessions]]
+* Fixed custom [[Map|map]] markers disappearing in some scenarios
+* Fixed custom map markers from old saves being wiped when being loaded into 1.2
+* Fixed crash due to [[Vehicles|path nodes]] having invalid connections when loading a save, either from save editing or invalid blueprints
+* Fixed performance degradation when dragging a long [[Vehicle Paths|vehicle path]] segment
+* Fixed a crash on load related to incorrect [[Save files|SubObject properties]] which would result in a crash on load for some saves
+* Fixed previously opened [[Crash Site]]s that require Power to be opened respawning alongside their contents in 1.2
+* Fixed several crashes related to [[Railway]]s that might have been preventing certain saves from being loaded
+* Fixed several Crashes related to [[Blueprint]] holograms
+* Crash fixes for issues when [[Build_Gun#Dismantle_mode|Dismantling]] in certain scenarios
+* Fixed FICSIT Material not being available in the [[Customizer]]
+* Fixed issues with hologram curvature for [[Conveyor Belts]]
+* Fixed issues with [[Conveyor_Lifts#Vertical_Splitter_and_Vertical_Merger|Conveyor Lift Splitters/Mergers]], Removed step placement from lift attachments, so now it behaves the same as with belts, Logic for guideline snapping was changed to be similar to belts one. Which means - no snapping has occurred by default as it was before (except for endings). When pressing guideline snapping - it snaps vertically towards the guidelines
+* Fixed conveyor lifts not getting removed when using [[Blueprint#Dismantle_mode|Blueprint mass dismantle]]
+* Fixed lifts snapped at certain angles having misalignments or other issues
+* Fixed incorrect UI prompts when interacting with a [[Portable Miner]] on a Crude Oil Node
+* Potential fix for [[Radiation]] persisting after sorting the inventory and then removing a radioactive resource from it
+* Fixed [[Conveyor Belts|conveyor belt]] customization disappearing after using a [[Splitter]] or [[Merger]]
+* Fixed sometimes being granted additional hand and [[Inventory|inventory slots]] when skipping the intro sequence which would later result in MAM/Hard Drive unlocks that interact with Hand or Inventory slots not working properly
+* Fixed previously built [[Railroad Switch Control|Railroad Switches]] not dismantling properly
+* Potential fix for stack sizes becoming 100 sometimes when they shouldn’t
+* Fixed invalid conveyor lift hologram setups that could be built by [[Build_Gun#Hologram_lock_and_nudge_mode|nudging]]
+* Fixed customizer pattern alignment issues on foundations
+
+==[[Dedicated Servers]]==
+* Fixed Dedicated Server crashing when a specified port is out of range
+* Fix in Server API when a socket cannot be allocated
+* Fixed a crash on Dedicated Servers that don’t have local player controllers in the Sign subsystem
+* Fixed incorrect menus showing up for weather in the Dedicated Server settings
+
+==UI==
+* Fixed issue where opening/closing the Hotbar radial menu with [[Controller]] would cause the [[HUD]] to fade in and out
+* Fixed issue where hiding the HUD in Build Mode would hide the entire HUD instead of only the Build Mode HUD
+* Fixed an issue with navigation when using [[Settings#Controls|Dynamic input mode]] in a building while using the cost slot without having any recipes selected
+* Fixed focus loss issues in the [[Game_menus|pause menu]] when using Dynamic input
+* Fixed foliage auto pickup UI being stuck after using the [[Chainsaw]] on a pickupable item
+* Fixed issue where the [[To-Do List]] would get squished sometimes if there are only notes and no recipes
+* Fixed Remove prompt overlapping in the Select Color UI in the [[Personnel Elevator]]
+* Fixed issues with Dynamic input when playing [[FICSIT Productive Packer Deluxe|Productive Packager Deluxe]]
+* Fixed several issues with incorrect button hints when switching between Mouse / Keyboard (MKB) and Controller with Dynamic input enabled
+* Fixed incorrect scaling for the [[Map]] and Map Markers on [[Controller#Steam_Deck|Steam Deck]]
+
+==[[Controller]]==
+* Fixed issue where Controller input wouldn’t work after using the Search function on [[Programmable Splitter]]
+* Fixed issue with focus loss after entering map coordinates in the Vehicle UI
+* Fixed issue where focus would stay stuck on the map regardless of which part of the Vehicle UI was being used
+* Added missing functionality to sort [[Train Station]] inventories when using a controller
+
+==Tech art==
+* Fixed issue where the [[Weather]] states would stack and play on top of each other in [[Multiplayer]]
+* Performance improvements to [[Electric Locomotive|Locomotives]] by adjusting their light components
+* Fixed [[Photo Mode]] Fog Density value not matching the game settings on startup, new behavior makes it work exactly like Zoom value, it will match whatever the player settings are when entering Photo Mode and will not be "stored"
+* Significant improvements to LODs on [[Railway|Train Tracks]] and enabled support for [[Customizer#Finishes|Paint finishes]] for them
+* Several optimizations for [[Signs]]
+* Fixed [[Geothermal Generator|Geothermal (Generator)]] paint finishes issues
+* Fixed build effect issues on [[Pipelines|Clean Pipelines]]
+
+==Localization==
+* Fixed issues with missing descriptions in most languages
+* Fixed several instances of untranslatable text
+* Imported latest community translations, updated completion rates
+
+==Modding==
+* Adding RainRendering headers to community resources
+{{PatchesNav}}

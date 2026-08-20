@@ -1,0 +1,342 @@
+[[File:Update1.0 Sign Logo.png|400px]]
+
+{{Patch
+|stable=1
+|build=365306
+|date=2024-09-10
+|discord=https://discord.com/channels/370472939054956546/557603412565426196/1283084387826798663
+|reddit=1fdjz13
+|steam=https://steamcommunity.com/games/526870/announcements/detail/4567301015235883040
+|website=https://www.satisfactorygame.com/updates/1-0
+|text=This patch marks Satisfactory's release out of Early Access.
+}}
+
+{{Tocright}}
+
+== Intro ==
+Hi Pioneers!
+
+Our Early Access journey has come to an end, and what a journey it’s been, after more than 5 years of adding features, fixing bugs, and improving the game with your feedback, we are happy to finally release the 1.0 version of Satisfactory!
+
+We are sending 1.0 off with MANY new features and changes, so grab some snacks and get ready to go through the patch notes while you are downloading the update 🙂
+
+As always, if you encounter some issues with this new release, please let us know over at our QA Site https://questions.satisfactorygame.com/ We always appreciate your feedback, and we’ll try to address any new issues ASAP.
+
+Thank you so much to all of you for your support so far, it has been invaluable for us ❤️
+
+
+== [[Tier 9]] ==
+The final Phase of Project Assembly (Phase 5) is now available, meaning players can finally complete Project Assembly and Save the Day! (and finish the game)
+
+Phase 4 now grants access to Tier 9, featuring 5 new end game Milestones with new buildings, resources, production lines, and crazy sci-fi features that push [[FICSIT Inc.|FICSIT]] technology to the limit!
+
+If you would like to see the new additions in motion, please check out our teaser video on them:
+
+https://youtu.be/KBgxQh5jEq4
+
+There are new buildings, production lines, and features to play around with, these include:
+
+
+=== [[Converter]] ===
+
+This building utilizes Strange Alien Matter, aka S.A.M., to enable matter conversion and transmutation. It can be used to convert one raw resource into another, for example Limestone into Iron and Copper into Caterium, allowing players to put resource nodes to good use that might have been neglected otherwise.
+
+It is also used for various processes essential for the development of other Tier 9 technology, such as the production of the synthetic metal Ficsite and the generation of Excited Photonic Matter.
+
+
+=== [[Quantum Encoder]] ===
+The most high-tech production building in the game. The Quantum Encoder is used to produce the most complex parts, down to the quantum level, such as Superposition Oscillators   and Neural-Quantum Processors.
+
+The Quantum Encoder requires Excited Photonic Matter to operate and produces Dark Matter Residue as a byproduct.
+
+
+=== [[Conveyor Belts#Mk.6-0|Conveyor Belts/Lifts Mk.6]] ===
+This is the final and fastest conveyor belt in the game, it can transport up to 1200 items per minute (up from 780 from Mk.5).
+
+This should be particularly exciting for those who want to utilize their Pure Node Overclocked Mk.3 Miners to their full capacity without being bottlenecked by Mk.5 Belts, or if you just like seeing items be transported as fast as possible.
+
+
+=== [[Blueprint Designer]] Mk.2 & Mk.3 ===
+You wanted bigger Blueprint Designers... so here they are. Since Update 7 the Blueprint Designer has been available in Tier 4, with a size of 4x4 foundations (or 32x32x32 meters).
+
+With Satisfactory 1.0, you will also be able to unlock the Blueprint Designer Mk.2 (5x5 or 40m3) in Tier 6 and the Blueprint Designer Mk.3 (6x6 or 48m3) in Tier 9.
+
+The size increases greatly expand the use cases and options available with Blueprints.
+
+
+=== [[Ficsonium]] ===
+Ficsonium is a new nuclear resource unlocked in Tier 9 that can be used to power Nuclear Power Plants. 
+
+It uses Plutonium Waste for its production, and unlike Uranium and Plutonium it does not generate its own waste. 
+
+This means you will finally be able to get rid of all your nuclear waste, at the cost of setting up this highly demanding and extremely radioactive production line.
+
+
+=== [[Portal|Portals]] ===
+Portals can be used by pioneers to allow near-instant travel between factories, but space-time travel does come with a cost, namely in the form of Singularity Cells and massive amounts of power.
+
+== [[MAM]] ==
+This time bringing a long-awaited use to the [[Mercer Sphere|Mercer Spheres]], [[Somersloop|Somersloops]] and [[SAM]]! With the new [[MAM#Alien Technology|Alien Technology]] research in the MAM, you can unlock new goodies such as:
+
+
+=== [[Dimensional Depot]] ===
+A favorite feature of ours, the Dimensional Depot allows you to use alien technology to upload resources to another dimension, which allows resources to be used at any time while building and crafting!
+Both Mercer Spheres and S.A.M. are required to unlock and build the Dimensional Depot, as well as upgrade its storage and upload speed capacities in the MAM.
+
+
+=== [[Alien Power Augmenter]] ===
+This building uses Somersloops to amplify the power produced on a power grid. The more total power that is being produced on the grid, the more power will be generated by the Power Augmenter.
+You can also boost this further with Alien Power Matrices created with the Quantum Encoder.
+
+
+=== [[Production Amplifier]] ===
+As an alternative to the Power Augmenter, Somersloops can also be used to boost production by inserting them into a production building. 
+
+This greatly boosts the resource output of that building without requiring any additional resource supply, but instead significantly increasing the power consumption.
+
+
+== [[HUB]] ==
+The HUB has now gotten a finalized version. In here you will be able to find a much cozier place to relax after some factory building (and also do your business).
+
+It also contains a brand-new locker you can interact with to finally access some highly requested features:
+
+
+=== [[Pioneer#Customization|Pioneer Cosmetics]] ===
+You can now change the appearance of your pioneer to your liking. These changes all work in Multiplayer/Dedicated Servers so you can give your own personal touch to your multiplayer sessions.
+
+
+=== Helmet & Buildgun skins and trinkets ===
+Several helmet options are now available to customize your pioneer’s appearance, along with different skins for the Build Gun and even various Build Gun trinket choices.
+
+
+=== Character coloring ===
+Your pioneer’s colors can now be fully customized, allowing your suit to look exactly the way you want it.
+These changes apply to equipment as well!
+
+
+== Factory cosmetics ==
+Of course, we didn’t forget about the looks of the factories themselves, so now you have a new set of buildings and new customizer options to really make your factory shine. They can all be found in the AWESOME SHOP.
+
+
+=== [[AWESOME Shop]] ===
+====[[AWESOME_Shop#Walls|Steel Framed Windows]]====
+This pack in the AWESOME Shop now includes 3 new types of windows in addition to the existing ones:
+* Honeycomb Frame Window
+* Triple Frame Window
+* Angled Frame Window
+
+
+====[[AWESOME_Shop#Architecture|Construction Fences]]====
+This new pack in the AWESOME Shop includes:
+* Tarp Construction Fence
+* Construction Fence
+
+
+====[[AWESOME_Shop#Architecture|Metal Barriers]]====
+This new pack in the AWESOME Shop includes:
+* Low Barrier
+* High Barrier
+
+
+====[[AWESOME_Shop#Customizer|Paint Finishes]]====
+These are purchased individually 
+* Unpainted
+* Copper
+* Chrome
+* Carbon Steel
+* Caterium
+
+
+== Balancing ==
+===[[Milestones|Milestone]] changes===
+* The [[Jetpack]] Milestone can now be unlocked at the start of [[Tier 5]], no longer requiring [[Crude Oil|Oil]] resources.
+* [[Electric Locomotive|Trains]] can now be unlocked without needing Heavy Modular Frames or Computers.
+* [[Train Signals]] now have their own Milestone.
+* The [[Fuel-Powered Generator]] now has its own Milestone and no longer requires [[Heavy Modular Frame]]s or [[Computer]]s to unlock.
+* Some Milestone costs between Tier 3 and 8 have been slightly adjusted to improve progression flow.
+* Control System Development has been added to Tier 7, featuring the [[Blender]], [[Radio Control Unit]], and [[Supercomputer]].
+
+
+===[[Space Elevator|Phase 4]] costs===
+* The cost for unlocking Phase 4 has been reduced, hopefully allowing pioneers to reach Phase 5 before the heat death of the universe.
+
+
+===Recipe changes===
+* [[Computer]]s no longer require screws and the cost of the remaining three components has been reduced, simplifying initial Computer production.
+** All alternative Computer recipes (and all recipes using computers) were adjusted to reflect the base recipe changes.
+* The [[Encased Industrial Beam]] now uses fewer [[Steel Beam]]s but more [[Concrete]].
+* The [[Heavy Modular Frame]] recipe got its number shuffled a bit to make for a cleaner production line.
+* The [[Magnetic Field Generator]] no longer requires [[Batteries]] and is now produced in the [[Assembler]] instead of the [[Manufacturer]].
+
+
+===New parts and recipes===
+* [[SAM|Strange Alien Matter]], [[Reanimated SAM]], and [[SAM Fluctuator]]s are now available via MAM [[MAM#Alien Technology|Alien Technology]] research and Tier 9.
+* Tier 9 introduces 10 new production parts, including [[Diamond]]s, [[Superposition Oscillator]], and [[Ficsonium]].
+* Three new [[Category:Project Assembly parts|Project Parts]] are also available in Tier 9 to help complete [[Space Elevator|Project Assembly]].
+* [[Rocket Fuel]] and [[Ionized Fuel]] are new fuel types available in the MAM.
+* [[MAM#Power Slugs|Synthetic Power Shards]] allow the creation and automation of [[Power Shard]]s, without the need for grinding innocent lifeforms into crystals. This recipe can be unlocked in the MAM after reaching Tier 9.
+
+
+====New [[Hard Drive|alternative recipes]]====
+* New alternative recipes are available for various Tier 9 parts.
+* Several underperforming alternative recipes have been adjusted for better viability.
+* Several new alternative recipes are available for underrepresented parts.
+* Various alternative recipes were added and rebalanced for raw resource refinements.
+* The Uranium Fuel Unit alternative recipe ow requires [[Rotor]]s instead of [[Beacon]]s, which have been removed.
+* The alternative [[Portable Miner]] recipe (Automated Miner) has been overhauled to only required Steel Pipes and Iron Plates.
+
+
+===[[Drone|Drones]]===
+* Can now use almost all types of [[Fuels]] instead of only [[Battery|batteries]].
+* The speed of the Drones is different based on the fuel used, with better fuels providing higher speed.
+
+===[[Biomass Burner]]===
+* Biomass Burners now have a Conveyer Belt input port.
+
+
+===[[Fuel-Powered Generator|Fuel Generators]]===
+* Fuel Generators now produce 250 MW instead of the previous 150 MW.
+
+
+===MAM changes===
+* [[Programmable Splitter|Programmable Splitters]] and [[Geothermal Generator|Geothermal Generators]] no longer require [[Supercomputer]]s to be unlocked or built.
+* The [[Gas Mask]] is now available in [[MAM#Mycelia|Mycelia research tree]] instead of Tier 5.
+
+
+===[[Hard Drive]] rerolling and saving===
+* Each Hard Drive now only gives two Alternative Recipe options instead of three.
+* Each Hard Drive can be ‘rerolled’ once, to show two different Alternative Recipe options.
+* After scanning, the Hard Drive selection is saved in a separate tab in the MAM, so you no longer must make a choice right away and can even scan more Hard Drive while you think it over.
+
+
+== Quality of Life ==
+
+===[[Conveyor Belts|Straight conveyor belts]]===
+* You can know build 90º turn conveyor belts in a straight shape, instead of the usual curved. Just change the build mode when building conveyor belts - available from the start, no unlocking required 🙂
+
+===[[Railway|Straight railways]]===
+* You can now hold {{Key|left ctrl}} when building Railways to make perfectly straight lines with them as well, instead of the usual curves.
+
+===[[Train Signals|Free placing signals]]===
+* You can now place signals freely at any point of the railway, instead of only at set spots.
+
+===[[Blueprint]] dismantling===
+* While dismantling, you can also now change the build mode to completely dismantle all parts of a blueprint instead of only a single element from it at a time.
+
+
+== Build system ==
+
+===[[Build clearance|Clearance]]===
+* We’ve updated the clearance of all [[buildings]] so they should have old issues resolved and be easier to place next to each other now.
+
+===[[Build_Gun#Guidelines|Guidelines]]===
+There are now two types of guidelines when holding {{Key|left ctrl}}:
+
+====Solid color====
+* You will see these when aligning a building from the sides.
+
+====Gradient====
+* You will see this when snapping buildables from an input or output.
+
+
+== Narrative ==
+There is now narrative and lore in the game. We implemented this in a way which won’t be intrusive for existing players (since [[Satisfactory]] is still a factory building game at its core), but there should still be a lot of interesting lore to dive into for those who were looking for more details about [[FICSIT Inc.|FICSIT]], [[ADA]], [[Project Assembly]], and more!
+
+If you would like to hear even more details regarding the narrative, please check out this video: 
+
+https://youtu.be/899Owtx-vz8
+
+
+== [[World]] ==
+
+We have done an extensive polish pass of all the areas and assets in the world, which is now fully completed and been given a lot of care and attention from all angles.
+
+This includes major polish for water, waterfalls, lakes, rivers, and oceans getting a major overhaul.
+
+The world vista has been reworked and updated.
+
+All rewards, creatures, hazards, and obstacles have been polished for every area.
+
+Previously unfinished areas like the [[Jungle Spires]], [[Southern Forest]], [[World#Biome_list|Bamboo Fields]], etc. are now finalized.
+
+Every area in the world has been given ambience, sound and atmosphere polish and improvements.
+
+And lastly, [[Resource Node]]s have received visual polish as well as significant changes to some placements. Various Nodes have been moved, changed, removed, and added to improve the overall experience & resource distribution across the world. These changes might require you to rebuild portions of your factory if you used the nodes which were removed or had their type or purity changed.
+
+If you would like to know a lot more of the specifics you can check out this video our CMs made about the changes:
+
+https://youtu.be/fkzumQ1A9Ms
+
+There are also some detailed map diagrams with the changes that you can find in the description of the video.
+
+
+== Progression ==
+If you’re continuing a save from a long time, certain narrative elements might not trigger as they would in a new playthrough, you might also have to re-do certain things like Milestone unlocks given that messages have now switched around or fix-up your factories given the World and Balancing changes that have come with 1.0.
+
+You can continue your playthrough in its entirety in any old save (Even saves from our very first release in 2019 should be supported!) - but you will miss out in some of these aspects.
+
+If you want to experience all the story elements properly, we recommend starting a new game from the beginning to get the full experience in its entirety.
+
+
+== [[Achievements]] ==
+Achievements are finally here as part of our 1.0 release, so you can enjoy doing some achievement hunting to try to complete them all.
+
+Please note that achievements are not retroactive and are only tracked from now on, so certain actions might have to be repeated to unlock some achievements. This could be yet another reason to make playing the game from the start worth it.
+
+
+== Optimizations ==
+
+https://youtu.be/yIKjR5jVv9Y
+
+
+===[[Save files|Save system optimization]]===
+Saving and Autosaving should now take considerably less time than ever before. This should make it so the autosaving happening is a lot less disruptive and will be especially noticeable in big factories!
+
+
+===Light weight instances - actors===
+
+We’ve optimized the way we handle how [[foundation]]s and [[wall]]s are handled, so you should now be able to build foundations without having to sacrifice as much performance/loading time. Your existing saves will also benefit from these changes (especially in some of the mega factories we’ve seen).
+
+
+===[[Conveyor Belts]] Conveyor item replication, scalability & rendering rework===
+
+There should now be some significant improvements in the look of items traveling on [[Conveyor Belts|conveyor belts]] in [[multiplayer]], as well as some significant improvements in performance for big saves with a lot of belts.
+
+
+===Train replication rework===
+
+[[Electric Locomotive|Trains]] should now be a lot better to drive around when playing in Multiplayer, as well as watching them be self-driven there should be a significant decrease of rubber-banding overall thanks to all the improvements.
+
+
+== Online integration ==
+
+There are many new settings that you can [[New game|apply to a session]]. Now you can play singleplayer with all the multiplayer capabilities disabled. You can now play exclusively using Steam to connect, or exclusively use Epic Online Services, as well as choose to have [[Crossplay]] between both platforms.
+
+[[Settings|Account linking]] has also changed allowing more flexibility, as it can now be managed entirely from Epic’s website by logging into a linked account.
+
+
+== [[Dedicated servers]] ==
+
+https://youtu.be/v8piXNQwcUw
+
+They have been fully reworked and are now complete, they should also work better than ever. We’ve resolved a lot of lingering issues with dedicated servers, and we plan to focus on addressing more issues that you might find from now on. 
+
+The servers are now faster to download with a smaller size, and easier to install as they only use port 7777 UDP/TCP. We now correctly bind to IPv4 and IPv6 simultaneously, so you no longer need to use the multihome command line. You can now run it as windowed or as just console. Additionally, there is now TLS support for added security.
+
+We’ve also improved the in-game UI/UX to tweak all the session settings or advanced game settings. Additional to the now-adjustable server settings, you can now also download a save from a server to continue playing locally if you’re the server admin.
+
+We have added support for an HTTP API, so it is now possible to create applications to communicate with the dedicated server for those who are interested in developing tools for it 🙂
+
+
+== Bugfixes ==
+This time around, we have fixed such an overwhelmingly massive number of bugs since the last update, at the time of writing we have 3,312 bug tickets marked as fixed and 92,052 submits having been made in our build management system since the last public update (v0.8.3.3).
+
+To make the patch notes more enjoyable for everyone, instead of being 50+ pages of bug fixes which would drown the info about the other goodies, we’ve decided to keep the patch notes more focused on new content and major changes.
+
+This also gives us the opportunity to start fresh with knowing what you all care about for us to fix and for you to let us know if we forgot anything important (or broke it again, whoops).
+
+You can give us all your bug related feedback on our QA Site (we check it every day!): https://questions.satisfactorygame.com/ 
+
+Anything you post here will help us fix those issues in future patches!
+
+{{PatchesNav}}

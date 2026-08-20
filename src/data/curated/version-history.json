@@ -1,0 +1,31 @@
+{
+  "$comment": "게임 버전 연혁. 버그 수정·성능 개선은 담지 않는다 — 진행과 설계 판단에 영향을 주는 변경만 담는다.",
+  "$purpose": "이 표는 **자료를 버리는 필터가 아니다.** 커뮤니티 공략을 읽을 때 어느 부분만 의심할지 알려주는 목록이다. 메인 시스템이 뒤집히지 않는 한 구버전 공략도 대부분 유효하다.",
+  "$dataBaseline": {
+    "note": "이 앱의 게임 수치는 아래 빌드에서 직접 뽑은 것이다. 커뮤니티 자료와 어긋나면 이쪽이 맞다.",
+    "steamBuildId": "24656030",
+    "gameUpdatedAt": "2026-08-18",
+    "extractedAt": "2026-08-19",
+    "confidence": "verified"
+  },
+  "versions": [
+    {
+      "version": "1.0",
+      "date": "2024-09-10",
+      "headline": "정식 출시",
+      "confidence": "consensus",
+      "source": "공식 출시일 — 여러 출처 일치",
+      "changes": [
+        {
+          "what": "하드 드라이브 대체 제작법 선택 규칙",
+          "before": "후보 3개 중 1개 선택",
+          "after": "후보 2개 + 리롤 1회",
+          "affects": "대체 레시피 획득 전략. 얼리액세스 시절 공략의 '3개 중 고르기' 서술은 낡았다",
+          "confidence": "verified",
+          "source": "docs/research/alternate-recipes.md — 게임 데이터로 확인"
+        }
+      ]
+    }
+  ],
+  "$pending": "1.1 · 1.2 변경 내역은 조사 중이다 (docs/research/version-history.md). 확인되는 대로 채운다."
+}

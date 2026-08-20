@@ -1,0 +1,43 @@
+{{patch
+|stable=1
+|build=424353
+|date=2025-07-17
+|discord=https://discord.com/channels/370472939054956546/557603412565426196/1395439401286242426
+|reddit=1m2bv68
+|steam=https://store.steampowered.com/news/app/526870/view/520845377984790640
+}}
+
+== Intro ==
+Hi Pioneers!
+
+Hello again everyone, Here’s a small patch with some fixes and the addition of virtual keyboard support for Steam Deck/SteamOS
+
+We’re still working on some other issues that we have identified but they have turned out to be more difficult to fix than expected, Most of the studio is also on vacation if you didn’t know already so certain fixes will need a lot more time
+
+https://www.youtube.com/watch?v=hmdqb4tLYm4
+
+For now If there’s any more major issues you’re having that you think we should still address, please let us know over at our QA Site https://questions.satisfactorygame.com/ We read your posts every day
+
+See you all again soon and hope you’re all also enjoying your summer <3
+
+== [[Controller#Steam_Deck|Steam Deck]] ==
+* Added support for the Steam Virtual Keyboard for Steam Deck and SteamOS
+
+== Bug fixes ==
+* Potential fix for NullPTR crash when closing the game
+* Fixed a crash related to FGBackgroundThread
+* Fix for a Crash on specific [[Save files|saves]] that had faulty [[Blueprint]]s using auto connected [[Conveyor Belts]] during a previous update during experimental
+
+== [[Story|Narrative]] ==
+* Improved subtitle timings for the [[Personnel Elevator|ElevADA]] messages
+
+== Optimization ==
+* Optimized static UI function calls
+
+== Localisation ==
+* Several fixes for namespace issues and untranslatable text
+* Updated community translated languages with the latest translations
+* Updated language completion rates
+* Updated credits
+
+{{PatchesNav}}

@@ -1,0 +1,75 @@
+<div class="infobox-tabber"><tabber>
+Cross=
+{{Infobox building|className=Desc_PipelineJunction_Cross_C
+| pipeInputs = 1-4
+| pipeOutputs = 1-4
+| size_width = 4
+| size_length = 4
+| size_height = 2
+}}
+|-|
+T-Junction=
+{{Infobox building|className=Desc_PipelineJunction_T_C
+| pipeInputs = 1-3
+| pipeOutputs = 1-3
+| size_width = 3
+| size_length = 4
+| size_height = 2
+}}
+</tabber></div>
+The '''Pipeline Junction''' allows liquid flow in any direction and can be used to split or merge [[Pipelines]] in either three or four ways. Any configuration works functionally: one input - two or three outputs, two inputs - one or two outputs, etc. Flow rates are only limited by the individual pipes entering and exiting.
+
+The '''Pipeline T-Junction''' is a variant with just three Pipeline connections.
+
+== Snapping ==
+
+* A junction can be placed on [[Foundations]] for precise placement. You can rotate it in 45-degree intervals horizontally.
+* A junction can be placed on [[Walls]] for precise placement. You can rotate it in 45-degree intervals vertically.
+*A junction can be snapped onto an existing pipeline, similar to snapping a [[Splitter]] onto a belt.
+** The junction can be rotated with its rotation axis aligned with the pipe, with a 45-degree interval.
+**On pipelines running parallel to machines, by holding {{Key|Left Ctrl}}, junctions will snap to be in line with any pipe input/output ports of the machines. Currently, this does not work in all orientations however.
+* A junction can be snapped to an open '''''end''''' of a pipe. This means junctions can be aligned precisely in many more positions than with other methods. 
+** To use this, build one of the pipes to be connected to the junction using any '''''temporary''''' [[Pipeline Supports|Pipeline Support]] of your choice. Then delete the temporary support. You can now snap a junction onto the end of the pipe and rotate it in 45-degree steps. 
+** '''Note''' however that snapping to completely vertical pipe ends usually does not allow you to rotate the junction in the desired direction. In this case you may have to build a (temporary) horizontal pipe first.
+
+== Notes ==
+* A Pipeline Junction Cross does not have a flow rate limit. If it is connected to two MK2 input- and two MK2 output pipes, it can transport up to 1200{{m3pm}} in total.
+*Similarly to [[Conveyor Splitter|Conveyor Splitters]], a junction with multiple outgoing pipes will attempt to split the outgoing fluid equally between the outputs. This is assuming the junction is built on a flat surface, as pipes on lower elevation always fill preferrentially.
+* The Junction '''cannot''' be built directly onto a [[building]]'s pipe connector, nor directly onto a [[Pipeline Supports|Pipeline Support]]. Therefore, extracting more than 300 {{m3pm}} of fluids from [[extractor]]s with just MK1 pipes is not possible.
+
+== Current issues ==
+* When splitting or merging many inputs/outputs of machines into or out of the same pipeline with junctions, the fluid at the far end of such a manifold may back up, even though the maximum flow rate of none of the pipe segments is saturated. The flow rates will fluctuate wildly in these cases.
+** For MK2 pipes, this may, for example, limit the usable maximum flow rate to below 450m³/min, depending on the exact setup.
+** As a workaround, the input pipe before- or the output pipe after the manifold can be split with an '''''additional''''' junction into 2 pipes, and then feeding the manifold from both ends.
+
+== See also ==
+* {{BuildingLink|Conveyor Belt}}
+* {{BuildingLink|Conveyor Lift}}
+* {{BuildingLink|Conveyor Pole}}
+* {{BuildingLink|Pipeline}}
+* {{BuildingLink|Pipeline Pump}}
+* {{BuildingLink|Pipeline Support}}
+* {{BuildingLink|Hypertube}}
+* {{BuildingLink|Hypertube Entrance}}
+* {{BuildingLink|Hypertube Support}}
+* {{BuildingLink|Hypertube Junction}}
+
+== Gallery ==
+<gallery>
+File:Coal_power_Water_Extractor.png|Pipeline Junction Crosses are used to distribute [[fluids]] among multiple [[pipe]]s.
+</gallery>
+
+== History ==
+* [[Patch 1.2.1.0]]: Fixed LOD issues on Pipeline T-Junctions
+* [[Patch 1.2.0.0]]: Introduced Pipeline T-Junction unlocked as a part of the Tier 3 – Coal Power Milestone
+* [[Patch 1.0.0.5]]: Fixed a bug where it was possible to merge a [[Pipeline]] or a [[Conveyor Belt]] into itself by using a Pipeline Junction or [[Splitter]]/[[Merger]], which would cause duplications
+* [[Patch 1.0.0.4]]
+** Fixed a bug where connecting a Pipeline Junction, [[Pipeline Pump]] or [[Valve]] to a [[Pipeline]] connected to a [[Pipeline Floor Hole]] would make it lose connection to the Pipeline Floor Hole
+** Updated Pipeline Junction to be consistent in size
+** Added Soft Clearance to Pipeline Junction
+* [[Patch 0.3.1.0]]: Pipe attachments such as Pipeline Pumps and Junctions can now be placed on Walls and Foundations
+* [[Patch 0.3]]: Introduced
+
+{{BuildingNav}}
+
+[[fr:Croisement de pipeline]]

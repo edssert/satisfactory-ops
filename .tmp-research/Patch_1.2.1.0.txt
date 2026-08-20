@@ -1,0 +1,79 @@
+{{patch
+|stable=1
+|ex=1
+|build=481836
+|date=2026-03-24
+|discord=https://discord.com/channels/370472939054956546/557603412565426196/1486020407004893276
+|reddit=1s2gjko
+|steam=https://store.steampowered.com/news/app/526870/view/497223585377552287
+}}
+
+==Intro==
+Hi Pioneers!
+
+We’re very happy to see you all enjoying the 1.2 Update on Experimental, we really appreciate all the feedback you’ve given us and all the bugs you’ve told us about so far so for today we have a bunch of fixes ready for you all 🙂
+
+If you heard about the 1.2 Update on Experimental and are interested trying it out, you can do so by following the instructions below:
+
+And remember, you can BACKUP YOUR SAVE before trying it to avoid losing any of your progress
+
+You can backup your save & blueprints by copying the folders in:
+
+<code>%LocalAppData%\FactoryGame\Saved\SaveGames\-YOUR ID-</code>
+
+<code>%LocalAppData%\FactoryGame\Saved\SaveGames\blueprints</code>
+
+To access the Experimental version on Steam:
+Right click Satisfactory on your ''library > Properties > Game Versions & Betas > experimental''
+
+Then exit this menu and the experimental version will start downloading for you
+
+To access the Experimental version on Epic:
+In your Library, search for “Satisfactory Experimental” and install it, it’s a separate entry from the default version so you need to download it individually
+
+If this patch introduced any new issues or there’s anything hindering you from playing the 1.2 Update, please let us know over at our QA Site https://questions.satisfactorygame.com/ We read your posts every day
+
+As always, thank you very much for the warm reception to the update, see you next time ❤️
+
+==[[Photo Mode]]==
+* Added Fog Density slider to Photo Mode under Image > Effect Settings
+
+==[[Weather]]==
+* Rebalanced the “Extreme” Weather preset so Rain can start earlier in a session
+
+==Bug Fixes==
+* Fixed looping sounds that would occur when entering decoupled camera mode quickly in [[Photo Mode]]
+* Fixed [[Basic Shelf Unit]] not being zoopable
+* Fixed [[Automated Gate|Automated Gates]] and [[AWESOME_Shop#Walls|Roll-Up Gates]] having unintended zooping settings
+* Fixed crash when placing [[Blueprint|Blueprints]] that contain [[Hypertube Junction|Hypertube Junctions]]
+* Fixed [[Settings#General_2|Mouse sensitivity]] being reset when relaunching the game
+* Potential fix for the Preferred Fuel icons showing up randomly on non-fuel [[Inventory]] items
+* Fixed [[Settings#Keybindings|Z key]] not working properly as an action key in multiple scenarios
+* Fixed previously placed [[Customizer]] patterns sometimes rotating when loading a save from previous versions in 1.2
+* Fixed missing Limestone node in [[World|Rocky Desert]]
+
+==UI==
+* Fixed Cancel button not working and acting as Confirm instead when [[Game_menus#Menu_options|loading a save]]
+* Removed the “Dynamic Input Switching” checkbox and moved it to [[Settings#Controls|Controls > Select Controls > “Dynamic”]]
+* Fixed keybinding inconsistencies for Minimizing/Maximizing ADA presentations
+* Fixed search function on [[Programmable Splitter]] menus not being usable when using Dynamic input
+* Fixed focus loss issues in the [[Vehicles|Vehicle Menu]] when using Dynamic input
+* Fixed “Confirm” button being missing in the [[New_game|World Seed]] menu
+* Fixed spelling mistake on the [[Resource Node]] Purity description
+* Fixed first search result in the “Select Items to Give” sub-menu in [[Advanced Game Settings|Creative Mode]] sometimes not being selectable
+* Fixed an issue where exiting [[Build Gun|Build mode]] after hiding the HUD caused HUD elements to stay hidden until the Build mode was reopened
+* Fixed “Remove All” button on [[Death Crate|Player Crates]] not working in Multiplayer
+
+==[[Controller]]==
+* Fixed Adjust Target Rate UI being visually cut off when using a controller
+* Fixed Power Shard UI tooltip not closing in some scenarios
+* Fixed D-pad button presses only working when holding when using Photo Mode in Decoupled Camera or Dolly mode
+* Added missing button prompt for “Remove all” on Player Crates when using a controller
+* Fixed B/Circle having duplicate functionality to exit Vehicles which would interfere with its default binding of X/Square
+
+==Tech Art==
+* Fixed LOD issues on [[Pipeline Junction|Pipeline T-Junctions]]
+* Tweaked [[World|Cloud]] coloring
+* Fixed build effects and LODs for [[Beams]] and [[Road Barrier|Barriers]]
+
+{{PatchesNav}}

@@ -1,0 +1,104 @@
+{{Patch
+|stable=1
+|build=377620
+|date=2024-11-04
+|discord=https://discord.com/channels/370472939054956546/557603412565426196/1303025926119882843
+|reddit=1gjhnsd
+|steam=https://store.steampowered.com/news/app/526870/view/4476108195413098876
+}}
+== Intro ==
+Hi Pioneers!
+
+Hello again everyone, this is potentially our last patch for a few weeks before we go back into focusing on working on more content so we included a bunch of highly requested fixes in it!
+
+Some notable examples are re-adding the Clearance visualization boxes on Buildings to be on by default, which now has also an option to turn it off for those who don’t want them, Gas Pillar smoke effect lingering should now properly be fixed for all Gas Pillars in the world, Updates to the community created translations including 3 more languages reaching 100% completion and plenty more crash and bug fixes!
+
+If we happened to introduce any new issues or missed anything important, please let us know over at our QA Site https://questions.satisfactorygame.com/ We read your posts every day!
+
+Hope you all have a great time and continue enjoying our game, thank you so much for your support <3
+
+== Gameplay ==
+* Re-added the clearance visualization boxes on [[Buildings]]
+** Can now be enabled in the [[Options]] menu > Gameplay > General > Show Clearance
+
+== Bugfixes ==
+* Optimized the [[Unreal_Engine#Lightweight_Actors|Lightweight Subsystem]], this improves a bug where hovering over big [[blueprint]] holograms over existing buildables would drastically lower performance until the hologram was closed
+* Fixed a bug where taming enough [[Lizard Doggo]]s would make other [[Creatures|creatures]] disappear
+* Added Equip/Unequip sounds for the [[Jetpack]]
+* Fixed a bug where it was possible to merge a [[Pipeline]] or a [[Conveyor Belt]] into itself by using a [[Pipeline Junction]] or [[Splitter]]/[[Merger]], which would cause duplications
+* Fix for Pipelines losing connection to [[Pipeline Floor Hole]]s when Upgrading/Downgrading them
+* Fixed a bug where [[Build_Gun#Hologram_lock_and_nudge_mode|Nudging]] would stop working for the player Hosting the session in [[Multiplayer]]
+* Fixed a bug where leaving a session without respawning would result in them losing their [[Inventory]] when rejoining
+* Fixed [[Power Pole]] Clearance
+* Fixed players not being able to mine [[Resource_Node#Resource_Deposit|resource deposits]] inside of the [[Spore Flower]] Gas
+* Fixed not being able to [[Build_Gun#Building_eyedropper|sample buildings]] sometimes after saving and reloading a session
+* Fixed a rare Crash in Multiplayer when someone in the session enters a [[Vehicle]]
+* Fixed [[Blueprint Designer]] Storage Container not properly displaying
+* Potential fix for a crash in the [[Power|Circuit Subsystem]]
+* Fixed crashes related to dismantling some parts of a [[Blueprint]], mostly affecting [[Conveyor Belt]]s, [[Pipeline]]s and [[Railway]]s
+* Fixed a bug where loading a [[Blueprint]] in a designer would load it in all the previously interacted designers
+* Fixed a crash related to Blueprint connections when exiting or loading a save
+* All of the remaining smoke effect lingering from [[Gas Pillar]]s should now be fixed
+* Fixed “Efficiency first” (Unlock All [[Milestones]]) [[Achievements|achievement]] not unlocking correctly on Epic Games Launcher
+* Fixed [[Controls|Ascend/Descend]] inputs getting stuck when opening a menu while using the [[Hoverpack]]
+* Fixed [[Electric Locomotive|Locomotives]] moving on railways displaying incorrectly in multiplayer in some scenarios
+* Fixed [[Drone Port|Drone Stations]] displaying incorrect names in the UI and incorrectly allowing duplicate names for stations
+* Fixed [[Train Signals]] disconnecting from the track when placing them in Multiplayer
+* Fix for crashes related to Blueprint connection issues in in Multiplayer
+
+== Modding ==
+* Fix FSimpleBuildingInfo not being exported, preventing FGBuildable.h linking correctly for modders because of its use in FORCEINLINE'd function.
+* Fix FactoryGame.h using Microsoft-specific extension by pre-declaring ENetMode enum without underlying type, making the file inclusion break in certain cases for modders.
+* Fix UFGBlueprintFunctionLibrary::BreakDynamicStruct not returning true when the struct type matches the parameter type, preventing new Item States from being usable from Blueprints for modders.
+* Added API for working with the new Lightweight Buildable Subsystem for modders
+
+== [[Dedicated servers]] ==
+* Fixed [[Advanced Game Settings]] being activated unintentionally transferring from the current save to another when starting a new session through the Server Manager
+
+== Localisation ==
+* Updated community translated languages with the latest translations
+* The following languages are now fully translated
+** Arabic - اَلْعَرَبِيَّةُ
+** Latvian - Latviešu Valoda
+** Norwegian - Norsk
+* Please note that for languages to be reimported into the game, they need to reach at least 50% completion, if you want to help out check out info on our Discord.
+
+== Known issues ==
+;There are languages missing
+These are the only officially supported languages: English, French, Italian, German, Spanish, Japanese, Korean, Polish, Portuguese, Russian, Simplified & Traditional Chinese.
+
+A lot of translations for Satisfactory have been community driven, which means that every other language previously available (and potential new ones) needs to be translated by the community, before being added as community translations once more.
+
+A lot of people in the community have already shown interest in helping us out with translations and we are ever so grateful to you all and we'll update translations in game as they come in! If you want to help out check out info on our Discord. Please note that you need to have been part of the server for a time to be eligible for this.
+
+;I Can't Switch supported Languages (workaround available)
+If you still have any issue switching between officially supported languages, a quick fix for this is to exit the game, rename the %LOCALAPPDATA%\FactoryGame\Saved\Config folder to %LOCALAPPDATA%\FactoryGame\Saved\Old_Config, then launch the game.
+
+;Plugin Error on launch
+This is related to mods installed, Mods have been updated and now work with 1.0 so please make sure to update all your mods!. Keep in mind that not all mods have been updated yet.
+
+;[Crash] Shader Cache (workaround available)
+Users may experience the following Fatal Error when booting up the game:
+ [File\BuildAgent\work\b731a33f2a691e17\UE4\Engine\Source\Runtime\RHI\Private\PipelineStateCache.cpp] [Line: 365] Shader compilation failures are Fatal.
+
+This can be fixed by forcing DirectX 11 (dx11) as the rendering API via the launch command: <code>-dx11</code>
+
+Video of how to set dx11 as a launch option: https://www.youtube.com/watch?v=cn3e-m4a-hU
+
+Text information on how to set launch options: [[Launch arguments]]
+
+;White static effect over the game (AMD Radeon 5000 Series GPUs, possibly others)
+This issue seems to be due to driver issues. Some workarounds on current drivers are:
+
+* Try disabling upscaling
+* If you really want to use upscaling, try using something other than FSR
+* If you really want to use FSR, try changing the value of the FSR application by single digit increments towards either the lower or higher end of your current settings
+* Force DirectX 11 as the rendering API through the launch command: <code>-dx11</code>
+
+;Mouse sensitivity feeling sluggish with V-Sync turned on
+We’re currently investigating an issue where some players experience very sluggish mouse movement with V-Sync turned on. In the meantime, we recommend playing with V-Sync turned off if the mouse controls feel overly annoying.
+
+;Players starting at tier 2 on Dedicated Servers
+Players are currently starting off at tier 2 upon entering the game on Dedicated Servers, skipping past tier 1. We’re currently looking into limiting the skipped parts of the game on Dedicated Servers to the intro sequence only (tier 0), and possibly even enabling players to experience tier 0 on Dedicated Servers as well.
+
+{{PatchesNav}}

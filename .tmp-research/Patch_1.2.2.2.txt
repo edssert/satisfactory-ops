@@ -1,0 +1,225 @@
+[[File:Update1.2 Sign Logo.png|400px]]
+
+{{patch
+|stable=1
+|build=491125
+|date=2026-06-02
+|discord=https://discord.com/channels/370472939054956546/557603412565426196/1511386154027716780
+|reddit=1tutp15
+|steam=https://store.steampowered.com/news/app/526870/view/695387676933621084
+}}
+== Intro ==
+Hi Pioneers!
+
+1.2 is now available for everyone to download and enjoy on all platforms!
+
+This update marks an important milestone for us since it’s the first time we’re officially launching an update simultaneously on PC, PlayStation 5 and Xbox Series S/X, this way everyone can enjoy the update on their favorite platforms!
+
+If you haven't seen what the update has to offer, be sure to check out our latest trailer below:
+
+https://www.youtube.com/watch?v=aoHCYhlYjlc
+
+If you encounter any issues while playing, please let us know over at our QA Site https://questions.satisfactorygame.com/ We read your posts every day!
+
+While you wait for your download to finish, Here’s a breakdown of most of the new additions from the update
+
+== [[Weather]] ==
+Rain is back! And better than ever, since its previous iteration from Update 6 we’ve done many improvements to it, with enhanced visual effects such as wetness on buildings and the pioneer’s suit, improved wind, fog, multiple variants of rain density, thunder and more!
+
+Additionally, with a brand-new system to support it, rain will also now be occluded by most buildables, foundations and walls, and both visuals and audio will be impacted by this creating a much more atmospheric experience all around your factories and world
+
+You can also tweak the frequency and intensity of Rain in the new World settings tab in the Options Menu
+
+The World settings menu includes:
+
+=== Weather presets ===
+* Default
+* Dry
+* The Great MASSAGE-2 (AB)b
+* Clear
+* Raining Kittens and Puppies
+* Extreme
+
+=== World settings ===
+* Visor effect raindrops on/off
+* Rain Post processing on/off
+* Thunder on/off
+
+=== Fog density slider ===
+* Added fog density slider
+** Found in Options > Video > Advanced
+** Controls the density of the cosmetic fog related to the new weather settings, this is separate from the fog in the world map
+
+== [[Unreal Engine|Unreal Engine 5.6.1]] ==
+If you missed it from the previous experimental from a month ago, we’ve also upgraded our Unreal Engine version to 5.6.1, bringing performance improvements all across the board
+
+== [[Controller]] ==
+Since we launched Controller support on PC with 1.0 and later polished further again with the Console release we’ve received various feedback about functionality that you all would like to have, so once again we’ve closely collaborated with the help of the awesome folks at Fishlabs ( https://fishlabs.de/ ) and some of your suggestions are now part of 1.2, such as:
+
+==== Dynamic Gamepad Swap ====
+You can now seamlessly switch from Mouse and Keyboard to Controller without having to change them in the options menu each with the new “Dynamic Gamepad Swap” Option in the Controls tab in the options menu
+
+Whenever you press a button or key on your Controller or Keyboard, the game will now adjust on the fly to whatever you’re using
+
+Of course, if you would prefer to avoid accidentally changing your input methods, you can still select only Keyboard and Mouse or Controller exclusively if you disable the Dynamic Swap
+
+==== Rebindable keybindings for controller ====
+We’ve seen that due to personal preferences or accessibility reasons it would help a lot of you to be able to tweak the existing controller configuration
+
+With this update most Controller bindings can now be rebound in the Options menu in the Keybindings tab, if you can’t find the settings, please remember that these can only be accessed while using a controller
+
+== [[Vehicle_pathing|Vehicle paths rework]] ==
+Vehicle path automation has been completely remade from the ground up with an entirely new system, old automated Vehicle routes should continue to work as-is, but from now on you will be able to place down Vehicle Paths from the Transport tab from the Build Menu by using the build gun, and then placing the Vehicle on top of the Path itself, similar to how Trains currently work with Railways and Locomotives
+
+Straight build mode for Vehicle paths is available too and so are individual paths for each type of vehicle if you want to really customize your paths further
+
+UI has also been changed to fit with the new system, showing available Vehicle Stations and Routes accessible when entering any Vehicle and opening the Vehicle Menu
+
+Vehicle path colors can also be customized from the Options Menu, in the User Interface tab for your preferences or accessibility uses
+
+== [[Vehicles#Motor_vehicles|Vehicle suspension improvements]] ==
+Manual driving has been improved as well on top of the self-driving controls, so not only automation will be improved but driving around and exploring the world should be more enjoyable as well!
+
+== Fluid Station and Truck ==
+[[Fluid Truck Station]]s and [[Fluid Truck]]s are now in the game! This allows for an alternative way to transport and store fluids across long distances, all the new changes to vehicle paths and improvements also apply to them
+
+Both the Station and Truck have a Capacity of 3200 m<sup>3</sup> in their internal storage
+
+Unlocked in [[Tier 5]] as part of the usual Logistics Mk.4 Milestone
+
+== [[Creative Mode]] ==
+With 1.2 we have now renamed the old [[Advanced Game Settings]] Menu into Creative Mode, the functionality remains the same as before, disabling achievements and enabling many settings so you can have options to build around freely
+
+== [[New game|Game Modes]] ==
+We’re also introducing a brand-new menu for Game Modes, available only when creating a New Game, Game Modes do not disable achievements, and will allow you to enjoy Satisfactory in new ways compared to a regular playthrough with the introduction of Cost Multipliers and World Randomization
+
+All of the settings below can be adjusted individually independently of each other, and once active they cannot be turned off forever for that save, any settings active on this save will also apply during multiplayer sessions
+
+===Cost Multipliers ===
+* [[Space Elevator]] Deliverable Cost Multipliers
+** 0.25
+** 0.50
+** 0.75
+** 1 (Default)
+** 2
+** 5
+** 10
+** 25
+** 50
+** 100
+* [[Recipes|Recipe]] Parts Cost Multiplier
+** 0.25
+** 0.50
+** 0.75
+** 1 (Default)
+** 1.25
+** 1.50
+** 1.75
+** 2
+* [[Power]] Consumption Multiplier
+** 0.25
+** 0.50
+** 0.75
+** 1 (Default)
+** 2
+** 5
+
+=== World Randomization ===
+* [[Resource Node]] Randomization
+** Default
+** Random
+** Basic Resource Rich
+** Advanced Resource Rich
+** Fossil Fuel Rich
+* Resource Node Purity
+** Default
+** All Pure
+** Mostly Pure
+** Average
+** Mostly Impure
+** All Impure
+** Random
+* World Seed
+** Shows the current world seed so you can share it with friends, currently other settings have to be manually matched on top of sharing the seed
+** Default world seed for a vanilla game is 0
+
+== [[Photo Mode]] ==
+Photo Mode has gotten a few new upgrades this time around, with a few new upgrades
+
+* One new colour filter
+** “I know what you are”
+* One new effect filter
+** “Blueprint”
+* All photo mode poses also have new variants for when the pioneer is using a hover pack
+
+=== Selfie Mode ===
+We also have a brand-new Camera mode aside from First Person and Decoupled for the Photo Mode
+
+You now have access to Selfie Mode, with a Selfie style camera for the Pioneer with support for its own set of poses, arm and head rotation, new cropping settings to mimic cell phone aspect ratios and all the settings and the usual image filters you know from the regular Photo Mode
+
+== [[SPWN]] ==
+Another new buildable reminiscent of common day facilities built for maximum efficiency at the workplace, it allows you to change your spawn location ONLY after washing your hands inside of it
+
+Unlockable as a part of the [[Alien Technology Research|Alien Technology MAM Research tree]]
+
+* Alien Technology
+** SPWN
+*** 1 {{ItemLink|Mercer Sphere}}
+*** 11 {{ItemLink|SAM Fluctuator}}
+*** 20 {{ItemLink|Steel Pipe}}
+
+== [[Power Line|Daisy chaining]] ==
+This new MAM Unlock allows 2 power connections to be made to the same building and lets you connect buildings to each other allowing power to flow from building to building as a part of the power grid, instead of the usual pole to building setup
+
+Unlockable as a part of the [[Caterium Research|Caterium MAM Research tree]] (note: source patch notes erroneously mention Alien Technology Research)
+
+* Caterium
+** Upgraded Power Connectors
+*** 15 {{ItemLink|Computer}}
+*** 50 {{ItemLink|High-Speed Connector}}
+*** 500 {{ItemLink|Quickwire}}
+
+== New buildables ==
+We also have two new buildable pieces to allow for further customization when factory building
+
+* [[Pipeline T-Junction]]
+** Unlocked as a part of the Tier 3 – Coal Power Milestone
+* [[Cross Beam]]
+** Unlocked as a part of the Beam Expansion Pack in the AWESOME Shop
+
+== [[Game menus|Real pause menu]] ==
+There’s a new option, enabled by default, where pressing ESC to bring up the Pause menu will actually pause the game logic as well so you no longer have to worry about creatures sneaking up on you while you go grab a snack after long hours of hard factory work
+
+* Only available in Single Player, will be disabled in [[Multiplayer]] sessions
+
+== Quality of Life ==
+As usual with every update, we also have plenty of QOL upgrades all across the board
+
+* [[Console release|Console]] Parity
+** All the changes that have come from the Console version, including bugfixes are now part of the PC version as of this 1.2 Update
+* [[Settings|Options Menu]]
+** We’ve done a full pass of the Options menu and all settings and creating consistency with the terminology and values
+* Hologram rotation mode (note: this feature was introduced in [[Patch 1.0]], patch notes erroneously list them here)
+** Found in Options > Controls, with this option you can change what the default rotation is when holograms are created by the buildgun, you can choose between:
+*** Static
+*** Spawn Facing Player
+*** Always Face Player
+** As well as control what is the relative rotation to the player, between:
+*** Parallel
+*** Perpendicular
+* Left handed [[Train Signals]]
+** Sampling a left handed signal will now correctly give a left handed signal instead of a default right handed signal
+* [[Giant Flying Manta|Manta]] art update
+** The Flying Manta has gotten a new visual overhaul
+* [[Signs]]
+** After several years of seeing you all use signs as lights and building thousands of them we finally caved in, Signs can now be zooped :)
+** Additionally, zooped signs on the ground will have a pole attached to them
+* Remember Snapping Toggle
+** Enable or disable the saving of your snap toggle decision across the game
+** Found under [[Settings|Options > Accessibility]], this option allows the last used snap mode to be remembered even when closing and reopening the [[Build Gun|Build Menu]]
+
+== Update art ==
+[[File:Update1.2 KeyArt.png|left|thumb|300px|Update 1.2 Key Art]]
+{{PatchesNav}}
+
+[[fr:Patch 1.2.2.2]]

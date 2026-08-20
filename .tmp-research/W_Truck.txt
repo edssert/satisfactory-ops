@@ -1,0 +1,107 @@
+<div class="infobox-tabber"><tabber>
+Solid=
+{{Infobox building|className=Desc_Truck_C
+| maxSpeed = 89
+| time0_50 = 4
+| inventorySize = 48 slots
+| size_width=6.5
+| size_length=10.5
+| size_height=6
+}}
+|-|
+Fluid=
+{{Infobox building|className=Desc_FluidTruck_C
+| maxSpeed = 89
+| time0_50 = 4
+| inventorySize = 3200 m<sup>3</sup>
+| size_width=6.5
+| size_length=10.5
+| size_height=6
+}}
+</tabber></div>
+The '''Truck''' (aka '''"The Unit"''') is a 6-wheeled land [[vehicle]] which can be used to transport large amounts of cargo on land. It can be either driven by the [[pioneer]] or automated. It has a higher maximum speed than and twice the storage capacity of the [[Tractor]], and can ford deeper water without getting stuck. However, due to being very heavy, it can end up being a slower transportation option than the Tractor. It has a tight turning circle thanks to its counter-steering rear wheels.
+
+The Truck can drift with the handbrake {{Key|Space}}, just as the [[Explorer]]. Unlike Tractors, Trucks are unable to knock down [[tree|plants and small vegetation]] blocking their ways, which can make Trucks unreliable sometimes.
+
+The '''Fluid Truck''' is a variant of the Truck capable of transporting [[fluids]] instead of items. It requires [[Fluid Truck Station]]s to be loaded and unloaded.
+
+== Usage ==
+{{Main|Vehicles}}
+The Truck's inventory can be accessed by interacting with a door at the rear of the vehicle, where it can also be fueled by inputting up to a stack of fuel into the fuel slot. All [[Fuels]] are accepted, ranging from {{ItemLink|Leaves}} to {{ItemLink|Plutonium Fuel Rod|Plutonium Fuel Rods}}. Fuels with more energy last longer, but do not provide any additional benefits. Additionally, a built-in [[Craft Bench]] can be accessed using a tab at the top of the same menu.
+
+Once fueled, entering the Truck allows it to be driven. Running out of fuel while driving prevents accelerating and braking. Automated routes can be recorded using the self-driving menu {{Key|Q}}.
+
+Despite its huge wheels and complex suspension system, it performs poorly as an off-road vehicle. It can not climb hills as easily as the Tractor or Explorer. It is the biggest road vehicle in the game, which means that it might not fit through small gaps that you might encounter while exploring the [[world]]. The suspension system is rather buggy, which can result in the Truck becoming stuck or being launched when driven across very rough terrain. As mentioned before, it also cannot knock down small foliage blocking its path.
+
+The Truck can climb both 2m ramps and 4m ramps in both manual and automated drive. It is almost exactly as wide as one foundation, so make sure any roads you build have lanes that are at least one and a half foundations wide.
+
+=== UI ===
+The Truck UI or Fluid Truck UI has several sections:
+* Truck Name
+* Current Inventory (Truck Only)
+* Current Fluid Load and Flush Handle (Fluid Truck Only)
+* Current Fuel Being Used
+
+<gallery>
+File:Truck UI.png|Example of Truck UI
+File:Fluid Truck UI.png|Example of Fluid Truck UI as of [[Patch 1.2.0.0|Version 1.2]]
+File:Truck UI - Vehicle Path Map.png|Example of Truck UI showing [[Vehicle Paths]] as of [[Patch 1.2.0.0|Version 1.2]].
+</gallery>
+
+=== Fuel consumption ===
+{{FuelConsumptionMasterTable}}
+
+== Achievements ==
+{{Achievement|KNOCKED_CREATURE_WITH_VEHICLE}}
+{{Achievement|NUM_PLAYER_KNOCKED_OVER}}
+{{Achievement|TOO_FAST}}
+
+== Current issues ==
+* The wheels and suspensions can easily be pushed by the [[pioneer]], causing the truck to move or even flip over.<ref>https://www.youtube.com/watch?v=cw4zBnbU5JE</ref>
+* When constructed on top of other vehicles or non-flat objects, the truck will usually get propelled high into the air.<ref>https://www.reddit.com/r/SatisfactoryGame/comments/bay5vm/truck_bug_action</ref>
+** [[Tractor]]s display similar behavior when crashing into other vehicles at high speeds.
+
+== Gallery ==
+<gallery>
+File:Vehicle loading Base E3 Alt.png|A truck at a [[Truck Station]]
+File:Fluid Truck Station Operation.png|A Fluid Truck showing it being loaded (or unloaded) at a [[Fluid Truck Station]]
+</gallery>
+
+== History ==
+* [[Patch 1.2.0.0]]: Introduced Fluid Truck
+* [[Patch 1.0]]:
+** Now unlocked at [[Tier 5]] - Logistics Mk.4
+** Changed 10 Circuit Board cost to 20 Encased Industrial Beam
+** Changed 5 Heavy Modular Frame cost to 20 Modular Frame
+** Removed 20 Encased Industrial Beam cost
+* [[Patch 0.8.2.0]]
+** Replaced some audio files for the Truck
+** Tweaks and adjustments for Truck audio
+* [[Patch 0.8.0.0]]
+** Moved Vehicle physics to using Unreal Engine 5 Chaos
+** Overhauled all Vehicle sounds
+** Improved the manual driving of all Vehicles
+** Reworked all Vehicle trunks visually simplifying the animation and adding a new sound
+** Added functionality for Vehicles to deal damage to creatures by hitting them
+*** Damage dealt is relative to vehicle speed and size
+* [[Patch 0.6.0.0]]: Changed cost from 8 Motor, 10 Computer, 4 Heavy Modular Frame, 50 Rubber and 10 Beacon to 15 Motor, 10 Circuit Board, 5 Heavy Modular Frame, 50 Rubber and 20 Encased Industrial Beam
+* [[Patch 0.5.0.0]]:
+** Vehicles can now be [[Customizer|paint]]ed
+** Updated Truck visuals
+** Vehicle recording is now completed by driving back to the first created node
+** Vehicle self-driving AI overhaul, will now consider more than just the next waypoint and avoid obstacles when moving to their destination
+** A queue system between self-driving vehicles has been added so they don't run into each other at Truck Stations and on their routes
+** Vehicle self-driving path behavior has also been overhauled
+** Vehicles will now try to unstuck themselves as a last resort, ensuring that they get back on their route
+** You can now Save and Load recorded vehicle paths for vehicles of the same type
+
+== Early game development ==
+Prior to Closed Alpha, in Sprint 12 (week 24) the first vehicle, a Truck, was seen and had a basic but developed design.
+* See also: [[Early_game_development#Truck|Game Development - Truck]]
+
+== References ==
+{{Reflist}}
+
+{{VehicleNav}}
+
+[[fr:Camion]]

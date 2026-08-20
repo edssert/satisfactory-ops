@@ -1,0 +1,91 @@
+{{Infobox item|className=Desc_WAT1_C}}
+'''Somersloops''' are alien artifacts found throughout the [[world]] used for [[production amplification]] and to construct {{BuildingLink|Alien Power Augmenter|Alien Power Augmenters}}.
+
+They emit a red glow and unusual particles, as well as a pulsating sound that fluctuates in volume. They will occasionally emit the sound of a voice, encouraging the player to harvest it.
+
+== Obtaining ==
+Somersloops, like [[Mercer Sphere|Mercer Spheres]] can be found while exploring, typically in hidden or hard-to-reach places, usually guarded by enemies and surrounded by [[Resource Node#Resource Deposit|Uranium Deposits]], [[Spore Flower]]s, [[Cracked boulder]]s or [[Gas Pillar]]s.
+
+There are a total of 106 Somersloops in the world as of [[Patch 1.0]].
+
+== Usage ==
+=== Production amplification ===
+{{Main|Production amplifier}}
+Somersloops are used for [[production amplification]] ("slooping"). Inserting Somersloops into select production buildings (once production amplification is researched in the [[MAM]]) increases the building's output without increasing the input costs, but doing so massively increases the machine's power consumption by up to 4x. The maximum boost is +100% for doubled output in total.
+
+=== Research ===
+{{MAMusage|chain1 = Alien Technology}}
+
+=== Crafting ===
+{{Recipes using|Desc_WAT1_C}}
+
+=== AWESOME Sink ===
+{{Sinkusage|Desc_WAT1_C}}
+
+==Achievements==
+{{Achievement|PICKED_UP_FIRST_SOMERSLOOP}}
+{{Achievement|PICKED_UP_X_SOMERSLOOP}}
+
+==Narrative==
+{{Spoilerbox|
+
+1. '''Pre-1.0 ADA pickup transcript:'''<br>
+{{Game Message| ADA: This object emits alpha radiation, the material has hydrophobic properties and contains pockets of Plutonium according to scans. Handle carefully. Further analysis required to determine application.}}
+
+2. '''Sound transcripts''' - Possible messages when received near a Somersloop include:
+
+* "Be appropriate."
+* "Harvest."
+* "Consume."
+* "Witness."
+* "Play. Play. Play."
+* "Defile - the scripture."
+* ''(deepening with each word)'' "Consume. Consume. Consume."
+* "Harmonize with us."
+* "Listen to the rhythm."
+* "Live Laugh Consume"
+* "Look through the window."
+* "Witness a single strand of the tapestry."
+* "Harvest the scripture and compose it into a blood song"
+* "This is a shrine to windows and weaving"
+* "Look though the window and witness a thread"
+* "Follow the veins to the altar and chant"
+* "Your waves lap at our shores, when will you land?"
+* "This bleeding temple hums a resonance song, play for us"
+
+3. '''ADA Corrupted Messages:'''<br>
+When collecting a Somersloop [[ADA]] will sometimes produce a corrupted message that seems to be coming from the Somersloop. In later messages, ADA & the artifact can be heard talking to each other.
+* View [[Story#Strange_Communications|Story Strange Communications]] to read and hear individual ADA messages (both normal and corrupted).
+}}
+
+== Trivia ==
+* The Somersloop references "[[wikipedia:Cool S|Cool S]]", a popular symbol typically found doodled in children's notebooks. Its description referring to it as a "somehow familiar shape" could reflect the unclear origin and spread of the S drawing.
+
+== See also ==
+* {{ItemLink|Mercer Sphere}}
+
+== Gallery ==
+<gallery>
+File:Somersloop screenshot.jpg|An unclaimed somersloop found on a stone spire as seen in [[Alpha Test Weekend|Closed Alpha]] through [[Patch 0.8.3.3|Update 8]]. 
+File:Somersloop update 4.png|A Somersloop as of Update 4
+File:Version 1.0 Somersloop.png|A Somersloop as of 1.0.
+File:Somersloop hi-res crop.png|Cropped image of a Somersloop in-game
+</gallery>
+
+== History ==
+* [[Patch 1.0.0.4]]: Fixed the “Whoosh” sound effect that would occasionally happen when traversing near previously picked up Somersloop
+* [[Patch 1.0]]: Updated mesh
+* [[Patch 0.8.0.0]]: Somersloops can no longer be deleted in the inventory
+* [[Patch 0.4.0.0]]: Made Somersloops much more visible by adding light effects
+* Unknown patch: Description now contains the text "WORK IN PROGRESS ANALYZING THIS WILL NOT GIVE YOU ANYTHING" and the item's in-game name was changed to "Somersloop WIP"
+* [[Patch 0.1.6]]: Somersloops are again no longer scannable in the [[MAM]]
+* [[Patch 0.1.5]]: Somersloops can now be scanned in the MAM again. After it is scanned, [[ADA]] will tell the [[pioneer]] that obtaining more samples of the Somersloop will be rewarded with new building options, however, no additional rewards were ever provided. Scanning it would only allow them to be chosen in the [[Object Scanner]]. The research was repeatable with no rewards.
+* [[Patch 0.1]]: Somersloops are no longer scannable in the MAM
+* [[Alpha Test Weekend]]: Introduced
+
+{{ItemNav}}
+[[Category:Items]]
+[[Category:Building materials]]
+
+[[fr:Somersloop]]
+[[zh:{{PAGENAME}}/zh]]
