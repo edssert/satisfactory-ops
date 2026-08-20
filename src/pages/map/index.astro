@@ -120,8 +120,13 @@ const payloadBelts = buildings
      * 지도는 도구다. 제목이 화면의 3분의 1을 먹으면 정작 지도를 볼 자리가 없다.
      * 머리말을 한 줄로 줄이고 폭도 다 쓴다.
      */
+    /*
+     * 제목·위 띠·아래 링크를 지도 묶음의 좌우 끝에 맞춘다.
+     * 제목만 화면 폭을 쓰면 지도와 어긋나 보인다 — 폭을 내용에 맞추면 셋이 같은 선에 선다.
+     */
     .map-page {
-      width: min(1700px, calc(100vw - var(--s6)));
+      width: fit-content;
+      max-width: calc(100vw - var(--s6));
       margin-inline: auto;
       padding: var(--s10) var(--s3) var(--s12);
     }
