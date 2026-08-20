@@ -147,25 +147,34 @@
 .rm-svg { display: block; width: 100%; height: 100%; }
 .rm-svg image { image-rendering: auto; }
 
+/*
+ * 표시선은 전부 화면 단위에 묶는다.
+ *
+ * SVG 의 stroke-width 는 사용자 좌표계 단위라 확대하면 같이 굵어진다. 그대로 두었더니
+ * 확대할 때 점이 검은 덩어리가 됐다. non-scaling-stroke 면 배율과 무관하게 화면 두께가 된다.
+ */
+.rm-svg [vector-effect] { vector-effect: non-scaling-stroke; }
+
 /* 인게임 지도의 격자. 칸 이름이 자원 위치를 말할 때 기준이 된다 */
 .rm-grid rect {
   fill: none;
-  stroke: color-mix(in oklab, white 22%, transparent);
-  stroke-width: 0.6;
+  stroke: color-mix(in oklab, white 20%, transparent);
+  stroke-width: 1;
 }
 .rm-grid text {
-  fill: color-mix(in oklab, white 62%, transparent);
+  fill: color-mix(in oklab, white 66%, transparent);
   font-family: var(--font-mono);
   paint-order: stroke;
-  stroke: rgb(0 0 0 / 0.65);
-  stroke-width: 2px;
+  stroke: rgb(0 0 0 / 0.7);
+  stroke-width: 3;
   stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
 }
 
 .rm-area rect {
-  fill: color-mix(in oklab, var(--accent) 16%, transparent);
+  fill: color-mix(in oklab, var(--accent) 14%, transparent);
   stroke: var(--accent);
-  stroke-width: 1.4;
+  stroke-width: 2;
 }
 .rm-area text {
   fill: var(--accent);
@@ -173,35 +182,117 @@
   font-weight: 700;
   text-anchor: middle;
   paint-order: stroke;
-  stroke: rgb(0 0 0 / 0.8);
-  stroke-width: 3px;
+  stroke: rgb(0 0 0 / 0.85);
+  stroke-width: 4;
   stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
 }
 
 /*
- * 노드 표시. 순도는 테두리 굵기로 나누되 그것만으로 판단하게 두지 않는다 —
+ * 노드 표시. 순도는 테두리 색·굵기로 나누되 그것만으로 판단하게 두지 않는다 —
  * 확대하면 글자가 붙고, 누르면 아래에 이름과 순도가 그대로 뜬다.
  */
 .rm-pt { cursor: pointer; }
 .rm-pt circle {
-  fill: rgb(10 12 16 / 0.86);
+  fill: rgb(10 12 16 / 0.82);
   stroke: var(--ink-3);
-  stroke-width: 1.1;
+  stroke-width: 1.5;
 }
-.rm-pt.is-p circle { stroke: var(--accent); stroke-width: 2.2; }
-.rm-pt.is-n circle { stroke: var(--primary); stroke-width: 1.6; }
-.rm-pt.is-i circle { stroke: var(--ink-3); stroke-width: 1; }
+.rm-pt.is-p circle { stroke: var(--accent); stroke-width: 2.5; }
+.rm-pt.is-n circle { stroke: var(--primary); stroke-width: 2; }
+.rm-pt.is-i circle { stroke: var(--ink-3); stroke-width: 1.5; }
 .rm-pt:hover circle { stroke: #fff; }
-.rm-pt.is-sel circle { stroke: #fff; stroke-width: 2.6; }
+.rm-pt.is-sel circle { stroke: #fff; stroke-width: 3; }
 .rm-plabel {
   fill: #fff;
   font-family: var(--font-mono);
   text-anchor: middle;
   paint-order: stroke;
-  stroke: rgb(0 0 0 / 0.8);
-  stroke-width: 2.4px;
+  stroke: rgb(0 0 0 / 0.85);
+  stroke-width: 3;
   stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
 }
+
+/* 멀리서 볼 때 묶은 덩어리. 누르면 그 자리로 들어간다 */
+.rm-cl { cursor: zoom-in; }
+.rm-cl circle {
+  fill: rgb(10 12 16 / 0.8);
+  stroke: var(--primary);
+  stroke-width: 2;
+}
+.rm-cl:hover circle { stroke: #fff; }
+.rm-cl text {
+  fill: #fff;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: rgb(0 0 0 / 0.85);
+  stroke-width: 3;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* 거리 재기 */
+.rm-measure line {
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-dasharray: 6 4;
+}
+.rm-measure circle { fill: var(--accent); stroke: #000; stroke-width: 1.5; }
+.rm-measure text {
+  fill: var(--accent);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: rgb(0 0 0 / 0.85);
+  stroke-width: 4;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.rm-stage.is-measuring { cursor: crosshair; }
+.rm-hint {
+  position: absolute;
+  top: var(--s3);
+  left: 50%;
+  display: flex;
+  gap: var(--s3);
+  align-items: center;
+  margin: 0;
+  padding: 6px 12px;
+  border-radius: var(--radius);
+  background: color-mix(in oklab, var(--raised) 94%, transparent);
+  color: var(--ink-2);
+  font-size: var(--t-caption);
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+.rm-hint button {
+  padding: 2px 8px;
+  border: var(--hair) solid var(--line-strong);
+  border-radius: 3px;
+  background: none;
+  color: var(--ink-3);
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+/* 자원 옆의 「그 자리로」 단추 */
+.rm-side li { display: flex; align-items: center; }
+.rm-side li label { flex: 1; min-width: 0; }
+.rm-go {
+  flex: none;
+  padding: 3px 6px;
+  border: 0;
+  background: none;
+  color: var(--line-strong);
+  font-size: 12px;
+  cursor: pointer;
+}
+.rm-go:hover { color: var(--primary); }
 
 /* 고른 노드 설명. 지도 위에 겹쳐 띄운다 */
 .rm-info {

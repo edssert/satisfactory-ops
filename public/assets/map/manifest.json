@@ -1,7 +1,16 @@
 {
-  "grid": 4,
   "tile": 1024,
   "preview": 1024,
+  "levels": [
+    {
+      "level": 1,
+      "grid": 2
+    },
+    {
+      "level": 2,
+      "grid": 5
+    }
+  ],
   "layers": [
     {
       "key": "terrain",

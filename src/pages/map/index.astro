@@ -23,7 +23,7 @@ const doc = nodesJson as unknown as {
   nodes: { res: string; ko: string; purity: string; type: string; fx: number; fy: number; cell: string }[];
 };
 const manifest = manifestJson as unknown as {
-  grid: number;
+  levels: { level: number; grid: number }[];
   layers: { key: string; ko: string; source: string }[];
 };
 
@@ -71,14 +71,14 @@ const bytes = JSON.stringify({ points, resources, payloadAreas }).length;
       resources={resources}
       areas={payloadAreas}
       layers={manifest.layers.map((l) => ({ key: l.key, ko: l.ko }))}
-      grid={manifest.grid}
+      levels={manifest.levels}
       assetBase={`${base}/assets`}
       mapBase={`${base}/assets/map`}
     />
 
     <p class="caption foot prose">
       노드 좌표·순도는 게임 데이터에서 가져왔습니다. 지형과 생물군계 그림은 공식 위키의 5000×5000
-      원본을 4×4 타일로 잘라 둔 것이며 Coffee Stain Studios 자산입니다. 그 위에 그리는 것은 전부
+      원본을 배율 계단(1024 · 2048 · 5120)으로 잘라 둔 것이며 Coffee Stain Studios 자산입니다. 그 위에 그리는 것은 전부
       벡터라 확대해도 뭉개지지 않습니다 — 게임 지형의 벡터 원본은 공개된 것이 없어 바탕만 사진입니다.
       데이터 {Math.round(bytes / 1024)}KB 를 화면과 함께 보내므로 조작에 네트워크 요청이 없습니다.
     </p>
