@@ -76,30 +76,62 @@ const bus = (itemId: string, perMinute: number, note?: string): Row => ({
 });
 
 /**
- * 초반 철 라인 — **보강된 철판 5/분을 감당할 크기**로 잡는다.
+ * 초반 철 라인 — 철 노드 하나를 전부 쓰는 크기.
  *
- * 이 크기를 쓰는 이유: 보강된 철판 5/분이 철광석 정확히 60/분이고, 그게 채굴기 한 대가
- * 벨트 Mk.1 로 낼 수 있는 최대치와 같다. 노드 하나·벨트 한 줄이 딱 떨어진다.
+ * **모든 기계를 100% 로 돌린다.** 클럭을 내리면 대수는 줄지만 초반에는 그럴 이유가 없다 —
+ * 정수비로 떨어지는 배치가 짓기도 쉽고 나중에 늘리기도 쉽다.
+ *
+ * 철괴 60 을 30 : 30 으로 나눈다.
+ *   철판 쪽 30 → 제작기 한 대(100%) → 철판 20/분
+ *   철봉 쪽 30 → 제작기 두 대(100%) → 철봉 30/분
+ *     그중 10 만 나사 제작기로 가고(→ 나사 40/분) 나머지 20 은 그대로 납품한다.
+ *
+ * 산출이 셋이다 — 철판 20 · 철봉 20 · 나사 40. 허브 업그레이드와 티어 1~2 마일스톤이
+ * 요구하는 것이 정확히 이 셋이다.
  */
 export function ironLine(): FlowDef {
   const miner = building('Build_MinerMk1_C');
   const smelter = building('Build_SmelterMk1_C');
   const constructor = building('Build_ConstructorMk1_C');
 
-  const need = expandDemand('Desc_IronPlateReinforced_C', 5);
-  const ore = need.get('Desc_OreIron_C') ?? 0;
-  const ingot = need.get('Desc_IronIngot_C') ?? 0;
-  const plate = need.get('Desc_IronPlate_C') ?? 0;
-  const rod = need.get('Desc_IronRod_C') ?? 0;
-  const screw = need.get('Desc_IronScrew_C') ?? 0;
+  const ore = building('Build_ConveyorBeltMk1_C').beltItemsPerMinute ?? 60;
+  const smeltIn = inOf('Recipe_IngotIron_C');
+  const smeltOut = outOf('Recipe_IngotIron_C');
+  const smelters = ore / smeltIn;
+  const ingot = smelters * smeltOut;
 
-  const pSmelt = plan('Recipe_IngotIron_C', ingot);
-  const pPlate = plan('Recipe_IronPlate_C', plate);
-  const pRod = plan('Recipe_IronRod_C', rod);
-  const pScrew = plan('Recipe_Screw_C', screw);
+  /* 철괴를 절반씩 나눈다 */
+  const half = ingot / 2;
+  const plateIn = inOf('Recipe_IronPlate_C');
+  const plateOut = outOf('Recipe_IronPlate_C');
+  const plateMachines = half / plateIn;
 
-  const ingotToPlate = (inOf('Recipe_IronPlate_C') * plate) / outOf('Recipe_IronPlate_C');
-  const ingotToRod = (inOf('Recipe_IronRod_C') * rod) / outOf('Recipe_IronRod_C');
+  const rodIn = inOf('Recipe_IronRod_C');
+  const rodOut = outOf('Recipe_IronRod_C');
+  const rodMachines = half / rodIn;
+  const rodTotal = rodMachines * rodOut;
+
+  const screwIn = inOf('Recipe_Screw_C');
+  const screwOut = outOf('Recipe_Screw_C');
+  const screwMachines = 1;
+  const rodToScrew = screwIn * screwMachines;
+  const rodSpare = rodTotal - rodToScrew;
+
+  /* 이 배치는 정수비 위에 서 있다. 레시피가 바뀌면 그림을 다시 짜야 한다 */
+  if (!Number.isInteger(smelters) || !Number.isInteger(plateMachines) || !Number.isInteger(rodMachines)) {
+    throw new Error(
+      `철 라인이 정수비가 아닙니다 (제련기 ${smelters} · 철판 ${plateMachines} · 철봉 ${rodMachines}).`
+    );
+  }
+
+  let n = 0;
+  const cons = (productKo: string, inKo: string, inRate: number, outRate: number): MachineBox => ({
+    ko: `${constructor.ko} #${++n}`,
+    machineId: constructor.id,
+    inputs: [{ ko: inKo, perMinute: inRate }],
+    output: { ko: productKo, perMinute: outRate },
+    clock: 100,
+  });
 
   return {
     rows: [
@@ -110,49 +142,45 @@ export function ironLine(): FlowDef {
         clock: 100,
       })),
       bus('Desc_OreIron_C', ore, '분배기 직렬'),
-      machines(pSmelt.count, (i) => ({
+      machines(smelters, (i) => ({
         ko: `${smelter.ko} #${i + 1}`,
         machineId: smelter.id,
-        inputs: [{ ko: ko('Desc_OreIron_C'), perMinute: ore / pSmelt.count }],
-        output: { ko: ko('Desc_IronIngot_C'), perMinute: pSmelt.each },
-        clock: pSmelt.clock,
+        inputs: [{ ko: ko('Desc_OreIron_C'), perMinute: smeltIn }],
+        output: { ko: ko('Desc_IronIngot_C'), perMinute: smeltOut },
+        clock: 100,
       })),
       bus('Desc_IronIngot_C', ingot, '분배기 직렬'),
       {
         kind: 'machines',
         boxes: [
-          ...Array.from({ length: pPlate.count }, (_, i) => ({
-            ko: `${constructor.ko} #${i + 1}`,
-            machineId: constructor.id,
-            inputs: [{ ko: ko('Desc_IronIngot_C'), perMinute: ingotToPlate / pPlate.count }],
-            output: { ko: ko('Desc_IronPlate_C'), perMinute: pPlate.each },
-            clock: pPlate.clock,
-            /* 철판은 여기서 끝난다. 아래 나사 줄로 내려가지 않는다 */
+          {
+            ...cons(ko('Desc_IronPlate_C'), ko('Desc_IronIngot_C'), plateIn, plateOut),
+            /* 철판은 여기서 끝난다 */
             feedsNext: false,
-          })),
-          ...Array.from({ length: pRod.count }, (_, i) => ({
-            ko: `${constructor.ko} #${pPlate.count + i + 1}`,
-            machineId: constructor.id,
-            inputs: [{ ko: ko('Desc_IronIngot_C'), perMinute: ingotToRod / pRod.count }],
-            output: { ko: ko('Desc_IronRod_C'), perMinute: pRod.each },
-            clock: pRod.clock,
-          })),
+          },
+          ...Array.from({ length: rodMachines }, () =>
+            cons(ko('Desc_IronRod_C'), ko('Desc_IronIngot_C'), rodIn, rodOut)
+          ),
         ],
       },
-      bus('Desc_IronRod_C', rod),
-      machines(pScrew.count, (i) => ({
-        ko: `${constructor.ko} #${pPlate.count + pRod.count + i + 1}`,
-        machineId: constructor.id,
-        inputs: [{ ko: ko('Desc_IronRod_C'), perMinute: rod / pScrew.count }],
-        output: { ko: ko('Desc_IronScrew_C'), perMinute: pScrew.each },
-        clock: pScrew.clock,
-      })),
+      {
+        kind: 'bus',
+        bus: {
+          itemKo: ko('Desc_IronRod_C'),
+          itemId: 'Desc_IronRod_C',
+          perMinute: rodTotal,
+          deliver: { ko: ko('Desc_IronRod_C'), perMinute: rodSpare },
+        },
+      },
+      machines(screwMachines, () =>
+        cons(ko('Desc_IronScrew_C'), ko('Desc_IronRod_C'), screwIn, screwOut)
+      ),
     ],
     caption:
       `철광석 ${fmt(ore)}개/분은 채굴기 한 대가 벨트 Mk.1 로 낼 수 있는 최대치입니다. ` +
-      `철괴를 철판용 ${fmt(ingotToPlate)}와 철봉용 ${fmt(ingotToRod)}로 나누는데 정수비가 아니라 ` +
-      `밸런서로는 못 나눕니다. 분배기를 일렬로 이어 붙이면 앞쪽 기계부터 차면서 저절로 맞습니다. ` +
-      `산출은 철판 ${fmt(plate)}개/분 · 나사 ${fmt(screw)}개/분 — 보강된 철판 5개/분의 입력과 같습니다.`,
+      `모든 기계가 100% 로 돕니다 — 클럭을 건드릴 일이 없습니다. ` +
+      `산출은 셋입니다: 철판 ${fmt(plateOut)}개/분 · 철봉 ${fmt(rodSpare)}개/분 · 나사 ${fmt(screwOut)}개/분. ` +
+      `철봉 ${fmt(rodTotal)} 중 ${fmt(rodToScrew)}만 나사로 돌리고 나머지는 그대로 납품합니다.`,
   };
 }
 

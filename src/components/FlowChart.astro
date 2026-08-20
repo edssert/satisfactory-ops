@@ -55,6 +55,11 @@ export interface BusLine {
   perMinute: number;
   /** 이 줄의 성격 — 예: "분배기 직렬", "병합기로 합침" */
   note?: string;
+  /**
+   * 이 줄에서 **밖으로 빠지는 양**. 철봉 30 중 10 만 나사로 가고 20 은 그대로 납품되는 것처럼,
+   * 아래로 안 내려가고 여기서 끝나는 몫을 적는다.
+   */
+  deliver?: { ko: string; perMinute: number };
 }
 
 export type Row = { kind: 'machines'; boxes: MachineBox[] } | { kind: 'bus'; bus: BusLine };
@@ -182,10 +187,30 @@ function connectors(row: Row): number[] {
               >
                 {label}
               </text>
-              {b.note && (
+              {b.note && !b.deliver && (
                 <text x={busX2 - 8} y={p.y + p.h / 2 + 4} class="fc-busnote" text-anchor="end">
                   {b.note}
                 </text>
+              )}
+              {b.deliver && (
+                <>
+                  <rect
+                    x={busX2 - chipWidth(`${b.deliver.ko} ${fmtRate(b.deliver.perMinute)}/분 납품`, false) - 6}
+                    y={p.y + 3}
+                    width={chipWidth(`${b.deliver.ko} ${fmtRate(b.deliver.perMinute)}/분 납품`, false)}
+                    height={p.h - 6}
+                    rx="3"
+                    class="fc-deliver"
+                  />
+                  <text
+                    x={busX2 - 12}
+                    y={p.y + p.h / 2 + 4}
+                    class="fc-delivertext"
+                    text-anchor="end"
+                  >
+                    {b.deliver.ko} {fmtRate(b.deliver.perMinute)}/분 납품
+                  </text>
+                </>
               )}
             </g>
           );

@@ -14,9 +14,24 @@ import '../../styles/fx.css';
 import FlowChart from '../../components/FlowChart.astro';
 import { building, buildings, defaultRecipeOf, item, milestones } from '../../lib/gamedata';
 import spine from '../../data/curated/spine.json';
+import finite from '../../data/curated/finite-resources.json';
 import { biomassLine, ironLine, smartPlatingLine, type FlowDef } from '../../lib/flows';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const finiteDoc = finite as {
+  items: {
+    id: string;
+    ko: string;
+    what: string;
+    becomes: string;
+    usedFor: string[];
+    warning: string;
+    advice: string;
+    amplified?: { ko: string; base: number; withSloop: number }[];
+    slots?: string;
+  }[];
+};
 
 /** 소수점이 붙을 때만 보여준다. 5.00 대신 5 */
 const num = (n: number) => (Number.isInteger(n) ? String(n) : String(Math.round(n * 100) / 100));
@@ -209,6 +224,70 @@ const FLOWS: Record<string, FlowDef> = {
           </section>
         ))}
 
+        <section class="step" id="finite">
+          <p class="marker"><span class="num">주의</span> 유한 자원</p>
+          <h2>다시 자라지 않는 것들</h2>
+          <p class="prose muted">
+            채굴 노드는 무한하지만 아래 넷은 아닙니다. 맵에 놓인 개수가 정해져 있고 게임이
+            경고해 주지 않아서, 초반에 아무 데나 써 버리는 일이 흔합니다.
+          </p>
+
+          <div class="finite">
+            {finiteDoc.items.map((f) => (
+              <article class="fin">
+                <header class="fin-head">
+                  <img
+                    class="fin-icon"
+                    src={`${base}/assets/items/${f.id}.png`}
+                    alt=""
+                    width="32"
+                    height="32"
+                    loading="lazy"
+                  />
+                  <h3>{f.ko}</h3>
+                </header>
+                <p class="fin-what">{f.what}</p>
+                <dl class="fin-rows">
+                  <dt>무엇이 되나</dt>
+                  <dd>{f.becomes}</dd>
+                  <dt>어디에 쓰나</dt>
+                  <dd>{f.usedFor.join(' · ')}</dd>
+                  <dt class="is-warn">함정</dt>
+                  <dd>{f.warning}</dd>
+                  <dt class="is-do">권장</dt>
+                  <dd class="is-do">{f.advice}</dd>
+                  {f.slots && (
+                    <>
+                      <dt>슬롯 수</dt>
+                      <dd>{f.slots}</dd>
+                    </>
+                  )}
+                </dl>
+                {f.amplified && (
+                  <table class="amp">
+                    <thead>
+                      <tr>
+                        <th>슬러그</th>
+                        <th class="n">그냥 변환</th>
+                        <th class="n">소머슬룹 1개</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {f.amplified.map((a) => (
+                        <tr>
+                          <td>{a.ko}</td>
+                          <td class="n">{a.base}</td>
+                          <td class="n is-amp">{a.withSloop}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              </article>
+            ))}
+          </div>
+        </section>
+
         <section class="step is-open">
           <p class="marker"><span class="num">{String(steps.length).padStart(2, '0')}</span> 티어 4 이후</p>
           <h2>아직 쓰지 않았습니다</h2>
@@ -334,6 +413,48 @@ const FLOWS: Record<string, FlowDef> = {
     .keep-body { margin: 0; font-weight: 600; max-width: var(--measure); }
 
     .step.is-open h2 { color: var(--ink-2); }
+
+    .finite { display: grid; gap: var(--s4); }
+    @media (min-width: 900px) { .finite { grid-template-columns: 1fr 1fr; } }
+    .fin {
+      padding: var(--s5);
+      border-radius: calc(var(--radius) * 2);
+      background: var(--glass);
+      box-shadow:
+        inset 0 1px 0 color-mix(in oklab, white 10%, transparent),
+        0 0 0 1px color-mix(in oklab, var(--danger) 24%, transparent);
+      backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    }
+    .fin-head { display: flex; align-items: center; gap: var(--s3); margin-bottom: var(--s3); }
+    .fin-head h3 { font-size: var(--t-body-l); }
+    .fin-icon { flex: none; }
+    .fin-what { margin: 0 0 var(--s4); font-size: var(--t-small); color: var(--ink-2); }
+    .fin-rows {
+      display: grid;
+      grid-template-columns: 72px minmax(0, 1fr);
+      gap: var(--s2) var(--s4);
+      margin: 0;
+      font-size: var(--t-small);
+    }
+    .fin-rows dt {
+      font-family: var(--font-mono);
+      font-size: var(--t-label);
+      letter-spacing: 0.06em;
+      color: var(--ink-3);
+      padding-top: 2px;
+    }
+    .fin-rows dt.is-warn { color: var(--danger); }
+    .fin-rows dt.is-do { color: var(--ok); }
+    .fin-rows dd { margin: 0; color: var(--ink-2); }
+    .fin-rows dd.is-do { color: var(--ink); font-weight: 500; }
+    .amp { margin-top: var(--s4); font-size: var(--t-caption); }
+    .amp thead th { position: static; background: transparent; padding-block: 0 4px; }
+    .amp td, .amp th { padding-inline: 0 var(--s3); }
+    .amp .is-amp { color: var(--ok); font-weight: 600; }
+    @media (max-width: 620px) {
+      .fin-rows { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+      .fin-rows dd { margin-bottom: var(--s3); }
+    }
     .wide { max-width: var(--measure-wide); }
   </style>
 </Base>
