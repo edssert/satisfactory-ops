@@ -207,12 +207,22 @@ const FLOWS: Record<string, FlowDef> = {
 
             {FLOWS[s.id] && (
               <div class="flowwrap">
-                <FlowChart rows={FLOWS[s.id]!.rows} caption={FLOWS[s.id]!.caption} index={i + 1} />
+                <FlowChart
+                  rows={FLOWS[s.id]!.rows}
+                  links={FLOWS[s.id]!.links}
+                  caption={FLOWS[s.id]!.caption}
+                  index={i + 1}
+                />
               </div>
             )}
             {s.id === 't2-assembler' && (
               <div class="flowwrap">
-                <FlowChart rows={FLOWS['t2-biofuel']!.rows} caption={FLOWS['t2-biofuel']!.caption} index={90} />
+                <FlowChart
+                rows={FLOWS['t2-biofuel']!.rows}
+                links={FLOWS['t2-biofuel']!.links}
+                caption={FLOWS['t2-biofuel']!.caption}
+                index={90}
+              />
               </div>
             )}
 

@@ -2,144 +2,203 @@
 /**
  * FlowChart — 공정 흐름도. **축척이 없다.**
  *
- * 모델을 바꿨다. 앞선 판본은 기계를 점으로 두고 기계끼리 화살표를 이었는데,
- * 그러면 45:15 같은 비정수 분배가 분배기 하나로 갈라지는 것처럼 그려진다. 실제로는 그렇게 안 된다.
+ * 모델을 다시 바꿨다. 앞선 판본은 줄과 줄 사이를 무조건 한 점으로 모았다가 다시 뿌렸다.
+ * 그러면 제련기 두 대가 병합기로 합쳐졌다가 제작기 세 대로 갈라지는 그림이 나오는데,
+ * 실제로는 그렇게 짓지 않는다 — 제련기 #1(철 주괴 30/분)은 제작기 #1(철 주괴 30/분)이
+ * 통째로 먹으므로 벨트 한 줄로 직결하면 된다. 있지도 않은 병합기를 그린 셈이다.
  *
- * 초반 공장의 표준은 **매니폴드**이고, 공식 위키의 정의는 이렇다:
- *   "Manifold refers to a fill method where Conveyor Splitters or Conveyor Mergers are aligned
- *    in a series (that is, one after another), usually parallel to the arrangement of buildings."
- *   — 즉 컨베이어 분배기를 **일렬로 이어 붙여** 기계 배열과 나란히 놓는 채움 방식이다.
- *   (satisfactory.wiki.gg/wiki/Manifold)
+ * 그래서 연결을 자동으로 만들지 않고 간선을 명시한다. `links` 가 정본이다.
  *
- * 그 줄 하나를 상자 하나로 그리고, 기계는 그 줄에 붙는다. 그래프가 아니라 세로로 쌓은 층이다:
+ *   분배기 — 한 기계의 산출이 두 곳 이상으로 갈릴 때만 그린다
+ *   병합기 — 한 기계의 투입구로 같은 물건이 두 줄 이상 들어올 때만 그린다
+ *            (물건이 다르면 투입구가 따로라 병합기가 필요 없다.
+ *             저장 컨테이너는 벨트 두 줄까지 직접 받는다)
  *
- *     [기계] [기계]          같은 일을 하는 기계도 각자 상자를 갖는다 (×2 로 뭉치지 않는다)
- *   ══ 철 주괴 60/분 ══       분배기를 일렬로 이어 붙인 줄. 유량은 여기 적는다
- *     [기계] [기계] [기계]
- *
- * 유량은 연결선이 아니라 **벨트 줄과 기계 상자 안**에 적는다.
- * 선에 라벨을 달면 어느 기계가 얼마를 내는지 눈으로 따라갈 수 없다.
+ * 유량은 연결선이 아니라 기계 상자 안에 적는다. 예외는 갈라지는 지점뿐이다 —
+ * 15/분이 10과 5로 갈리면 어느 쪽이 얼만지 상자만 봐선 알 수 없어서 가지에 적는다.
  */
 import '../styles/flow.css';
-import { NODE_W, GAP_X, PAD, chipWidth, fmtRate } from '../lib/flow-layout';
+import { NODE_W, GAP_X, PAD, fmtRate } from '../lib/flow-layout';
 
-/** 네 줄(기계·입력·출력·클럭)을 담아야 하므로 flow-layout 기본값보다 높다 */
+/** 네 줄(기계·투입·산출·클럭)이 들어가야 하므로 flow-layout 기본값보다 높다 */
 const NODE_H = 88;
+const STORE_H = 92;
+/** 분배기·병합기가 들어갈 자리를 줄 사이에 확보한다 */
+const ROW_GAP = 68;
+const BRANCH_DY = 28;
+const ATTACH = 32;
+/** 필렛 반지름 */
+const R = 9;
 
 export interface MachineBox {
-  /** 기계 이름. 같은 기계가 여러 대면 상자를 여러 개 만든다 */
+  /** 기계 이름. 같은 기계가 여러 대면 상자를 각각 만든다 */
   ko: string;
   /** 아이콘용 건물 클래스 */
   machineId?: string;
-  /**
-   * 상자는 네 줄이다 — 기계 이름 / 들어가는 것 / 나오는 것 / 클럭.
-   * 저장 컨테이너처럼 만들지 않는 것은 `note` 만 쓴다. 보관하는 물건에 분당은 뜻이 없다.
-   */
   inputs?: { ko: string; perMinute: number }[];
-  /** 단위는 기본이 "/분"이다. 발전기처럼 MW 를 내는 것은 unit 을 바꾼다 */
+  /** 단위는 기본이 "/분". 발전기처럼 MW 를 내는 것은 unit 을 바꾼다 */
   output?: { ko: string; perMinute: number; unit?: string };
   /** 100 이면 적지 않는다 */
   clock?: number;
   /** 기계가 아닌 것(저장 컨테이너 등)에 붙이는 한 줄 */
   note?: string;
-  /**
-   * 이 기계의 산출이 아래 줄로 가는가. 기본값 true.
-   * 철판처럼 그 자리에서 끝나는 것은 false — 아니면 없는 연결선이 그려진다.
-   */
-  feedsNext?: boolean;
+  /** 설 자리(열 번호, 0부터). 없으면 그 줄 안에서 가운데 정렬 */
+  col?: number;
 }
 
-export interface BusLine {
-  itemKo: string;
-  itemId?: string;
-  perMinute: number;
-  /** 이 줄의 성격 — 예: "분배기 직렬", "병합기로 합침" */
-  note?: string;
-  /**
-   * 이 줄에서 **밖으로 빠지는 양**. 철봉 30 중 10 만 나사로 가고 20 은 그대로 납품되는 것처럼,
-   * 아래로 안 내려가고 여기서 끝나는 몫을 적는다.
-   */
-  deliver?: { ko: string; perMinute: number };
-}
-
-/** 라인의 최종 산출이 쌓이는 곳. 무엇이 분당 몇 개씩 쌓이는지 적는다 */
+/** 라인의 끝. 무엇이 분당 몇 개씩 들어오는지 */
 export interface StoreBox {
   itemKo: string;
   itemId?: string;
   perMinute: number;
-  /**
-   * 어느 자리에 세울 것인가. 가장 넓은 줄의 열 번호(0부터)다.
-   * 이 컨테이너로 보내는 기계와 같은 열에 두면 선이 곧게 내려와 어디서 왔는지가 보인다.
-   */
-  col: number;
-  /** 어느 줄에서 오는가. rows 배열의 인덱스 */
-  fromRow: number;
+  col?: number;
 }
 
 export type Row =
   | { kind: 'machines'; boxes: MachineBox[] }
-  | { kind: 'bus'; bus: BusLine }
   | { kind: 'storage'; label: string; boxes: StoreBox[] };
+
+/** 상자 좌표 — [행, 그 행에서 몇 번째] */
+export type At = [number, number];
+
+export interface Link {
+  from: At;
+  to: At;
+  /** 갈라지는 지점에서만 적는다. 안 적으면 어느 가지가 얼만지 알 수 없다 */
+  perMinute?: number;
+}
 
 interface Props {
   rows: Row[];
+  links: Link[];
   caption?: string;
   index?: number;
 }
-const { rows, caption, index = 1 } = Astro.props;
+const { rows, links, caption, index = 1 } = Astro.props;
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const bIcon = `${base}/assets/buildings-png`;
 const iIcon = `${base}/assets/items`;
 
-const BUS_H = 30;
-const ROW_GAP = 44;
-/** 필렛 반지름. 배선이 꺾이는 곳을 둥글게 돌린다 */
-const R = 10;
+/* ---------------------------------------------------------------- 배치 */
 
-const STORE_H = 92;
-const widest = Math.max(
-  ...rows.map((r) => (r.kind === 'bus' ? 1 : r.boxes.length)),
-  1
+const cols = Math.max(
+  1,
+  ...rows.map((r) =>
+    Math.max(r.boxes.length, ...r.boxes.map((b: { col?: number }) => (b.col ?? 0) + 1))
+  )
 );
-const width = PAD * 2 + widest * NODE_W + (widest - 1) * GAP_X;
-const centerX = width / 2;
+const width = PAD * 2 + cols * NODE_W + (cols - 1) * GAP_X;
 
-/** 위에서부터 층을 쌓는다 */
 let cursor = PAD;
 const placed = rows.map((row) => {
-  const h = row.kind === 'machines' ? NODE_H : row.kind === 'storage' ? STORE_H : BUS_H;
+  const h = row.kind === 'storage' ? STORE_H : NODE_H;
   const at = { row, y: cursor, h };
   cursor += h + ROW_GAP;
   return at;
 });
 const height = cursor - ROW_GAP + PAD;
 
-/** 기계 상자를 가운데 정렬해 x 를 매긴다 */
-const boxX = (count: number, i: number) => {
-  const total = count * NODE_W + (count - 1) * GAP_X;
-  return (width - total) / 2 + i * (NODE_W + GAP_X);
-};
-
-const busX1 = PAD;
-const busX2 = width - PAD;
-
-/** 층과 층 사이를 잇는 선의 x 좌표들 */
-/** 저장 상자는 가장 넓은 줄의 열 자리에 세운다 — 보내는 기계와 x 가 맞아야 선이 곧다 */
-const storeX = (col: number) => boxX(widest, col);
-
-function connectors(row: Row): number[] {
-  if (row.kind === 'storage') {
-    return row.boxes.map((b) => storeX(b.col) + NODE_W / 2);
-  }
-  if (row.kind === 'machines') {
-    return row.boxes
-      .map((b, i) => ({ b, x: boxX(row.boxes.length, i) + NODE_W / 2 }))
-      .filter(({ b }) => b.feedsNext !== false)
-      .map(({ x }) => x);
-  }
-  return [centerX];
+function boxLeft(ri: number, bi: number): number {
+  const row = rows[ri]!;
+  const b = row.boxes[bi] as { col?: number } | undefined;
+  if (b?.col != null) return PAD + b.col * (NODE_W + GAP_X);
+  const n = row.boxes.length;
+  const total = n * NODE_W + (n - 1) * GAP_X;
+  return (width - total) / 2 + bi * (NODE_W + GAP_X);
 }
+const boxCx = (ri: number, bi: number) => boxLeft(ri, bi) + NODE_W / 2;
+const rowTop = (ri: number) => placed[ri]!.y;
+const rowBottom = (ri: number) => placed[ri]!.y + placed[ri]!.h;
+
+/* ---------------------------------------------------------------- 간선 */
+
+const key = (a: At) => `${a[0]}:${a[1]}`;
+const outs = new Map<string, Link[]>();
+const ins = new Map<string, Link[]>();
+for (const l of links) {
+  const sk = key(l.from);
+  const dk = key(l.to);
+  if (!outs.has(sk)) outs.set(sk, []);
+  if (!ins.has(dk)) ins.set(dk, []);
+  outs.get(sk)!.push(l);
+  ins.get(dk)!.push(l);
+}
+
+/** 이 간선이 나르는 물건. 병합기가 필요한지 판단하는 데 쓴다 */
+function carried(l: Link): string {
+  const row = rows[l.from[0]]!;
+  if (row.kind !== 'machines') return '';
+  return row.boxes[l.from[1]]?.output?.ko ?? '';
+}
+
+/**
+ * 병합기가 필요한가. 같은 물건이 한 투입구로 두 줄 이상 들어올 때만이다.
+ * 물건이 다르면 기계의 투입구가 따로라 그냥 각각 꽂는다.
+ * 저장 컨테이너는 벨트 두 줄까지 직접 받으므로 세 줄부터 병합기를 그린다.
+ */
+function isMerge(k: string): boolean {
+  const inc = ins.get(k) ?? [];
+  const ri = Number(k.split(':')[0]);
+  if (rows[ri]!.kind === 'storage') return inc.length >= 3;
+  if (inc.length < 2) return false;
+  return new Set(inc.map(carried)).size === 1;
+}
+
+/** 들어오는 줄이 여럿이면 투입구를 나눠 꽂는다 — 한 점에 겹치면 어느 줄인지 안 보인다 */
+function dstX(l: Link): number {
+  const k = key(l.to);
+  const inc = ins.get(k) ?? [];
+  if (isMerge(k) || inc.length <= 1) return boxCx(l.to[0], l.to[1]);
+  const i = inc.indexOf(l);
+  return boxLeft(l.to[0], l.to[1]) + (NODE_W * (i + 1)) / (inc.length + 1);
+}
+
+/** 가로로 도는 높이를 hy 로 못박은 꺾인 선. 꺾임은 필렛으로 돌린다 */
+function elbow(x1: number, y1: number, x2: number, y2: number, hy: number): string {
+  if (Math.abs(x1 - x2) < 1.5) return `M${x1},${y1} L${x2},${y2}`;
+  const dir = x2 > x1 ? 1 : -1;
+  const r = Math.max(2, Math.min(R, Math.abs(x2 - x1) / 2, Math.abs(hy - y1), Math.abs(y2 - hy)));
+  return (
+    `M${x1},${y1} L${x1},${hy - r} ` +
+    `Q${x1},${hy} ${x1 + r * dir},${hy} ` +
+    `L${x2 - r * dir},${hy} ` +
+    `Q${x2},${hy} ${x2},${hy + r} ` +
+    `L${x2},${y2}`
+  );
+}
+
+const edges = links.map((l) => {
+  const split = (outs.get(key(l.from)) ?? []).length >= 2;
+  const merge = isMerge(key(l.to));
+  const sx = boxCx(l.from[0], l.from[1]);
+  const ex = merge ? boxCx(l.to[0], l.to[1]) : dstX(l);
+  const y0 = rowBottom(l.from[0]) + (split ? BRANCH_DY : 0);
+  const y1 = rowTop(l.to[0]) - (merge ? BRANCH_DY : 0);
+  const hy = split ? y0 + ATTACH / 2 + 4 : merge ? y1 - ATTACH / 2 - 4 : (y0 + y1) / 2;
+  return {
+    d: elbow(sx, y0, ex, y1, hy),
+    /* 중간 줄을 들르지 않고 지나가는 벨트는 점선으로 — 그 줄에 꽂힌 게 아님을 드러낸다 */
+    skips: l.to[0] > l.from[0] + 1,
+    arrow: !merge,
+    /* 갈라지는 지점에서만 유량을 적는다 */
+    rate: split && l.perMinute != null ? { x: ex + 7, y: hy - 6, v: l.perMinute } : null,
+  };
+});
+
+/** 분배기 실물이 설 자리 */
+const splitters = [...outs.entries()]
+  .filter(([, v]) => v.length >= 2)
+  .map(([k]) => {
+    const [ri, bi] = k.split(':').map(Number) as [number, number];
+    return { x: boxCx(ri, bi), y: rowBottom(ri) + BRANCH_DY };
+  });
+
+/** 병합기 실물이 설 자리 */
+const mergers = [...ins.keys()].filter(isMerge).map((k) => {
+  const [ri, bi] = k.split(':').map(Number) as [number, number];
+  return { x: boxCx(ri, bi), y: rowTop(ri) - BRANCH_DY, top: rowTop(ri) };
+});
 ---
 
 <figure class="fc">
@@ -148,7 +207,7 @@ function connectors(row: Row): number[] {
     style={`max-width:${width}px`}
     viewBox={`0 0 ${width} ${height}`}
     role="img"
-    aria-label={caption ?? '공정 흐름도'}
+    aria-label={caption || '공정 흐름도'}
   >
     <defs>
       <marker
@@ -160,111 +219,86 @@ function connectors(row: Row): number[] {
         markerHeight="5"
         orient="auto-start-reverse"
       >
-        <path d="M0,1 L9,5 L0,9 z" class="fc-arrowhead" />
+        <path d="M0,1 L9,5 L0,9 z" class="fc-arrowhead"></path>
       </marker>
     </defs>
 
     {
-      /*
-       * 배선. 위 줄에서 내려와 한 점에 모였다가 아래 줄로 갈라진다.
-       * 꺾이는 곳은 필렛으로 돌린다 — 직각으로 꺾으면 도면이 아니라 순서도로 보인다.
-       */
+      edges.map((e) => (
+        <path
+          d={e.d}
+          class={e.skips ? 'fc-link is-skip' : 'fc-link'}
+          fill="none"
+          marker-end={e.arrow ? `url(#fc-arrow-${index})` : undefined}
+        />
+      ))
+    }
+
+    {/* 분배기로 들어가는 토막 · 병합기에서 기계로 나가는 토막 */}
+    {
+      splitters.map((s) => (
+        <path d={`M${s.x},${s.y - BRANCH_DY} L${s.x},${s.y}`} class="fc-link" fill="none" />
+      ))
+    }
+    {
+      mergers.map((m) => (
+        <path
+          d={`M${m.x},${m.y} L${m.x},${m.top}`}
+          class="fc-link"
+          fill="none"
+          marker-end={`url(#fc-arrow-${index})`}
+        />
+      ))
+    }
+
+    {/* 실물을 분기점에 얹는다. 선 위에 올려 두고 한참 아래에서 갈라지면 그냥 통과한 그림이 된다 */}
+    {
+      splitters.map((s) => (
+        <image
+          href={`${bIcon}/Build_ConveyorAttachmentSplitter_C.png`}
+          x={s.x - ATTACH / 2}
+          y={s.y - ATTACH / 2}
+          width={ATTACH}
+          height={ATTACH}
+          preserveAspectRatio="xMidYMid meet"
+        />
+      ))
+    }
+    {
+      mergers.map((m) => (
+        <image
+          href={`${bIcon}/Build_ConveyorAttachmentMerger_C.png`}
+          x={m.x - ATTACH / 2}
+          y={m.y - ATTACH / 2}
+          width={ATTACH}
+          height={ATTACH}
+          preserveAspectRatio="xMidYMid meet"
+        />
+      ))
+    }
+
+    {
+      edges.map((e) =>
+        e.rate ? (
+          <text x={e.rate.x} y={e.rate.y} class="fc-branchrate">
+            {fmtRate(e.rate.v)}/분
+          </text>
+        ) : null
+      )
+    }
+
+    {
       placed.map((p, ri) => {
-        const next = placed[ri + 1];
-        if (!next) return null;
-        if (next.row.kind === 'storage') return null;
-
-        const y1 = p.y + p.h;
-        const y2 = next.y;
-        /*
-         * 가지는 **분배기에서 바로** 갈라져야 한다. 분배기를 지나 한참 내려간 뒤 갈라지면
-         * 그 분배기를 그냥 통과한 그림이 된다.
-         */
-        const mid =
-          p.row.kind === 'bus'
-            ? y1 + R
-            : next.row.kind === 'bus'
-              ? y2 - R
-              : (y1 + y2) / 2;
-
-        const srcXs = p.row.kind === 'bus' ? [centerX] : connectors(p.row);
-        const dstXs = next.row.kind === 'bus' ? [centerX] : connectors(next.row);
-        if (!srcXs.length || !dstXs.length) return null;
-
-        /** 한 점에서 여러 갈래로 갈라지거나, 여러 갈래가 한 점에 모이는 배선 */
-        const branch = (xs: number[], toward: number, fromY: number, toY: number, down: boolean) => {
-          const spineY = down ? mid : mid;
-          return xs.map((x) => {
-            if (Math.abs(x - toward) < 1) {
-              return `M${x},${fromY} L${x},${toY}`;
-            }
-            const dir = x > toward ? 1 : -1;
-            if (down) {
-              /* 한 점 → 여러 갈래: 내려와서 옆으로 벌어졌다가 다시 내려간다 */
-              return (
-                `M${toward},${fromY} L${toward},${spineY - R} ` +
-                `Q${toward},${spineY} ${toward + R * dir},${spineY} ` +
-                `L${x - R * dir},${spineY} ` +
-                `Q${x},${spineY} ${x},${spineY + R} ` +
-                `L${x},${toY}`
-              );
-            }
-            /* 여러 갈래 → 한 점 */
-            return (
-              `M${x},${fromY} L${x},${spineY - R} ` +
-              `Q${x},${spineY} ${x - R * dir},${spineY} ` +
-              `L${toward + R * dir},${spineY} ` +
-              `Q${toward},${spineY} ${toward},${spineY + R} ` +
-              `L${toward},${toY}`
-            );
-          });
-        };
-
-        const paths =
-          srcXs.length === 1
-            ? branch(dstXs, srcXs[0]!, y1, y2, true)
-            : branch(srcXs, dstXs[0]!, y1, y2, false);
-
-        return paths.map((d) => (
-          <path d={d} class="fc-link" fill="none" marker-end={`url(#fc-arrow-${index})`} />
-        ));
-      })
-    }
-
-    {
-      /*
-       * 컨테이너로 내려가는 선. 보내는 줄의 아래쪽에서 컨테이너 위쪽까지 곧게 내린다.
-       * 중간 줄을 지나가므로 점선으로 그려 "여기 들르지 않고 지나간다"를 드러낸다.
-       */
-      placed.flatMap((p) => {
-        if (p.row.kind !== 'storage') return [];
-        const store = p;
-        return p.row.boxes.map((b) => {
-          const src = placed[b.fromRow];
-          if (!src) return null;
-          const x = storeX(b.col) + NODE_W / 2;
-          return (
-            <path
-              d={`M${x},${src.y + src.h} L${x},${store.y}`}
-              class="fc-link is-store"
-              marker-end={`url(#fc-arrow-${index})`}
-            />
-          );
-        });
-      })
-    }
-
-    {
-      placed.map((p) => {
         if (p.row.kind === 'storage') {
-          const boxes = p.row.boxes;
           const label = p.row.label;
           return (
             <g class="fc-store">
-              <line x1={busX1} y1={p.y - 14} x2={busX2} y2={p.y - 14} class="fc-storeline" />
-              <text x={busX1} y={p.y - 20} class="fc-storelabel">{label}</text>
-              {boxes.map((b) => {
-                const x = storeX(b.col);
+              <line x1={PAD} y1={p.y - 18} x2={width - PAD} y2={p.y - 18} class="fc-storeline" />
+              <text x={PAD} y={p.y - 24} class="fc-storelabel">
+                {label}
+              </text>
+              {p.row.boxes.map((b, bi) => {
+                const x = boxLeft(ri, bi);
                 return (
                   <g>
                     <rect x={x} y={p.y} width={NODE_W} height={STORE_H} rx="3" class="fc-storebox" />
@@ -277,9 +311,11 @@ function connectors(row: Row): number[] {
                         height="40"
                       />
                     )}
-                    <text x={x + 66} y={p.y + 40} class="fc-name">{b.itemKo}</text>
+                    <text x={x + 66} y={p.y + 40} class="fc-name">
+                      {b.itemKo}
+                    </text>
                     <text x={x + 66} y={p.y + 62} class="fc-storerate">
-                      {fmtRate(b.perMinute)}/분씩 쌓임
+                      {fmtRate(b.perMinute)}/분
                     </text>
                   </g>
                 );
@@ -287,69 +323,9 @@ function connectors(row: Row): number[] {
             </g>
           );
         }
-        if (p.row.kind === 'bus') {
-          const b = p.row.bus;
-          const merge = /병합/.test(b.note ?? '');
-          const attach = merge
-            ? 'Build_ConveyorAttachmentMerger_C'
-            : 'Build_ConveyorAttachmentSplitter_C';
-          const label = `${b.itemKo} ${fmtRate(b.perMinute)}/분`;
-          const w = chipWidth(label);
-          const cy = p.y + p.h / 2;
-          return (
-            <g class="fc-bus">
-              {/* 분배기·병합기 실물 */}
-              <image
-                href={`${bIcon}/${attach}.png`}
-                x={centerX - 21}
-                y={cy - 21}
-                width="42"
-                height="42"
-                preserveAspectRatio="xMidYMid meet"
-              />
-              {/* 유량은 옆에 붙인다 */}
-              <rect
-                x={centerX - 28 - w}
-                y={cy - 13}
-                width={w}
-                height="26"
-                rx="3"
-                class="fc-buschip"
-              />
-              {b.itemId && (
-                <image
-                  href={`${iIcon}/${b.itemId}.png`}
-                  x={centerX - 24 - w}
-                  y={cy - 10}
-                  width="20"
-                  height="20"
-                />
-              )}
-              <text x={centerX - 24 - w + (b.itemId ? 24 : 4)} y={cy + 5} class="fc-bustext">
-                {label}
-              </text>
-              {b.deliver && (
-                <>
-                  <rect
-                    x={centerX + 28}
-                    y={cy - 13}
-                    width={chipWidth(`${b.deliver.ko} ${fmtRate(b.deliver.perMinute)}/분`, false)}
-                    height="26"
-                    rx="3"
-                    class="fc-deliver"
-                  />
-                  <text x={centerX + 34} y={cy + 5} class="fc-delivertext">
-                    {b.deliver.ko} {fmtRate(b.deliver.perMinute)}/분
-                  </text>
-                </>
-              )}
-            </g>
-          );
-        }
 
-        const boxes = p.row.boxes;
-        return boxes.map((m, i) => {
-          const x = boxX(boxes.length, i);
+        return p.row.boxes.map((m, bi) => {
+          const x = boxLeft(ri, bi);
           const tx = x + (m.machineId ? 62 : 12);
           return (
             <g class="fc-node">
@@ -364,7 +340,9 @@ function connectors(row: Row): number[] {
                   preserveAspectRatio="xMidYMid meet"
                 />
               )}
-              <text x={tx} y={p.y + 24} class="fc-name">{m.ko}</text>
+              <text x={tx} y={p.y + 24} class="fc-name">
+                {m.ko}
+              </text>
               {m.inputs && m.inputs.length > 0 && (
                 <text x={tx} y={p.y + 45} class="fc-io">
                   <tspan class="fc-iolabel">넣음</tspan>
@@ -387,7 +365,11 @@ function connectors(row: Row): number[] {
                   </tspan>
                 </text>
               )}
-              {m.note && <text x={tx} y={p.y + 45} class="fc-product">{m.note}</text>}
+              {m.note && (
+                <text x={tx} y={p.y + 45} class="fc-product">
+                  {m.note}
+                </text>
+              )}
               {/* 100% 는 기본값이라 적지 않는다. 적으면 상자마다 같은 글자가 반복돼 잡음이 된다 */}
               {m.clock != null && m.clock < 100 && (
                 <text x={tx} y={p.y + 83} class="fc-sub">클럭 {fmtRate(m.clock)}%</text>
