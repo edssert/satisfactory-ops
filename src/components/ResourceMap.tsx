@@ -132,9 +132,20 @@ export default function ResourceMap({
   const [showGrid, setShowGrid] = useState(true);
   const [showAreas, setShowAreas] = useState(true);
   const [sel, setSel] = useState<MapPoint | null>(null);
-  const [measure, setMeasure] = useState<{ a: { x: number; y: number }; b: { x: number; y: number } | null } | null>(
-    null
-  );
+  /**
+   * 거리 재기.
+   *
+   * 벨트는 직선으로 못 깐다 — 언덕을 돌고 강을 피해 꺾인다. 그래서 두 점이 아니라
+   * 꺾이는 점들을 찍는다. 구간마다 길이가 뜨고 합계가 따로 나온다.
+   *   pts   찍은 점들 (세계 좌표)
+   *   at    아직 안 찍고 마우스가 있는 자리 — 다음 구간을 미리 보여 준다
+   *   done  다 찍었는가
+   */
+  const [measure, setMeasure] = useState<{
+    pts: { x: number; y: number }[];
+    at: { x: number; y: number } | null;
+    done: boolean;
+  } | null>(null);
   const [vb, setVb] = useState({ x: 0, y: 0, w: SIZE, h: SIZE });
   const [sent, setSent] = useState(false);
   const [q, setQ] = useState('');
@@ -238,15 +249,15 @@ export default function ResourceMap({
   );
 
   const onDown = (e: PointerEvent) => {
-    if (measure) return;
+    if (measure && !measure.done) return;
     pan.current = { px: e.clientX, py: e.clientY, vx: vb.x, vy: vb.y };
     moved.current = false;
     (e.currentTarget as Element).setPointerCapture?.(e.pointerId);
   };
   const onMove = (e: PointerEvent) => {
-    if (measure && measure.b === null) {
+    if (measure && !measure.done) {
       const w = toWorld(e.clientX, e.clientY);
-      setMeasure((m) => (m ? { ...m, hover: w } : m) as never);
+      setMeasure((m) => (m ? { ...m, at: w } : m));
     }
     const p = pan.current;
     const r = host.current?.getBoundingClientRect();
@@ -267,8 +278,28 @@ export default function ResourceMap({
   const onStageClick = (e: MouseEvent) => {
     if (!measure || moved.current) return;
     const w = toWorld(e.clientX, e.clientY);
-    setMeasure((m) => (m && m.b === null ? { a: m.a, b: w } : { a: w, b: null }));
+    setMeasure((m) => {
+      if (!m) return m;
+      /* 다 찍은 뒤 다시 누르면 새로 잰다 */
+      if (m.done) return { pts: [w], at: w, done: false };
+      return { pts: [...m.pts, w], at: w, done: false };
+    });
   };
+  /*
+   * 두 번 누르면 거기서 끝낸다.
+   * 두 번 누르기는 누르기 두 번이라 같은 자리에 점이 두 개 찍힌다 — 겹친 것을 지운다.
+   */
+  const onStageDouble = () => {
+    setMeasure((m) => {
+      if (!m || m.pts.length < 2) return m;
+      const pts = m.pts.filter(
+        (q, i) => i === 0 || Math.hypot(q.x - m.pts[i - 1]!.x, q.y - m.pts[i - 1]!.y) > 0.5
+      );
+      return { pts, at: null, done: true };
+    });
+  };
+  const undoPoint = () =>
+    setMeasure((m) => (m && m.pts.length ? { ...m, pts: m.pts.slice(0, -1), done: false } : m));
 
   useEffect(() => {
     const el = host.current;
@@ -280,6 +311,21 @@ export default function ResourceMap({
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
+
+  /* Esc 로 끝내고 Backspace 로 마지막 점을 무른다 */
+  useEffect(() => {
+    if (!measure) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMeasure(null);
+      if (e.key === 'Backspace') {
+        e.preventDefault();
+        undoPoint();
+      }
+      if (e.key === 'Enter') setMeasure((m) => (m ? { ...m, at: null, done: true } : m));
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [measure]);
 
   useEffect(() => {
     const el = host.current;
@@ -375,8 +421,12 @@ export default function ResourceMap({
   const km = (a: { x: number; y: number }, b: { x: number; y: number }) =>
     (Math.hypot(a.x - b.x, a.y - b.y) / SIZE) * WORLD_KM;
 
-  const hover = (measure as unknown as { hover?: { x: number; y: number } })?.hover;
-  const mEnd = measure?.b ?? hover ?? null;
+  /* 그릴 선 — 찍은 점들 + (아직 안 끝났으면) 마우스가 있는 자리 */
+  const line = measure ? [...measure.pts, ...(!measure.done && measure.at ? [measure.at] : [])] : [];
+  const totalKm = line.slice(1).reduce((a, q, i) => a + km(line[i]!, q), 0);
+  /* 마지막 점이 화면 오른쪽에 있으면 글자를 왼쪽으로 뻗는다. 안 그러면 판 밖으로 나간다 */
+  const endAnchor: 'start' | 'end' =
+    line.length && line[line.length - 1]!.x > vb.x + vb.w * 0.62 ? 'end' : 'start';
 
   return (
     <div class="rm">
@@ -418,8 +468,8 @@ export default function ResourceMap({
         <button
           type="button"
           class={`rm-btn${measure ? ' is-on' : ''}`}
-          onClick={() => setMeasure(measure ? null : { a: { x: 0, y: 0 }, b: null })}
-          title="두 점을 눌러 거리를 잽니다"
+          onClick={() => setMeasure(measure ? null : { pts: [], at: null, done: false })}
+          title="꺾이는 점들을 눌러 거리를 잽니다"
         >
           거리 재기
         </button>
@@ -511,10 +561,6 @@ export default function ResourceMap({
               </li>
             ))}
           </ul>
-          <p class="rm-note">
-            전부 맵에 고정 개수로 놓여 있고 다시 생기지 않습니다. 하드 드라이브는 그림 위에
-            올리면 화물칸을 여는 데 드는 물건이 뜹니다.
-          </p>
 
           <p class="rm-k">순도</p>
           <ul class="rm-pur">
@@ -551,6 +597,7 @@ export default function ResourceMap({
           onPointerUp={onUp}
           onPointerLeave={onUp}
           onClick={(e) => onStageClick(e as unknown as MouseEvent)}
+          onDblClick={onStageDouble}
         >
           <svg class="rm-svg" viewBox={`${vb.x} ${vb.y} ${vb.w} ${vh}`} role="img" aria-label="자원 지도">
             <image href={`${mapBase}/${baseLayer(layer)}/preview.webp`} x="0" y="0" width={SIZE} height={SIZE} />
@@ -705,40 +752,65 @@ export default function ResourceMap({
               );
             })}
 
-            {measure && mEnd && (
+            {measure && line.length >= 2 && (
               <g class="rm-measure">
-                <line
-                  x1={measure.a.x}
-                  y1={measure.a.y}
-                  x2={mEnd.x}
-                  y2={mEnd.y}
+                <path
+                  d={line.map((q, i) => `${i ? 'L' : 'M'}${q.x},${q.y}`).join(' ')}
+                  fill="none"
                   vector-effect="non-scaling-stroke"
                 />
-                <circle cx={measure.a.x} cy={measure.a.y} r={s(4)} vector-effect="non-scaling-stroke" />
-                <circle cx={mEnd.x} cy={mEnd.y} r={s(4)} vector-effect="non-scaling-stroke" />
+                {line.map((q, i) => (
+                  <circle key={`mp${i}`} cx={q.x} cy={q.y} r={s(4)} vector-effect="non-scaling-stroke" />
+                ))}
+                {/* 구간마다 길이. 짧은 구간에까지 붙이면 글자가 겹친다 */}
+                {line.slice(1).map((q, i) => {
+                  const a = line[i]!;
+                  const d = km(a, q);
+                  if (d * 1000 < 60) return null;
+                  return (
+                    <text
+                      key={`ms${i}`}
+                      x={(a.x + q.x) / 2}
+                      y={(a.y + q.y) / 2 - s(7)}
+                      font-size={s(Math.max(11, labelPx))}
+                      class="rm-seg"
+                    >
+                      {Math.round(d * 1000)} m
+                    </text>
+                  );
+                })}
+                {/* 합계는 마지막 점 옆에 */}
                 <text
-                  x={(measure.a.x + mEnd.x) / 2}
-                  y={(measure.a.y + mEnd.y) / 2 - s(8)}
-                  font-size={s(Math.max(12, labelPx * 1.2))}
+                  x={line[line.length - 1]!.x + s(endAnchor === 'end' ? -8 : 8)}
+                  y={line[line.length - 1]!.y + s(Math.max(16, labelPx * 1.5))}
+                  font-size={s(Math.max(13, labelPx * 1.2))}
+                  text-anchor={endAnchor}
                 >
-                  {km(measure.a, mEnd).toFixed(2)} km
+                  합 {totalKm.toFixed(2)} km
                 </text>
                 <text
-                  x={(measure.a.x + mEnd.x) / 2}
-                  y={(measure.a.y + mEnd.y) / 2 + s(12)}
-                  font-size={s(Math.max(10, labelPx))}
+                  x={line[line.length - 1]!.x + s(endAnchor === 'end' ? -8 : 8)}
+                  y={line[line.length - 1]!.y + s(Math.max(30, labelPx * 2.8))}
+                  font-size={s(Math.max(10, labelPx * 0.95))}
+                  text-anchor={endAnchor}
                 >
-                  벨트 재료 {Math.ceil(km(measure.a, mEnd) * 1000 * BELT_PER_M)}개 · 구간{' '}
-                  {Math.ceil((km(measure.a, mEnd) * 1000) / BELT_SEGMENT_M)}개 · 전신주{' '}
-                  {Math.ceil((km(measure.a, mEnd) * 1000) / POLE_SPAN_M)}개
+                  벨트 재료 {Math.ceil(totalKm * 1000 * BELT_PER_M)}개 · 구간{' '}
+                  {Math.ceil((totalKm * 1000) / BELT_SEGMENT_M)}개 · 전신주{' '}
+                  {Math.ceil((totalKm * 1000) / POLE_SPAN_M)}개
                 </text>
               </g>
             )}
+
           </svg>
 
           {measure && (
             <p class="rm-hint">
-              두 점을 누르면 거리가 나옵니다. 다시 누르면 새로 잽니다.
+              {measure.done
+                ? `${measure.pts.length}점 · ${totalKm.toFixed(2)} km — 다시 누르면 새로 잽니다`
+                : '꺾이는 자리를 차례로 누르세요. 두 번 누르면 끝납니다'}
+              <button type="button" onClick={undoPoint} disabled={!measure.pts.length}>
+                한 점 무르기
+              </button>
               <button type="button" onClick={() => setMeasure(null)}>
                 끝내기
               </button>

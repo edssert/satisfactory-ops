@@ -247,17 +247,11 @@
 }
 
 /* 거리 재기 */
-.rm-measure line {
-  stroke: var(--accent);
-  stroke-width: 2;
-  stroke-dasharray: 6 4;
-}
 .rm-measure circle { fill: var(--accent); stroke: #000; stroke-width: 1.5; }
 .rm-measure text {
   fill: var(--accent);
   font-family: var(--font-mono);
   font-weight: 600;
-  text-anchor: middle;
   paint-order: stroke;
   stroke: rgb(0 0 0 / 0.85);
   stroke-width: 4;
@@ -458,3 +452,8 @@
   font-size: 12px;
   cursor: pointer;
 }
+
+/* 거리 재기 — 구간별 길이와 합계 */
+.rm-measure path { stroke: var(--accent); stroke-width: 2.5; stroke-dasharray: 7 5; stroke-linejoin: round; }
+.rm-seg { fill: var(--ink); font-weight: 500; text-anchor: middle; }
+.rm-hint button:disabled { opacity: 0.4; cursor: default; }
