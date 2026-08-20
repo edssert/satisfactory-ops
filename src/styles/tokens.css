@@ -7,7 +7,20 @@
  */
 
 /* ---------------------------------------------------------------- 폰트 */
-/* 수치용만 자체 호스팅한다(라틴 서브셋). 표시·본문은 시스템 스택. ADR-0018 */
+/*
+ * 표시·본문 = Pretendard. 이 사이트가 쓰는 글자만 담은 서브셋을 빌드 때 만든다
+ * (`npm run font`). 92개 조각을 연쇄로 물어오는 배포판 동적 서브셋 대신 파일 하나다.
+ * 가변축(wght 45~920)을 남겨 두어 400/600/800 을 파일 하나로 쓴다.
+ */
+@font-face {
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 45 920;
+  font-display: swap;
+  src: url('../fonts/pretendard-subset.woff2') format('woff2-variations');
+}
+
+/* 수치용만 별도 자체 호스팅(라틴 서브셋). ADR-0018 */
 @font-face {
   font-family: 'IBM Plex Mono';
   font-style: normal;
@@ -67,6 +80,8 @@
   --surface-2: #eeebea;
   --ink: #1a1c20;
   --ink-2: #5a6069;
+  /* module-sheet.css 가 쓰는 이름. --ink-2 와 같은 것이다 */
+  --ink-muted: var(--ink-2);
   --accent: #c25e1e;
   --accent-ink: #8f4415;
   --line: #d8d3ce;
@@ -81,10 +96,12 @@
   --res-unverified: #7a7a7a;
 
   /* 타이포 — 브리프 §04 + ADR-0018 */
-  --font-display: 'Bahnschrift', 'DIN Alternate', 'Pretendard Variable', Pretendard,
-    -apple-system, 'Segoe UI', 'Malgun Gothic', sans-serif;
-  --font-body: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont,
-    'Segoe UI Variable Text', 'Segoe UI', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+  /* 표시·본문 같은 서체, 굵기와 자간으로만 위계를 준다. 한글에 Bahnschrift 를 섞으면
+     제목의 한글만 다른 서체로 떨어진다 — 그 서체엔 한글 글리프가 없다 */
+  --font-display: 'Pretendard', -apple-system, 'Segoe UI Variable Display', 'Segoe UI',
+    'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-body: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI Variable Text',
+    'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Consolas, D2Coding, monospace;
 
   /* 스케일 — 브리프 §04 (PC / 모바일) */
@@ -103,8 +120,10 @@
   --s2: 8px;
   --s3: 12px;
   --s4: 16px;
+  --s5: 20px;
   --s6: 24px;
   --s8: 32px;
+  --s10: 40px;
   --s12: 48px;
   --s16: 64px;
   --s24: 96px;
@@ -133,6 +152,7 @@
     --surface-2: #23272e;
     --ink: #e4e1dd;
     --ink-2: #9aa1ab;
+    --ink-muted: var(--ink-2);
     --accent: #fa9549;
     --accent-ink: #ffb877;
     --line: #2e333b;
