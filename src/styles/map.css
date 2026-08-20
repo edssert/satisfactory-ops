@@ -329,3 +329,32 @@
   .rm-body { grid-template-columns: 1fr; }
   .rm-side { max-height: 240px; }
 }
+
+/* 자원 검색 */
+.rm-q {
+  width: 100%;
+  margin-bottom: 6px;
+  padding: 6px 8px;
+  border: var(--hair) solid var(--line-strong);
+  border-radius: 3px;
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  font-size: 12px;
+}
+
+/* 노드 설명의 벨트 권고와 설계 보내기 */
+.rm-info .rm-belt { color: var(--primary); font-size: 11px; }
+.rm-send {
+  flex: none;
+  padding: 6px 12px;
+  border: var(--hair) solid var(--primary);
+  border-radius: 4px;
+  background: none;
+  color: var(--primary);
+  font: inherit;
+  font-size: var(--t-caption);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.rm-send:hover { background: var(--primary); color: var(--on-accent); }

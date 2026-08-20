@@ -15,6 +15,7 @@ import nodesJson from '../../data/app/resource-nodes.json';
 import manifestJson from '../../../public/assets/map/manifest.json';
 import { items } from '../../lib/gamedata';
 import { areas } from '../../lib/start-areas';
+import { buildings } from '../../lib/gamedata';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -47,6 +48,11 @@ const resources = [...new Set(doc.nodes.map((n) => n.res))]
   .sort((a, b) => b.n - a.n);
 
 const payloadAreas = areas.map((a) => ({ key: a.key, ko: a.ko, cells: a.cells }));
+/** 벨트 등급표. 노드 산출을 어느 벨트가 감당하는지 말할 때 쓴다 */
+const payloadBelts = buildings
+  .filter((b) => /^Build_ConveyorBeltMk\d_C$/.test(b.id) && b.beltItemsPerMinute)
+  .map((b) => ({ ko: b.ko, r: b.beltItemsPerMinute! }))
+  .sort((a, b) => a.r - b.r);
 const bytes = JSON.stringify({ points, resources, payloadAreas }).length;
 ---
 
@@ -67,6 +73,7 @@ const bytes = JSON.stringify({ points, resources, payloadAreas }).length;
 
     <ResourceMap
       client:load
+      belts={payloadBelts}
       points={points}
       resources={resources}
       areas={payloadAreas}

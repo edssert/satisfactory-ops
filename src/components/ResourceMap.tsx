@@ -34,7 +34,13 @@ export interface MapArea {
   cells: string[];
 }
 
+export interface MapBelt {
+  ko: string;
+  r: number;
+}
+
 interface Props {
+  belts: MapBelt[];
   points: MapPoint[];
   resources: MapRes[];
   areas: MapArea[];
@@ -55,6 +61,15 @@ const WORLD_KM = 7.972;
 /** 원본이 5000px 이라 그 이상은 없는 정보를 늘리는 것이다 */
 const MAX_ZOOM = 14;
 
+/**
+ * 벨트 재료는 길이에 비례한다 — 공식 위키: "roughly 0.5 materials per meter, rounded up".
+ * 한 구간은 최대 56 m(파운데이션 일곱 칸)이고 그보다 길면 기둥을 세워 이어야 한다.
+ */
+const BELT_PER_M = 0.5;
+const BELT_SEGMENT_M = 56;
+/** 전신주 하나가 덮는 반경. 전력을 끌고 가는 거리를 가늠할 때 쓴다 */
+const POLE_SPAN_M = 40;
+
 const PURITY: Record<string, { ko: string; mult: number }> = {
   i: { ko: '불순', mult: 0.5 },
   n: { ko: '보통', mult: 1 },
@@ -69,6 +84,7 @@ const KIND: Record<string, string> = {
 };
 
 export default function ResourceMap({
+  belts: BELTS,
   points,
   resources,
   areas,
@@ -92,6 +108,8 @@ export default function ResourceMap({
     null
   );
   const [vb, setVb] = useState({ x: 0, y: 0, w: SIZE, h: SIZE });
+  const [sent, setSent] = useState(false);
+  const [q, setQ] = useState('');
 
   const host = useRef<HTMLDivElement>(null);
   const pan = useRef<{ px: number; py: number; vx: number; vy: number } | null>(null);
@@ -248,6 +266,50 @@ export default function ResourceMap({
     setVb({ x: Math.max(0, x - w / 2), y: Math.max(0, y - w / 2), w, h: w });
 
   const koOf = (r: string) => resources.find((x) => x.r === r)?.ko ?? r;
+
+  /** 이 처리량을 감당하는 가장 낮은 벨트 등급 */
+  const beltFor = (perMin: number) => {
+    const hit = BELTS.find((b) => b.r >= perMin);
+    return hit ? hit.ko : `${BELTS[BELTS.length - 1]!.ko}로도 모자란다`;
+  };
+
+  /**
+   * 설계 화면으로 보낸다.
+   *
+   * 지도에서 "여기 순수 철 노드가 있다"를 확인한 다음, 그걸 다시 손으로 옮겨 적게 하면
+   * 두 화면이 따로 노는 것이다. 저장소에 채굴기 하나를 얹어 두고 설계 화면을 연다.
+   */
+  const sendToPlanner = (p: MapPoint) => {
+    try {
+      const raw = localStorage.getItem('sfops.planner');
+      const save = raw ? JSON.parse(raw) : { version: 2, nodes: [], edges: [], seq: 1 };
+      if (save.version !== 2) return;
+      const id = (save.seq ?? 1) + 1;
+      save.seq = id;
+      save.nodes = [
+        ...(save.nodes ?? []),
+        {
+          id,
+          kind: 'extract',
+          ref: 'Build_MinerMk1_C',
+          machine: 'Build_MinerMk1_C',
+          x: 8 + ((save.nodes?.length ?? 0) % 4) * 20,
+          y: 8,
+          floor: 0,
+          count: 1,
+          clock: 100,
+          rot: 0,
+          resource: p.r,
+          purity: PURITY[p.p]!.mult,
+        },
+      ];
+      localStorage.setItem('sfops.planner', JSON.stringify(save));
+      setSent(true);
+      setTimeout(() => setSent(false), 2000);
+    } catch {
+      /* 저장을 막아 둔 브라우저도 있다 */
+    }
+  };
   const km = (a: { x: number; y: number }, b: { x: number; y: number }) =>
     (Math.hypot(a.x - b.x, a.y - b.y) / SIZE) * WORLD_KM;
 
@@ -309,8 +371,17 @@ export default function ResourceMap({
       <div class="rm-body">
         <aside class="rm-side">
           <p class="rm-k">자원</p>
+          <input
+            class="rm-q"
+            type="search"
+            value={q}
+            placeholder="자원 이름"
+            onInput={(e) => setQ((e.currentTarget as HTMLInputElement).value)}
+          />
           <ul>
-            {resources.map((r) => (
+            {resources
+              .filter((r) => !q.trim() || r.ko.includes(q.trim()))
+              .map((r) => (
               <li key={r.r}>
                 <label>
                   <input type="checkbox" checked={on.has(r.r)} onChange={() => toggle(on, r.r, setOn)} />
@@ -527,6 +598,15 @@ export default function ResourceMap({
                 >
                   {km(measure.a, mEnd).toFixed(2)} km
                 </text>
+                <text
+                  x={(measure.a.x + mEnd.x) / 2}
+                  y={(measure.a.y + mEnd.y) / 2 + s(12)}
+                  font-size={s(10)}
+                >
+                  벨트 재료 {Math.ceil(km(measure.a, mEnd) * 1000 * BELT_PER_M)}개 · 구간{' '}
+                  {Math.ceil((km(measure.a, mEnd) * 1000) / BELT_SEGMENT_M)}개 · 전신주{' '}
+                  {Math.ceil((km(measure.a, mEnd) * 1000) / POLE_SPAN_M)}개
+                </text>
               </g>
             )}
           </svg>
@@ -557,7 +637,22 @@ export default function ResourceMap({
                         ? '지열 발전기 전용'
                         : '자원정 추출기(티어 8) 전용'}
                 </span>
+                {sel.t === 'node' && (
+                  <span class="rm-belt">
+                    {beltFor(240 * PURITY[sel.p]!.mult)} 이상이라야 Mk.3 산출을 다 받는다
+                  </span>
+                )}
               </div>
+              {sel.t === 'node' && (
+                <button
+                  type="button"
+                  class="rm-send"
+                  onClick={() => sendToPlanner(sel)}
+                  title="설계 화면에 이 노드의 채굴기를 놓는다"
+                >
+                  {sent ? '보냈습니다' : '설계로 보내기'}
+                </button>
+              )}
               <button type="button" onClick={() => setSel(null)} aria-label="닫기">
                 ✕
               </button>
