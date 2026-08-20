@@ -30,7 +30,16 @@ export function navigationCacheKey(pathname) {
 }
 
 /** 프리캐시에서 제외할 것: 소스맵, 라이선스 텍스트 등 런타임에 필요 없는 파일 */
-const EXCLUDE = [/\.map$/i, /LICENSE/i, /\.txt$/i];
+const EXCLUDE = [
+  /\.map$/i,
+  /LICENSE/i,
+  /\.txt$/i,
+  /*
+   * 지도 확대 타일은 미리 받지 않는다. 32장 1.8MB 인데 확대해야 쓰이고,
+   * 미리보기 한 장이면 지도 화면이 열린다. 오프라인에서도 전체 보기는 된다.
+   */
+  /assets[\/]map[\/][a-z]+[\/]\d+-\d+\.webp$/i,
+];
 
 function walk(dir, out = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {

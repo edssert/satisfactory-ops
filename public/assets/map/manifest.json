@@ -1,0 +1,17 @@
+{
+  "grid": 4,
+  "tile": 1024,
+  "preview": 1024,
+  "layers": [
+    {
+      "key": "terrain",
+      "ko": "지형",
+      "source": "File:Map.jpg"
+    },
+    {
+      "key": "biome",
+      "ko": "생물군계",
+      "source": "File:Biome Map.jpg"
+    }
+  ]
+}

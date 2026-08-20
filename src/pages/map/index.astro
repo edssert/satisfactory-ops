@@ -1,0 +1,99 @@
+---
+/**
+ * 자원 지도.
+ *
+ * 지형만 사진이고 그 위에 올라가는 것은 전부 SVG 다 — 노드 626개, 인게임 격자, 시작 지점.
+ * 그래서 확대해도 표시가 선명하다. 바탕 사진도 4×4 타일로 잘라 두어서 확대한 자리만 큰 그림을 받는다.
+ *
+ * 페이지가 데이터 서브셋을 만들어 아일랜드에 넘긴다(ADR-0009). 44KB 남짓이라 조작에 요청이 없다.
+ */
+import Base from '../../layouts/Base.astro';
+import ResourceMap from '../../components/ResourceMap';
+import '../../styles/fx.css';
+import '../../styles/map.css';
+import nodesJson from '../../data/app/resource-nodes.json';
+import manifestJson from '../../../public/assets/map/manifest.json';
+import { items } from '../../lib/gamedata';
+import { areas } from '../../lib/start-areas';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const doc = nodesJson as unknown as {
+  $source: string;
+  nodes: { res: string; ko: string; purity: string; type: string; fx: number; fy: number; cell: string }[];
+};
+const manifest = manifestJson as unknown as {
+  grid: number;
+  layers: { key: string; ko: string; source: string }[];
+};
+
+const round = (n: number) => Math.round(n * 10000) / 10000;
+const points = doc.nodes.map((n) => ({
+  r: n.res,
+  p: n.purity[0] as 'i' | 'n' | 'p',
+  t: n.type,
+  x: round(n.fx) * 1000,
+  y: round(n.fy) * 1000,
+  c: n.cell,
+}));
+
+const itemKo = new Map(items.map((i) => [i.id, i.ko]));
+const resources = [...new Set(doc.nodes.map((n) => n.res))]
+  .map((r) => ({
+    r,
+    ko: itemKo.get(r) ?? doc.nodes.find((n) => n.res === r)!.ko,
+    n: doc.nodes.filter((n) => n.res === r).length,
+  }))
+  .sort((a, b) => b.n - a.n);
+
+const payloadAreas = areas.map((a) => ({ key: a.key, ko: a.ko, cells: a.cells }));
+const bytes = JSON.stringify({ points, resources, payloadAreas }).length;
+---
+
+<Base
+  title="자원 지도 — 노드 626개를 확대해서 본다"
+  description="철·구리·석회석부터 우라늄까지 모든 자원 노드를 순도와 함께 지도 위에서 봅니다. 확대해도 표시가 뭉개지지 않습니다."
+  section="map"
+>
+  <div class="wrap page">
+    <header class="page-head">
+      <p class="marker"><span class="num">지도</span></p>
+      <h1><span class="fx-gradient-text">무엇이 어디에 있나</span></h1>
+      <p class="lede prose">
+        노드 {doc.nodes.length}개를 순도와 함께 얹었습니다. 자원을 골라서 켜고 끄고,
+        굴려서 확대하고, 노드를 누르면 채굴기 등급별 산출이 나옵니다.
+      </p>
+    </header>
+
+    <ResourceMap
+      client:load
+      points={points}
+      resources={resources}
+      areas={payloadAreas}
+      layers={manifest.layers.map((l) => ({ key: l.key, ko: l.ko }))}
+      grid={manifest.grid}
+      assetBase={`${base}/assets`}
+      mapBase={`${base}/assets/map`}
+    />
+
+    <p class="caption foot prose">
+      노드 좌표·순도는 게임 데이터에서 가져왔습니다. 지형과 생물군계 그림은 공식 위키의 5000×5000
+      원본을 4×4 타일로 잘라 둔 것이며 Coffee Stain Studios 자산입니다. 그 위에 그리는 것은 전부
+      벡터라 확대해도 뭉개지지 않습니다 — 게임 지형의 벡터 원본은 공개된 것이 없어 바탕만 사진입니다.
+      데이터 {Math.round(bytes / 1024)}KB 를 화면과 함께 보내므로 조작에 네트워크 요청이 없습니다.
+    </p>
+
+    <p class="back">
+      <a href={`${base}/guide/start/`}>시작 지점 비교로 →</a>
+    </p>
+  </div>
+
+  <style>
+    .page { padding-block: var(--s14) var(--s16); }
+    .page-head { margin-bottom: var(--s6); }
+    .page-head h1 { margin-bottom: var(--s4); }
+    .lede { font-size: var(--t-body-l); color: var(--ink-2); }
+    .foot { margin-top: var(--s6); }
+    .back { margin-top: var(--s6); }
+  </style>
+</Base>
