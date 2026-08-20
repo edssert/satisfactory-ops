@@ -12,8 +12,19 @@ import Base from '../../layouts/Base.astro';
 import '../../styles/fx.css';
 import '../../styles/tech.css';
 import tech from '../../data/app/tech.json';
+import assetIndex from '../../data/app/assets.json';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+/*
+ * **있는 파일**을 기준으로 건다. 없는 것을 목록으로 관리하려다 놓쳤다 —
+ * 상점이 참조하는 id 중에는 items.json 에 아예 없는 것이 있어서, 데이터 기준으로 세면 빠진다.
+ */
+const assets = assetIndex as { items: string[]; buildings: string[] };
+const itemIcons = new Set(assets.items);
+const buildingIcons = new Set(assets.buildings);
+const hasBuildingIcon = (id: string) => buildingIcons.has(id);
+const hasItemIcon = (id: string) => itemIcons.has(id);
 
 interface Unlocks {
   buildings: { id: string; ko: string }[];
@@ -62,8 +73,10 @@ const mamByTree = doc.mamTrees.map((t) => {
 
 /** 상점 항목의 대표 그림 — 해금하는 건물이나 아이템의 아이콘을 쓴다 */
 function iconOf(u: Unlocks): { src: string; kind: 'building' | 'item' } | null {
-  if (u.buildings.length) return { src: u.buildings[0]!.id, kind: 'building' };
-  if (u.items.length) return { src: u.items[0]!.id, kind: 'item' };
+  const b = u.buildings.find((x) => hasBuildingIcon(x.id));
+  if (b) return { src: b.id, kind: 'building' };
+  const i = u.items.find((x) => hasItemIcon(x.id));
+  if (i) return { src: i.id, kind: 'item' };
   return null;
 }
 const shopCards = doc.shop.map((sh) => ({ ...sh, icon: iconOf(sh.unlocks) }));
@@ -186,7 +199,7 @@ function summarize(u: Unlocks): string[] {
                   {row.nodes.map((m) => (
                     <article class={`tnode${m.discontinued ? ' is-old' : ''}`}>
                       <div class="tnode-icons">
-                        {m.unlocks.buildings.slice(0, 3).map((b) => (
+                        {m.unlocks.buildings.filter((b) => hasBuildingIcon(b.id)).slice(0, 3).map((b) => (
                           <img
                             src={`${base}/assets/buildings-png/${b.id}.png`}
                             alt=""
@@ -195,8 +208,8 @@ function summarize(u: Unlocks): string[] {
                             loading="lazy"
                           />
                         ))}
-                        {m.unlocks.buildings.length === 0 &&
-                          m.unlocks.items.slice(0, 3).map((i) => (
+                        {m.unlocks.buildings.filter((b) => hasBuildingIcon(b.id)).length === 0 &&
+                          m.unlocks.items.filter((i) => hasItemIcon(i.id)).slice(0, 3).map((i) => (
                             <img
                               src={`${base}/assets/items/${i.id}.png`}
                               alt=""
@@ -205,9 +218,9 @@ function summarize(u: Unlocks): string[] {
                               loading="lazy"
                             />
                           ))}
-                        {m.unlocks.buildings.length === 0 &&
-                          m.unlocks.items.length === 0 &&
-                          m.cost.slice(0, 3).map((c) => (
+                        {m.unlocks.buildings.filter((b) => hasBuildingIcon(b.id)).length === 0 &&
+                          m.unlocks.items.filter((i) => hasItemIcon(i.id)).length === 0 &&
+                          m.cost.filter((c) => hasItemIcon(c.item)).slice(0, 3).map((c) => (
                             <img
                               src={`${base}/assets/items/${c.item}.png`}
                               alt=""

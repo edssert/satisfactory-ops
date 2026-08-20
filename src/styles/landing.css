@@ -200,15 +200,24 @@
 .demo-now {
   margin: var(--s4) 0 0;
   padding: 0 var(--s5);
+  min-height: 28px;
   font-size: var(--t-body-l);
   font-weight: 700;
   letter-spacing: -0.02em;
 }
 
-.demo-out { margin: 0; padding: var(--s4) var(--s5) var(--s4); }
+/*
+ * 단계를 바꿀 때마다 판이 늘었다 줄었다 하면 눈이 피로하다. 가장 긴 내용에 맞춰
+ * 최소 높이를 잡아 두면 전환이 조용해진다.
+ */
+.demo-out {
+  margin: 0;
+  padding: var(--s4) var(--s5);
+  min-height: 232px;
+}
 .demo-out .row {
   display: grid;
-  grid-template-columns: 64px minmax(0, 1fr);
+  grid-template-columns: 68px minmax(0, 1fr);
   gap: var(--s3);
   padding-block: var(--s3);
   border-top: var(--hair) solid var(--line);
@@ -234,6 +243,7 @@
 
 .demo-gate {
   margin: 0;
+  min-height: 68px;
   padding: var(--s3) var(--s5);
   border-top: var(--hair) solid var(--line);
   background: color-mix(in oklab, var(--raised) 45%, transparent);
@@ -324,65 +334,66 @@
 .vs-note { margin: 0; font-size: var(--t-small); color: var(--ink-2); }
 
 /* ------------------------------------------------------------------ 02 진행 축 */
+/*
+ * 세 열이다: 라벨 · 레일 · 내용.
+ * 레일을 절대 위치로 띄우면 라벨이 길어질 때(티어 4-9) 글자를 관통한다. 열을 따로 준다.
+ */
 .spine { position: relative; margin: 0; padding: 0; list-style: none; }
-.spine-rail {
-  position: absolute;
-  left: 41px;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: var(--line);
-  pointer-events: none;
-}
-.spine-rail::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, var(--primary), var(--accent));
-  transform-origin: top;
-  transform: scaleY(0.06);
-  box-shadow: 0 0 12px color-mix(in oklab, var(--primary) 45%, transparent);
-}
-@supports (animation-timeline: view()) {
-  .spine-rail::after {
-    animation: rail-grow linear both;
-    animation-timeline: view();
-    animation-range: cover 12% cover 78%;
-  }
-  @keyframes rail-grow {
-    from { transform: scaleY(0.06); }
-    to { transform: scaleY(1); }
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .spine-rail::after { animation: none; transform: scaleY(1); }
-}
 
 .spine-step {
   display: grid;
-  grid-template-columns: 88px minmax(0, 1fr);
-  gap: var(--s5);
+  grid-template-columns: 72px 20px minmax(0, 1fr);
+  align-items: start;
+  column-gap: var(--s4);
   padding-block: var(--s5);
   border-top: var(--hair) solid var(--line);
 }
 .spine-step:last-child { border-bottom: var(--hair) solid var(--line); }
 .spine-step > div { min-width: 0; }
-.spine-tier { position: relative; font-size: var(--t-caption); color: var(--accent); padding-top: 0.35em; }
-.spine-tier::after {
+
+.spine-tier {
+  font-size: var(--t-caption);
+  color: var(--accent);
+  white-space: nowrap;
+  text-align: right;
+  padding-top: 3px;
+}
+
+/* 레일은 가운데 열 안에서만 산다 */
+.spine-gutter {
+  position: relative;
+  align-self: stretch;
+  justify-self: center;
+  width: 2px;
+  background: var(--line);
+}
+.spine-step:first-child .spine-gutter { margin-top: 8px; }
+.spine-step:last-child .spine-gutter { margin-bottom: 8px; }
+.spine-gutter::after {
   content: '';
   position: absolute;
-  right: -17px;
-  top: 0.85em;
+  left: 50%;
+  top: 8px;
   width: 8px;
   height: 8px;
+  margin-left: -4px;
   border-radius: 50%;
   background: var(--accent);
   outline: 3px solid var(--bg);
   box-shadow: 0 0 10px color-mix(in oklab, var(--accent) 60%, transparent);
 }
 .spine-step.is-future .spine-tier { color: var(--ink-3); }
-.spine-step.is-future .spine-tier::after { background: var(--line-strong); box-shadow: none; }
-.spine-step h3 { margin-bottom: var(--s1); font-size: var(--t-body-l); }
+.spine-step.is-future .spine-gutter::after {
+  background: var(--line-strong);
+  box-shadow: none;
+}
+
+.spine-step h3 { margin-bottom: 4px; font-size: var(--t-body-l); }
+.spine-step .caption { max-width: var(--measure-wide); }
+
+@media (max-width: 640px) {
+  .spine-step { grid-template-columns: 60px 16px minmax(0, 1fr); column-gap: var(--s3); }
+}
 
 .showcase { margin-top: var(--s10); }
 .showcase-tag {

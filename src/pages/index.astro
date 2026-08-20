@@ -37,9 +37,9 @@ const gensPerBelt = Math.floor(beltMk1Rate / coalPerGen);
 
 const LINES: Record<string, { now: string; scale: string; keep: string }> = {
   hub: {
-    now: '철 노드 옆에 허브를 놓고, 허브 6까지 민다',
+    now: '철 노드 옆에 허브를 세우고 허브 6까지 올린다',
     scale:
-      '허브 6에서 바이오매스 연소기와 바이오매스 레시피가 같이 열린다 — 급유 자동화가 되는 시점이 정확히 여기다',
+      '허브 6에서 바이오매스 연소기와 바이오매스 레시피가 같이 열린다. 급유 자동화가 되는 시점이 정확히 여기다',
     keep: '이파리보다 나무를 먼저 챙긴다. 나무 하나가 바이오매스 5개, 이파리는 0.5개다',
   },
   't1-iron': {
@@ -48,7 +48,7 @@ const LINES: Record<string, { now: string; scale: string; keep: string }> = {
     keep: '제련기 줄 옆을 비워 둔다. 티어 2에서 조립기가 여기 붙는다',
   },
   't2-assembler': {
-    now: `${assembler.ko} 2대 — 회전자용 1대, 지능형 도금판용 1대`,
+    now: `${assembler.ko} 2대. 회전자용 1대, 지능형 도금판용 1대`,
     scale: '대수를 늘리는 대신 클럭을 내린다. 회전자 5개/분은 한 대의 절반이면 나온다',
     keep: '옆을 4×4 파운데이션 이상 비워 둔다. 페이즈 2가 같은 부품을 20배 요구한다',
   },
@@ -216,10 +216,10 @@ const facts = [
     </p>
 
     <ol class="spine">
-      <span class="spine-rail" aria-hidden="true"></span>
       {spine.steps.map((s) => (
         <li class="spine-step">
           <span class="spine-tier n">{s.label}</span>
+          <span class="spine-gutter" aria-hidden="true"></span>
           <div>
             <h3>{s.title}</h3>
             <p class="caption">{s.gateNote}</p>
@@ -227,7 +227,8 @@ const facts = [
         </li>
       ))}
       <li class="spine-step is-future">
-        <span class="spine-tier n">티어 4–9</span>
+        <span class="spine-tier n">티어 4-9</span>
+        <span class="spine-gutter" aria-hidden="true"></span>
         <div>
           <h3><span class="n">{laterMilestones}</span>개 마일스톤</h3>
           <p class="caption">해금 목록과 요구 부품만 표로 제공합니다. 진행 조언은 아직 없습니다.</p>

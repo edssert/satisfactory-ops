@@ -67,6 +67,13 @@ export interface StoreBox {
   itemKo: string;
   itemId?: string;
   perMinute: number;
+  /**
+   * 어느 자리에 세울 것인가. 가장 넓은 줄의 열 번호(0부터)다.
+   * 이 컨테이너로 보내는 기계와 같은 열에 두면 선이 곧게 내려와 어디서 왔는지가 보인다.
+   */
+  col: number;
+  /** 어느 줄에서 오는가. rows 배열의 인덱스 */
+  fromRow: number;
 }
 
 export type Row =
@@ -116,9 +123,12 @@ const busX1 = PAD;
 const busX2 = width - PAD;
 
 /** 층과 층 사이를 잇는 선의 x 좌표들 */
+/** 저장 상자는 가장 넓은 줄의 열 자리에 세운다 — 보내는 기계와 x 가 맞아야 선이 곧다 */
+const storeX = (col: number) => boxX(widest, col);
+
 function connectors(row: Row): number[] {
   if (row.kind === 'storage') {
-    return row.boxes.map((_, i) => boxX(row.boxes.length, i) + NODE_W / 2);
+    return row.boxes.map((b) => storeX(b.col) + NODE_W / 2);
   }
   if (row.kind === 'machines') {
     return row.boxes
@@ -159,7 +169,7 @@ function connectors(row: Row): number[] {
         const y1 = p.y + p.h;
         const y2 = next.y;
         /* 벨트 줄이 한쪽에 있으면 그 줄은 가로로 길므로, 기계 쪽 상자마다 한 줄씩 내린다 */
-        /* 저장 행 앞에는 선을 긋지 않는다 — 어느 기계에서 왔는지가 한 줄로 안 그려진다 */
+        /* 저장 행으로 가는 선은 따로 그린다(아래 블록). 여기서는 건너뛴다 */
         if (next.row.kind === 'storage') return null;
         const xs =
           p.row.kind === 'bus' ? connectors(next.row) : connectors(p.row);
@@ -174,6 +184,29 @@ function connectors(row: Row): number[] {
     }
 
     {
+      /*
+       * 컨테이너로 내려가는 선. 보내는 줄의 아래쪽에서 컨테이너 위쪽까지 곧게 내린다.
+       * 중간 줄을 지나가므로 점선으로 그려 "여기 들르지 않고 지나간다"를 드러낸다.
+       */
+      placed.flatMap((p) => {
+        if (p.row.kind !== 'storage') return [];
+        const store = p;
+        return p.row.boxes.map((b) => {
+          const src = placed[b.fromRow];
+          if (!src) return null;
+          const x = storeX(b.col) + NODE_W / 2;
+          return (
+            <path
+              d={`M${x},${src.y + src.h} L${x},${store.y}`}
+              class="fc-link is-store"
+              marker-end={`url(#fc-arrow-${index})`}
+            />
+          );
+        });
+      })
+    }
+
+    {
       placed.map((p) => {
         if (p.row.kind === 'storage') {
           const boxes = p.row.boxes;
@@ -182,8 +215,8 @@ function connectors(row: Row): number[] {
             <g class="fc-store">
               <line x1={busX1} y1={p.y - 14} x2={busX2} y2={p.y - 14} class="fc-storeline" />
               <text x={busX1} y={p.y - 20} class="fc-storelabel">{label}</text>
-              {boxes.map((b, i) => {
-                const x = boxX(boxes.length, i);
+              {boxes.map((b) => {
+                const x = storeX(b.col);
                 return (
                   <g>
                     <rect x={x} y={p.y} width={NODE_W} height={STORE_H} rx="3" class="fc-storebox" />
@@ -317,5 +350,5 @@ function connectors(row: Row): number[] {
     }
   </svg>
 
-  {caption && <figcaption class="fc-cap">{caption}</figcaption>}
+  {caption && caption.length > 0 && <figcaption class="fc-cap">{caption}</figcaption>}
 </figure>

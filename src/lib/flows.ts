@@ -178,18 +178,19 @@ export function ironLine(): FlowDef {
       {
         kind: 'storage',
         label: '저장 컨테이너로',
+        /*
+         * 열 번호는 가장 넓은 줄(제작기 3대) 기준이다. 보내는 기계와 같은 열에 두면
+         * 선이 곧게 내려와 어디서 왔는지 보인다.
+         *   0열 = 제작기 #1(철판) · 1열 = 제작기 #4(나사, 가운데) · 2열 = 철봉 벨트 줄
+         */
         boxes: [
-          { itemKo: ko('Desc_IronPlate_C'), itemId: 'Desc_IronPlate_C', perMinute: plateOut },
-          { itemKo: ko('Desc_IronRod_C'), itemId: 'Desc_IronRod_C', perMinute: rodSpare },
-          { itemKo: ko('Desc_IronScrew_C'), itemId: 'Desc_IronScrew_C', perMinute: screwOut },
+          { itemKo: ko('Desc_IronPlate_C'), itemId: 'Desc_IronPlate_C', perMinute: plateOut, col: 0, fromRow: 4 },
+          { itemKo: ko('Desc_IronScrew_C'), itemId: 'Desc_IronScrew_C', perMinute: screwOut, col: 1, fromRow: 6 },
+          { itemKo: ko('Desc_IronRod_C'), itemId: 'Desc_IronRod_C', perMinute: rodSpare, col: 2, fromRow: 5 },
         ] satisfies StoreBox[],
       },
     ],
-    caption:
-      `철광석 ${fmt(ore)}개/분은 채굴기 한 대가 벨트 Mk.1 로 낼 수 있는 최대치입니다. ` +
-      `모든 기계가 100% 로 돕니다 — 클럭을 건드릴 일이 없습니다. ` +
-      `산출은 셋이고 각각 저장 컨테이너로 보냅니다 — 철판 ${fmt(plateOut)} · 철봉 ${fmt(rodSpare)} · 나사 ${fmt(screwOut)} 개/분. ` +
-      `철봉 ${fmt(rodTotal)} 중 ${fmt(rodToScrew)}만 나사로 돌립니다.`,
+    caption: '',
   };
 }
 
