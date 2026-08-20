@@ -448,36 +448,42 @@ const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').len
      * 세이브에서 "딴 대체 제작법"을 가져온다. 110가지를 손으로 체크하는 건 실제로 안 한다.
      * 파서가 2.6MB 라 파일을 고른 뒤에야 내려받는다. 파일은 브라우저 밖으로 나가지 않는다.
      */
-    const box = document.querySelector('[data-own-file]');
-    const label = document.querySelector('[data-own-label]');
-    const msg = document.querySelector('[data-own-msg]');
-    const wrap = document.querySelector('[data-own-load]');
-    box?.addEventListener('change', async (e) => {
-      const file = e.target.files?.[0];
-      if (!file) return;
+    const box = document.querySelector('[data-own-file]') as HTMLInputElement | null;
+    const label = document.querySelector('[data-own-label]') as HTMLElement | null;
+    const msg = document.querySelector('[data-own-msg]') as HTMLElement | null;
+    const wrap = document.querySelector('[data-own-load]') as HTMLElement | null;
+    const say = (text: string) => {
+      if (!msg) return;
+      msg.hidden = false;
+      msg.textContent = text;
+    };
+    box?.addEventListener('change', async () => {
+      const file = box.files?.[0];
+      if (!file || !label || !wrap) return;
       wrap.classList.add('is-busy');
       label.textContent = '읽는 중…';
       try {
         const { readSave } = await import('../../../lib/save-import');
-        const r = await readSave(file, window.__sfopsUnlocks ?? {});
+        const unlocks = (window as unknown as { __sfopsUnlocks?: Record<string, string[]> })
+          .__sfopsUnlocks;
+        const r = await readSave(file, unlocks ?? {});
         const KEY = 'sfops.owned';
-        const cur = JSON.parse(localStorage.getItem(KEY) || 'null');
+        const cur = JSON.parse(localStorage.getItem(KEY) || 'null') as { ids?: string[] } | null;
         const ids = [...new Set([...(cur?.ids ?? []), ...r.alternates])];
         localStorage.setItem(KEY, JSON.stringify({ version: 1, ids }));
-        msg.hidden = false;
-        msg.textContent =
+        say(
           r.alternates.length === 0
             ? `${r.session} · ${r.hours}시간 — 아직 딴 대체 제작법이 없습니다`
-            : `${r.session} · ${r.hours}시간 — ${r.alternates.length}가지를 가져왔습니다`;
-        /* 위 스크립트가 storage 를 듣고 있지만 같은 탭에는 안 온다. 직접 다시 그린다 */
+            : `${r.session} · ${r.hours}시간 — ${r.alternates.length}가지를 가져왔습니다`
+        );
+        /* 위 스크립트가 storage 를 듣고 있다. 같은 탭에는 안 오므로 직접 보낸다 */
         window.dispatchEvent(new StorageEvent('storage', { key: KEY }));
       } catch (err) {
-        msg.hidden = false;
-        msg.textContent = '읽지 못했습니다 — ' + (err?.message ?? err);
+        say('읽지 못했습니다 — ' + (err instanceof Error ? err.message : String(err)));
       } finally {
         wrap.classList.remove('is-busy');
         label.textContent = '세이브에서 가져오기';
-        e.target.value = '';
+        box.value = '';
       }
     });
   </script>
