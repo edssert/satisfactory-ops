@@ -88,54 +88,25 @@
  * 무엇이 있는지 한눈에 안 들어온다.
  */
 /*
- * 서랍을 판 옆에 두면 지도가 오른쪽으로 밀린다. 판 위에 띄워서 지도를 한가운데에 둔다.
- * 가릴 때는 접는다.
+ * 서랍을 판 옆에 두면 지도가 밀린다. 판 위에 띄워서 지도를 한가운데에 둔다.
+ * 자원은 왼쪽, 수집품은 오른쪽 — 접었다 폈다 하지 않아도 둘 다 늘 보인다.
  */
 .rm-side {
   position: absolute;
   z-index: 5;
   top: var(--s3);
-  left: var(--s3);
   overflow-y: auto;
-  width: 372px;
   max-height: calc(100% - var(--s6));
   padding: var(--s3);
   border: var(--hair) solid var(--line-strong);
   border-radius: var(--radius);
-  background: color-mix(in oklab, var(--raised) 93%, transparent);
+  background: color-mix(in oklab, var(--raised) 92%, transparent);
   box-shadow: 0 18px 40px -24px rgb(0 0 0 / 0.95);
   backdrop-filter: blur(8px);
 }
-.rm-side.is-off { display: none; }
-
-.rm-fold {
-  position: absolute;
-  z-index: 6;
-  top: var(--s3);
-  left: var(--s3);
-  padding: 6px 12px;
-  border: var(--hair) solid var(--line-strong);
-  border-radius: var(--radius);
-  background: color-mix(in oklab, var(--raised) 93%, transparent);
-  color: var(--ink-2);
-  font: inherit;
-  font-size: var(--t-caption);
-  cursor: pointer;
-  backdrop-filter: blur(8px);
-}
-.rm-fold:hover { color: var(--ink); }
-.rm-side .rm-foldx {
-  position: sticky;
-  top: 0;
-  float: right;
-  padding: 2px 6px;
-  border: 0;
-  background: none;
-  color: var(--ink-3);
-  font-size: 12px;
-  cursor: pointer;
-}
-.rm-side .rm-foldx:hover { color: var(--ink); }
+.rm-side.is-left { left: var(--s3); width: 352px; }
+.rm-side.is-right { right: var(--s3); width: 264px; }
+.rm-side.is-right ul { grid-template-columns: 1fr; }
 .rm-k {
   margin: 0 0 6px;
   color: var(--ink-3);
@@ -345,26 +316,8 @@
   cursor: pointer;
 }
 
-/*
- * 「그 자리로」 단추는 평소에 숨겨 둔다. 두 줄로 좁아진 칸에서 이 단추가
- * 이름을 밀어내 「철…」처럼 잘리게 만들었다. 가리킬 때만 나온다.
- */
-.rm-side li { position: relative; display: flex; align-items: center; }
-.rm-side li label { flex: 1; min-width: 0; padding-right: 18px; }
-.rm-go {
-  position: absolute;
-  right: 0;
-  padding: 3px 5px;
-  border: 0;
-  background: none;
-  color: var(--line-strong);
-  font-size: 12px;
-  cursor: pointer;
-  opacity: 0;
-}
-.rm-side li:hover .rm-go { opacity: 1; }
-.rm-go:hover { color: var(--primary); }
-.rm-go:focus-visible { opacity: 1; }
+.rm-side li { min-width: 0; }
+.rm-side li label { min-width: 0; }
 
 /* 고른 노드 설명. 지도 위에 겹쳐 띄운다 */
 .rm-info {
@@ -397,9 +350,16 @@
 }
 .rm-info button:hover { color: var(--ink); }
 
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
   .rm-stage { aspect-ratio: auto; height: 64vh; }
-  .rm-side { width: calc(100% - var(--s6)); max-height: 52%; }
+  .rm-side.is-left,
+  .rm-side.is-right {
+    position: static;
+    width: 100%;
+    max-height: none;
+    margin-bottom: var(--s2);
+  }
+  .rm-body { flex-direction: column; }
 }
 
 /* 자원 검색 */

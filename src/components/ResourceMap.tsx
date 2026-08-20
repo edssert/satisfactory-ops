@@ -129,8 +129,6 @@ export default function ResourceMap({
   /* 수집품은 처음엔 꺼 둔다. 1764개를 한꺼번에 켜면 자원이 안 보인다 */
   const [dropsOn, setDropsOn] = useState<Set<string>>(() => new Set());
   const [dropInfo, setDropInfo] = useState<MapDrop | null>(null);
-  /* 서랍은 판 위에 뜬다. 지도를 가리면 접는다 */
-  const [side, setSide] = useState(true);
   const [showGrid, setShowGrid] = useState(true);
   const [showAreas, setShowAreas] = useState(true);
   const [sel, setSel] = useState<MapPoint | null>(null);
@@ -220,6 +218,15 @@ export default function ResourceMap({
     f(next);
   };
 
+  /*
+   * 지도를 화면 밖으로 끌고 나가지 못하게 묶는다.
+   * 지도가 통째로 들어와 있으면(가장 축소) 끌어도 움직일 데가 없으므로 가운데에 고정한다.
+   */
+  const clamp = useCallback((v: number, span: number, view: number) => {
+    if (view >= span) return (span - view) / 2;
+    return Math.max(0, Math.min(span - view, v));
+  }, []);
+
   const toWorld = useCallback(
     (clientX: number, clientY: number) => {
       const r = host.current?.getBoundingClientRect();
@@ -240,8 +247,8 @@ export default function ResourceMap({
         const kx = (wx - v.x) / v.w;
         const ky = (wy - v.y) / (v.w / aspect);
         return {
-          x: Math.max(-60, Math.min(SIZE + 60 - w, wx - kx * w)),
-          y: Math.max(-60, Math.min(SIZE + 60 - h, wy - ky * h)),
+          x: clamp(wx - kx * w, SIZE, w),
+          y: clamp(wy - ky * h, SIZE, h),
           w,
           h,
         };
@@ -269,8 +276,8 @@ export default function ResourceMap({
     if (Math.abs(dx) + Math.abs(dy) > 2) moved.current = true;
     setVb((v) => ({
       ...v,
-      x: Math.max(-60, Math.min(SIZE + 60 - v.w, p.vx - dx)),
-      y: Math.max(-60, Math.min(SIZE + 60 - v.w / aspect, p.vy - dy)),
+      x: clamp(p.vx - dx, SIZE, v.w),
+      y: clamp(p.vy - dy, SIZE, v.w / aspect),
     }));
   };
   const onUp = () => {
@@ -341,12 +348,11 @@ export default function ResourceMap({
     return () => el.removeEventListener('wheel', h);
   }, [toWorld, zoomAt]);
 
-  const reset = () =>
-    setVb(
-      aspect >= 1
-        ? { x: (SIZE - SIZE * aspect) / 2, y: 0, w: SIZE * aspect, h: SIZE }
-        : { x: 0, y: (SIZE - SIZE / aspect) / 2, w: SIZE, h: SIZE / aspect }
-    );
+  const reset = () => {
+    const w = aspect >= 1 ? SIZE * aspect : SIZE;
+    const h = w / aspect;
+    setVb({ x: (SIZE - w) / 2, y: (SIZE - h) / 2, w, h });
+  };
   /* 판 크기를 처음 잰 뒤 한 번 맞춘다 */
   const fitted = useRef(false);
   useEffect(() => {
@@ -371,7 +377,12 @@ export default function ResourceMap({
 
   /** 어떤 자원이 있는 곳으로 데려간다 */
   const flyTo = (x: number, y: number, w = SIZE / 6) =>
-    setVb({ x: x - w / 2, y: y - w / aspect / 2, w, h: w / aspect });
+    setVb({
+      x: clamp(x - w / 2, SIZE, w),
+      y: clamp(y - w / aspect / 2, SIZE, w / aspect),
+      w,
+      h: w / aspect,
+    });
 
   const koOf = (r: string) => resources.find((x) => x.r === r)?.ko ?? r;
   /** 겹쳐 보기는 지형 위에 생물군계를 얹는 것이라 바탕은 지형이다 */
@@ -534,15 +545,7 @@ export default function ResourceMap({
           onClick={(e) => onStageClick(e as unknown as MouseEvent)}
           onDblClick={onStageDouble}
         >
-        {!side && (
-          <button type="button" class="rm-fold" onClick={() => setSide(true)}>
-            자원 고르기
-          </button>
-        )}
-        <aside class={`rm-side${side ? '' : ' is-off'}`} onPointerDown={(e) => e.stopPropagation()}>
-          <button type="button" class="rm-foldx" onClick={() => setSide(false)} aria-label="접기">
-            ✕
-          </button>
+        <aside class="rm-side is-left" onPointerDown={(e) => e.stopPropagation()}>
           <p class="rm-k">자원</p>
           <input
             class="rm-q"
@@ -562,21 +565,6 @@ export default function ResourceMap({
                   <span>{r.ko}</span>
                   <b class="n">{r.n}</b>
                 </label>
-                <button
-                  type="button"
-                  class="rm-go"
-                  title={`${r.ko} 있는 곳 보기`}
-                  onClick={() => {
-                    const hit = points.filter((p) => p.r === r.r);
-                    if (!hit.length) return;
-                    const cx = hit.reduce((a, p) => a + p.x, 0) / hit.length;
-                    const cy = hit.reduce((a, p) => a + p.y, 0) / hit.length;
-                    setOn(new Set([r.r]));
-                    flyTo(cx, cy, SIZE / 2.2);
-                  }}
-                >
-                  ↗
-                </button>
               </li>
             ))}
           </ul>
@@ -589,6 +577,9 @@ export default function ResourceMap({
             </button>
           </div>
 
+        </aside>
+
+        <aside class="rm-side is-right" onPointerDown={(e) => e.stopPropagation()}>
           <p class="rm-k">수집품</p>
           <ul>
             {dropKinds.map((k) => (
