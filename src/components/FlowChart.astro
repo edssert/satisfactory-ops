@@ -21,16 +21,23 @@
  * 선에 라벨을 달면 어느 기계가 얼마를 내는지 눈으로 따라갈 수 없다.
  */
 import '../styles/flow.css';
-import { NODE_W, NODE_H, GAP_X, PAD, chipWidth, fmtRate } from '../lib/flow-layout';
+import { NODE_W, GAP_X, PAD, chipWidth, fmtRate } from '../lib/flow-layout';
+
+/** 네 줄(기계·입력·출력·클럭)을 담아야 하므로 flow-layout 기본값보다 높다 */
+const NODE_H = 96;
 
 export interface MachineBox {
   /** 기계 이름. 같은 기계가 여러 대면 상자를 여러 개 만든다 */
   ko: string;
   /** 아이콘용 건물 클래스 */
   machineId?: string;
-  /** 이 기계가 내는 것 */
-  productKo?: string;
-  perMinute?: number;
+  /**
+   * 상자는 네 줄이다 — 기계 이름 / 들어가는 것 / 나오는 것 / 클럭.
+   * 저장 컨테이너처럼 만들지 않는 것은 `note` 만 쓴다. 보관하는 물건에 분당은 뜻이 없다.
+   */
+  inputs?: { ko: string; perMinute: number }[];
+  /** 단위는 기본이 "/분"이다. 발전기처럼 MW 를 내는 것은 unit 을 바꾼다 */
+  output?: { ko: string; perMinute: number; unit?: string };
   /** 100 이면 적지 않는다 */
   clock?: number;
   /** 기계가 아닌 것(저장 컨테이너 등)에 붙이는 한 줄 */
@@ -201,15 +208,32 @@ function connectors(row: Row): number[] {
                   preserveAspectRatio="xMidYMid meet"
                 />
               )}
-              <text x={tx} y={p.y + 27} class="fc-name">{m.ko}</text>
-              {m.productKo != null && m.perMinute != null && (
-                <text x={tx} y={p.y + 48} class="fc-rate">
-                  {m.productKo} <tspan class="fc-num">{fmtRate(m.perMinute)}/분</tspan>
+              <text x={tx} y={p.y + 24} class="fc-name">{m.ko}</text>
+              {m.inputs && m.inputs.length > 0 && (
+                <text x={tx} y={p.y + 45} class="fc-io">
+                  <tspan class="fc-iolabel">넣음</tspan>
+                  {m.inputs.map((g, gi) => (
+                    <>
+                      {gi > 0 && <tspan class="fc-iosep"> · </tspan>}
+                      <tspan> {g.ko} </tspan>
+                      <tspan class="fc-num">{fmtRate(g.perMinute)}/분</tspan>
+                    </>
+                  ))}
                 </text>
               )}
-              {m.note && <text x={tx} y={p.y + 48} class="fc-product">{m.note}</text>}
-              {m.clock != null && m.clock < 100 && (
-                <text x={tx} y={p.y + 67} class="fc-sub">{fmtRate(m.clock)}%</text>
+              {m.output && (
+                <text x={tx} y={p.y + 64} class="fc-io">
+                  <tspan class="fc-iolabel">냄</tspan>
+                  <tspan> {m.output.ko} </tspan>
+                  <tspan class="fc-num">
+                    {fmtRate(m.output.perMinute)}
+                    {m.output.unit ?? '/분'}
+                  </tspan>
+                </text>
+              )}
+              {m.note && <text x={tx} y={p.y + 45} class="fc-product">{m.note}</text>}
+              {m.clock != null && (
+                <text x={tx} y={p.y + 83} class="fc-sub">클럭 {fmtRate(m.clock)}%</text>
               )}
             </g>
           );

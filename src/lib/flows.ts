@@ -106,15 +106,15 @@ export function ironLine(): FlowDef {
       machines(1, () => ({
         ko: miner.ko,
         machineId: miner.id,
-        productKo: ko('Desc_OreIron_C'),
-        perMinute: ore,
+        output: { ko: ko('Desc_OreIron_C'), perMinute: ore },
+        clock: 100,
       })),
       bus('Desc_OreIron_C', ore, '분배기 직렬'),
       machines(pSmelt.count, (i) => ({
         ko: `${smelter.ko} #${i + 1}`,
         machineId: smelter.id,
-        productKo: ko('Desc_IronIngot_C'),
-        perMinute: pSmelt.each,
+        inputs: [{ ko: ko('Desc_OreIron_C'), perMinute: ore / pSmelt.count }],
+        output: { ko: ko('Desc_IronIngot_C'), perMinute: pSmelt.each },
         clock: pSmelt.clock,
       })),
       bus('Desc_IronIngot_C', ingot, '분배기 직렬'),
@@ -124,8 +124,8 @@ export function ironLine(): FlowDef {
           ...Array.from({ length: pPlate.count }, (_, i) => ({
             ko: `${constructor.ko} #${i + 1}`,
             machineId: constructor.id,
-            productKo: ko('Desc_IronPlate_C'),
-            perMinute: pPlate.each,
+            inputs: [{ ko: ko('Desc_IronIngot_C'), perMinute: ingotToPlate / pPlate.count }],
+            output: { ko: ko('Desc_IronPlate_C'), perMinute: pPlate.each },
             clock: pPlate.clock,
             /* 철판은 여기서 끝난다. 아래 나사 줄로 내려가지 않는다 */
             feedsNext: false,
@@ -133,8 +133,8 @@ export function ironLine(): FlowDef {
           ...Array.from({ length: pRod.count }, (_, i) => ({
             ko: `${constructor.ko} #${pPlate.count + i + 1}`,
             machineId: constructor.id,
-            productKo: ko('Desc_IronRod_C'),
-            perMinute: pRod.each,
+            inputs: [{ ko: ko('Desc_IronIngot_C'), perMinute: ingotToRod / pRod.count }],
+            output: { ko: ko('Desc_IronRod_C'), perMinute: pRod.each },
             clock: pRod.clock,
           })),
         ],
@@ -143,8 +143,8 @@ export function ironLine(): FlowDef {
       machines(pScrew.count, (i) => ({
         ko: `${constructor.ko} #${pPlate.count + pRod.count + i + 1}`,
         machineId: constructor.id,
-        productKo: ko('Desc_IronScrew_C'),
-        perMinute: pScrew.each,
+        inputs: [{ ko: ko('Desc_IronRod_C'), perMinute: rod / pScrew.count }],
+        output: { ko: ko('Desc_IronScrew_C'), perMinute: pScrew.each },
         clock: pScrew.clock,
       })),
     ],
@@ -178,15 +178,28 @@ export function biomassLine(withBiofuel = false): FlowDef {
     {
       kind: 'machines',
       boxes: [
-        { ko: container.ko, machineId: container.id, productKo: ko('Desc_Wood_C'), perMinute: woodIn },
-        { ko: container.ko, machineId: container.id, productKo: ko('Desc_Leaves_C'), perMinute: leafIn },
+        /* 컨테이너는 만들지 않는다. 보관하는 물건에 분당은 뜻이 없다 */
+        { ko: container.ko, machineId: container.id, note: `${ko('Desc_Wood_C')} 보관` },
+        { ko: container.ko, machineId: container.id, note: `${ko('Desc_Leaves_C')} 보관` },
       ],
     },
     {
       kind: 'machines',
       boxes: [
-        { ko: `${constructor.ko} #1`, machineId: constructor.id, productKo: ko('Desc_GenericBiomass_C'), perMinute: half },
-        { ko: `${constructor.ko} #2`, machineId: constructor.id, productKo: ko('Desc_GenericBiomass_C'), perMinute: half },
+        {
+          ko: `${constructor.ko} #1`,
+          machineId: constructor.id,
+          inputs: [{ ko: ko('Desc_Wood_C'), perMinute: woodIn }],
+          output: { ko: ko('Desc_GenericBiomass_C'), perMinute: half },
+          clock: Math.round((half / outOf('Recipe_Biomass_Wood_C')) * 1000) / 10,
+        },
+        {
+          ko: `${constructor.ko} #2`,
+          machineId: constructor.id,
+          inputs: [{ ko: ko('Desc_Leaves_C'), perMinute: leafIn }],
+          output: { ko: ko('Desc_GenericBiomass_C'), perMinute: half },
+          clock: Math.round((half / outOf('Recipe_Biomass_Leaves_C')) * 1000) / 10,
+        },
       ],
     },
     bus('Desc_GenericBiomass_C', bioPerBurner, '병합기로 합침'),
@@ -205,11 +218,17 @@ export function biomassLine(withBiofuel = false): FlowDef {
       machines(1, () => ({
         ko: `${constructor.ko} #3`,
         machineId: constructor.id,
-        productKo: ko('Desc_Biofuel_C'),
-        perMinute: fuelPerBurner,
+        inputs: [{ ko: ko('Desc_GenericBiomass_C'), perMinute: bioForFuel }],
+        output: { ko: ko('Desc_Biofuel_C'), perMinute: fuelPerBurner },
+        clock: Math.round((fuelPerBurner / outOf('Recipe_Biofuel_C')) * 1000) / 10,
       })),
       bus('Desc_Biofuel_C', fuelPerBurner),
-      machines(1, () => ({ ko: burner.ko, machineId: burner.id, note: `${burner.powerGenMW} MW` }))
+      machines(1, () => ({
+        ko: burner.ko,
+        machineId: burner.id,
+        inputs: [{ ko: ko('Desc_Biofuel_C'), perMinute: fuelPerBurner }],
+        output: { ko: '전력', perMinute: burner.powerGenMW ?? 30, unit: ' MW' },
+      }))
     );
     caption =
       `나무와 이파리는 레시피가 달라 제작기가 각각 필요합니다. 합친 바이오매스를 제작기 한 대가 ` +
@@ -219,7 +238,12 @@ export function biomassLine(withBiofuel = false): FlowDef {
       `${item('Desc_Biofuel_C').energyMJ! / item('Desc_GenericBiomass_C').energyMJ!}배입니다.`;
   } else {
     rows.push(
-      machines(1, () => ({ ko: burner.ko, machineId: burner.id, note: `${burner.powerGenMW} MW` }))
+      machines(1, () => ({
+        ko: burner.ko,
+        machineId: burner.id,
+        inputs: [{ ko: ko('Desc_GenericBiomass_C'), perMinute: bioPerBurner }],
+        output: { ko: '전력', perMinute: burner.powerGenMW ?? 30, unit: ' MW' },
+      }))
     );
   }
 
@@ -247,15 +271,13 @@ export function smartPlatingLine(target = 5): FlowDef {
           ...Array.from({ length: rip.count }, (_, i) => ({
             ko: `${assembler.ko} #${i + 1}`,
             machineId: assembler.id,
-            productKo: ko('Desc_IronPlateReinforced_C'),
-            perMinute: rip.each,
+            output: { ko: ko('Desc_IronPlateReinforced_C'), perMinute: rip.each },
             clock: rip.clock,
           })),
           ...Array.from({ length: rotor.count }, (_, i) => ({
             ko: `${assembler.ko} #${rip.count + i + 1}`,
             machineId: assembler.id,
-            productKo: ko('Desc_Rotor_C'),
-            perMinute: rotor.each,
+            output: { ko: ko('Desc_Rotor_C'), perMinute: rotor.each },
             clock: rotor.clock,
           })),
         ],
@@ -263,8 +285,11 @@ export function smartPlatingLine(target = 5): FlowDef {
       machines(smart.count, (i) => ({
         ko: `${assembler.ko} #${rip.count + rotor.count + i + 1}`,
         machineId: assembler.id,
-        productKo: ko('Desc_SpaceElevatorPart_1_C'),
-        perMinute: smart.each,
+        inputs: [
+          { ko: ko('Desc_IronPlateReinforced_C'), perMinute: target / smart.count },
+          { ko: ko('Desc_Rotor_C'), perMinute: target / smart.count },
+        ],
+        output: { ko: ko('Desc_SpaceElevatorPart_1_C'), perMinute: smart.each },
         clock: smart.clock,
       })),
     ],

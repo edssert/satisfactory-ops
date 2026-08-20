@@ -1,41 +1,72 @@
 ---
 /**
- * 대체 제작법 우선순위 — 하드 드라이브에서 무엇을 먼저 뽑을 것인가.
+ * 대체 제작법 — 무엇을 대체하고, 무엇이 달라지는가.
  *
- * 순위와 점수는 **우리가 매긴 것이 아니다.** 커뮤니티 분석글(1.0 기준, 선형계획 모형)에서
- * 그대로 옮겼고, 레시피 id·한글명·재료·해금 티어만 게임 데이터에서 붙였다.
- * 출처와 방법은 화면 아래에 밝힌다.
+ * 앞선 판본은 대체 제작법의 재료만 표로 늘어놓았다. 그러면 "대체"의 의미가 안 보인다.
+ * 기본 제작법과 나란히 놓고, **산출 1개당 재료량**으로 정규화해 비교한다 —
+ * 산출 속도가 다른 두 레시피를 재료 절대량으로 비교하면 틀린 결론이 나온다.
  *
- * 「언제부터」는 하드 드라이브를 뽑는 시점이 아니라 **실제로 쓸 수 있게 되는 시점**이다.
- * 재료가 아직 안 열렸으면 뽑아 둬도 못 쓴다.
+ * 순위와 점수는 우리가 매긴 것이 아니다. 커뮤니티 분석글(1.0 기준)에서 옮겼고 출처를 밝힌다.
  */
 import Base from '../../layouts/Base.astro';
 import priority from '../../data/curated/alternate-priority.json';
 
-const doc = priority as {
-  $source: {
+interface Ing {
+  ko: string;
+  per: number;
+}
+interface Change {
+  ko: string;
+  before: number;
+  after: number;
+  kind: '제거' | '감소' | '증가' | '추가';
+  pct: number | null;
+}
+interface Alt {
+  id: string;
+  ko: string;
+  en: string;
+  makes: { ko: string; perMinute: number };
+  tier: string;
+  score: number;
+  usableFromTier: number;
+  needsOtherAlternate: boolean;
+  grades: { lp: string; steam: string | null; own: string | null; gap: number | null };
+  own: { score: number; resourcePct: number; machinePct: number; powerPct: number } | null;
+  agreement: 'strong' | 'weak' | 'split' | 'partial';
+  consensus: 'both-high' | 'mixed' | 'conflict' | 'both-low' | 'unknown';
+  sortKey: number;
+  compare: {
+    standard: { ko: string; machineKo: string; outPerMin: number; ingredients: Ing[] };
+    alternate: { machineKo: string; outPerMin: number; ingredients: Ing[] };
+    outputRatio: number;
+    byproducts: { ko: string; per: number }[];
+    changes: Change[];
+  } | null;
+}
+
+const doc = priority as unknown as {
+  $sources: {
     title: string;
     author: string;
     url: string;
     date: string;
     gameVersion: string;
     method: string;
+    limits?: string;
+  }[];
+  $dispute: {
+    summary: string;
+    agree: number;
+    near: number;
+    far: number;
+    note: string;
+    threeWay: { strong: number; conflict: number; note: string };
   };
   $note: string;
   $tierNote: string;
   $unranked: { id: string; ko: string; en: string }[];
-  recipes: {
-    id: string;
-    ko: string;
-    en: string;
-    makes: { ko: string; perMinute: number };
-    tier: string;
-    score: number;
-    usableFromTier: number;
-    machine: { ko: string };
-    ingredients: { ko: string; perMinute: number }[];
-    needsOtherAlternate: boolean;
-  }[];
+  recipes: Alt[];
 };
 
 const TIER_KO: Record<string, string> = {
@@ -47,83 +78,197 @@ const TIER_KO: Record<string, string> = {
   F: '안 씀',
 };
 
-/** 언제부터 쓸 수 있는지로 묶는다. 리세마라할 때 지금 뽑아야 할 것이 위로 온다 */
+/*
+ * 등급은 **이 사이트의 계산 하나**로 매긴다. 세 개를 나란히 보여주면 고르는 사람이
+ * 판단을 떠안는다. 남의 순위는 각주로 내리고, 크게 엇갈릴 때만 표시한다.
+ */
+const GRADE_ORDER = ['S', 'A', 'B', 'C', 'D', 'F'];
+const gradeRank = (g: string | null) => (g ? GRADE_ORDER.indexOf(g) : 99);
+const counts = {
+  s: doc.recipes.filter((r) => r.grades.own === 'S').length,
+  a: doc.recipes.filter((r) => r.grades.own === 'A').length,
+  conflict: doc.recipes.filter((r) => r.agreement === 'split').length,
+};
+
 const tiers = [...new Set(doc.recipes.map((r) => r.usableFromTier))].sort((a, b) => a - b);
 const groups = tiers.map((t) => ({
   tier: t,
+  /* 자체 계산 점수 순. 등급이 없는 것(비교 대상 없음)은 맨 뒤로 */
   list: doc.recipes
     .filter((r) => r.usableFromTier === t)
-    .sort((a, b) => b.score - a.score),
+    .sort(
+      (a, b) =>
+        gradeRank(a.grades.own) - gradeRank(b.grades.own) ||
+        (b.own?.score ?? -999) - (a.own?.score ?? -999)
+    ),
 }));
 
+const num = (n: number) => (Number.isInteger(n) ? String(n) : String(Math.round(n * 1000) / 1000));
+const pct = (n: number) => `${n > 0 ? '+' : ''}${n}%`;
 const topPicks = doc.recipes.filter((r) => r.tier === 'S' || r.tier === 'A').length;
-const num = (n: number) => (Number.isInteger(n) ? String(n) : String(Math.round(n * 100) / 100));
 ---
 
 <Base
-  title="대체 제작법 우선순위 — 무엇을 먼저 뽑을까"
-  description="하드 드라이브 대체 제작법 104건을 쓸 수 있게 되는 티어별로 묶고 커뮤니티 순위를 붙였습니다."
+  title="대체 제작법 — 무엇이 어떻게 달라지나"
+  description="대체 제작법 104건을 기본 제작법과 나란히 비교합니다. 산출 1개당 재료량으로 정규화했습니다."
   section="recipes"
 >
   <div class="wrap page">
     <header class="page-head">
       <p class="marker"><span class="num">대체 제작법</span></p>
-      <h1>무엇을 먼저 뽑을까</h1>
+      <h1>무엇이 어떻게 달라지나</h1>
       <p class="lede prose">
         하드 드라이브는 후보 <strong>2개 중 1개</strong>를 고르고 리롤이 한 번 있습니다.
-        아래는 <strong>실제로 쓸 수 있게 되는 티어</strong>로 묶은 목록입니다 — 재료가 아직
-        안 열렸으면 뽑아 둬도 못 씁니다.
+        아래는 <strong>실제로 쓸 수 있게 되는 티어</strong>로 묶었습니다 — 재료가 아직 안 열렸으면
+        뽑아 둬도 못 씁니다.
       </p>
     </header>
 
     <div class="facts">
-      <div class="fact"><span class="fact-k">순위가 있는 것</span><span class="fact-v n">{doc.recipes.length}</span></div>
-      <div class="fact"><span class="fact-k">무조건 · 적극 권장</span><span class="fact-v n">{topPicks}</span></div>
-      <div class="fact"><span class="fact-k">순위 미확보</span><span class="fact-v n">{doc.$unranked.length}</span></div>
+      <div class="fact"><span class="fact-k">비교한 제작법</span><span class="fact-v n">{doc.recipes.length}</span></div>
+      <div class="fact is-ok"><span class="fact-k">S 등급</span><span class="fact-v n">{counts.s}</span></div>
+      <div class="fact is-ok"><span class="fact-k">A 등급</span><span class="fact-v n">{counts.a}</span></div>
+      <div class="fact is-warn"><span class="fact-k">외부와 크게 다름</span><span class="fact-v n">{counts.conflict}</span></div>
     </div>
+
+    <section class="note-box">
+      <p>
+        등급은 <strong>1.2 게임 데이터로 직접 계산</strong>했습니다. 우주 엘리베이터를 끝까지
+        납품하는 데 드는 총량을 기본 제작법으로 한 번 풀고, 대체 제작법을 하나씩 끼워 다시 푼 뒤
+        차이를 봅니다. 원자재는 <strong>실제 맵의 노드 수</strong>로 희소도를 매겨 곱합니다 —
+        우라늄 6개와 철 70여 개를 같은 무게로 셈하지 않습니다.
+      </p>
+      <p class="caption">
+        커뮤니티 순위 두 건과 대조했고, <strong>{counts.conflict}건</strong>은 평가가 크게
+        갈립니다. 그런 항목에는 카드에 표시해 두었습니다. {doc.$note}
+      </p>
+    </section>
 
     {groups.map((g) => (
       <section class="section">
         <p class="marker">
           <span class="num">{g.tier === 0 ? '허브' : `티어 ${g.tier}`}</span> 부터 쓸 수 있음
+          <span class="marker-count n">{g.list.length}건</span>
         </p>
-        <div class="scroll-x">
-          <table>
-            <thead>
-              <tr>
-                <th>제작법</th>
-                <th>등급</th>
-                <th class="n">점수</th>
-                <th>만드는 것</th>
-                <th>재료</th>
-                <th>기계</th>
-              </tr>
-            </thead>
-            <tbody>
-              {g.list.map((r) => (
-                <tr>
-                  <td>
-                    <strong>{r.ko}</strong> <span class="en">{r.en}</span>
-                    {r.needsOtherAlternate && (
-                      <span class="rownote">다른 대체 제작법이 함께 있어야 제값을 합니다</span>
-                    )}
-                  </td>
-                  <td>
-                    <span class={`grade is-${r.tier.toLowerCase()}`}>{r.tier}</span>
-                    <span class="grade-ko">{TIER_KO[r.tier]}</span>
-                  </td>
-                  <td class="n">{num(r.score)}</td>
-                  <td>{r.makes.ko} <span class="n">{num(r.makes.perMinute)}/분</span></td>
-                  <td class="small muted">
-                    {r.ingredients.map((g2) => (
-                      <span class="chip">{g2.ko} <span class="n">{num(g2.perMinute)}</span></span>
+
+        <div class="cards">
+          {g.list.map((r) => (
+            <article class={`card is-${r.consensus}`}>
+              <header class="card-head">
+                <h3>
+                  {r.ko} <span class="en">{r.en}</span>
+                </h3>
+                <div class="card-grade">
+                  {r.agreement === 'split' && <span class="verdict is-warn">평가 갈림</span>}
+                  <span class={`grade is-${(r.grades.own ?? 'f').toLowerCase()}`}>
+                    {r.grades.own ?? '—'}
+                  </span>
+                  {r.own && <span class="score n">{num(r.own.score)}</span>}
+                </div>
+              </header>
+
+              {r.compare ? (
+                <>
+                  <table class="cmp">
+                    <thead>
+                      <tr>
+                        <th />
+                        <th>재료 (산출 1개당)</th>
+                        <th class="n">기계당 산출</th>
+                        <th>기계</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="is-std">
+                        <th scope="row">기본</th>
+                        <td>
+                          {r.compare.standard.ingredients.map((g2, i) => (
+                            <>
+                              {i > 0 && <span class="sep">·</span>}
+                              {g2.ko} <span class="n">{num(g2.per)}</span>
+                            </>
+                          ))}
+                        </td>
+                        <td class="n">{num(r.compare.standard.outPerMin)}/분</td>
+                        <td class="small muted nowrap">{r.compare.standard.machineKo}</td>
+                      </tr>
+                      <tr class="is-alt">
+                        <th scope="row">대체</th>
+                        <td>
+                          {r.compare.alternate.ingredients.map((g2, i) => (
+                            <>
+                              {i > 0 && <span class="sep">·</span>}
+                              {g2.ko} <span class="n">{num(g2.per)}</span>
+                            </>
+                          ))}
+                        </td>
+                        <td class="n">
+                          {num(r.compare.alternate.outPerMin)}/분
+                          {r.compare.outputRatio !== 1 && (
+                            <span class={`ratio${r.compare.outputRatio > 1 ? ' is-up' : ' is-down'}`}>
+                              ×{num(r.compare.outputRatio)}
+                            </span>
+                          )}
+                        </td>
+                        <td class="small muted nowrap">{r.compare.alternate.machineKo}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <p class="changes">
+                    {r.compare.changes.map((c, i) => (
+                      <>
+                        {i > 0 && <span class="sep">·</span>}
+                        <span class={`chg is-${c.kind}`}>
+                          {c.ko}{' '}
+                          {c.kind === '제거'
+                            ? '빠짐'
+                            : c.kind === '추가'
+                              ? '들어감'
+                              : pct(c.pct ?? 0)}
+                        </span>
+                      </>
                     ))}
-                  </td>
-                  <td class="small muted nowrap">{r.machine.ko}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    {r.compare.byproducts.length > 0 &&
+                      r.compare.byproducts.map((b) => (
+                        <>
+                          <span class="sep">·</span>
+                          <span class="chg is-byproduct">
+                            부산물 {b.ko} <span class="n">{num(b.per)}</span>
+                          </span>
+                        </>
+                      ))}
+                  </p>
+
+                  {r.own && (
+                    <p class="own">
+                      <span class="own-k">1.2 계산</span>
+                      자원 <span class={`n ${r.own.resourcePct >= 0 ? 'is-save' : 'is-cost'}`}>
+                        {r.own.resourcePct >= 0 ? '−' : '+'}{Math.abs(r.own.resourcePct)}%
+                      </span>
+                      <span class="sep">·</span>
+                      기계 <span class={`n ${r.own.machinePct >= 0 ? 'is-save' : 'is-cost'}`}>
+                        {r.own.machinePct >= 0 ? '−' : '+'}{Math.abs(r.own.machinePct)}%
+                      </span>
+                      <span class="sep">·</span>
+                      전력 <span class={`n ${r.own.powerPct >= 0 ? 'is-save' : 'is-cost'}`}>
+                        {r.own.powerPct >= 0 ? '−' : '+'}{Math.abs(r.own.powerPct)}%
+                      </span>
+                    </p>
+                  )}
+                  {r.needsOtherAlternate && (
+                    <p class="caution">다른 대체 제작법이 함께 있어야 제값을 합니다.</p>
+                  )}
+                  <p class="caution">
+                    커뮤니티 평가 — LP 모형 <span class="n">{r.grades.lp}</span> ·
+                    스팀 가이드 <span class="n">{r.grades.steam ?? '—'}</span>
+                  </p>
+                </>
+              ) : (
+                <p class="caution">기본 제작법이 없어 비교할 대상이 없습니다.</p>
+              )}
+            </article>
+          ))}
         </div>
       </section>
     ))}
@@ -131,9 +276,7 @@ const num = (n: number) => (Number.isInteger(n) ? String(n) : String(Math.round(
     {doc.$unranked.length > 0 && (
       <section class="section">
         <p class="marker"><span class="num">순위 미확보</span></p>
-        <p class="caption">
-          출처의 표에 없어 순위를 붙이지 못한 것들입니다. 지어내지 않고 그대로 둡니다.
-        </p>
+        <p class="caption">출처의 표에 없어 순위를 붙이지 못한 것들입니다.</p>
         <ul class="unranked">
           {doc.$unranked.map((r) => (
             <li class="chip">{r.ko} <span class="en">{r.en}</span></li>
@@ -145,13 +288,24 @@ const num = (n: number) => (Number.isInteger(n) ? String(n) : String(Math.round(
     <section class="section">
       <p class="marker"><span class="num">출처</span></p>
       <div class="src">
-        <p>
-          <a href={doc.$source.url}>{doc.$source.title}</a> — {doc.$source.author},
-          {' '}{doc.$source.date} · 게임 <span class="n">{doc.$source.gameVersion}</span> 기준
-        </p>
-        <p class="caption">{doc.$source.method}</p>
+        {doc.$sources.map((src, i) => (
+          <div class="src-item">
+            <p>
+              <span class="n src-n">{['LP 모형', '스팀 가이드', '자체 계산'][i]}</span>{' '}
+              <a href={src.url}>{src.title}</a> — {src.author}, {src.date} · 게임{' '}
+              <span class="n">{src.gameVersion}</span>
+            </p>
+            <p class="caption">{src.method}</p>
+            {src.limits && <p class="caption limits">한계: {src.limits}</p>}
+          </div>
+        ))}
+        <p class="caption">{doc.$dispute.summary}</p>
         <p class="caption">{doc.$note}</p>
         <p class="caption">{doc.$tierNote}</p>
+        <p class="caption">
+          재료는 <strong>산출 1개당</strong>으로 맞췄습니다. 산출 속도가 다른 두 제작법을
+          절대량으로 비교하면 틀린 결론이 나옵니다.
+        </p>
       </div>
     </section>
   </div>
@@ -175,26 +329,133 @@ const num = (n: number) => (Number.isInteger(n) ? String(n) : String(Math.round(
     .fact-v { font-size: var(--t-body-l); font-weight: 500; }
 
     .section { padding-block: var(--s12) 0; }
-    .rownote { display: block; font-size: var(--t-caption); color: var(--ink-3); }
-    .nowrap { white-space: nowrap; }
-    td .chip { margin: 1px 2px 1px 0; }
+    .marker-count { margin-left: auto; color: var(--ink-3); }
 
-    /* 등급은 글자로 읽힌다. 색은 보조 신호일 뿐이다 */
+    .cards { display: grid; gap: var(--s5); }
+    @media (min-width: 1000px) { .cards { grid-template-columns: 1fr 1fr; } }
+
+    .card {
+      padding: var(--s5);
+      border: var(--hair) solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+    /* 두 곳이 함께 높게 본 것만 테두리로 띄운다. 색이 아니라 라벨이 정본이다 */
+    .card.is-both-high { border-color: var(--line-strong); }
+    .card-grade .grade { min-width: 1.7rem; font-size: var(--t-body); }
+
+    .card-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: var(--s2) var(--s4);
+      margin-bottom: var(--s4);
+    }
+    .card-head h3 { font-size: var(--t-body-l); }
+    .card-grade { margin-left: auto; display: flex; align-items: baseline; gap: var(--s2); }
     .grade {
       display: inline-block;
-      min-width: 1.5rem;
-      padding: 0.05em 0.35em;
+      min-width: 1.4rem;
+      padding: 0.05em 0.3em;
       border: var(--hair) solid var(--line-strong);
       border-radius: var(--radius);
       font-family: var(--font-mono);
       font-weight: 600;
       text-align: center;
+      font-size: var(--t-caption);
     }
     .grade.is-s, .grade.is-a { border-color: var(--accent); color: var(--accent); }
     .grade.is-d, .grade.is-f { color: var(--ink-3); }
-    .grade-ko { margin-left: var(--s2); font-size: var(--t-caption); color: var(--ink-2); }
+    .grades { display: inline-flex; align-items: flex-end; gap: var(--s2); }
+    .grade-cell { display: grid; justify-items: center; gap: 2px; }
+    .grade-src { font-family: var(--font-mono); font-size: 10px; color: var(--ink-3); }
+    .verdict {
+      padding: 0.1em 0.45em;
+      border: var(--hair) solid var(--line);
+      border-radius: var(--radius);
+      font-size: var(--t-label);
+      color: var(--ink-2);
+      white-space: nowrap;
+    }
+    .verdict.is-ok { border-color: var(--ok); color: var(--ok); }
+    .verdict.is-warn { border-color: var(--accent); color: var(--accent); }
+    .verdict.is-low { color: var(--ink-3); }
+
+    .note-box {
+      margin-top: var(--s6);
+      padding: var(--s5);
+      border-left: 2px solid var(--accent);
+      background: var(--raised);
+    }
+    .note-box p { max-width: var(--measure-wide); }
+    .fact.is-ok .fact-v { color: var(--ok); }
+    .fact.is-warn .fact-v { color: var(--accent); }
+    .src-item { margin-bottom: var(--s5); }
+    .src-n { color: var(--accent); font-size: var(--t-caption); }
+
+    .cmp { font-size: var(--t-small); }
+    .cmp thead th {
+      position: static;
+      padding-block: 0 var(--s1);
+      border-bottom: var(--hair) solid var(--line);
+      background: transparent;
+    }
+    .cmp tbody th {
+      width: 2.6rem;
+      padding-left: 0;
+      font-family: var(--font-mono);
+      font-size: var(--t-label);
+      letter-spacing: 0.06em;
+      color: var(--ink-3);
+      text-align: left;
+      border-bottom: var(--hair) solid var(--line);
+    }
+    .cmp td { padding-inline: var(--s3) 0; }
+    .cmp tbody tr:hover td, .cmp tbody tr:hover th { background: transparent; }
+    .cmp .is-std td { color: var(--ink-2); }
+    .cmp .is-alt th { color: var(--accent); }
+    .cmp .is-alt td { font-weight: 500; }
+    .sep { color: var(--ink-3); margin-inline: 0.35em; }
+    .ratio { margin-left: var(--s2); font-size: var(--t-caption); }
+    .ratio.is-up { color: var(--ok); }
+    .ratio.is-down { color: var(--ink-3); }
+
+    .changes {
+      margin: var(--s4) 0 0;
+      font-size: var(--t-caption);
+      line-height: 1.9;
+      color: var(--ink-2);
+    }
+    .chg { white-space: nowrap; }
+    .chg.is-제거 { color: var(--ok); font-weight: 600; }
+    .chg.is-감소 { color: var(--ok); }
+    .chg.is-추가 { color: var(--ink-2); }
+    .chg.is-증가 { color: var(--ink-3); }
+    .chg.is-byproduct { color: var(--accent); }
+
+    .own {
+      margin: var(--s3) 0 0;
+      padding-top: var(--s3);
+      border-top: var(--hair) solid var(--line);
+      font-size: var(--t-caption);
+      color: var(--ink-2);
+    }
+    .own-k {
+      display: inline-block;
+      margin-right: var(--s3);
+      font-family: var(--font-mono);
+      font-size: var(--t-label);
+      letter-spacing: 0.06em;
+      color: var(--accent);
+    }
+    /* 줄면 좋은 것이므로 절감을 초록으로. 색만으로 구분하지 않도록 부호를 함께 쓴다 */
+    .is-save { color: var(--ok); }
+    .is-cost { color: var(--ink-3); }
+    .limits { color: var(--ink-3); }
+    .caution { margin: var(--s3) 0 0; font-size: var(--t-caption); color: var(--ink-3); }
 
     .unranked { display: flex; flex-wrap: wrap; gap: var(--s2); margin: var(--s4) 0 0; padding: 0; list-style: none; }
     .src p { max-width: var(--measure-wide); }
+    .nowrap { white-space: nowrap; }
   </style>
 </Base>

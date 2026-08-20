@@ -1,15 +1,6 @@
 {
   "$comment": "대체 제작법 우선순위. 순위와 점수는 커뮤니티 분석글(1.0 기준)에서 그대로 옮긴 것이고, 레시피 id·한글명·산출은 게임 데이터에서 붙였다. 우리가 매긴 점수가 아니다.",
-  "$source": {
-    "title": "Alternate Recipe Ranking 1.0 - Optimizing for Time/Effort",
-    "author": "u/wrigh516",
-    "url": "https://www.reddit.com/comments/1fekus9/",
-    "date": "2024-09-11",
-    "gameVersion": "1.0",
-    "method": "게임 파일 데이터로 선형계획 모형(Pyomo + glpk)을 돌려, 한 레시피를 강제했을 때 전체 생산망의 전력·아이템 이동량·기계 수·자원 소모가 얼마나 바뀌는지로 점수를 매겼다. 이 순위는 자원 효율이 아니라 시간·수고 최소화 기준이다.",
-    "confidence": "consensus"
-  },
-  "$note": "1.0 기준이다. 1.1~1.2 에서 바뀐 레시피가 있으면 이 순위도 흔들린다 — 게임 데이터와 대조해 확인된 것만 화면에 쓴다.",
+  "$note": "두 외부 출처 모두 1.2 기준이 아니다. LP 모형 쪽은 1.0(2024-09), 스팀 가이드 쪽은 2025-08 갱신으로 버전을 밝히지 않았다. 1.1·1.2 의 레시피 변경이 반영되지 않았을 수 있어, 이 사이트가 1.2 데이터로 직접 계산한 값을 함께 싣는다.",
   "$unranked": [
     {
       "id": "Recipe_Alternate_Coal_1_C",
@@ -84,7 +75,109 @@
           "ko": "콘크리트",
           "perMinute": 20.625
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_ModularFrameHeavy_C",
+          "ko": "고중량 모듈식 골조",
+          "machineKo": "제조기",
+          "outPerMin": 2,
+          "ingredients": [
+            {
+              "ko": "모듈식 골조",
+              "per": 5
+            },
+            {
+              "ko": "강철 파이프",
+              "per": 20
+            },
+            {
+              "ko": "포장된 산업용 빔",
+              "per": 5
+            },
+            {
+              "ko": "나사",
+              "per": 120
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "제조기",
+          "outPerMin": 2.8125,
+          "ingredients": [
+            {
+              "ko": "모듈식 골조",
+              "per": 2.667
+            },
+            {
+              "ko": "포장된 산업용 빔",
+              "per": 3.333
+            },
+            {
+              "ko": "강철 파이프",
+              "per": 12
+            },
+            {
+              "ko": "콘크리트",
+              "per": 7.333
+            }
+          ]
+        },
+        "outputRatio": 1.41,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "나사",
+            "before": 120,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "모듈식 골조",
+            "before": 5,
+            "after": 2.667,
+            "kind": "감소",
+            "pct": -46.7
+          },
+          {
+            "ko": "강철 파이프",
+            "before": 20,
+            "after": 12,
+            "kind": "감소",
+            "pct": -40
+          },
+          {
+            "ko": "포장된 산업용 빔",
+            "before": 5,
+            "after": 3.333,
+            "kind": "감소",
+            "pct": -33.3
+          },
+          {
+            "ko": "콘크리트",
+            "before": 0,
+            "after": 7.333,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "S",
+        "steam": "S",
+        "gap": 0,
+        "own": "S"
+      },
+      "consensus": "both-high",
+      "sortKey": 0,
+      "own": {
+        "score": 37.73,
+        "resourcePct": 3.36,
+        "machinePct": 12.24,
+        "powerPct": 3.17
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_Alternate_CopperAlloyIngot_C",
@@ -119,7 +212,68 @@
           "ko": "철 광석",
           "perMinute": 50
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_IngotCopper_C",
+          "ko": "구리 주괴",
+          "machineKo": "제련기",
+          "outPerMin": 30,
+          "ingredients": [
+            {
+              "ko": "구리 광석",
+              "per": 1
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "주조소",
+          "outPerMin": 100,
+          "ingredients": [
+            {
+              "ko": "구리 광석",
+              "per": 0.5
+            },
+            {
+              "ko": "철 광석",
+              "per": 0.5
+            }
+          ]
+        },
+        "outputRatio": 3.33,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "구리 광석",
+            "before": 1,
+            "after": 0.5,
+            "kind": "감소",
+            "pct": -50
+          },
+          {
+            "ko": "철 광석",
+            "before": 0,
+            "after": 0.5,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "S",
+        "steam": "A",
+        "gap": 1,
+        "own": "S"
+      },
+      "consensus": "both-high",
+      "sortKey": 0.3333333333333333,
+      "own": {
+        "score": 40.98,
+        "resourcePct": 8.2,
+        "machinePct": 8.46,
+        "powerPct": -0.54
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_PureAluminumIngot_C",
@@ -150,7 +304,68 @@
           "ko": "알루미늄 조각",
           "perMinute": 60
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_IngotAluminum_C",
+          "ko": "알루미늄 주괴",
+          "machineKo": "주조소",
+          "outPerMin": 60,
+          "ingredients": [
+            {
+              "ko": "알루미늄 조각",
+              "per": 1.5
+            },
+            {
+              "ko": "이산화규소",
+              "per": 1.25
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "제련기",
+          "outPerMin": 30,
+          "ingredients": [
+            {
+              "ko": "알루미늄 조각",
+              "per": 2
+            }
+          ]
+        },
+        "outputRatio": 0.5,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "이산화규소",
+            "before": 1.25,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "알루미늄 조각",
+            "before": 1.5,
+            "after": 2,
+            "kind": "증가",
+            "pct": 33.3
+          }
+        ]
+      },
+      "grades": {
+        "lp": "S",
+        "steam": "S",
+        "gap": 0,
+        "own": "B"
+      },
+      "consensus": "mixed",
+      "sortKey": 100.66666666666667,
+      "own": {
+        "score": 7.83,
+        "resourcePct": 1.89,
+        "machinePct": 0.91,
+        "powerPct": 0.34
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_Diamond_OilBased_C",
@@ -181,7 +396,64 @@
           "ko": "원유",
           "perMinute": 200
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Diamond_C",
+          "ko": "다이아몬드",
+          "machineKo": "입자 가속기",
+          "outPerMin": 30,
+          "ingredients": [
+            {
+              "ko": "석탄",
+              "per": 20
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "입자 가속기",
+          "outPerMin": 40,
+          "ingredients": [
+            {
+              "ko": "원유",
+              "per": 5
+            }
+          ]
+        },
+        "outputRatio": 1.33,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "석탄",
+            "before": 20,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "원유",
+            "before": 0,
+            "after": 5,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "S",
+        "steam": "A",
+        "gap": 1,
+        "own": "B"
+      },
+      "consensus": "mixed",
+      "sortKey": 101,
+      "own": {
+        "score": 10.84,
+        "resourcePct": 2.85,
+        "machinePct": 0.03,
+        "powerPct": 2.23
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_DarkMatter_Trap_C",
@@ -216,7 +488,79 @@
           "ko": "암흑 물질 잔여물",
           "perMinute": 150
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_DarkMatter_C",
+          "ko": "암흑 물질 수정",
+          "machineKo": "입자 가속기",
+          "outPerMin": 30,
+          "ingredients": [
+            {
+              "ko": "다이아몬드",
+              "per": 1
+            },
+            {
+              "ko": "암흑 물질 잔여물",
+              "per": 5
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "입자 가속기",
+          "outPerMin": 60,
+          "ingredients": [
+            {
+              "ko": "시간 수정",
+              "per": 0.5
+            },
+            {
+              "ko": "암흑 물질 잔여물",
+              "per": 2.5
+            }
+          ]
+        },
+        "outputRatio": 2,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "다이아몬드",
+            "before": 1,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "암흑 물질 잔여물",
+            "before": 5,
+            "after": 2.5,
+            "kind": "감소",
+            "pct": -50
+          },
+          {
+            "ko": "시간 수정",
+            "before": 0,
+            "after": 0.5,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "S",
+        "steam": "S",
+        "gap": 0,
+        "own": "A"
+      },
+      "consensus": "both-high",
+      "sortKey": 0.3333333333333333,
+      "own": {
+        "score": 12.11,
+        "resourcePct": 3.92,
+        "machinePct": 0.03,
+        "powerPct": 0.29
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_Alternate_HeavyFlexibleFrame_C",
@@ -259,7 +603,109 @@
           "ko": "나사",
           "perMinute": 390
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_ModularFrameHeavy_C",
+          "ko": "고중량 모듈식 골조",
+          "machineKo": "제조기",
+          "outPerMin": 2,
+          "ingredients": [
+            {
+              "ko": "모듈식 골조",
+              "per": 5
+            },
+            {
+              "ko": "강철 파이프",
+              "per": 20
+            },
+            {
+              "ko": "포장된 산업용 빔",
+              "per": 5
+            },
+            {
+              "ko": "나사",
+              "per": 120
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "제조기",
+          "outPerMin": 3.75,
+          "ingredients": [
+            {
+              "ko": "모듈식 골조",
+              "per": 5
+            },
+            {
+              "ko": "포장된 산업용 빔",
+              "per": 3
+            },
+            {
+              "ko": "고무",
+              "per": 20
+            },
+            {
+              "ko": "나사",
+              "per": 104
+            }
+          ]
+        },
+        "outputRatio": 1.88,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "강철 파이프",
+            "before": 20,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "포장된 산업용 빔",
+            "before": 5,
+            "after": 3,
+            "kind": "감소",
+            "pct": -40
+          },
+          {
+            "ko": "나사",
+            "before": 120,
+            "after": 104,
+            "kind": "감소",
+            "pct": -13.3
+          },
+          {
+            "ko": "모듈식 골조",
+            "before": 5,
+            "after": 5,
+            "kind": "증가",
+            "pct": 0
+          },
+          {
+            "ko": "고무",
+            "before": 0,
+            "after": 20,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "S",
+        "steam": "F",
+        "gap": 5,
+        "own": "A"
+      },
+      "consensus": "conflict",
+      "sortKey": 202,
+      "own": {
+        "score": 13.87,
+        "resourcePct": 2.34,
+        "machinePct": 3.13,
+        "powerPct": 0.59
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_SloppyAlumina_C",
@@ -294,7 +740,72 @@
           "ko": "물",
           "perMinute": 200
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_AluminaSolution_C",
+          "ko": "알루미나 용액",
+          "machineKo": "정제소",
+          "outPerMin": 120,
+          "ingredients": [
+            {
+              "ko": "보크사이트",
+              "per": 1
+            },
+            {
+              "ko": "물",
+              "per": 1.5
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "정제소",
+          "outPerMin": 240,
+          "ingredients": [
+            {
+              "ko": "보크사이트",
+              "per": 0.833
+            },
+            {
+              "ko": "물",
+              "per": 0.833
+            }
+          ]
+        },
+        "outputRatio": 2,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "보크사이트",
+            "before": 1,
+            "after": 0.833,
+            "kind": "감소",
+            "pct": -16.7
+          },
+          {
+            "ko": "물",
+            "before": 1.5,
+            "after": 0.833,
+            "kind": "감소",
+            "pct": -44.4
+          }
+        ]
+      },
+      "grades": {
+        "lp": "S",
+        "steam": "S",
+        "gap": 0,
+        "own": "B"
+      },
+      "consensus": "mixed",
+      "sortKey": 100.66666666666667,
+      "own": {
+        "score": 10.47,
+        "resourcePct": 3.01,
+        "machinePct": 0.57,
+        "powerPct": 0.3
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_CrystalOscillator_C",
@@ -333,7 +844,101 @@
           "ko": "인공지능 진폭 제한 회로",
           "perMinute": 1.875
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_CrystalOscillator_C",
+          "ko": "수정 발진기",
+          "machineKo": "제조기",
+          "outPerMin": 1,
+          "ingredients": [
+            {
+              "ko": "석영 수정",
+              "per": 18
+            },
+            {
+              "ko": "케이블",
+              "per": 14
+            },
+            {
+              "ko": "보강된 철판",
+              "per": 2.5
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "제조기",
+          "outPerMin": 1.875,
+          "ingredients": [
+            {
+              "ko": "석영 수정",
+              "per": 10
+            },
+            {
+              "ko": "고무",
+              "per": 7
+            },
+            {
+              "ko": "인공지능 진폭 제한 회로",
+              "per": 1
+            }
+          ]
+        },
+        "outputRatio": 1.88,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "케이블",
+            "before": 14,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "보강된 철판",
+            "before": 2.5,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "석영 수정",
+            "before": 18,
+            "after": 10,
+            "kind": "감소",
+            "pct": -44.4
+          },
+          {
+            "ko": "고무",
+            "before": 0,
+            "after": 7,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "인공지능 진폭 제한 회로",
+            "before": 0,
+            "after": 1,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "S",
+        "steam": "B",
+        "gap": 2,
+        "own": "B"
+      },
+      "consensus": "mixed",
+      "sortKey": 101.33333333333333,
+      "own": {
+        "score": 6.68,
+        "resourcePct": 0.34,
+        "machinePct": 2.43,
+        "powerPct": 0.8
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_CircuitBoard_1_C",
@@ -368,7 +973,79 @@
           "ko": "이산화규소",
           "perMinute": 27.5
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_CircuitBoard_C",
+          "ko": "회로 기판",
+          "machineKo": "조립기",
+          "outPerMin": 7.5,
+          "ingredients": [
+            {
+              "ko": "구리판",
+              "per": 2
+            },
+            {
+              "ko": "플라스틱",
+              "per": 4
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 12.5,
+          "ingredients": [
+            {
+              "ko": "구리판",
+              "per": 2.2
+            },
+            {
+              "ko": "이산화규소",
+              "per": 2.2
+            }
+          ]
+        },
+        "outputRatio": 1.67,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "플라스틱",
+            "before": 4,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "구리판",
+            "before": 2,
+            "after": 2.2,
+            "kind": "증가",
+            "pct": 10
+          },
+          {
+            "ko": "이산화규소",
+            "before": 0,
+            "after": 2.2,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "S",
+        "steam": "C",
+        "gap": 3,
+        "own": "A"
+      },
+      "consensus": "conflict",
+      "sortKey": 201.33333333333334,
+      "own": {
+        "score": 15.34,
+        "resourcePct": 1.89,
+        "machinePct": 3.25,
+        "powerPct": 3.17
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_Computer_2_C",
@@ -403,7 +1080,90 @@
           "ko": "수정 발진기",
           "perMinute": 1.666667
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Computer_C",
+          "ko": "컴퓨터",
+          "machineKo": "제조기",
+          "outPerMin": 2.5,
+          "ingredients": [
+            {
+              "ko": "회로 기판",
+              "per": 4
+            },
+            {
+              "ko": "케이블",
+              "per": 8
+            },
+            {
+              "ko": "플라스틱",
+              "per": 16
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 3.333333,
+          "ingredients": [
+            {
+              "ko": "회로 기판",
+              "per": 1.5
+            },
+            {
+              "ko": "수정 발진기",
+              "per": 0.5
+            }
+          ]
+        },
+        "outputRatio": 1.33,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "케이블",
+            "before": 8,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "플라스틱",
+            "before": 16,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "회로 기판",
+            "before": 4,
+            "after": 1.5,
+            "kind": "감소",
+            "pct": -62.5
+          },
+          {
+            "ko": "수정 발진기",
+            "before": 0,
+            "after": 0.5,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "S",
+        "steam": "A",
+        "gap": 1,
+        "own": "B"
+      },
+      "consensus": "mixed",
+      "sortKey": 101,
+      "own": {
+        "score": 8.16,
+        "resourcePct": 1.12,
+        "machinePct": 1.1,
+        "powerPct": 2.6
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_HeatFusedFrame_C",
@@ -446,7 +1206,112 @@
           "ko": "연료",
           "perMinute": 30
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_FusedModularFrame_C",
+          "ko": "융합된 모듈식 골조",
+          "machineKo": "혼합기",
+          "outPerMin": 1.5,
+          "ingredients": [
+            {
+              "ko": "고중량 모듈식 골조",
+              "per": 1
+            },
+            {
+              "ko": "알루미늄 케이스",
+              "per": 50
+            },
+            {
+              "ko": "질소 가스",
+              "per": 25
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "혼합기",
+          "outPerMin": 3,
+          "ingredients": [
+            {
+              "ko": "고중량 모듈식 골조",
+              "per": 1
+            },
+            {
+              "ko": "알루미늄 주괴",
+              "per": 50
+            },
+            {
+              "ko": "질산",
+              "per": 8
+            },
+            {
+              "ko": "연료",
+              "per": 10
+            }
+          ]
+        },
+        "outputRatio": 2,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "알루미늄 케이스",
+            "before": 50,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "질소 가스",
+            "before": 25,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "고중량 모듈식 골조",
+            "before": 1,
+            "after": 1,
+            "kind": "증가",
+            "pct": 0
+          },
+          {
+            "ko": "알루미늄 주괴",
+            "before": 0,
+            "after": 50,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "질산",
+            "before": 0,
+            "after": 8,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "연료",
+            "before": 0,
+            "after": 10,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "S",
+        "steam": "F",
+        "gap": 5,
+        "own": "A"
+      },
+      "consensus": "conflict",
+      "sortKey": 202,
+      "own": {
+        "score": 11.94,
+        "resourcePct": 3.29,
+        "machinePct": 0.88,
+        "powerPct": 0.31
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_NuclearFuelRod_1_C",
@@ -489,7 +1354,105 @@
           "ko": "회전자",
           "perMinute": 2
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_NuclearFuelRod_C",
+          "ko": "우라늄 연료봉",
+          "machineKo": "제조기",
+          "outPerMin": 0.4,
+          "ingredients": [
+            {
+              "ko": "포장된 우라늄 전지",
+              "per": 50
+            },
+            {
+              "ko": "포장된 산업용 빔",
+              "per": 3
+            },
+            {
+              "ko": "전자기 제어봉",
+              "per": 5
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "제조기",
+          "outPerMin": 0.6,
+          "ingredients": [
+            {
+              "ko": "포장된 우라늄 전지",
+              "per": 33.333
+            },
+            {
+              "ko": "전자기 제어봉",
+              "per": 3.333
+            },
+            {
+              "ko": "수정 발진기",
+              "per": 1
+            },
+            {
+              "ko": "회전자",
+              "per": 3.333
+            }
+          ]
+        },
+        "outputRatio": 1.5,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "포장된 산업용 빔",
+            "before": 3,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "포장된 우라늄 전지",
+            "before": 50,
+            "after": 33.333,
+            "kind": "감소",
+            "pct": -33.3
+          },
+          {
+            "ko": "전자기 제어봉",
+            "before": 5,
+            "after": 3.333,
+            "kind": "감소",
+            "pct": -33.3
+          },
+          {
+            "ko": "수정 발진기",
+            "before": 0,
+            "after": 1,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "회전자",
+            "before": 0,
+            "after": 3.333,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "S",
+        "steam": "A",
+        "gap": 1,
+        "own": "C"
+      },
+      "consensus": "conflict",
+      "sortKey": 201.33333333333334,
+      "own": {
+        "score": 0,
+        "resourcePct": 0,
+        "machinePct": 0,
+        "powerPct": 0
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_CircuitBoard_2_C",
@@ -524,7 +1487,79 @@
           "ko": "고속 전선",
           "perMinute": 37.5
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_CircuitBoard_C",
+          "ko": "회로 기판",
+          "machineKo": "조립기",
+          "outPerMin": 7.5,
+          "ingredients": [
+            {
+              "ko": "구리판",
+              "per": 2
+            },
+            {
+              "ko": "플라스틱",
+              "per": 4
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 8.75,
+          "ingredients": [
+            {
+              "ko": "플라스틱",
+              "per": 1.429
+            },
+            {
+              "ko": "고속 전선",
+              "per": 4.286
+            }
+          ]
+        },
+        "outputRatio": 1.17,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "구리판",
+            "before": 2,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "플라스틱",
+            "before": 4,
+            "after": 1.429,
+            "kind": "감소",
+            "pct": -64.3
+          },
+          {
+            "ko": "고속 전선",
+            "before": 0,
+            "after": 4.286,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "S",
+        "steam": "A",
+        "gap": 1,
+        "own": "A"
+      },
+      "consensus": "both-high",
+      "sortKey": 0.6666666666666666,
+      "own": {
+        "score": 16.21,
+        "resourcePct": 1.38,
+        "machinePct": 4.81,
+        "powerPct": 2.45
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_Alternate_SuperStateComputer_C",
@@ -567,7 +1602,123 @@
           "ko": "전선",
           "perMinute": 60
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_ComputerSuper_C",
+          "ko": "슈퍼컴퓨터",
+          "machineKo": "제조기",
+          "outPerMin": 1.875,
+          "ingredients": [
+            {
+              "ko": "컴퓨터",
+              "per": 4
+            },
+            {
+              "ko": "인공지능 진폭 제한 회로",
+              "per": 2
+            },
+            {
+              "ko": "고속 커넥터",
+              "per": 3
+            },
+            {
+              "ko": "플라스틱",
+              "per": 28
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "제조기",
+          "outPerMin": 2.4,
+          "ingredients": [
+            {
+              "ko": "컴퓨터",
+              "per": 3
+            },
+            {
+              "ko": "전자기 제어봉",
+              "per": 1
+            },
+            {
+              "ko": "배터리",
+              "per": 10
+            },
+            {
+              "ko": "전선",
+              "per": 25
+            }
+          ]
+        },
+        "outputRatio": 1.28,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "인공지능 진폭 제한 회로",
+            "before": 2,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "고속 커넥터",
+            "before": 3,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "플라스틱",
+            "before": 28,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "컴퓨터",
+            "before": 4,
+            "after": 3,
+            "kind": "감소",
+            "pct": -25
+          },
+          {
+            "ko": "전자기 제어봉",
+            "before": 0,
+            "after": 1,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "배터리",
+            "before": 0,
+            "after": 10,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "전선",
+            "before": 0,
+            "after": 25,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "A",
+        "steam": "A",
+        "gap": 0,
+        "own": "A"
+      },
+      "consensus": "both-high",
+      "sortKey": 1,
+      "own": {
+        "score": 14.49,
+        "resourcePct": 2.07,
+        "machinePct": 3.41,
+        "powerPct": 1.46
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_Alternate_Diamond_Turbo_C",
@@ -602,7 +1753,68 @@
           "ko": "포장된 터보 연료",
           "perMinute": 40
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Diamond_C",
+          "ko": "다이아몬드",
+          "machineKo": "입자 가속기",
+          "outPerMin": 30,
+          "ingredients": [
+            {
+              "ko": "석탄",
+              "per": 20
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "입자 가속기",
+          "outPerMin": 60,
+          "ingredients": [
+            {
+              "ko": "석탄",
+              "per": 10
+            },
+            {
+              "ko": "포장된 터보 연료",
+              "per": 0.667
+            }
+          ]
+        },
+        "outputRatio": 2,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "석탄",
+            "before": 20,
+            "after": 10,
+            "kind": "감소",
+            "pct": -50
+          },
+          {
+            "ko": "포장된 터보 연료",
+            "before": 0,
+            "after": 0.667,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "A",
+        "steam": "D",
+        "gap": 3,
+        "own": "B"
+      },
+      "consensus": "conflict",
+      "sortKey": 202.33333333333334,
+      "own": {
+        "score": 8.68,
+        "resourcePct": 1.97,
+        "machinePct": -0.62,
+        "powerPct": 4.01
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_Computer_1_C",
@@ -641,7 +1853,101 @@
           "ko": "고무",
           "perMinute": 22.5
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Computer_C",
+          "ko": "컴퓨터",
+          "machineKo": "제조기",
+          "outPerMin": 2.5,
+          "ingredients": [
+            {
+              "ko": "회로 기판",
+              "per": 4
+            },
+            {
+              "ko": "케이블",
+              "per": 8
+            },
+            {
+              "ko": "플라스틱",
+              "per": 16
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "제조기",
+          "outPerMin": 3.75,
+          "ingredients": [
+            {
+              "ko": "회로 기판",
+              "per": 4
+            },
+            {
+              "ko": "고속 전선",
+              "per": 14
+            },
+            {
+              "ko": "고무",
+              "per": 6
+            }
+          ]
+        },
+        "outputRatio": 1.5,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "케이블",
+            "before": 8,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "플라스틱",
+            "before": 16,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "회로 기판",
+            "before": 4,
+            "after": 4,
+            "kind": "증가",
+            "pct": 0
+          },
+          {
+            "ko": "고속 전선",
+            "before": 0,
+            "after": 14,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "고무",
+            "before": 0,
+            "after": 6,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "A",
+        "steam": "C",
+        "gap": 2,
+        "own": "B"
+      },
+      "consensus": "mixed",
+      "sortKey": 102,
+      "own": {
+        "score": 11.67,
+        "resourcePct": 0.59,
+        "machinePct": 3.73,
+        "powerPct": 2.44
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_ElectroAluminumScrap_C",
@@ -676,7 +1982,84 @@
           "ko": "석유 코크스",
           "perMinute": 60
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_AluminumScrap_C",
+          "ko": "알루미늄 조각",
+          "machineKo": "정제소",
+          "outPerMin": 360,
+          "ingredients": [
+            {
+              "ko": "알루미나 용액",
+              "per": 0.667
+            },
+            {
+              "ko": "석탄",
+              "per": 0.333
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "정제소",
+          "outPerMin": 300,
+          "ingredients": [
+            {
+              "ko": "알루미나 용액",
+              "per": 0.6
+            },
+            {
+              "ko": "석유 코크스",
+              "per": 0.2
+            }
+          ]
+        },
+        "outputRatio": 0.83,
+        "byproducts": [
+          {
+            "ko": "물",
+            "per": 0.35
+          }
+        ],
+        "changes": [
+          {
+            "ko": "석탄",
+            "before": 0.333,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "알루미나 용액",
+            "before": 0.667,
+            "after": 0.6,
+            "kind": "감소",
+            "pct": -10
+          },
+          {
+            "ko": "석유 코크스",
+            "before": 0,
+            "after": 0.2,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "A",
+        "steam": "B",
+        "gap": 1,
+        "own": "B"
+      },
+      "consensus": "mixed",
+      "sortKey": 101.66666666666667,
+      "own": {
+        "score": 7.64,
+        "resourcePct": 2.7,
+        "machinePct": -0.14,
+        "powerPct": -0.18
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_Alternate_DilutedFuel_C",
@@ -711,7 +2094,68 @@
           "ko": "물",
           "perMinute": 100
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_ResidualFuel_C",
+          "ko": "연료 잔여물",
+          "machineKo": "정제소",
+          "outPerMin": 40,
+          "ingredients": [
+            {
+              "ko": "중유 잔여물",
+              "per": 1.5
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "혼합기",
+          "outPerMin": 100,
+          "ingredients": [
+            {
+              "ko": "중유 잔여물",
+              "per": 0.5
+            },
+            {
+              "ko": "물",
+              "per": 1
+            }
+          ]
+        },
+        "outputRatio": 2.5,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "중유 잔여물",
+            "before": 1.5,
+            "after": 0.5,
+            "kind": "감소",
+            "pct": -66.7
+          },
+          {
+            "ko": "물",
+            "before": 0,
+            "after": 1,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "A",
+        "steam": "S",
+        "gap": 1,
+        "own": "C"
+      },
+      "consensus": "conflict",
+      "sortKey": 201.33333333333334,
+      "own": {
+        "score": 0,
+        "resourcePct": 0,
+        "machinePct": 0,
+        "powerPct": 0
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_TurboPressureMotor_C",
@@ -754,7 +2198,123 @@
           "ko": "고정자",
           "perMinute": 15
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_MotorTurbo_C",
+          "ko": "터보 모터",
+          "machineKo": "제조기",
+          "outPerMin": 1.875,
+          "ingredients": [
+            {
+              "ko": "냉각 시스템",
+              "per": 4
+            },
+            {
+              "ko": "무선 제어 장치",
+              "per": 2
+            },
+            {
+              "ko": "모터",
+              "per": 4
+            },
+            {
+              "ko": "고무",
+              "per": 24
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "제조기",
+          "outPerMin": 3.75,
+          "ingredients": [
+            {
+              "ko": "모터",
+              "per": 2
+            },
+            {
+              "ko": "압력 변환 큐브",
+              "per": 0.5
+            },
+            {
+              "ko": "포장된 질소 가스",
+              "per": 12
+            },
+            {
+              "ko": "고정자",
+              "per": 4
+            }
+          ]
+        },
+        "outputRatio": 2,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "냉각 시스템",
+            "before": 4,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "무선 제어 장치",
+            "before": 2,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "고무",
+            "before": 24,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "모터",
+            "before": 4,
+            "after": 2,
+            "kind": "감소",
+            "pct": -50
+          },
+          {
+            "ko": "압력 변환 큐브",
+            "before": 0,
+            "after": 0.5,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "포장된 질소 가스",
+            "before": 0,
+            "after": 12,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "고정자",
+            "before": 0,
+            "after": 4,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "A",
+        "steam": "A",
+        "gap": 0,
+        "own": "B"
+      },
+      "consensus": "mixed",
+      "sortKey": 101.33333333333333,
+      "own": {
+        "score": 10.08,
+        "resourcePct": 1.86,
+        "machinePct": 1.7,
+        "powerPct": 1.1
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_Alternate_RubberConcrete_C",
@@ -789,7 +2349,68 @@
           "ko": "고무",
           "perMinute": 20
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Concrete_C",
+          "ko": "콘크리트",
+          "machineKo": "제작기",
+          "outPerMin": 15,
+          "ingredients": [
+            {
+              "ko": "석회석",
+              "per": 3
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 90,
+          "ingredients": [
+            {
+              "ko": "석회석",
+              "per": 1.111
+            },
+            {
+              "ko": "고무",
+              "per": 0.222
+            }
+          ]
+        },
+        "outputRatio": 6,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "석회석",
+            "before": 3,
+            "after": 1.111,
+            "kind": "감소",
+            "pct": -63
+          },
+          {
+            "ko": "고무",
+            "before": 0,
+            "after": 0.222,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "A",
+        "steam": "F",
+        "gap": 4,
+        "own": "C"
+      },
+      "consensus": "conflict",
+      "sortKey": 203,
+      "own": {
+        "score": 4.53,
+        "resourcePct": 1,
+        "machinePct": 0.9,
+        "powerPct": -0.27
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_AILimiter_Plastic_C",
@@ -824,7 +2445,79 @@
           "ko": "플라스틱",
           "perMinute": 28
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_AILimiter_C",
+          "ko": "인공지능 진폭 제한 회로",
+          "machineKo": "조립기",
+          "outPerMin": 5,
+          "ingredients": [
+            {
+              "ko": "구리판",
+              "per": 5
+            },
+            {
+              "ko": "고속 전선",
+              "per": 20
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 8,
+          "ingredients": [
+            {
+              "ko": "고속 전선",
+              "per": 15
+            },
+            {
+              "ko": "플라스틱",
+              "per": 3.5
+            }
+          ]
+        },
+        "outputRatio": 1.6,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "구리판",
+            "before": 5,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "고속 전선",
+            "before": 20,
+            "after": 15,
+            "kind": "감소",
+            "pct": -25
+          },
+          {
+            "ko": "플라스틱",
+            "before": 0,
+            "after": 3.5,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "A",
+        "steam": "A",
+        "gap": 0,
+        "own": "C"
+      },
+      "consensus": "mixed",
+      "sortKey": 101.66666666666667,
+      "own": {
+        "score": 2.06,
+        "resourcePct": 0.38,
+        "machinePct": 0.46,
+        "powerPct": 0
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_Screw_2_C",
@@ -855,7 +2548,64 @@
           "ko": "강철 빔",
           "perMinute": 5
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Screw_C",
+          "ko": "나사",
+          "machineKo": "제작기",
+          "outPerMin": 40,
+          "ingredients": [
+            {
+              "ko": "철봉",
+              "per": 0.25
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "제작기",
+          "outPerMin": 260,
+          "ingredients": [
+            {
+              "ko": "강철 빔",
+              "per": 0.019
+            }
+          ]
+        },
+        "outputRatio": 6.5,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "철봉",
+            "before": 0.25,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "강철 빔",
+            "before": 0,
+            "after": 0.019,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "A",
+        "steam": "B",
+        "gap": 1,
+        "own": "S"
+      },
+      "consensus": "mixed",
+      "sortKey": 101,
+      "own": {
+        "score": 24.88,
+        "resourcePct": 0.04,
+        "machinePct": 11.48,
+        "powerPct": 1.8
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_Motor_1_C",
@@ -894,7 +2644,83 @@
           "ko": "수정 발진기",
           "perMinute": 1.25
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Motor_C",
+          "ko": "모터",
+          "machineKo": "조립기",
+          "outPerMin": 5,
+          "ingredients": [
+            {
+              "ko": "회전자",
+              "per": 2
+            },
+            {
+              "ko": "고정자",
+              "per": 2
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "제조기",
+          "outPerMin": 7.5,
+          "ingredients": [
+            {
+              "ko": "회전자",
+              "per": 0.5
+            },
+            {
+              "ko": "고정자",
+              "per": 0.5
+            },
+            {
+              "ko": "수정 발진기",
+              "per": 0.167
+            }
+          ]
+        },
+        "outputRatio": 1.5,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "회전자",
+            "before": 2,
+            "after": 0.5,
+            "kind": "감소",
+            "pct": -75
+          },
+          {
+            "ko": "고정자",
+            "before": 2,
+            "after": 0.5,
+            "kind": "감소",
+            "pct": -75
+          },
+          {
+            "ko": "수정 발진기",
+            "before": 0,
+            "after": 0.167,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "A",
+        "steam": "A",
+        "gap": 0,
+        "own": "B"
+      },
+      "consensus": "mixed",
+      "sortKey": 101.33333333333333,
+      "own": {
+        "score": 9.01,
+        "resourcePct": 0.24,
+        "machinePct": 3.94,
+        "powerPct": 0.41
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_Alternate_SteelRod_C",
@@ -925,7 +2751,64 @@
           "ko": "강철 주괴",
           "perMinute": 12
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_IronRod_C",
+          "ko": "철봉",
+          "machineKo": "제작기",
+          "outPerMin": 15,
+          "ingredients": [
+            {
+              "ko": "철 주괴",
+              "per": 1
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "제작기",
+          "outPerMin": 48,
+          "ingredients": [
+            {
+              "ko": "강철 주괴",
+              "per": 0.25
+            }
+          ]
+        },
+        "outputRatio": 3.2,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "철 주괴",
+            "before": 1,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "강철 주괴",
+            "before": 0,
+            "after": 0.25,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "A",
+        "steam": "F",
+        "gap": 4,
+        "own": "A"
+      },
+      "consensus": "conflict",
+      "sortKey": 202.33333333333334,
+      "own": {
+        "score": 18.18,
+        "resourcePct": 0.53,
+        "machinePct": 7.75,
+        "powerPct": 1.09
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_Concrete_C",
@@ -960,7 +2843,68 @@
           "ko": "석회석",
           "perMinute": 60
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Concrete_C",
+          "ko": "콘크리트",
+          "machineKo": "제작기",
+          "outPerMin": 15,
+          "ingredients": [
+            {
+              "ko": "석회석",
+              "per": 3
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 50,
+          "ingredients": [
+            {
+              "ko": "이산화규소",
+              "per": 0.3
+            },
+            {
+              "ko": "석회석",
+              "per": 1.2
+            }
+          ]
+        },
+        "outputRatio": 3.33,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "석회석",
+            "before": 3,
+            "after": 1.2,
+            "kind": "감소",
+            "pct": -60
+          },
+          {
+            "ko": "이산화규소",
+            "before": 0,
+            "after": 0.3,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "A",
+        "steam": "C",
+        "gap": 2,
+        "own": "C"
+      },
+      "consensus": "mixed",
+      "sortKey": 102.33333333333333,
+      "own": {
+        "score": 3.68,
+        "resourcePct": 0.74,
+        "machinePct": 0.77,
+        "powerPct": -0.08
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_ModularFrame_C",
@@ -995,7 +2939,79 @@
           "ko": "강철 파이프",
           "perMinute": 10
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_ModularFrame_C",
+          "ko": "모듈식 골조",
+          "machineKo": "조립기",
+          "outPerMin": 2,
+          "ingredients": [
+            {
+              "ko": "보강된 철판",
+              "per": 1.5
+            },
+            {
+              "ko": "철봉",
+              "per": 6
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 3,
+          "ingredients": [
+            {
+              "ko": "보강된 철판",
+              "per": 0.667
+            },
+            {
+              "ko": "강철 파이프",
+              "per": 3.333
+            }
+          ]
+        },
+        "outputRatio": 1.5,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "철봉",
+            "before": 6,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "보강된 철판",
+            "before": 1.5,
+            "after": 0.667,
+            "kind": "감소",
+            "pct": -55.6
+          },
+          {
+            "ko": "강철 파이프",
+            "before": 0,
+            "after": 3.333,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "A",
+        "steam": "A",
+        "gap": 0,
+        "own": "A"
+      },
+      "consensus": "both-high",
+      "sortKey": 1,
+      "own": {
+        "score": 16.23,
+        "resourcePct": 0.01,
+        "machinePct": 7.29,
+        "powerPct": 1.62
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_Alternate_SteelBeam_Aluminum_C",
@@ -1026,7 +3042,64 @@
           "ko": "알루미늄 주괴",
           "perMinute": 22.5
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_SteelBeam_C",
+          "ko": "강철 빔",
+          "machineKo": "제작기",
+          "outPerMin": 15,
+          "ingredients": [
+            {
+              "ko": "강철 주괴",
+              "per": 4
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "제작기",
+          "outPerMin": 22.5,
+          "ingredients": [
+            {
+              "ko": "알루미늄 주괴",
+              "per": 1
+            }
+          ]
+        },
+        "outputRatio": 1.5,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "강철 주괴",
+            "before": 4,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "알루미늄 주괴",
+            "before": 0,
+            "after": 1,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "A",
+        "steam": "A",
+        "gap": 0,
+        "own": "D"
+      },
+      "consensus": "conflict",
+      "sortKey": 202,
+      "own": {
+        "score": -1.15,
+        "resourcePct": -1.41,
+        "machinePct": 1.26,
+        "powerPct": 0.56
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_AluminumRod_C",
@@ -1057,7 +3130,64 @@
           "ko": "알루미늄 주괴",
           "perMinute": 7.5
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_IronRod_C",
+          "ko": "철봉",
+          "machineKo": "제작기",
+          "outPerMin": 15,
+          "ingredients": [
+            {
+              "ko": "철 주괴",
+              "per": 1
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "제작기",
+          "outPerMin": 52.5,
+          "ingredients": [
+            {
+              "ko": "알루미늄 주괴",
+              "per": 0.143
+            }
+          ]
+        },
+        "outputRatio": 3.5,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "철 주괴",
+            "before": 1,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "알루미늄 주괴",
+            "before": 0,
+            "after": 0.143,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "A",
+        "steam": "F",
+        "gap": 4,
+        "own": "B"
+      },
+      "consensus": "conflict",
+      "sortKey": 202.66666666666666,
+      "own": {
+        "score": 5.98,
+        "resourcePct": -3.38,
+        "machinePct": 7.55,
+        "powerPct": 1.02
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_TurboMotor_1_C",
@@ -1100,7 +3230,116 @@
           "ko": "회전자",
           "perMinute": 6.5625
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_MotorTurbo_C",
+          "ko": "터보 모터",
+          "machineKo": "제조기",
+          "outPerMin": 1.875,
+          "ingredients": [
+            {
+              "ko": "냉각 시스템",
+              "per": 4
+            },
+            {
+              "ko": "무선 제어 장치",
+              "per": 2
+            },
+            {
+              "ko": "모터",
+              "per": 4
+            },
+            {
+              "ko": "고무",
+              "per": 24
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "제조기",
+          "outPerMin": 2.8125,
+          "ingredients": [
+            {
+              "ko": "모터",
+              "per": 2.333
+            },
+            {
+              "ko": "무선 제어 장치",
+              "per": 3
+            },
+            {
+              "ko": "전자기 제어봉",
+              "per": 1.667
+            },
+            {
+              "ko": "회전자",
+              "per": 2.333
+            }
+          ]
+        },
+        "outputRatio": 1.5,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "냉각 시스템",
+            "before": 4,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "고무",
+            "before": 24,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "모터",
+            "before": 4,
+            "after": 2.333,
+            "kind": "감소",
+            "pct": -41.7
+          },
+          {
+            "ko": "무선 제어 장치",
+            "before": 2,
+            "after": 3,
+            "kind": "증가",
+            "pct": 50
+          },
+          {
+            "ko": "전자기 제어봉",
+            "before": 0,
+            "after": 1.667,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "회전자",
+            "before": 0,
+            "after": 2.333,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "A",
+        "steam": "D",
+        "gap": 3,
+        "own": "C"
+      },
+      "consensus": "conflict",
+      "sortKey": 202.66666666666666,
+      "own": {
+        "score": 2.84,
+        "resourcePct": 0.76,
+        "machinePct": 0.23,
+        "powerPct": 0.1
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_ElectricMotor_C",
@@ -1135,7 +3374,79 @@
           "ko": "회전자",
           "perMinute": 7.5
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Motor_C",
+          "ko": "모터",
+          "machineKo": "조립기",
+          "outPerMin": 5,
+          "ingredients": [
+            {
+              "ko": "회전자",
+              "per": 2
+            },
+            {
+              "ko": "고정자",
+              "per": 2
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 7.5,
+          "ingredients": [
+            {
+              "ko": "전자기 제어봉",
+              "per": 0.5
+            },
+            {
+              "ko": "회전자",
+              "per": 1
+            }
+          ]
+        },
+        "outputRatio": 1.5,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "고정자",
+            "before": 2,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "회전자",
+            "before": 2,
+            "after": 1,
+            "kind": "감소",
+            "pct": -50
+          },
+          {
+            "ko": "전자기 제어봉",
+            "before": 0,
+            "after": 0.5,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "A",
+        "steam": "D",
+        "gap": 3,
+        "own": "B"
+      },
+      "consensus": "conflict",
+      "sortKey": 202.33333333333334,
+      "own": {
+        "score": 5.83,
+        "resourcePct": -0.22,
+        "machinePct": 2.88,
+        "powerPct": 0.73
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_WetConcrete_C",
@@ -1170,7 +3481,68 @@
           "ko": "물",
           "perMinute": 100
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Concrete_C",
+          "ko": "콘크리트",
+          "machineKo": "제작기",
+          "outPerMin": 15,
+          "ingredients": [
+            {
+              "ko": "석회석",
+              "per": 3
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "정제소",
+          "outPerMin": 80,
+          "ingredients": [
+            {
+              "ko": "석회석",
+              "per": 1.5
+            },
+            {
+              "ko": "물",
+              "per": 1.25
+            }
+          ]
+        },
+        "outputRatio": 5.33,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "석회석",
+            "before": 3,
+            "after": 1.5,
+            "kind": "감소",
+            "pct": -50
+          },
+          {
+            "ko": "물",
+            "before": 0,
+            "after": 1.25,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "A",
+        "steam": "S",
+        "gap": 1,
+        "own": "C"
+      },
+      "consensus": "conflict",
+      "sortKey": 201.33333333333334,
+      "own": {
+        "score": 2.42,
+        "resourcePct": -0.01,
+        "machinePct": 1.29,
+        "powerPct": -0.13
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_HighSpeedWiring_C",
@@ -1209,7 +3581,90 @@
           "ko": "고속 커넥터",
           "perMinute": 1.875
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_SpaceElevatorPart_3_C",
+          "ko": "자동 배선기",
+          "machineKo": "조립기",
+          "outPerMin": 2.5,
+          "ingredients": [
+            {
+              "ko": "고정자",
+              "per": 1
+            },
+            {
+              "ko": "케이블",
+              "per": 20
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "제조기",
+          "outPerMin": 7.5,
+          "ingredients": [
+            {
+              "ko": "고정자",
+              "per": 0.5
+            },
+            {
+              "ko": "전선",
+              "per": 10
+            },
+            {
+              "ko": "고속 커넥터",
+              "per": 0.25
+            }
+          ]
+        },
+        "outputRatio": 3,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "케이블",
+            "before": 20,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "고정자",
+            "before": 1,
+            "after": 0.5,
+            "kind": "감소",
+            "pct": -50
+          },
+          {
+            "ko": "전선",
+            "before": 0,
+            "after": 10,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "고속 커넥터",
+            "before": 0,
+            "after": 0.25,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "A",
+        "steam": "F",
+        "gap": 4,
+        "own": "B"
+      },
+      "consensus": "conflict",
+      "sortKey": 202.66666666666666,
+      "own": {
+        "score": 4.87,
+        "resourcePct": -0.62,
+        "machinePct": 3.3,
+        "powerPct": 0.13
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_CokeSteelIngot_C",
@@ -1244,7 +3699,79 @@
           "ko": "석유 코크스",
           "perMinute": 75
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_IngotSteel_C",
+          "ko": "강철 주괴",
+          "machineKo": "주조소",
+          "outPerMin": 45,
+          "ingredients": [
+            {
+              "ko": "철 광석",
+              "per": 1
+            },
+            {
+              "ko": "석탄",
+              "per": 1
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "주조소",
+          "outPerMin": 100,
+          "ingredients": [
+            {
+              "ko": "철 광석",
+              "per": 0.75
+            },
+            {
+              "ko": "석유 코크스",
+              "per": 0.75
+            }
+          ]
+        },
+        "outputRatio": 2.22,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "석탄",
+            "before": 1,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "철 광석",
+            "before": 1,
+            "after": 0.75,
+            "kind": "감소",
+            "pct": -25
+          },
+          {
+            "ko": "석유 코크스",
+            "before": 0,
+            "after": 0.75,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "A",
+        "steam": "C",
+        "gap": 2,
+        "own": "S"
+      },
+      "consensus": "conflict",
+      "sortKey": 201.33333333333334,
+      "own": {
+        "score": 21.89,
+        "resourcePct": 6.39,
+        "machinePct": 1.34,
+        "powerPct": 0.04
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_UraniumCell_1_C",
@@ -1287,7 +3814,112 @@
           "ko": "고속 전선",
           "perMinute": 75
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_UraniumCell_C",
+          "ko": "포장된 우라늄 전지",
+          "machineKo": "혼합기",
+          "outPerMin": 25,
+          "ingredients": [
+            {
+              "ko": "우라늄",
+              "per": 2
+            },
+            {
+              "ko": "콘크리트",
+              "per": 0.6
+            },
+            {
+              "ko": "황산",
+              "per": 1.6
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "제조기",
+          "outPerMin": 20,
+          "ingredients": [
+            {
+              "ko": "우라늄",
+              "per": 1.25
+            },
+            {
+              "ko": "이산화규소",
+              "per": 0.75
+            },
+            {
+              "ko": "황",
+              "per": 1.25
+            },
+            {
+              "ko": "고속 전선",
+              "per": 3.75
+            }
+          ]
+        },
+        "outputRatio": 0.8,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "콘크리트",
+            "before": 0.6,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "황산",
+            "before": 1.6,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "우라늄",
+            "before": 2,
+            "after": 1.25,
+            "kind": "감소",
+            "pct": -37.5
+          },
+          {
+            "ko": "이산화규소",
+            "before": 0,
+            "after": 0.75,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "황",
+            "before": 0,
+            "after": 1.25,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "고속 전선",
+            "before": 0,
+            "after": 3.75,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "A",
+        "steam": "A",
+        "gap": 0,
+        "own": "C"
+      },
+      "consensus": "mixed",
+      "sortKey": 101.66666666666667,
+      "own": {
+        "score": 0,
+        "resourcePct": 0,
+        "machinePct": 0,
+        "powerPct": 0
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_HighSpeedConnector_C",
@@ -1326,7 +3958,94 @@
           "ko": "회로 기판",
           "perMinute": 3
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_HighSpeedConnector_C",
+          "ko": "고속 커넥터",
+          "machineKo": "제조기",
+          "outPerMin": 3.75,
+          "ingredients": [
+            {
+              "ko": "고속 전선",
+              "per": 56
+            },
+            {
+              "ko": "케이블",
+              "per": 10
+            },
+            {
+              "ko": "회로 기판",
+              "per": 1
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "제조기",
+          "outPerMin": 3,
+          "ingredients": [
+            {
+              "ko": "고속 전선",
+              "per": 30
+            },
+            {
+              "ko": "이산화규소",
+              "per": 12.5
+            },
+            {
+              "ko": "회로 기판",
+              "per": 1
+            }
+          ]
+        },
+        "outputRatio": 0.8,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "케이블",
+            "before": 10,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "고속 전선",
+            "before": 56,
+            "after": 30,
+            "kind": "감소",
+            "pct": -46.4
+          },
+          {
+            "ko": "회로 기판",
+            "before": 1,
+            "after": 1,
+            "kind": "증가",
+            "pct": 0
+          },
+          {
+            "ko": "이산화규소",
+            "before": 0,
+            "after": 12.5,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "F",
+        "gap": 3,
+        "own": "B"
+      },
+      "consensus": "conflict",
+      "sortKey": 203,
+      "own": {
+        "score": 5.12,
+        "resourcePct": 1.01,
+        "machinePct": 1,
+        "powerPct": 0.09
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_RadioControlSystem_C",
@@ -1369,7 +4088,105 @@
           "ko": "고무",
           "perMinute": 45
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_RadioControlUnit_C",
+          "ko": "무선 제어 장치",
+          "machineKo": "제조기",
+          "outPerMin": 2.5,
+          "ingredients": [
+            {
+              "ko": "알루미늄 케이스",
+              "per": 16
+            },
+            {
+              "ko": "수정 발진기",
+              "per": 0.5
+            },
+            {
+              "ko": "컴퓨터",
+              "per": 1
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "제조기",
+          "outPerMin": 4.5,
+          "ingredients": [
+            {
+              "ko": "수정 발진기",
+              "per": 0.333
+            },
+            {
+              "ko": "회로 기판",
+              "per": 3.333
+            },
+            {
+              "ko": "알루미늄 케이스",
+              "per": 20
+            },
+            {
+              "ko": "고무",
+              "per": 10
+            }
+          ]
+        },
+        "outputRatio": 1.8,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "컴퓨터",
+            "before": 1,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "수정 발진기",
+            "before": 0.5,
+            "after": 0.333,
+            "kind": "감소",
+            "pct": -33.3
+          },
+          {
+            "ko": "알루미늄 케이스",
+            "before": 16,
+            "after": 20,
+            "kind": "증가",
+            "pct": 25
+          },
+          {
+            "ko": "회로 기판",
+            "before": 0,
+            "after": 3.333,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "고무",
+            "before": 0,
+            "after": 10,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "C",
+        "gap": 1,
+        "own": "B"
+      },
+      "consensus": "mixed",
+      "sortKey": 102.33333333333333,
+      "own": {
+        "score": 8.45,
+        "resourcePct": 0.21,
+        "machinePct": 2.93,
+        "powerPct": 1.96
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_Alternate_IngotSteel_1_C",
@@ -1404,7 +4221,79 @@
           "ko": "석탄",
           "perMinute": 40
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_IngotSteel_C",
+          "ko": "강철 주괴",
+          "machineKo": "주조소",
+          "outPerMin": 45,
+          "ingredients": [
+            {
+              "ko": "철 광석",
+              "per": 1
+            },
+            {
+              "ko": "석탄",
+              "per": 1
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "주조소",
+          "outPerMin": 60,
+          "ingredients": [
+            {
+              "ko": "철 주괴",
+              "per": 0.667
+            },
+            {
+              "ko": "석탄",
+              "per": 0.667
+            }
+          ]
+        },
+        "outputRatio": 1.33,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "철 광석",
+            "before": 1,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "석탄",
+            "before": 1,
+            "after": 0.667,
+            "kind": "감소",
+            "pct": -33.3
+          },
+          {
+            "ko": "철 주괴",
+            "before": 0,
+            "after": 0.667,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "S",
+        "gap": 2,
+        "own": "B"
+      },
+      "consensus": "mixed",
+      "sortKey": 101.33333333333333,
+      "own": {
+        "score": 5.29,
+        "resourcePct": 2.79,
+        "machinePct": -1.54,
+        "powerPct": 0
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_HeatSink_1_C",
@@ -1439,7 +4328,86 @@
           "ko": "고무",
           "perMinute": 30
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_HeatSink_C",
+          "ko": "방열판",
+          "machineKo": "조립기",
+          "outPerMin": 7.5,
+          "ingredients": [
+            {
+              "ko": "알클래드 알루미늄 판",
+              "per": 5
+            },
+            {
+              "ko": "구리판",
+              "per": 3
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 10,
+          "ingredients": [
+            {
+              "ko": "알루미늄 케이스",
+              "per": 3
+            },
+            {
+              "ko": "고무",
+              "per": 3
+            }
+          ]
+        },
+        "outputRatio": 1.33,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "알클래드 알루미늄 판",
+            "before": 5,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "구리판",
+            "before": 3,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "알루미늄 케이스",
+            "before": 0,
+            "after": 3,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "고무",
+            "before": 0,
+            "after": 3,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "A",
+        "gap": 1,
+        "own": "C"
+      },
+      "consensus": "mixed",
+      "sortKey": 102,
+      "own": {
+        "score": 3.5,
+        "resourcePct": 0.52,
+        "machinePct": 0.94,
+        "powerPct": 0.06
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_Plastic_1_C",
@@ -1474,7 +4442,75 @@
           "ko": "연료",
           "perMinute": 30
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Plastic_C",
+          "ko": "플라스틱",
+          "machineKo": "정제소",
+          "outPerMin": 20,
+          "ingredients": [
+            {
+              "ko": "원유",
+              "per": 1.5
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "정제소",
+          "outPerMin": 60,
+          "ingredients": [
+            {
+              "ko": "고무",
+              "per": 0.5
+            },
+            {
+              "ko": "연료",
+              "per": 0.5
+            }
+          ]
+        },
+        "outputRatio": 3,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "원유",
+            "before": 1.5,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "고무",
+            "before": 0,
+            "after": 0.5,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "연료",
+            "before": 0,
+            "after": 0.5,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "A",
+        "gap": 1,
+        "own": "A"
+      },
+      "consensus": "mixed",
+      "sortKey": 101.33333333333333,
+      "own": {
+        "score": 12.7,
+        "resourcePct": 4.39,
+        "machinePct": 0,
+        "powerPct": -0.47
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_Alternate_CoatedIronPlate_C",
@@ -1509,7 +4545,68 @@
           "ko": "플라스틱",
           "perMinute": 7.5
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_IronPlate_C",
+          "ko": "철판",
+          "machineKo": "제작기",
+          "outPerMin": 20,
+          "ingredients": [
+            {
+              "ko": "철 주괴",
+              "per": 1.5
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 75,
+          "ingredients": [
+            {
+              "ko": "철 주괴",
+              "per": 0.5
+            },
+            {
+              "ko": "플라스틱",
+              "per": 0.1
+            }
+          ]
+        },
+        "outputRatio": 3.75,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "철 주괴",
+            "before": 1.5,
+            "after": 0.5,
+            "kind": "감소",
+            "pct": -66.7
+          },
+          {
+            "ko": "플라스틱",
+            "before": 0,
+            "after": 0.1,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "A",
+        "gap": 1,
+        "own": "B"
+      },
+      "consensus": "mixed",
+      "sortKey": 101.66666666666667,
+      "own": {
+        "score": 8.13,
+        "resourcePct": 0.73,
+        "machinePct": 2.99,
+        "powerPct": -0.04
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_Alternate_AdheredIronPlate_C",
@@ -1544,7 +4641,79 @@
           "ko": "고무",
           "perMinute": 3.75
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_IronPlateReinforced_C",
+          "ko": "보강된 철판",
+          "machineKo": "조립기",
+          "outPerMin": 5,
+          "ingredients": [
+            {
+              "ko": "철판",
+              "per": 6
+            },
+            {
+              "ko": "나사",
+              "per": 12
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 3.75,
+          "ingredients": [
+            {
+              "ko": "철판",
+              "per": 3
+            },
+            {
+              "ko": "고무",
+              "per": 1
+            }
+          ]
+        },
+        "outputRatio": 0.75,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "나사",
+            "before": 12,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "철판",
+            "before": 6,
+            "after": 3,
+            "kind": "감소",
+            "pct": -50
+          },
+          {
+            "ko": "고무",
+            "before": 0,
+            "after": 1,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "C",
+        "gap": 1,
+        "own": "A"
+      },
+      "consensus": "mixed",
+      "sortKey": 102,
+      "own": {
+        "score": 14.66,
+        "resourcePct": 0.65,
+        "machinePct": 6.15,
+        "powerPct": 0.41
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_ReinforcedIronPlate_2_C",
@@ -1579,7 +4748,79 @@
           "ko": "전선",
           "perMinute": 37.5
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_IronPlateReinforced_C",
+          "ko": "보강된 철판",
+          "machineKo": "조립기",
+          "outPerMin": 5,
+          "ingredients": [
+            {
+              "ko": "철판",
+              "per": 6
+            },
+            {
+              "ko": "나사",
+              "per": 12
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 5.625,
+          "ingredients": [
+            {
+              "ko": "철판",
+              "per": 3.333
+            },
+            {
+              "ko": "전선",
+              "per": 6.667
+            }
+          ]
+        },
+        "outputRatio": 1.13,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "나사",
+            "before": 12,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "철판",
+            "before": 6,
+            "after": 3.333,
+            "kind": "감소",
+            "pct": -44.4
+          },
+          {
+            "ko": "전선",
+            "before": 0,
+            "after": 6.667,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "S",
+        "gap": 2,
+        "own": "B"
+      },
+      "consensus": "mixed",
+      "sortKey": 101.33333333333333,
+      "own": {
+        "score": 9.72,
+        "resourcePct": -0.27,
+        "machinePct": 4.81,
+        "powerPct": 0.91
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_Cable_1_C",
@@ -1614,7 +4855,68 @@
           "ko": "고무",
           "perMinute": 30
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Cable_C",
+          "ko": "케이블",
+          "machineKo": "제작기",
+          "outPerMin": 30,
+          "ingredients": [
+            {
+              "ko": "전선",
+              "per": 2
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 100,
+          "ingredients": [
+            {
+              "ko": "전선",
+              "per": 0.45
+            },
+            {
+              "ko": "고무",
+              "per": 0.3
+            }
+          ]
+        },
+        "outputRatio": 3.33,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "전선",
+            "before": 2,
+            "after": 0.45,
+            "kind": "감소",
+            "pct": -77.5
+          },
+          {
+            "ko": "고무",
+            "before": 0,
+            "after": 0.3,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "C",
+        "gap": 1,
+        "own": "A"
+      },
+      "consensus": "mixed",
+      "sortKey": 102,
+      "own": {
+        "score": 12.32,
+        "resourcePct": 1.03,
+        "machinePct": 4.84,
+        "powerPct": -0.45
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_CoatedCable_C",
@@ -1649,7 +4951,68 @@
           "ko": "중유 잔여물",
           "perMinute": 15
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Cable_C",
+          "ko": "케이블",
+          "machineKo": "제작기",
+          "outPerMin": 30,
+          "ingredients": [
+            {
+              "ko": "전선",
+              "per": 2
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "정제소",
+          "outPerMin": 67.5,
+          "ingredients": [
+            {
+              "ko": "전선",
+              "per": 0.556
+            },
+            {
+              "ko": "중유 잔여물",
+              "per": 0.222
+            }
+          ]
+        },
+        "outputRatio": 2.25,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "전선",
+            "before": 2,
+            "after": 0.556,
+            "kind": "감소",
+            "pct": -72.2
+          },
+          {
+            "ko": "중유 잔여물",
+            "before": 0,
+            "after": 0.222,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "D",
+        "gap": 2,
+        "own": "S"
+      },
+      "consensus": "conflict",
+      "sortKey": 202,
+      "own": {
+        "score": 19.43,
+        "resourcePct": 2.83,
+        "machinePct": 5.5,
+        "powerPct": -0.06
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_FusedWire_C",
@@ -1684,7 +5047,68 @@
           "ko": "카테리움 주괴",
           "perMinute": 3
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Wire_C",
+          "ko": "전선",
+          "machineKo": "제작기",
+          "outPerMin": 30,
+          "ingredients": [
+            {
+              "ko": "구리 주괴",
+              "per": 0.5
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 90,
+          "ingredients": [
+            {
+              "ko": "구리 주괴",
+              "per": 0.133
+            },
+            {
+              "ko": "카테리움 주괴",
+              "per": 0.033
+            }
+          ]
+        },
+        "outputRatio": 3,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "구리 주괴",
+            "before": 0.5,
+            "after": 0.133,
+            "kind": "감소",
+            "pct": -73.3
+          },
+          {
+            "ko": "카테리움 주괴",
+            "before": 0,
+            "after": 0.033,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "B",
+        "gap": 0,
+        "own": "A"
+      },
+      "consensus": "mixed",
+      "sortKey": 101.66666666666667,
+      "own": {
+        "score": 12.52,
+        "resourcePct": 1.19,
+        "machinePct": 4.45,
+        "powerPct": 0.05
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_Alternate_PlasticSmartPlating_C",
@@ -1723,7 +5147,83 @@
           "ko": "플라스틱",
           "perMinute": 7.5
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_SpaceElevatorPart_1_C",
+          "ko": "지능형 도금판",
+          "machineKo": "조립기",
+          "outPerMin": 2,
+          "ingredients": [
+            {
+              "ko": "보강된 철판",
+              "per": 1
+            },
+            {
+              "ko": "회전자",
+              "per": 1
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "제조기",
+          "outPerMin": 5,
+          "ingredients": [
+            {
+              "ko": "보강된 철판",
+              "per": 0.5
+            },
+            {
+              "ko": "회전자",
+              "per": 0.5
+            },
+            {
+              "ko": "플라스틱",
+              "per": 1.5
+            }
+          ]
+        },
+        "outputRatio": 2.5,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "보강된 철판",
+            "before": 1,
+            "after": 0.5,
+            "kind": "감소",
+            "pct": -50
+          },
+          {
+            "ko": "회전자",
+            "before": 1,
+            "after": 0.5,
+            "kind": "감소",
+            "pct": -50
+          },
+          {
+            "ko": "플라스틱",
+            "before": 0,
+            "after": 1.5,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "A",
+        "gap": 1,
+        "own": "C"
+      },
+      "consensus": "mixed",
+      "sortKey": 102,
+      "own": {
+        "score": 4.53,
+        "resourcePct": 0.12,
+        "machinePct": 2.01,
+        "powerPct": 0.15
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_CopperRotor_C",
@@ -1758,7 +5258,79 @@
           "ko": "나사",
           "perMinute": 195
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Rotor_C",
+          "ko": "회전자",
+          "machineKo": "조립기",
+          "outPerMin": 4,
+          "ingredients": [
+            {
+              "ko": "철봉",
+              "per": 5
+            },
+            {
+              "ko": "나사",
+              "per": 25
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 11.25,
+          "ingredients": [
+            {
+              "ko": "구리판",
+              "per": 2
+            },
+            {
+              "ko": "나사",
+              "per": 17.333
+            }
+          ]
+        },
+        "outputRatio": 2.81,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "철봉",
+            "before": 5,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "나사",
+            "before": 25,
+            "after": 17.333,
+            "kind": "감소",
+            "pct": -30.7
+          },
+          {
+            "ko": "구리판",
+            "before": 0,
+            "after": 2,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "D",
+        "gap": 2,
+        "own": "B"
+      },
+      "consensus": "mixed",
+      "sortKey": 102.66666666666667,
+      "own": {
+        "score": 5.28,
+        "resourcePct": -0.24,
+        "machinePct": 2.66,
+        "powerPct": 0.68
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_SteelCastedPlate_C",
@@ -1793,7 +5365,68 @@
           "ko": "강철 주괴",
           "perMinute": 15
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_IronPlate_C",
+          "ko": "철판",
+          "machineKo": "제작기",
+          "outPerMin": 20,
+          "ingredients": [
+            {
+              "ko": "철 주괴",
+              "per": 1.5
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "주조소",
+          "outPerMin": 45,
+          "ingredients": [
+            {
+              "ko": "철 주괴",
+              "per": 0.333
+            },
+            {
+              "ko": "강철 주괴",
+              "per": 0.333
+            }
+          ]
+        },
+        "outputRatio": 2.25,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "철 주괴",
+            "before": 1.5,
+            "after": 0.333,
+            "kind": "감소",
+            "pct": -77.8
+          },
+          {
+            "ko": "강철 주괴",
+            "before": 0,
+            "after": 0.333,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "C",
+        "gap": 1,
+        "own": "B"
+      },
+      "consensus": "mixed",
+      "sortKey": 102.33333333333333,
+      "own": {
+        "score": 4.9,
+        "resourcePct": 0.14,
+        "machinePct": 2.38,
+        "powerPct": -0.28
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_Alternate_RocketFuel_Nitro_C",
@@ -1836,7 +5469,102 @@
           "ko": "석탄",
           "perMinute": 50
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_UnpackageRocketFuel_C",
+          "ko": "로켓 연료 비우기",
+          "machineKo": "포장기",
+          "outPerMin": 120,
+          "ingredients": [
+            {
+              "ko": "포장된 로켓 연료",
+              "per": 0.5
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "혼합기",
+          "outPerMin": 150,
+          "ingredients": [
+            {
+              "ko": "연료",
+              "per": 0.667
+            },
+            {
+              "ko": "질소 가스",
+              "per": 0.5
+            },
+            {
+              "ko": "황",
+              "per": 0.667
+            },
+            {
+              "ko": "석탄",
+              "per": 0.333
+            }
+          ]
+        },
+        "outputRatio": 1.25,
+        "byproducts": [
+          {
+            "ko": "압축 석탄",
+            "per": 0.16666666666666666
+          }
+        ],
+        "changes": [
+          {
+            "ko": "포장된 로켓 연료",
+            "before": 0.5,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "연료",
+            "before": 0,
+            "after": 0.667,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "질소 가스",
+            "before": 0,
+            "after": 0.5,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "황",
+            "before": 0,
+            "after": 0.667,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "석탄",
+            "before": 0,
+            "after": 0.333,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "S",
+        "gap": 2,
+        "own": "C"
+      },
+      "consensus": "conflict",
+      "sortKey": 201.66666666666666,
+      "own": {
+        "score": 0,
+        "resourcePct": 0,
+        "machinePct": 0,
+        "powerPct": 0
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_SteamedCopperSheet_C",
@@ -1871,7 +5599,68 @@
           "ko": "물",
           "perMinute": 22.5
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_CopperSheet_C",
+          "ko": "구리판",
+          "machineKo": "제작기",
+          "outPerMin": 10,
+          "ingredients": [
+            {
+              "ko": "구리 주괴",
+              "per": 2
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "정제소",
+          "outPerMin": 22.5,
+          "ingredients": [
+            {
+              "ko": "구리 주괴",
+              "per": 1
+            },
+            {
+              "ko": "물",
+              "per": 1
+            }
+          ]
+        },
+        "outputRatio": 2.25,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "구리 주괴",
+            "before": 2,
+            "after": 1,
+            "kind": "감소",
+            "pct": -50
+          },
+          {
+            "ko": "물",
+            "before": 0,
+            "after": 1,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "D",
+        "gap": 2,
+        "own": "C"
+      },
+      "consensus": "mixed",
+      "sortKey": 103,
+      "own": {
+        "score": 4.82,
+        "resourcePct": 0.63,
+        "machinePct": 1.99,
+        "powerPct": -1.05
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_OCSupercomputer_C",
@@ -1906,7 +5695,108 @@
           "ko": "냉각 시스템",
           "perMinute": 6
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_ComputerSuper_C",
+          "ko": "슈퍼컴퓨터",
+          "machineKo": "제조기",
+          "outPerMin": 1.875,
+          "ingredients": [
+            {
+              "ko": "컴퓨터",
+              "per": 4
+            },
+            {
+              "ko": "인공지능 진폭 제한 회로",
+              "per": 2
+            },
+            {
+              "ko": "고속 커넥터",
+              "per": 3
+            },
+            {
+              "ko": "플라스틱",
+              "per": 28
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 3,
+          "ingredients": [
+            {
+              "ko": "무선 제어 장치",
+              "per": 2
+            },
+            {
+              "ko": "냉각 시스템",
+              "per": 2
+            }
+          ]
+        },
+        "outputRatio": 1.6,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "컴퓨터",
+            "before": 4,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "인공지능 진폭 제한 회로",
+            "before": 2,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "고속 커넥터",
+            "before": 3,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "플라스틱",
+            "before": 28,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "무선 제어 장치",
+            "before": 0,
+            "after": 2,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "냉각 시스템",
+            "before": 0,
+            "after": 2,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "A",
+        "gap": 1,
+        "own": "C"
+      },
+      "consensus": "mixed",
+      "sortKey": 102,
+      "own": {
+        "score": 4.43,
+        "resourcePct": -0.38,
+        "machinePct": 2.23,
+        "powerPct": 1.11
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_Rotor_C",
@@ -1941,7 +5831,86 @@
           "ko": "전선",
           "perMinute": 30
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Rotor_C",
+          "ko": "회전자",
+          "machineKo": "조립기",
+          "outPerMin": 4,
+          "ingredients": [
+            {
+              "ko": "철봉",
+              "per": 5
+            },
+            {
+              "ko": "나사",
+              "per": 25
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 5,
+          "ingredients": [
+            {
+              "ko": "강철 파이프",
+              "per": 2
+            },
+            {
+              "ko": "전선",
+              "per": 6
+            }
+          ]
+        },
+        "outputRatio": 1.25,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "철봉",
+            "before": 5,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "나사",
+            "before": 25,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "강철 파이프",
+            "before": 0,
+            "after": 2,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "전선",
+            "before": 0,
+            "after": 6,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "S",
+        "gap": 2,
+        "own": "B"
+      },
+      "consensus": "mixed",
+      "sortKey": 101.33333333333333,
+      "own": {
+        "score": 8.27,
+        "resourcePct": -0.46,
+        "machinePct": 4.45,
+        "powerPct": 0.75
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_CateriumIngot_Tempered_C",
@@ -1976,7 +5945,68 @@
           "ko": "석유 코크스",
           "perMinute": 15
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_IngotCaterium_C",
+          "ko": "카테리움 주괴",
+          "machineKo": "제련기",
+          "outPerMin": 15,
+          "ingredients": [
+            {
+              "ko": "카테리움 광석",
+              "per": 3
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "주조소",
+          "outPerMin": 22.5,
+          "ingredients": [
+            {
+              "ko": "카테리움 광석",
+              "per": 2
+            },
+            {
+              "ko": "석유 코크스",
+              "per": 0.667
+            }
+          ]
+        },
+        "outputRatio": 1.5,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "카테리움 광석",
+            "before": 3,
+            "after": 2,
+            "kind": "감소",
+            "pct": -33.3
+          },
+          {
+            "ko": "석유 코크스",
+            "before": 0,
+            "after": 0.667,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "D",
+        "gap": 2,
+        "own": "C"
+      },
+      "consensus": "mixed",
+      "sortKey": 103,
+      "own": {
+        "score": 3.62,
+        "resourcePct": 1.32,
+        "machinePct": -0.05,
+        "powerPct": -0.24
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_CoolingDevice_C",
@@ -2015,7 +6045,105 @@
           "ko": "질소 가스",
           "perMinute": 60
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_CoolingSystem_C",
+          "ko": "냉각 시스템",
+          "machineKo": "혼합기",
+          "outPerMin": 6,
+          "ingredients": [
+            {
+              "ko": "방열판",
+              "per": 2
+            },
+            {
+              "ko": "고무",
+              "per": 2
+            },
+            {
+              "ko": "물",
+              "per": 5
+            },
+            {
+              "ko": "질소 가스",
+              "per": 25
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "혼합기",
+          "outPerMin": 5,
+          "ingredients": [
+            {
+              "ko": "방열판",
+              "per": 2
+            },
+            {
+              "ko": "모터",
+              "per": 0.5
+            },
+            {
+              "ko": "질소 가스",
+              "per": 12
+            }
+          ]
+        },
+        "outputRatio": 0.83,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "고무",
+            "before": 2,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "물",
+            "before": 5,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "질소 가스",
+            "before": 25,
+            "after": 12,
+            "kind": "감소",
+            "pct": -52
+          },
+          {
+            "ko": "방열판",
+            "before": 2,
+            "after": 2,
+            "kind": "증가",
+            "pct": 0
+          },
+          {
+            "ko": "모터",
+            "before": 0,
+            "after": 0.5,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "C",
+        "gap": 1,
+        "own": "F"
+      },
+      "consensus": "conflict",
+      "sortKey": 203.33333333333334,
+      "own": {
+        "score": -5.09,
+        "resourcePct": 0.08,
+        "machinePct": -2.36,
+        "powerPct": -0.61
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_PureQuartzCrystal_C",
@@ -2050,7 +6178,68 @@
           "ko": "물",
           "perMinute": 37.5
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_QuartzCrystal_C",
+          "ko": "석영 수정",
+          "machineKo": "제작기",
+          "outPerMin": 22.5,
+          "ingredients": [
+            {
+              "ko": "석영 원석",
+              "per": 1.667
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "정제소",
+          "outPerMin": 52.5,
+          "ingredients": [
+            {
+              "ko": "석영 원석",
+              "per": 1.286
+            },
+            {
+              "ko": "물",
+              "per": 0.714
+            }
+          ]
+        },
+        "outputRatio": 2.33,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "석영 원석",
+            "before": 1.667,
+            "after": 1.286,
+            "kind": "감소",
+            "pct": -22.9
+          },
+          {
+            "ko": "물",
+            "before": 0,
+            "after": 0.714,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "B",
+        "gap": 0,
+        "own": "C"
+      },
+      "consensus": "mixed",
+      "sortKey": 102.33333333333333,
+      "own": {
+        "score": 1.1,
+        "resourcePct": 0.32,
+        "machinePct": 0.15,
+        "powerPct": -0.16
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_Alternate_ElectromagneticControlRod_1_C",
@@ -2085,7 +6274,79 @@
           "ko": "고속 커넥터",
           "perMinute": 4
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_ElectromagneticControlRod_C",
+          "ko": "전자기 제어봉",
+          "machineKo": "조립기",
+          "outPerMin": 4,
+          "ingredients": [
+            {
+              "ko": "고정자",
+              "per": 1.5
+            },
+            {
+              "ko": "인공지능 진폭 제한 회로",
+              "per": 1
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 8,
+          "ingredients": [
+            {
+              "ko": "고정자",
+              "per": 1
+            },
+            {
+              "ko": "고속 커넥터",
+              "per": 0.5
+            }
+          ]
+        },
+        "outputRatio": 2,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "인공지능 진폭 제한 회로",
+            "before": 1,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "고정자",
+            "before": 1.5,
+            "after": 1,
+            "kind": "감소",
+            "pct": -33.3
+          },
+          {
+            "ko": "고속 커넥터",
+            "before": 0,
+            "after": 0.5,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "D",
+        "gap": 2,
+        "own": "D"
+      },
+      "consensus": "mixed",
+      "sortKey": 103.33333333333333,
+      "own": {
+        "score": -0.18,
+        "resourcePct": -0.07,
+        "machinePct": 0.03,
+        "powerPct": -0.03
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_Cable_2_C",
@@ -2120,7 +6381,75 @@
           "ko": "고무",
           "perMinute": 5
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Cable_C",
+          "ko": "케이블",
+          "machineKo": "제작기",
+          "outPerMin": 30,
+          "ingredients": [
+            {
+              "ko": "전선",
+              "per": 2
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 27.5,
+          "ingredients": [
+            {
+              "ko": "고속 전선",
+              "per": 0.273
+            },
+            {
+              "ko": "고무",
+              "per": 0.182
+            }
+          ]
+        },
+        "outputRatio": 0.92,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "전선",
+            "before": 2,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "고속 전선",
+            "before": 0,
+            "after": 0.273,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "고무",
+            "before": 0,
+            "after": 0.182,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "D",
+        "gap": 2,
+        "own": "B"
+      },
+      "consensus": "mixed",
+      "sortKey": 102.66666666666667,
+      "own": {
+        "score": 9.96,
+        "resourcePct": 1.12,
+        "machinePct": 3.76,
+        "powerPct": -0.92
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_Wire_2_C",
@@ -2151,7 +6480,64 @@
           "ko": "카테리움 주괴",
           "perMinute": 15
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Wire_C",
+          "ko": "전선",
+          "machineKo": "제작기",
+          "outPerMin": 30,
+          "ingredients": [
+            {
+              "ko": "구리 주괴",
+              "per": 0.5
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "제작기",
+          "outPerMin": 120,
+          "ingredients": [
+            {
+              "ko": "카테리움 주괴",
+              "per": 0.125
+            }
+          ]
+        },
+        "outputRatio": 4,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "구리 주괴",
+            "before": 0.5,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "카테리움 주괴",
+            "before": 0,
+            "after": 0.125,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "S",
+        "gap": 2,
+        "own": "D"
+      },
+      "consensus": "conflict",
+      "sortKey": 202,
+      "own": {
+        "score": -0.45,
+        "resourcePct": -4.18,
+        "machinePct": 5.56,
+        "powerPct": 0.97
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_Stator_C",
@@ -2186,7 +6572,79 @@
           "ko": "고속 전선",
           "perMinute": 60
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Stator_C",
+          "ko": "고정자",
+          "machineKo": "조립기",
+          "outPerMin": 5,
+          "ingredients": [
+            {
+              "ko": "강철 파이프",
+              "per": 3
+            },
+            {
+              "ko": "전선",
+              "per": 8
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 8,
+          "ingredients": [
+            {
+              "ko": "강철 파이프",
+              "per": 2
+            },
+            {
+              "ko": "고속 전선",
+              "per": 7.5
+            }
+          ]
+        },
+        "outputRatio": 1.6,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "전선",
+            "before": 8,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "강철 파이프",
+            "before": 3,
+            "after": 2,
+            "kind": "감소",
+            "pct": -33.3
+          },
+          {
+            "ko": "고속 전선",
+            "before": 0,
+            "after": 7.5,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "F",
+        "gap": 3,
+        "own": "D"
+      },
+      "consensus": "conflict",
+      "sortKey": 203.66666666666666,
+      "own": {
+        "score": -0.15,
+        "resourcePct": -1.33,
+        "machinePct": 1.68,
+        "powerPct": 0.48
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_BoltedFrame_C",
@@ -2221,7 +6679,79 @@
           "ko": "나사",
           "perMinute": 140
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_ModularFrame_C",
+          "ko": "모듈식 골조",
+          "machineKo": "조립기",
+          "outPerMin": 2,
+          "ingredients": [
+            {
+              "ko": "보강된 철판",
+              "per": 1.5
+            },
+            {
+              "ko": "철봉",
+              "per": 6
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 5,
+          "ingredients": [
+            {
+              "ko": "보강된 철판",
+              "per": 1.5
+            },
+            {
+              "ko": "나사",
+              "per": 28
+            }
+          ]
+        },
+        "outputRatio": 2.5,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "철봉",
+            "before": 6,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "보강된 철판",
+            "before": 1.5,
+            "after": 1.5,
+            "kind": "증가",
+            "pct": 0
+          },
+          {
+            "ko": "나사",
+            "before": 0,
+            "after": 28,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "B",
+        "gap": 0,
+        "own": "F"
+      },
+      "consensus": "conflict",
+      "sortKey": 203,
+      "own": {
+        "score": -2.97,
+        "resourcePct": -0.1,
+        "machinePct": -1.45,
+        "powerPct": 0.23
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_ReinforcedIronPlate_1_C",
@@ -2256,7 +6786,72 @@
           "ko": "나사",
           "perMinute": 250
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_IronPlateReinforced_C",
+          "ko": "보강된 철판",
+          "machineKo": "조립기",
+          "outPerMin": 5,
+          "ingredients": [
+            {
+              "ko": "철판",
+              "per": 6
+            },
+            {
+              "ko": "나사",
+              "per": 12
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 15,
+          "ingredients": [
+            {
+              "ko": "철판",
+              "per": 6
+            },
+            {
+              "ko": "나사",
+              "per": 16.667
+            }
+          ]
+        },
+        "outputRatio": 3,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "철판",
+            "before": 6,
+            "after": 6,
+            "kind": "증가",
+            "pct": 0
+          },
+          {
+            "ko": "나사",
+            "before": 12,
+            "after": 16.667,
+            "kind": "증가",
+            "pct": 38.9
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "B",
+        "gap": 0,
+        "own": "D"
+      },
+      "consensus": "mixed",
+      "sortKey": 102.66666666666667,
+      "own": {
+        "score": -0.88,
+        "resourcePct": -0.24,
+        "machinePct": -0.28,
+        "powerPct": 0.4
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_Gunpowder_1_C",
@@ -2291,7 +6886,79 @@
           "ko": "압축 석탄",
           "perMinute": 15
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Gunpowder_C",
+          "ko": "흑색 화약",
+          "machineKo": "조립기",
+          "outPerMin": 30,
+          "ingredients": [
+            {
+              "ko": "석탄",
+              "per": 0.5
+            },
+            {
+              "ko": "황",
+              "per": 0.5
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 45,
+          "ingredients": [
+            {
+              "ko": "황",
+              "per": 0.167
+            },
+            {
+              "ko": "압축 석탄",
+              "per": 0.333
+            }
+          ]
+        },
+        "outputRatio": 1.5,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "석탄",
+            "before": 0.5,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "황",
+            "before": 0.5,
+            "after": 0.167,
+            "kind": "감소",
+            "pct": -66.7
+          },
+          {
+            "ko": "압축 석탄",
+            "before": 0,
+            "after": 0.333,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "D",
+        "gap": 2,
+        "own": "C"
+      },
+      "consensus": "mixed",
+      "sortKey": 103,
+      "own": {
+        "score": 0,
+        "resourcePct": 0,
+        "machinePct": 0,
+        "powerPct": 0
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_HeavyOilResidue_C",
@@ -2322,7 +6989,57 @@
           "ko": "원유",
           "perMinute": 30
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Plastic_C",
+          "ko": "플라스틱",
+          "machineKo": "정제소",
+          "outPerMin": 10,
+          "ingredients": [
+            {
+              "ko": "원유",
+              "per": 3
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "정제소",
+          "outPerMin": 40,
+          "ingredients": [
+            {
+              "ko": "원유",
+              "per": 0.75
+            }
+          ]
+        },
+        "outputRatio": 4,
+        "byproducts": [
+          {
+            "ko": "폴리머 수지",
+            "per": 0.5
+          }
+        ],
+        "changes": [
+          {
+            "ko": "원유",
+            "before": 3,
+            "after": 0.75,
+            "kind": "감소",
+            "pct": -75
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "S",
+        "gap": 2,
+        "own": null
+      },
+      "consensus": "mixed",
+      "sortKey": 101,
+      "own": null,
+      "agreement": "partial"
     },
     {
       "id": "Recipe_Alternate_FlexibleFramework_C",
@@ -2361,7 +7078,83 @@
           "ko": "고무",
           "perMinute": 30
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_SpaceElevatorPart_2_C",
+          "ko": "다용도 골조",
+          "machineKo": "조립기",
+          "outPerMin": 5,
+          "ingredients": [
+            {
+              "ko": "모듈식 골조",
+              "per": 0.5
+            },
+            {
+              "ko": "강철 빔",
+              "per": 6
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "제조기",
+          "outPerMin": 7.5,
+          "ingredients": [
+            {
+              "ko": "모듈식 골조",
+              "per": 0.5
+            },
+            {
+              "ko": "강철 빔",
+              "per": 3
+            },
+            {
+              "ko": "고무",
+              "per": 4
+            }
+          ]
+        },
+        "outputRatio": 1.5,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "강철 빔",
+            "before": 6,
+            "after": 3,
+            "kind": "감소",
+            "pct": -50
+          },
+          {
+            "ko": "모듈식 골조",
+            "before": 0.5,
+            "after": 0.5,
+            "kind": "증가",
+            "pct": 0
+          },
+          {
+            "ko": "고무",
+            "before": 0,
+            "after": 4,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "D",
+        "gap": 2,
+        "own": "C"
+      },
+      "consensus": "mixed",
+      "sortKey": 103,
+      "own": {
+        "score": 2.16,
+        "resourcePct": 0.56,
+        "machinePct": 0.37,
+        "powerPct": -0.26
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_TurboHeavyFuel_C",
@@ -2396,7 +7189,79 @@
           "ko": "압축 석탄",
           "perMinute": 30
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Alternate_Turbofuel_C",
+          "ko": "터보 연료",
+          "machineKo": "정제소",
+          "outPerMin": 18.75,
+          "ingredients": [
+            {
+              "ko": "연료",
+              "per": 1.2
+            },
+            {
+              "ko": "압축 석탄",
+              "per": 0.8
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "정제소",
+          "outPerMin": 30,
+          "ingredients": [
+            {
+              "ko": "중유 잔여물",
+              "per": 1.25
+            },
+            {
+              "ko": "압축 석탄",
+              "per": 1
+            }
+          ]
+        },
+        "outputRatio": 1.6,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "연료",
+            "before": 1.2,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "압축 석탄",
+            "before": 0.8,
+            "after": 1,
+            "kind": "증가",
+            "pct": 25
+          },
+          {
+            "ko": "중유 잔여물",
+            "before": 0,
+            "after": 1.25,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "F",
+        "gap": 3,
+        "own": "C"
+      },
+      "consensus": "conflict",
+      "sortKey": 203.33333333333334,
+      "own": {
+        "score": 0,
+        "resourcePct": 0,
+        "machinePct": 0,
+        "powerPct": 0
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_Screw_C",
@@ -2427,7 +7292,64 @@
           "ko": "철 주괴",
           "perMinute": 12.5
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Screw_C",
+          "ko": "나사",
+          "machineKo": "제작기",
+          "outPerMin": 40,
+          "ingredients": [
+            {
+              "ko": "철봉",
+              "per": 0.25
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "제작기",
+          "outPerMin": 50,
+          "ingredients": [
+            {
+              "ko": "철 주괴",
+              "per": 0.25
+            }
+          ]
+        },
+        "outputRatio": 1.25,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "철봉",
+            "before": 0.25,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "철 주괴",
+            "before": 0,
+            "after": 0.25,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "D",
+        "gap": 2,
+        "own": "A"
+      },
+      "consensus": "conflict",
+      "sortKey": 202.33333333333334,
+      "own": {
+        "score": 12.79,
+        "resourcePct": 0,
+        "machinePct": 5.88,
+        "powerPct": 1.03
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_IngotIron_C",
@@ -2462,7 +7384,68 @@
           "ko": "구리 광석",
           "perMinute": 10
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_IngotIron_C",
+          "ko": "철 주괴",
+          "machineKo": "제련기",
+          "outPerMin": 30,
+          "ingredients": [
+            {
+              "ko": "철 광석",
+              "per": 1
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "주조소",
+          "outPerMin": 75,
+          "ingredients": [
+            {
+              "ko": "철 광석",
+              "per": 0.533
+            },
+            {
+              "ko": "구리 광석",
+              "per": 0.133
+            }
+          ]
+        },
+        "outputRatio": 2.5,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "철 광석",
+            "before": 1,
+            "after": 0.533,
+            "kind": "감소",
+            "pct": -46.7
+          },
+          {
+            "ko": "구리 광석",
+            "before": 0,
+            "after": 0.133,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "S",
+        "gap": 2,
+        "own": "B"
+      },
+      "consensus": "mixed",
+      "sortKey": 101.33333333333333,
+      "own": {
+        "score": 7.51,
+        "resourcePct": 0.73,
+        "machinePct": 3.06,
+        "powerPct": -0.8
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_PolymerResin_C",
@@ -2493,7 +7476,57 @@
           "ko": "원유",
           "perMinute": 60
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_LiquidFuel_C",
+          "ko": "연료",
+          "machineKo": "정제소",
+          "outPerMin": 30,
+          "ingredients": [
+            {
+              "ko": "원유",
+              "per": 2
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "정제소",
+          "outPerMin": 130,
+          "ingredients": [
+            {
+              "ko": "원유",
+              "per": 0.462
+            }
+          ]
+        },
+        "outputRatio": 4.33,
+        "byproducts": [
+          {
+            "ko": "중유 잔여물",
+            "per": 0.15384615384615385
+          }
+        ],
+        "changes": [
+          {
+            "ko": "원유",
+            "before": 2,
+            "after": 0.462,
+            "kind": "감소",
+            "pct": -76.9
+          }
+        ]
+      },
+      "grades": {
+        "lp": "B",
+        "steam": "D",
+        "gap": 2,
+        "own": null
+      },
+      "consensus": "mixed",
+      "sortKey": 103,
+      "own": null,
+      "agreement": "partial"
     },
     {
       "id": "Recipe_Alternate_PureIronIngot_C",
@@ -2528,7 +7561,68 @@
           "ko": "물",
           "perMinute": 20
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_IngotIron_C",
+          "ko": "철 주괴",
+          "machineKo": "제련기",
+          "outPerMin": 30,
+          "ingredients": [
+            {
+              "ko": "철 광석",
+              "per": 1
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "정제소",
+          "outPerMin": 65,
+          "ingredients": [
+            {
+              "ko": "철 광석",
+              "per": 0.538
+            },
+            {
+              "ko": "물",
+              "per": 0.308
+            }
+          ]
+        },
+        "outputRatio": 2.17,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "철 광석",
+            "before": 1,
+            "after": 0.538,
+            "kind": "감소",
+            "pct": -46.2
+          },
+          {
+            "ko": "물",
+            "before": 0,
+            "after": 0.308,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "C",
+        "steam": "A",
+        "gap": 2,
+        "own": "C"
+      },
+      "consensus": "mixed",
+      "sortKey": 102.33333333333333,
+      "own": {
+        "score": 0.87,
+        "resourcePct": -0.18,
+        "machinePct": 2.35,
+        "powerPct": -3.29
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_IronIngot_Leached_C",
@@ -2563,7 +7657,68 @@
           "ko": "황산",
           "perMinute": 10
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_IngotIron_C",
+          "ko": "철 주괴",
+          "machineKo": "제련기",
+          "outPerMin": 30,
+          "ingredients": [
+            {
+              "ko": "철 광석",
+              "per": 1
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "정제소",
+          "outPerMin": 100,
+          "ingredients": [
+            {
+              "ko": "철 광석",
+              "per": 0.5
+            },
+            {
+              "ko": "황산",
+              "per": 0.1
+            }
+          ]
+        },
+        "outputRatio": 3.33,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "철 광석",
+            "before": 1,
+            "after": 0.5,
+            "kind": "감소",
+            "pct": -50
+          },
+          {
+            "ko": "황산",
+            "before": 0,
+            "after": 0.1,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "C",
+        "steam": "D",
+        "gap": 1,
+        "own": "F"
+      },
+      "consensus": "mixed",
+      "sortKey": 104,
+      "own": {
+        "score": -3.65,
+        "resourcePct": -2.8,
+        "machinePct": 3.51,
+        "powerPct": -2.27
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_Wire_1_C",
@@ -2594,7 +7749,64 @@
           "ko": "철 주괴",
           "perMinute": 12.5
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Wire_C",
+          "ko": "전선",
+          "machineKo": "제작기",
+          "outPerMin": 30,
+          "ingredients": [
+            {
+              "ko": "구리 주괴",
+              "per": 0.5
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "제작기",
+          "outPerMin": 22.5,
+          "ingredients": [
+            {
+              "ko": "철 주괴",
+              "per": 0.556
+            }
+          ]
+        },
+        "outputRatio": 0.75,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "구리 주괴",
+            "before": 0.5,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "철 주괴",
+            "before": 0,
+            "after": 0.556,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "C",
+        "steam": "D",
+        "gap": 1,
+        "own": "C"
+      },
+      "consensus": "mixed",
+      "sortKey": 103.33333333333333,
+      "own": {
+        "score": 3.52,
+        "resourcePct": 2.74,
+        "machinePct": -2.16,
+        "powerPct": -0.38
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_Alternate_CoatedIronCanister_C",
@@ -2629,7 +7841,75 @@
           "ko": "구리판",
           "perMinute": 15
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_UnpackageAlumina_C",
+          "ko": "알루미나 용액 비우기",
+          "machineKo": "포장기",
+          "outPerMin": 120,
+          "ingredients": [
+            {
+              "ko": "포장된 알루미나 용액",
+              "per": 1
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 60,
+          "ingredients": [
+            {
+              "ko": "철판",
+              "per": 0.5
+            },
+            {
+              "ko": "구리판",
+              "per": 0.25
+            }
+          ]
+        },
+        "outputRatio": 0.5,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "포장된 알루미나 용액",
+            "before": 1,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "철판",
+            "before": 0,
+            "after": 0.5,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "구리판",
+            "before": 0,
+            "after": 0.25,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "C",
+        "steam": "D",
+        "gap": 1,
+        "own": "C"
+      },
+      "consensus": "mixed",
+      "sortKey": 103.33333333333333,
+      "own": {
+        "score": 0,
+        "resourcePct": 0,
+        "machinePct": 0,
+        "powerPct": 0
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_Alternate_ClassicBattery_C",
@@ -2672,7 +7952,119 @@
           "ko": "전선",
           "perMinute": 90
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Battery_C",
+          "ko": "배터리",
+          "machineKo": "혼합기",
+          "outPerMin": 20,
+          "ingredients": [
+            {
+              "ko": "황산",
+              "per": 2.5
+            },
+            {
+              "ko": "알루미나 용액",
+              "per": 2
+            },
+            {
+              "ko": "알루미늄 케이스",
+              "per": 1
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "제조기",
+          "outPerMin": 30,
+          "ingredients": [
+            {
+              "ko": "황",
+              "per": 1.5
+            },
+            {
+              "ko": "알클래드 알루미늄 판",
+              "per": 1.75
+            },
+            {
+              "ko": "플라스틱",
+              "per": 2
+            },
+            {
+              "ko": "전선",
+              "per": 3
+            }
+          ]
+        },
+        "outputRatio": 1.5,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "황산",
+            "before": 2.5,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "알루미나 용액",
+            "before": 2,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "알루미늄 케이스",
+            "before": 1,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "황",
+            "before": 0,
+            "after": 1.5,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "알클래드 알루미늄 판",
+            "before": 0,
+            "after": 1.75,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "플라스틱",
+            "before": 0,
+            "after": 2,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "전선",
+            "before": 0,
+            "after": 3,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "C",
+        "steam": "F",
+        "gap": 2,
+        "own": "C"
+      },
+      "consensus": "mixed",
+      "sortKey": 103.66666666666667,
+      "own": {
+        "score": 0,
+        "resourcePct": 0,
+        "machinePct": 0,
+        "powerPct": 0
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_SteelCanister_C",
@@ -2703,7 +8095,64 @@
           "ko": "강철 주괴",
           "perMinute": 40
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_UnpackageAlumina_C",
+          "ko": "알루미나 용액 비우기",
+          "machineKo": "포장기",
+          "outPerMin": 120,
+          "ingredients": [
+            {
+              "ko": "포장된 알루미나 용액",
+              "per": 1
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "제작기",
+          "outPerMin": 40,
+          "ingredients": [
+            {
+              "ko": "강철 주괴",
+              "per": 1
+            }
+          ]
+        },
+        "outputRatio": 0.33,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "포장된 알루미나 용액",
+            "before": 1,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "강철 주괴",
+            "before": 0,
+            "after": 1,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "C",
+        "steam": "D",
+        "gap": 1,
+        "own": "C"
+      },
+      "consensus": "mixed",
+      "sortKey": 103.33333333333333,
+      "own": {
+        "score": 0,
+        "resourcePct": 0,
+        "machinePct": 0,
+        "powerPct": 0
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_Alternate_Quickwire_C",
@@ -2738,7 +8187,68 @@
           "ko": "구리 주괴",
           "perMinute": 37.5
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Quickwire_C",
+          "ko": "고속 전선",
+          "machineKo": "제작기",
+          "outPerMin": 60,
+          "ingredients": [
+            {
+              "ko": "카테리움 주괴",
+              "per": 0.2
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 90,
+          "ingredients": [
+            {
+              "ko": "카테리움 주괴",
+              "per": 0.083
+            },
+            {
+              "ko": "구리 주괴",
+              "per": 0.417
+            }
+          ]
+        },
+        "outputRatio": 1.5,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "카테리움 주괴",
+            "before": 0.2,
+            "after": 0.083,
+            "kind": "감소",
+            "pct": -58.3
+          },
+          {
+            "ko": "구리 주괴",
+            "before": 0,
+            "after": 0.417,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "C",
+        "steam": "C",
+        "gap": 0,
+        "own": "C"
+      },
+      "consensus": "mixed",
+      "sortKey": 103,
+      "own": {
+        "score": 2.76,
+        "resourcePct": 1.19,
+        "machinePct": -0.28,
+        "powerPct": -0.25
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_Alternate_Silica_C",
@@ -2773,7 +8283,68 @@
           "ko": "석회석",
           "perMinute": 37.5
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Silica_C",
+          "ko": "이산화규소",
+          "machineKo": "제작기",
+          "outPerMin": 37.5,
+          "ingredients": [
+            {
+              "ko": "석영 원석",
+              "per": 0.6
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 52.5,
+          "ingredients": [
+            {
+              "ko": "석영 원석",
+              "per": 0.429
+            },
+            {
+              "ko": "석회석",
+              "per": 0.714
+            }
+          ]
+        },
+        "outputRatio": 1.4,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "석영 원석",
+            "before": 0.6,
+            "after": 0.429,
+            "kind": "감소",
+            "pct": -28.6
+          },
+          {
+            "ko": "석회석",
+            "before": 0,
+            "after": 0.714,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "C",
+        "steam": "D",
+        "gap": 1,
+        "own": "C"
+      },
+      "consensus": "mixed",
+      "sortKey": 103.33333333333333,
+      "own": {
+        "score": 0.29,
+        "resourcePct": 0.36,
+        "machinePct": -0.13,
+        "powerPct": -0.53
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_Alternate_SteelBeam_Molded_C",
@@ -2808,7 +8379,68 @@
           "ko": "콘크리트",
           "perMinute": 80
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_SteelBeam_C",
+          "ko": "강철 빔",
+          "machineKo": "제작기",
+          "outPerMin": 15,
+          "ingredients": [
+            {
+              "ko": "강철 주괴",
+              "per": 4
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "주조소",
+          "outPerMin": 45,
+          "ingredients": [
+            {
+              "ko": "강철 주괴",
+              "per": 2.667
+            },
+            {
+              "ko": "콘크리트",
+              "per": 1.778
+            }
+          ]
+        },
+        "outputRatio": 3,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "강철 주괴",
+            "before": 4,
+            "after": 2.667,
+            "kind": "감소",
+            "pct": -33.3
+          },
+          {
+            "ko": "콘크리트",
+            "before": 0,
+            "after": 1.778,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "C",
+        "steam": "B",
+        "gap": 1,
+        "own": "F"
+      },
+      "consensus": "conflict",
+      "sortKey": 203.33333333333334,
+      "own": {
+        "score": -5.03,
+        "resourcePct": -1.18,
+        "machinePct": -0.71,
+        "powerPct": -0.07
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_AlcladCasing_C",
@@ -2843,7 +8475,68 @@
           "ko": "구리 주괴",
           "perMinute": 75
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_AluminumCasing_C",
+          "ko": "알루미늄 케이스",
+          "machineKo": "제작기",
+          "outPerMin": 60,
+          "ingredients": [
+            {
+              "ko": "알루미늄 주괴",
+              "per": 1.5
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 112.5,
+          "ingredients": [
+            {
+              "ko": "알루미늄 주괴",
+              "per": 1.333
+            },
+            {
+              "ko": "구리 주괴",
+              "per": 0.667
+            }
+          ]
+        },
+        "outputRatio": 1.88,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "알루미늄 주괴",
+            "before": 1.5,
+            "after": 1.333,
+            "kind": "감소",
+            "pct": -11.1
+          },
+          {
+            "ko": "구리 주괴",
+            "before": 0,
+            "after": 0.667,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "C",
+        "steam": "F",
+        "gap": 2,
+        "own": "C"
+      },
+      "consensus": "mixed",
+      "sortKey": 103.66666666666667,
+      "own": {
+        "score": 1.88,
+        "resourcePct": 0.74,
+        "machinePct": -0.15,
+        "powerPct": -0.04
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_IronIngot_Basic_C",
@@ -2878,7 +8571,68 @@
           "ko": "석회석",
           "perMinute": 40
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_IngotIron_C",
+          "ko": "철 주괴",
+          "machineKo": "제련기",
+          "outPerMin": 30,
+          "ingredients": [
+            {
+              "ko": "철 광석",
+              "per": 1
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "주조소",
+          "outPerMin": 50,
+          "ingredients": [
+            {
+              "ko": "철 광석",
+              "per": 0.5
+            },
+            {
+              "ko": "석회석",
+              "per": 0.8
+            }
+          ]
+        },
+        "outputRatio": 1.67,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "철 광석",
+            "before": 1,
+            "after": 0.5,
+            "kind": "감소",
+            "pct": -50
+          },
+          {
+            "ko": "석회석",
+            "before": 0,
+            "after": 0.8,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "C",
+        "steam": "F",
+        "gap": 2,
+        "own": "F"
+      },
+      "consensus": "mixed",
+      "sortKey": 104.33333333333333,
+      "own": {
+        "score": -9.56,
+        "resourcePct": -3.07,
+        "machinePct": 0.76,
+        "powerPct": -1.87
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_Silica_Distilled_C",
@@ -2917,7 +8671,91 @@
           "ko": "물",
           "perMinute": 100
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Silica_C",
+          "ko": "이산화규소",
+          "machineKo": "제작기",
+          "outPerMin": 37.5,
+          "ingredients": [
+            {
+              "ko": "석영 원석",
+              "per": 0.6
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "혼합기",
+          "outPerMin": 270,
+          "ingredients": [
+            {
+              "ko": "용해된 이산화규소",
+              "per": 0.444
+            },
+            {
+              "ko": "석회석",
+              "per": 0.185
+            },
+            {
+              "ko": "물",
+              "per": 0.37
+            }
+          ]
+        },
+        "outputRatio": 7.2,
+        "byproducts": [
+          {
+            "ko": "물",
+            "per": 0.2962962962962963
+          }
+        ],
+        "changes": [
+          {
+            "ko": "석영 원석",
+            "before": 0.6,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "용해된 이산화규소",
+            "before": 0,
+            "after": 0.444,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "석회석",
+            "before": 0,
+            "after": 0.185,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "물",
+            "before": 0,
+            "after": 0.37,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "C",
+        "steam": "D",
+        "gap": 1,
+        "own": "A"
+      },
+      "consensus": "conflict",
+      "sortKey": 202.66666666666666,
+      "own": {
+        "score": 17.68,
+        "resourcePct": 5.27,
+        "machinePct": 1.19,
+        "powerPct": -0.51
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_Quartz_Fused_C",
@@ -2952,7 +8790,68 @@
           "ko": "석탄",
           "perMinute": 36
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_QuartzCrystal_C",
+          "ko": "석영 수정",
+          "machineKo": "제작기",
+          "outPerMin": 22.5,
+          "ingredients": [
+            {
+              "ko": "석영 원석",
+              "per": 1.667
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "주조소",
+          "outPerMin": 54,
+          "ingredients": [
+            {
+              "ko": "석영 원석",
+              "per": 1.389
+            },
+            {
+              "ko": "석탄",
+              "per": 0.667
+            }
+          ]
+        },
+        "outputRatio": 2.4,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "석영 원석",
+            "before": 1.667,
+            "after": 1.389,
+            "kind": "감소",
+            "pct": -16.7
+          },
+          {
+            "ko": "석탄",
+            "before": 0,
+            "after": 0.667,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "C",
+        "steam": "F",
+        "gap": 2,
+        "own": "C"
+      },
+      "consensus": "mixed",
+      "sortKey": 103.66666666666667,
+      "own": {
+        "score": 0.57,
+        "resourcePct": 0.1,
+        "machinePct": 0.16,
+        "powerPct": -0.05
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_SteelPipe_Molded_C",
@@ -2987,7 +8886,68 @@
           "ko": "콘크리트",
           "perMinute": 30
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_SteelPipe_C",
+          "ko": "강철 파이프",
+          "machineKo": "제작기",
+          "outPerMin": 20,
+          "ingredients": [
+            {
+              "ko": "강철 주괴",
+              "per": 1.5
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "주조소",
+          "outPerMin": 50,
+          "ingredients": [
+            {
+              "ko": "강철 주괴",
+              "per": 1
+            },
+            {
+              "ko": "콘크리트",
+              "per": 0.6
+            }
+          ]
+        },
+        "outputRatio": 2.5,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "강철 주괴",
+            "before": 1.5,
+            "after": 1,
+            "kind": "감소",
+            "pct": -33.3
+          },
+          {
+            "ko": "콘크리트",
+            "before": 0,
+            "after": 0.6,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "C",
+        "steam": "S",
+        "gap": 3,
+        "own": "D"
+      },
+      "consensus": "conflict",
+      "sortKey": 202.33333333333334,
+      "own": {
+        "score": -1.86,
+        "resourcePct": -0.52,
+        "machinePct": -0.09,
+        "powerPct": -0.12
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_CateriumIngot_Leached_C",
@@ -3022,7 +8982,68 @@
           "ko": "황산",
           "perMinute": 30
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_IngotCaterium_C",
+          "ko": "카테리움 주괴",
+          "machineKo": "제련기",
+          "outPerMin": 15,
+          "ingredients": [
+            {
+              "ko": "카테리움 광석",
+              "per": 3
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "정제소",
+          "outPerMin": 36,
+          "ingredients": [
+            {
+              "ko": "카테리움 광석",
+              "per": 1.5
+            },
+            {
+              "ko": "황산",
+              "per": 0.833
+            }
+          ]
+        },
+        "outputRatio": 2.4,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "카테리움 광석",
+            "before": 3,
+            "after": 1.5,
+            "kind": "감소",
+            "pct": -50
+          },
+          {
+            "ko": "황산",
+            "before": 0,
+            "after": 0.833,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "C",
+        "steam": "D",
+        "gap": 1,
+        "own": "C"
+      },
+      "consensus": "mixed",
+      "sortKey": 103.33333333333333,
+      "own": {
+        "score": 0.06,
+        "resourcePct": 0.16,
+        "machinePct": 0,
+        "powerPct": -0.42
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_Alternate_TurboBlendFuel_C",
@@ -3065,7 +9086,101 @@
           "ko": "석유 코크스",
           "perMinute": 22.5
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Alternate_Turbofuel_C",
+          "ko": "터보 연료",
+          "machineKo": "정제소",
+          "outPerMin": 18.75,
+          "ingredients": [
+            {
+              "ko": "연료",
+              "per": 1.2
+            },
+            {
+              "ko": "압축 석탄",
+              "per": 0.8
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "혼합기",
+          "outPerMin": 45,
+          "ingredients": [
+            {
+              "ko": "연료",
+              "per": 0.333
+            },
+            {
+              "ko": "중유 잔여물",
+              "per": 0.667
+            },
+            {
+              "ko": "황",
+              "per": 0.5
+            },
+            {
+              "ko": "석유 코크스",
+              "per": 0.5
+            }
+          ]
+        },
+        "outputRatio": 2.4,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "압축 석탄",
+            "before": 0.8,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "연료",
+            "before": 1.2,
+            "after": 0.333,
+            "kind": "감소",
+            "pct": -72.2
+          },
+          {
+            "ko": "중유 잔여물",
+            "before": 0,
+            "after": 0.667,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "황",
+            "before": 0,
+            "after": 0.5,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "석유 코크스",
+            "before": 0,
+            "after": 0.5,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "C",
+        "steam": "D",
+        "gap": 1,
+        "own": "C"
+      },
+      "consensus": "mixed",
+      "sortKey": 103.33333333333333,
+      "own": {
+        "score": 0,
+        "resourcePct": 0,
+        "machinePct": 0,
+        "powerPct": 0
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_Alternate_ElectrodeCircuitBoard_C",
@@ -3100,7 +9215,86 @@
           "ko": "석유 코크스",
           "perMinute": 40
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_CircuitBoard_C",
+          "ko": "회로 기판",
+          "machineKo": "조립기",
+          "outPerMin": 7.5,
+          "ingredients": [
+            {
+              "ko": "구리판",
+              "per": 2
+            },
+            {
+              "ko": "플라스틱",
+              "per": 4
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 5,
+          "ingredients": [
+            {
+              "ko": "고무",
+              "per": 4
+            },
+            {
+              "ko": "석유 코크스",
+              "per": 8
+            }
+          ]
+        },
+        "outputRatio": 0.67,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "구리판",
+            "before": 2,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "플라스틱",
+            "before": 4,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "고무",
+            "before": 0,
+            "after": 4,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "석유 코크스",
+            "before": 0,
+            "after": 8,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "C",
+        "steam": "S",
+        "gap": 3,
+        "own": "B"
+      },
+      "consensus": "conflict",
+      "sortKey": 201.66666666666666,
+      "own": {
+        "score": 10.98,
+        "resourcePct": 2.68,
+        "machinePct": 1.88,
+        "powerPct": -0.82
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_PureCateriumIngot_C",
@@ -3135,7 +9329,68 @@
           "ko": "물",
           "perMinute": 24
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_IngotCaterium_C",
+          "ko": "카테리움 주괴",
+          "machineKo": "제련기",
+          "outPerMin": 15,
+          "ingredients": [
+            {
+              "ko": "카테리움 광석",
+              "per": 3
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "정제소",
+          "outPerMin": 12,
+          "ingredients": [
+            {
+              "ko": "카테리움 광석",
+              "per": 2
+            },
+            {
+              "ko": "물",
+              "per": 2
+            }
+          ]
+        },
+        "outputRatio": 0.8,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "카테리움 광석",
+            "before": 3,
+            "after": 2,
+            "kind": "감소",
+            "pct": -33.3
+          },
+          {
+            "ko": "물",
+            "before": 0,
+            "after": 2,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "C",
+        "steam": "S",
+        "gap": 3,
+        "own": "D"
+      },
+      "consensus": "conflict",
+      "sortKey": 202.33333333333334,
+      "own": {
+        "score": -0.05,
+        "resourcePct": 0.63,
+        "machinePct": -0.53,
+        "powerPct": -0.88
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_EncasedIndustrialBeam_C",
@@ -3170,7 +9425,79 @@
           "ko": "콘크리트",
           "perMinute": 20
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_EncasedIndustrialBeam_C",
+          "ko": "포장된 산업용 빔",
+          "machineKo": "조립기",
+          "outPerMin": 6,
+          "ingredients": [
+            {
+              "ko": "강철 빔",
+              "per": 3
+            },
+            {
+              "ko": "콘크리트",
+              "per": 6
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 4,
+          "ingredients": [
+            {
+              "ko": "강철 파이프",
+              "per": 6
+            },
+            {
+              "ko": "콘크리트",
+              "per": 5
+            }
+          ]
+        },
+        "outputRatio": 0.67,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "강철 빔",
+            "before": 3,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "콘크리트",
+            "before": 6,
+            "after": 5,
+            "kind": "감소",
+            "pct": -16.7
+          },
+          {
+            "ko": "강철 파이프",
+            "before": 0,
+            "after": 6,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "C",
+        "steam": "C",
+        "gap": 0,
+        "own": "C"
+      },
+      "consensus": "mixed",
+      "sortKey": 103,
+      "own": {
+        "score": 2.98,
+        "resourcePct": 1.15,
+        "machinePct": -0.21,
+        "powerPct": -0.05
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_Alternate_RecycledRubber_C",
@@ -3205,7 +9532,75 @@
           "ko": "연료",
           "perMinute": 30
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Rubber_C",
+          "ko": "고무",
+          "machineKo": "정제소",
+          "outPerMin": 20,
+          "ingredients": [
+            {
+              "ko": "원유",
+              "per": 1.5
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "정제소",
+          "outPerMin": 60,
+          "ingredients": [
+            {
+              "ko": "플라스틱",
+              "per": 0.5
+            },
+            {
+              "ko": "연료",
+              "per": 0.5
+            }
+          ]
+        },
+        "outputRatio": 3,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "원유",
+            "before": 1.5,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "플라스틱",
+            "before": 0,
+            "after": 0.5,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "연료",
+            "before": 0,
+            "after": 0.5,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "C",
+        "steam": "A",
+        "gap": 2,
+        "own": "C"
+      },
+      "consensus": "mixed",
+      "sortKey": 102.33333333333333,
+      "own": {
+        "score": 1.45,
+        "resourcePct": 0.5,
+        "machinePct": 0,
+        "powerPct": -0.05
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_IngotSteel_2_C",
@@ -3240,7 +9635,79 @@
           "ko": "압축 석탄",
           "perMinute": 2.5
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_IngotSteel_C",
+          "ko": "강철 주괴",
+          "machineKo": "주조소",
+          "outPerMin": 45,
+          "ingredients": [
+            {
+              "ko": "철 광석",
+              "per": 1
+            },
+            {
+              "ko": "석탄",
+              "per": 1
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "주조소",
+          "outPerMin": 10,
+          "ingredients": [
+            {
+              "ko": "철 광석",
+              "per": 0.5
+            },
+            {
+              "ko": "압축 석탄",
+              "per": 0.25
+            }
+          ]
+        },
+        "outputRatio": 0.22,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "석탄",
+            "before": 1,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "철 광석",
+            "before": 1,
+            "after": 0.5,
+            "kind": "감소",
+            "pct": -50
+          },
+          {
+            "ko": "압축 석탄",
+            "before": 0,
+            "after": 0.25,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "D",
+        "steam": "B",
+        "gap": 2,
+        "own": "F"
+      },
+      "consensus": "conflict",
+      "sortKey": 203.66666666666666,
+      "own": {
+        "score": -10.72,
+        "resourcePct": 7.04,
+        "machinePct": -12.91,
+        "powerPct": -6.02
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_Quartz_Purified_C",
@@ -3275,7 +9742,73 @@
           "ko": "질산",
           "perMinute": 10
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_QuartzCrystal_C",
+          "ko": "석영 수정",
+          "machineKo": "제작기",
+          "outPerMin": 22.5,
+          "ingredients": [
+            {
+              "ko": "석영 원석",
+              "per": 1.667
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "정제소",
+          "outPerMin": 75,
+          "ingredients": [
+            {
+              "ko": "석영 원석",
+              "per": 1.6
+            },
+            {
+              "ko": "질산",
+              "per": 0.133
+            }
+          ]
+        },
+        "outputRatio": 3.33,
+        "byproducts": [
+          {
+            "ko": "용해된 이산화규소",
+            "per": 0.8
+          }
+        ],
+        "changes": [
+          {
+            "ko": "석영 원석",
+            "before": 1.667,
+            "after": 1.6,
+            "kind": "감소",
+            "pct": -4
+          },
+          {
+            "ko": "질산",
+            "before": 0,
+            "after": 0.133,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "D",
+        "steam": "D",
+        "gap": 0,
+        "own": "D"
+      },
+      "consensus": "both-low",
+      "sortKey": 304,
+      "own": {
+        "score": -0.67,
+        "resourcePct": -0.17,
+        "machinePct": 0.04,
+        "powerPct": -0.24
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_Alternate_PlutoniumFuelUnit_C",
@@ -3310,7 +9843,101 @@
           "ko": "압력 변환 큐브",
           "perMinute": 0.5
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_PlutoniumFuelRod_C",
+          "ko": "플루토늄 연료봉",
+          "machineKo": "제조기",
+          "outPerMin": 0.25,
+          "ingredients": [
+            {
+              "ko": "포장된 플루토늄 전지",
+              "per": 30
+            },
+            {
+              "ko": "강철 빔",
+              "per": 18
+            },
+            {
+              "ko": "전자기 제어봉",
+              "per": 6
+            },
+            {
+              "ko": "방열판",
+              "per": 10
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "조립기",
+          "outPerMin": 0.5,
+          "ingredients": [
+            {
+              "ko": "포장된 플루토늄 전지",
+              "per": 20
+            },
+            {
+              "ko": "압력 변환 큐브",
+              "per": 1
+            }
+          ]
+        },
+        "outputRatio": 2,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "강철 빔",
+            "before": 18,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "전자기 제어봉",
+            "before": 6,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "방열판",
+            "before": 10,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "포장된 플루토늄 전지",
+            "before": 30,
+            "after": 20,
+            "kind": "감소",
+            "pct": -33.3
+          },
+          {
+            "ko": "압력 변환 큐브",
+            "before": 0,
+            "after": 1,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "D",
+        "steam": "F",
+        "gap": 1,
+        "own": "C"
+      },
+      "consensus": "mixed",
+      "sortKey": 104,
+      "own": {
+        "score": 0,
+        "resourcePct": 0,
+        "machinePct": 0,
+        "powerPct": 0
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_Diamond_Pink_C",
@@ -3345,7 +9972,68 @@
           "ko": "석영 수정",
           "perMinute": 45
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Diamond_C",
+          "ko": "다이아몬드",
+          "machineKo": "입자 가속기",
+          "outPerMin": 30,
+          "ingredients": [
+            {
+              "ko": "석탄",
+              "per": 20
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "변환기",
+          "outPerMin": 15,
+          "ingredients": [
+            {
+              "ko": "석탄",
+              "per": 8
+            },
+            {
+              "ko": "석영 수정",
+              "per": 3
+            }
+          ]
+        },
+        "outputRatio": 0.5,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "석탄",
+            "before": 20,
+            "after": 8,
+            "kind": "감소",
+            "pct": -60
+          },
+          {
+            "ko": "석영 수정",
+            "before": 0,
+            "after": 3,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "D",
+        "steam": "A",
+        "gap": 3,
+        "own": "C"
+      },
+      "consensus": "conflict",
+      "sortKey": 202.66666666666666,
+      "own": {
+        "score": 0.12,
+        "resourcePct": -0.77,
+        "machinePct": -0.82,
+        "powerPct": 4.07
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_InstantPlutoniumCell_C",
@@ -3380,7 +10068,86 @@
           "ko": "알루미늄 케이스",
           "perMinute": 10
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_PlutoniumCell_C",
+          "ko": "포장된 플루토늄 전지",
+          "machineKo": "조립기",
+          "outPerMin": 5,
+          "ingredients": [
+            {
+              "ko": "플루토늄 펠릿",
+              "per": 2
+            },
+            {
+              "ko": "콘크리트",
+              "per": 4
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "입자 가속기",
+          "outPerMin": 10,
+          "ingredients": [
+            {
+              "ko": "비분열성 우라늄",
+              "per": 7.5
+            },
+            {
+              "ko": "알루미늄 케이스",
+              "per": 1
+            }
+          ]
+        },
+        "outputRatio": 2,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "플루토늄 펠릿",
+            "before": 2,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "콘크리트",
+            "before": 4,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "비분열성 우라늄",
+            "before": 0,
+            "after": 7.5,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "알루미늄 케이스",
+            "before": 0,
+            "after": 1,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "D",
+        "steam": "F",
+        "gap": 1,
+        "own": "C"
+      },
+      "consensus": "mixed",
+      "sortKey": 104,
+      "own": {
+        "score": 0,
+        "resourcePct": 0,
+        "machinePct": 0,
+        "powerPct": 0
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_SteelPipe_Iron_C",
@@ -3411,7 +10178,64 @@
           "ko": "철 주괴",
           "perMinute": 100
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_SteelPipe_C",
+          "ko": "강철 파이프",
+          "machineKo": "제작기",
+          "outPerMin": 20,
+          "ingredients": [
+            {
+              "ko": "강철 주괴",
+              "per": 1.5
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "제작기",
+          "outPerMin": 25,
+          "ingredients": [
+            {
+              "ko": "철 주괴",
+              "per": 4
+            }
+          ]
+        },
+        "outputRatio": 1.25,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "강철 주괴",
+            "before": 1.5,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "철 주괴",
+            "before": 0,
+            "after": 4,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "D",
+        "steam": "C",
+        "gap": 1,
+        "own": "D"
+      },
+      "consensus": "mixed",
+      "sortKey": 103.66666666666667,
+      "own": {
+        "score": -2.45,
+        "resourcePct": 0.5,
+        "machinePct": -2,
+        "powerPct": 0.05
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_Alternate_InstantScrap_C",
@@ -3454,7 +10278,106 @@
           "ko": "물",
           "perMinute": 60
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_AluminumScrap_C",
+          "ko": "알루미늄 조각",
+          "machineKo": "정제소",
+          "outPerMin": 360,
+          "ingredients": [
+            {
+              "ko": "알루미나 용액",
+              "per": 0.667
+            },
+            {
+              "ko": "석탄",
+              "per": 0.333
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "혼합기",
+          "outPerMin": 300,
+          "ingredients": [
+            {
+              "ko": "보크사이트",
+              "per": 0.5
+            },
+            {
+              "ko": "석탄",
+              "per": 0.333
+            },
+            {
+              "ko": "황산",
+              "per": 0.167
+            },
+            {
+              "ko": "물",
+              "per": 0.2
+            }
+          ]
+        },
+        "outputRatio": 0.83,
+        "byproducts": [
+          {
+            "ko": "물",
+            "per": 0.16666666666666666
+          }
+        ],
+        "changes": [
+          {
+            "ko": "알루미나 용액",
+            "before": 0.667,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "석탄",
+            "before": 0.333,
+            "after": 0.333,
+            "kind": "증가",
+            "pct": 0
+          },
+          {
+            "ko": "보크사이트",
+            "before": 0,
+            "after": 0.5,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "황산",
+            "before": 0,
+            "after": 0.167,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "물",
+            "before": 0,
+            "after": 0.2,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "F",
+        "steam": "F",
+        "gap": 0,
+        "own": "B"
+      },
+      "consensus": "conflict",
+      "sortKey": 204,
+      "own": {
+        "score": 4.84,
+        "resourcePct": 1.64,
+        "machinePct": 0.14,
+        "powerPct": -0.36
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_PureCopperIngot_C",
@@ -3489,7 +10412,68 @@
           "ko": "물",
           "perMinute": 10
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_IngotCopper_C",
+          "ko": "구리 주괴",
+          "machineKo": "제련기",
+          "outPerMin": 30,
+          "ingredients": [
+            {
+              "ko": "구리 광석",
+              "per": 1
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "정제소",
+          "outPerMin": 37.5,
+          "ingredients": [
+            {
+              "ko": "구리 광석",
+              "per": 0.4
+            },
+            {
+              "ko": "물",
+              "per": 0.267
+            }
+          ]
+        },
+        "outputRatio": 1.25,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "구리 광석",
+            "before": 1,
+            "after": 0.4,
+            "kind": "감소",
+            "pct": -60
+          },
+          {
+            "ko": "물",
+            "before": 0,
+            "after": 0.267,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "F",
+        "steam": "A",
+        "gap": 4,
+        "own": "A"
+      },
+      "consensus": "conflict",
+      "sortKey": 202.33333333333334,
+      "own": {
+        "score": 15.58,
+        "resourcePct": 11.73,
+        "machinePct": -3.08,
+        "powerPct": -13.45
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_FertileUranium_C",
@@ -3532,7 +10516,114 @@
           "ko": "황산",
           "perMinute": 25
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_NonFissileUranium_C",
+          "ko": "비분열성 우라늄",
+          "machineKo": "혼합기",
+          "outPerMin": 50,
+          "ingredients": [
+            {
+              "ko": "우라늄 폐기물",
+              "per": 0.75
+            },
+            {
+              "ko": "이산화규소",
+              "per": 0.5
+            },
+            {
+              "ko": "질산",
+              "per": 0.3
+            },
+            {
+              "ko": "황산",
+              "per": 0.3
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "혼합기",
+          "outPerMin": 100,
+          "ingredients": [
+            {
+              "ko": "우라늄",
+              "per": 0.25
+            },
+            {
+              "ko": "우라늄 폐기물",
+              "per": 0.25
+            },
+            {
+              "ko": "질산",
+              "per": 0.15
+            },
+            {
+              "ko": "황산",
+              "per": 0.25
+            }
+          ]
+        },
+        "outputRatio": 2,
+        "byproducts": [
+          {
+            "ko": "물",
+            "per": 0.4
+          }
+        ],
+        "changes": [
+          {
+            "ko": "이산화규소",
+            "before": 0.5,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "우라늄 폐기물",
+            "before": 0.75,
+            "after": 0.25,
+            "kind": "감소",
+            "pct": -66.7
+          },
+          {
+            "ko": "질산",
+            "before": 0.3,
+            "after": 0.15,
+            "kind": "감소",
+            "pct": -50
+          },
+          {
+            "ko": "황산",
+            "before": 0.3,
+            "after": 0.25,
+            "kind": "감소",
+            "pct": -16.7
+          },
+          {
+            "ko": "우라늄",
+            "before": 0,
+            "after": 0.25,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "F",
+        "steam": "F",
+        "gap": 0,
+        "own": "C"
+      },
+      "consensus": "mixed",
+      "sortKey": 104.33333333333333,
+      "own": {
+        "score": 0,
+        "resourcePct": 0,
+        "machinePct": 0,
+        "powerPct": 0
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_RadioControlUnit_1_C",
@@ -3571,7 +10662,108 @@
           "ko": "석영 수정",
           "perMinute": 45
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_RadioControlUnit_C",
+          "ko": "무선 제어 장치",
+          "machineKo": "제조기",
+          "outPerMin": 2.5,
+          "ingredients": [
+            {
+              "ko": "알루미늄 케이스",
+              "per": 16
+            },
+            {
+              "ko": "수정 발진기",
+              "per": 0.5
+            },
+            {
+              "ko": "컴퓨터",
+              "per": 1
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "제조기",
+          "outPerMin": 3.75,
+          "ingredients": [
+            {
+              "ko": "방열판",
+              "per": 4
+            },
+            {
+              "ko": "고속 커넥터",
+              "per": 2
+            },
+            {
+              "ko": "석영 수정",
+              "per": 12
+            }
+          ]
+        },
+        "outputRatio": 1.5,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "알루미늄 케이스",
+            "before": 16,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "수정 발진기",
+            "before": 0.5,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "컴퓨터",
+            "before": 1,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "방열판",
+            "before": 0,
+            "after": 4,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "고속 커넥터",
+            "before": 0,
+            "after": 2,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "석영 수정",
+            "before": 0,
+            "after": 12,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "F",
+        "steam": "F",
+        "gap": 0,
+        "own": "F"
+      },
+      "consensus": "both-low",
+      "sortKey": 305,
+      "own": {
+        "score": -19.09,
+        "resourcePct": -5.89,
+        "machinePct": -1.37,
+        "powerPct": 1.32
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_Alternate_Diamond_Cloudy_C",
@@ -3606,7 +10798,68 @@
           "ko": "석회석",
           "perMinute": 480
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Diamond_C",
+          "ko": "다이아몬드",
+          "machineKo": "입자 가속기",
+          "outPerMin": 30,
+          "ingredients": [
+            {
+              "ko": "석탄",
+              "per": 20
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "입자 가속기",
+          "outPerMin": 20,
+          "ingredients": [
+            {
+              "ko": "석탄",
+              "per": 12
+            },
+            {
+              "ko": "석회석",
+              "per": 24
+            }
+          ]
+        },
+        "outputRatio": 0.67,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "석탄",
+            "before": 20,
+            "after": 12,
+            "kind": "감소",
+            "pct": -40
+          },
+          {
+            "ko": "석회석",
+            "before": 0,
+            "after": 24,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "F",
+        "steam": "F",
+        "gap": 0,
+        "own": "F"
+      },
+      "consensus": "both-low",
+      "sortKey": 305,
+      "own": {
+        "score": -9,
+        "resourcePct": -1.4,
+        "machinePct": -0.17,
+        "powerPct": -4.46
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_Alternate_IonizedFuel_Dark_C",
@@ -3641,7 +10894,91 @@
           "ko": "암흑 물질 수정",
           "perMinute": 80
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_IonizedFuel_C",
+          "ko": "이온화 연료",
+          "machineKo": "정제소",
+          "outPerMin": 40,
+          "ingredients": [
+            {
+              "ko": "로켓 연료",
+              "per": 1
+            },
+            {
+              "ko": "동력 조각",
+              "per": 0.063
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "변환기",
+          "outPerMin": 200,
+          "ingredients": [
+            {
+              "ko": "포장된 로켓 연료",
+              "per": 1.2
+            },
+            {
+              "ko": "암흑 물질 수정",
+              "per": 0.4
+            }
+          ]
+        },
+        "outputRatio": 5,
+        "byproducts": [
+          {
+            "ko": "압축 석탄",
+            "per": 0.2
+          }
+        ],
+        "changes": [
+          {
+            "ko": "로켓 연료",
+            "before": 1,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "동력 조각",
+            "before": 0.063,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "포장된 로켓 연료",
+            "before": 0,
+            "after": 1.2,
+            "kind": "추가",
+            "pct": null
+          },
+          {
+            "ko": "암흑 물질 수정",
+            "before": 0,
+            "after": 0.4,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "F",
+        "steam": "F",
+        "gap": 0,
+        "own": "C"
+      },
+      "consensus": "mixed",
+      "sortKey": 104.33333333333333,
+      "own": {
+        "score": 0,
+        "resourcePct": 0,
+        "machinePct": 0,
+        "powerPct": 0
+      },
+      "agreement": "weak"
     },
     {
       "id": "Recipe_Alternate_DarkMatter_Crystallization_C",
@@ -3672,7 +11009,68 @@
           "ko": "암흑 물질 잔여물",
           "perMinute": 200
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_DarkMatter_C",
+          "ko": "암흑 물질 수정",
+          "machineKo": "입자 가속기",
+          "outPerMin": 30,
+          "ingredients": [
+            {
+              "ko": "다이아몬드",
+              "per": 1
+            },
+            {
+              "ko": "암흑 물질 잔여물",
+              "per": 5
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "입자 가속기",
+          "outPerMin": 20,
+          "ingredients": [
+            {
+              "ko": "암흑 물질 잔여물",
+              "per": 10
+            }
+          ]
+        },
+        "outputRatio": 0.67,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "다이아몬드",
+            "before": 1,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "암흑 물질 잔여물",
+            "before": 5,
+            "after": 10,
+            "kind": "증가",
+            "pct": 100
+          }
+        ]
+      },
+      "grades": {
+        "lp": "F",
+        "steam": "D",
+        "gap": 1,
+        "own": "F"
+      },
+      "consensus": "both-low",
+      "sortKey": 304.6666666666667,
+      "own": {
+        "score": -12.17,
+        "resourcePct": -4.06,
+        "machinePct": -0.37,
+        "powerPct": 0.75
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_Alternate_Diamond_Petroleum_C",
@@ -3703,7 +11101,64 @@
           "ko": "석유 코크스",
           "perMinute": 720
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_Diamond_C",
+          "ko": "다이아몬드",
+          "machineKo": "입자 가속기",
+          "outPerMin": 30,
+          "ingredients": [
+            {
+              "ko": "석탄",
+              "per": 20
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "입자 가속기",
+          "outPerMin": 30,
+          "ingredients": [
+            {
+              "ko": "석유 코크스",
+              "per": 24
+            }
+          ]
+        },
+        "outputRatio": 1,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "석탄",
+            "before": 20,
+            "after": 0,
+            "kind": "제거",
+            "pct": -100
+          },
+          {
+            "ko": "석유 코크스",
+            "before": 0,
+            "after": 24,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "F",
+        "steam": "F",
+        "gap": 0,
+        "own": "B"
+      },
+      "consensus": "conflict",
+      "sortKey": 204,
+      "own": {
+        "score": 9.95,
+        "resourcePct": 4.22,
+        "machinePct": -0.82,
+        "powerPct": -1.07
+      },
+      "agreement": "split"
     },
     {
       "id": "Recipe_Alternate_CopperIngot_Leached_C",
@@ -3738,7 +11193,68 @@
           "ko": "황산",
           "perMinute": 25
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_IngotCopper_C",
+          "ko": "구리 주괴",
+          "machineKo": "제련기",
+          "outPerMin": 30,
+          "ingredients": [
+            {
+              "ko": "구리 광석",
+              "per": 1
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "정제소",
+          "outPerMin": 110,
+          "ingredients": [
+            {
+              "ko": "구리 광석",
+              "per": 0.409
+            },
+            {
+              "ko": "황산",
+              "per": 0.227
+            }
+          ]
+        },
+        "outputRatio": 3.67,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "구리 광석",
+            "before": 1,
+            "after": 0.409,
+            "kind": "감소",
+            "pct": -59.1
+          },
+          {
+            "ko": "황산",
+            "before": 0,
+            "after": 0.227,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "F",
+        "steam": "D",
+        "gap": 1,
+        "own": "F"
+      },
+      "consensus": "both-low",
+      "sortKey": 304.6666666666667,
+      "own": {
+        "score": -20.95,
+        "resourcePct": -9.09,
+        "machinePct": 5.94,
+        "powerPct": -5.56
+      },
+      "agreement": "strong"
     },
     {
       "id": "Recipe_Alternate_CopperIngot_Tempered_C",
@@ -3773,8 +11289,124 @@
           "ko": "석유 코크스",
           "perMinute": 40
         }
-      ]
+      ],
+      "compare": {
+        "standard": {
+          "id": "Recipe_IngotCopper_C",
+          "ko": "구리 주괴",
+          "machineKo": "제련기",
+          "outPerMin": 30,
+          "ingredients": [
+            {
+              "ko": "구리 광석",
+              "per": 1
+            }
+          ]
+        },
+        "alternate": {
+          "machineKo": "주조소",
+          "outPerMin": 60,
+          "ingredients": [
+            {
+              "ko": "구리 광석",
+              "per": 0.417
+            },
+            {
+              "ko": "석유 코크스",
+              "per": 0.667
+            }
+          ]
+        },
+        "outputRatio": 2,
+        "byproducts": [],
+        "changes": [
+          {
+            "ko": "구리 광석",
+            "before": 1,
+            "after": 0.417,
+            "kind": "감소",
+            "pct": -58.3
+          },
+          {
+            "ko": "석유 코크스",
+            "before": 0,
+            "after": 0.667,
+            "kind": "추가",
+            "pct": null
+          }
+        ]
+      },
+      "grades": {
+        "lp": "F",
+        "steam": "D",
+        "gap": 1,
+        "own": "S"
+      },
+      "consensus": "conflict",
+      "sortKey": 203,
+      "own": {
+        "score": 44.42,
+        "resourcePct": 15.97,
+        "machinePct": 1.28,
+        "powerPct": -6.05
+      },
+      "agreement": "split"
     }
   ],
-  "$tierNote": "「언제부터」는 만드는 기계의 해금 티어와 재료가 등장하는 티어 중 늦은 쪽으로 계산한 값이다. 하드 드라이브에서 뽑는 시점과는 별개다 — 뽑아 두고 나중에 쓸 수 있다."
+  "$tierNote": "「언제부터」는 만드는 기계의 해금 티어와 재료가 등장하는 티어 중 늦은 쪽으로 계산한 값이다. 하드 드라이브에서 뽑는 시점과는 별개다 — 뽑아 두고 나중에 쓸 수 있다.",
+  "$sources": [
+    {
+      "title": "Alternate Recipe Ranking 1.0 - Optimizing for Time/Effort",
+      "author": "u/wrigh516",
+      "url": "https://www.reddit.com/comments/1fekus9/",
+      "date": "2024-09-11",
+      "gameVersion": "1.0",
+      "method": "게임 파일 데이터로 선형계획 모형(Pyomo + glpk)을 돌려, 한 레시피를 강제했을 때 전체 생산망의 전력·아이템 이동량·기계 수·자원 소모가 얼마나 바뀌는지로 점수를 매겼다. 이 순위는 자원 효율이 아니라 시간·수고 최소화 기준이다.",
+      "confidence": "consensus"
+    },
+    {
+      "title": "Satisfactory Alternate Recipe Tier List",
+      "author": "Steam 커뮤니티 가이드",
+      "url": "https://steamcommunity.com/sharedfiles/filedetails/?id=3551739887",
+      "date": "2025-08-19",
+      "gameVersion": "미명시 (1.1 시기)",
+      "method": "순수 효율이 아니라 사용 편의와 효율의 균형으로 매겼다고 밝힌다. 재료의 희귀도와 도입 편의, 그리고 게임 단계별 유용성을 함께 본다.",
+      "confidence": "single-source"
+    },
+    {
+      "title": "이 사이트의 자체 계산",
+      "author": "satisfactory-ops",
+      "url": "https://github.com/edssert/satisfactory-ops/blob/main/scripts/rank-alternates.mjs",
+      "date": "2026-08-20",
+      "gameVersion": "1.2 (Steam 빌드 24656030)",
+      "method": "우주 엘리베이터 페이즈 1~5 를 전부 납품하는 데 드는 총량을 기본 제작법으로 한 번 풀고, 대체 제작법을 하나씩 끼워 다시 푼 뒤 차이를 본다. 원자재는 실제 맵의 노드 수(순도 가중)로 희소도를 매겨 곱한다 — 우라늄 6개와 철 70여 개를 같은 무게로 셈하지 않기 위해서다. 점수는 자원 절감×3 + 기계 절감×2 + 전력 절감×1 이고, 등급은 점수 분포의 분위수로 자른다.",
+      "weights": {
+        "resource": 3,
+        "machine": 2,
+        "power": 1
+      },
+      "cuts": {
+        "S": 19.43,
+        "A": 11.94,
+        "B": 4.84,
+        "C": 0,
+        "D": -2.45
+      },
+      "limits": "대체 제작법을 하나씩만 끼워 본다(상호작용 미고려). 부산물 되먹임 최적화를 하지 않는다. 페이즈 요구량은 게임 배포 데이터에 없어 공식 위키에서 옮겼다.",
+      "confidence": "verified"
+    }
+  ],
+  "$dispute": {
+    "summary": "두 순위는 방법론이 달라 결과가 크게 엇갈린다. 어느 쪽도 정답으로 두지 않는다.",
+    "agree": 24,
+    "near": 34,
+    "far": 46,
+    "onlyLp": 0,
+    "note": "LP 모형 쪽은 전체 생산망의 기계 수·자원·아이템 이동량을 최소화하는 계산이고, 스팀 가이드 쪽은 재료 희귀도와 도입 편의를 사람이 판단한 것이다. 계산이 좋다고 본 것을 사람은 번거롭다고 보고, 그 반대도 있다.",
+    "threeWay": {
+      "strong": 29,
+      "conflict": 35,
+      "note": "세 출처가 한 등급 안에서 일치하면 강한 합의로 본다."
+    }
+  }
 }
