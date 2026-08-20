@@ -12,9 +12,22 @@
 
 /* ------------------------------------------------------------------ 서체 */
 /*
- * Pretendard — 이 사이트가 쓰는 글자만 담은 서브셋을 빌드 때 만든다(`npm run font`).
- * 가변축을 남겨 400~800 을 파일 하나로 쓴다.
+ * 역할을 셋으로 나눈다. 하나로 통일하면 위계가 안 생긴다.
+ *
+ *   표시  Wanted Sans     기하학적이고 획이 단단하다. 한글 UI 용으로 만들어진 서체다
+ *   본문  Pretendard      KRDS 가 국문·영문 공통 기본으로 지정. 긴 글 가독성이 가장 낫다
+ *   수치  JetBrains Mono  숫자 구분이 뚜렷하고 0 에 사선이 있다. 표에서 자릿수를 세기 좋다
+ *
+ * 셋 다 SIL Open Font License 1.1 이다. 상업 사용·수정·재배포가 되고 웹 임베딩에 제약이 없다.
+ * 쓰는 글자만 담은 서브셋을 빌드 때 만든다(`npm run font`).
  */
+@font-face {
+  font-family: 'Wanted Sans';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../fonts/wanted-sans-subset.woff2') format('woff2-variations');
+}
 @font-face {
   font-family: 'Pretendard';
   font-style: normal;
@@ -22,48 +35,48 @@
   font-display: swap;
   src: url('../fonts/pretendard-subset.woff2') format('woff2-variations');
 }
-/* 수치용. 라틴만 필요하므로 라틴 서브셋 두 굵기만 싣는다 */
 @font-face {
-  font-family: 'IBM Plex Mono';
+  font-family: 'JetBrains Mono';
   font-style: normal;
-  font-weight: 400;
+  font-weight: 100 800;
   font-display: swap;
-  src: url('../fonts/ibm-plex-mono-latin-400-normal.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2191, U+2193, U+2212, U+FEFF;
-}
-@font-face {
-  font-family: 'IBM Plex Mono';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url('../fonts/ibm-plex-mono-latin-500-normal.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2191, U+2193, U+2212, U+FEFF;
+  src: url('../fonts/jetbrains-mono-subset.woff2') format('woff2-variations');
 }
 
 :root {
-  --font-display: 'Pretendard', -apple-system, 'Segoe UI', 'Apple SD Gothic Neo',
-    'Malgun Gothic', sans-serif;
-  --font-body: var(--font-display);
-  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Consolas, monospace;
+  --font-display: 'Wanted Sans', 'Pretendard', -apple-system, 'Segoe UI',
+    'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-body: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Consolas, monospace;
 
   /* ---------------------------------------------------------------- 색 */
-  /* 밝은 테마 — 도면 용지. 순백이 아니라 살짝 따뜻한 회백색이다 */
-  --bg: #f6f4f1;
-  --bg-grid: #e6e2dc;
-  --surface: #fffefc;
-  --raised: #edeae5;
-  --ink: #17191c;
-  --ink-2: #5d636b;
-  --ink-3: #8b9098;
-  --line: #ddd8d1;
-  --line-strong: #b3ada4;
-  --accent: #b8541a;
-  --accent-soft: #f3e2d5;
-  --primary: #1d6f7c;
-  --primary-ink: #14545e;
-  --on-accent: #fffefc;
-  --ok: #2f6d24;
-  --danger: #a52218;
+  /*
+   * 색 — 다크 하나만 쓴다.
+   *
+   * 밝은 테마를 반쯤 만들어 두는 것은 없느니만 못하다. 유리 계층·발광 테두리·배경 광원이
+   * 전부 어두운 바닥을 전제로 설계돼 있어서, 흰 배경에 그대로 얹으면 탁해질 뿐이다.
+   * 제대로 만들 때까지는 토글을 두지 않는다.
+   */
+  --bg: #0a0d12;
+  --bg-grid: #121722;
+  --surface: #111722;
+  --raised: #18202c;
+  --ink: #e8ecf1;
+  --ink-2: #9aa6b6;
+  --ink-3: #6b7889;
+  --line: #1f2733;
+  --line-strong: #38455a;
+  /* 강조를 둘로 나눈다 — 수치는 호박색, 구조·상호작용은 청록 */
+  --accent: #ffb457;
+  --accent-ink: #ffc987;
+  --accent-soft: #241a10;
+  --primary: #5ec8d8;
+  --primary-ink: #8fdce8;
+  --on-accent: #0a0d12;
+  --ok: #7fd88f;
+  --danger: #ff7a6b;
+  --res-unverified: #8b8b8b;
 
   /* ------------------------------------------------------------ 타이포 */
   /*
@@ -126,70 +139,13 @@
   --dur: 160ms;
   --ease: cubic-bezier(0.32, 0.72, 0, 1);
 
-  color-scheme: light dark;
+  color-scheme: dark;
 }
 
 /*
  * 어두운 테마 — 현장 HUD. 밝은 테마의 반전이 아니라 따로 정한 값이다.
  * 주황은 어두운 배경에서 더 밝게 가야 같은 무게로 읽힌다.
  */
-/* 밝은 테마는 유리를 거의 쓰지 않는다. 흰 배경에 블러를 얹으면 탁해질 뿐이다 */
-:root:not([data-theme='dark']) {
-  --glass: var(--surface);
-  --glass-raised: var(--raised);
-  --glass-blur: 0px;
-  --ambient-cool: color-mix(in oklab, var(--primary) 4%, transparent);
-  --ambient-warm: color-mix(in oklab, var(--accent) 4%, transparent);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --bg: #0a0d12;
-    --bg-grid: #121722;
-    --surface: #111722;
-    --raised: #18202c;
-    --ink: #e8ecf1;
-    --ink-2: #9aa6b6;
-    --ink-3: #6b7889;
-    --line: #1f2733;
-    --line-strong: #38455a;
-    /*
-     * 강조를 둘로 나눈다 — 수치·중요한 것은 호박색, 구조·상호작용은 청록.
-     * 한 색만 쓰면 "무엇이 중요한가"와 "무엇을 누를 수 있는가"가 구분되지 않는다.
-     */
-    --accent: #ffb457;
-    --accent-ink: #ffc987;
-    --accent-soft: #241a10;
-    --primary: #5ec8d8;
-    --primary-ink: #8fdce8;
-    --on-accent: #0a0d12;
-    --ok: #7fd88f;
-    --danger: #ff7a6b;
-  }
-}
-:root[data-theme='dark'] {
-  --bg: #0a0d12;
-  --bg-grid: #121722;
-  --surface: #111722;
-  --raised: #18202c;
-  --ink: #e8ecf1;
-  --ink-2: #9aa6b6;
-  --ink-3: #6b7889;
-  --line: #1f2733;
-  --line-strong: #38455a;
-  /*
-   * 강조를 둘로 나눈다 — 수치·중요한 것은 호박색, 구조·상호작용은 청록.
-   * 한 색만 쓰면 "무엇이 중요한가"와 "무엇을 누를 수 있는가"가 구분되지 않는다.
-   */
-  --accent: #ffb457;
-  --accent-ink: #ffc987;
-  --accent-soft: #241a10;
-  --primary: #5ec8d8;
-  --primary-ink: #8fdce8;
-  --on-accent: #0a0d12;
-  --ok: #7fd88f;
-  --danger: #ff7a6b;
-}
 
 @media (prefers-reduced-motion: reduce) {
   :root {

@@ -176,7 +176,16 @@ function connectors(row: Row): number[] {
 
         const y1 = p.y + p.h;
         const y2 = next.y;
-        const mid = (y1 + y2) / 2;
+        /*
+         * 가지는 **분배기에서 바로** 갈라져야 한다. 분배기를 지나 한참 내려간 뒤 갈라지면
+         * 그 분배기를 그냥 통과한 그림이 된다.
+         */
+        const mid =
+          p.row.kind === 'bus'
+            ? y1 + R
+            : next.row.kind === 'bus'
+              ? y2 - R
+              : (y1 + y2) / 2;
 
         const srcXs = p.row.kind === 'bus' ? [centerX] : connectors(p.row);
         const dstXs = next.row.kind === 'bus' ? [centerX] : connectors(next.row);
@@ -300,7 +309,7 @@ function connectors(row: Row): number[] {
               />
               {/* 유량은 옆에 붙인다 */}
               <rect
-                x={centerX + 28}
+                x={centerX - 28 - w}
                 y={cy - 13}
                 width={w}
                 height="26"
@@ -308,20 +317,28 @@ function connectors(row: Row): number[] {
                 class="fc-buschip"
               />
               {b.itemId && (
-                <image href={`${iIcon}/${b.itemId}.png`} x={centerX + 32} y={cy - 10} width="20" height="20" />
+                <image
+                  href={`${iIcon}/${b.itemId}.png`}
+                  x={centerX - 24 - w}
+                  y={cy - 10}
+                  width="20"
+                  height="20"
+                />
               )}
-              <text x={centerX + (b.itemId ? 56 : 36)} y={cy + 5} class="fc-bustext">{label}</text>
+              <text x={centerX - 24 - w + (b.itemId ? 24 : 4)} y={cy + 5} class="fc-bustext">
+                {label}
+              </text>
               {b.deliver && (
                 <>
                   <rect
-                    x={centerX - 32 - chipWidth(`${b.deliver.ko} ${fmtRate(b.deliver.perMinute)}/분`, false)}
+                    x={centerX + 28}
                     y={cy - 13}
                     width={chipWidth(`${b.deliver.ko} ${fmtRate(b.deliver.perMinute)}/분`, false)}
                     height="26"
                     rx="3"
                     class="fc-deliver"
                   />
-                  <text x={centerX - 38} y={cy + 5} class="fc-delivertext" text-anchor="end">
+                  <text x={centerX + 34} y={cy + 5} class="fc-delivertext">
                     {b.deliver.ko} {fmtRate(b.deliver.perMinute)}/분
                   </text>
                 </>
