@@ -21790,8 +21790,7 @@
     "somersloopSlots": 0,
     "powerShardSlots": 0,
     "footprint": null,
-    "productionBoostPowerExponent": 2,
-    "beltItemsPerMinute": 400
+    "productionBoostPowerExponent": 2
   },
   {
     "className": "Build_LightsControlPanel_C",

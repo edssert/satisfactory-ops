@@ -477,7 +477,13 @@ function buildBuildings(groups, itemIndex, recipes) {
         }));
         b.supplementalToPowerRatio = num(c.mSupplementalToPowerRatio) || null;
       }
-      if (c.mSpeed !== undefined) b.beltItemsPerMinute = num(c.mSpeed) / 2; // 내부 단위는 items/min의 2배
+      /*
+       * mSpeed 는 컨베이어에서만 처리량이다. 작업자용 엘리베이터(FGBuildableElevator)에도
+       * 같은 이름의 필드가 있는데 그건 사람이 올라가는 속도다 — 400/분짜리 벨트로 새어 나가
+       * 화면에서 "그때 필요한 벨트: 작업자용 엘리베이터" 같은 답을 냈다.
+       */
+      const isConveyor = n === 'FGBuildableConveyorBelt' || n === 'FGBuildableConveyorLift';
+      if (isConveyor && c.mSpeed !== undefined) b.beltItemsPerMinute = num(c.mSpeed) / 2; // 내부 단위는 items/min의 2배
       if (c.mFlowLimit !== undefined) b.pipeFlowM3PerMinute = round(num(c.mFlowLimit) * 60);
       if (c.mStorageSizeX !== undefined) b.storageSlots = num(c.mStorageSizeX) * num(c.mStorageSizeY);
 
@@ -652,6 +658,13 @@ function main() {
       !!wetConcrete && wetConcrete.ingredients.some((i) => i.item === 'Desc_Water_C' && i.amount === 5)],
     ['제조소 전력값 (Constructor 4 MW)', !!constructor && constructor.power.consumptionMW === 4],
     ['벨트 속도 (Mk.1 60 items/min)', !!beltMk1 && beltMk1.beltItemsPerMinute === 60],
+    ['처리량이 붙은 건물은 컨베이어뿐',
+      buildings.filter((b) => b.beltItemsPerMinute != null)
+        .every((b) => b.nativeClass === 'FGBuildableConveyorBelt' || b.nativeClass === 'FGBuildableConveyorLift'),
+      () => '컨베이어가 아닌데 처리량이 붙음: ' +
+        buildings.filter((b) => b.beltItemsPerMinute != null &&
+          b.nativeClass !== 'FGBuildableConveyorBelt' && b.nativeClass !== 'FGBuildableConveyorLift')
+          .map((b) => b.className).join(', ')],
     ['건물 치수 — 제작기 8×10×6 m (충돌 박스 합집합)', (() => {
       const f = buildings.find((b) => b.className === 'Build_ConstructorMk1_C')?.footprint;
       return !!f && f.widthM === 8 && f.lengthM === 10 && f.heightM === 6;

@@ -17,9 +17,51 @@ import spine from '../../data/curated/spine.json';
 import finite from '../../data/curated/finite-resources.json';
 import exploration from '../../data/curated/exploration.json';
 import craft from '../../data/curated/build-craft.json';
+import purity from '../../data/curated/node-purity.json';
 import { biomassLine, ironLine, smartPlatingLine, type FlowDef } from '../../lib/flows';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+/*
+ * 순도 표. 게임 데이터에서 계산한다 — 채굴기 기본 속도 × 순도 배수 × 클럭.
+ * 배수(불순 0.5 · 보통 1 · 순수 2)는 게임이 노드에 붙이는 값이라 코드에 둔다.
+ */
+const PURITY_MULT = [
+  { ko: '불순', mult: 0.5 },
+  { ko: '보통', mult: 1 },
+  { ko: '순수', mult: 2 },
+];
+const MAX_CLOCK = 2.5;
+const POWER_EXP = 1.321928;
+
+const miners = ['Build_MinerMk1_C', 'Build_MinerMk2_C', 'Build_MinerMk3_C'].map((id) => {
+  const b = building(id);
+  const rate = b.extraction?.perMinuteAtNormalPurity ?? 0;
+  return {
+    ko: b.ko,
+    base: rate,
+    powerMW: b.powerMW ?? 0,
+    byPurity: PURITY_MULT.map((q) => ({ ko: q.ko, perMin: rate * q.mult })),
+    /* 순수 노드를 최대로 돌리면 얼마나 나오나 — 벨트가 감당하는지 보려는 값이다 */
+    maxPure: rate * 2 * MAX_CLOCK,
+    maxPowerMW: Math.round((b.powerMW ?? 0) * Math.pow(MAX_CLOCK, POWER_EXP)),
+  };
+});
+
+/* 리프트는 벨트와 처리량이 같다. 표에는 벨트만 쓴다 */
+const belts = buildings
+  .filter((b) => b.beltItemsPerMinute != null && b.id.includes('ConveyorBelt'))
+  .sort((a, b) => (a.beltItemsPerMinute ?? 0) - (b.beltItemsPerMinute ?? 0))
+  .map((b) => ({ ko: b.ko, perMin: b.beltItemsPerMinute ?? 0 }));
+
+/** 어떤 채굴기·순도가 어느 벨트에서 막히나 */
+const beltFor = (perMin: number) => belts.find((b) => b.perMin >= perMin) ?? belts[belts.length - 1];
+
+const purityDoc = purity as {
+  $key: string;
+  $when: string;
+  points: { title: string; body: string; confidence: string; source: string }[];
+};
 
 const finiteDoc = finite as {
   items: {
@@ -327,6 +369,64 @@ const FLOWS: Record<string, FlowDef> = {
           </p>
         </section>
 
+        <section class="step" id="purity">
+          <p class="marker"><span class="num">판단</span> 노드 순도</p>
+          <h2>순수 노드를 찾아 멀리 가지 않는다</h2>
+          <p class="prose muted">{purityDoc.$key}</p>
+
+          <table class="pur">
+            <thead>
+              <tr>
+                <th>채굴기</th>
+                {PURITY_MULT.map((q) => (
+                  <th class="n">{q.ko}</th>
+                ))}
+                <th class="n">순수·250%</th>
+                <th>그때 필요한 벨트</th>
+              </tr>
+            </thead>
+            <tbody>
+              {miners.map((m) => (
+                <tr>
+                  <th scope="row">{m.ko}</th>
+                  {m.byPurity.map((q) => (
+                    <td class="n">{q.perMin}</td>
+                  ))}
+                  <td class="n is-amp">{m.maxPure}</td>
+                  <td>
+                    {beltFor(m.maxPure).ko}
+                    <span class="pur-sub n"> {m.maxPowerMW} MW</span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p class="caption">단위는 분당 개수입니다. 250%는 동력 조각 3개를 꽂은 최대치입니다.</p>
+
+          <div class="pur-pts">
+            {purityDoc.points.map((x) => (
+              <article class="pur-pt">
+                <h3>{x.title}</h3>
+                <p>{x.body}</p>
+              </article>
+            ))}
+          </div>
+
+          <p class="contrast prose">
+            <span class="contrast-tag">단</span>
+            {purityDoc.$when}
+          </p>
+
+          <details class="src">
+            <summary>출처</summary>
+            <ol>
+              {purityDoc.points.map((x) => (
+                <li>{x.source}</li>
+              ))}
+            </ol>
+          </details>
+        </section>
+
         <section class="step" id="explore">
           <p class="marker"><span class="num">편의</span> 탐험</p>
           <h2>탐험이 곧 편의성이다</h2>
@@ -543,6 +643,72 @@ const FLOWS: Record<string, FlowDef> = {
     .keep-body { margin: 0; font-weight: 600; max-width: var(--measure); }
 
     .step.is-open h2 { color: var(--ink-2); }
+
+    /* 순도 표 — 수치는 오른쪽 맞춤, 자릿수가 눈으로 비교돼야 한다 */
+    .pur {
+      width: 100%;
+      margin-top: var(--s4);
+      border-collapse: collapse;
+      font-size: var(--t-body-s);
+    }
+    .pur th,
+    .pur td {
+      padding: 9px 10px;
+      border-bottom: var(--hair) solid var(--line);
+      text-align: left;
+    }
+    .pur thead th {
+      color: var(--ink-3);
+      font-size: var(--t-caption);
+      font-weight: 500;
+    }
+    .pur .n {
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+    .pur tbody th { color: var(--ink); font-weight: 500; white-space: nowrap; }
+    .pur .is-amp { color: var(--primary); }
+    .pur-sub { display: block; color: var(--ink-3); font-size: var(--t-caption); }
+
+    .pur-pts {
+      display: grid;
+      gap: var(--s3);
+      margin-top: var(--s5);
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+    .pur-pt {
+      padding: var(--s3);
+      border-left: 2px solid var(--line-strong);
+    }
+    .pur-pt h3 {
+      margin: 0 0 6px;
+      font-size: var(--t-body);
+      font-weight: 600;
+      word-break: keep-all;
+    }
+    .pur-pt p {
+      margin: 0;
+      color: var(--ink-2);
+      font-size: var(--t-body-s);
+      line-height: 1.7;
+      word-break: keep-all;
+    }
+
+    /* 출처는 각주로 내린다 — 화면은 결론만 */
+    .src { margin-top: var(--s4); }
+    .src summary {
+      color: var(--ink-3);
+      font-size: var(--t-caption);
+      cursor: pointer;
+    }
+    .src ol {
+      margin: var(--s2) 0 0;
+      padding-left: 1.4em;
+      color: var(--ink-3);
+      font-size: var(--t-caption);
+      line-height: 1.7;
+    }
 
     .contrast {
       margin: var(--s5) 0 0;

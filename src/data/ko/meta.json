@@ -1,6 +1,6 @@
 {
   "$comment": "이 폴더의 items/recipes/buildings/schematics/milestones.json은 scripts/build-data.mjs가 게임 원본에서 생성합니다. 직접 수정하지 마세요.",
-  "generatedAt": "2026-08-20T12:21:53.744Z",
+  "generatedAt": "2026-08-20T16:59:58.830Z",
   "generator": "scripts/build-data.mjs",
   "source": {
     "kind": "local-game-install",
