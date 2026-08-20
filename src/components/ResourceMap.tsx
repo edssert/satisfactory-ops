@@ -39,7 +39,25 @@ export interface MapBelt {
   r: number;
 }
 
+/** 수집품 — 슬러그·소머슬룹·머서 구체·하드 드라이브 */
+export interface MapDrop {
+  k: string;
+  x: number;
+  y: number;
+  /** 하드 드라이브의 잠금 비용 */
+  c?: { ko: string; amount: number; item: string }[];
+}
+export interface MapDropKind {
+  key: string;
+  ko: string;
+  item: string | null;
+  n: number;
+  fill: string;
+}
+
 interface Props {
+  drops: MapDrop[];
+  dropKinds: MapDropKind[];
   belts: MapBelt[];
   points: MapPoint[];
   resources: MapRes[];
@@ -89,6 +107,8 @@ const KIND: Record<string, string> = {
 };
 
 export default function ResourceMap({
+  drops,
+  dropKinds,
   belts: BELTS,
   points,
   resources,
@@ -106,6 +126,9 @@ export default function ResourceMap({
   const [kinds, setKinds] = useState<Set<string>>(
     () => new Set(['node', 'frackingCore', 'frackingSatellite', 'geyser'])
   );
+  /* 수집품은 처음엔 꺼 둔다. 1764개를 한꺼번에 켜면 자원이 안 보인다 */
+  const [dropsOn, setDropsOn] = useState<Set<string>>(() => new Set());
+  const [dropInfo, setDropInfo] = useState<MapDrop | null>(null);
   const [showGrid, setShowGrid] = useState(true);
   const [showAreas, setShowAreas] = useState(true);
   const [sel, setSel] = useState<MapPoint | null>(null);
@@ -143,26 +166,14 @@ export default function ResourceMap({
     [points, on, pur, kinds]
   );
 
-  /**
-   * 멀리서 볼 때는 점을 묶는다. 626개를 다 찍으면 서로 겹쳐서 어디에 몇 개인지 못 읽는다.
-   * 격자 한 칸 정도로 묶고, 묶음 안이 한 종류면 그 그림을, 섞여 있으면 개수만 보여 준다.
+  /*
+   * 묶지 않는다. 앞서 멀리서 볼 때 점을 묶어 「+4」처럼 보여 줬는데,
+   * 그러면 최소 배율에서 무엇이 어디에 있는지가 사라진다. 전부 하나씩 찍는다.
    */
-  const clusters = useMemo(() => {
-    if (zoom >= 3.2) return null;
-    const cell = s(26);
-    const bag = new Map<string, { x: number; y: number; n: number; res: Set<string>; pts: MapPoint[] }>();
-    for (const p of shown) {
-      const k = `${Math.round(p.x / cell)}|${Math.round(p.y / cell)}`;
-      const b = bag.get(k) ?? { x: 0, y: 0, n: 0, res: new Set<string>(), pts: [] };
-      b.x += p.x;
-      b.y += p.y;
-      b.n++;
-      b.res.add(p.r);
-      b.pts.push(p);
-      bag.set(k, b);
-    }
-    return [...bag.values()].map((b) => ({ ...b, x: b.x / b.n, y: b.y / b.n }));
-  }, [shown, zoom, s]);
+  const shownDrops = useMemo(
+    () => drops.filter((d) => dropsOn.has(d.k)),
+    [drops, dropsOn]
+  );
 
   /** 지금 배율에 맞는 타일 단계와, 그중 보이는 것만 */
   const tiles = useMemo(() => {
@@ -425,6 +436,12 @@ export default function ResourceMap({
         <span class="rm-spacer" />
         <span class="rm-count">
           보이는 노드 <b class="n">{shown.length}</b>
+          {shownDrops.length > 0 && (
+            <>
+              {' · 수집품 '}
+              <b class="n">{shownDrops.length}</b>
+            </>
+          )}
         </span>
       </div>
 
@@ -475,6 +492,29 @@ export default function ResourceMap({
               해제
             </button>
           </div>
+
+          <p class="rm-k">수집품</p>
+          <ul>
+            {dropKinds.map((k) => (
+              <li key={k.key}>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={dropsOn.has(k.key)}
+                    onChange={() => toggle(dropsOn, k.key, setDropsOn)}
+                  />
+                  <i class="rm-swatch" style={`background:${k.fill}`} aria-hidden="true"></i>
+                  {k.item && <img src={`${assetBase}/items/${k.item}.png`} alt="" width="20" height="20" />}
+                  <span>{k.ko}</span>
+                  <b class="n">{k.n}</b>
+                </label>
+              </li>
+            ))}
+          </ul>
+          <p class="rm-note">
+            전부 맵에 고정 개수로 놓여 있고 다시 생기지 않습니다. 하드 드라이브는 그림 위에
+            올리면 화물칸을 여는 데 드는 물건이 뜹니다.
+          </p>
 
           <p class="rm-k">순도</p>
           <ul class="rm-pur">
@@ -591,94 +631,79 @@ export default function ResourceMap({
                 })
               )}
 
-            {/* 멀리서는 묶어서, 가까이서는 하나씩 */}
-            {clusters
-              ? clusters.map((c, i) => {
-                  const one = c.n === 1 ? c.pts[0]! : null;
-                  const r = s(one ? markPx / 2 : Math.min(markPx * 0.9, markPx / 2 + Math.log2(c.n) * 3));
-                  return (
-                    <g
-                      key={`c${i}`}
-                      class={one ? `rm-pt is-${one.p}` : 'rm-cl'}
-                      onClick={() => (one ? setSel(one) : flyTo(c.x, c.y, Math.max(SIZE / 8, vb.w / 3)))}
-                    >
-                      <circle cx={c.x} cy={c.y} r={r} vector-effect="non-scaling-stroke" />
-                      {one ? (
-                        <image
-                          href={`${assetBase}/items/${one.r}.png`}
-                          x={c.x - r * 0.7}
-                          y={c.y - r * 0.7}
-                          width={r * 1.4}
-                          height={r * 1.4}
-                        />
-                      ) : (
-                        <>
-                          {c.res.size === 1 && (
-                            <image
-                              href={`${assetBase}/items/${[...c.res][0]}.png`}
-                              x={c.x - r * 0.56}
-                              y={c.y - r * 0.78}
-                              width={r * 1.12}
-                              height={r * 1.12}
-                            />
-                          )}
-                          <title>{c.n}개 — 눌러서 들어가기</title>
-                          <text
-                            x={c.x}
-                            y={c.res.size === 1 ? c.y + r * 0.66 : c.y + s(labelPx * 0.36)}
-                            font-size={s(c.res.size === 1 ? labelPx * 0.9 : labelPx * 1.15)}
-                          >
-                            {c.n}
-                          </text>
-                        </>
-                      )}
-                    </g>
-                  );
-                })
-              : shown.map((p, i) => {
-                  const r = s((markPx / 2) * (p.t === 'node' ? 1 : 0.82));
-                  const active = sel === p;
-                  /* 동그라미를 점 위로 띄우고 가는 줄로 실제 자리를 가리킨다. 지도를 안 가린다 */
-                  const cy = p.y - r * 1.55;
-                  return (
-                    <g
-                      key={`${p.r}-${i}`}
-                      class={`rm-pt is-${p.p}${active ? ' is-sel' : ''}`}
-                      onClick={() => !moved.current && setSel(active ? null : p)}
-                    >
-                      <line x1={p.x} y1={p.y} x2={p.x} y2={cy} vector-effect="non-scaling-stroke" />
-                      <circle
-                        cx={p.x}
-                        cy={p.y}
-                        r={s(1.6)}
-                        class="rm-foot"
-                        vector-effect="non-scaling-stroke"
-                      />
-                      <circle
-                        cx={p.x}
-                        cy={cy}
-                        r={r}
-                        fill={PURITY[p.p]!.fill}
-                        vector-effect="non-scaling-stroke"
-                      />
-                      <image
-                        href={`${assetBase}/items/${p.r}.png`}
-                        x={p.x - r * 0.72}
-                        y={cy - r * 0.72}
-                        width={r * 1.44}
-                        height={r * 1.44}
-                      />
-                      {/*
-                        * 글자를 안 붙인다. 그림이 무슨 자원인지, 색이 순도를 말하므로
-                        * 이름과 순도를 겹쳐 적으면 지도가 글자로 덮인다.
-                        * 색을 못 읽는 경우를 위해 이름은 title 로 남기고, 누르면 아래에 글로 뜬다.
-                        */}
-                      <title>
-                        {koOf(p.r)} · {PURITY[p.p]!.ko} · {KIND[p.t] ?? p.t}
-                      </title>
-                    </g>
-                  );
-                })}
+            {/* 자원 노드 — 최소 배율에서도 하나씩 보인다 */}
+            {shown.map((p, i) => {
+              const r = s((markPx / 2) * (p.t === 'node' ? 1 : 0.82));
+              const active = sel === p;
+              /* 동그라미를 점 위로 띄우고 가는 줄로 실제 자리를 가리킨다. 지형을 안 가린다 */
+              const cy = p.y - r * 1.55;
+              return (
+                <g
+                  key={`${p.r}-${i}`}
+                  class={`rm-pt is-${p.p}${active ? ' is-sel' : ''}`}
+                  onClick={() => !moved.current && setSel(active ? null : p)}
+                >
+                  <line x1={p.x} y1={p.y} x2={p.x} y2={cy} vector-effect="non-scaling-stroke" />
+                  <circle cx={p.x} cy={p.y} r={s(1.6)} class="rm-foot" vector-effect="non-scaling-stroke" />
+                  <circle
+                    cx={p.x}
+                    cy={cy}
+                    r={r}
+                    fill={PURITY[p.p]!.fill}
+                    vector-effect="non-scaling-stroke"
+                  />
+                  <image
+                    href={`${assetBase}/items/${p.r}.png`}
+                    x={p.x - r * 0.72}
+                    y={cy - r * 0.72}
+                    width={r * 1.44}
+                    height={r * 1.44}
+                  />
+                  <title>
+                    {koOf(p.r)} · {PURITY[p.p]!.ko} · {KIND[p.t] ?? p.t}
+                  </title>
+                </g>
+              );
+            })}
+
+            {/* 수집품 — 슬러그·소머슬룹·머서 구체·하드 드라이브 */}
+            {shownDrops.map((d, i) => {
+              const kind = dropKinds.find((k) => k.key === d.k);
+              const r = s(markPx / 2) * 0.86;
+              const cy = d.y - r * 1.5;
+              return (
+                <g
+                  key={`d${i}`}
+                  class={`rm-drop${d.k === 'drive' ? ' is-drive' : ''}`}
+                  onPointerEnter={() => setDropInfo(d)}
+                  onPointerLeave={() => setDropInfo((h) => (h === d ? null : h))}
+                  onClick={() => !moved.current && setDropInfo(d)}
+                >
+                  <line x1={d.x} y1={d.y} x2={d.x} y2={cy} vector-effect="non-scaling-stroke" />
+                  <circle cx={d.x} cy={d.y} r={s(1.4)} class="rm-foot" vector-effect="non-scaling-stroke" />
+                  <circle
+                    cx={d.x}
+                    cy={cy}
+                    r={r}
+                    fill={kind?.fill ?? '#7d8ea0'}
+                    vector-effect="non-scaling-stroke"
+                  />
+                  {kind?.item && (
+                    <image
+                      href={`${assetBase}/items/${kind.item}.png`}
+                      x={d.x - r * 0.7}
+                      y={cy - r * 0.7}
+                      width={r * 1.4}
+                      height={r * 1.4}
+                    />
+                  )}
+                  <title>
+                    {kind?.ko ?? d.k}
+                    {d.c ? ` — 잠금 ${d.c.map((c) => `${c.ko} ${c.amount}`).join(', ')}` : ''}
+                  </title>
+                </g>
+              );
+            })}
 
             {measure && mEnd && (
               <g class="rm-measure">
@@ -718,6 +743,45 @@ export default function ResourceMap({
                 끝내기
               </button>
             </p>
+          )}
+
+          {dropInfo && (
+            <div class="rm-hover">
+              {(() => {
+                const kind = dropKinds.find((k) => k.key === dropInfo.k);
+                return (
+                  <>
+                    {kind?.item && (
+                      <img src={`${assetBase}/items/${kind.item}.png`} alt="" width="30" height="30" />
+                    )}
+                    <div>
+                      <b>{kind?.ko ?? dropInfo.k}</b>
+                      {dropInfo.c ? (
+                        <span class="rm-cost">
+                          화물칸을 여는 데:{' '}
+                          {dropInfo.c.map((c) => (
+                            <em key={c.item}>
+                              <img src={`${assetBase}/items/${c.item}.png`} alt="" width="18" height="18" />
+                              {c.ko} {c.amount}
+                            </em>
+                          ))}
+                        </span>
+                      ) : dropInfo.k === 'drive' ? (
+                        <span>
+                          여는 데 드는 물건이 데이터에 없습니다 — 그냥 열리거나 전력을 이어야 하는
+                          화물칸입니다
+                        </span>
+                      ) : (
+                        <span>주우면 그만입니다. 다시 생기지 않습니다</span>
+                      )}
+                    </div>
+                    <button type="button" onClick={() => setDropInfo(null)} aria-label="닫기">
+                      ✕
+                    </button>
+                  </>
+                );
+              })()}
+            </div>
           )}
 
           {sel && (

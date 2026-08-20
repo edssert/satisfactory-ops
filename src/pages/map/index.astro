@@ -12,6 +12,7 @@ import ResourceMap from '../../components/ResourceMap';
 import '../../styles/fx.css';
 import '../../styles/map.css';
 import nodesJson from '../../data/app/resource-nodes.json';
+import collectiblesJson from '../../data/app/collectibles.json';
 import manifestJson from '../../../public/assets/map/manifest.json';
 import { items } from '../../lib/gamedata';
 import { areas } from '../../lib/start-areas';
@@ -27,6 +28,32 @@ const manifest = manifestJson as unknown as {
   levels: { level: number; grid: number }[];
   layers: { key: string; ko: string; source: string }[];
 };
+
+const collectiblesDoc = collectiblesJson as unknown as {
+  $kinds: { key: string; ko: string; item: string | null; n: number }[];
+  $driveNote: string;
+  items: { kind: string; fx: number; fy: number; cost?: { item: string; ko: string; amount: number }[] }[];
+};
+
+/*
+ * 수집품 색. 게임의 물건 색을 따른다(파란·노란·보라 슬러그).
+ * 그림도 같이 들어가므로 색만으로 구분하는 것이 아니다.
+ */
+const DROP_FILL: Record<string, string> = {
+  slug1: '#4aa3ff',
+  slug2: '#f2c744',
+  slug3: '#a86ce0',
+  sloop: '#f06ba8',
+  mercer: '#5ad1c8',
+  drive: '#c9d1d9',
+};
+const drops = collectiblesDoc.items.map((c) => ({
+  k: c.kind,
+  x: Math.round(c.fx * 100000) / 100,
+  y: Math.round(c.fy * 100000) / 100,
+  ...(c.cost ? { c: c.cost } : {}),
+}));
+const dropKinds = collectiblesDoc.$kinds.map((k) => ({ ...k, fill: DROP_FILL[k.key] ?? '#8d99a6' }));
 
 const round = (n: number) => Math.round(n * 10000) / 10000;
 const points = doc.nodes.map((n) => ({
@@ -53,7 +80,7 @@ const payloadBelts = buildings
   .filter((b) => /^Build_ConveyorBeltMk\d_C$/.test(b.id) && b.beltItemsPerMinute)
   .map((b) => ({ ko: b.ko, r: b.beltItemsPerMinute! }))
   .sort((a, b) => a.r - b.r);
-const bytes = JSON.stringify({ points, resources, payloadAreas }).length;
+const bytes = JSON.stringify({ points, resources, payloadAreas, drops }).length;
 ---
 
 <Base
@@ -65,13 +92,15 @@ const bytes = JSON.stringify({ points, resources, payloadAreas }).length;
     <header class="map-head">
       <h1>자원 지도</h1>
       <p>
-        노드 {doc.nodes.length}개를 순도와 함께. 굴려서 확대, 끌어서 이동,
-        노드를 누르면 채굴기 등급별 산출과 필요한 벨트 등급이 나옵니다.
+        채굴 노드 {doc.nodes.length}개와 수집품 {drops.length}개. 굴려서 확대, 끌어서 이동,
+        노드를 누르면 채굴기 등급별 산출이, 하드 드라이브에 올리면 화물칸을 여는 물건이 나옵니다.
       </p>
     </header>
 
     <ResourceMap
       client:load
+      drops={drops}
+      dropKinds={dropKinds}
       belts={payloadBelts}
       points={points}
       resources={resources}

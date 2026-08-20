@@ -270,6 +270,19 @@ if (!toolsPage) {
   if (!bad) pass(`넘겨보내는 주소 ${seen}개가 전부 존재`);
 }
 
+// ─────────────────────────────────────────────── 지도가 수집품까지 담았는가
+{
+  const hit = allHtml.find((h) => h.p.includes(`map${path.sep}index.html`));
+  if (!hit) {
+    fail('지도 페이지가 빌드되지 않았습니다');
+  } else {
+    const need = ['rm-svg', '파란색 파워 슬러그', '소머슬룹', '머서 구체', '하드 드라이브'];
+    const miss = need.filter((n) => !hit.s.includes(n));
+    if (miss.length) fail(`지도에 ${miss.join(', ')} 가 없습니다`);
+    else pass('지도가 자원 노드와 수집품 네 종류를 담음');
+  }
+}
+
 // ─────────────────────────────────────────────── 결과
 console.log('산출물 커버리지 검사:');
 console.log(notes.join('\n'));

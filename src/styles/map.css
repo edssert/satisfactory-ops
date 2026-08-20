@@ -391,3 +391,70 @@
   border: 1px solid rgb(0 0 0 / 0.7);
   border-radius: 50%;
 }
+
+/* ------------------------------------------------- 수집품 */
+
+/*
+ * 슬러그·소머슬룹·머서 구체·하드 드라이브. 자원 노드와 같은 핀 모양이되
+ * 색은 게임의 물건 색을 따른다. 그림이 같이 들어가므로 색만으로 구분하는 것이 아니다.
+ */
+.rm-drop { cursor: pointer; }
+.rm-drop line { stroke: rgb(0 0 0 / 0.75); stroke-width: 2; }
+.rm-drop circle { stroke: rgb(0 0 0 / 0.8); stroke-width: 2; }
+.rm-drop:hover circle { stroke: #fff; }
+.rm-drop .rm-foot { fill: rgb(0 0 0 / 0.85); stroke: none; }
+/* 하드 드라이브는 네모난 느낌을 주려고 테두리를 굵게 */
+.rm-drop.is-drive circle { stroke: #1b2027; stroke-width: 3; }
+
+.rm-swatch {
+  width: 11px;
+  height: 11px;
+  flex: none;
+  border: 1px solid rgb(0 0 0 / 0.7);
+  border-radius: 50%;
+}
+.rm-note {
+  margin: -6px 0 var(--s4);
+  color: var(--ink-3);
+  font-size: 11px;
+  line-height: 1.6;
+  word-break: keep-all;
+}
+
+/* 수집품 설명 — 지도 위에 겹쳐 뜬다 */
+.rm-hover {
+  position: absolute;
+  top: var(--s3);
+  right: var(--s3);
+  display: flex;
+  gap: var(--s3);
+  align-items: center;
+  max-width: 420px;
+  padding: var(--s3) var(--s4);
+  border: var(--hair) solid var(--line-strong);
+  border-radius: var(--radius);
+  background: color-mix(in oklab, var(--raised) 95%, transparent);
+  box-shadow: 0 16px 36px -20px rgb(0 0 0 / 0.95);
+}
+.rm-hover > div { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.rm-hover b { color: var(--ink); font-size: var(--t-body-s); }
+.rm-hover span { color: var(--ink-2); font-size: var(--t-caption); line-height: 1.6; word-break: keep-all; }
+.rm-cost { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; }
+.rm-cost em {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--t-caption);
+  font-style: normal;
+}
+.rm-hover button {
+  flex: none;
+  padding: 4px 6px;
+  border: 0;
+  background: none;
+  color: var(--ink-3);
+  font-size: 12px;
+  cursor: pointer;
+}

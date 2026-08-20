@@ -15,12 +15,13 @@
     {
       "key": "terrain",
       "ko": "지형",
-      "source": "File:Map.jpg"
+      "source": "https://satisfactory-logistics-maps.fra1.cdn.digitaloceanspaces.com/map/v2 (z=5)"
     },
     {
       "key": "biome",
       "ko": "생물군계",
-      "source": "File:Biome Map.jpg"
+      "source": "satisfactory.wiki.gg File:Biome Map.jpg"
     }
-  ]
+  ],
+  "note": "지도 그림은 Coffee Stain Studios 자산이다. 세계 렌더는 rockfactory/satisfactory-logistics(MIT) 가 공개한 타일 피라미드에서 받아 다시 잘랐고, 생물군계는 공식 위키에서 받았다."
 }
