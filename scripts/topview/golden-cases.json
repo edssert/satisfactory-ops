@@ -1,0 +1,34 @@
+{
+  "$schemaVersion": 1,
+  "cases": [
+    {
+      "id": "smelter-anders-blender-2023",
+      "assetId": "Golden_Build_SmelterMk1_C_Anders2023",
+      "reference": "public/assets/planner/top-view/golden/Build_SmelterMk1_C_Anders2023.webp",
+      "referenceSource": "anders-2023",
+      "occupancyFrame": { "x": 0.0561, "y": 0.0294, "width": 0.8972, "height": 0.9412 },
+      "referenceFramePx": { "width": 384, "height": 640, "ratio": 0.6 },
+      "referenceProjection": { "type": "orthographic-oblique", "inferredFrontTiltDeg": 33.5573, "confidence": "consensus" },
+      "currentGameFootprintM": { "width": 5, "length": 10, "ratio": 0.5 },
+      "geometryAuthority": "game-install-cl-502094",
+      "currentGameControls": [
+        { "id": "smelter-current-top", "view": "top", "width": 1217, "height": 618, "sha256": "a4f17ddeb9d5ae78f58a407730f8bf3d3031d6554f639920ac09b0e888bb2d34", "researchPath": ".tmp-research/user-controls/smelter-current/01-top.png" },
+        { "id": "smelter-current-side-a", "view": "side-a", "width": 1082, "height": 945, "sha256": "8ab257abea0213a77e8978c726eb619fe47af8698b7dc9a3e17abd3e27398877", "researchPath": ".tmp-research/user-controls/smelter-current/02-side-a.png" },
+        { "id": "smelter-current-side-b", "view": "side-b", "width": 971, "height": 817, "sha256": "0b51790faef558a80995197dab57eac2f0d8e57b464159531ca7ebec11258224", "researchPath": ".tmp-research/user-controls/smelter-current/03-side-b.png" },
+        { "id": "smelter-current-end-a", "view": "end-a", "width": 573, "height": 791, "sha256": "a3dbe6e08288179ad948150b338662a2dfbc09926b7dba9264c05f19ac554c20", "researchPath": ".tmp-research/user-controls/smelter-current/04-end-a.png" },
+        { "id": "smelter-current-end-b", "view": "end-b", "width": 494, "height": 769, "sha256": "cf33c97f3947ddccb51950f755531c41b34417bf6dc93511feb093cd21f6f879", "researchPath": ".tmp-research/user-controls/smelter-current/05-end-b.png" },
+        { "id": "smelter-current-isometric-a", "view": "isometric-a", "width": 999, "height": 1105, "sha256": "d303a29b43d31aef932fe98dcc3157361ecde0470d9fa3e94ef08ead479ccffd", "researchPath": ".tmp-research/user-controls/smelter-current/06-isometric-a.png" },
+        { "id": "smelter-current-isometric-b", "view": "isometric-b", "width": 910, "height": 1048, "sha256": "172e9d6da21d0a297892112c20fd4527f532f526db7edc7328b28a2d189f39cb", "researchPath": ".tmp-research/user-controls/smelter-current/07-isometric-b.png" },
+        { "id": "smelter-current-isometric-c", "view": "isometric-c", "width": 1029, "height": 1116, "sha256": "29b06176ba307b77cb8b3211bd3f731079817853e37e462a73a599a78dbff157", "researchPath": ".tmp-research/user-controls/smelter-current/08-isometric-c.png" },
+        { "id": "smelter-current-isometric-d", "view": "isometric-d", "width": 895, "height": 837, "sha256": "cb5c440bac75644e31db3b42aa5200e2b6393ca82d15c8e66f1992640b523195", "researchPath": ".tmp-research/user-controls/smelter-current/09-isometric-d.png" },
+        { "id": "smelter-current-near-top", "view": "near-top", "width": 148, "height": 73, "sha256": "078b92c950554276f9054c7304d08465ff7121d98f5d892bd60dcad34eed81ae", "researchPath": ".tmp-research/user-controls/smelter-current/10-near-top.png", "projectionUse": "low-distortion-silhouette-and-relative-placement" }
+      ],
+      "controlProjection": "perspective",
+      "metricMeasurement": false,
+      "controlUse": ["component-presence", "relative-face-and-height", "material-and-emission", "assembly-error-detection"],
+      "comparisonModes": ["style-normalized-art", "orthographic-oblique-reference", "current-game-geometry"],
+      "purpose": "누락 기기 Blender 프로파일과 조립 완결성의 색·금속·파이프·발광·AO·그림자·코너 교정",
+      "approval": "approved-style-reference"
+    }
+  ]
+}

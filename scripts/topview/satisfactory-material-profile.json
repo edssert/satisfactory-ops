@@ -1,0 +1,27 @@
+{
+  "$schemaVersion": 1,
+  "id": "anders-material-study-2026",
+  "grid": { "columns": 3, "rows": 3, "cellPx": 256 },
+  "sources": [
+    "https://www.reddit.com/r/SatisfactoryGame/comments/q5619z/",
+    "https://www.reddit.com/r/SatisfactoryGame/comments/qom52d/",
+    "FactoryGame/Content/FactoryGame/Buildable/-Shared/Material/Resources/TX_Hologram_01",
+    "https://github.com/DavidHGillen/Satisfactory_ModelingTools"
+  ],
+  "cells": [
+    { "row": 0, "column": 0, "role": "paint-primary", "color": "#ea9c42", "metallic": 0.55, "roughness": 0.32, "emission": 0 },
+    { "row": 0, "column": 1, "role": "paint-secondary", "color": "#5e6d81", "metallic": 0.55, "roughness": 0.34, "emission": 0 },
+    { "row": 0, "column": 2, "role": "rubber", "color": "#2c333e", "metallic": 0, "roughness": 0.78, "emission": 0 },
+    { "row": 1, "column": 0, "role": "steel", "color": "#81a2a9", "metallic": 1, "roughness": 0.2, "emission": 0 },
+    { "row": 1, "column": 1, "role": "neutral-metal", "color": "#596a7a", "metallic": 0.88, "roughness": 0.36, "emission": 0 },
+    { "row": 1, "column": 2, "role": "paint-red", "color": "#b3261e", "metallic": 0.45, "roughness": 0.35, "emission": 0 },
+    { "row": 2, "column": 0, "role": "light-metal", "color": "#b3b9b4", "metallic": 1, "roughness": 0.15, "emission": 0 },
+    { "row": 2, "column": 1, "role": "dark-metal", "color": "#1f2021", "metallic": 0.82, "roughness": 0.3, "emission": 0 },
+    { "row": 2, "column": 2, "role": "emissive-void", "color": "#000000", "metallic": 0, "roughness": 0.5, "emission": 0 }
+  ],
+  "packedChannels": {
+    "reflection": { "red": "metallic", "green": "roughness", "blue": "emission-strength" },
+    "paintMasks": { "green": "paint-primary", "blue": "paint-secondary" }
+  },
+  "confidence": "consensus"
+}

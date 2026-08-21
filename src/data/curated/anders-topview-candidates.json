@@ -440,19 +440,25 @@
       },
       "componentRole": "primary-or-standalone",
       "parentGroupId": null,
-      "identityStatus": "class-identified",
+      "identityStatus": "identified",
       "identity": "Build_SmelterMk1_C",
-      "assetId": null,
+      "assetId": "Golden_Build_SmelterMk1_C_Anders2023",
       "buildingClasses": [
         "Build_SmelterMk1_C"
       ],
       "role": "building",
       "variant": null,
-      "approvedCropPx": null,
-      "confidence": "consensus",
+      "approvedCropPx": {
+        "x": 1932,
+        "y": 3560,
+        "width": 680,
+        "height": 428
+      },
+      "confidence": "verified",
       "sources": [
         "anders-assets-2023",
-        "scripts/analyze-topview-sheets.py"
+        "scripts/analyze-topview-sheets.py",
+        "current-game-smelter-visual-cross-check"
       ],
       "openQuestion": null
     },
@@ -2793,18 +2799,19 @@
       "componentIds": [
         "Sheet_00.png#16"
       ],
-      "identityStatus": "class-identified",
+      "identityStatus": "identified",
       "identity": "Build_SmelterMk1_C",
-      "assetId": null,
+      "assetId": "Golden_Build_SmelterMk1_C_Anders2023",
       "buildingClasses": [
         "Build_SmelterMk1_C"
       ],
       "role": "building",
       "variant": null,
-      "confidence": "consensus",
+      "confidence": "verified",
       "sources": [
         "anders-assets-2023",
-        "scripts/analyze-topview-sheets.py"
+        "scripts/analyze-topview-sheets.py",
+        "current-game-smelter-visual-cross-check"
       ],
       "openQuestion": null
     },

@@ -71,6 +71,30 @@ SHA-256은 `FF333B8848DD9E3FD0027776613A639EC6160D42B597A4531ADA61D0B9E56A57`이
    Ambient Occlusion을 곱해 조명 없이 형태와 재질을 읽히게 한다.
 7. 결과 장면에는 실제 광원을 사용하지 않았고, 깊이감은 가짜 조명과 필요 시 피사계 심도 모사로 만든다.
 
+[초기 Blender 재질 연구 게시물](https://www.reddit.com/r/SatisfactoryGame/comments/q5619z/)의 Anders 본문·댓글과
+원본 2560×1400 작업 화면 두 장은 최종 셰이더의 더 구체적인 단서를 제공한다.
+
+- 작업 파일은 `MaterialStudy.blend`, Blender 2.93.4, EEVEE다. 작업 화면에는 정적·스켈레탈 메시,
+  `Ground`, 정사영 카메라와 `Sun` 객체가 있고 EEVEE Ambient Occlusion·Bloom이 활성화돼 있다.
+- Anders가 밝힌 공용 재질은 도색 1·2, 빨강, 흰색, 강철, 회색 금속, 어두운 금속, 고무의 8개 기본
+  재질과 출력·입력·용융 금속·흰색의 4개 발광, 그리고 Void다. UV는 3×3 계열 아틀라스를 사용하고
+  Anders는 이를 합성 텍스처로 만들었다.
+- 동일 UV에 서로 다른 색이 매핑돼 보이는 문제에 대해 Anders는 게임의 `TX_Hologram_01`을 보면 재질
+  인덱스 구조를 알 수 있다고 직접 안내했다.
+- 기계 아래 그림자는 `Ground`의 Transparent BSDF 색에 Ambient Occlusion을 연결하고, 더 강한 그림자가
+  필요하면 AO 노드를 여러 개 결합하는 방식이다. Cycles shadow catcher 제안에는 당시 EEVEE 미지원과
+  Blender 2.93.4 Cycles 메모리 문제를 이유로 쓰지 않았다고 답했다.
+
+현재 게임 설치본에서 `TX_Hologram_01`, `ColorAtlas_Alb`, `PanelAtlas_Nor`를 추출해 확인했다.
+`TX_Hologram_01`은 실제 3×3 단색 셀이고, 제련기 정적 메시의 공용 재질에 연결하면 파츠별 흰색·주황·
+금속·고무 UV 분류가 복원된다. 이 텍스처는 최종 색이 아니라 **재질 셀 인덱스 증거**로 사용하며,
+Anders의 기본 재질 색과 반사 특성을 셀별로 다시 합성한다.
+
+초기 `MaterialStudy.blend` 화면의 `Sun`과 한 달 뒤 3D 장면에서 Anders가 명시한 “광원·IBL 없음”은 서로
+다르다. 이를 한쪽이 틀렸다고 지우지 않는다. 초기 화면은 재질·형상 점검용 EEVEE 장면이고, 후속 장면은
+Glossy/Emission·Facing·AO로 실제 조명을 완전히 가짜화한 발전된 구성으로 해석한다. 골든 마스터는 두
+구성을 같은 제련기 표본으로 비교해 2023 배포 아틀라스와 더 가까운 쪽을 채택한다.
+
 [2023년 대안 자산팩](https://www.reddit.com/r/SatisfactoryGame/comments/12l586u/)은 제목에서 Blender 렌더임을
 명시한다. 게시물의 4096×4096 세 장과 Dropbox의 `Sheet_00`~`02`는 축소 정규화 오차 0으로 동일하며,
 파일 해시만 인코딩 차이로 다르다. `Texture 02.png`는 2021년 v1.1b 시트와 같은 방식으로 일치한다.
@@ -81,6 +105,74 @@ SHA-256은 `FF333B8848DD9E3FD0027776613A639EC6160D42B597A4531ADA61D0B9E56A57`이
 Blender에서 동일 정사영·재질·투명 배경 프리셋을 재현한다. 이 발견으로 누락 기기 렌더의 주 경로는
 Three.js 실시간 캡처보다 Blender 배치 렌더가 된다. Three.js는 랜딩 실시간 장면과 브라우저 검수용으로
 역할을 좁힌다.
+
+2026-08-21 헤드리스 파일럿은 다음을 재현했다.
+
+- Satisfactory 1.2 설치본은 UE 5.6.1, CL 502094이며 CUE4Parse가 아카이브 2개와 패키지 48,573건을
+  인덱싱했다.
+- FModel `7c86ee47ec2722152b735b7cb788686f6ea3e91a`에 고정된 CUE4Parse
+  `7afcbb323c9fd9445d5452856b18b1d732d2dccd`로 정적 메시, 스켈레탈/VAT 메시, 재질 JSON, 텍스처와
+  공용 생산 표시등을 glTF/PNG로 추출했다.
+- Blender 5.2.0 LTS 헤드리스 렌더에서 CUE4Parse glTF의 축 변환을 소스와 대조했다. 최종 좌표는
+  Unreal `(X,Y,Z)` m에 대해 Blender `(X,-Y,Z)` m다.
+- Blueprint CDO에서 생산 표시등 상대 위치·회전을 읽어 별도 메시를 결합했다. 임의의 녹색 점을 그림에
+  덧붙이지 않는다.
+- Anders가 설명한 `Albedo × Facing × AO → Emission` 무조명 구조를 재현하고, 게임 하드 클리어런스
+  XY 합집합에 흰 점유 코너를 생성했다. `scripts/topview/render-topview.py`가 이 렌더 단계를 재현한다.
+
+첫 파일럿의 단일 청회색 팔레트와 생산 표시등 재질 전체를 녹색으로 만든 방식은 폐기했다. 표시등의 실제
+Albedo와 ReflectionMap을 복원해 회색 하우징을 유지하고 ReflectionMap B 채널의 원형 렌즈 링만 녹색
+상태 발광으로 사용한다. 색·그림자도 원 제작자 근거를 확인하기 전 임의 후처리로 보정하지 않는다.
+
+[Satisfactory Modeling Tools](https://github.com/DavidHGillen/Satisfactory_ModelingTools)의
+`SF_CommonParts.blend`를 Blender 5.2에서 헤드리스로 열어 공용 PBR 노드 계약을 확인했다. Reflection
+텍스처는 R=Metallic, G=Roughness, B=Emission Strength이고, Masks G/B는 Albedo와 1·2차 도색 색을
+혼합하며 DirectX normal을 연결한다. 저장소 커밋은 `69d8c65666cb4a7b37e0f02705c74659398d42e5`다.
+
+[UModel Tools Next](https://github.com/dotm5/UModel_Tools_Next) 커밋
+`86d7cff79f9f0c6bd46fe6567c81c9b715cc3b2e`에 Satisfactory 전용 TOML 규칙을 더해 현재
+`MI_SK_Smelter.json`을 파일럿했다. 일반 규칙은 Albedo와 DirectX normal만 5노드·4링크로 복원했지만,
+Satisfactory 규칙은 Albedo, AOMasks R, normal, Reflection R/G/B를 10노드·11링크로 복원했다. 따라서
+이 후보는 통째로 채택하거나 기각하는 대신 FModel JSON 어댑터, TOML 규칙, normal 변환, packed mask,
+노드 테스트를 각각 흡수한다.
+
+교정 표본은 제련기다. 2023 Blender 원본 `Sheet_00.png#16`을 별도 골든으로 승인했다. 이 자산은
+원본 `(1932,3560,680×428)` 크롭을 -90° 회전한 428×680 RGBA이며, 흰 코너 프레임은 384×640px라
+비율이 0.600이다. 반면 현재 게임 하드 박스와 [공식 위키](https://satisfactory.wiki.gg/wiki/Smelter)는
+5×10m, 비율 0.500이다. 골든에서 포트 전면의 수직면과 세 개 발광 슬롯이 보이므로 완전 수직이 아닌
+기울어진 정사영이다. 긴 축이 `cos θ`만큼 압축됐다고 보면 `0.500/0.600=0.8333`, 즉 전면 방향 틸트는
+약 33.557°다. 2022년 커뮤니티 자료의 6×9m 기록은 당시 치수 인식이 달랐다는 보조 증거지만, 현재
+프레임 차이는 정사영 틸트로 직접 설명되므로 이를 1순위 가설로 둔다. 원 `.blend`의 카메라 값은 아직
+없어 `consensus`다.
+
+따라서 골든의 원시 픽셀 비율을 현재 평면 치수로 오해하거나 후보를 가로로 늘리지 않는다. 색·금속·파이프·발광·AO·그림자는 기계 시각 본체를
+정규화한 **스타일 비교**로 보고, 실제 축척·점유·포트는 현재 게임 하드 박스와 CDO를 사용하는 **기하
+비교**로 분리한다. 현재 입력은 Y=-3m, 출력은 Y=+2m이고 Blueprint 표시등은 Unreal 좌표
+`(-1.0034,-4.1429,2.8498)`m다.
+
+사용자가 현재 게임에서 직접 제공한 탑·양 측면·양 끝면 5장과 아이소메트릭 4장을 별도 기하 대조군으로
+등록했다. 앞의 원본 해상도는 1217×618, 1082×945, 971×817, 573×791, 494×769이고 아이소메트릭은
+999×1105, 910×1048, 1029×1116, 895×837이다. SHA-256은
+`scripts/topview/golden-cases.json`에 기록했다. 실제 탑뷰는 화구와 캐비닛이 붙어 있고 은색 파이프 4개,
+코일형 전력 연결부, 긴 주황 상태등, 앞·뒤 포트 프레임이 모두 존재함을 보여 준다. 미변형 VAT 후보처럼
+큰 빈 공간이나 분리된 부품이 생기면 즉시 조립 실패다.
+
+아홉 장은 모두 인게임 원근투영 캡처다. 탑뷰에 가까운 첫 장도 평행투영이 아니므로 토대·기계 픽셀
+비율을 미터로 환산하지 않는다. 부품 존재, 부착 면·높이, 상대 위치, 재질·발광, 조립 오류 판정에만
+사용한다. 실축·점유·포트는 게임 하드 박스와 CDO가 정본이고 최종 이미지는 Blender 정사영 카메라로
+렌더한다.
+
+첫 후보 결과는 다음과 같다. 수치는 이미지 바이트가 아니라 게임 메시와 하드 박스에서 계산한다.
+
+| 클래스 | 하드 점유영역 | 시각 메시 경계 | 판정 |
+|---|---:|---:|---|
+| `Build_MinerMk1_C` | 6×14 m | 6.6285×14.2832×19.9810 m | 외형이 점유 코너 밖으로 일부 돌출하는 실제 관계를 보존한 후보 |
+| `Build_GeneratorBiomass_Automated_C` | 8×8 m | 8.3344×7.5158×7.8476 m | 현재 자동화 연소기 실루엣과 표시등을 결합한 후보 |
+
+두 자산은 구조·출처·해시는 검증했지만 복합 Anders 도면 안에서의 그림자·밀도 비교 전이므로
+`candidate`다. FModel/CUE4Parse 현 의존 그래프의 `Microsoft.Bcl.Memory 9.0.0`에는
+`GHSA-73j8-2gch-69rq` 고위험 권고가 남아 있다. 로컬 읽기 전용 파일럿 외의 정식 추출 도구에는 패치된
+버전 강제 또는 상류 수정이 선행돼야 한다.
 
 ### 2.3 전수 이미지 분석
 
@@ -111,12 +203,13 @@ Three.js 실시간 캡처보다 Blender 배치 렌더가 된다. Three.js는 랜
 | 원본 | 개수 | 상태 |
 |---|---:|---|
 | Anders 시트 크롭 | 19 | 17건 `approved`, 컨베이어 리프트 방향 변형 2건 `candidate` |
-| 게임 설치본 메시 렌더 | 2 | 채굴기·자동화 바이오매스 연소기 `candidate`; Anders와 다른 시각 프로파일 |
+| 게임 설치본 메시 렌더 | 2 | 채굴기·자동화 바이오매스 연소기 `candidate`; Anders 제작 원리를 재현한 Blender 프로파일 |
 
-게임 메시 후보는 `Build_MinerMk1_C`, `Build_GeneratorBiomass_Automated_C`다. Anders 시트의 91개
-후보를 전수 식별하기 전에 빈 항목을 채우려고 게임 메시를 렌더한 결과다. 후보 표시만 했더라도 플래너
-실사용 자산으로 연결한 것은 승인 절차 위반이다. 과거 게임 메시 리프트 자산은 제거하고 Anders 원본
-방향 변형으로 교체했다.
+게임 메시 후보는 `Build_MinerMk1_C`, `Build_GeneratorBiomass_Automated_C`다. 최초 Three.js 임시 렌더는
+Anders와 다른 시각 프로파일이어서 폐기했고, 현재 파일은 Blender 5.2.0 LTS에서 실제 정적·동적 메시,
+재질, 생산 표시등과 하드 점유영역을 다시 결합한 후보로 교체했다. 플래너에 실사용할 수 있다는 뜻의
+`approved` 승격은 복합 도면 비교 뒤에만 한다. 과거 게임 메시 리프트 자산은 제거하고 Anders 원본 방향
+변형으로 교체했다.
 
 사용자 대조와 시트 시각 판독으로 `Texture 02.png`의 21번과 33번이 컨베이어 리프트의 독립 탑뷰
 변형임을 확인했다. 21번은 `(2052, 3140, 308×248)`, 33번은 `(2064, 3600, 284×224)` 크롭이다. 두
@@ -134,6 +227,9 @@ Three.js 실시간 캡처보다 Blender 배치 렌더가 된다. Three.js는 랜
    모델링한다.
 7. 누락 자산을 새로 렌더할 때는 Anders의 흰 `ㄴ`형 코너를 네 방향에 합성하고 코너 안쪽 사각형과
    게임 하드 박스·`occupancyFrame`의 픽셀 오차를 검사한다.
+8. 제련기를 골든 마스터로 완성하기 전에는 다른 게임 메시 자산을 양산하지 않는다. 원 제작자·유사
+   구현·게임 공용 재질 근거를 먼저 소진하고, 근거 없는 팔레트·그림자·후처리는 제품 파이프라인에
+   채택하지 않는다.
 
 ### 2.6 완성 도면 문맥 분석
 
@@ -253,6 +349,45 @@ Satisfactory Ops는 공간 자동 배치를 제공하지 않으므로 최적 위
 | [Three.js](https://github.com/mrdoob/three.js) | 웹 3D·현재 메시 후보 렌더 | 113k별, r184, MIT | Blender 기준 렌더와 시점·재질·그림자·알파 품질 비교 |
 | Blender headless | 결정적 오프라인 정사영 렌더 | Python 자동화·Cycles/EEVEE | 전체 클래스 일괄 렌더, 동일 카메라·광원·색 관리·재실행 시간 |
 
+### 5.1 3D·재질·검수 생태계 레이더
+
+GitHub API 직접 조회일은 2026-08-21이다. 별 수는 인기 지표일 뿐 능력 폐기 기준이 아니다.
+
+| 원 저장소 | 별 | 최근 push | 라이선스 | 흡수할 능력과 형태 |
+|---|---:|---|---|---|
+| [MCPBlender/blender-mcp](https://github.com/MCPBlender/blender-mcp) | 26,110 | 2026-08-16 | MIT | MCP 장면·재질 검사 명령과 반복 작업 인터페이스 `adapt-pattern`; GUI/Computer Use 없이 헤드리스 경로만 파일럿 |
+| [DLR-RM/BlenderProc](https://github.com/DLR-RM/BlenderProc) | 3,678 | 2026-01-20 | GPL-3.0 | 결정적 카메라·재질·RGB/depth/normal/segmentation 배치 출력 `adapt-pattern`·`test` |
+| [EpicGamesExt/BlenderTools](https://github.com/EpicGamesExt/BlenderTools) | 3,264 | 2026-08-09 | MIT | Unreal↔Blender 축척·normal·애니메이션 계약 `reference`·`test` |
+| [Visual Regression Tracker](https://github.com/Visual-Regression-Tracker/Visual-Regression-Tracker) | 707 | 2026-08-07 | Apache-2.0 | pixelmatch·looks-same·odiff·VLM 기준선 이력 `adapt-pattern`·`monitor` |
+| [botero-dev/bl_datasmith](https://github.com/botero-dev/bl_datasmith) | 491 | 2026-02-10 | 개별 확인 | 장면 계층·재질 그래프·조명·카메라 변환 `reference` |
+| [reg-viz/reg-cli](https://github.com/reg-viz/reg-cli) | 418 | 2026-08-21 | MIT | 4K WASM/Rayon 이미지 diff와 작은 산출물 `test`·`integrate` 후보 |
+| [h4lfheart/UEFormat](https://github.com/h4lfheart/UEFormat) | 323 | 2026-08-14 | 개별 확인 | FModel/CUE4Parse→Blender 메시·애니메이션 중간 포맷 `monitor`·`pilot` |
+| [Waffle1434/Blender-UE4-Importer](https://github.com/Waffle1434/Blender-UE4-Importer) | 91 | 2023-11-22 | 개별 확인 | UE 재질 그래프 변환 노드 목록 `reference`; UE5 지원 불확실성은 해당 통합에만 한정 |
+| [AnimNyan/UEShaderScript](https://github.com/AnimNyan/UEShaderScript) | 70 | 2022-12-13 | GPL-2.0 | Unreal 셰이더 맵 프리셋·다중 재질 적용 UX `adapt-pattern` |
+| [Satisfactory Modeling Tools](https://github.com/DavidHGillen/Satisfactory_ModelingTools) | 18 | 2024-08-13 | 용도 제한 조건 | 공용 Factory 재질·데칼·UV·Substance·실제 `.blend` 노드 `reference`·`adapt-pattern`; 배포 사용은 별도 조건 확인 |
+| [BlenderKit/headless-blender-container](https://github.com/BlenderKit/headless-blender-container) | 16 | 2026-06-25 | 개별 확인 | Blender 다버전 헤드리스 CI 재현 `monitor` |
+| [dotm5/UModel_Tools_Next](https://github.com/dotm5/UModel_Tools_Next) | 3 | 2026-07-16 | GPL-3.0 | Blender 5.2/FModel JSON/packed mask/normal/노드 테스트 `adapt-code`·`adapt-pattern`·`test` |
+
+### 5.2 다축 점수와 조사 배분
+
+점수는 [[capability-evaluation-method-2026]]의 결과 가치/증거/복잡성/레버리지/조사 배분 순서다.
+복잡성은 감점하지 않고 더 많은 파일럿 자원을 배정한다. 동일 제련기 파일럿을 수행하지 않은 후보는 증거
+점수의 실제 표본 30점과 동등 비교 20점을 얻지 못한다.
+
+| 능력 묶음 | 가치 | 증거 | 복잡성 | 레버리지 | 조사 배분 | 현재 처리 |
+|---|---:|---:|---:|---:|---:|---|
+| Blender 5.2 헤드리스+Anders 셰이더 재구성 | 94 | 82 | 72 | 94 | 61 | 골든 마스터 핵심; AO Ground·Bloom·fake lighting 비교 |
+| FModel/CUE4Parse 추출 | 88 | 89 | 76 | 92 | 58 | 이미 통합한 메시·CDO·텍스처를 재질 파이프라인과 연결 |
+| UModel Tools Next 재질 규칙 | 79 | 83 | 64 | 88 | 54 | 제련기 파일럿 통과; 코드·TOML·normal·테스트 능력 흡수 |
+| Satisfactory Modeling Tools 공용 재질 | 72 | 76 | 58 | 80 | 52 | `.blend` 노드와 UV/데칼/Substance 규칙 흡수, 배포 조건 별도 확인 |
+| BlenderProc 배치 렌더 패턴 | 71 | 48 | 72 | 87 | 67 | RGB/depth/normal/ID 패스 파일럿 큐 |
+| UEFormat 중간 포맷 | 74 | 42 | 66 | 87 | 69 | glTF가 잃는 재질·애니메이션 정보 비교 파일럿 큐 |
+| Blender MCP 장면 검사 | 62 | 46 | 59 | 78 | 61 | GUI 조작은 쓰지 않고 MCP 명령 모델·검사 능력만 분석 |
+| reg-cli/VRT 시각 회귀 | 68 | 55 | 43 | 79 | 50 | 골든 마스터 4K/투명 알파/복합 도면 비교 능력 흡수 |
+
+주기 레이더는 매주 월요일 09:00에 실행한다. 변화 속도가 높은 AI/MCP·Blender 5.x·FModel/CUE4Parse와
+시각 회귀 도구는 주간 확인하고, 안정된 논문·표준은 주요 버전 또는 분기 단위로 다시 본다.
+
 점수는 동일 표본 파일럿 후 [[capability-evaluation-method-2026]] 기준으로 확정한다.
 
 게임 메시 신규 자산의 주 파이프라인은 `CUE4Parse/FModel → 클래스·메시·재질 추출 → Blender 정사영
@@ -260,11 +395,48 @@ Satisfactory Ops는 공간 자동 배치를 제공하지 않으므로 최적 위
 일치한다. Three.js는 동일 추출 메시를 사용하는 브라우저 3D 랜딩과 대화형 검수 장면에만 사용하며,
 정식 2D 탑뷰 산출의 정본으로 혼용하지 않는다.
 
+### 5.3 게임 패키지 전수 그래프와 파이프라인 교정
+
+개별 패키지를 필요할 때마다 수동 추적하는 방식은 Blueprint 계층, 간접 구성품, 재질 부모, VAT 상태를
+누락시켰다. 2026-08-21에 CUE4Parse로 관련 범위를 전수 순회해 다음 로컬 그래프를 생성했다.
+
+| 항목 | 수량 | 검증 |
+|---|---:|---|
+| 패키지 | 6,706 | 실패 0, NDJSON 행 수와 summary 일치 |
+| 재질 | 901 | 인스턴스 부모·스칼라·색·텍스처·스위치 보존 |
+| 구성품 | 3,809 | 상대 위치·회전·스케일·직접 메시·override material 보존 |
+| 객체 참조 | 54,868 | `/Game` ObjectPath 역참조 가능 |
+| 자동 건물 장면 계약 | 576 | `Build_*` Blueprint 구성품과 간접 Blueprint 메시 해석 |
+
+제련기 자동 계약은 현재형 VAT 본체, 정적 프레임, 생산 표시등, 사다리 상호작용, 입·출력, 전력 연결을
+동시에 보존한다. `BP_LadderComponent`와 `FGPowerConnectionComponent`는 별도 시각 메시가 아니라
+상호작용·연결 구성품이고, 보이는 사다리와 전력 하우징은 정적 프레임에 포함된다. 따라서 시각 메시와
+비시각 구성품을 같은 규칙으로 누락 판정하지 않는다.
+
+현재 제련기 Idle 재질은 `SM_VAT_Smelter_01`, `TX_Smelter_Idle_Pos/Quat`, `AnimationLength=1.266667`,
+`UpscaleANim=200`, `bAllowQuatDeformation=false`를 사용한다. Idle 위치/회전 텍스처는 1×9이며,
+VAT 메시에는 일반 UV 외에 부품 피벗·ID용 UV와 vertex color가 보존돼 있다. 구형 SK 프록시나 일반
+POS/Quat 세트를 현재 Idle 자세 대신 사용하지 않는다.
+
+공용 `TX2D_FactoryBase_BC`는 512×512×9 `Texture2DArray`다. 기본 ExportSession은 첫 슬라이스만
+PNG로 내보내므로 `DecodeTextureArray`를 사용하는 전용 명령으로 9개를 모두 추출한다. 정적 재질은
+고유 AO/도장 마스크, 공용 배열, 부모 재질의 주·보조 도장 색을 함께 복원해야 한다.
+
+[SideFX VAT 3.0 공식 문서](https://www.sidefx.com/docs/houdini/nodes/out/labs--vertex_animation_textures-3.0.html)는
+Rigid 모드가 4~6개 UV 채널을 요구하며 피벗 정확도와 Position/Rotation texture가 실시간 셰이더의
+핵심임을 명시한다. [공식 Unreal 5.6 가져오기 지침](https://github.com/sideeffects/SideFXLabs/blob/Development/unreal/5.6/VAT%20Import%20Settings%20Guide.txt)은
+vertex color를 Replace로 가져오고 normal/tangent를 보존하도록 요구한다. 따라서 VAT GLB의 추가 UV와
+vertex color를 장식 데이터로 버리지 않는다.
+
+조립 검수와 스타일 승인을 분리한다. 먼저 PBR·중립 스튜디오 조명에서 정적/VAT/표시등 격리 패스를
+확인하고, 모든 부품이 보인 뒤 Anders의 무조명 Facing·AO·Bloom 출력 프로파일을 적용한다. 사선
+평행투영은 Anders 골든의 외관 연구용이고, 런타임 탑뷰는 수직 정사영으로 고정한다.
+
 ## 6. 미해결 항목
 
 - Anders 91개 후보의 게임 클래스·부품 역할 전수 식별
 - 원 Figma 벡터 문서와 재배포·파생 사용 조건
-- 현재 Satisfactory 1.2 아카이브에서 FModel/CUE4Parse로 정적·애니메이션 메시·표시등·재질을 재현하는 추출 명령
+- VAT Idle 1×9 위치 텍스처의 부품 ID·피벗 적용이 원시 기본 자세에 주는 미세 차이
 - 게임 1.2 기준 벨트·파이프·리프트 최소 길이와 곡률의 원본 근거
 - Anders 21·33번의 상·하단 및 입·출력 방향 의미와 실제 메시·점유·깊이 모델
 - ISO 10628 등 유료 표준에서 공개적으로 확인 가능한 적용 범위와 필요한 정식 열람 범위

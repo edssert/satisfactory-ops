@@ -22,11 +22,19 @@ const manifestPath = resolve(root, 'src/data/curated/topview-assets.json');
 const candidateCatalogPath = resolve(root, 'src/data/curated/anders-topview-candidates.json');
 const layoutCorpusPath = resolve(root, 'src/data/curated/anders-layout-corpus.json');
 const redditArchivePath = resolve(root, 'src/data/curated/anders-reddit-posts.json');
+const goldenCasesPath = resolve(root, 'scripts/topview/golden-cases.json');
+const materialProfilePath = resolve(root, 'scripts/topview/satisfactory-material-profile.json');
+const sceneRoot = resolve(root, 'scripts/topview/scenes');
 const strictVisual = process.argv.includes('--strict-visual');
 const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
 const candidateCatalog = JSON.parse(readFileSync(candidateCatalogPath, 'utf8'));
 const layoutCorpus = JSON.parse(readFileSync(layoutCorpusPath, 'utf8'));
 const redditArchive = JSON.parse(readFileSync(redditArchivePath, 'utf8'));
+const goldenCases = JSON.parse(readFileSync(goldenCasesPath, 'utf8'));
+const materialProfile = JSON.parse(readFileSync(materialProfilePath, 'utf8'));
+const sceneRecipes = readdirSync(sceneRoot)
+  .filter((name) => name.endsWith('.json'))
+  .map((name) => ({ path: resolve(sceneRoot, name), data: JSON.parse(readFileSync(resolve(sceneRoot, name), 'utf8')) }));
 const errors = [];
 const warnings = [];
 
@@ -42,7 +50,7 @@ const ids = new Set();
 const paths = new Set();
 const usedFiles = new Set();
 const buildingProfiles = new Map();
-const allowedRoles = new Set(['building', 'foundation', 'transport-part', 'transport-direction']);
+const allowedRoles = new Set(['building', 'foundation', 'transport-part', 'transport-direction', 'golden-reference']);
 const allowedReview = new Set(['candidate', 'approved', 'rejected', 'superseded']);
 
 for (const asset of manifest.assets) {
@@ -64,7 +72,17 @@ for (const asset of manifest.assets) {
   else {
     usedFiles.add(absolute);
     const sha256 = createHash('sha256').update(readFileSync(absolute)).digest('hex');
+    if (asset.sha256 && asset.sha256 !== sha256) errors.push(`${asset.assetId}: SHA-256 불일치`);
     process.stdout.write(`  ${asset.assetId.padEnd(44)} ${sha256.slice(0, 12)}  ${asset.reviewStatus}\n`);
+  }
+  if (asset.hardFootprintM && (![asset.hardFootprintM.width, asset.hardFootprintM.length].every(Number.isFinite) ||
+      asset.hardFootprintM.width <= 0 || asset.hardFootprintM.length <= 0)) {
+    errors.push(`${asset.assetId}: hardFootprintM 오류`);
+  }
+  if (asset.occupancyFrame) {
+    const { x, y, width, height } = asset.occupancyFrame;
+    if (![x, y, width, height].every(Number.isFinite) || x < 0 || y < 0 || width <= 0 || height <= 0 ||
+        x + width > 1.001 || y + height > 1.001) errors.push(`${asset.assetId}: occupancyFrame 오류`);
   }
   if (asset.buildingClass && asset.role === 'building') {
     buildingProfiles.set(asset.buildingClass, asset.visualProfile);
@@ -211,6 +229,106 @@ for (const asset of manifest.assets.filter((entry) => entry.sourceId === 'anders
   if (!candidateIds.has(candidateKey)) errors.push(`${asset.assetId}: Anders 후보 카탈로그 누락 ${candidateKey}`);
 }
 
+if (goldenCases.$schemaVersion !== 1 || !Array.isArray(goldenCases.cases) || !goldenCases.cases.length) {
+  errors.push('골든 사례 스키마/행 누락');
+} else {
+  for (const golden of goldenCases.cases) {
+    const asset = manifest.assets.find((entry) => entry.assetId === golden.assetId);
+    if (!asset || asset.role !== 'golden-reference' || asset.reviewStatus !== 'approved') {
+      errors.push(`${golden.id}: 승인 golden-reference asset 불일치`);
+    }
+    if (resolve(root, golden.reference) !== resolve(publicRoot, asset?.path ?? '')) {
+      errors.push(`${golden.id}: reference 경로 불일치`);
+    }
+    const current = golden.currentGameFootprintM;
+    if (!current || current.width / current.length !== current.ratio) errors.push(`${golden.id}: 현재 실축 비율 오류`);
+    const reference = golden.referenceFramePx;
+    if (!reference || Math.abs(reference.width / reference.height - reference.ratio) > 1e-9) {
+      errors.push(`${golden.id}: 골든 프레임 비율 오류`);
+    }
+    for (const control of golden.currentGameControls ?? []) {
+      if (!control.id || !control.view || !Number.isInteger(control.width) || control.width <= 0 ||
+          !Number.isInteger(control.height) || control.height <= 0 || !sha256Pattern.test(control.sha256 ?? '')) {
+        errors.push(`${golden.id}: 현재 게임 대조 이미지 메타데이터 오류 ${control.id}`);
+      }
+    }
+    if (golden.controlProjection !== 'perspective' || golden.metricMeasurement !== false ||
+        !golden.controlUse?.includes('assembly-error-detection')) {
+      errors.push(`${golden.id}: 인게임 원근 대조군 사용 범위 오류`);
+    }
+  }
+}
+
+if (materialProfile.$schemaVersion !== 1 || materialProfile.grid?.columns !== 3 || materialProfile.grid?.rows !== 3 ||
+    materialProfile.cells?.length !== 9) errors.push('Satisfactory 재질 프로파일 3×3 스키마 오류');
+for (const cell of materialProfile.cells ?? []) {
+  if (!/^#[0-9a-f]{6}$/i.test(cell.color ?? '') ||
+      ![cell.metallic, cell.roughness, cell.emission].every((value) => Number.isFinite(value) && value >= 0 && value <= 1)) {
+    errors.push(`재질 셀 오류 ${cell.row}:${cell.column}`);
+  }
+}
+
+const confidenceValues = new Set(['verified', 'consensus', 'disputed', 'unsourced']);
+const featureStatuses = new Set(['present', 'present-but-projection-pending', 'pending-final-validation']);
+for (const recipeEntry of sceneRecipes) {
+  const recipe = recipeEntry.data;
+  if (recipe.$schemaVersion !== 1 || !recipe.id || !recipe.buildingClass) {
+    errors.push(`${relative(root, recipeEntry.path)}: 장면 레시피 식별/스키마 오류`);
+    continue;
+  }
+  const footprint = recipe.footprint;
+  if (!footprint || ![footprint.widthM, footprint.lengthM, footprint.heightM].every((value) => Number.isFinite(value) && value > 0) ||
+      !confidenceValues.has(footprint.confidence)) {
+    errors.push(`${recipe.id}: 실축 점유영역 오류`);
+  }
+  const componentIds = new Set();
+  let enabledBodies = 0;
+  for (const component of recipe.components ?? []) {
+    if (!component.id || componentIds.has(component.id)) errors.push(`${recipe.id}: 구성품 중복/빈 ID ${component.id}`);
+    componentIds.add(component.id);
+    if (!['body', 'production-indicator', 'metadata-only', 'excluded'].includes(component.renderMode)) {
+      errors.push(`${recipe.id}/${component.id}: renderMode=${component.renderMode}`);
+    }
+    if (!confidenceValues.has(component.confidence)) errors.push(`${recipe.id}/${component.id}: confidence=${component.confidence}`);
+    if (component.renderMode !== 'excluded' && component.enabled !== false) enabledBodies += component.renderMode === 'body' ? 1 : 0;
+    const sourcePath = component.path ? resolve(root, component.path) : null;
+    if (component.renderMode !== 'metadata-only' && sourcePath && !existsSync(sourcePath)) warnings.push(`${recipe.id}/${component.id}: 로컬 추출 메시 없음 ${component.path}`);
+    if (component.renderMode !== 'excluded' && (!Array.isArray(component.transform) || component.transform.length !== 4 ||
+        !component.transform.every(Number.isFinite))) {
+      errors.push(`${recipe.id}/${component.id}: transform은 [x,y,z,yaw]여야 함`);
+    }
+    if (component.renderMode === 'excluded' && !component.reason) errors.push(`${recipe.id}/${component.id}: 제외 근거 누락`);
+  }
+  if (!enabledBodies) errors.push(`${recipe.id}: 활성 본체 메시 없음`);
+  for (const [channel, mappings] of Object.entries(recipe.materials ?? {})) {
+    if (!['albedo', 'ao', 'normal', 'reflection', 'stateMask'].includes(channel)) continue;
+    for (const [materialName, rawPath] of Object.entries(mappings)) {
+      if (!materialName || typeof rawPath !== 'string') errors.push(`${recipe.id}: ${channel} 재질 매핑 오류`);
+      else if (!existsSync(resolve(root, rawPath))) warnings.push(`${recipe.id}: ${channel}/${materialName} 로컬 텍스처 없음`);
+    }
+  }
+  const featureIds = new Set();
+  for (const feature of recipe.assemblyFeatures ?? []) {
+    if (!feature.id || featureIds.has(feature.id)) errors.push(`${recipe.id}: 조립 특징 중복/빈 ID ${feature.id}`);
+    featureIds.add(feature.id);
+    if (feature.owner !== 'renderer' && !componentIds.has(feature.owner)) errors.push(`${recipe.id}/${feature.id}: 없는 owner ${feature.owner}`);
+    if (!featureStatuses.has(feature.status)) errors.push(`${recipe.id}/${feature.id}: status=${feature.status}`);
+  }
+  const incomplete = (recipe.assemblyFeatures ?? []).filter((feature) => feature.status !== 'present');
+  if (incomplete.length) warnings.push(`${recipe.id}: 골든 비교 게이트 미통과 ${incomplete.map((feature) => feature.id).join(', ')}`);
+  if (!['orthographic-top', 'orthographic-oblique'].includes(recipe.camera?.projection) || !Number.isFinite(recipe.camera?.frontTiltDeg)) {
+    errors.push(`${recipe.id}: 카메라 투영 계약 오류`);
+  }
+  if (recipe.camera?.projection === 'orthographic-top' && recipe.camera.frontTiltDeg !== 0) {
+    errors.push(`${recipe.id}: 런타임 수직 탑뷰는 frontTiltDeg=0이어야 함`);
+  }
+  if (recipe.referenceComparisonCamera &&
+      (recipe.referenceComparisonCamera.projection !== 'orthographic-oblique' || !Number.isFinite(recipe.referenceComparisonCamera.frontTiltDeg))) {
+    errors.push(`${recipe.id}: 연구용 사선 비교 카메라 계약 오류`);
+  }
+  if (!recipe.lighting?.groundAo || typeof recipe.lighting?.bloom !== 'boolean') errors.push(`${recipe.id}: 조명/AO 계약 오류`);
+}
+
 for (const file of walk(assetRoot)) {
   if (!usedFiles.has(file)) errors.push(`매니페스트에 없는 런타임 자산: ${relative(publicRoot, file)}`);
 }
@@ -229,6 +347,8 @@ if (errors.length) {
 for (const warning of warnings) process.stderr.write(`WARN  ${warning}\n`);
 if (strictVisual && warnings.length) process.exit(3);
 process.stdout.write(`PASS  탑뷰 ${manifest.assets.length}건 · 파일/출처/경로 구조 일치\n`);
+process.stdout.write(`PASS  Blender 장면 레시피 ${sceneRecipes.length}건 · 구성품/재질/카메라/조명 계약 일치\n`);
 process.stdout.write(`PASS  Anders 연결 성분 ${candidateCatalog.components.length}건 → 의미 자산 그룹 ${candidateCatalog.groups.length}건 · 소속/박스/식별 상태 일치\n`);
 process.stdout.write(`PASS  Anders 도면 코퍼스 ${layoutCorpus.layouts.length}건 · 출처 ${layoutCorpus.sources.length}건 · 매체 ${layoutCorpus.media.length}건 · 해시/참조 일치\n`);
 process.stdout.write(`PASS  Anders Reddit 원출처 ${redditPostIds.size}건 · 이미지 ${archivedRedditMedia}건 보관 · 미확보 ${unavailableRedditMedia}건 명시\n`);
+process.stdout.write(`PASS  탑뷰 골든 ${goldenCases.cases.length}건 · 3×3 재질 셀 ${materialProfile.cells.length}건 · 스타일/현재 기하 분리\n`);

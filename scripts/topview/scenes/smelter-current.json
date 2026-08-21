@@ -1,0 +1,141 @@
+{
+  "$schemaVersion": 1,
+  "id": "smelter-current-cl-502094",
+  "buildingClass": "Build_SmelterMk1_C",
+  "status": "assembly-in-progress",
+  "geometryAuthority": "game-install-cl-502094",
+  "sourceBlueprint": ".tmp-research/cue4parse-pilot/inspect/Build_SmelterMk1.uasset.json",
+  "footprint": {
+    "widthM": 5,
+    "lengthM": 10,
+    "heightM": 8.5,
+    "centerM": [0, 0],
+    "confidence": "verified"
+  },
+  "components": [
+    {
+      "id": "static-frame",
+      "renderMode": "body",
+      "path": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Mesh/SmelterMk1_static.glb",
+      "transform": [-5.478708e-8, -0.3, 0, 179.99995],
+      "source": "Build_SmelterMk1_C.FGColoredInstanceMeshProxy",
+      "confidence": "verified",
+      "contains": ["static-frame", "ports", "feet", "ladder", "decal-surfaces"]
+    },
+    {
+      "id": "current-vat-idle-body",
+      "renderMode": "body",
+      "path": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Mesh/SM_VAT_Smelter_01.glb",
+      "transform": [0, 0.000004880058, 0.05, 0.00004438202],
+      "source": "Build_SmelterMk1_C.FGVertexAnimatedMesh_GEN_VARIABLE",
+      "materialOverride": "MI_VAT_Smelter_Idle",
+      "pose": "exported-base-pose; idle 1x9 VAT offset validation pending",
+      "confidence": "verified",
+      "contains": ["furnace-vessel", "rear-cabinet", "four-polished-pipes", "coil", "top-panels", "hazard-trim"]
+    },
+    {
+      "id": "production-indicator",
+      "renderMode": "production-indicator",
+      "path": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/-Shared/ProductionIndicator/Mesh/SM_ProductionLight_01.glb",
+      "transform": [1.00342896, -4.1428882, 2.849815, 180],
+      "source": "Build_SmelterMk1_C.BP_ProductionIndicatorInstanced_GEN_VARIABLE",
+      "confidence": "verified",
+      "contains": ["indicator-housing", "indicator-lens", "indicator-cap"]
+    },
+    {
+      "id": "ladder-interaction",
+      "renderMode": "metadata-only",
+      "enabled": false,
+      "transform": [1.8999951, -3.2000027, 2.65, 0.00062069343],
+      "source": "Build_SmelterMk1_C.BP_LadderComponent_GEN_VARIABLE",
+      "confidence": "verified",
+      "contains": ["climb-interaction-volume"],
+      "note": "보이는 사다리 형상은 static-frame에 포함되고 이 Blueprint 구성품은 상호작용 영역이다."
+    },
+    {
+      "id": "legacy-skeletal-reference",
+      "renderMode": "excluded",
+      "enabled": false,
+      "path": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Mesh/SK_SmelterMk1.glb",
+      "reason": "현재 Blueprint는 SM_VAT_Smelter_01을 사용한다. 구형 골격 메시는 형상 연구 대조군으로만 유지한다.",
+      "confidence": "verified"
+    }
+  ],
+  "materials": {
+    "albedo": {
+      "MI_SK_Smelter": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Texture/TX_SK_Smelter_01_BC.png",
+      "MI_VAT_Smelter": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Texture/TX_SK_Smelter_01_BC.png",
+      "MI_SmelterMk1_01": ".cache/game-asset-export/factory-base-bc-slices/TX2D_FactoryBase_BC-slice-00.png",
+      "MI_ProdLight": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/-Shared/ProductionIndicator/Textures/TX_ProductionLight_01_Albedo.png",
+      "DecalColor_Masked": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Alb.png"
+    },
+    "ao": {
+      "MI_SK_Smelter": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Texture/TX_SK_Smelter_01_AOMasks.png",
+      "MI_VAT_Smelter": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Texture/TX_SK_Smelter_01_AOMasks.png",
+      "MI_SmelterMk1_01": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Texture/TX_SmelterMk1_static_AO.png"
+    },
+    "normal": {
+      "MI_SK_Smelter": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Texture/TX_SK_Smelter_01_N.png",
+      "MI_VAT_Smelter": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Texture/TX_SK_Smelter_01_N.png",
+      "DecalColor_Masked": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Nor.png",
+      "Decal_Normal": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/PanelAtlas_Nor.png"
+    },
+    "reflection": {
+      "MI_SK_Smelter": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Texture/TX_SK_Smelter_01_Refl.png",
+      "MI_VAT_Smelter": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Texture/TX_SK_Smelter_01_Refl.png",
+      "MI_ProdLight": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/-Shared/ProductionIndicator/Textures/TX_ProductionLight_01_Reflection.png"
+    },
+    "stateMask": {
+      "MI_ProdLight": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/-Shared/ProductionIndicator/Textures/TX_ProductionLight_01_Reflection.png"
+    },
+    "paint": {
+      "MI_SK_Smelter": { "primary": "#fa9549", "secondary": "#4f5da4" },
+      "MI_VAT_Smelter": { "primary": "#fa9549", "secondary": "#4f5da4" },
+      "MI_SmelterMk1_01": { "primary": "#fa9549", "secondary": "#4f5da4" }
+    },
+    "alpha": [],
+    "pbr": ["MI_VAT_Smelter", "MI_SmelterMk1_01", "DecalColor_Masked", "Decal_Normal"],
+    "emissiveAccent": ["MI_VAT_Smelter", "DecalColor_Masked"],
+    "state": { "color": "#ff5b2e", "strength": 5 }
+  },
+  "camera": {
+    "projection": "orthographic-top",
+    "frontTiltDeg": 0,
+    "displayYawDeg": 0,
+    "source": "runtime planner assets require metric top-down projection",
+    "confidence": "verified"
+  },
+  "referenceComparisonCamera": {
+    "projection": "orthographic-oblique",
+    "frontTiltDeg": 33.5573,
+    "purpose": "Anders 2023 골든의 외관 연구 전용이며 런타임 탑뷰 생성에는 사용하지 않는다.",
+    "confidence": "consensus"
+  },
+  "lighting": {
+    "groundAo": true,
+    "aoLayers": 3,
+    "bloom": true,
+    "sun": true,
+    "method": "조립 검수는 원본 PBR 채널과 태양광/AO, Anders 스타일화는 별도 최종 프로파일",
+    "confidence": "verified"
+  },
+  "assemblyFeatures": [
+    { "id": "furnace-vessel", "owner": "current-vat-idle-body", "status": "present", "controls": ["top", "isometric-a", "isometric-c"] },
+    { "id": "rear-cabinet", "owner": "current-vat-idle-body", "status": "present", "controls": ["top", "side-a", "side-b"] },
+    { "id": "four-polished-pipes", "owner": "current-vat-idle-body", "status": "present", "controls": ["top", "side-a", "isometric-c"] },
+    { "id": "ladder", "owner": "static-frame", "status": "present", "controls": ["side-b", "isometric-a"] },
+    { "id": "ladder-interaction", "owner": "ladder-interaction", "status": "present", "controls": ["game-blueprint-cdo"] },
+    { "id": "power-connector-housing", "owner": "static-frame", "status": "present", "controls": ["side-a", "side-b", "isometric-a"] },
+    { "id": "input-output-port-housings", "owner": "static-frame", "status": "present", "controls": ["end-a", "end-b", "top"] },
+    { "id": "production-indicator", "owner": "production-indicator", "status": "present", "controls": ["end-a", "isometric-a", "isometric-c"] },
+    { "id": "three-slot-lights", "owner": "current-vat-idle-body", "status": "present-but-projection-pending", "controls": ["end-a"] },
+    { "id": "occupancy-corners", "owner": "renderer", "status": "present", "controls": ["anders-golden"] },
+    { "id": "contact-shadow", "owner": "renderer", "status": "pending-final-validation", "controls": ["anders-golden"] }
+  ],
+  "validation": {
+    "metricAuthority": ["footprint", "game-cdo-transforms"],
+    "perspectiveControls": ["component-presence", "relative-placement", "material-response", "assembly-errors"],
+    "comparisonGate": "all assemblyFeatures must be present and material/camera/lighting checks must pass before golden comparison",
+    "runtimeProjectionInvariant": "orthographic-top with frontTiltDeg=0"
+  }
+}
