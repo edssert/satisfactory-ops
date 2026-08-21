@@ -114,6 +114,8 @@ export interface ValidationIssue {
     | 'ROUTE_ENDPOINT'
     | 'ROUTE_SEGMENT_LENGTH'
     | 'ROUTE_TURN_RADIUS'
+    | 'ROUTE_INCLINE'
+    | 'ROUTE_TURN_INCLINE'
     | 'LIFT_HEIGHT'
     | 'PORT_DIRECTION'
     | 'PORT_MEDIUM'

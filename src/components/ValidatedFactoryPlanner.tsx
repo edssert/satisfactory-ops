@@ -16,6 +16,7 @@ import {
 } from '../domain/factory/editor-state';
 import { drawingPixelSize, factoryDrawingBounds, type DrawingBounds } from '../domain/factory/drawing-bounds';
 import { routeAroundMachines } from '../domain/factory/route';
+import { transportPathParts } from '../domain/factory/transport-geometry';
 import { validateFactoryPlan } from '../domain/factory/validate';
 import type {
   Box3,
@@ -52,6 +53,10 @@ export interface DrawingRecipe {
 interface Props {
   machines: DrawingMachine[];
   beltImageUrl: string;
+  beltTurnImageUrl: string;
+  beltDirectionImageUrl: string;
+  pipeImageUrl: string;
+  pipeTurnImageUrl: string;
   liftImageUrl: string;
   foundationImageUrl: string;
   proof: {
@@ -247,37 +252,6 @@ function svgPoint(svg: SVGSVGElement, event: PointerEvent): Vec3 {
   };
 }
 
-function routePath(points: Vec3[]): string {
-  return points.map((point, index) => `${index ? 'L' : 'M'} ${point.x} ${point.y}`).join(' ');
-}
-
-interface BeltSegment { x: number; y: number; z: number; length: number; angle: number }
-
-function beltSegments(points: Vec3[]): BeltSegment[] {
-  return points.slice(1).flatMap((point, index) => {
-    const start = points[index];
-    const dx = point.x - start.x;
-    const dy = point.y - start.y;
-    const length = Math.hypot(dx, dy);
-    if (length <= .02) return [];
-    return [{
-      x: (start.x + point.x) / 2,
-      y: (start.y + point.y) / 2,
-      z: (start.z + point.z) / 2,
-      length,
-      angle: Math.atan2(dy, dx) * 180 / Math.PI,
-    }];
-  });
-}
-
-function liftSegments(points: Vec3[]) {
-  return points.slice(1).flatMap((point, index) => {
-    const start = points[index];
-    if (Math.abs(start.x - point.x) > .02 || Math.abs(start.y - point.y) > .02 || Math.abs(start.z - point.z) <= .02) return [];
-    return [{ x: point.x, y: point.y, lowZ: Math.min(start.z, point.z), highZ: Math.max(start.z, point.z), height: Math.abs(point.z - start.z) }];
-  });
-}
-
 function rerouteTransports(routes: TransportRoute[], placements: Placement[]): TransportRoute[] {
   return routes.map((route) => {
     const fromPlacement = placements.find((placement) => placement.id === route.from.placementId);
@@ -309,7 +283,17 @@ function syncTransportRates(routes: TransportRoute[], placements: Placement[]): 
   });
 }
 
-export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftImageUrl, foundationImageUrl, proof }: Props) {
+export default function ValidatedFactoryPlanner({
+  machines,
+  beltImageUrl,
+  beltTurnImageUrl,
+  beltDirectionImageUrl,
+  pipeImageUrl,
+  pipeTurnImageUrl,
+  liftImageUrl,
+  foundationImageUrl,
+  proof,
+}: Props) {
   const byClass = useMemo(() => new Map(machines.map((machine) => [machine.buildingClass, machine])), [machines]);
   const [placements, setPlacements] = useState<Placement[]>([]);
   const [foundations, setFoundations] = useState<FoundationTile[]>([]);
@@ -963,17 +947,19 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
   }
 
   function renderSolidRoute(route: TransportRoute, elevated: boolean) {
-    const segments = beltSegments(route.pathM).filter((segment) => elevated ? segment.z > 2.1 : segment.z <= 2.1);
+    const parts = transportPathParts(route.pathM);
+    const segments = parts.belts.filter((segment) => elevated ? segment.center.z > 2.1 : segment.center.z <= 2.1);
+    const turns = parts.turns.filter((turn) => elevated ? turn.at.z > 2.1 : turn.at.z <= 2.1);
     if (!segments.length) return null;
-    const labelSegment = segments[Math.floor(segments.length / 2)];
+    const labelSegment = segments.reduce((longest, segment) => !longest || segment.planarLengthM > longest.planarLengthM ? segment : longest, undefined as (typeof segments)[number] | undefined);
     return (
       <g class={`vp-route is-solid${elevated ? ' is-elevated' : ''}`} key={`${route.id}-${elevated ? 'high' : 'low'}`} aria-label="컨베이어 벨트">
         {segments.map((segment, segmentIndex) => (
-          <g class="vp-belt-segment" transform={`translate(${segment.x} ${segment.y}) rotate(${segment.angle})`}>
-            <rect x={-segment.length / 2} y="-1.05" width={segment.length} height="2.1" rx=".7" class="vp-belt-frame" />
-            {Array.from({ length: Math.ceil(segment.length / 2) }, (_, tileIndex) => {
-              const startX = -segment.length / 2 + tileIndex * 2;
-              const tileWidth = Math.min(2, segment.length - tileIndex * 2);
+          <g class="vp-belt-segment" transform={`translate(${segment.center.x} ${segment.center.y}) rotate(${segment.angleDeg})`} key={`${route.id}-belt-${segmentIndex}`}>
+            <rect x={-segment.planarLengthM / 2} y="-1.05" width={segment.planarLengthM} height="2.1" rx=".7" class="vp-belt-frame" />
+            {Array.from({ length: Math.ceil(segment.planarLengthM / 2) }, (_, tileIndex) => {
+              const startX = -segment.planarLengthM / 2 + tileIndex * 2;
+              const tileWidth = Math.min(2, segment.planarLengthM - tileIndex * 2);
               return tileWidth > 0 ? (
                 <image
                   key={`${segmentIndex}-${tileIndex}`}
@@ -987,29 +973,53 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
                 />
               ) : null;
             })}
-            <path d={`M ${-segment.length / 2} -.88 H ${segment.length / 2} M ${-segment.length / 2} .88 H ${segment.length / 2}`} class="vp-belt-rail" />
-            <path d={`M ${-segment.length / 2 + .5} 0 H ${segment.length / 2 - .5}`} class="vp-belt-motion" />
+            <path d={`M ${-segment.planarLengthM / 2} -.88 H ${segment.planarLengthM / 2} M ${-segment.planarLengthM / 2} .88 H ${segment.planarLengthM / 2}`} class="vp-belt-rail" />
+            {segment.planarLengthM >= 2.5 && (
+              <image href={beltDirectionImageUrl} x="-.42" y="-.62" width=".84" height="1.24" transform="rotate(90)" class="vp-belt-direction" />
+            )}
           </g>
         ))}
-        {route.pathM.slice(1, -1).filter((point) => elevated ? point.z > 2.1 : point.z <= 2.1).map((point) => <circle cx={point.x} cy={point.y} r="1.02" class="vp-belt-joint" />)}
-        {layers.flow && labelSegment && route.flowPerMinute > 0 && (
-          <g class="vp-route-label" transform={`translate(${labelSegment.x} ${labelSegment.y - 1.7})`}>
+        {turns.map((turn, index) => (
+          <g class="vp-belt-turn" transform={`translate(${turn.at.x} ${turn.at.y}) rotate(${turn.assetRotationDeg})`} key={`${route.id}-turn-${index}`}>
+            <image href={beltTurnImageUrl} x="-2" y="-2" width="4" height="4" preserveAspectRatio="none" />
+          </g>
+        ))}
+        {layers.flow && !elevated && labelSegment && route.flowPerMinute > 0 && (
+          <g class="vp-route-label" transform={`translate(${labelSegment.center.x} ${labelSegment.center.y - 1.7})`}>
             <rect x="-4.5" y="-.7" width="9" height="1.4" rx=".24" />
-            <text>{itemNames.get(route.itemId) ?? route.itemId} · {fmt(route.flowPerMinute)}/분{elevated ? ` · Z +${fmt(labelSegment.z)} m` : ''}</text>
+            <text>{itemNames.get(route.itemId) ?? route.itemId} · {fmt(route.flowPerMinute)}/분</text>
           </g>
         )}
       </g>
     );
   }
 
-  function renderFluidRoute(route: TransportRoute) {
-    const labelPoint = route.pathM[Math.floor(route.pathM.length / 2)];
+  function renderFluidRoute(route: TransportRoute, elevated: boolean) {
+    const parts = transportPathParts(route.pathM);
+    const segments = parts.belts.filter((segment) => elevated ? segment.center.z > 2.1 : segment.center.z <= 2.1);
+    const turns = parts.turns.filter((turn) => elevated ? turn.at.z > 2.1 : turn.at.z <= 2.1);
+    const labelSegment = segments.reduce((longest, segment) => !longest || segment.planarLengthM > longest.planarLengthM ? segment : longest, undefined as (typeof segments)[number] | undefined);
+    if (!segments.length) return null;
     return (
-      <g class="vp-route is-fluid" key={route.id} aria-label="파이프라인">
-        <path d={routePath(route.pathM)} class="vp-route-shell" />
-        <path d={routePath(route.pathM)} class="vp-route-core" />
-        {layers.flow && labelPoint && route.flowPerMinute > 0 && (
-          <g class="vp-route-label" transform={`translate(${labelPoint.x} ${labelPoint.y - 1.9})`}>
+      <g class={`vp-route is-fluid${elevated ? ' is-elevated' : ''}`} key={`${route.id}-${elevated ? 'high' : 'low'}`} aria-label="파이프라인">
+        {segments.map((segment, segmentIndex) => (
+          <g class="vp-pipe-segment" transform={`translate(${segment.center.x} ${segment.center.y}) rotate(${segment.angleDeg})`} key={`${route.id}-pipe-${segmentIndex}`}>
+            {Array.from({ length: Math.ceil(segment.planarLengthM / 4) }, (_, tileIndex) => {
+              const startX = -segment.planarLengthM / 2 + tileIndex * 4;
+              const tileWidth = Math.min(4, segment.planarLengthM - tileIndex * 4);
+              return tileWidth > 0 ? (
+                <image key={`${segmentIndex}-${tileIndex}`} href={pipeImageUrl} x={startX - .02} y="-1.22" width={tileWidth + .04} height="2.44" preserveAspectRatio="none" />
+              ) : null;
+            })}
+          </g>
+        ))}
+        {turns.map((turn, index) => (
+          <g class="vp-pipe-turn" transform={`translate(${turn.at.x} ${turn.at.y}) rotate(${turn.assetRotationDeg})`} key={`${route.id}-pipe-turn-${index}`}>
+            <image href={pipeTurnImageUrl} x="-2" y="-2" width="4" height="4" preserveAspectRatio="none" />
+          </g>
+        ))}
+        {layers.flow && !elevated && labelSegment && route.flowPerMinute > 0 && (
+          <g class="vp-route-label" transform={`translate(${labelSegment.center.x} ${labelSegment.center.y - 1.9})`}>
             <rect x="-5.4" y="-.7" width="10.8" height="1.4" rx=".24" />
             <text>{itemNames.get(route.itemId) ?? route.itemId} · {fmt(route.flowPerMinute)} m³/분</text>
           </g>
@@ -1019,14 +1029,14 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
   }
 
   function renderLift(route: TransportRoute) {
-    return liftSegments(route.pathM).map((lift, index) => (
+    return transportPathParts(route.pathM).lifts.map((lift, index) => (
       <g class="vp-lift" transform={`translate(${lift.x} ${lift.y})`} key={`${route.id}-lift-${index}`}>
-        <rect x="-1.35" y="-2.1" width="2.7" height="4.2" rx=".45" class="vp-lift-bed" />
-        <image href={liftImageUrl} x="-1.6" y="-2.4" width="3.2" height="4.8" preserveAspectRatio="xMidYMid meet" />
+        <rect x="-1.1" y="-1.1" width="2.2" height="2.2" rx=".28" class="vp-lift-bed" />
+        <image href={liftImageUrl} x="-1.18" y="-1.18" width="2.36" height="2.36" preserveAspectRatio="xMidYMid meet" />
         {layers.elevation && (
-          <g class="vp-lift-label" transform="translate(0 -2.7)">
+          <g class="vp-lift-label" transform="translate(0 -1.65)">
             <rect x="-2.25" y="-.65" width="4.5" height="1.3" rx=".22" />
-            <text>리프트 {fmt(lift.height)} m · Z +{fmt(lift.highZ)} m</text>
+            <text>리프트 {fmt(lift.heightM)} m · Z +{fmt(lift.highZ)} m</text>
           </g>
         )}
       </g>
@@ -1172,7 +1182,7 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
               </g>
             ))}
 
-            {layers.logistics && transports.map((route) => route.medium === 'solid' ? renderSolidRoute(route, false) : renderFluidRoute(route))}
+            {layers.logistics && transports.map((route) => route.medium === 'solid' ? renderSolidRoute(route, false) : renderFluidRoute(route, false))}
 
             {layers.machines && [...placements].sort((a, b) => a.positionM.z - b.positionM.z).map((placement) => {
               const spec = byClass.get(placement.spec.buildingClass)!;
@@ -1232,7 +1242,7 @@ export default function ValidatedFactoryPlanner({ machines, beltImageUrl, liftIm
                 </g>
               );
             })}
-            {layers.logistics && transports.filter((route) => route.medium === 'solid').map((route) => renderSolidRoute(route, true))}
+            {layers.logistics && transports.map((route) => route.medium === 'solid' ? renderSolidRoute(route, true) : renderFluidRoute(route, true))}
             {layers.logistics && transports.filter((route) => route.medium === 'solid').flatMap((route) => renderLift(route))}
             {placementTool?.kind === 'foundation' && ghostPoint && (
               <g class="vp-placement-ghost">

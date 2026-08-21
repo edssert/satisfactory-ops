@@ -71,6 +71,10 @@ function mount() {
   render(h(Planner, {
     machines,
     beltImageUrl: '/assets/conveyor.webp',
+    beltTurnImageUrl: '/assets/conveyor-turn.webp',
+    beltDirectionImageUrl: '/assets/conveyor-direction.webp',
+    pipeImageUrl: '/assets/pipe.webp',
+    pipeTurnImageUrl: '/assets/pipe-turn.webp',
     liftImageUrl: '/assets/lift.png',
     foundationImageUrl: '/assets/foundation.png',
     proof: { fileCount: 9, publicFileCount: 8, observationCount: 9933, toleranceM: .05 },

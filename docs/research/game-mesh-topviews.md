@@ -38,6 +38,7 @@ AndersPottemager 공개 시트에 없는 최신 설비를 원근 아이콘이나
 |---|---|---:|---:|
 | `Build_MinerMk1_C` | `MinerMk1_static`, `SK_MinerMk1` | 6.6285×14.2832×19.981 m | 6×14 m 복합 박스 |
 | `Build_GeneratorBiomass_Automated_C` | `GeneratorBiomass_static`, `SM_VA_GeneratorBiomass` | 8.3344×7.5158×6.9785 m | 8×8 m |
+| `Build_ConveyorLiftMk1_C` | `SM_ConveyorLift_Bottom_01` | 2.1300×2.1573×2.8958 m | 메시 경계 기반 2.2×2.2 m 작도 프레임 |
 
 메시 경계와 하드 박스가 다른 것은 오류가 아니다. 손잡이·난간·장식처럼 보이는 부분은 충돌 상자 밖으로
 나갈 수 있다. `src/data/curated/topview-assets.json`의 `occupancyFrame`은 1024px 렌더 안에서 하드 박스가
@@ -48,9 +49,15 @@ AndersPottemager 공개 시트에 없는 최신 설비를 원근 아이콘이나
 
 - `public/assets/topview/Build_MinerMk1_C.webp`
 - `public/assets/topview/Build_GeneratorBiomass_Automated_C.webp`
+- `public/assets/topview/Build_ConveyorLiftMk1_C.webp`
 - 배치 가능한 열 개 설비 모두 `imageKind: topview`로 렌더되어 원근 아이콘 폴백은 0건이다.
 - 파운데이션 여덟 장 위에 두 자산을 배치하고 `도면 맞춤`을 실행한 실브라우저 검사에서 콘솔 오류 0건,
   탑뷰 이미지 2/2건 로드를 확인했다.
+
+리프트는 `ConveyorLift_Connector`, `SM_ConveyorLift_Bottom_01`, `SM_ConveyorLift_Lift_01`,
+`SM_ConveyorLift_Top_01`, `SM_ConveyorLiftMid_MK1_01`을 각각 추출해 위에서 비교했다. 평면 점유를 가장
+완전하게 드러내는 하단 메시를 제품 자산으로 선택했다. CUE4Parse의 GLB에는 게임 페인트 셰이더가 없으므로
+`scripts/normalize-game-topview.py`가 원본 메시 명암과 발광 표식을 보존한 채 기본 금속 팔레트로 복원한다.
 
 ## 사용 조건
 

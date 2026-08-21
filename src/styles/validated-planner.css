@@ -139,6 +139,10 @@
 .vp-belt-frame { fill: var(--diagram-structure); stroke: var(--line-strong); stroke-width: .16; }
 .vp-route.is-elevated { filter: drop-shadow(0 1.1px .75px color-mix(in oklab, var(--diagram-shadow) 65%, transparent)); }
 .vp-belt-tile { pointer-events: none; }
+.vp-belt-direction,
+.vp-belt-turn image,
+.vp-pipe-segment image,
+.vp-pipe-turn image { pointer-events: none; }
 .vp-belt-rail { fill: none; stroke: var(--ink-3); stroke-width: .14; }
 .vp-belt-motion { fill: none; stroke: var(--status-warning); stroke-width: .18; stroke-dasharray: .65 .9; animation: vp-belt-flow 1.2s linear infinite; }
 .vp-belt-joint { fill: var(--diagram-structure); stroke: var(--line-strong); stroke-width: .18; }
@@ -149,7 +153,7 @@
 .vp-route-label text,
 .vp-lift-label text { fill: var(--ink-1); font: 700 .48px var(--font-mono); text-anchor: middle; dominant-baseline: central; }
 .vp-lift { pointer-events: none; filter: drop-shadow(0 1.2px .8px color-mix(in oklab, var(--diagram-shadow) 68%, transparent)); }
-.vp-lift-bed { fill: var(--diagram-structure); stroke: var(--status-warning); stroke-width: .18; }
+.vp-lift-bed { fill: var(--diagram-structure); stroke: var(--line-strong); stroke-width: .12; }
 .vp-lift image { pointer-events: none; }
 @keyframes vp-belt-flow { to { stroke-dashoffset: -1.55; } }
 @media (prefers-reduced-motion: reduce) { .vp-belt-motion { animation: none; } }

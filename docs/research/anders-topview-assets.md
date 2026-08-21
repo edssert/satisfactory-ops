@@ -10,7 +10,8 @@
 - 활용 튜토리얼: [A 10 min tutorial on making Satisfactory blueprints with Figma](https://www.reddit.com/r/SatisfactoryGame/comments/msq6pb/)
 
 제작자가 공개한 `Assets.zip`의 4096×4096 PNG 네 장을 분석했다. 저장소에는 전체 시트를 넣지 않고,
-게임 객체와 대조한 토대·생산 설비·저장고·분배기·병합기 열 개만 투명 WebP로 잘라 사용한다. 원본 시트와 자동 검출 미리보기는
+게임 객체와 대조한 토대·생산 설비·저장고·분배기·병합기뿐 아니라 컨베이어/파이프 직선·곡선·방향·접합부를
+투명 WebP로 잘라 사용한다. 원본 시트와 자동 검출 미리보기는
 `.tmp-research/`에만 둔다.
 
 ## 제품에서의 역할
@@ -33,3 +34,7 @@ python scripts/build-topview-assets.py .tmp-research/anders-assets public/assets
 
 자산 식별과 크롭 좌표는 `src/data/curated/topview-assets.json`에 있다. 자동 검출 결과만으로 새 객체를
 추가하지 않고 실제 게임 모델·포트 수·외곽 비율을 사람이 확인한다.
+
+현재 물류 자산 id는 `ConveyorBeltStraightMk1`, `ConveyorBeltTurn90Mk1`,
+`ConveyorDirectionForward`, `ConveyorDirectionReverse`, `PipelineStraightMk1`,
+`PipelineTurn90Mk1`, `PipelineJunctionCrossMk1`이다. 리프트는 이 시트에 없어 [[game-mesh-topviews|게임 원본 메시]]로 보완했다.

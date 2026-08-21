@@ -50,6 +50,12 @@ updated: 2026-08-21
 > 픽셀 예산은 `src/domain/factory/drawing-bounds.ts`, 브라우저 회귀는
 > `tests/planner-ui.test.ts`, 기하 회귀는 `tests/factory-domain.test.ts`가 맡는다.
 
+> [!success] 2026-08-21 물류 작도 체크포인트
+> 컨베이어·파이프는 실제 직선/90도 곡선 자산으로 이어지고, 방향 표식과 높은 구간의 깊이 순서를 갖는다.
+> 컨베이어 리프트는 게임 설치본의 Mk.1 메시를 정사영해 2.13×2.16m 경계로 교체했다. 0.5–56m 길이,
+> 35° 경사, 4–48m 리프트, 경사 중 회전을 독립 오류로 검증한다. 기하 분해는
+> `src/domain/factory/transport-geometry.ts`, 회귀는 `tests/factory-domain.test.ts`가 맡는다.
+
 ## 설계 결정
 
 - [[0025-validated-factory-domain|ADR-0025 검증된 공장 도메인]]

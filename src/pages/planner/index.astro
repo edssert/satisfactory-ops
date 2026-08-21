@@ -74,8 +74,12 @@ const machines: DrawingMachine[] = portsData.$completeBuildings.flatMap((buildin
     <ValidatedFactoryPlanner
       client:load
       machines={machines}
-      beltImageUrl={`${base}/assets/buildings/conveyor-belt-mk.1.webp`}
-      liftImageUrl={`${base}/assets/buildings-png/Build_ConveyorLiftMk1_C.png`}
+      beltImageUrl={`${base}/assets/topview/ConveyorBeltStraightMk1.webp`}
+      beltTurnImageUrl={`${base}/assets/topview/ConveyorBeltTurn90Mk1.webp`}
+      beltDirectionImageUrl={`${base}/assets/topview/ConveyorDirectionForward.webp`}
+      pipeImageUrl={`${base}/assets/topview/PipelineStraightMk1.webp`}
+      pipeTurnImageUrl={`${base}/assets/topview/PipelineTurn90Mk1.webp`}
+      liftImageUrl={`${base}/assets/topview/Build_ConveyorLiftMk1_C.webp`}
       foundationImageUrl={foundationTopview
         ? `${base}/assets/topview/Build_Foundation_8x1_01_C.webp`
         : `${base}/assets/buildings-png/Build_Foundation_8x1_01_C.png`}

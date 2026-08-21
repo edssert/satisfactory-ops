@@ -73,6 +73,7 @@ satisfactory-ops/
 │  │  ├─ editor-state.ts   편집 JSON v4 검증·직렬화·게임 스펙 재결합
 │  │  ├─ geometry.ts       하드 클리어런스·포트 좌표 변환
 │  │  ├─ route.ts          설비를 피하는 직교 물류 경로
+│  │  ├─ transport-geometry.ts  경로를 직선·곡선·리프트 작도 부품으로 분해
 │  │  └─ validate.ts       시공 발행 가능 여부 단일 게이트
 │  ├─ state/               사용자 데이터. 브라우저에서만 산다
 │  │  ├─ persist.ts        localStorage · 스키마 버전 · 마이그레이션 사다리

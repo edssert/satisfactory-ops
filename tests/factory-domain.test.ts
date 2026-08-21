@@ -6,6 +6,7 @@ import { isStoredPlan, restoreStoredPlan, toStoredPlan } from '../src/domain/fac
 import { portWorldPosition } from '../src/domain/factory/geometry.ts';
 import { routeAroundMachines } from '../src/domain/factory/route.ts';
 import { drawingSupported, requireMachineSpec } from '../src/domain/factory/specs.ts';
+import { transportPathParts } from '../src/domain/factory/transport-geometry.ts';
 import type { FactoryPlan, Placement } from '../src/domain/factory/types.ts';
 import { validateFactoryPlan } from '../src/domain/factory/validate.ts';
 import portRows from '../src/data/curated/machine-ports.json' with { type: 'json' };
@@ -150,6 +151,38 @@ test('도면 내보내기 경계는 실제 미터 축척과 고해상도 픽셀 
   assert.deepEqual(large, { width: 8192, height: 4096 });
 });
 
+test('물류 경로는 평면 벨트·90도 곡선·수직 리프트 부품으로 분해된다', () => {
+  const parts = transportPathParts([
+    { x: 0, y: 0, z: 1 },
+    { x: 4, y: 0, z: 1 },
+    { x: 4, y: 4, z: 1 },
+    { x: 4, y: 4, z: 9 },
+    { x: 8, y: 4, z: 9 },
+  ]);
+  assert.equal(parts.belts.length, 3);
+  assert.equal(parts.turns.length, 1);
+  assert.equal(parts.turns[0].assetRotationDeg, 270);
+  assert.equal(parts.turns[0].touchesIncline, false);
+  assert.equal(parts.lifts.length, 1);
+  assert.equal(parts.lifts[0].heightM, 8);
+});
+
+test('과경사와 경사 중 회전은 각각 시공 오류로 분리된다', () => {
+  const broken = structuredClone(validPlan);
+  broken.transports[0].pathM = [
+    portWorldPosition(smelter, output),
+    { x: 0, y: 6, z: 1 },
+    { x: 4, y: 6, z: 9 },
+    { x: 4, y: 10, z: 9 },
+    { x: 4, y: 10, z: 1 },
+    { x: 12, y: 10, z: 1 },
+    portWorldPosition(constructor, input),
+  ];
+  const codes = new Set(validateFactoryPlan(broken).issues.map((entry) => entry.code));
+  assert.equal(codes.has('ROUTE_INCLINE'), true);
+  assert.equal(codes.has('ROUTE_TURN_INCLINE'), true);
+});
+
 test('배치 가능한 설비는 원근 아이콘 폴백 없이 실제 탑뷰를 갖는다', () => {
   const assets = new Set(topviewRows.assets.map((entry) => entry.buildingClass));
   const materialConnected = new Set(portRows.ports
@@ -161,6 +194,23 @@ test('배치 가능한 설비는 원근 아이콘 폴백 없이 실제 탑뷰를
   for (const buildingClass of catalog) {
     assert.equal(existsSync(`public/assets/topview/${buildingClass}.webp`), true, buildingClass);
   }
+});
+
+test('물류 도면은 직선·회전·방향·파이프 자산을 빠짐없이 가진다', () => {
+  const required = [
+    'ConveyorBeltStraightMk1',
+    'ConveyorBeltTurn90Mk1',
+    'ConveyorDirectionForward',
+    'PipelineStraightMk1',
+    'PipelineTurn90Mk1',
+    'PipelineJunctionCrossMk1',
+  ];
+  const assetIds = new Set(topviewRows.assets.map((entry) => 'assetId' in entry ? entry.assetId : undefined));
+  for (const assetId of required) {
+    assert.equal(assetIds.has(assetId), true, assetId);
+    assert.equal(existsSync(`public/assets/topview/${assetId}.webp`), true, assetId);
+  }
+  assert.equal(existsSync('public/assets/topview/Build_ConveyorLiftMk1_C.webp'), true);
 });
 
 test('직교 라우터는 중간 설비의 하드 클리어런스를 우회한다', () => {

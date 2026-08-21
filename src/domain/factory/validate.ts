@@ -3,11 +3,12 @@ import {
   BELT_MAX_SEGMENT_M,
   BELT_MIN_SEGMENT_M,
   BELT_MIN_TURN_RADIUS_M,
+  BELT_MAX_INCLINE_DEG,
   isVerticalSegment,
   LIFT_MAX_HEIGHT_M,
   LIFT_MIN_HEIGHT_M,
-  segmentLength,
 } from './logistics.ts';
+import { transportPathParts } from './transport-geometry.ts';
 import type { FactoryPlan, Placement, PortReference, ValidationIssue, ValidationResult } from './types.ts';
 
 const EPSILON = 1e-6;
@@ -163,17 +164,23 @@ export function validateFactoryPlan(plan: FactoryPlan, options: FactoryValidatio
     if (!start || !end || distance(start, expectedStart) > 0.02 || distance(end, expectedEnd) > 0.02) {
       issues.push(issue('ROUTE_ENDPOINT', [route.id], '물류 경로 끝점이 실제 설비 포트 좌표에 접속하지 않습니다.'));
     }
-    route.pathM.slice(1).forEach((point, index) => {
-      const previous = route.pathM[index];
-      const lengthM = segmentLength(previous, point);
-      if (isVerticalSegment(previous, point)) {
-        if (lengthM < LIFT_MIN_HEIGHT_M - EPSILON || lengthM > LIFT_MAX_HEIGHT_M + EPSILON) {
-          issues.push(issue('LIFT_HEIGHT', [route.id], '컨베이어 리프트의 수직 높이는 4–48 m 범위여야 합니다.', { lengthM }));
-        }
-      } else if (lengthM < BELT_MIN_SEGMENT_M - EPSILON || lengthM > BELT_MAX_SEGMENT_M + EPSILON) {
-        issues.push(issue('ROUTE_SEGMENT_LENGTH', [route.id], '컨베이어 한 구간은 약 0.5–56 m 범위여야 합니다.', { lengthM }));
+    const parts = transportPathParts(route.pathM);
+    parts.lifts.forEach((part) => {
+      if (part.heightM < LIFT_MIN_HEIGHT_M - EPSILON || part.heightM > LIFT_MAX_HEIGHT_M + EPSILON) {
+        issues.push(issue('LIFT_HEIGHT', [route.id], '컨베이어 리프트의 수직 높이는 4–48 m 범위여야 합니다.', { lengthM: part.heightM }));
       }
     });
+    parts.belts.forEach((part) => {
+      if (part.lengthM < BELT_MIN_SEGMENT_M - EPSILON || part.lengthM > BELT_MAX_SEGMENT_M + EPSILON) {
+        issues.push(issue('ROUTE_SEGMENT_LENGTH', [route.id], '컨베이어 한 구간은 약 0.5–56 m 범위여야 합니다.', { lengthM: part.lengthM }));
+      }
+      if (part.slopeDeg > BELT_MAX_INCLINE_DEG + EPSILON) {
+        issues.push(issue('ROUTE_INCLINE', [route.id], '컨베이어 경사는 35°를 넘을 수 없습니다.', { slopeDeg: part.slopeDeg }));
+      }
+    });
+    if (parts.turns.some((part) => part.touchesIncline)) {
+      issues.push(issue('ROUTE_TURN_INCLINE', [route.id], '컨베이어는 평면 회전을 마친 뒤 별도 구간에서 높이를 바꿔야 합니다.'));
+    }
     for (let index = 1; index < route.pathM.length - 1; index += 1) {
       const before = route.pathM[index - 1];
       const middle = route.pathM[index];

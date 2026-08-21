@@ -28,7 +28,14 @@ def main() -> None:
 
     generated = []
     for asset in manifest["assets"]:
-        sheet_name = asset.get("sheet", manifest["$source"]["sheet"])
+        # 게임 설치본에서 직접 렌더한 항목은 이 크롭 파이프라인의 입력이 아니다.
+        if "cropPx" not in asset:
+            continue
+        source = manifest["$sources"][asset["sourceId"]]
+        sheet_name = asset.get("sheet", source["sheet"])
+        asset_id = asset.get("assetId", asset.get("buildingClass"))
+        if not asset_id:
+            raise SystemExit("buildingClass 또는 assetId가 없는 자산 항목")
         if sheet_name not in sheets:
             sheets[sheet_name] = Image.open(args.source_directory / sheet_name).convert("RGBA")
         sheet = sheets[sheet_name]
@@ -38,11 +45,11 @@ def main() -> None:
         image = sheet.crop((left, top, left + crop["width"], top + crop["height"]))
         alpha_box = image.getchannel("A").getbbox()
         if alpha_box is None:
-            raise SystemExit(f"투명하지 않은 자산 영역: {asset['buildingClass']}")
+            raise SystemExit(f"투명하지 않은 자산 영역: {asset_id}")
         image = image.crop(alpha_box)
-        output = args.output_directory / f"{asset['buildingClass']}.webp"
+        output = args.output_directory / f"{asset_id}.webp"
         image.save(output, "WEBP", lossless=True, quality=100, method=6)
-        generated.append({"buildingClass": asset["buildingClass"], "width": image.width, "height": image.height})
+        generated.append({"assetId": asset_id, "width": image.width, "height": image.height})
 
     print(json.dumps({"generated": generated}, ensure_ascii=False))
 

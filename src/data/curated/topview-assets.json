@@ -28,7 +28,15 @@
     { "buildingClass": "Build_StorageContainerMk1_C", "sourceId": "anders-2023", "candidateId": 4, "cropPx": { "x": 3520, "y": 172, "width": 384, "height": 684 }, "occupancyFrame": { "x": 0.0604, "y": 0, "width": 0.8791, "height": 0.9938 } },
     { "buildingClass": "Build_ConveyorAttachmentSplitter_C", "sourceId": "anders-2023", "candidateId": 18, "cropPx": { "x": 2512, "y": 3088, "width": 352, "height": 352 } },
     { "buildingClass": "Build_ConveyorAttachmentMerger_C", "sourceId": "anders-2023", "candidateId": 30, "cropPx": { "x": 2512, "y": 3536, "width": 352, "height": 352 } },
+    { "assetId": "ConveyorDirectionForward", "kind": "transport-direction", "sourceId": "anders-2023", "candidateId": 8, "cropPx": { "x": 348, "y": 2060, "width": 72, "height": 96 } },
+    { "assetId": "ConveyorDirectionReverse", "kind": "transport-direction", "sourceId": "anders-2023", "candidateId": 9, "cropPx": { "x": 540, "y": 2060, "width": 72, "height": 96 } },
+    { "assetId": "ConveyorBeltStraightMk1", "kind": "transport-part", "sourceId": "anders-2023", "candidateId": 11, "cropPx": { "x": 292, "y": 2284, "width": 184, "height": 168 } },
+    { "assetId": "ConveyorBeltTurn90Mk1", "kind": "transport-part", "sourceId": "anders-2023", "candidateId": 10, "cropPx": { "x": 484, "y": 2212, "width": 240, "height": 240 } },
+    { "assetId": "PipelineStraightMk1", "kind": "transport-part", "sourceId": "anders-2023", "candidateId": 19, "cropPx": { "x": 1184, "y": 3096, "width": 320, "height": 208 } },
+    { "assetId": "PipelineTurn90Mk1", "kind": "transport-part", "sourceId": "anders-2023", "candidateId": 22, "cropPx": { "x": 172, "y": 3176, "width": 172, "height": 172 } },
+    { "assetId": "PipelineJunctionCrossMk1", "kind": "transport-part", "sourceId": "anders-2023", "candidateId": 29, "cropPx": { "x": 704, "y": 3464, "width": 240, "height": 240 } },
     { "buildingClass": "Build_MinerMk1_C", "sourceId": "game-install-cl-502094", "renderPx": { "width": 1024, "height": 1024 }, "meshBoundsM": { "width": 6.6285, "length": 14.2832, "height": 19.981 }, "occupancyFrame": { "x": 0.3125, "y": 0.042, "width": 0.3751, "height": 0.8752 } },
-    { "buildingClass": "Build_GeneratorBiomass_Automated_C", "sourceId": "game-install-cl-502094", "renderPx": { "width": 1024, "height": 1024 }, "meshBoundsM": { "width": 8.3344, "length": 7.5158, "height": 6.9785 }, "occupancyFrame": { "x": 0.1063, "y": 0.0047, "width": 0.8571, "height": 0.8571 } }
+    { "buildingClass": "Build_GeneratorBiomass_Automated_C", "sourceId": "game-install-cl-502094", "renderPx": { "width": 1024, "height": 1024 }, "meshBoundsM": { "width": 8.3344, "length": 7.5158, "height": 6.9785 }, "occupancyFrame": { "x": 0.1063, "y": 0.0047, "width": 0.8571, "height": 0.8571 } },
+    { "buildingClass": "Build_ConveyorLiftMk1_C", "sourceId": "game-install-cl-502094", "renderPx": { "width": 512, "height": 512 }, "meshBoundsM": { "width": 2.13, "length": 2.1573, "height": 2.8958 }, "occupancyFrame": { "x": 0.0352, "y": 0.0352, "width": 0.9297, "height": 0.9297 } }
   ]
 }
