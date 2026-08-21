@@ -3,7 +3,7 @@
  * shoot.mjs — 빌드한 화면을 실제 브라우저로 열어 사진을 찍는다.
  *
  * 눈으로 못 보고 고치다가 같은 곳을 여러 번 틀렸다. 배포 전에 화면을 직접 본다.
- * 사용: node scripts/shoot.mjs <경로> [출력.png] [--w=1440] [--h=900] [--full] [--wait=ms] [--click=선택자]
+ * 사용: node scripts/shoot.mjs <경로> [출력.png] [--w=1440] [--h=900] [--full] [--reduce] [--nojs] [--wait=ms] [--click=선택자]
  */
 import { chromium } from 'playwright';
 import http from 'node:http';
@@ -23,6 +23,8 @@ const W = num('w', 1440);
 const H = num('h', 900);
 const WAIT = num('wait', 900);
 const FULL = argv.includes('--full');
+const REDUCE = argv.includes('--reduce');
+const NOJS = argv.includes('--nojs');
 const CLICK = argv.find((a) => a.startsWith('--click='))?.slice(8);
 
 const DIST = path.resolve('dist');
@@ -53,7 +55,12 @@ await new Promise((r) => server.listen(0, r));
 const port = server.address().port;
 
 const browser = await chromium.launch();
-const page = await browser.newPage({ viewport: { width: W, height: H }, deviceScaleFactor: 2 });
+const page = await browser.newPage({
+  viewport: { width: W, height: H },
+  deviceScaleFactor: 2,
+  javaScriptEnabled: !NOJS,
+  reducedMotion: REDUCE ? 'reduce' : 'no-preference',
+});
 const errs = [];
 page.on('console', (m) => m.type() === 'error' && errs.push(m.text()));
 page.on('pageerror', (e) => errs.push(String(e)));

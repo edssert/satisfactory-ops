@@ -62,6 +62,33 @@ async function openPage(options = {}) {
   return { context, page, runtimeErrors };
 }
 
+async function landingMotionState(page) {
+  return page.evaluate(() => {
+    const selectors = [
+      '[data-split-title]', '.hero-lede', '.hero-actions', '.hero-proof', '.hero-index',
+      '[data-reveal]', '.workflow-step', '.machine-rail', '.close-media',
+    ];
+    const hidden = selectors.flatMap((selector) => [...document.querySelectorAll(selector)]
+      .filter((node) => {
+        const style = getComputedStyle(node);
+        const rect = node.getBoundingClientRect();
+        return style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity) < 0.99 || rect.width === 0 || rect.height === 0;
+      })
+      .map((node) => `${selector}:${node.className}`));
+    const transformed = ['.hero-image', '.close-media', '.machine-rail', '.workflow-step']
+      .flatMap((selector) => [...document.querySelectorAll(selector)]
+        .filter((node) => getComputedStyle(node).transform !== 'none')
+        .map((node) => `${selector}:${getComputedStyle(node).transform}`));
+    return { hidden, transformed, pinSpacers: document.querySelectorAll('.pin-spacer').length };
+  });
+}
+
+function assertReducedLanding(state, label) {
+  assert(state.hidden.length === 0, `${label}에서 핵심 콘텐츠가 숨었습니다: ${state.hidden.join(', ')}`);
+  assert(state.transformed.length === 0, `${label}에서 이동·확대가 남았습니다: ${state.transformed.join(', ')}`);
+  assert(state.pinSpacers === 0, `${label}에 ScrollTrigger 핀 ${state.pinSpacers}개가 남았습니다.`);
+}
+
 try {
   const regular = await openPage();
   await regular.page.goto(`${origin}/guide/`, { waitUntil: 'networkidle' });
@@ -100,6 +127,12 @@ try {
   await regular.page.waitForTimeout(250);
   const afterBack = await regular.page.evaluate(() => window.scrollY);
   assert(Math.abs(afterBack - beforeNavigate) < 180, `뒤로가기 스크롤 복원이 어긋났습니다(${beforeNavigate} → ${afterBack}).`);
+
+  await regular.page.goto(`${origin}/`, { waitUntil: 'networkidle' });
+  assert((await landingMotionState(regular.page)).pinSpacers > 0, '일반 데스크톱 모드의 ScrollTrigger 핀이 생성되지 않았습니다.');
+  await regular.page.emulateMedia({ reducedMotion: 'reduce' });
+  await regular.page.waitForTimeout(250);
+  assertReducedLanding(await landingMotionState(regular.page), '실행 중 reduce 전환');
   assert(regular.runtimeErrors.length === 0, `일반 모드 콘솔 오류: ${regular.runtimeErrors.join(' | ')}`);
   await regular.context.close();
 
@@ -111,6 +144,9 @@ try {
   await reduced.page.waitForTimeout(100);
   const directTop = await reduced.page.locator(finalHref).evaluate((node) => node.getBoundingClientRect().top);
   assert(directTop >= 80 && directTop <= 125, `직접 해시 진입이 고정 헤더 아래에 정렬되지 않았습니다(top=${directTop}).`);
+
+  await reduced.page.goto(`${origin}/`, { waitUntil: 'networkidle' });
+  assertReducedLanding(await landingMotionState(reduced.page), 'reduce 최초 진입');
   assert(reduced.runtimeErrors.length === 0, `reduce 모드 콘솔 오류: ${reduced.runtimeErrors.join(' | ')}`);
   await reduced.context.close();
 
@@ -120,6 +156,8 @@ try {
   console.log('PASS  실행 중 prefers-reduced-motion 전환');
   console.log('PASS  뒤로가기 스크롤 복원');
   console.log('PASS  reduce 최초 진입과 직접 해시 진입');
+  console.log('PASS  reduce 랜딩 최종 상태와 ScrollTrigger 무핀 폴백');
+  console.log('PASS  실행 중 reduce 전환의 GSAP 정리');
 } finally {
   await browser.close();
   await new Promise((resolve) => server.close(resolve));

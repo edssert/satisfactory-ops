@@ -108,7 +108,7 @@ satisfactory-ops/
 
 | 화면 | 정적 HTML | 아일랜드 |
 |---|---|---|
-| 랜딩 | 8개 섹션 전부 | `QuickCalc` (히어로 계산 위젯) |
+| 랜딩 | 전 섹션·게임 데이터 집계·링크 | **없음**. GSAP/Lenis는 기존 HTML의 움직임만 향상 |
 | 마일스톤 | 페이지 골격 | `MilestoneChecklist` (SSR 후 하이드레이션 — JS 없어도 목록은 읽힌다) |
 | 시작 가이드 | 허브 표·티어1 계획·본문 | `StartPath`(설정·분기) · `SiteMap`(맵 팬줌·노드 계획) |
 | 공장 설계판 | 페이지 설명·근거 | `ValidatedFactoryPlanner`(직접 배치·연결·검증·편집 이력) |

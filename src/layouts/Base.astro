@@ -127,7 +127,13 @@ const nav = [
         syncTouch: false,
         prevent: (node) => node instanceof HTMLElement && Boolean(node.closest('[data-lenis-prevent]')),
       });
-      window.addEventListener('pagehide', () => lenis.destroy(), { once: true });
+      const scrollWindow = window as Window & { __sfopsLenis?: Lenis };
+      scrollWindow.__sfopsLenis = lenis;
+      window.dispatchEvent(new CustomEvent('sfops:lenis-ready', { detail: lenis }));
+      window.addEventListener('pagehide', () => {
+        if (scrollWindow.__sfopsLenis === lenis) delete scrollWindow.__sfopsLenis;
+        lenis.destroy();
+      }, { once: true });
     </script>
   </body>
 </html>

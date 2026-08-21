@@ -138,9 +138,9 @@ const workspaces = [
       </div>
 
       <div class="hero-index landing-shell" aria-label="데이터 범위">
-        <div><span>ITEMS</span><strong>{itemCount.toLocaleString('ko-KR')}</strong></div>
-        <div><span>RECIPES</span><strong>{recipeCount.toLocaleString('ko-KR')}</strong></div>
-        <div><span>BUILDINGS</span><strong>{buildingCount.toLocaleString('ko-KR')}</strong></div>
+        <div><span>ITEMS</span><strong data-tick={itemCount.toLocaleString('ko-KR')}>{itemCount.toLocaleString('ko-KR')}</strong></div>
+        <div><span>RECIPES</span><strong data-tick={recipeCount.toLocaleString('ko-KR')}>{recipeCount.toLocaleString('ko-KR')}</strong></div>
+        <div><span>BUILDINGS</span><strong data-tick={buildingCount.toLocaleString('ko-KR')}>{buildingCount.toLocaleString('ko-KR')}</strong></div>
         <p>게임 설치본 → 정규화 → 관계 검증 → 정적 발행</p>
       </div>
     </section>
@@ -268,6 +268,20 @@ const workspaces = [
 
     gsap.registerPlugin(ScrollTrigger, SplitText);
 
+    type LenisScrollSource = { on: (event: 'scroll', callback: () => void) => () => void };
+    const scrollWindow = window as Window & { __sfopsLenis?: LenisScrollSource };
+    let detachLenis: (() => void) | undefined;
+    const attachLenis = (lenis: LenisScrollSource) => {
+      detachLenis?.();
+      detachLenis = lenis.on('scroll', ScrollTrigger.update);
+    };
+    if (scrollWindow.__sfopsLenis) attachLenis(scrollWindow.__sfopsLenis);
+    else {
+      window.addEventListener('sfops:lenis-ready', (event) => {
+        attachLenis((event as CustomEvent<LenisScrollSource>).detail);
+      }, { once: true });
+    }
+
     const media = gsap.matchMedia();
     media.add(
       {
@@ -359,5 +373,9 @@ const workspaces = [
         return () => title.revert();
       },
     );
+    window.addEventListener('pagehide', () => {
+      detachLenis?.();
+      media.revert();
+    }, { once: true });
   </script>
 </Base>

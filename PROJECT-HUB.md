@@ -69,6 +69,12 @@ updated: 2026-08-21
 > 앱에서 키보드·해시·동적 축소 모션·뒤로가기 복원·직접 URL 진입을 Chromium으로 검증하며
 > `npm run verify`의 필수 단계다. 근거와 한계는 [[lenis-native-scroll-accessibility]]에 있다.
 
+> [!success] 2026-08-21 랜딩 점진 향상 체크포인트
+> 랜딩의 게임 집계값과 핵심 콘텐츠는 Astro HTML에 남고, GSAP·ScrollTrigger·SplitText는 표현만
+> 향상한다. Lenis 스크롤과 ScrollTrigger를 공식 방식으로 동기화하고 페이지 종료 때 구독과
+> matchMedia 컨텍스트를 정리한다. `test:nojs`와 확장된 `test:scroll`이 JS 비활성, reduce 최초 진입,
+> 실행 중 설정 전환을 검증한다. 근거는 [[landing-progressive-enhancement]]에 있다.
+
 ## 설계 결정
 
 - [[0025-validated-factory-domain|ADR-0025 검증된 공장 도메인]]
@@ -85,6 +91,7 @@ updated: 2026-08-21
 - [[design-web-2026]]
 - [[design-landing-craft]]
 - [[lenis-native-scroll-accessibility]]
+- [[landing-progressive-enhancement]]
 
 ## 완료 판정
 
