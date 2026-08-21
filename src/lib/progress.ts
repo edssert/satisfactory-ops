@@ -8,6 +8,8 @@
  * 게임 데이터와 사용자 데이터를 섞지 않는다(코딩 규약). 버전 필드를 둔다.
  */
 
+import { load as loadUnifiedState, saveNow, type UserState } from '../state/persist.ts';
+
 export const PROGRESS_KEY = 'sfops.progress';
 export const PROGRESS_VERSION = 1;
 
@@ -20,14 +22,28 @@ export interface ProgressSave {
   hours: number;
 }
 
-export function loadProgress(): ProgressSave | null {
+export function loadProgress(impliedPrerequisites: string[] = []): ProgressSave | null {
   if (typeof localStorage === 'undefined') return null;
   try {
+    const unified = loadUnifiedState().state;
     const raw = localStorage.getItem(PROGRESS_KEY);
-    if (!raw) return null;
+    if (!raw) {
+      let ids = withImpliedPrerequisites(unified.doneMilestones, impliedPrerequisites);
+      if (!ids.length && unified.setup.tutorialSkipped) ids = [...impliedPrerequisites];
+      if (!ids.length) return null;
+      syncUnifiedProgress(unified, ids);
+      return {
+        version: PROGRESS_VERSION,
+        ids,
+        session: '',
+        hours: 0,
+      };
+    }
     const s = JSON.parse(raw) as ProgressSave;
     if (s.version !== PROGRESS_VERSION || !Array.isArray(s.ids)) return null;
-    return s;
+    const ids = withImpliedPrerequisites(s.ids, impliedPrerequisites);
+    syncUnifiedProgress(unified, ids);
+    return { ...s, ids };
   } catch {
     return null;
   }
@@ -37,6 +53,7 @@ export function saveProgress(s: Omit<ProgressSave, 'version'>): void {
   if (typeof localStorage === 'undefined') return;
   try {
     localStorage.setItem(PROGRESS_KEY, JSON.stringify({ version: PROGRESS_VERSION, ...s }));
+    syncUnifiedProgress(loadUnifiedState().state, s.ids);
   } catch {
     /* 저장 공간이 없어도 가이드는 계속 읽을 수 있어야 한다 */
   }
@@ -46,7 +63,24 @@ export function clearProgress(): void {
   if (typeof localStorage === 'undefined') return;
   try {
     localStorage.removeItem(PROGRESS_KEY);
+    syncUnifiedProgress(loadUnifiedState().state, []);
   } catch {
     /* 무시 */
   }
+}
+
+function syncUnifiedProgress(state: UserState, ids: string[]): void {
+  const nextIds = [...new Set(ids.filter((id): id is string => typeof id === 'string'))];
+  if (
+    state.doneMilestones.length === nextIds.length
+    && state.doneMilestones.every((id, index) => id === nextIds[index])
+  ) return;
+  saveNow({ ...state, doneMilestones: nextIds });
+}
+
+/** 후속 마일스톤이 있으면 그 전에 끝내야 했던 HUB 단계도 완료로 복원한다. */
+function withImpliedPrerequisites(ids: string[], prerequisites: string[]): string[] {
+  const prerequisiteSet = new Set(prerequisites);
+  const hasLaterProgress = ids.some((id) => !prerequisiteSet.has(id));
+  return hasLaterProgress ? [...new Set([...prerequisites, ...ids])] : [...new Set(ids)];
 }

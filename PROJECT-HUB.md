@@ -60,7 +60,8 @@ updated: 2026-08-21
 > 진행 상태를 v2로 올리고 불리언 자원 설정을 `standard | randomized`로 명시했다. 통합 v1뿐 아니라
 > 단일 HTML의 `sops.progress.v1` v1/v2와 분리 저장된 `sfops.progress`·`sfops.owned`도 데이터 손실 없이
 > 최신 키로 병합한다. 이전 형식은 `tests/fixtures/`, 변환·미래 버전 거부·손상 백업 회귀는
-> `tests/persist.test.ts`가 고정한다.
+> `tests/persist.test.ts`가 고정한다. 실제 가이드의 `lib/progress.ts`가 같은 경계를 호출하므로
+> 테스트 전용 코드가 아니라 공개 번들에서 실행된다.
 
 ## 설계 결정
 

@@ -169,6 +169,10 @@ interface UserState {
 미래 버전인 입력은 억지로 정규화하지 않고 원문을 `sfops.v1.backup.<timestamp>`에 보존한다.
 `tests/fixtures/user-state-v1.json`, `legacy-progress-v2.json`이 공개된 이전 구조의 고정 증거이고
 `tests/persist.test.ts`가 변환·병합·미래 버전 거부·손상 백업을 검증한다.
+실제 `/guide/`가 사용하는 `lib/progress.ts`도 이 경계를 먼저 실행하며, 세이브에서 읽은 완료 ID와
+초기화 결과를 분리 키와 통합 키에 동시에 기록한다. 레거시 앱은 HUB 업그레이드를 저장하지 않았으므로
+후속 티어 마일스톤이 있으면 페이지가 게임 생성 데이터의 HUB ID 6개를 선행 완료로 보강한다. HUB 진행
+도중인 최신 세이브는 후속 마일스톤이 없으므로 이 추정을 적용하지 않는다.
 
 ### 공장 편집 계획 v4
 

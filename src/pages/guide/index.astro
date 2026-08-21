@@ -656,7 +656,10 @@ const steps = spine.steps.map((s) => ({
     </div>
   </div>
 
-  <script is:inline set:html={`window.__sfopsUnlocks=${JSON.stringify(saveUnlocks.map)}`}></script>
+  <script
+    is:inline
+    set:html={`window.__sfopsUnlocks=${JSON.stringify(saveUnlocks.map)};window.__sfopsHubIds=${JSON.stringify(hub.map((entry) => entry.id))}`}
+  ></script>
 
   <script>
     /*
@@ -675,11 +678,12 @@ const steps = spine.steps.map((s) => ({
     const where = document.querySelector('[data-prog-where]') as HTMLElement | null;
     const who = document.querySelector('[data-prog-who]') as HTMLElement | null;
     const clearBtn = document.querySelector('[data-prog-clear]') as HTMLElement | null;
+    const hubIds = (window as unknown as { __sfopsHubIds?: string[] }).__sfopsHubIds ?? [];
 
     const STAGE = { done: '끝남', now: '지금 여기', next: '앞으로' };
 
     function paint() {
-      const p = loadProgress();
+      const p = loadProgress(hubIds);
       const groups = [...document.querySelectorAll<HTMLElement>('[data-step][data-need]')];
       if (!p) {
         groups.forEach((g) => {
@@ -751,7 +755,9 @@ const steps = spine.steps.map((s) => ({
         where.textContent = nowId
           ? `지금 여기 — ${titles.get(nowId) ?? nowId}`
           : '모든 구간을 끝냈습니다';
-        who.textContent = `${p.session} · ${p.hours}시간 · 구간 ${doneCount}개 완료`;
+        who.textContent = p.session
+          ? `${p.session} · ${p.hours}시간 · 구간 ${doneCount}개 완료`
+          : `이전 앱에서 복원 · 구간 ${doneCount}개 완료`;
       }
     }
 

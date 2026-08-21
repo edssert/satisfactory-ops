@@ -12,11 +12,21 @@ import {
   migrateLegacyProgress,
   migrateUserState,
 } from '../src/state/persist.ts';
+import { clearProgress, loadProgress, saveProgress } from '../src/lib/progress.ts';
 
 const fixture = (name: string): string => readFileSync(
   new URL(`./fixtures/${name}`, import.meta.url),
   'utf8',
 );
+
+const HUB_IDS = [
+  'Schematic_Tutorial1_C',
+  'Schematic_Tutorial1_5_C',
+  'Schematic_Tutorial2_C',
+  'Schematic_Tutorial3_C',
+  'Schematic_Tutorial4_C',
+  'Schematic_Tutorial5_C',
+];
 
 class MemoryStorage implements Storage {
   #values = new Map<string, string>();
@@ -110,5 +120,40 @@ test('손상된 원문은 덮어쓰지 않고 별도 백업한 뒤 복구 상태
     assert.match(result.backupKey ?? '', /^sfops\.v1\.backup\.\d+$/);
     assert.equal(storage.getItem(result.backupKey!), raw);
     assert.equal(storage.getItem(STORAGE_KEY), raw);
+  });
+});
+
+test('실제 가이드의 세이브 진척 읽기 경로가 통합 상태를 함께 갱신한다', () => {
+  withStorage({}, (storage) => {
+    saveProgress({ ids: ['Schematic_4-5_C'], session: 'Pioneer', hours: 88 });
+    const progress = loadProgress();
+    assert.deepEqual(progress?.ids, ['Schematic_4-5_C']);
+    const unified = JSON.parse(storage.getItem(STORAGE_KEY)!);
+    assert.deepEqual(unified.doneMilestones, ['Schematic_4-5_C']);
+
+    clearProgress();
+    assert.equal(storage.getItem(SPLIT_PROGRESS_KEY), null);
+    assert.deepEqual(JSON.parse(storage.getItem(STORAGE_KEY)!).doneMilestones, []);
+  });
+});
+
+test('레거시 키만 있는 사용자도 실제 가이드에서 완료 구간을 돌려받는다', () => {
+  withStorage({ [LEGACY_PROGRESS_KEY]: fixture('legacy-progress-v2.json') }, () => {
+    const progress = loadProgress(HUB_IDS);
+    assert.deepEqual(progress?.ids, [...HUB_IDS, 'Schematic_1-1_C', 'Schematic_1-2_C']);
+    assert.equal(progress?.session, '');
+  });
+});
+
+test('튜토리얼 도중 저장은 아직 하지 않은 HUB 단계를 완료로 추정하지 않는다', () => {
+  withStorage({
+    [SPLIT_PROGRESS_KEY]: JSON.stringify({
+      version: 1,
+      ids: HUB_IDS.slice(0, 2),
+      session: 'Pioneer',
+      hours: 1,
+    }),
+  }, () => {
+    assert.deepEqual(loadProgress(HUB_IDS)?.ids, HUB_IDS.slice(0, 2));
   });
 });

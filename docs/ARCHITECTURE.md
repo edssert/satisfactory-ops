@@ -140,6 +140,8 @@ satisfactory-ops/
 실제로 사용한 `sops.progress.v1`, `sfops.progress`, `sfops.owned`도 최신 키가 없을 때 한 번 병합한다.
 가져오기와 브라우저 복원은 동일한 `migrateUserState()` 경계를 사용한다. 미래 버전 또는 손상 데이터는
 부분 복원으로 숨기지 않고 원문 백업 후 초기 상태로 격리한다.
+가이드의 실사용 `loadProgress/saveProgress/clearProgress`는 이 통합 경계를 호출해 세이브 진척과
+마이그레이션 상태가 갈라지지 않게 한다.
 
 ### 시공 도면 내보내기
 

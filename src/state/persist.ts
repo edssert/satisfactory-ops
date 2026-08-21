@@ -218,17 +218,25 @@ function normalize(data: unknown): UserState {
 
 let pending: ReturnType<typeof setTimeout> | null = null;
 
+/** 다른 영속 모듈과 상태를 원자적으로 맞출 때 쓰는 즉시 저장 경계. */
+export function saveNow(state: UserState): void {
+  if (typeof localStorage === 'undefined') return;
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      ...state,
+      schemaVersion: CURRENT_VERSION,
+      updatedAt: new Date().toISOString(),
+    }));
+  } catch {
+    /* 시크릿 모드·용량 초과. 앱은 계속 동작한다 */
+  }
+}
+
 /** 400ms 디바운스 저장. 체크박스 연타에 매번 직렬화하지 않는다. */
 export function save(state: UserState): void {
   if (typeof localStorage === 'undefined') return;
   if (pending) clearTimeout(pending);
-  pending = setTimeout(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...state, updatedAt: new Date().toISOString() }));
-    } catch {
-      /* 시크릿 모드·용량 초과. 앱은 계속 동작한다 */
-    }
-  }, 400);
+  pending = setTimeout(() => saveNow(state), 400);
 }
 
 /** 내보내기 (TRD D-4) */
