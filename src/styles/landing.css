@@ -83,7 +83,7 @@
     linear-gradient(to right, var(--hero-muted) 1px, transparent 1px),
     linear-gradient(to bottom, var(--hero-muted) 1px, transparent 1px);
   background-size: 64px 64px;
-  mask-image: linear-gradient(90deg, #000, transparent 78%);
+  mask-image: linear-gradient(90deg, var(--mask-solid), transparent 78%);
 }
 .hero-layout {
   display: grid;
@@ -150,7 +150,7 @@
 .hero-proof {
   border-top: 2px solid var(--primary);
   background: color-mix(in oklab, var(--hero-canvas) 84%, transparent);
-  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--hero-ink) 13%, transparent), 0 34px 100px rgb(0 0 0 / .34);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--hero-ink) 13%, transparent), var(--shadow-hero);
   backdrop-filter: blur(18px) saturate(1.2);
 }
 .proof-head,
@@ -256,7 +256,7 @@
 }
 .machine-portrait::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 35%, color-mix(in oklab, var(--primary) 12%, transparent), transparent 46%); }
 .machine-no { position: absolute; top: 16px; left: 16px; font-family: var(--font-mono); font-size: .7rem; color: var(--ink-3); }
-.machine-portrait img { position: relative; width: 100%; height: 250px; object-fit: contain; filter: drop-shadow(0 25px 24px rgb(0 0 0 / .28)); transition: transform .5s var(--ease); }
+.machine-portrait img { position: relative; width: 100%; height: 250px; object-fit: contain; filter: drop-shadow(var(--shadow-media)); transition: transform .5s var(--ease); }
 .machine-portrait:hover img { transform: translateY(-8px) scale(1.04); }
 .machine-portrait h3 { position: relative; margin: 0; font-size: 1.15rem; }
 .machine-portrait p { position: relative; margin: 7px 0 0; color: var(--ink-3); font-family: var(--font-mono); font-size: .68rem; letter-spacing: .05em; }

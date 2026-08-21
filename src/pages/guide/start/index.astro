@@ -235,8 +235,8 @@ const VERDICT: Record<string, { one: string; why: string }> = {
     /* 좁은 화면에서 표는 자기 상자 안에서만 굴린다. 오른쪽 끝을 흐리게 해 굴릴 수 있음을 알린다 */
     @media (max-width: 520px) {
       .page :global(.scroll-x) {
-        -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 16px), transparent);
-        mask-image: linear-gradient(to right, #000 calc(100% - 16px), transparent);
+        -webkit-mask-image: linear-gradient(to right, var(--mask-solid) calc(100% - 16px), transparent);
+        mask-image: linear-gradient(to right, var(--mask-solid) calc(100% - 16px), transparent);
       }
     }
 

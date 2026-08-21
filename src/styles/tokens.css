@@ -36,6 +36,7 @@
   --raw-ink-850: #19212c;
   --raw-ink-800: #202a37;
   --raw-ink-700: #344153;
+  --raw-ink-600: #59677b;
   --raw-ink-500: #748196;
   --raw-ink-400: #98a4b5;
   --raw-ink-200: #d4dbe4;
@@ -51,10 +52,24 @@
   --raw-cyan-500: #10a8bf;
   --raw-cyan-300: #67d5e3;
   --raw-green-500: #2ea66a;
+  --raw-green-700: #187a48;
   --raw-red-500: #d9544d;
+  --raw-red-700: #b83e38;
   --raw-yellow-500: #d89a19;
+  --raw-yellow-700: #8a5b00;
+  --raw-paper-border: #888176;
+  --raw-white: #ffffff;
   --raw-shadow-dark: #000000;
   --raw-mask: #000000;
+  --raw-node-impure: #8d99a6;
+  --raw-node-normal: #f0a52b;
+  --raw-node-pure: #3fbf6f;
+  --raw-slug-blue: #4aa3ff;
+  --raw-slug-yellow: #f2c744;
+  --raw-slug-purple: #a86ce0;
+  --raw-somersloop: #f06ba8;
+  --raw-mercer-sphere: #5ad1c8;
+  --raw-hard-drive: #c9d1d9;
 
   /* semantic roles — 기본은 어두운 현장 제어실 */
   --canvas: var(--raw-ink-1000);
@@ -68,7 +83,7 @@
   --text-tertiary: #8794a7;
   --text-inverse: var(--raw-ink-1000);
   --border-subtle: var(--raw-ink-800);
-  --border-strong: var(--raw-ink-700);
+  --border-strong: var(--raw-ink-600);
   --brand: var(--raw-orange-500);
   --brand-strong: var(--raw-orange-400);
   --action: var(--raw-cyan-500);
@@ -92,9 +107,31 @@
   --shadow-color: color-mix(in oklab, var(--raw-shadow-dark) 56%, transparent);
   --shadow-header: 0 14px 30px -24px var(--shadow-color);
   --shadow-card: 0 22px 50px -36px var(--shadow-color);
+  --shadow-overlay: 0 16px 36px -20px color-mix(in oklab, var(--raw-shadow-dark) 95%, transparent);
+  --shadow-hero: 0 34px 100px color-mix(in oklab, var(--raw-shadow-dark) 34%, transparent);
+  --shadow-media: 0 25px 24px color-mix(in oklab, var(--raw-shadow-dark) 28%, transparent);
   --ambient-cool: color-mix(in oklab, var(--action) 7%, transparent);
   --ambient-warm: color-mix(in oklab, var(--brand) 6%, transparent);
   --mask-solid: var(--raw-mask);
+
+  /* 지도는 지형 사진 위에 놓이므로 테마와 무관한 고정 대비층을 쓴다 */
+  --map-label: var(--raw-white);
+  --map-plate: color-mix(in srgb, var(--raw-ink-1000) 80%, transparent);
+  --map-area-plate: color-mix(in srgb, var(--raw-ink-1000) 72%, transparent);
+  --map-outline: color-mix(in srgb, var(--raw-shadow-dark) 80%, transparent);
+  --map-outline-soft: color-mix(in srgb, var(--raw-shadow-dark) 70%, transparent);
+  --map-outline-strong: color-mix(in srgb, var(--raw-shadow-dark) 90%, transparent);
+  --map-drive-outline: var(--raw-ink-850);
+  --node-impure: var(--raw-node-impure);
+  --node-normal: var(--raw-node-normal);
+  --node-pure: var(--raw-node-pure);
+  --collectible-slug-blue: var(--raw-slug-blue);
+  --collectible-slug-yellow: var(--raw-slug-yellow);
+  --collectible-slug-purple: var(--raw-slug-purple);
+  --collectible-somersloop: var(--raw-somersloop);
+  --collectible-mercer-sphere: var(--raw-mercer-sphere);
+  --collectible-hard-drive: var(--raw-hard-drive);
+  --collectible-fallback: var(--raw-node-impure);
 
   /* legacy role aliases — 기존 79개 화면을 새 의미 체계로 즉시 이행 */
   --bg: var(--canvas);
@@ -148,6 +185,7 @@
   --s8: 32px;
   --s10: 40px;
   --s12: 48px;
+  --s14: 56px;
   --s16: 64px;
   --s20: 80px;
   --s24: 96px;
@@ -180,17 +218,18 @@
   --layer-accent: #fff0e4;
   --text-primary: #171a1f;
   --text-secondary: #4f5863;
-  --text-tertiary: #68737e;
+  --text-tertiary: #59636f;
   --text-inverse: #ffffff;
   --border-subtle: #d7d2c8;
-  --border-strong: #a9a398;
+  --border-strong: var(--raw-paper-border);
   --brand: var(--raw-orange-600);
   --brand-strong: var(--raw-orange-700);
   --action: var(--raw-cyan-600);
   --action-strong: #06677a;
   --on-action: #ffffff;
-  --status-danger: var(--raw-red-500);
-  --status-warning: var(--raw-yellow-500);
+  --status-ok: var(--raw-green-700);
+  --status-danger: var(--raw-red-700);
+  --status-warning: var(--raw-yellow-700);
   --shadow-color: color-mix(in oklab, var(--raw-shadow-dark) 18%, transparent);
   --ambient-cool: color-mix(in oklab, var(--action) 5%, transparent);
   --ambient-warm: color-mix(in oklab, var(--brand) 5%, transparent);

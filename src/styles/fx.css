@@ -6,7 +6,7 @@
  * 이 저장소는 Astro 정적 사이트라 아일랜드를 늘리지 않는 편이 낫다(ADR-0009).
  *
  * 옮긴 것:
- *   Border Beam   — 테두리를 도는 빛. 원본 기본값 size 50 · duration 6s · #ffaa40 → #9c40ff
+ *   Border Beam   — 토큰 색으로 테두리를 도는 빛. 기본값 size 50 · duration 6s
  *   Retro Grid    — 원근 격자 바닥. 원본 perspective 200px · 15s 스크롤
  *   Dot Pattern   — 점 격자 배경
  *   Shimmer       — 버튼 위를 지나가는 빛
@@ -52,12 +52,12 @@
     transparent 360deg
   );
   -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
+    linear-gradient(var(--mask-solid) 0 0) content-box,
+    linear-gradient(var(--mask-solid) 0 0);
   -webkit-mask-composite: xor;
   mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
+    linear-gradient(var(--mask-solid) 0 0) content-box,
+    linear-gradient(var(--mask-solid) 0 0);
   mask-composite: exclude;
   pointer-events: none;
   animation: fx-beam-spin 6s linear infinite;
@@ -79,7 +79,7 @@
   overflow: hidden;
   perspective: 200px;
   pointer-events: none;
-  mask-image: linear-gradient(180deg, transparent, #000 55%, transparent 96%);
+  mask-image: linear-gradient(180deg, transparent, var(--mask-solid) 55%, transparent 96%);
 }
 .fx-retrogrid::before {
   content: '';
@@ -112,7 +112,7 @@
     transparent 1px
   );
   background-size: 18px 18px;
-  mask-image: radial-gradient(70% 60% at 50% 40%, #000, transparent);
+  mask-image: radial-gradient(70% 60% at 50% 40%, var(--mask-solid), transparent);
 }
 
 /* ------------------------------------------------------------- Shimmer */

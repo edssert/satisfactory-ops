@@ -47,12 +47,12 @@ const collectiblesDoc = collectiblesJson as unknown as {
  * 그림도 같이 들어가므로 색만으로 구분하는 것이 아니다.
  */
 const DROP_FILL: Record<string, string> = {
-  slug1: '#4aa3ff',
-  slug2: '#f2c744',
-  slug3: '#a86ce0',
-  sloop: '#f06ba8',
-  mercer: '#5ad1c8',
-  drive: '#c9d1d9',
+  slug1: 'var(--collectible-slug-blue)',
+  slug2: 'var(--collectible-slug-yellow)',
+  slug3: 'var(--collectible-slug-purple)',
+  sloop: 'var(--collectible-somersloop)',
+  mercer: 'var(--collectible-mercer-sphere)',
+  drive: 'var(--collectible-hard-drive)',
 };
 const drops = collectiblesDoc.items.map((c) => ({
   i: c.id,
@@ -61,7 +61,7 @@ const drops = collectiblesDoc.items.map((c) => ({
   y: Math.round(c.fy * 100000) / 100,
   ...(c.cost ? { c: c.cost } : {}),
 }));
-const dropKinds = collectiblesDoc.$kinds.map((k) => ({ ...k, fill: DROP_FILL[k.key] ?? '#8d99a6' }));
+const dropKinds = collectiblesDoc.$kinds.map((k) => ({ ...k, fill: DROP_FILL[k.key] ?? 'var(--collectible-fallback)' }));
 
 const round = (n: number) => Math.round(n * 10000) / 10000;
 const points = doc.nodes.map((n) => ({

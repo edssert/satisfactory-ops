@@ -136,7 +136,14 @@
   white-space: nowrap;
   word-break: keep-all;
 }
-.rm-side label b { color: var(--ink-3); font-family: var(--font-mono); font-size: 11px; }
+.rm-side label b {
+  flex: none;
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-align: right;
+}
+.rm-side.is-right label b { min-width: 8ch; }
 .rm-quick { display: flex; gap: 4px; margin: -8px 0 var(--s4); }
 .rm-quick button {
   padding: 3px 9px;
@@ -188,7 +195,7 @@
   fill: color-mix(in oklab, white 66%, transparent);
   font-family: var(--font-mono);
   paint-order: stroke;
-  stroke: rgb(0 0 0 / 0.7);
+  stroke: var(--map-outline-soft);
   stroke-width: 3;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
@@ -206,7 +213,7 @@
  */
 .rm-arealabels { pointer-events: none; }
 .rm-areaplate {
-  fill: rgb(10 13 18 / 0.72);
+  fill: var(--map-area-plate);
   stroke: color-mix(in oklab, var(--accent) 45%, transparent);
   stroke-width: 1;
   vector-effect: non-scaling-stroke;
@@ -217,7 +224,7 @@
   font-weight: 700;
   text-anchor: middle;
   paint-order: stroke;
-  stroke: rgb(0 0 0 / 0.85);
+  stroke: var(--map-outline-strong);
   stroke-width: 4;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
@@ -229,18 +236,18 @@
  */
 .rm-pt { cursor: pointer; }
 /* 채움색이 순도다. 테두리는 어두운 바탕에서 떼어 놓는 용도 */
-.rm-pt circle { stroke: rgb(0 0 0 / 0.8); stroke-width: 2; }
-.rm-pt:hover circle { stroke: #fff; }
-.rm-pt.is-sel circle { stroke: #fff; stroke-width: 3.5; }
-.rm-pt line { stroke: rgb(0 0 0 / 0.75); stroke-width: 2; }
-.rm-pt .rm-foot { fill: rgb(0 0 0 / 0.85); stroke: none; }
+.rm-pt circle { stroke: var(--map-outline); stroke-width: 2; }
+.rm-pt:hover circle { stroke: var(--map-label); }
+.rm-pt.is-sel circle { stroke: var(--map-label); stroke-width: 3.5; }
+.rm-pt line { stroke: var(--map-outline-soft); stroke-width: 2; }
+.rm-pt .rm-foot { fill: var(--map-outline-strong); stroke: none; }
 .rm-badge {
-  fill: #fff;
+  fill: var(--map-label);
   font-family: var(--font-mono);
   font-weight: 700;
   text-anchor: middle;
   paint-order: stroke;
-  stroke: rgb(0 0 0 / 0.9);
+  stroke: var(--map-outline-strong);
   stroke-width: 3;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
@@ -250,11 +257,11 @@
 /* 겹쳐 보기 — 지형 위에 생물군계를 얹는다. 색이 살아나서 지대가 구분된다 */
 .rm-blend image { opacity: 0.55; mix-blend-mode: color; }
 .rm-plabel {
-  fill: #fff;
+  fill: var(--map-label);
   font-family: var(--font-mono);
   text-anchor: middle;
   paint-order: stroke;
-  stroke: rgb(0 0 0 / 0.85);
+  stroke: var(--map-outline-strong);
   stroke-width: 3;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
@@ -263,31 +270,31 @@
 /* 멀리서 볼 때 묶은 덩어리. 누르면 그 자리로 들어간다 */
 .rm-cl { cursor: zoom-in; }
 .rm-cl circle {
-  fill: rgb(10 12 16 / 0.8);
+  fill: var(--map-plate);
   stroke: var(--primary);
   stroke-width: 2;
 }
-.rm-cl:hover circle { stroke: #fff; }
+.rm-cl:hover circle { stroke: var(--map-label); }
 .rm-cl text {
-  fill: #fff;
+  fill: var(--map-label);
   font-family: var(--font-mono);
   font-weight: 600;
   text-anchor: middle;
   paint-order: stroke;
-  stroke: rgb(0 0 0 / 0.85);
+  stroke: var(--map-outline-strong);
   stroke-width: 3;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
 }
 
 /* 거리 재기 */
-.rm-measure circle { fill: var(--accent); stroke: #000; stroke-width: 1.5; }
+.rm-measure circle { fill: var(--accent); stroke: var(--map-outline-strong); stroke-width: 1.5; }
 .rm-measure text {
   fill: var(--accent);
   font-family: var(--font-mono);
   font-weight: 600;
   paint-order: stroke;
-  stroke: rgb(0 0 0 / 0.85);
+  stroke: var(--map-outline-strong);
   stroke-width: 4;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
@@ -336,7 +343,7 @@
   border: var(--hair) solid var(--line-strong);
   border-radius: var(--radius);
   background: color-mix(in oklab, var(--raised) 94%, transparent);
-  box-shadow: 0 16px 36px -20px rgb(0 0 0 / 0.95);
+  box-shadow: var(--shadow-overlay);
   backdrop-filter: blur(6px);
 }
 .rm-info > div { display: flex; flex: 1; flex-direction: column; min-width: 0; }
@@ -433,7 +440,7 @@
 .rm-legend i {
   width: 11px;
   height: 11px;
-  border: 1px solid rgb(0 0 0 / 0.7);
+  border: 1px solid var(--map-outline-soft);
   border-radius: 50%;
 }
 
@@ -444,18 +451,18 @@
  * 색은 게임의 물건 색을 따른다. 그림이 같이 들어가므로 색만으로 구분하는 것이 아니다.
  */
 .rm-drop { cursor: pointer; }
-.rm-drop line { stroke: rgb(0 0 0 / 0.75); stroke-width: 2; }
-.rm-drop circle { stroke: rgb(0 0 0 / 0.8); stroke-width: 2; }
-.rm-drop:hover circle { stroke: #fff; }
-.rm-drop .rm-foot { fill: rgb(0 0 0 / 0.85); stroke: none; }
+.rm-drop line { stroke: var(--map-outline-soft); stroke-width: 2; }
+.rm-drop circle { stroke: var(--map-outline); stroke-width: 2; }
+.rm-drop:hover circle { stroke: var(--map-label); }
+.rm-drop .rm-foot { fill: var(--map-outline-strong); stroke: none; }
 /* 하드 드라이브는 네모난 느낌을 주려고 테두리를 굵게 */
-.rm-drop.is-drive circle { stroke: #1b2027; stroke-width: 3; }
+.rm-drop.is-drive circle { stroke: var(--map-drive-outline); stroke-width: 3; }
 
 .rm-swatch {
   width: 11px;
   height: 11px;
   flex: none;
-  border: 1px solid rgb(0 0 0 / 0.7);
+  border: 1px solid var(--map-outline-soft);
   border-radius: 50%;
 }
 .rm-note {
@@ -479,7 +486,7 @@
   border: var(--hair) solid var(--line-strong);
   border-radius: var(--radius);
   background: color-mix(in oklab, var(--raised) 95%, transparent);
-  box-shadow: 0 16px 36px -20px rgb(0 0 0 / 0.95);
+  box-shadow: var(--shadow-overlay);
 }
 .rm-hover > div { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 .rm-hover b { color: var(--ink); font-size: var(--t-body-s); }
@@ -536,7 +543,7 @@
   border: var(--hair) solid var(--line-strong);
   border-radius: var(--radius);
   background: var(--raised);
-  box-shadow: 0 16px 36px -20px rgb(0 0 0 / 0.95);
+  box-shadow: var(--shadow-overlay);
   list-style: none;
 }
 .rm-menu label {
@@ -659,7 +666,7 @@
   font-size: 10px;
 }
 .rm-ok { margin: 6px 0 0; color: var(--ink-2); font-size: var(--t-caption); word-break: keep-all; }
-.rm-bad { margin: 6px 0 0; color: var(--danger, #e0623c); font-size: var(--t-caption); }
+.rm-bad { margin: 6px 0 0; color: var(--danger); font-size: var(--t-caption); }
 
 /* 초록이 무슨 뜻인지 서랍에서 한 번 말해 준다 */
 .rm-gotkey {

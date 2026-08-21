@@ -106,12 +106,12 @@ const POLE_SPAN_M = 40;
  * 수집품에는 순도가 없어서 동그라미 색이 비어 있다 — 그 자리를 「주웠나」로 쓴다.
  * 흐리게만 하면 축소했을 때 안 보이는데, 정작 알고 싶은 건 「어디가 남았나」다.
  */
-const GOT_FILL = '#3fbf6f';
+const GOT_FILL = 'var(--status-ok)';
 
 const PURITY: Record<string, { ko: string; short: string; mult: number; fill: string }> = {
-  i: { ko: '불순', short: '불', mult: 0.5, fill: '#8d99a6' },
-  n: { ko: '보통', short: '보', mult: 1, fill: '#f0a52b' },
-  p: { ko: '순수', short: '순', mult: 2, fill: '#3fbf6f' },
+  i: { ko: '불순', short: '불', mult: 0.5, fill: 'var(--node-impure)' },
+  n: { ko: '보통', short: '보', mult: 1, fill: 'var(--node-normal)' },
+  p: { ko: '순수', short: '순', mult: 2, fill: 'var(--node-pure)' },
 };
 const KIND: Record<string, string> = {
   node: '채굴 노드',
@@ -867,7 +867,7 @@ export default function ResourceMap({
                     cx={d.x}
                     cy={cy}
                     r={r}
-                    fill={got.has(d.i) ? GOT_FILL : (kind?.fill ?? '#7d8ea0')}
+                    fill={got.has(d.i) ? GOT_FILL : (kind?.fill ?? 'var(--collectible-fallback)')}
                     vector-effect="non-scaling-stroke"
                   />
                   {kind?.item && (

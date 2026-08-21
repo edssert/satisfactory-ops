@@ -75,6 +75,12 @@ updated: 2026-08-21
 > matchMedia 컨텍스트를 정리한다. `test:nojs`와 확장된 `test:scroll`이 JS 비활성, reduce 최초 진입,
 > 실행 중 설정 전환을 검증한다. 근거는 [[landing-progressive-enhancement]]에 있다.
 
+> [!success] 2026-08-21 디자인 토큰·테마 체크포인트
+> 원시 색을 지도·리디렉션·마스크까지 `tokens.css`로 회수하고, 미정의 토큰 참조를 제거했다.
+> 라이트는 정밀 작업지, 다크는 현장 제어실로 명시하며 양쪽 모두 핵심 본문 7:1, 작은 글자 4.5:1,
+> 의미 경계 3:1을 실제 Chromium에서 검사한다. `check:tokens`와 `test:theme`가 `npm run verify`의
+> 필수 단계이며 근거는 [[design-token-theme-system]]에 있다.
+
 ## 설계 결정
 
 - [[0025-validated-factory-domain|ADR-0025 검증된 공장 도메인]]
@@ -92,6 +98,7 @@ updated: 2026-08-21
 - [[design-landing-craft]]
 - [[lenis-native-scroll-accessibility]]
 - [[landing-progressive-enhancement]]
+- [[design-token-theme-system]]
 
 ## 완료 판정
 

@@ -996,8 +996,8 @@ const steps = spine.steps.map((s) => ({
     @media (max-width: 660px) {
       /* 오른쪽 끝을 흐리게 해 "옆으로 더 있다"를 알린다. 안 그러면 잘린 그림으로 보인다 */
       .flowwrap > :global(.fc) {
-        -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 20px), transparent);
-        mask-image: linear-gradient(to right, #000 calc(100% - 20px), transparent);
+        -webkit-mask-image: linear-gradient(to right, var(--mask-solid) calc(100% - 20px), transparent);
+        mask-image: linear-gradient(to right, var(--mask-solid) calc(100% - 20px), transparent);
       }
       /* 흐려지는 자리에 글자가 걸리지 않게 설명글 오른쪽을 비운다 */
       .flowwrap :global(.fc-cap) { padding-right: 30px; }
@@ -1006,8 +1006,8 @@ const steps = spine.steps.map((s) => ({
     /* 표도 같다 — 좁을 때만 상자 안에서 굴리고, 굴릴 수 있다는 것을 오른쪽 끝으로 알린다 */
     @media (max-width: 520px) {
       .step :global(.scroll-x) {
-        -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 16px), transparent);
-        mask-image: linear-gradient(to right, #000 calc(100% - 16px), transparent);
+        -webkit-mask-image: linear-gradient(to right, var(--mask-solid) calc(100% - 16px), transparent);
+        mask-image: linear-gradient(to right, var(--mask-solid) calc(100% - 16px), transparent);
       }
     }
 

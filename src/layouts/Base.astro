@@ -35,9 +35,8 @@ const nav = [
       (function () {
         try {
           /*
-           * 이 앱은 어두운 화면이 기본이다(DESIGN-BRIEF). 운영체제 설정을 따라가지 않는다 —
-           * 밝은 테마를 화면마다 다 맞춰 두기 전까지는 머리 띠만 밝아지는 어긋남이 난다.
-           * 사용자가 직접 고른 값(sfops-theme)만 존중한다.
+           * 게임과 오갈 때 눈부심을 줄이기 위해 기본은 다크다(DESIGN-BRIEF).
+           * 운영체제 추정값 대신 사용자가 직접 고른 값(sfops-theme)만 존중한다.
            */
           var saved = localStorage.getItem('sfops-theme');
           document.documentElement.dataset.theme = saved === 'light' ? 'light' : 'dark';

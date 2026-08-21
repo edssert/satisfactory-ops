@@ -81,8 +81,8 @@ satisfactory-ops/
 │  ├─ components/          Preact 아일랜드 (상태를 소유하는 최소 단위)
 │  ├─ layouts/Base.astro   헤더·푸터·테마·네이티브 기반 Lenis 향상
 │  ├─ pages/               라우트 = 파일
-│  ├─ styles/              tokens.css(브리프 정본) · base.css · 컴포넌트별 CSS
-│  └─ fonts/               IBM Plex Mono 라틴 서브셋 (자체 호스팅, ADR-0018)
+│  ├─ styles/              tokens.css(값 정본) · base.css · 컴포넌트별 CSS
+│  └─ fonts/               Wanted Sans · Pretendard · JetBrains Mono 서브셋
 ├─ public/                 그대로 복사되는 자산 (맵·아이콘·매니페스트·폰트 라이선스)
 ├─ tests/solver.test.ts    골든 테스트 (node --test, 의존성 0)
 ├─ legacy/                 이식 전 단일 HTML (배포되지 않음)
@@ -161,6 +161,8 @@ satisfactory-ops/
 | 단위 테스트 | `npm test` | 골든 값 불일치 |
 | 타입 검사 | `npx astro check` | 타입 오류 |
 | 빌드 | `npm run build` | 데이터 참조 깨짐 → `gamedata.must()`가 던져 빌드 실패 |
+| 디자인 토큰 | `npm run check:tokens` | 원시 색 누출·미정의 토큰·테마/문서 계약 누락 |
+| 테마 브라우저 | `npm run test:theme` | 전환·지속·다크/라이트 대비·런타임 오류 실패 |
 
 CI(`.github/workflows/deploy.yml`)가 이 순서를 그대로 돌리고 `dist/`를 Pages에 올린다.
 **게임 설치본이 없는 CI에서는 1단을 돌리지 않는다** — 커밋된 산출물을 신뢰한다(ADR-0008 완화책).
