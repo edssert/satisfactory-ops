@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "doneMilestones": ["Schematic_1-1_C", "Schematic_1-2_C", "Schematic_1-1_C"],
+  "ownedAlternates": ["Recipe_Alternate_Screw_C"],
+  "setup": {
+    "startLocation": "rocky-desert",
+    "tutorialSkipped": true,
+    "randomizedResources": true
+  },
+  "updatedAt": "2026-08-20T12:00:00.000Z"
+}

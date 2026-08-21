@@ -142,17 +142,33 @@ ADR-0015. 출처: `rockfactory/satisfactory-logistics` (MIT).
 
 ```ts
 interface UserState {
-  schemaVersion: 1;
+  schemaVersion: 2;
   doneMilestones: string[];   // 체크한 마일스톤 className
   ownedAlternates: string[];  // 확보한 대체 레시피 className
   setup: {
     startLocation: 'grass-fields' | 'rocky-desert' | 'northern-forest' | 'dune-desert' | null;
     tutorialSkipped: boolean;
-    randomizedResources: boolean;
+    resourceMode: 'standard' | 'randomized';
   };
   updatedAt: string | null;
 }
 ```
+
+### 진행 상태 마이그레이션
+
+`src/state/persist.ts`는 현재 키의 `v1 → v2` 사다리뿐 아니라 실제로 배포됐던 이전 저장 키도
+한 번만 읽어 `sfops.v1`로 통합한다.
+
+| 입력 | 실제 구형 구조 | 변환 |
+|---|---|---|
+| `sfops.v1` v1 | `setup.randomizedResources: boolean` | `resourceMode` 열거형으로 승격 |
+| `sops.progress.v1` v1/v2 | `done` 객체, `setup.mode/start/random` | 완료 ID 배열과 정식 입지 ID로 변환 |
+| `sfops.progress` v1 + `sfops.owned` v1 | 진척·대체 제작법 분리 배열 | 하나의 `UserState`로 병합 |
+
+성공한 구형 키 변환은 최신 값을 `sfops.v1`에 즉시 기록하되 원래 키를 삭제하지 않는다. 손상되거나
+미래 버전인 입력은 억지로 정규화하지 않고 원문을 `sfops.v1.backup.<timestamp>`에 보존한다.
+`tests/fixtures/user-state-v1.json`, `legacy-progress-v2.json`이 공개된 이전 구조의 고정 증거이고
+`tests/persist.test.ts`가 변환·병합·미래 버전 거부·손상 백업을 검증한다.
 
 ### 공장 편집 계획 v4
 

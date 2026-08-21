@@ -82,16 +82,16 @@ export default function StartPath({ gap, hubCost, portableMiners, inventoryNote,
             <button
               type="button"
               class="sp-opt"
-              aria-pressed={!s.randomizedResources}
-              onClick={() => setSetup({ randomizedResources: false })}
+              aria-pressed={s.resourceMode === 'standard'}
+              onClick={() => setSetup({ resourceMode: 'standard' })}
             >
               끔
             </button>
             <button
               type="button"
               class="sp-opt"
-              aria-pressed={s.randomizedResources}
-              onClick={() => setSetup({ randomizedResources: true })}
+              aria-pressed={s.resourceMode === 'randomized'}
+              onClick={() => setSetup({ resourceMode: 'randomized' })}
             >
               켬
             </button>
@@ -99,7 +99,7 @@ export default function StartPath({ gap, hubCost, portableMiners, inventoryNote,
         </div>
       </section>
 
-      {s.randomizedResources && (
+      {s.resourceMode === 'randomized' && (
         <p class="sp-warn">
           <strong>자원 랜덤화를 켰다면 이 화면의 노드 위치·순도 조언은 전부 무효입니다.</strong> 지도와
           노드 데이터는 기본 배치 기준입니다. 부지 판단은 인게임 스캐너로 직접 하세요.

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 2,
+  "done": {
+    "Schematic_1-1_C": 1,
+    "Schematic_1-2_C": 1,
+    "Schematic_1-3_C": 0
+  },
+  "setup": {
+    "mode": "skip",
+    "start": "north",
+    "random": true
+  }
+}

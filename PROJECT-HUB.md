@@ -56,6 +56,12 @@ updated: 2026-08-21
 > 35° 경사, 4–48m 리프트, 경사 중 회전을 독립 오류로 검증한다. 기하 분해는
 > `src/domain/factory/transport-geometry.ts`, 회귀는 `tests/factory-domain.test.ts`가 맡는다.
 
+> [!success] 2026-08-21 저장 마이그레이션 체크포인트
+> 진행 상태를 v2로 올리고 불리언 자원 설정을 `standard | randomized`로 명시했다. 통합 v1뿐 아니라
+> 단일 HTML의 `sops.progress.v1` v1/v2와 분리 저장된 `sfops.progress`·`sfops.owned`도 데이터 손실 없이
+> 최신 키로 병합한다. 이전 형식은 `tests/fixtures/`, 변환·미래 버전 거부·손상 백업 회귀는
+> `tests/persist.test.ts`가 고정한다.
+
 ## 설계 결정
 
 - [[0025-validated-factory-domain|ADR-0025 검증된 공장 도메인]]
