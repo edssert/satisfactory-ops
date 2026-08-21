@@ -81,6 +81,13 @@ updated: 2026-08-21
 > 의미 경계 3:1을 실제 Chromium에서 검사한다. `check:tokens`와 `test:theme`가 `npm run verify`의
 > 필수 단계이며 근거는 [[design-token-theme-system]]에 있다.
 
+> [!success] 2026-08-21 검증형 진행 가이드 체크포인트
+> 티어 0~9 가이드를 완료 상태→시공→현장 검증→확장 예약으로 전면 재작성했다. 기계 대수·클럭·재료
+> 유량은 게임 추출 데이터에서 계산하고 설명문 수치 복제를 금지한다. 하드 드라이브 부족설과 S.A.M. 후반
+> 전용설을 공식 위키·게임 데이터로 교정했고, 알루미늄 환류는 복수 해법과 정상상태 검증을 함께 제시한다.
+> `check:guide`와 `test:guide-ui`가 구조·근거·폐기 주장·반응형·키보드·직접 링크를 고정하며 근거는
+> [[guide-content-rewrite]]에 있다.
+
 ## 설계 결정
 
 - [[0025-validated-factory-domain|ADR-0025 검증된 공장 도메인]]
@@ -99,6 +106,7 @@ updated: 2026-08-21
 - [[lenis-native-scroll-accessibility]]
 - [[landing-progressive-enhancement]]
 - [[design-token-theme-system]]
+- [[guide-content-rewrite]]
 
 ## 완료 판정
 

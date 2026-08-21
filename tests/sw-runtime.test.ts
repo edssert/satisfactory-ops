@@ -152,7 +152,7 @@ test('온라인에서 각 화면이 자기 문서를 돌려준다', { skip: !fs.
   const sw = await bootServiceWorker();
   const cases: [string, string][] = [
     [`${BASE}/`, '설계 가능한 시스템'],
-    [`${BASE}/guide/`, '해금 순서대로'],
+    [`${BASE}/guide/`, '공장 시공 가이드'],
     [`${BASE}/dex/reference/`, '레퍼런스'],
     [`${BASE}/dex/tiers/0/`, '티어 0'],
     [`${BASE}/dex/mam/quartz/`, 'MAM 도감'],
@@ -172,7 +172,7 @@ test('온라인에서 각 화면이 자기 문서를 돌려준다', { skip: !fs.
 test('오프라인에서도 각 화면이 자기 문서를 돌려준다', { skip: !fs.existsSync(SW) }, async () => {
   const sw = await bootServiceWorker(true);
   const res = await sw.navigate(`${BASE}/guide/`);
-  assert.ok(titleOf(res.body).includes('해금 순서대로'), `오프라인 응답: ${titleOf(res.body)}`);
+  assert.ok(titleOf(res.body).includes('공장 시공 가이드'), `오프라인 응답: ${titleOf(res.body)}`);
 });
 
 test('캐시에 없는 경로는 오프라인일 때만 셸로 폴백한다', { skip: !fs.existsSync(SW) }, async () => {

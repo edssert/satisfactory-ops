@@ -6,8 +6,8 @@
  * (석탄 발전을 맨 앞에 두었다가 티어 3 해금이라는 지적을 받았다. 그 실수를 구조로 막는다 —
  *  단계의 순서는 spine.json 이 정하고, 각 단계의 해금 내용은 게임 데이터에서 조회한다.)
  *
- * 규모는 마일스톤 요구량 역산이 아니라 **커뮤니티 표준 생산량**이다(spine.json 의 targets).
- * 기계 대수는 그 목표를 게임 레시피로 나눠 계산한다.
+ * 각 단계는 관찰 가능한 완료 상태 → 시공 순서 → 현장 검증 → 확장 예약으로 구성한다.
+ * 생산 기준과 기계 대수는 게임 레시피로 계산하며 설명문에 수치를 복제하지 않는다.
  */
 import Base from '../../layouts/Base.astro';
 import '../../styles/fx.css';
@@ -101,6 +101,14 @@ const exploreDoc = exploration as {
 
 /** 소수점이 붙을 때만 보여준다. 5.00 대신 5 */
 const num = (n: number) => (Number.isInteger(n) ? String(n) : String(Math.round(n * 100) / 100));
+const confidenceLabel = (value: string) =>
+  ({ verified: '게임 데이터 확인', consensus: '복수 근거 합의', disputed: '의견 대립', unsourced: '근거 미확인' })[value] ?? value;
+const sourceLabel = (value: string) => {
+  if (value.startsWith('src/data/app/')) return '게임 설치본 추출 데이터';
+  if (value.startsWith('docs/research/')) return '조사·교차검증 기록';
+  if (value.startsWith('https://')) return '외부 원문';
+  return value;
+};
 
 /** 레시피 → 산출 건물. "이 마일스톤에서 무엇이 열리는가"를 게임 데이터로 답하기 위한 색인 */
 const buildingByRecipe = new Map<string, (typeof buildings)[number]>();
@@ -222,16 +230,16 @@ const steps = spine.steps.map((s) => ({
 ---
 
 <Base
-  title="가이드, 해금 순서대로 무엇을 얼마나"
-  description="Satisfactory 진행 가이드. 허브부터 석탄 발전까지, 그 시점에 실제로 열려 있는 것만 다룹니다."
+  title="공장 시공 가이드 — 완료 상태부터 역산"
+  description="Satisfactory 공장을 해금 순서에 맞춰 시공하고, 실제 운전 상태로 완료를 판정하는 검증형 가이드입니다."
   section="guide"
 >
   <div class="wrap page">
     <header class="page-head">
       <p class="marker"><span class="num">가이드</span></p>
-      <h1>해금 순서대로<br /><span class="fx-gradient-text">무엇을 얼마나</span></h1>
+      <h1>지금 지을 것과<br /><span class="fx-gradient-text">끝났다고 말할 기준</span></h1>
       <p class="lede prose">
-        각 단계는 그 시점에 <strong>실제로 열려 있는 것만</strong> 다룹니다.
+        해금 목록을 읽고 끝내지 않습니다. <strong>완료 상태를 먼저 정하고</strong>, 시공 뒤 실제 유량·적체·재가동을 확인합니다.
       </p>
     
       <div class="prog" data-prog hidden>
@@ -280,18 +288,24 @@ const steps = spine.steps.map((s) => ({
               <span class="stage" data-stage hidden></span>
             </p>
             <h2>{s.title}</h2>
-            <p class="goal">{s.goal}</p>
+            <p class="brief">{s.brief}</p>
 
-            {s.unlocks.length > 0 && (
-              <div class="gate">
-                <p class="gate-note">{s.gateNote}</p>
+            <div class="completion">
+              <p class="completion-k">완료 상태</p>
+              <ul class="checks">
+                {s.doneWhen.map((check) => <li>{check}</li>)}
+              </ul>
+              {s.unlocks.length > 0 && (
+                <div class="unlocked-row">
+                  <span>이 단계 해금</span>
                 <ul class="unlocks">
                   {s.unlocks.slice(0, 10).map((b) => (
                     <li class="chip">{b.ko}</li>
                   ))}
                 </ul>
-              </div>
-            )}
+                </div>
+              )}
+            </div>
 
             <div class="remain" data-remain hidden>
               <h3 class="sub">이 구간에서 아직 안 산 것</h3>
@@ -314,19 +328,21 @@ const steps = spine.steps.map((s) => ({
               </ul>
             </div>
 
-            <h3 class="sub">이번 단계의 공사 순서</h3>
-            <ol class="actions">
-              {s.actions.map((a) => (
+            <h3 class="sub">시공 순서 · 현장 검증</h3>
+            <ol class="sequence">
+              {s.sequence.map((a) => (
                 <li>
-                  <p class="do">{a.do}</p>
-                  <p class="why">{a.why}</p>
+                  <div class="sequence-copy">
+                    <p class="build"><span>시공</span>{a.build}</p>
+                    <p class="verify"><span>검증</span>{a.verify}</p>
+                  </div>
                 </li>
               ))}
             </ol>
 
             {s.rows.length > 0 && (
               <>
-                <h3 class="sub">목표 생산량</h3>
+                <h3 class="sub">운전 기준</h3>
                 <div class="scroll-x">
                   <table>
                     <thead>
@@ -370,12 +386,30 @@ const steps = spine.steps.map((s) => ({
               </p>
             )}
 
-            {s.leaveRoom && (
+            {s.reserve && (
               <div class="keep">
-                <p class="keep-tag">증설 경계</p>
-                <p class="keep-body">{s.leaveRoom}</p>
+                <p class="keep-tag">확장 예약</p>
+                <p class="keep-body">{s.reserve}</p>
               </div>
             )}
+
+            <footer class="evidence">
+              <span class={`confidence is-${s.confidence}`}>{confidenceLabel(s.confidence)}</span>
+              <span aria-hidden="true">·</span>
+              {s.sources
+                .filter((source, sourceIndex, all) =>
+                  all.findIndex((candidate) => sourceLabel(candidate) === sourceLabel(source)) === sourceIndex)
+                .map((source, sourceIndex) => (
+                <>
+                  {sourceIndex > 0 && <span aria-hidden="true">·</span>}
+                  {source.startsWith('https://') ? (
+                    <a href={source} rel="noreferrer">{sourceLabel(source)}</a>
+                  ) : (
+                    <span title={source}>{sourceLabel(source)}</span>
+                  )}
+                </>
+                ))}
+            </footer>
           </section>
         ))}
 
@@ -383,7 +417,7 @@ const steps = spine.steps.map((s) => ({
           <p class="marker"><span class="num">주의</span> 유한 자원</p>
           <h2>다시 자라지 않는 것들</h2>
           <p class="prose muted">
-            채굴 노드는 무한하지만 아래 넷은 아닙니다. 맵에 놓인 개수가 정해져 있고 게임이
+            채굴 노드는 무한하지만 아래 {finiteDoc.items.length}종은 아닙니다. 맵에 놓인 개수가 정해져 있고 게임이
             경고해 주지 않아서, 초반에 아무 데나 써 버리는 일이 흔합니다.
           </p>
 
@@ -903,26 +937,57 @@ const steps = spine.steps.map((s) => ({
      */
     .body { min-width: 0; max-width: 100%; }
 
+    /* 해시 오프셋은 base.css의 html scroll-padding-top 하나만 정본으로 쓴다. */
     .step { min-width: 0; max-width: 100%; padding-bottom: var(--s20); }
     .step + .step { border-top: var(--hair) solid var(--line); padding-top: var(--s16); }
     .step h2 { margin-bottom: var(--s4); }
-    .goal {
+    .brief {
       max-width: var(--measure);
       font-size: var(--t-body-l);
       color: var(--ink-2);
       margin-bottom: var(--s8);
     }
 
-    .gate {
+    .completion {
       margin-bottom: var(--s10);
-      padding: var(--s4) var(--s5);
-      border-left: 2px solid var(--primary);
+      padding: var(--s5);
+      border: var(--hair) solid var(--line);
+      border-left: 3px solid var(--primary);
       border-radius: var(--radius);
       background: var(--glass-raised);
       box-shadow: var(--lit);
       backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
     }
-    .gate-note { margin-bottom: var(--s3); font-size: var(--t-small); }
+    .completion-k,
+    .sequence-copy p > span,
+    .unlocked-row > span {
+      font-family: var(--font-mono);
+      font-size: var(--t-caption);
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .completion-k { margin: 0 0 var(--s3); }
+    .checks { display: grid; gap: var(--s2); margin: 0; padding: 0; list-style: none; }
+    .checks li { position: relative; padding-left: 1.45rem; color: var(--ink); }
+    .checks li::before {
+      content: '□';
+      position: absolute;
+      left: 0;
+      top: -.05em;
+      font-family: var(--font-mono);
+      color: var(--primary);
+    }
+    .unlocked-row {
+      display: grid;
+      grid-template-columns: max-content minmax(0, 1fr);
+      gap: var(--s3);
+      align-items: start;
+      margin-top: var(--s4);
+      padding-top: var(--s4);
+      border-top: var(--hair) solid var(--line);
+    }
     .unlocks { display: flex; flex-wrap: wrap; gap: var(--s2); margin: 0; padding: 0; list-style: none; }
 
     .sub {
@@ -934,8 +999,8 @@ const steps = spine.steps.map((s) => ({
     }
     .step > .sub:not(:first-of-type) { margin-top: var(--s10); }
 
-    .actions { margin: 0 0 var(--s4); padding: 0; list-style: none; counter-reset: a; }
-    .actions li {
+    .sequence { margin: 0 0 var(--s4); padding: 0; list-style: none; counter-reset: a; }
+    .sequence li {
       display: grid;
       grid-template-columns: 32px minmax(0, 1fr);
       gap: var(--s3);
@@ -943,8 +1008,8 @@ const steps = spine.steps.map((s) => ({
       border-top: var(--hair) solid var(--line);
       counter-increment: a;
     }
-    .actions li:last-child { border-bottom: var(--hair) solid var(--line); }
-    .actions li::before {
+    .sequence li:last-child { border-bottom: var(--hair) solid var(--line); }
+    .sequence li::before {
       content: counter(a);
       color: var(--primary);
       font-family: var(--font-mono);
@@ -952,14 +1017,29 @@ const steps = spine.steps.map((s) => ({
       color: var(--accent);
       padding-top: 0.35em;
     }
-    .do { grid-column: 2; margin: 0 0 var(--s1); font-weight: 600; }
-    .why {
-      grid-column: 2;
-      margin: 0;
+    .sequence-copy { grid-column: 2; display: grid; gap: var(--s2); }
+    .sequence-copy p { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: var(--s3); margin: 0; }
+    .build { font-weight: 650; }
+    .verify {
       max-width: var(--measure);
       font-size: var(--t-small);
       color: var(--ink-2);
     }
+    .verify > span { color: var(--status-ok); }
+
+    .evidence {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s1) var(--s2);
+      margin-top: var(--s5);
+      color: var(--ink-3);
+      font-family: var(--font-mono);
+      font-size: var(--t-caption);
+    }
+    .evidence a { color: inherit; text-underline-offset: .18em; }
+    .confidence { color: var(--ink-2); font-weight: 700; }
+    .confidence.is-verified { color: var(--status-ok); }
+    .confidence.is-consensus { color: var(--accent); }
 
     .rownote { display: block; font-size: var(--t-caption); color: var(--ink-3); }
     td .chip { margin: 1px 2px 1px 0; }
@@ -1005,6 +1085,8 @@ const steps = spine.steps.map((s) => ({
 
     /* 표도 같다 — 좁을 때만 상자 안에서 굴리고, 굴릴 수 있다는 것을 오른쪽 끝으로 알린다 */
     @media (max-width: 520px) {
+      .unlocked-row { grid-template-columns: 1fr; }
+      .sequence-copy p { grid-template-columns: 1fr; gap: var(--s1); }
       .step :global(.scroll-x) {
         -webkit-mask-image: linear-gradient(to right, var(--mask-solid) calc(100% - 16px), transparent);
         mask-image: linear-gradient(to right, var(--mask-solid) calc(100% - 16px), transparent);
