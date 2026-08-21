@@ -1,9 +1,9 @@
 /**
  * 검증형 공장 설계판.
  *
- * 화면에 그리는 사각형·포트·경로는 별도의 근삿값을 만들지 않는다. 페이지가 게임 데이터와
- * 공개 세이브/블루프린트 코퍼스에서 고른 검증 서브셋을 전달하고, 이 컴포넌트는 그 좌표를
- * 그대로 이동·회전시킨다. 발행 가능 여부는 domain/factory 검증기 하나가 판정한다.
+ * 화면에 그리는 사각형·포트·경로는 페이지가 전달한 버전 데이터만 사용한다. 기존 포트 코퍼스는
+ * 재검증 중이므로 UI에서 검증 완료로 표현하지 않는다. 발행 가능 여부는 domain/factory 검증기 하나가
+ * 판정하되, 근거 승인 상태도 별도 게이트로 결합해야 한다.
  */
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import {
@@ -59,12 +59,6 @@ interface Props {
   pipeTurnImageUrl: string;
   liftImageUrl: string;
   foundationImageUrl: string;
-  proof: {
-    fileCount: number;
-    publicFileCount: number;
-    observationCount: number;
-    toleranceM: number;
-  };
 }
 
 type DragState = {
@@ -292,7 +286,6 @@ export default function ValidatedFactoryPlanner({
   pipeTurnImageUrl,
   liftImageUrl,
   foundationImageUrl,
-  proof,
 }: Props) {
   const byClass = useMemo(() => new Map(machines.map((machine) => [machine.buildingClass, machine])), [machines]);
   const [placements, setPlacements] = useState<Placement[]>([]);
@@ -349,7 +342,10 @@ export default function ValidatedFactoryPlanner({
     const host = stageRef.current;
     if (!host || typeof ResizeObserver === 'undefined') return;
     const observer = new ResizeObserver(([entry]) => {
-      if (entry) setBox({ width: entry.contentRect.width, height: entry.contentRect.height });
+      if (!entry) return;
+      const width = entry.contentRect.width;
+      const height = entry.contentRect.height;
+      setBox((current) => current.width === width && current.height === height ? current : { width, height });
     });
     observer.observe(host);
     return () => observer.disconnect();
@@ -535,8 +531,7 @@ export default function ValidatedFactoryPlanner({
     setSelectedFoundationId(tile.id);
     setSelectedId(null);
     setGroupSelection([]);
-    setPlacementTool(null);
-    setNotice('파운데이션 배치 완료');
+    setNotice('파운데이션 배치 완료 · 계속 좌클릭해 배치하거나 Esc로 종료');
   }
 
   function queueMachine(machine: DrawingMachine) {
@@ -552,7 +547,7 @@ export default function ValidatedFactoryPlanner({
     setSelectedId(null);
     setSelectedFoundationId(null);
     setGroupSelection([]);
-    setNotice('파운데이션 · 캔버스에서 놓을 위치를 좌클릭하세요. Esc 취소');
+    setNotice('파운데이션 · 캔버스에서 연속 배치할 위치를 좌클릭하세요. Esc 종료');
   }
 
   function removeSelected() {
@@ -1047,9 +1042,9 @@ export default function ValidatedFactoryPlanner({
     <section class="vp" aria-label="검증형 공장 설계판">
       <aside class="vp-catalog">
         <header>
-          <p class="vp-eyebrow">VERIFIED CATALOG</p>
-          <h2>실측 완료 설비</h2>
-          <p>게임 충돌 상자와 공개 세이브·블루프린트 포트가 모두 확인된 설비만 놓을 수 있습니다.</p>
+          <p class="vp-eyebrow">PLACEMENT CATALOG</p>
+          <h2>설비와 토대</h2>
+          <p>항목을 클릭한 뒤 캔버스에 놓거나, 원하는 위치로 직접 드래그하세요.</p>
         </header>
         <label class="vp-search">
           <input aria-label="설비 검색" value={query} onInput={(event) => setQuery(event.currentTarget.value)} placeholder="설비 검색" />
@@ -1065,11 +1060,10 @@ export default function ValidatedFactoryPlanner({
             title="클릭한 뒤 위치를 고르거나 캔버스로 드래그"
           >
             <img src={foundationImageUrl} alt="" draggable={false} />
-            <span><strong>파운데이션 8 m × 8 m</strong><small>실제 게임 타일 · 8 m 스냅</small></span>
-            <b aria-hidden="true">+</b>
+            <span><strong>파운데이션</strong><small>클릭 후 배치 · 드래그 가능</small></span>
+            <span class="vp-place-hint" aria-hidden="true">배치</span>
           </button>
           {visibleMachines.map((machine) => {
-            const bounds = boundsOf(machine);
             return (
               <button
                 type="button"
@@ -1081,16 +1075,12 @@ export default function ValidatedFactoryPlanner({
                 title="클릭한 뒤 위치를 고르거나 캔버스로 드래그"
               >
                 <img src={machine.imageUrl} alt="" draggable={false} />
-                <span><strong>{machine.name}</strong><small>{fmt(bounds.max.x - bounds.min.x)} × {fmt(bounds.max.y - bounds.min.y)} m · 포트 {machine.ports.length}</small></span>
-                <b aria-hidden="true">+</b>
+                <span><strong>{machine.name}</strong><small>클릭 후 배치 · 드래그 가능</small></span>
+                <span class="vp-place-hint" aria-hidden="true">배치</span>
               </button>
             );
           })}
         </div>
-        <footer>
-          <span class="vp-proof-dot" />
-          공개 파일 {proof.publicFileCount}건 포함 {proof.fileCount}건 · 연결 관측 {proof.observationCount.toLocaleString('ko-KR')}회 · 합의 반경 {fmt(proof.toleranceM * 100)} cm
-        </footer>
       </aside>
 
       <div class="vp-workspace">
@@ -1106,7 +1096,7 @@ export default function ValidatedFactoryPlanner({
             <button type="button" onClick={rotateSelected} disabled={!selectedId}>90° 회전</button>
             <button type="button" onClick={() => changeElevation(-4)} disabled={!selectedId && !selectedFoundationId}>높이 −4 m</button>
             <button type="button" onClick={() => changeElevation(4)} disabled={!selectedId && !selectedFoundationId}>높이 +4 m</button>
-            <button type="button" onClick={removeSelected} disabled={!selectedId && !selectedFoundationId && !groupSelection.length}>선택 삭제{groupSelection.length ? ` (${groupSelection.length})` : ''}</button>
+            <button type="button" data-action="delete-selection" onClick={removeSelected} disabled={!selectedId && !selectedFoundationId && !groupSelection.length}>선택 삭제{groupSelection.length ? ` (${groupSelection.length})` : ''}</button>
             <button type="button" class="is-danger" onClick={resetPlan} disabled={!placements.length && !foundations.length}>전체 초기화</button>
             <button type="button" onClick={() => fitToPlan()} disabled={!placements.length && !foundations.length && !transports.length}>도면 맞춤</button>
             <button type="button" onClick={exportPlan}>JSON 내보내기</button>
@@ -1273,13 +1263,13 @@ export default function ValidatedFactoryPlanner({
           {!placements.length && (
             <div class="vp-empty">
               <span>01</span>
-              <h3>왼쪽에서 검증 설비를 놓으세요.</h3>
+              <h3>왼쪽에서 설비나 토대를 놓으세요.</h3>
               <p>파운데이션과 설비를 직접 놓고, 실제 포트를 눌러 컨베이어·파이프를 연결합니다.</p>
             </div>
           )}
         </div>
 
-        <section class="vp-inspector" aria-live="polite">
+        <section class="vp-inspector" aria-label="도면 검사 결과" aria-live="polite" tabIndex={0}>
           <div class="vp-inspector-title">
             <p class="vp-eyebrow">MACHINE CONTROL</p>
             <h3>{selectedMachine ? selectedMachine.name : selectedFoundationId ? '선택한 파운데이션' : '설비를 선택하세요.'}</h3>

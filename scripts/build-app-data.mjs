@@ -7,7 +7,7 @@
  *        src/data/curated/*.json  (수기 콘텐츠. 게임 객체는 클래스명으로만 참조)
  * 출력:  src/data/app/*.json      (화면별 최소 필드 + 빌드타임 역인덱스)
  *
- * 결정 근거: docs/adr/0012-data-storage.md, docs/adr/0017-korean-display-names.md
+ * 결정 근거: satisfactory-ops-vault/docs/decisions/REGISTER.md D-011, D-012
  *
  * 사용법:
  *   node scripts/build-app-data.mjs            # 생성
@@ -148,7 +148,7 @@ const buildings = en.buildings.map((x) => ({
     byproductAmount: f.byproductAmount ?? null,
   })),
   storageSlots: x.storageSlots ?? null,
-  // 배치 도면용 (FRD F13). 게임 충돌 박스 합집합, m 단위
+  // 설계 스튜디오 점유 영역 후보. 게임 충돌 박스 합집합, m 단위
   footprint: x.footprint
     ? {
         // 배치용 = 하드 클리어런스(CT_Default) 합집합. 소프트(굴뚝·안테나)는 건설을 막지 않는다.
@@ -443,7 +443,7 @@ if (failed) die(2, '검증 ' + failed + '건 실패 — 파일을 쓰지 않고 
 // ---------------------------------------------------------------- 출력
 
 const meta = {
-  $comment: 'scripts/build-app-data.mjs 산출물입니다. 직접 수정하지 마세요. (docs/adr/0012)',
+  $comment: 'scripts/build-app-data.mjs 산출물입니다. 직접 수정하지 마세요. (Decision D-012)',
   generatedAt: new Date().toISOString(),
   generator: 'scripts/build-app-data.mjs',
   game: {

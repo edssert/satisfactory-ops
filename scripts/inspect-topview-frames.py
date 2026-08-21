@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Anders 탑뷰 안의 흰 설치 범위 코너 후보를 픽셀 군집으로 출력한다.
 
-사용: python scripts/inspect-topview-frames.py public/assets/topview
+사용: python scripts/inspect-topview-frames.py public/assets/planner/top-view
 제품 좌표를 자동 확정하지 않으며, 사람이 프리뷰와 대조할 후보만 stdout JSON으로 낸다.
 """
 from __future__ import annotations
@@ -53,5 +53,5 @@ def inspect(path: Path) -> dict[str, object]:
     return {"file": path.name, "width": image.width, "height": image.height, "candidates": groups[:40]}
 
 
-root = Path(sys.argv[1] if len(sys.argv) > 1 else "public/assets/topview")
+root = Path(sys.argv[1] if len(sys.argv) > 1 else "public/assets/planner/top-view")
 print(json.dumps([inspect(path) for path in sorted(root.glob("*.webp"))], ensure_ascii=False, indent=2))

@@ -1,0 +1,234 @@
+/**
+ * 설계판 탑뷰 자산의 매니페스트·파일·출처·시각 프로파일을 검증한다.
+ *
+ * 사용:
+ *   node scripts/check-topview-assets.mjs
+ *   node scripts/check-topview-assets.mjs --strict-visual
+ *
+ * 종료 코드:
+ *   0 구조 검증 통과
+ *   2 매니페스트 또는 파일 구조 오류
+ *   3 시각 프로파일 승인 미완료(--strict-visual)
+ */
+
+import { createHash } from 'node:crypto';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
+import { resolve, relative, sep } from 'node:path';
+
+const root = resolve(import.meta.dirname, '..');
+const publicRoot = resolve(root, 'public');
+const assetRoot = resolve(publicRoot, 'assets/planner/top-view');
+const manifestPath = resolve(root, 'src/data/curated/topview-assets.json');
+const candidateCatalogPath = resolve(root, 'src/data/curated/anders-topview-candidates.json');
+const layoutCorpusPath = resolve(root, 'src/data/curated/anders-layout-corpus.json');
+const redditArchivePath = resolve(root, 'src/data/curated/anders-reddit-posts.json');
+const strictVisual = process.argv.includes('--strict-visual');
+const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
+const candidateCatalog = JSON.parse(readFileSync(candidateCatalogPath, 'utf8'));
+const layoutCorpus = JSON.parse(readFileSync(layoutCorpusPath, 'utf8'));
+const redditArchive = JSON.parse(readFileSync(redditArchivePath, 'utf8'));
+const errors = [];
+const warnings = [];
+
+function walk(directory) {
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const absolute = resolve(directory, entry.name);
+    return entry.isDirectory() ? walk(absolute) : [absolute];
+  });
+}
+
+if (manifest.$schemaVersion !== 3) errors.push(`schemaVersion: ${manifest.$schemaVersion}`);
+const ids = new Set();
+const paths = new Set();
+const usedFiles = new Set();
+const buildingProfiles = new Map();
+const allowedRoles = new Set(['building', 'foundation', 'transport-part', 'transport-direction']);
+const allowedReview = new Set(['candidate', 'approved', 'rejected', 'superseded']);
+
+for (const asset of manifest.assets) {
+  if (!asset.assetId || ids.has(asset.assetId)) errors.push(`중복 또는 빈 assetId: ${asset.assetId}`);
+  ids.add(asset.assetId);
+  if (!allowedRoles.has(asset.role)) errors.push(`${asset.assetId}: role=${asset.role}`);
+  if (!allowedReview.has(asset.reviewStatus)) errors.push(`${asset.assetId}: reviewStatus=${asset.reviewStatus}`);
+  if (!manifest.$sources[asset.sourceId]) errors.push(`${asset.assetId}: sourceId=${asset.sourceId}`);
+  if (!asset.derivation || !asset.visualProfile) errors.push(`${asset.assetId}: 파생·시각 프로파일 누락`);
+  if (!asset.path?.startsWith('assets/planner/top-view/') || asset.path.includes('..') || !asset.path.endsWith('.webp')) {
+    errors.push(`${asset.assetId}: 잘못된 path=${asset.path}`);
+    continue;
+  }
+  if (paths.has(asset.path)) errors.push(`중복 path: ${asset.path}`);
+  paths.add(asset.path);
+  const absolute = resolve(publicRoot, asset.path);
+  if (!absolute.startsWith(`${assetRoot}${sep}`)) errors.push(`${asset.assetId}: 경로 이탈`);
+  if (!existsSync(absolute) || !statSync(absolute).isFile()) errors.push(`${asset.assetId}: 파일 누락 ${asset.path}`);
+  else {
+    usedFiles.add(absolute);
+    const sha256 = createHash('sha256').update(readFileSync(absolute)).digest('hex');
+    process.stdout.write(`  ${asset.assetId.padEnd(44)} ${sha256.slice(0, 12)}  ${asset.reviewStatus}\n`);
+  }
+  if (asset.buildingClass && asset.role === 'building') {
+    buildingProfiles.set(asset.buildingClass, asset.visualProfile);
+  }
+}
+
+if (candidateCatalog.$schemaVersion !== 2) errors.push(`Anders 후보 schemaVersion: ${candidateCatalog.$schemaVersion}`);
+if (candidateCatalog.$counts?.detectedComponents !== 91 || candidateCatalog.components?.length !== 91) {
+  errors.push(`Anders 연결 성분 수: counts=${candidateCatalog.$counts?.detectedComponents}, rows=${candidateCatalog.components?.length}`);
+}
+const candidateIds = new Set();
+const candidateStatuses = new Set(['identified', 'class-identified', 'role-identified', 'unidentified', 'component']);
+const candidateConfidence = new Set(['verified', 'consensus', 'disputed', 'unsourced']);
+for (const candidate of candidateCatalog.components ?? []) {
+  if (!candidate.id || candidateIds.has(candidate.id)) errors.push(`Anders 후보 중복/빈 id: ${candidate.id}`);
+  candidateIds.add(candidate.id);
+  if (candidate.id !== `${candidate.sheet}#${candidate.candidateId}`) errors.push(`${candidate.id}: sheet/candidateId 불일치`);
+  if (!candidateStatuses.has(candidate.identityStatus)) errors.push(`${candidate.id}: identityStatus=${candidate.identityStatus}`);
+  if (!candidateConfidence.has(candidate.confidence)) errors.push(`${candidate.id}: confidence=${candidate.confidence}`);
+  const box = candidate.detectedBoxPx;
+  if (!box || ![box.x, box.y, box.width, box.height].every(Number.isFinite) || box.width <= 0 || box.height <= 0) {
+    errors.push(`${candidate.id}: detectedBoxPx 오류`);
+  }
+  if (!Array.isArray(candidate.sources) || !candidate.sources.length) errors.push(`${candidate.id}: sources 누락`);
+  if (candidate.identityStatus === 'component' && (!candidate.parentGroupId || candidate.componentRole !== 'occupancy-frame-marker')) {
+    errors.push(`${candidate.id}: 복합 성분의 parentGroupId/componentRole 누락`);
+  }
+  if (candidate.identityStatus === 'identified' && (!candidate.assetId || !ids.has(candidate.assetId))) {
+    errors.push(`${candidate.id}: 승인 assetId 불일치 ${candidate.assetId}`);
+  }
+  if (['role-identified', 'unidentified'].includes(candidate.identityStatus) && !candidate.openQuestion) errors.push(`${candidate.id}: openQuestion 누락`);
+}
+
+if (candidateCatalog.$counts?.semanticGroups !== 84 || candidateCatalog.groups?.length !== 84) {
+  errors.push(`Anders 의미 그룹 수: counts=${candidateCatalog.$counts?.semanticGroups}, rows=${candidateCatalog.groups?.length}`);
+}
+const groupIds = new Set();
+const assignedComponents = new Set();
+for (const group of candidateCatalog.groups ?? []) {
+  if (!group.id || groupIds.has(group.id)) errors.push(`Anders 그룹 중복/빈 id: ${group.id}`);
+  groupIds.add(group.id);
+  if (!Array.isArray(group.componentIds) || !group.componentIds.length || !group.componentIds.includes(group.primaryComponentId)) {
+    errors.push(`${group.id}: componentIds/primaryComponentId 오류`);
+    continue;
+  }
+  for (const componentId of group.componentIds) {
+    if (!candidateIds.has(componentId)) errors.push(`${group.id}: 없는 성분 ${componentId}`);
+    if (assignedComponents.has(componentId)) errors.push(`${group.id}: 중복 소속 성분 ${componentId}`);
+    assignedComponents.add(componentId);
+  }
+  if (group.identityStatus === 'identified' && (!group.assetId || !ids.has(group.assetId))) {
+    errors.push(`${group.id}: 승인 assetId 불일치 ${group.assetId}`);
+  }
+  if (['role-identified', 'unidentified'].includes(group.identityStatus) && !group.openQuestion) errors.push(`${group.id}: openQuestion 누락`);
+}
+if (assignedComponents.size !== candidateIds.size) errors.push(`Anders 그룹 미소속 성분: ${candidateIds.size - assignedComponents.size}건`);
+
+if (layoutCorpus.$schemaVersion !== 2) errors.push(`Anders 도면 코퍼스 schemaVersion: ${layoutCorpus.$schemaVersion}`);
+const corpusSourceIds = new Set();
+for (const source of layoutCorpus.sources ?? []) {
+  if (!source.id || corpusSourceIds.has(source.id)) errors.push(`Anders 도면 출처 중복/빈 id: ${source.id}`);
+  corpusSourceIds.add(source.id);
+  if (!source.kind || !source.status || !source.rightsStatus) errors.push(`${source.id}: 출처 종류/상태/권리 누락`);
+}
+
+const sha256Pattern = /^[0-9a-f]{64}$/;
+const mediaIds = new Set();
+const corpusHashes = new Map();
+const registerCorpusHash = (hash, owner) => {
+  if (!sha256Pattern.test(hash ?? '')) errors.push(`${owner}: SHA-256 오류`);
+  const previous = corpusHashes.get(hash);
+  if (previous) errors.push(`${owner}: SHA-256 중복 ${previous}`);
+  else corpusHashes.set(hash, owner);
+};
+for (const media of layoutCorpus.media ?? []) {
+  if (!media.id || mediaIds.has(media.id)) errors.push(`Anders 도면 매체 중복/빈 id: ${media.id}`);
+  mediaIds.add(media.id);
+  if (!media.role || !media.mimeType) errors.push(`${media.id}: role/mimeType 누락`);
+  for (const sourceId of media.sourceIds ?? []) {
+    if (!corpusSourceIds.has(sourceId)) errors.push(`${media.id}: 없는 출처 ${sourceId}`);
+  }
+  registerCorpusHash(media.sha256, media.id);
+}
+
+const layoutIds = new Set();
+for (const layout of layoutCorpus.layouts ?? []) {
+  if (!layout.id || layoutIds.has(layout.id)) errors.push(`Anders 도면 중복/빈 id: ${layout.id}`);
+  layoutIds.add(layout.id);
+  if (!layout.id?.startsWith('layout:')) errors.push(`${layout.id}: 안정 ID 접두사 오류`);
+  if (!layout.title || !layout.layoutAuthor || !layout.assetAuthor) errors.push(`${layout.id}: 제목/제작자 누락`);
+  if (!Number.isInteger(layout.widthPx) || layout.widthPx <= 0 || !Number.isInteger(layout.heightPx) || layout.heightPx <= 0) {
+    errors.push(`${layout.id}: 픽셀 크기 오류`);
+  }
+  if (!Array.isArray(layout.sourceIds) || !layout.sourceIds.length) errors.push(`${layout.id}: sourceIds 누락`);
+  for (const sourceId of layout.sourceIds ?? []) {
+    if (!corpusSourceIds.has(sourceId)) errors.push(`${layout.id}: 없는 출처 ${sourceId}`);
+  }
+  registerCorpusHash(layout.sha256, layout.id);
+  for (const [index, variant] of (layout.observedVariants ?? []).entries()) {
+    if (!Number.isInteger(variant.widthPx) || variant.widthPx <= 0 || !Number.isInteger(variant.heightPx) || variant.heightPx <= 0 || !variant.relation) {
+      errors.push(`${layout.id}: observedVariants[${index}] 오류`);
+    }
+    registerCorpusHash(variant.sha256, `${layout.id}.observedVariants[${index}]`);
+  }
+  if (layout.titleStatus === 'descriptive-placeholder' && layout.confidence === 'verified') {
+    errors.push(`${layout.id}: 임시 제목을 verified로 둘 수 없음`);
+  }
+}
+
+if (redditArchive.$schemaVersion !== 1) errors.push(`Anders Reddit 색인 schemaVersion: ${redditArchive.$schemaVersion}`);
+const redditPostIds = new Set();
+const redditMediaIds = new Set();
+let archivedRedditMedia = 0;
+let unavailableRedditMedia = 0;
+for (const post of redditArchive.posts ?? []) {
+  if (!post.id || redditPostIds.has(post.id)) errors.push(`Anders Reddit 게시물 중복/빈 id: ${post.id}`);
+  redditPostIds.add(post.id);
+  if (!post.id?.startsWith('reddit:') || !post.redditId || !post.title || !post.role || !post.permalink) {
+    errors.push(`${post.id}: 게시물 식별·제목·역할·URL 누락`);
+  }
+  for (const media of post.media ?? []) {
+    if (!media.id || redditMediaIds.has(media.id)) errors.push(`Anders Reddit 매체 중복/빈 id: ${media.id}`);
+    redditMediaIds.add(media.id);
+    if (!media.sourceUri || !Number.isInteger(media.widthPx) || media.widthPx <= 0 || !Number.isInteger(media.heightPx) || media.heightPx <= 0) {
+      errors.push(`${media.id}: 원본 URI/픽셀 크기 오류`);
+    }
+    if (media.availability === 'archived') {
+      archivedRedditMedia += 1;
+      if (!sha256Pattern.test(media.sha256 ?? '')) errors.push(`${media.id}: 보관 매체 SHA-256 오류`);
+    } else if (media.availability === 'unavailable') {
+      unavailableRedditMedia += 1;
+      if (media.sha256 !== null) errors.push(`${media.id}: 미확보 매체에 SHA-256 존재`);
+    } else errors.push(`${media.id}: availability=${media.availability}`);
+  }
+}
+if (redditArchive.counts?.posts !== redditPostIds.size || redditArchive.counts?.media !== redditMediaIds.size ||
+    redditArchive.counts?.archivedMedia !== archivedRedditMedia || redditArchive.counts?.unavailableMedia !== unavailableRedditMedia) {
+  errors.push('Anders Reddit 색인 집계 불일치');
+}
+
+for (const asset of manifest.assets.filter((entry) => entry.sourceId === 'anders-2023')) {
+  const source = manifest.$sources[asset.sourceId];
+  const candidateKey = `${asset.sheet ?? source.sheet}#${asset.candidateId}`;
+  if (!candidateIds.has(candidateKey)) errors.push(`${asset.assetId}: Anders 후보 카탈로그 누락 ${candidateKey}`);
+}
+
+for (const file of walk(assetRoot)) {
+  if (!usedFiles.has(file)) errors.push(`매니페스트에 없는 런타임 자산: ${relative(publicRoot, file)}`);
+}
+
+const profileGroups = Map.groupBy([...buildingProfiles], ([, profile]) => profile);
+const candidateBuildings = manifest.assets.filter((asset) => asset.role === 'building' && asset.reviewStatus !== 'approved');
+const unidentifiedCandidates = candidateCatalog.groups.filter((candidate) => candidate.identityStatus === 'unidentified');
+if (profileGroups.size > 1) warnings.push(`설비 visualProfile ${profileGroups.size}종 혼용: ${[...profileGroups.keys()].join(', ')}`);
+if (candidateBuildings.length) warnings.push(`설비 승인 대기 ${candidateBuildings.length}건: ${candidateBuildings.map((asset) => asset.assetId).join(', ')}`);
+if (unidentifiedCandidates.length) warnings.push(`Anders 후보 미식별 ${unidentifiedCandidates.length}건`);
+
+if (errors.length) {
+  for (const error of errors) process.stderr.write(`ERROR ${error}\n`);
+  process.exit(2);
+}
+for (const warning of warnings) process.stderr.write(`WARN  ${warning}\n`);
+if (strictVisual && warnings.length) process.exit(3);
+process.stdout.write(`PASS  탑뷰 ${manifest.assets.length}건 · 파일/출처/경로 구조 일치\n`);
+process.stdout.write(`PASS  Anders 연결 성분 ${candidateCatalog.components.length}건 → 의미 자산 그룹 ${candidateCatalog.groups.length}건 · 소속/박스/식별 상태 일치\n`);
+process.stdout.write(`PASS  Anders 도면 코퍼스 ${layoutCorpus.layouts.length}건 · 출처 ${layoutCorpus.sources.length}건 · 매체 ${layoutCorpus.media.length}건 · 해시/참조 일치\n`);
+process.stdout.write(`PASS  Anders Reddit 원출처 ${redditPostIds.size}건 · 이미지 ${archivedRedditMedia}건 보관 · 미확보 ${unavailableRedditMedia}건 명시\n`);

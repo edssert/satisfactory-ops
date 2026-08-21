@@ -20,6 +20,7 @@ output/
 .obsidian/themes/
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json
+satisfactory-ops-vault/.obsidian/
 /tmp/
 dist/
 node_modules/

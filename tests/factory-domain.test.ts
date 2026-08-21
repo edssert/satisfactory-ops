@@ -184,7 +184,9 @@ test('과경사와 경사 중 회전은 각각 시공 오류로 분리된다', (
 });
 
 test('배치 가능한 설비는 원근 아이콘 폴백 없이 실제 탑뷰를 갖는다', () => {
-  const assets = new Set(topviewRows.assets.map((entry) => entry.buildingClass));
+  const assets = new Map(topviewRows.assets
+    .filter((entry) => 'buildingClass' in entry)
+    .map((entry) => [entry.buildingClass, entry]));
   const materialConnected = new Set(portRows.ports
     .filter((port) => port.medium !== 'power')
     .map((port) => port.buildingClass));
@@ -192,11 +194,13 @@ test('배치 가능한 설비는 원근 아이콘 폴백 없이 실제 탑뷰를
   const missing = catalog.filter((buildingClass) => !assets.has(buildingClass));
   assert.deepEqual(missing, []);
   for (const buildingClass of catalog) {
-    assert.equal(existsSync(`public/assets/topview/${buildingClass}.webp`), true, buildingClass);
+    const asset = assets.get(buildingClass);
+    assert.ok(asset, buildingClass);
+    assert.equal(existsSync(`public/${asset.path}`), true, buildingClass);
   }
 });
 
-test('물류 도면은 직선·회전·방향·파이프 자산을 빠짐없이 가진다', () => {
+test('물류 도면은 직선·회전·방향·파이프와 양방향 리프트 탑뷰를 빠짐없이 가진다', () => {
   const required = [
     'ConveyorBeltStraightMk1',
     'ConveyorBeltTurn90Mk1',
@@ -205,12 +209,19 @@ test('물류 도면은 직선·회전·방향·파이프 자산을 빠짐없이 
     'PipelineTurn90Mk1',
     'PipelineJunctionCrossMk1',
   ];
-  const assetIds = new Set(topviewRows.assets.map((entry) => 'assetId' in entry ? entry.assetId : undefined));
+  const assetsById = new Map(topviewRows.assets.map((entry) => [entry.assetId, entry]));
   for (const assetId of required) {
-    assert.equal(assetIds.has(assetId), true, assetId);
-    assert.equal(existsSync(`public/assets/topview/${assetId}.webp`), true, assetId);
+    const asset = assetsById.get(assetId);
+    assert.ok(asset, assetId);
+    assert.equal(existsSync(`public/${asset.path}`), true, assetId);
   }
-  assert.equal(existsSync('public/assets/topview/Build_ConveyorLiftMk1_C.webp'), true);
+  const liftClasses = Array.from({ length: 6 }, (_, index) => `Build_ConveyorLiftMk${index + 1}_C`);
+  for (const assetId of ['ConveyorLiftHeadA', 'ConveyorLiftHeadB']) {
+    const lift = assetsById.get(assetId);
+    assert.ok(lift, assetId);
+    assert.equal(existsSync(`public/${lift.path}`), true, assetId);
+    assert.deepEqual(lift.sharedBuildingClasses, liftClasses, assetId);
+  }
 });
 
 test('직교 라우터는 중간 설비의 하드 클리어런스를 우회한다', () => {

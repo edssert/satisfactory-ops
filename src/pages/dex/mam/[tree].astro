@@ -103,7 +103,12 @@ const { w: TW, h: TH } = MAM_TILE;
         </div>
 
         <div class="mam-stage-wrap">
-        <div class="mam-stage">
+        <div
+          class="mam-stage"
+          role="region"
+          aria-label={`${tree.ko} 연구 트리. 좌우와 위아래로 스크롤할 수 있습니다.`}
+          tabindex="0"
+        >
           <svg
             class="mam-svg"
             width={layout.width}
@@ -154,7 +159,7 @@ const { w: TW, h: TH } = MAM_TILE;
 
         <details class="mam-table">
           <summary>이 트리의 연구 {layout.nodes.length}건 — 비용과 해금 전체</summary>
-          <div class="scroll-x">
+          <div class="scroll-x" tabindex="0">
             <table>
               <thead>
                 <tr>

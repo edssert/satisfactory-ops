@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """검토가 끝난 AndersPottemager 시트 영역을 투명 WebP 설비 자산으로 만든다.
 
-사용: python scripts/build-topview-assets.py <Assets 폴더> <출력 폴더>
+사용: python scripts/build-topview-assets.py <Assets 폴더> <public 폴더>
 작물 식별과 좌표는 src/data/curated/topview-assets.json이 정본이다.
 """
 
@@ -17,14 +17,14 @@ from PIL import Image
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("source_directory", type=Path)
-    parser.add_argument("output_directory", type=Path)
+    parser.add_argument("public_directory", type=Path)
     args = parser.parse_args()
 
     root = Path(__file__).resolve().parents[1]
     manifest_path = root / "src/data/curated/topview-assets.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     sheets: dict[str, Image.Image] = {}
-    args.output_directory.mkdir(parents=True, exist_ok=True)
+    args.public_directory.mkdir(parents=True, exist_ok=True)
 
     generated = []
     for asset in manifest["assets"]:
@@ -47,7 +47,8 @@ def main() -> None:
         if alpha_box is None:
             raise SystemExit(f"투명하지 않은 자산 영역: {asset_id}")
         image = image.crop(alpha_box)
-        output = args.output_directory / f"{asset_id}.webp"
+        output = args.public_directory / asset["path"]
+        output.parent.mkdir(parents=True, exist_ok=True)
         image.save(output, "WEBP", lossless=True, quality=100, method=6)
         generated.append({"assetId": asset_id, "width": image.width, "height": image.height})
 

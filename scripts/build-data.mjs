@@ -7,7 +7,7 @@
  * 출력: src/data/{meta,items,recipes,buildings,schematics,milestones}.json
  *
  * 의존성 없음 (Node 24 내장 fs/path/crypto만 사용).
- * 결정 근거: docs/adr/0008-game-data-source.md
+ * 결정 근거: satisfactory-ops-vault/docs/decisions/REGISTER.md D-004
  *
  * 사용법:
  *   node scripts/build-data.mjs                     # 자동 탐색 후 빌드
@@ -185,7 +185,7 @@ function parseClassList(raw) {
  *
  * 충돌 박스가 **여러 개인 건물이 많다**(입자 가속기는 24개). 첫 박스만 읽으면 조립기 높이가
  * 5m가 아니라 3m로 나온다. 전부의 합집합을 잡아야 배치 계산이 맞는다.
- * 단위는 cm이므로 100으로 나눈다. 도면 생성(FRD F13)의 기준 치수다.
+ * 단위는 cm이므로 100으로 나눈다. 설계 스튜디오 점유 영역 후보 치수다.
  */
 /**
  * mClearanceData -> 배치에 쓸 기하.
@@ -437,7 +437,7 @@ function buildBuildings(groups, itemIndex, recipes) {
         manufacturingSpeed: c.mManufacturingSpeed !== undefined ? num(c.mManufacturingSpeed) : null,
         somersloopSlots: c.mProductionShardSlotSize !== undefined ? num(c.mProductionShardSlotSize) : null,
         powerShardSlots: c.mPotentialShardSlots !== undefined ? num(c.mPotentialShardSlots) : null,
-        // 배치 도면용 실제 점유 공간 (FRD F13-2)
+        // 설계 스튜디오 점유 영역 후보. 자산·세이브 교차 검증 전에는 승인 치수로 간주하지 않는다.
         footprint: parseClearance(c.mClearanceData),
         productionBoostPowerExponent: c.mProductionBoostPowerConsumptionExponent !== undefined
           ? num(c.mProductionBoostPowerConsumptionExponent) : null,
@@ -609,7 +609,7 @@ function main() {
       '  3) 또는 SATISFACTORY_DOCS 환경변수에 Docs 폴더 경로를 지정하세요.',
       '',
       '주의: 공개 저장소 미러(greeny/SatisfactoryTools 등)는 1.2 미반영이라 대체 소스로 쓰지 않습니다.',
-      '      근거는 docs/adr/0008-game-data-source.md 참고.',
+      '      근거는 satisfactory-ops-vault/docs/decisions/REGISTER.md D-004 참고.',
     ].join('\n'));
     process.exit(1);
   }

@@ -1,33 +1,25 @@
 # satisfactory-ops
 
-**Satisfactory 공장 설계 플레이북** — 마일스톤 단위로 "지금 할 일"과 "지금 남겨둬야 할 것"을 알려주는, 내 진행 상황을 아는 안내서.
+**Satisfactory 공장 계산·설계·검증 웹앱** — 게임 데이터 기반 생산 계산, 진행 계획, 실축 수동 배치,
+세이브 진단, 시공 도면 출력을 하나의 로컬 우선 작업 흐름으로 제공한다.
 
 배포: **<https://edssert.github.io/satisfactory-ops/>**
 
 > ⚠️ 비공식 팬 프로젝트입니다. Coffee Stain Studios와 무관합니다.
 
-## 왜 또 만드나
+## 제품 범위
 
-기존 Satisfactory 도구는 전부 **계산기**다. "보강된 철판(Reinforced Iron Plate) 5/분에 기계 몇 대?"는 답해주지만, **"지금 뭘 해야 하지?"** 와 **"지금 이 배치가 왜 T6에 문제가 되지?"** 는 답하지 않는다.
-
-Satisfactory는 설계 게임이다. 초반 결정이 수십 시간 뒤에 비용으로 돌아오는데, 플레이어가 그걸 아는 시점은 이미 늦었을 때다.
-
-| 실패 | 드러나는 시점 | 진짜 원인 |
-|---|---|---|
-| 로드 밸런서로 지어 확장 불가 | T4~T5 | T2의 분배 방식 선택 |
-| 나사가 전체 생산을 잡아먹음 | T6 | 대체 레시피를 안 모음 |
-| 물이 없어 석탄 발전 불가 | T3 | 입지 선정 시 물 미고려 |
-| 정유소 부산물 역류로 전면 정지 | T5 | 유체는 양쪽 산출을 다 빼야 함 |
-
-이 앱은 그 정보를 **필요한 시점에** 준다.
+제품의 핵심 계약은 생산 목표를 계산한 뒤 동일한 데이터와 설정을 설계판, 공정 검증, 세이브 대조,
+도면 출력까지 유지하는 것이다. 계산기는 부가 기능이 아니며 복수 목표, 대체 제작법, 순환·부산물,
+추출·물류 제약, 클럭·강화 자원, 전력, BOM을 다루는 핵심 도메인으로 개발한다.
 
 ## 화면
 
 | 화면 | 내용 |
 |---|---|
-| **가이드** `/guide/` | 이 사이트의 본체. 게임의 해금 순서대로 "지금 무엇을 얼마나 지어야 하는가"를 짚는다. 하위 화면 **시작 지점 고르기**는 네 시작 지역의 자원을 노드 좌표에서 직접 세어 별점의 뜻을 풀어 준다 |
+| **가이드** `/guide/` | 해금 순서, 시공 조건, 현장 검증, 확장 예약을 게임 데이터와 근거에 따라 제공한다 |
 | **설계** `/planner/` | 실제 축척(미터)으로 공장을 짜는 도면판. "여기에 들어가나"까지 답한다 |
-| **직접 만들기** `/builder/` | 목표 품목과 분당 수량을 넣으면 공정 전체를 펼친다. 유리수 산술이라 반올림 오차가 없고, 순환 레시피는 사용자가 켜야 나타난다 |
+| **생산 계획** `/builder/` | 목표 품목과 제약을 입력해 공정, 원자재, 전력, 물류, BOM을 계산한다. RFC-0001에 따라 복수 목표와 순환·부산물 최적화를 확장한다 |
 | **지도** `/map/` | 자원 노드 626개 + 수집품(슬러그·소머슬룹·머서 구체·하드 드라이브 화물칸) + 인게임 격자. 표시는 전부 SVG라 확대해도 선명하다 |
 | **진단** `/checkup/` | `.sav`를 브라우저에서 읽어 지금 무엇이 병목인지 답한다. 게임이 설비마다 적어 두는 직전 5분 가동률을 쓰고, 벨트를 따라가 "굶는지 막혔는지"를 가른다. **파일은 기기를 벗어나지 않는다** |
 | **도감** `/dex/` | 진행도와 무관하게 게임의 모든 해금·수치를 본다 — 티어 마일스톤 42, MAM 노드 120, 어썸 싱크 상점 173, 대체 제작법 110, 그리고 벨트·파이프·발전기 레퍼런스 표와 용어집 17건 |
@@ -51,11 +43,12 @@ Node 22 이상이 필요하다(`.nvmrc`).
 `npm run data`는 게임 설치본의 `CommunityResources/Docs`를 찾아 읽는다. 게임이 없는 기기에서는
 커밋된 `src/data/`를 그대로 쓰면 된다 — **앱 실행에 게임이 필요하지 않다.**
 
-AI 에이전트로 이 저장소를 작업한다면 [`AGENTS.md`](AGENTS.md)를 먼저 읽는다.
+AI 에이전트로 이 저장소를 작업한다면 [`AGENTS.md`](AGENTS.md)와
+[`문서 관리 규격`](satisfactory-ops-vault/docs/DOCUMENTATION.md)을 먼저 읽는다.
 
 ## 원칙
 
-**수치는 출처 없이 쓰지 않는다.** 모든 게임 데이터에 `source`와 `confidence`(`verified`/`consensus`/`disputed`)를 붙인다. 근거는 [`docs/research/`](docs/research/)에 남긴다.
+**수치는 출처 없이 쓰지 않는다.** 모든 게임 데이터에 `source`와 `confidence`(`verified`/`consensus`/`disputed`)를 붙인다. 근거는 [`볼트의 research`](satisfactory-ops-vault/docs/research/)에 남긴다.
 
 **이견을 숨기지 않는다.** 출처가 갈리면 양쪽을 다 쓰고 어느 쪽이 왜 더 믿을 만한지 밝힌다.
 
@@ -74,7 +67,8 @@ Astro 7 정적 출력 + Preact 아일랜드 + TypeScript. 런타임 의존성은
 
 문서 화면은 JavaScript 0KB이고, 상태를 소유하는 화면만 아일랜드로 하이드레이션한다.
 자체 생성 서비스워커가 전량 프리캐시해 오프라인에서도 동작한다.
-생산 체인은 BigInt 유리수로 풀어 반올림 오차가 없다.
+비순환 생산 체인은 BigInt 유리수로 풀어 반올림 오차를 제거한다. 순환·복수 목표·부산물 상쇄를 포함한
+확장 범위와 승인 조건은 [`PRODUCT`](satisfactory-ops-vault/docs/PRODUCT.md)와 [`ROADMAP`](satisfactory-ops-vault/docs/ROADMAP.md)에서 관리한다.
 
 ## 문서
 
@@ -82,14 +76,14 @@ Astro 7 정적 출력 + Preact 아일랜드 + TypeScript. 런타임 의존성은
 |---|---|
 | [`AGENTS.md`](AGENTS.md) | AI 에이전트 진입 문서 — 명령·규칙·지뢰 |
 | [`CLAUDE.md`](CLAUDE.md) | 개발 지침 |
-| [`docs/PRD.md`](docs/PRD.md) | 무엇을 왜 만드는가 |
-| [`docs/FRD.md`](docs/FRD.md) | 기능 명세 |
-| [`docs/TRD.md`](docs/TRD.md) | 기술 요구·품질 기준 |
-| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | 구조·모듈 경계·데이터 흐름 |
-| [`docs/DATA-MODEL.md`](docs/DATA-MODEL.md) | 데이터 스키마 |
-| [`docs/DESIGN-BRIEF.md`](docs/DESIGN-BRIEF.md) | 시각 설계 지시서 |
-| [`docs/adr/`](docs/adr/) | 결정과 근거 (19건) |
-| [`docs/research/`](docs/research/) | 조사 원본 (55건) |
+| [`satisfactory-ops-vault/PROJECT-HUB.md`](satisfactory-ops-vault/PROJECT-HUB.md) | 독립 Obsidian 볼트 진입점과 실행 우선순위 |
+| [`PRODUCT`](satisfactory-ops-vault/docs/PRODUCT.md) | 제품 범위·기능·품질·완료 조건 |
+| [`ENGINEERING`](satisfactory-ops-vault/docs/ENGINEERING.md) | 프레임워크·모듈·데이터·검증 경계 |
+| [`DESIGN`](satisfactory-ops-vault/docs/DESIGN.md) | 시각 설계·모션·테마·진화 규격 |
+| [`ASSETS`](satisfactory-ops-vault/docs/ASSETS.md) | 게임 자산·탑뷰·토대·운송 자산 규격 |
+| [`DECISIONS`](satisfactory-ops-vault/docs/DECISIONS.md) | 현재 유효한 중요 결정 |
+| [`ROADMAP`](satisfactory-ops-vault/docs/ROADMAP.md) | 실행 순서·검증 상태·단계 종료 조건 |
+| [`Research`](satisfactory-ops-vault/docs/research/README.md) | 다시 검증한 외부 근거와 조사 대기열 |
 
 ## 기여
 
@@ -113,9 +107,10 @@ Astro 7 정적 출력 + Preact 아일랜드 + TypeScript. 런타임 의존성은
 
 번들된 서체는 전부 SIL Open Font License 1.1입니다 — Wanted Sans(표시), Pretendard(본문), JetBrains Mono(수치).
 
-## 관련 도구
+## 교차 검증 도구
 
-이 앱이 하지 않는 것은 이들이 이미 잘합니다.
+다음 도구는 기능 범위와 계산 결과를 독립적으로 대조하는 기준으로 사용한다. 외부 링크가 내부 기능 결손을
+대체하지 않는다.
 
 - [SCIM 인터랙티브 맵](https://satisfactory-calculator.com/en/interactive-map) — 노드 단위 자원 지도
 - [Satisfactory Tools](https://www.satisfactorytools.com/production) — 정밀 생산 플래너
@@ -124,6 +119,6 @@ Astro 7 정적 출력 + Preact 아일랜드 + TypeScript. 런타임 의존성은
 ## 데이터 출처
 
 - 게임 수치: 게임 설치본이 배포하는 `CommunityResources/Docs/{en-US,ko}.json` (Coffee Stain Studios)
-- 한국어 표시명: 게임 공식 한국어 로케일 ([ADR-0017](docs/adr/0017-korean-display-names.md))
+- 한국어 표시명: 게임 공식 한국어 로케일 ([D-011](satisfactory-ops-vault/docs/decisions/REGISTER.md))
 - 자원 노드·수집품 좌표: [rockfactory/satisfactory-logistics](https://github.com/rockfactory/satisfactory-logistics) (MIT)
 - 세이브 파서: [@etothepii/satisfactory-file-parser](https://github.com/etothepii4/satisfactory-file-parser)

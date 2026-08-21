@@ -1,0 +1,731 @@
+{
+  "$schemaVersion": 1,
+  "$description": "AndersPottemager의 Satisfactory Reddit 게시물과 원본 이미지의 정규화 증거 색인. 이미지 바이트는 배포하지 않는다.",
+  "author": "AndersPottemager",
+  "acquisition": {
+    "metadataSource": "https://arctic-shift.photon-reddit.com/api/posts/search?author=AndersPottemager&limit=50",
+    "downloader": "scripts/archive-anders-layouts.mjs",
+    "rightsStatus": "public-reference-only-unless-explicitly-released"
+  },
+  "counts": {
+    "posts": 21,
+    "media": 42,
+    "archivedMedia": 37,
+    "unavailableMedia": 5
+  },
+  "posts": [
+    {
+      "id": "reddit:k251gd",
+      "redditId": "k251gd",
+      "title": "Some Tier 1 Iron Works schematics. Oddly Satisfactory. Because ingame factory design is quite frustrating process.",
+      "role": "layout",
+      "createdUtc": 1606496871,
+      "permalink": "https://www.reddit.com/r/SatisfactoryGame/comments/k251gd/some_tier_1_iron_works_schematics_oddly/",
+      "media": [
+        {
+          "id": "reddit-media:k251gd:1",
+          "index": 1,
+          "mediaId": "c8btc2un7t161",
+          "sourceUri": "https://i.redd.it/c8btc2un7t161.png",
+          "fallbackUri": "https://preview.redd.it/c8btc2un7t161.png?width=640&format=png&auto=webp&s=ae11f61c9c5cc955506be3d3f406af20b4b48bbf",
+          "widthPx": 640,
+          "heightPx": 640,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "9993fce27b63c33219a225b7cbed45c8d738e641dcb4da463298d99bab2a3f92"
+        },
+        {
+          "id": "reddit-media:k251gd:2",
+          "index": 2,
+          "mediaId": "hg5h42do7t161",
+          "sourceUri": "https://i.redd.it/hg5h42do7t161.png",
+          "fallbackUri": "https://preview.redd.it/hg5h42do7t161.png?width=1024&format=png&auto=webp&s=87d3a2076b34275e372cf058420eab0a14511f80",
+          "widthPx": 1024,
+          "heightPx": 1024,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "0dc515fc97f170f465d3bda355d5c71d555a67c74819c655edc99be5986c9098"
+        },
+        {
+          "id": "reddit-media:k251gd:3",
+          "index": 3,
+          "mediaId": "a4np11to7t161",
+          "sourceUri": "https://i.redd.it/a4np11to7t161.png",
+          "fallbackUri": "https://preview.redd.it/a4np11to7t161.png?width=1024&format=png&auto=webp&s=53abaa225582f7b58782c2a453b07b7c13782a71",
+          "widthPx": 1024,
+          "heightPx": 1024,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "fc3d9616c42a4ae4ff0b559cb20bdf44acdd5e38b9f41b97a41ea6907a620de9"
+        },
+        {
+          "id": "reddit-media:k251gd:4",
+          "index": 4,
+          "mediaId": "s8yndggp7t161",
+          "sourceUri": "https://i.redd.it/s8yndggp7t161.png",
+          "fallbackUri": "https://preview.redd.it/s8yndggp7t161.png?width=1024&format=png&auto=webp&s=f1ed911eb4a1dd9a02d4e3bb47acaea74e6440a5",
+          "widthPx": 1024,
+          "heightPx": 1024,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "7fc88531b439d303d55069f24a3b0a3994042c81ee000a9f41ef30eb8f976b91"
+        },
+        {
+          "id": "reddit-media:k251gd:5",
+          "index": 5,
+          "mediaId": "o6lattvp7t161",
+          "sourceUri": "https://i.redd.it/o6lattvp7t161.png",
+          "fallbackUri": "https://preview.redd.it/o6lattvp7t161.png?width=896&format=png&auto=webp&s=a7ef7726485d13938e15f5181e62867481400f3a",
+          "widthPx": 896,
+          "heightPx": 1280,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "2ba0ec049d9264d865bff43940b8200328a32ec1827ff0e3361a7559a5311462"
+        }
+      ]
+    },
+    {
+      "id": "reddit:k3dacg",
+      "redditId": "k3dacg",
+      "title": "Manufacturers are really complicated",
+      "role": "layout",
+      "createdUtc": 1606670824,
+      "permalink": "https://www.reddit.com/r/SatisfactoryGame/comments/k3dacg/manufacturers_are_really_complicated/",
+      "media": [
+        {
+          "id": "reddit-media:k3dacg:1",
+          "index": 1,
+          "mediaId": "f11gnkrzq7261",
+          "sourceUri": "https://i.redd.it/f11gnkrzq7261.png",
+          "fallbackUri": "https://preview.redd.it/f11gnkrzq7261.png?auto=webp&s=009f224b084af9a3ec0a1578e4c936be73c40bae",
+          "widthPx": 896,
+          "heightPx": 1152,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "b526259d26ba76e0960081709e9ca0754c5f353475fd32ea9999d44e4a74df3e"
+        }
+      ]
+    },
+    {
+      "id": "reddit:k5at59",
+      "redditId": "k5at59",
+      "title": "Always had trouble remembering how to do this properly",
+      "role": "layout",
+      "createdUtc": 1606921394,
+      "permalink": "https://www.reddit.com/r/SatisfactoryGame/comments/k5at59/always_had_trouble_remembering_how_to_do_this/",
+      "media": [
+        {
+          "id": "reddit-media:k5at59:1",
+          "index": 1,
+          "mediaId": "ypaev0k5gs261",
+          "sourceUri": "https://i.redd.it/ypaev0k5gs261.png",
+          "fallbackUri": "https://preview.redd.it/ypaev0k5gs261.png?auto=webp&s=eb6533bcadc21df5f0a6a3d8a055c47527e7710b",
+          "widthPx": 1152,
+          "heightPx": 1536,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "cf753f35dd4516a25e0f5d1a34bb565689c5ebe6dbc9d736d67f46532c65695d"
+        }
+      ]
+    },
+    {
+      "id": "reddit:k76nk7",
+      "redditId": "k76nk7",
+      "title": "It's nice to have a plan. Here's a complete layout of 100% Efficient x20 Modular Frame Factory.",
+      "role": "layout",
+      "createdUtc": 1607171345,
+      "permalink": "https://www.reddit.com/r/SatisfactoryGame/comments/k76nk7/its_nice_to_have_a_plan_heres_a_complete_layout/",
+      "media": [
+        {
+          "id": "reddit-media:k76nk7:1",
+          "index": 1,
+          "mediaId": "1k2f7vvc3d361",
+          "sourceUri": "https://i.redd.it/1k2f7vvc3d361.png",
+          "fallbackUri": "https://preview.redd.it/1k2f7vvc3d361.png?width=1408&format=png&auto=webp&s=2222e3027cf562c78144414bab17b894ff25a89e",
+          "widthPx": 1408,
+          "heightPx": 1280,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "4717b57694ee065501197bf1568633568a10fcd501d43331d2d7774693b6c8fd"
+        },
+        {
+          "id": "reddit-media:k76nk7:2",
+          "index": 2,
+          "mediaId": "8lombi7d3d361",
+          "sourceUri": "https://i.redd.it/8lombi7d3d361.png",
+          "fallbackUri": "https://preview.redd.it/8lombi7d3d361.png?width=1408&format=png&auto=webp&s=c8b2d22bd2b88859e525276d1d63a4f0c7f94430",
+          "widthPx": 1408,
+          "heightPx": 1280,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "249fe8e56bc998724aca82c00e21c3952d39e7d02ce1a67709abc5a96fc028f9"
+        },
+        {
+          "id": "reddit-media:k76nk7:3",
+          "index": 3,
+          "mediaId": "7z2vqgnd3d361",
+          "sourceUri": "https://i.redd.it/7z2vqgnd3d361.png",
+          "fallbackUri": "https://preview.redd.it/7z2vqgnd3d361.png?width=1408&format=png&auto=webp&s=865830f907e963c12fd68f2f2245954e401871d8",
+          "widthPx": 1408,
+          "heightPx": 1280,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "ad1f55ba94527f9a8efef7b1e3d38a4b3a4ee52877dfb162284d16f908e4c32a"
+        },
+        {
+          "id": "reddit-media:k76nk7:4",
+          "index": 4,
+          "mediaId": "yy12k36e3d361",
+          "sourceUri": "https://i.redd.it/yy12k36e3d361.png",
+          "fallbackUri": "https://preview.redd.it/yy12k36e3d361.png?width=1408&format=png&auto=webp&s=ce08c77ec3a31b02573815e7f92211efa9d27aba",
+          "widthPx": 1408,
+          "heightPx": 1280,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "371cde0ded30d4968cf535aab3acebb4406ed6216ba155154d2bda2c4f567c8c"
+        },
+        {
+          "id": "reddit-media:k76nk7:5",
+          "index": 5,
+          "mediaId": "2rx1xoje3d361",
+          "sourceUri": "https://i.redd.it/2rx1xoje3d361.png",
+          "fallbackUri": "https://preview.redd.it/2rx1xoje3d361.png?width=1408&format=png&auto=webp&s=114f4ea6be1780ea2c28b3876d91d99a9e79cb24",
+          "widthPx": 1408,
+          "heightPx": 1280,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "08cb73f83c49f41dd7199837b9a986ec824115cbeb8d2ba932179f999d2a0091"
+        },
+        {
+          "id": "reddit-media:k76nk7:6",
+          "index": 6,
+          "mediaId": "ajglbxue3d361",
+          "sourceUri": "https://i.redd.it/ajglbxue3d361.png",
+          "fallbackUri": "https://preview.redd.it/ajglbxue3d361.png?width=1408&format=png&auto=webp&s=d537b8091c0fb66d6a991079193d10ac5ff53382",
+          "widthPx": 1408,
+          "heightPx": 1280,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "65f849da92fcc06808343dab4816426be062cecddb17a4b44f1c17132ba5b0ab"
+        },
+        {
+          "id": "reddit-media:k76nk7:7",
+          "index": 7,
+          "mediaId": "y9xwvglf3d361",
+          "sourceUri": "https://i.redd.it/y9xwvglf3d361.png",
+          "fallbackUri": "https://preview.redd.it/y9xwvglf3d361.png?width=1408&format=png&auto=webp&s=fc40c68ed90b6d460403fa0f0bbc8e1970321ea5",
+          "widthPx": 1408,
+          "heightPx": 1280,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "2ac83f485f8b4675cd563d48c3baa5218eb7c76fc380aa218ae4d3d8efb95344"
+        },
+        {
+          "id": "reddit-media:k76nk7:8",
+          "index": 8,
+          "mediaId": "svub841g3d361",
+          "sourceUri": "https://i.redd.it/svub841g3d361.png",
+          "fallbackUri": "https://preview.redd.it/svub841g3d361.png?width=1408&format=png&auto=webp&s=1e66fa79cb5d9abd5a5785d5eaf6ec6f4a7e7557",
+          "widthPx": 1408,
+          "heightPx": 1280,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "ccdfe9d884ec78c51a3ea80eda970918410f2c38efafadbc78b23f1d92016c7c"
+        },
+        {
+          "id": "reddit-media:k76nk7:9",
+          "index": 9,
+          "mediaId": "li8z5tgg3d361",
+          "sourceUri": "https://i.redd.it/li8z5tgg3d361.png",
+          "fallbackUri": "https://preview.redd.it/li8z5tgg3d361.png?width=1408&format=png&auto=webp&s=cfdb1da50c7e2e18eee4f01e48b26f3006ad0611",
+          "widthPx": 1408,
+          "heightPx": 1280,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "073ec370bb3cf31dc80a54a8a980bbd8b9bf57a9a21cc8266f350c207374386e"
+        },
+        {
+          "id": "reddit-media:k76nk7:10",
+          "index": 10,
+          "mediaId": "gclvh86i3d361",
+          "sourceUri": "https://i.redd.it/gclvh86i3d361.png",
+          "fallbackUri": "https://preview.redd.it/gclvh86i3d361.png?width=2560&format=png&auto=webp&s=08999dbe91f8cd5423efa8d3b9fdfd3fdc63d69e",
+          "widthPx": 2560,
+          "heightPx": 1440,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "58e8a95949528f509d1588b02326e72c2a0b650356675372f8026ad13e101c64"
+        },
+        {
+          "id": "reddit-media:k76nk7:11",
+          "index": 11,
+          "mediaId": "2omcksyi3d361",
+          "sourceUri": "https://i.redd.it/2omcksyi3d361.png",
+          "fallbackUri": "https://preview.redd.it/2omcksyi3d361.png?width=2560&format=png&auto=webp&s=7b0d9efb648dcc5d1f651c1c31f5aa86d59e48a1",
+          "widthPx": 2560,
+          "heightPx": 1440,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "a0ac3d08bde73bf6868072ea07d7ecfa945994624b465a9602308acb1be2b65d"
+        },
+        {
+          "id": "reddit-media:k76nk7:12",
+          "index": 12,
+          "mediaId": "kg7ly2ej3d361",
+          "sourceUri": "https://i.redd.it/kg7ly2ej3d361.png",
+          "fallbackUri": "https://preview.redd.it/kg7ly2ej3d361.png?width=2560&format=png&auto=webp&s=60918a9cc0f27ebf68630120b443f929b8636ee7",
+          "widthPx": 2560,
+          "heightPx": 1440,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "c2b516520e5980b1d7ecec089443ce2e0c3aa65aefac0f6bb0d6b57f641be808"
+        }
+      ]
+    },
+    {
+      "id": "reddit:k7dvjn",
+      "redditId": "k7dvjn",
+      "title": "The Rotor Tower Layout",
+      "role": "layout",
+      "createdUtc": 1607196332,
+      "permalink": "https://www.reddit.com/r/SatisfactoryGame/comments/k7dvjn/the_rotor_tower_layout/",
+      "media": [
+        {
+          "id": "reddit-media:k7dvjn:1",
+          "index": 1,
+          "mediaId": "94c4warr5f361",
+          "sourceUri": "https://i.redd.it/94c4warr5f361.png",
+          "fallbackUri": "https://preview.redd.it/94c4warr5f361.png?width=1920&format=png&auto=webp&s=de4a4e22166b740b88d3d1ec103226c14204b739",
+          "widthPx": 1920,
+          "heightPx": 1408,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "cb7a5a2990817c48157b3d20120bace4aa24bf702957cd8c78383ca42fb94440"
+        },
+        {
+          "id": "reddit-media:k7dvjn:2",
+          "index": 2,
+          "mediaId": "e2g5fjcz5f361",
+          "sourceUri": "https://i.redd.it/e2g5fjcz5f361.png",
+          "fallbackUri": "https://preview.redd.it/e2g5fjcz5f361.jpg?width=2560&format=pjpg&auto=webp&s=5eaa9cadfd06bf1474443953a76326bc54badca1",
+          "widthPx": 2560,
+          "heightPx": 1440,
+          "mimeType": "image/jpg",
+          "availability": "archived",
+          "sha256": "97fdfd5b91405f283ffee80557ca6dd649a401a869c561d8809d3d2f31ab0905"
+        }
+      ]
+    },
+    {
+      "id": "reddit:k7t5no",
+      "redditId": "k7t5no",
+      "title": "x60 Stator Factory \"Brute Force\" Layout. 100% Efficient, No Underclocking. Not really a building guide, more like ratios guide.",
+      "role": "layout",
+      "createdUtc": 1607258708,
+      "permalink": "https://www.reddit.com/r/SatisfactoryGame/comments/k7t5no/x60_stator_factory_brute_force_layout_100/",
+      "media": [
+        {
+          "id": "reddit-media:k7t5no:1",
+          "index": 1,
+          "mediaId": "hnv828kyak361",
+          "sourceUri": "https://i.redd.it/hnv828kyak361.png",
+          "fallbackUri": "https://preview.redd.it/hnv828kyak361.png?auto=webp&s=62368c93455be17cb050e8b9f3429a341a9f4741",
+          "widthPx": 2304,
+          "heightPx": 2304,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "ea696ce1e04f16893703d6f94914bfd6fac9467655a041b1218875e69f5962d9"
+        }
+      ]
+    },
+    {
+      "id": "reddit:kf451i",
+      "redditId": "kf451i",
+      "title": "An asset pack for Satisfactory schematics, in true 4k. It's the most recent version, rendered \"as is\".",
+      "role": "asset-pack",
+      "createdUtc": 1608232851,
+      "permalink": "https://www.reddit.com/r/SatisfactoryGame/comments/kf451i/an_asset_pack_for_satisfactory_schematics_in_true/",
+      "media": [
+        {
+          "id": "reddit-media:kf451i:1",
+          "index": 1,
+          "mediaId": "6xm62azzrs561",
+          "sourceUri": "https://i.redd.it/6xm62azzrs561.png",
+          "fallbackUri": "https://preview.redd.it/6xm62azzrs561.png?auto=webp&s=a7b68ee1fb3e2df9ef77f4826cd9f527bbb4a88a",
+          "widthPx": 4096,
+          "heightPx": 4096,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "39bbb3a8e82c49f533b5b0e45d9530fb81350b606b07984b9a1e20ace4f71f53"
+        }
+      ]
+    },
+    {
+      "id": "reddit:mfuj2c",
+      "redditId": "mfuj2c",
+      "title": "Solid Biofuel Mini Tower",
+      "role": "layout",
+      "createdUtc": 1617038450,
+      "permalink": "https://www.reddit.com/r/SatisfactoryGame/comments/mfuj2c/solid_biofuel_mini_tower/",
+      "media": [
+        {
+          "id": "reddit-media:mfuj2c:1",
+          "index": 1,
+          "mediaId": "fg6qyuhs30q61",
+          "sourceUri": "https://i.redd.it/fg6qyuhs30q61.png",
+          "fallbackUri": "https://preview.redd.it/fg6qyuhs30q61.png?auto=webp&s=102c67c650ac0b5504c4c8a47ea75abbf69acf79",
+          "widthPx": 1920,
+          "heightPx": 1152,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "14fda992650251e46d1fe8a0ebc88529d0af8e55aa83446cd6a10de2f65a3d47"
+        }
+      ]
+    },
+    {
+      "id": "reddit:mjj391",
+      "redditId": "mjj391",
+      "title": "x15 Rifle Cartridge Factory",
+      "role": "layout",
+      "createdUtc": 1617489636,
+      "permalink": "https://www.reddit.com/r/SatisfactoryGame/comments/mjj391/x15_rifle_cartridge_factory/",
+      "media": [
+        {
+          "id": "reddit-media:mjj391:1",
+          "index": 1,
+          "mediaId": "xs1d5n8dd1r61",
+          "sourceUri": "https://i.redd.it/xs1d5n8dd1r61.png",
+          "fallbackUri": "https://preview.redd.it/xs1d5n8dd1r61.png?auto=webp&s=732c3cb089a84b8f1b1b386dd02445a58d9f84fc",
+          "widthPx": 2496,
+          "heightPx": 1984,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "1b937caa3a38943a0af94b938e39cd9e1065707b1f74563cb97617f9696b7ee3"
+        }
+      ]
+    },
+    {
+      "id": "reddit:mlmmld",
+      "redditId": "mlmmld",
+      "title": "Compact x5 Modular Frame Factory",
+      "role": "layout",
+      "createdUtc": 1617745485,
+      "permalink": "https://www.reddit.com/r/SatisfactoryGame/comments/mlmmld/compact_x5_modular_frame_factory/",
+      "media": [
+        {
+          "id": "reddit-media:mlmmld:1",
+          "index": 1,
+          "mediaId": "rd6u5fj2imr61",
+          "sourceUri": "https://i.redd.it/rd6u5fj2imr61.png",
+          "fallbackUri": "https://preview.redd.it/rd6u5fj2imr61.png?auto=webp&s=3f34cc4eeec143fb0bf591deeab1f31c658add1f",
+          "widthPx": 2432,
+          "heightPx": 2304,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "1d0e45d1faecfea4c8cca5bf4ad14879100b2cb755457d3f40397abf9a6a21ae"
+        }
+      ]
+    },
+    {
+      "id": "reddit:mozrk1",
+      "redditId": "mozrk1",
+      "title": "x240 Aluminum Ingot Factory",
+      "role": "layout",
+      "createdUtc": 1618176253,
+      "permalink": "https://www.reddit.com/r/SatisfactoryGame/comments/mozrk1/x240_aluminum_ingot_factory/",
+      "media": [
+        {
+          "id": "reddit-media:mozrk1:1",
+          "index": 1,
+          "mediaId": "10qvxii63ms61",
+          "sourceUri": "https://i.redd.it/10qvxii63ms61.png",
+          "fallbackUri": "https://preview.redd.it/10qvxii63ms61.png?auto=webp&s=803e58e85671ed67538d4fb5541962b99ea74237",
+          "widthPx": 3456,
+          "heightPx": 2560,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "ce33e7f50adea5605bb3e43e50539d87c02310fd9c0c93d667c6f10bdfba26bb"
+        }
+      ]
+    },
+    {
+      "id": "reddit:mq91ek",
+      "redditId": "mq91ek",
+      "title": "Satisfactory blueprint asset pack, v.1.1b. What's new: pipelines and refinery",
+      "role": "asset-pack",
+      "createdUtc": 1618340419,
+      "permalink": "https://www.reddit.com/r/SatisfactoryGame/comments/mq91ek/satisfactory_blueprint_asset_pack_v11b_whats_new/",
+      "media": [
+        {
+          "id": "reddit-media:mq91ek:1",
+          "index": 1,
+          "mediaId": "ek198pzmlzs61",
+          "sourceUri": "https://i.redd.it/ek198pzmlzs61.png",
+          "fallbackUri": "https://preview.redd.it/ek198pzmlzs61.png?auto=webp&s=61293345bd61c387b7098d0f2f935313a2e78fe6",
+          "widthPx": 4096,
+          "heightPx": 4096,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "129e3d8fc72afea7b60a70688a012710e08dcd12f4b6e3486b3b9b6e10ba41f2"
+        }
+      ]
+    },
+    {
+      "id": "reddit:msq6pb",
+      "redditId": "msq6pb",
+      "title": "A 10 min tutorial on making Satisfactory blueprints with Figma",
+      "role": "tutorial",
+      "createdUtc": 1618664041,
+      "permalink": "https://www.reddit.com/r/SatisfactoryGame/comments/msq6pb/a_10_min_tutorial_on_making_satisfactory/",
+      "media": []
+    },
+    {
+      "id": "reddit:q5619z",
+      "redditId": "q5619z",
+      "title": "Messing around with Blender",
+      "role": "render-reference",
+      "createdUtc": 1633864131,
+      "permalink": "https://www.reddit.com/r/SatisfactoryGame/comments/q5619z/messing_around_with_blender/",
+      "media": [
+        {
+          "id": "reddit-media:q5619z:1",
+          "index": 1,
+          "mediaId": "ec3uyrdwuls71",
+          "sourceUri": "https://i.redd.it/ec3uyrdwuls71.png",
+          "fallbackUri": "https://preview.redd.it/ec3uyrdwuls71.png?width=2560&format=png&auto=webp&s=712a2d686ed63e3e53f4cddf11cee58e23801e95",
+          "widthPx": 2560,
+          "heightPx": 1400,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "266e5cd3839548e7808f692a82f88ff74bc7dae4b6bcfab3f7c1654ec811f4d4"
+        },
+        {
+          "id": "reddit-media:q5619z:2",
+          "index": 2,
+          "mediaId": "8bangcswuls71",
+          "sourceUri": "https://i.redd.it/8bangcswuls71.png",
+          "fallbackUri": "https://preview.redd.it/8bangcswuls71.png?width=2560&format=png&auto=webp&s=dd73b2b0a888d7f666d730fa4a962a5e3c08ac95",
+          "widthPx": 2560,
+          "heightPx": 1400,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "04ec2389298fa24e43c56a7fa0b0a72fb82d9bc43c3d8a33019ce9070c7b876e"
+        }
+      ]
+    },
+    {
+      "id": "reddit:qjzjy5",
+      "redditId": "qjzjy5",
+      "title": "Coal Generator Setup Blueprint, in 4K.",
+      "role": "layout",
+      "createdUtc": 1635716878,
+      "permalink": "https://www.reddit.com/r/SatisfactoryGame/comments/qjzjy5/coal_generator_setup_blueprint_in_4k/",
+      "media": [
+        {
+          "id": "reddit-media:qjzjy5:1",
+          "index": 1,
+          "mediaId": "dyafqc47vuw71",
+          "sourceUri": "https://i.redd.it/dyafqc47vuw71.png",
+          "fallbackUri": "https://preview.redd.it/dyafqc47vuw71.png?auto=webp&s=cc3d7154c37ed60f1d3d8031fa403d421bf79f2b",
+          "widthPx": 3840,
+          "heightPx": 2560,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "c767158cb4089da2f4831c382c228cc90aa2f6ee3c6e240d8d0905ba19c94114"
+        }
+      ]
+    },
+    {
+      "id": "reddit:qom52d",
+      "redditId": "qom52d",
+      "title": "A quick 3D snapshot of the blueprint from my previous post",
+      "role": "render-reference",
+      "createdUtc": 1636282194,
+      "permalink": "https://www.reddit.com/r/SatisfactoryGame/comments/qom52d/a_quick_3d_snapshot_of_the_blueprint_from_my/",
+      "media": [
+        {
+          "id": "reddit-media:qom52d:1",
+          "index": 1,
+          "mediaId": "x84tw0kjk5y71",
+          "sourceUri": "https://i.redd.it/x84tw0kjk5y71.png",
+          "fallbackUri": "https://preview.redd.it/x84tw0kjk5y71.png?auto=webp&s=c6e6d8f3f93bda40c91685e51dcca9fc988d1d92",
+          "widthPx": 3840,
+          "heightPx": 2160,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "7d56f338d2909091438a1d354fc7fd06b6860bc5f93c174b96d0bff78224c464"
+        }
+      ]
+    },
+    {
+      "id": "reddit:re5jyz",
+      "redditId": "re5jyz",
+      "title": "Compact Ammunition Factory using Conveyor Lift Floor Holes",
+      "role": "layout",
+      "createdUtc": 1639246991,
+      "permalink": "https://www.reddit.com/r/SatisfactoryGame/comments/re5jyz/compact_ammunition_factory_using_conveyor_lift/",
+      "media": [
+        {
+          "id": "reddit-media:re5jyz:1",
+          "index": 1,
+          "mediaId": "ib8a8ugqgy481",
+          "sourceUri": "https://i.redd.it/ib8a8ugqgy481.png",
+          "fallbackUri": "https://preview.redd.it/ib8a8ugqgy481.png?auto=webp&s=1b43a1bf6a764d4b1605004fad7366eb1a4a9d96",
+          "widthPx": 4864,
+          "heightPx": 1664,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "9136450dc760f2e30b93a65a46038c6a8577eb373e38a62f5d192d7c9ebbd269"
+        }
+      ]
+    },
+    {
+      "id": "reddit:ri2c86",
+      "redditId": "ri2c86",
+      "title": "My take on a Starter Factory, the one you build before moving on to Heavy Modular Frame, Oil and Computers.",
+      "role": "layout",
+      "createdUtc": 1639694729,
+      "permalink": "https://www.reddit.com/r/SatisfactoryGame/comments/ri2c86/my_take_on_a_starter_factory_the_one_you_build/",
+      "media": [
+        {
+          "id": "reddit-media:ri2c86:1",
+          "index": 1,
+          "mediaId": "g71e385pdz581",
+          "sourceUri": "https://i.redd.it/g71e385pdz581.png",
+          "fallbackUri": "https://preview.redd.it/g71e385pdz581.png?auto=webp&s=48c8ade82c332859f3e6a153a1bc1691cb8cede9",
+          "widthPx": 4864,
+          "heightPx": 3584,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "4c136a8fefa5255cf34d05cbe140b17c4205b8e48f928800f222da5302c42ab3"
+        }
+      ]
+    },
+    {
+      "id": "reddit:12l586u",
+      "redditId": "12l586u",
+      "title": "Satisfactory blueprint asset pack, the alternative version, this time rendered with Blender. It's not really finished, but someone asked for it, so here it is.",
+      "role": "asset-pack",
+      "createdUtc": 1681420721,
+      "permalink": "https://www.reddit.com/r/SatisfactoryGame/comments/12l586u/satisfactory_blueprint_asset_pack_the_alternative/",
+      "media": [
+        {
+          "id": "reddit-media:12l586u:1",
+          "index": 1,
+          "mediaId": "rj5vvwugwpta1",
+          "sourceUri": "https://i.redd.it/rj5vvwugwpta1.png",
+          "fallbackUri": "https://preview.redd.it/rj5vvwugwpta1.png?width=4096&format=png&auto=webp&s=a0b355fd6f94d021310b266838b961363ba54e06",
+          "widthPx": 4096,
+          "heightPx": 4096,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "131a6f48b86fc01c7b902ac6724b5c867aa54d9f47edfd5c089efe1d6d7f11a5"
+        },
+        {
+          "id": "reddit-media:12l586u:2",
+          "index": 2,
+          "mediaId": "w6rico1hxpta1",
+          "sourceUri": "https://i.redd.it/w6rico1hxpta1.png",
+          "fallbackUri": "https://preview.redd.it/w6rico1hxpta1.png?width=4096&format=png&auto=webp&s=e60d19b5df016f34a77f214b3b28d8428870f32f",
+          "widthPx": 4096,
+          "heightPx": 4096,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "a1dc9d07c3264ef5aff4ee64e4d230acde3c96caab6e709f20ecf1f79e613bf8"
+        },
+        {
+          "id": "reddit-media:12l586u:3",
+          "index": 3,
+          "mediaId": "3rva025iwpta1",
+          "sourceUri": "https://i.redd.it/3rva025iwpta1.png",
+          "fallbackUri": "https://preview.redd.it/3rva025iwpta1.png?width=4096&format=png&auto=webp&s=d9e9090465754366c7d8bb5de6b884bdfd98544e",
+          "widthPx": 4096,
+          "heightPx": 4096,
+          "mimeType": "image/png",
+          "availability": "archived",
+          "sha256": "5a871dde4dbae053d6f7303ccedd44c389723e1018bf896d2d55e5e29ba2b8a0"
+        }
+      ]
+    },
+    {
+      "id": "reddit:1rtyjzf",
+      "redditId": "1rtyjzf",
+      "title": "A rough idea for a node-based factory planning... minigame?",
+      "role": "interaction-concept",
+      "createdUtc": 1773531334,
+      "permalink": "https://www.reddit.com/r/SatisfactoryGame/comments/1rtyjzf/a_rough_idea_for_a_nodebased_factory_planning/",
+      "media": [
+        {
+          "id": "reddit-media:1rtyjzf:1",
+          "index": 1,
+          "mediaId": "eqicdq8ka3pg1",
+          "sourceUri": "https://i.redd.it/eqicdq8ka3pg1.png",
+          "fallbackUri": "https://preview.redd.it/eqicdq8ka3pg1.png?width=2880&format=png&auto=webp&s=017bd6007050cb7f3778351db09aff87e16374fd",
+          "widthPx": 2880,
+          "heightPx": 1088,
+          "mimeType": "image/png",
+          "availability": "unavailable",
+          "sha256": null
+        },
+        {
+          "id": "reddit-media:1rtyjzf:2",
+          "index": 2,
+          "mediaId": "asidmyxka3pg1",
+          "sourceUri": "https://i.redd.it/asidmyxka3pg1.png",
+          "fallbackUri": "https://preview.redd.it/asidmyxka3pg1.png?width=3200&format=png&auto=webp&s=d0c9d1d7a6b7c42c52b25b9f3a859f9601eb9758",
+          "widthPx": 3200,
+          "heightPx": 1344,
+          "mimeType": "image/png",
+          "availability": "unavailable",
+          "sha256": null
+        },
+        {
+          "id": "reddit-media:1rtyjzf:3",
+          "index": 3,
+          "mediaId": "fmhezgzla3pg1",
+          "sourceUri": "https://i.redd.it/fmhezgzla3pg1.png",
+          "fallbackUri": "https://preview.redd.it/fmhezgzla3pg1.png?width=3712&format=png&auto=webp&s=5ac58ca96cff08a219019c90e9d37030f368f15e",
+          "widthPx": 3712,
+          "heightPx": 1216,
+          "mimeType": "image/png",
+          "availability": "unavailable",
+          "sha256": null
+        },
+        {
+          "id": "reddit-media:1rtyjzf:4",
+          "index": 4,
+          "mediaId": "iiphr36na3pg1",
+          "sourceUri": "https://i.redd.it/iiphr36na3pg1.png",
+          "fallbackUri": "https://preview.redd.it/iiphr36na3pg1.png?width=4096&format=png&auto=webp&s=8617c52e96cc1060e0ec5b5c9ac0697254dff640",
+          "widthPx": 4096,
+          "heightPx": 2560,
+          "mimeType": "image/png",
+          "availability": "unavailable",
+          "sha256": null
+        }
+      ]
+    },
+    {
+      "id": "reddit:1rtz2bi",
+      "redditId": "1rtz2bi",
+      "title": "A rough idea for a node-base factory planning... minigame?",
+      "role": "interaction-concept",
+      "createdUtc": 1773532644,
+      "permalink": "https://www.reddit.com/r/SatisfactoryGame/comments/1rtz2bi/a_rough_idea_for_a_nodebase_factory_planning/",
+      "media": [
+        {
+          "id": "reddit-media:1rtz2bi:1",
+          "index": 1,
+          "mediaId": "nw5tkooxm3pg1",
+          "sourceUri": "https://i.redd.it/nw5tkooxm3pg1.png",
+          "fallbackUri": "https://preview.redd.it/nw5tkooxm3pg1.png?auto=webp&s=3e36e2ac4533e53382af3a37cc4b3e6c33d37bb0",
+          "widthPx": 3712,
+          "heightPx": 3648,
+          "mimeType": "image/png",
+          "availability": "unavailable",
+          "sha256": null
+        }
+      ]
+    }
+  ]
+}

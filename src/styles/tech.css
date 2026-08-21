@@ -55,7 +55,12 @@
   color: var(--on-accent);
 }
 .tabs a[aria-current='page'] b { color: var(--on-accent); }
-.tabs .tab-n { font-family: var(--font-mono); font-size: 10px; opacity: 0.8; }
+.tabs .tab-n {
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+.tabs a[aria-current='page'] .tab-n { color: var(--on-accent); }
 
 /* ------------------------------------------------------------------ 항목 타일 */
 

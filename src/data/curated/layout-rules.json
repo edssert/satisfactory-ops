@@ -32,7 +32,7 @@
       "valueNum": 32,
       "unit": "m",
       "why": "청사진 설계소 Mk.1 내부 폭. 초반 모듈을 이 폭에 맞춰 지어야 티어 4에서 그대로 청사진으로 떠서 복제할 수 있다. 발행된 커뮤니티 모듈들이 4×4 토대를 지키는 이유.",
-      "source": "docs/adr 및 위키 Blueprint Designer — 내부 32 m = 토대 4×4",
+      "source": "satisfactory.wiki.gg Blueprint Designer 및 게임 데이터 교차 검증",
       "confidence": "verified"
     },
     {

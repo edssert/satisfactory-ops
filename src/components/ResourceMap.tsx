@@ -11,7 +11,7 @@
  * 좌표계는 0~1000 정사각형이다. 노드의 fx·fy(0~1)를 1000배 한 값이고,
  * 게임 세계 좌표 북서 (-3246, -3750) ~ 남동 (4253, 3750) 에 대응한다.
  *
- * 상태를 갖는 최소 단위라서 아일랜드다(ADR-0009).
+ * 지도 탐색·선택·저장을 함께 소유하는 사용자 작업 공간 경계다(D-006).
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { loadCollected, saveCollected } from '../lib/collected';

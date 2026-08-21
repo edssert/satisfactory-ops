@@ -1,0 +1,231 @@
+---
+/** 게임 데이터·Anders 후보·런타임 탑뷰를 티어별로 대조하는 정적 검수 화면. */
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
+import Base from '../../../layouts/Base.astro';
+import TechNav from '../../../components/TechNav.astro';
+import { buildings } from '../../../lib/gamedata';
+import topviewData from '../../../data/curated/topview-assets.json';
+import candidateData from '../../../data/curated/anders-topview-candidates.json';
+import layoutCorpus from '../../../data/curated/anders-layout-corpus.json';
+import redditArchive from '../../../data/curated/anders-reddit-posts.json';
+import portData from '../../../data/curated/machine-ports.json';
+import '../../../styles/tech.css';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const topviewByClass = new Map(topviewData.assets.flatMap((asset) => {
+  if ('buildingClass' in asset && asset.buildingClass) return [[asset.buildingClass, asset] as const];
+  const shared = 'sharedBuildingClasses' in asset ? asset.sharedBuildingClasses : undefined;
+  if (shared && asset.assetId === 'ConveyorLiftHeadA') {
+    return shared.map((buildingClass) => [buildingClass, asset] as const);
+  }
+  return [];
+}));
+const groupsByClass = new Map<string, typeof candidateData.groups>();
+for (const group of candidateData.groups) {
+  for (const buildingClass of group.buildingClasses) {
+    const list = groupsByClass.get(buildingClass) ?? [];
+    list.push(group);
+    groupsByClass.set(buildingClass, list);
+  }
+}
+const portClasses = new Set(portData.$completeBuildings);
+const categories = new Set(['manufacturer', 'extractor', 'generator', 'logistics', 'storage', 'transport', 'power', 'hub']);
+const relevant = buildings.filter((building) => (
+  categories.has(building.category) || /^Build_Foundation_/.test(building.id)
+));
+
+const CATEGORY: Record<string, string> = {
+  manufacturer: '생산', extractor: '추출', generator: '발전', logistics: '물류', storage: '저장',
+  transport: '운송', power: '전력', hub: '특수', structure: '토대',
+};
+const tierLabel = (tier: number | null) => tier == null ? '미분류' : `티어 ${tier}`;
+const CATEGORY_ORDER: Record<string, number> = {
+  extractor: 0, manufacturer: 1, generator: 2, structure: 3, storage: 4, logistics: 5, transport: 6, power: 7, hub: 8,
+};
+const rows = relevant.map((building) => {
+  const topview = topviewByClass.get(building.id);
+  const groups = groupsByClass.get(building.id) ?? [];
+  const iconRelative = `assets/buildings-png/${building.id}.png`;
+  const hasIcon = existsSync(resolve('public', iconRelative));
+  return {
+    building,
+    topview,
+    groups,
+    image: topview ? topview.path : hasIcon ? iconRelative : 'favicon.svg',
+    assetState: topview?.reviewStatus === 'approved'
+      ? '승인'
+      : topview?.visualProfile === 'game-mesh-dark-2026'
+        ? '시각 불일치 후보'
+        : topview
+          ? '공통 탑뷰 후보'
+          : '누락',
+    assetStateKey: topview?.reviewStatus === 'approved'
+      ? 'approved'
+      : topview?.visualProfile === 'game-mesh-dark-2026'
+        ? 'mismatch'
+        : topview
+          ? 'candidate'
+          : 'missing',
+    portState: portClasses.has(building.id) ? '재검증 표본 있음' : '미검증',
+  };
+}).sort((left, right) => (
+  (left.building.unlockTier ?? 99) - (right.building.unlockTier ?? 99)
+  || (CATEGORY_ORDER[left.building.category] ?? 99) - (CATEGORY_ORDER[right.building.category] ?? 99)
+  || left.building.ko.localeCompare(right.building.ko, 'ko')
+));
+const tiers = [...new Set(rows.map((row) => row.building.unlockTier))].map((tier) => ({
+  tier,
+  rows: rows.filter((row) => row.building.unlockTier === tier),
+}));
+const approved = rows.filter((row) => row.assetStateKey === 'approved').length;
+const candidates = rows.filter((row) => ['candidate', 'mismatch'].includes(row.assetStateKey)).length;
+const missing = rows.length - approved - candidates;
+const SOURCE_ROLE: Record<string, string> = {
+  layout: '완성 도면',
+  'asset-pack': '자산팩',
+  tutorial: '제작 튜토리얼',
+  'render-reference': '렌더 근거',
+  'interaction-concept': '편집 개념',
+};
+const redditPosts = [...redditArchive.posts].sort((left, right) => right.createdUtc - left.createdUtc);
+---
+
+<Base
+  title="설계 재료 — 티어별 탑뷰·점유·포트 검수"
+  description="게임 데이터의 설비를 티어별로 정렬하고 Anders 자산, 탑뷰 승인, 점유 박스와 포트 검증 상태를 대조합니다."
+  section="dex"
+>
+  <div class="wrap asset-audit">
+    <TechNav here="assets" />
+    <header class="asset-audit-head">
+      <p class="marker"><span class="num">설계 재료</span></p>
+      <h1>티어별 기계·물류·토대 검수</h1>
+      <p class="lede">게임 설치본의 해금 순서에 따라 정렬했습니다. 아이콘은 탑뷰가 아닙니다. 탑뷰가 없거나
+        시각 프로파일이 다른 항목을 숨기지 않고 그대로 표시합니다.</p>
+      <dl class="asset-audit-counts">
+        <div><dt>대상</dt><dd>{rows.length}</dd></div>
+        <div><dt>탑뷰 승인</dt><dd>{approved}</dd></div>
+        <div><dt>후보</dt><dd>{candidates}</dd></div>
+        <div><dt>누락</dt><dd>{missing}</dd></div>
+        <div><dt>Anders 의미 그룹</dt><dd>{candidateData.$counts.semanticGroups}</dd></div>
+        <div><dt>미식별 그룹</dt><dd>{candidateData.$counts.unidentifiedGroups}</dd></div>
+      </dl>
+    </header>
+
+    <section class="source-audit" aria-labelledby="source-audit-title">
+      <header>
+        <p class="marker"><span class="num">원출처 코퍼스</span></p>
+        <h2 id="source-audit-title">Anders 원본을 추측이 아닌 출처로 관리합니다</h2>
+        <p>Reddit 게시물, 갤러리 순서, 원본 해상도와 SHA-256을 정규화했습니다. 사용자 제공 축소본은
+          별도 도면 수로 부풀리지 않고 원본의 파생본으로 연결합니다.</p>
+      </header>
+      <dl class="source-counts">
+        <div><dt>원 게시물</dt><dd>{redditArchive.counts.posts}</dd></div>
+        <div><dt>원본 매체</dt><dd>{redditArchive.counts.media}</dd></div>
+        <div><dt>해시 보관</dt><dd>{redditArchive.counts.archivedMedia}</dd></div>
+        <div><dt>삭제·미확보</dt><dd>{redditArchive.counts.unavailableMedia}</dd></div>
+        <div><dt>의미 분석 도면</dt><dd>{layoutCorpus.layouts.length}</dd></div>
+      </dl>
+      <div class="source-method">
+        <strong>확인된 제작 파이프라인</strong>
+        <span>게임 메시 추출 → glTF → Blender → 정적·애니메이션 메시 조합 → 가짜 조명 재질 → 정사영 렌더 → Figma 도면 구성</span>
+      </div>
+      <div class="source-grid">
+        {redditPosts.map((post) => (
+          <article>
+            <p><span>{SOURCE_ROLE[post.role] ?? post.role}</span><time datetime={new Date(post.createdUtc * 1000).toISOString()}>{new Date(post.createdUtc * 1000).getUTCFullYear()}</time></p>
+            <h3>{post.title}</h3>
+            <dl>
+              <div><dt>이미지</dt><dd>{post.media.filter((media) => media.availability === 'archived').length}/{post.media.length} 확보</dd></div>
+              <div><dt>게시물 ID</dt><dd><code>{post.redditId}</code></dd></div>
+            </dl>
+            <a href={post.permalink} target="_blank" rel="noreferrer">원 게시물 열기 <span aria-hidden="true">↗</span></a>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    {tiers.map(({ tier, rows: tierRows }) => (
+      <section class="asset-tier" aria-labelledby={`asset-tier-${tier ?? 'none'}`}>
+        <header>
+          <p>{tierLabel(tier)}</p>
+          <span>{tierRows.length}개</span>
+        </header>
+        <div class="asset-grid">
+          {tierRows.map(({ building, topview, groups, image, assetState, assetStateKey, portState }) => (
+            <article class:list={['asset-card', `is-${assetStateKey}`]}>
+              <div class="asset-preview">
+                <img src={`${base}/${image}`} alt="" width="200" height="200" loading="lazy" />
+                <span>{assetState}</span>
+              </div>
+              <div class="asset-copy">
+                <p>{CATEGORY[building.category] ?? building.category}</p>
+                <h2>{building.ko}</h2>
+                <dl>
+                  <div><dt>게임 하드 박스</dt><dd>{building.footprint ? `${building.footprint.widthM} × ${building.footprint.lengthM} × ${building.footprint.heightM} m` : '없음'}</dd></div>
+                  <div><dt>Anders 그룹</dt><dd>{groups.length ? groups.map((group) => group.id).join(', ') : '미연결'}</dd></div>
+                  <div><dt>포트</dt><dd>{portState}</dd></div>
+                  <div><dt>프로파일</dt><dd>{topview?.visualProfile ?? '탑뷰 없음'}</dd></div>
+                </dl>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
+</Base>
+
+<style>
+  .asset-audit { padding-block: var(--s12) var(--s20); }
+  .asset-audit-head { display: grid; gap: var(--s3); margin-bottom: var(--s10); }
+  .asset-audit-head h1 { margin: 0; }
+  .asset-audit-head .lede { max-width: 76ch; margin: 0; color: var(--ink-2); }
+  .asset-audit-counts { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: var(--s2); margin: var(--s4) 0 0; }
+  .asset-audit-counts div { padding: var(--s3); border: var(--hair) solid var(--line); background: var(--surface); }
+  .asset-audit-counts dt { color: var(--ink-3); font: var(--t-caption) var(--font-mono); }
+  .asset-audit-counts dd { margin: var(--s1) 0 0; font: 700 var(--t-h3) var(--font-mono); }
+  .source-audit { margin-block: var(--s12) var(--s16); padding-block: var(--s8); border-block: var(--hair) solid var(--line-strong); }
+  .source-audit > header { display: grid; gap: var(--s2); max-width: 82ch; }
+  .source-audit > header h2 { margin: 0; }
+  .source-audit > header > p:last-child { margin: 0; color: var(--ink-2); }
+  .source-counts { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: var(--s2); margin: var(--s5) 0 0; }
+  .source-counts div { padding: var(--s3); border: var(--hair) solid var(--line); background: var(--surface); }
+  .source-counts dt { color: var(--ink-3); font: var(--t-caption) var(--font-mono); }
+  .source-counts dd { margin: var(--s1) 0 0; font: 700 var(--t-h3) var(--font-mono); }
+  .source-method { display: grid; grid-template-columns: minmax(150px, .3fr) 1fr; gap: var(--s3); margin-top: var(--s3); padding: var(--s4); border-left: 3px solid var(--primary); background: var(--surface); }
+  .source-method strong { font-family: var(--font-mono); }
+  .source-method span { color: var(--ink-2); }
+  .source-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--s2); margin-top: var(--s5); }
+  .source-grid article { display: grid; align-content: start; min-width: 0; padding: var(--s3); border: var(--hair) solid var(--line); background: var(--surface); }
+  .source-grid article > p { display: flex; justify-content: space-between; margin: 0; color: var(--ink-3); font: var(--t-caption) var(--font-mono); }
+  .source-grid article > p span { color: var(--primary); }
+  .source-grid h3 { margin: var(--s2) 0 0; font-size: var(--t-body); line-height: 1.45; }
+  .source-grid dl { display: grid; gap: 4px; margin: var(--s3) 0; }
+  .source-grid dl div { display: flex; justify-content: space-between; gap: var(--s2); color: var(--ink-3); font-size: var(--t-caption); }
+  .source-grid dd { margin: 0; }
+  .source-grid a { align-self: end; color: var(--ink-1); font-size: var(--t-caption); font-weight: 700; }
+  .asset-tier { margin-top: var(--s12); }
+  .asset-tier > header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--s4); border-bottom: var(--hair) solid var(--line-strong); padding-bottom: var(--s2); }
+  .asset-tier > header p { margin: 0; font: 700 var(--t-h3) var(--font-mono); }
+  .asset-tier > header span { color: var(--ink-3); font: var(--t-caption) var(--font-mono); }
+  .asset-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--s3); }
+  .asset-card { display: grid; grid-template-columns: 104px minmax(0, 1fr); min-width: 0; border: var(--hair) solid var(--line); background: var(--surface); }
+  .asset-card.is-approved { border-color: color-mix(in oklab, var(--status-ok) 35%, var(--line)); }
+  .asset-card.is-missing { border-color: color-mix(in oklab, var(--status-danger) 45%, var(--line)); }
+  .asset-card.is-candidate,
+  .asset-card.is-mismatch { border-color: color-mix(in oklab, var(--status-warning) 45%, var(--line)); }
+  .asset-preview { position: relative; display: grid; min-height: 148px; place-items: center; overflow: hidden; border-right: var(--hair) solid var(--line); background: var(--bg); }
+  .asset-preview img { width: 92px; height: 116px; object-fit: contain; }
+  .asset-preview span { position: absolute; inset: 7px auto auto 7px; padding: 3px 6px; background: var(--bg); color: var(--ink-2); font: 700 .58rem var(--font-mono); }
+  .asset-copy { min-width: 0; padding: var(--s3); }
+  .asset-copy > p { margin: 0 0 var(--s1); color: var(--primary); font: .58rem var(--font-mono); }
+  .asset-copy h2 { margin: 0; font-size: var(--t-body); }
+  .asset-copy code { display: block; margin-top: 3px; color: var(--ink-3); font-size: .55rem; overflow-wrap: anywhere; }
+  .asset-copy dl { display: grid; gap: 5px; margin: var(--s3) 0 0; }
+  .asset-copy dl div { display: grid; grid-template-columns: 78px minmax(0, 1fr); gap: 6px; font-size: .6rem; }
+  .asset-copy dt { color: var(--ink-3); }
+  .asset-copy dd { min-width: 0; margin: 0; overflow-wrap: anywhere; color: var(--ink-2); }
+  @media (max-width: 520px) { .asset-card { grid-template-columns: 88px minmax(0, 1fr); } .asset-preview img { width: 78px; } .source-method { grid-template-columns: 1fr; } }
+</style>

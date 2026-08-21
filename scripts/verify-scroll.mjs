@@ -129,7 +129,11 @@ try {
   assert(Math.abs(afterBack - beforeNavigate) < 180, `뒤로가기 스크롤 복원이 어긋났습니다(${beforeNavigate} → ${afterBack}).`);
 
   await regular.page.goto(`${origin}/`, { waitUntil: 'networkidle' });
-  assert((await landingMotionState(regular.page)).pinSpacers > 0, '일반 데스크톱 모드의 ScrollTrigger 핀이 생성되지 않았습니다.');
+  const landingState = await landingMotionState(regular.page);
+  assert(landingState.pinSpacers === 0, `분류별 자산 탐색에 불필요한 ScrollTrigger 핀 ${landingState.pinSpacers}개가 남았습니다.`);
+  assert((await regular.page.locator('.machine-window').count()) === 3, '생산·물류·발전 자산 탐색 영역 세 개가 유지되지 않았습니다.');
+  assert(await regular.page.locator('.machine-window').evaluateAll((nodes) => nodes.every((node) => getComputedStyle(node).overflowX === 'auto')),
+    '분류별 자산 탐색 영역이 네이티브 가로 스크롤을 사용하지 않습니다.');
   await regular.page.emulateMedia({ reducedMotion: 'reduce' });
   await regular.page.waitForTimeout(250);
   assertReducedLanding(await landingMotionState(regular.page), '실행 중 reduce 전환');

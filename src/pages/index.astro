@@ -19,13 +19,37 @@ const recipeCount = meta.counts?.recipes ?? 0;
 const buildingCount = meta.counts?.buildings ?? buildings.length;
 
 const machinePortraits = topviewAssets.assets.flatMap((asset) => {
+  if (asset.reviewStatus !== 'approved') return [];
   const building = buildings.find((entry) => entry.id === asset.buildingClass);
   if (!building) return [];
   return [{
     ...building,
+    imagePath: asset.path,
+    reviewStatus: asset.reviewStatus,
     drawingStatus: drawingSupported(building.id) ? '도면 검증 완료' : '포트 검증 중',
   }];
+}).sort((left, right) => (
+  (left.unlockTier ?? 99) - (right.unlockTier ?? 99)
+  || ({ extractor: 0, manufacturer: 1, structure: 2, storage: 3, logistics: 4, transport: 5, generator: 6, power: 7 }[left.category] ?? 99)
+    - ({ extractor: 0, manufacturer: 1, structure: 2, storage: 3, logistics: 4, transport: 5, generator: 6, power: 7 }[right.category] ?? 99)
+  || left.ko.localeCompare(right.ko, 'ko')
+));
+
+const liftAsset = topviewAssets.assets.find((asset) => asset.assetId === 'ConveyorLiftHeadA');
+const liftBuilding = buildings.find((building) => building.id === 'Build_ConveyorLiftMk1_C');
+if (liftAsset && liftBuilding) machinePortraits.push({
+  ...liftBuilding,
+  ko: '컨베이어 리프트 Mk.1–6',
+  imagePath: liftAsset.path,
+  reviewStatus: liftAsset.reviewStatus,
+  drawingStatus: '공통 탑뷰 · 방향 검증 중',
 });
+
+const machineLanes = [
+  { key: 'production', title: '생산 · 추출', note: '채굴기 공통 프로파일 재제작 중', items: machinePortraits.filter((entry) => ['extractor', 'manufacturer'].includes(entry.category)) },
+  { key: 'logistics', title: '물류 · 저장 · 토대', note: '리프트 Mk.1–6 공통 탑뷰', items: machinePortraits.filter((entry) => ['structure', 'storage', 'logistics', 'transport'].includes(entry.category)) },
+  { key: 'power', title: '발전', note: 'Anders 프로파일 승인 자산 재제작 중', items: machinePortraits.filter((entry) => ['generator', 'power'].includes(entry.category)) },
+];
 
 const itemStrip = items
   .filter((entry) => entry.kind === 'part' || entry.kind === 'resource')
@@ -203,30 +227,31 @@ const workspaces = [
         <p>
           이름·크기·충돌은 게임 설치본에서, 탑뷰는 공개된 AndersPottemager 자산에서 가져옵니다.
           이미지는 표현일 뿐이며 실제 점유공간과 포트 좌표를 바꾸지 못합니다.
+          <a href={`${base}/dex/assets/`}>티어별 전체 자산·검증 상태 보기</a>
         </p>
       </div>
-      <div class="machine-window">
-        <div class="machine-rail">
-          {machinePortraits.map((entry, index) => (
-            <article class="machine-portrait">
-              <span class="machine-no">{String(index + 1).padStart(2, '0')}</span>
-              <img
-                src={`${base}/assets/topview/${entry.id}.webp`}
-                alt={entry.ko}
-                width="320"
-                height="320"
-                loading="lazy"
-              />
-              <div>
-                <h3>{entry.ko}</h3>
-                <p>
-                  {entry.footprint ? `${entry.footprint.widthM} × ${entry.footprint.lengthM} m` : '외곽 데이터 확인 중'}
-                  {' · '}{entry.drawingStatus}
-                </p>
+      <div class="machine-lanes">
+        {machineLanes.map((lane) => (
+          <section class="machine-lane" aria-labelledby={`machine-lane-${lane.key}`}>
+            <header><div><h3 id={`machine-lane-${lane.key}`}>{lane.title}</h3><p>{lane.note}</p></div><span>{lane.items.length}개</span></header>
+            <div class="machine-window" role="region" aria-label={`${lane.title} 탑뷰 모음. 좌우로 스크롤할 수 있습니다.`} tabindex="0">
+              <div class:list={['machine-rail', { 'is-empty': !lane.items.length }]}>
+                {!lane.items.length && <p class="machine-empty">승인된 탑뷰가 아직 없습니다. 후보는 전체 검수 화면에서 확인할 수 있습니다.</p>}
+                {lane.items.map((entry, index) => (
+                  <article class="machine-portrait">
+                    <span class="machine-no">{String(index + 1).padStart(2, '0')}</span>
+                    <img src={`${base}/${entry.imagePath}`} alt={entry.ko} width="320" height="320" loading="lazy" />
+                    <div>
+                      <span class="machine-tier">{entry.unlockTier == null ? '미분류' : `T${entry.unlockTier}`}</span>
+                      <h3>{entry.ko}</h3>
+                      <p>{entry.reviewStatus === 'approved' ? '탑뷰 승인' : '탑뷰 후보'}{' · '}{entry.drawingStatus}</p>
+                    </div>
+                  </article>
+                ))}
               </div>
-            </article>
-          ))}
-        </div>
+            </div>
+          </section>
+        ))}
       </div>
     </section>
 
@@ -285,11 +310,10 @@ const workspaces = [
     const media = gsap.matchMedia();
     media.add(
       {
-        desktop: '(min-width: 960px)',
         reduce: '(prefers-reduced-motion: reduce)',
       },
       (context: gsap.Context) => {
-        const { desktop = false, reduce = false } = (context.conditions ?? {}) as Record<string, boolean>;
+        const { reduce = false } = (context.conditions ?? {}) as Record<string, boolean>;
         if (reduce) return;
 
         gsap.to('.landing-progress span', {
@@ -344,25 +368,6 @@ const workspaces = [
             scrollTrigger: { trigger: step, start: 'top 84%', once: true },
           });
         });
-
-        if (desktop) {
-          const rail = document.querySelector<HTMLElement>('.machine-rail');
-          const windowElement = document.querySelector<HTMLElement>('.machine-window');
-          if (rail && windowElement) {
-            gsap.to(rail, {
-              x: () => Math.min(0, window.innerWidth - rail.scrollWidth - 48),
-              ease: 'none',
-              scrollTrigger: {
-                trigger: '[data-machines]',
-                start: 'top top',
-                end: () => `+=${Math.max(window.innerWidth, rail.scrollWidth - window.innerWidth)}`,
-                pin: true,
-                scrub: 0.55,
-                invalidateOnRefresh: true,
-              },
-            });
-          }
-        }
 
         gsap.to('.close-media', {
           scale: 1.08,

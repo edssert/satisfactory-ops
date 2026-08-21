@@ -10,7 +10,7 @@ import path from 'node:path';
 
 const SRC = path.resolve('src');
 const TOKENS = path.join(SRC, 'styles', 'tokens.css');
-const BRIEF = path.resolve('docs', 'DESIGN-BRIEF.md');
+const DESIGN = path.resolve('satisfactory-ops-vault', 'docs', 'DESIGN.md');
 const EXTENSIONS = new Set(['.astro', '.css', '.js', '.jsx', '.mjs', '.ts', '.tsx']);
 
 function walk(directory) {
@@ -61,7 +61,7 @@ const requiredLightOverrides = [
 ];
 const missingLight = requiredLightOverrides.filter((name) => !new RegExp(`--${name}\\s*:`).test(lightBlock));
 
-const brief = fs.readFileSync(BRIEF, 'utf8');
+const brief = fs.readFileSync(DESIGN, 'utf8');
 const requiredBriefFacts = [
   'src/styles/tokens.css',
   'Wanted Sans',
@@ -77,11 +77,11 @@ if (leaks.length || undefinedTokens.length || missingLight.length || missingBrie
   if (leaks.length) console.error(`FAIL  토큰 밖 원시 색상 ${leaks.length}건\n  ${leaks.join('\n  ')}`);
   if (undefinedTokens.length) console.error(`FAIL  미정의 CSS 토큰 ${undefinedTokens.length}건\n  ${undefinedTokens.join('\n  ')}`);
   if (missingLight.length) console.error(`FAIL  라이트 테마 역할 누락: ${missingLight.map((name) => `--${name}`).join(', ')}`);
-  if (missingBriefFacts.length) console.error(`FAIL  DESIGN-BRIEF 계약 누락: ${missingBriefFacts.join(' / ')}`);
+  if (missingBriefFacts.length) console.error(`FAIL  DESIGN 계약 누락: ${missingBriefFacts.join(' / ')}`);
   process.exit(1);
 }
 
 console.log(`PASS  토큰 밖 원시 색상 0건 (${files.length}개 소스)`);
 console.log(`PASS  CSS 토큰 참조 ${referenced.size}종 전부 정의`);
 console.log(`PASS  라이트 테마 핵심 역할 ${requiredLightOverrides.length}종 정의`);
-console.log('PASS  DESIGN-BRIEF와 배포 토큰 계약 일치');
+console.log('PASS  DESIGN과 배포 토큰 계약 일치');

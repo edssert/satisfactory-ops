@@ -337,7 +337,7 @@ export default function SiteMap({ mapSrc, sites, nodes, demand, minerMk1, source
             <span class="n">{minerMk1.pure}</span> / 보통 <span class="n">{minerMk1.normal}</span> /
             불순 <span class="n">{minerMk1.impure}</span> 개/분).
           </p>
-          <div class="scroll-x">
+          <div class="scroll-x" tabIndex={0}>
             <table>
               <thead>
                 <tr>

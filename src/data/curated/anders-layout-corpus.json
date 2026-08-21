@@ -1,0 +1,348 @@
+{
+  "$schemaVersion": 2,
+  "$description": "AndersPottemager 자산과 이를 사용한 완성 도면의 출처·해시·분석 색인. 원본은 연구 보관소에 보존하고 배포물에는 포함하지 않는다.",
+  "sources": [
+    {
+      "id": "source:user-reference-set",
+      "kind": "user-provided-reference",
+      "uri": null,
+      "author": null,
+      "status": "corroborated",
+      "rightsStatus": "unverified"
+    },
+    {
+      "id": "source:reddit:k251gd",
+      "kind": "reddit-post",
+      "uri": "https://www.reddit.com/r/SatisfactoryGame/comments/k251gd/",
+      "author": "AndersPottemager",
+      "title": "Some Tier 1 Iron Works schematics",
+      "status": "verified",
+      "rightsStatus": "public-reference-only"
+    },
+    {
+      "id": "source:reddit:k7dvjn",
+      "kind": "reddit-gallery",
+      "uri": "https://www.reddit.com/r/SatisfactoryGame/comments/k7dvjn/",
+      "author": "AndersPottemager",
+      "title": "The Rotor Tower Layout",
+      "status": "verified",
+      "rightsStatus": "public-reference-only"
+    },
+    {
+      "id": "source:reddit:mfuj2c",
+      "kind": "reddit-post",
+      "uri": "https://www.reddit.com/r/SatisfactoryGame/comments/mfuj2c/",
+      "author": "AndersPottemager",
+      "title": "Solid Biofuel Mini Tower",
+      "status": "verified",
+      "rightsStatus": "public-reference-only"
+    },
+    {
+      "id": "source:reddit:mozrk1",
+      "kind": "reddit-post",
+      "uri": "https://www.reddit.com/r/SatisfactoryGame/comments/mozrk1/",
+      "author": "AndersPottemager",
+      "title": "x240 Aluminum Ingot Factory",
+      "status": "verified",
+      "rightsStatus": "public-reference-only"
+    },
+    {
+      "id": "source:reddit:ri2c86",
+      "kind": "reddit-post",
+      "uri": "https://www.reddit.com/r/SatisfactoryGame/comments/ri2c86/",
+      "author": "AndersPottemager",
+      "title": "My take on a Starter Factory",
+      "status": "verified",
+      "rightsStatus": "public-reference-only"
+    },
+    {
+      "id": "source:reddit:mq91ek",
+      "kind": "reddit-post",
+      "uri": "https://www.reddit.com/r/SatisfactoryGame/comments/mq91ek/",
+      "author": "AndersPottemager",
+      "title": "Satisfactory blueprint asset pack, v.1.1b",
+      "status": "verified",
+      "rightsStatus": "creator-stated-free-use"
+    },
+    {
+      "id": "source:reddit:msq6pb",
+      "kind": "reddit-post",
+      "uri": "https://www.reddit.com/r/SatisfactoryGame/comments/msq6pb/",
+      "author": "AndersPottemager",
+      "title": "A 10 min tutorial on making Satisfactory blueprints with Figma",
+      "status": "verified",
+      "rightsStatus": "public-reference-only"
+    },
+    {
+      "id": "source:reddit:nkq1ms",
+      "kind": "reddit-post-and-comment",
+      "uri": "https://www.reddit.com/r/SatisfactoryGame/comments/nkq1ms/",
+      "author": "PokeMaki",
+      "title": "1920 Steel Ingots per minute",
+      "status": "verified",
+      "rightsStatus": "public-reference-only"
+    },
+    {
+      "id": "source:image:steel-pipes-1200",
+      "kind": "creator-linked-image",
+      "uri": "https://i.ibb.co/tM7sj8T/1200-Steel-Pipes.png",
+      "author": "PokeMaki",
+      "title": "1200 Steel Pipes",
+      "status": "verified",
+      "rightsStatus": "public-reference-only"
+    },
+    {
+      "id": "source:dropbox:anders-assets",
+      "kind": "creator-linked-archive",
+      "uri": "https://www.dropbox.com/scl/fi/fjso2avbeocyqyvchlecg/Assets.zip?dl=1&rlkey=6ut90yf5j7614acf9on95f42g",
+      "author": "AndersPottemager",
+      "title": "Assets.zip",
+      "status": "verified",
+      "rightsStatus": "creator-stated-free-use"
+    }
+  ],
+  "media": [
+    {
+      "id": "media:anders-asset-pack-v1-1b",
+      "role": "asset-sheet",
+      "sourceIds": ["source:reddit:mq91ek"],
+      "sha256": "129e3d8fc72afea7b60a70688a012710e08dcd12f4b6e3486b3b9b6e10ba41f2",
+      "widthPx": 4096,
+      "heightPx": 4096,
+      "mimeType": "image/png"
+    },
+    {
+      "id": "media:anders-assets-archive",
+      "role": "source-archive",
+      "sourceIds": ["source:dropbox:anders-assets"],
+      "sha256": "400a20946b4049078388d26261c0a3e83b87bd7e04e5d423a2b0756c73452bac",
+      "mimeType": "application/zip"
+    }
+  ],
+  "layouts": [
+    {
+      "id": "layout:rotor-tower",
+      "title": "The Rotor Tower Layout",
+      "layoutAuthor": "AndersPottemager",
+      "assetAuthor": "AndersPottemager",
+      "sourceUrl": "https://www.reddit.com/r/SatisfactoryGame/comments/k7dvjn/",
+      "sha256": "cb7a5a2990817c48157b3d20120bace4aa24bf702957cd8c78383ca42fb94440",
+      "widthPx": 1920,
+      "heightPx": 1408,
+      "confidence": "verified",
+      "sourceIds": ["source:reddit:k7dvjn", "source:user-reference-set"],
+      "observedVariants": [
+        {
+          "sha256": "b8f24dc751838d65234fc2aa62cd83f3d4054b8ed97615869f22e686bd871312",
+          "widthPx": 1080,
+          "heightPx": 792,
+          "relation": "downscaled-user-reference"
+        }
+      ],
+      "analysisTargets": ["foundation tiling", "multi-stage layout", "conveyor turns", "machine rotation", "material totals"]
+    },
+    {
+      "id": "layout:starter-factory",
+      "title": "My take on a Starter Factory",
+      "layoutAuthor": "AndersPottemager",
+      "assetAuthor": "AndersPottemager",
+      "sourceUrl": "https://www.reddit.com/r/SatisfactoryGame/comments/ri2c86/",
+      "sha256": "4c136a8fefa5255cf34d05cbe140b17c4205b8e48f928800f222da5302c42ab3",
+      "widthPx": 4864,
+      "heightPx": 3584,
+      "confidence": "verified",
+      "sourceIds": ["source:reddit:ri2c86", "source:user-reference-set"],
+      "observedVariants": [
+        {
+          "sha256": "7ccde66577270e769a1bb16b9250c830b0e02e48965c1a9d873ea52c9b1a4a79",
+          "widthPx": 4864,
+          "heightPx": 3584,
+          "relation": "reencoded-user-reference"
+        },
+        {
+          "sha256": "8d75892aef235359d5379d913865708eba909fa15625066340dbb65844a85d4d",
+          "widthPx": 1080,
+          "heightPx": 795,
+          "relation": "downscaled-user-reference"
+        }
+      ],
+      "analysisTargets": ["production dependency", "branching", "item-rate annotation", "container connection", "flow direction", "clock badges", "machine family identification", "transport context"]
+    },
+    {
+      "id": "layout:solid-biofuel-mini-tower",
+      "title": "Solid Biofuel Mini Tower",
+      "layoutAuthor": "AndersPottemager",
+      "assetAuthor": "AndersPottemager",
+      "sourceUrl": "https://www.reddit.com/r/SatisfactoryGame/comments/mfuj2c/",
+      "sha256": "14fda992650251e46d1fe8a0ebc88529d0af8e55aa83446cd6a10de2f65a3d47",
+      "widthPx": 1920,
+      "heightPx": 1152,
+      "confidence": "verified",
+      "sourceIds": ["source:reddit:mfuj2c", "source:user-reference-set"],
+      "observedVariants": [
+        {
+          "sha256": "e2466b02bb788b8cdbe4b0c01569b257aaec086c025671d1ed1792398b8f67c5",
+          "widthPx": 1920,
+          "heightPx": 1152,
+          "relation": "reencoded-user-reference"
+        }
+      ],
+      "analysisTargets": ["tower sequence", "storage orientation", "splitter and merger direction", "belt head and tail", "foundation footprint"]
+    },
+    {
+      "id": "layout:aluminum-ingot-540",
+      "title": "Aluminum Ingot 540 per minute",
+      "layoutAuthor": "AndersPottemager",
+      "assetAuthor": "AndersPottemager",
+      "sha256": "bb21013e665b62d85d9b6407054d5892666de7e3fcbac103a2278be97aef1140",
+      "widthPx": 2048,
+      "heightPx": 2100,
+      "confidence": "corroborated",
+      "sourceIds": ["source:user-reference-set"],
+      "analysisTargets": ["belt and pipe depth", "fluid direction", "junction semantics", "machine underclock", "throughput labels", "large foundation grid"]
+    },
+    {
+      "id": "layout:aluminum-ingot-240-vertical",
+      "title": "Aluminum Ingot Factory Vertical Setup",
+      "layoutAuthor": "AndersPottemager",
+      "assetAuthor": "AndersPottemager",
+      "sourceUrl": "https://www.reddit.com/r/SatisfactoryGame/comments/mozrk1/",
+      "sha256": "ce33e7f50adea5605bb3e43e50539d87c02310fd9c0c93d667c6f10bdfba26bb",
+      "widthPx": 3456,
+      "heightPx": 2560,
+      "confidence": "verified",
+      "sourceIds": ["source:reddit:mozrk1", "source:user-reference-set"],
+      "observedVariants": [
+        {
+          "sha256": "1f0cd243ae3b6fb348ff3bfe5035f00d7389052a1f441e155f26e5674f4c9cd5",
+          "widthPx": 3456,
+          "heightPx": 2560,
+          "relation": "reencoded-user-reference"
+        }
+      ],
+      "analysisTargets": ["vertical process sequence", "pipe and belt crossings", "input-output labels", "foundation modules", "stage transition"]
+    },
+    {
+      "id": "layout:modular-factory-stages",
+      "title": "Modular Factory Stages",
+      "titleStatus": "descriptive-placeholder",
+      "layoutAuthor": "PokeMaki",
+      "assetAuthor": "AndersPottemager",
+      "sha256": "5176867b20a0899d507d227fac6bba5d433286df5d44900c3960750890e89935",
+      "widthPx": 4338,
+      "heightPx": 2048,
+      "confidence": "corroborated",
+      "sourceIds": ["source:user-reference-set"],
+      "analysisTargets": ["three-stage assembly", "logistics-only middle stage", "repeatable modules", "lift transition", "foundation boundary", "input-output labeling"]
+    },
+    {
+      "id": "layout:steel-ingots-1920",
+      "title": "1920 Steel Ingots per minute",
+      "layoutAuthor": "PokeMaki",
+      "assetAuthor": "AndersPottemager",
+      "sourceUrl": "https://www.reddit.com/r/SatisfactoryGame/comments/nkq1ms/",
+      "sha256": "da0d6cae692a2e7bd5d7019bb9bfdcea95d5f5ab629d86acd73f413ef3b73da6",
+      "widthPx": 4338,
+      "heightPx": 2048,
+      "confidence": "verified",
+      "sourceIds": ["source:reddit:nkq1ms"],
+      "observedClaims": ["Solid Steel Ingot alternate recipe", "Mk.4-belt-friendly layout", "normal splitters", "1920 steel ingots per minute", "partially built in game"],
+      "analysisTargets": ["module repetition", "belt loops", "machine adjacency", "input-output manifolds", "foundation spacing", "step-by-step assembly sequence", "central lift area"]
+    },
+    {
+      "id": "layout:steel-pipes-1200",
+      "title": "1200 Steel Pipes",
+      "layoutAuthor": "PokeMaki",
+      "assetAuthor": "AndersPottemager",
+      "sourceUrl": "https://i.ibb.co/tM7sj8T/1200-Steel-Pipes.png",
+      "sha256": "b2245e2d367d14336f96dcc9c4f1692b2a5ba0859720716658039e6dc9d5df32",
+      "widthPx": 5643,
+      "heightPx": 2048,
+      "confidence": "verified",
+      "sourceIds": ["source:reddit:nkq1ms", "source:image:steel-pipes-1200", "source:user-reference-set"],
+      "observedVariants": [
+        {
+          "sha256": "637aba2bc8fda6415a276ebd3d44d5f02c5da6c1c804e09d45cb437a06b218cf",
+          "widthPx": 1080,
+          "heightPx": 509,
+          "relation": "downscaled-user-reference"
+        }
+      ],
+      "observedClaims": ["300 iron ore per minute", "300 coal per minute", "1800 steel ingots per minute", "1200 steel pipes per minute", "normal nodes and Mk.2 miners"],
+      "analysisTargets": ["three-stage construction sequence", "machine-only stage", "logistics-only stage", "combined stage", "central service void", "symmetric belt routing", "foundation module", "four-output bus"]
+    },
+    {
+      "id": "layout:tier1-ironworks-1",
+      "layoutSetId": "layout-set:tier1-ironworks",
+      "sequenceIndex": 1,
+      "title": "Iron Plate, Iron Rod and Screw",
+      "layoutAuthor": "AndersPottemager",
+      "assetAuthor": "AndersPottemager",
+      "sha256": "fc3d9616c42a4ae4ff0b559cb20bdf44acdd5e38b9f41b97a41ea6907a620de9",
+      "widthPx": 1024,
+      "heightPx": 1024,
+      "confidence": "verified",
+      "sourceIds": ["source:reddit:k251gd"]
+    },
+    {
+      "id": "layout:tier1-ironworks-2",
+      "layoutSetId": "layout-set:tier1-ironworks",
+      "sequenceIndex": 2,
+      "title": "Reinforced Iron Plate, layout 1",
+      "layoutAuthor": "AndersPottemager",
+      "assetAuthor": "AndersPottemager",
+      "sha256": "9993fce27b63c33219a225b7cbed45c8d738e641dcb4da463298d99bab2a3f92",
+      "widthPx": 640,
+      "heightPx": 640,
+      "confidence": "verified",
+      "sourceIds": ["source:reddit:k251gd"]
+    },
+    {
+      "id": "layout:tier1-ironworks-3",
+      "layoutSetId": "layout-set:tier1-ironworks",
+      "sequenceIndex": 3,
+      "title": "Reinforced Iron Plate, layout 2",
+      "layoutAuthor": "AndersPottemager",
+      "assetAuthor": "AndersPottemager",
+      "sha256": "0dc515fc97f170f465d3bda355d5c71d555a67c74819c655edc99be5986c9098",
+      "widthPx": 1024,
+      "heightPx": 1024,
+      "confidence": "verified",
+      "sourceIds": ["source:reddit:k251gd"]
+    },
+    {
+      "id": "layout:tier1-ironworks-4",
+      "layoutSetId": "layout-set:tier1-ironworks",
+      "sequenceIndex": 4,
+      "title": "Reinforced Iron Plate, layout 3",
+      "layoutAuthor": "AndersPottemager",
+      "assetAuthor": "AndersPottemager",
+      "sha256": "2ba0ec049d9264d865bff43940b8200328a32ec1827ff0e3361a7559a5311462",
+      "widthPx": 896,
+      "heightPx": 1280,
+      "confidence": "verified",
+      "sourceIds": ["source:reddit:k251gd"]
+    },
+    {
+      "id": "layout:tier1-ironworks-5",
+      "layoutSetId": "layout-set:tier1-ironworks",
+      "sequenceIndex": 5,
+      "title": "Rotor",
+      "layoutAuthor": "AndersPottemager",
+      "assetAuthor": "AndersPottemager",
+      "sha256": "7fc88531b439d303d55069f24a3b0a3994042c81ee000a9f41ef30eb8f976b91",
+      "widthPx": 1024,
+      "heightPx": 1024,
+      "confidence": "verified",
+      "sourceIds": ["source:reddit:k251gd", "source:user-reference-set"],
+      "observedVariants": [
+        {
+          "sha256": "3c58612f419e30bf1afcb9a5884912464f782c4e9276c7626370db21526e29c7",
+          "widthPx": 640,
+          "heightPx": 640,
+          "relation": "downscaled-user-reference"
+        }
+      ]
+    }
+  ]
+}

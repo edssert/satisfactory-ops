@@ -7,8 +7,9 @@ interface Props {
   title: string;
   description: string;
   section?: string | null;
+  workspace?: boolean;
 }
-const { title, description, section = null } = Astro.props;
+const { title, description, section = null, workspace = false } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const nav = [
@@ -35,7 +36,7 @@ const nav = [
       (function () {
         try {
           /*
-           * 게임과 오갈 때 눈부심을 줄이기 위해 기본은 다크다(DESIGN-BRIEF).
+           * 게임과 오갈 때 눈부심을 줄이기 위해 기본은 다크다(DESIGN).
            * 운영체제 추정값 대신 사용자가 직접 고른 값(sfops-theme)만 존중한다.
            */
           var saved = localStorage.getItem('sfops-theme');
@@ -45,7 +46,7 @@ const nav = [
     </script>
   </head>
 
-  <body>
+  <body class:list={{ 'is-workspace': workspace }}>
     <a class="skip" href="#main">본문으로 건너뛰기</a>
 
     <header class="site-head">
@@ -114,25 +115,27 @@ const nav = [
       import Lenis from 'lenis';
       import 'lenis/dist/lenis.css';
 
-      const lenis = new Lenis({
-        autoRaf: true,
-        /* scroll-padding-top이 헤더 높이의 정본이다. 별도 offset을 더하면 96px가 이중 적용된다. */
-        anchors: true,
-        duration: 1.05,
-        respectReducedMotion: true,
-        smoothWheel: true,
-        stopInertiaOnNavigate: true,
-        /* iOS 16 미만에서 불안정한 관성 모사는 켜지 않고 네이티브 터치를 유지한다. */
-        syncTouch: false,
-        prevent: (node) => node instanceof HTMLElement && Boolean(node.closest('[data-lenis-prevent]')),
-      });
-      const scrollWindow = window as Window & { __sfopsLenis?: Lenis };
-      scrollWindow.__sfopsLenis = lenis;
-      window.dispatchEvent(new CustomEvent('sfops:lenis-ready', { detail: lenis }));
-      window.addEventListener('pagehide', () => {
-        if (scrollWindow.__sfopsLenis === lenis) delete scrollWindow.__sfopsLenis;
-        lenis.destroy();
-      }, { once: true });
+      if (!document.body.classList.contains('is-workspace')) {
+        const lenis = new Lenis({
+          autoRaf: true,
+          /* scroll-padding-top이 헤더 높이의 정본이다. 별도 offset을 더하면 96px가 이중 적용된다. */
+          anchors: true,
+          duration: 1.05,
+          respectReducedMotion: true,
+          smoothWheel: true,
+          stopInertiaOnNavigate: true,
+          /* iOS 16 미만에서 불안정한 관성 모사는 켜지 않고 네이티브 터치를 유지한다. */
+          syncTouch: false,
+          prevent: (node) => node instanceof HTMLElement && Boolean(node.closest('[data-lenis-prevent]')),
+        });
+        const scrollWindow = window as Window & { __sfopsLenis?: Lenis };
+        scrollWindow.__sfopsLenis = lenis;
+        window.dispatchEvent(new CustomEvent('sfops:lenis-ready', { detail: lenis }));
+        window.addEventListener('pagehide', () => {
+          if (scrollWindow.__sfopsLenis === lenis) delete scrollWindow.__sfopsLenis;
+          lenis.destroy();
+        }, { once: true });
+      }
     </script>
   </body>
 </html>
@@ -261,6 +264,46 @@ const nav = [
   .foot-inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s6); }
   .foot-brand { margin-bottom: var(--s1); font: 700 var(--t-small) var(--font-mono); }
   .foot-legal { text-align: right; }
+
+  .is-workspace {
+    height: 100dvh;
+    overflow: hidden;
+  }
+  .is-workspace .site-head {
+    position: relative;
+    display: grid;
+    height: 48px;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: stretch;
+  }
+  .is-workspace .head-row {
+    width: auto;
+    min-height: 48px;
+    margin: 0;
+    padding-inline: 18px;
+  }
+  .is-workspace .head-status { display: none; }
+  .is-workspace .brand-name { font-size: .78rem; }
+  .is-workspace .theme-toggle { margin-left: 12px; padding: 5px 8px; }
+  .is-workspace .nav-rail {
+    display: flex;
+    min-width: 0;
+    align-items: stretch;
+    overflow-x: auto;
+    border-top: 0;
+    border-left: var(--hair) solid var(--border-subtle);
+    scrollbar-width: none;
+  }
+  .is-workspace .nav-rail::-webkit-scrollbar { display: none; }
+  .is-workspace .nav {
+    width: max-content;
+    margin: 0;
+    padding-inline: 18px;
+    gap: 26px;
+  }
+  .is-workspace .nav a { display: grid; height: 48px; align-items: center; padding: 0; font-size: .68rem; }
+  .is-workspace #main { height: calc(100dvh - 48px); min-height: 0; overflow: hidden; }
+  .is-workspace .site-foot { display: none; }
 
   @media (max-width: 680px) {
     .head-row { min-height: 52px; }

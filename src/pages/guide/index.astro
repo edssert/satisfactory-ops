@@ -343,7 +343,7 @@ const steps = spine.steps.map((s) => ({
             {s.rows.length > 0 && (
               <>
                 <h3 class="sub">운전 기준</h3>
-                <div class="scroll-x">
+                <div class="scroll-x" tabindex="0">
                   <table>
                     <thead>
                       <tr>
@@ -511,7 +511,7 @@ const steps = spine.steps.map((s) => ({
           <h2>순수 노드를 찾아 멀리 가지 않는다</h2>
           <p class="prose muted">{purityDoc.$key}</p>
 
-          <div class="scroll-x">
+          <div class="scroll-x" tabindex="0">
           <table class="pur">
             <thead>
               <tr>
@@ -587,7 +587,7 @@ const steps = spine.steps.map((s) => ({
           </ol>
 
           <h3 class="ex-h3">장비 — 무엇부터 열 것인가</h3>
-          <div class="scroll-x">
+          <div class="scroll-x" tabindex="0">
             <table class="ex-gear">
               <thead>
                 <tr>
@@ -1040,6 +1040,7 @@ const steps = spine.steps.map((s) => ({
     .confidence { color: var(--ink-2); font-weight: 700; }
     .confidence.is-verified { color: var(--status-ok); }
     .confidence.is-consensus { color: var(--accent); }
+    .confidence.is-unsourced { text-decoration: underline dotted var(--status-warning); text-underline-offset: .22em; }
 
     .rownote { display: block; font-size: var(--t-caption); color: var(--ink-3); }
     td .chip { margin: 1px 2px 1px 0; }

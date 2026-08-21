@@ -3,7 +3,7 @@ import { defineConfig, passthroughImageService } from 'astro/config';
 import preact from '@astrojs/preact';
 import serviceWorker from './scripts/sw-integration.mjs';
 
-// 결정 근거: docs/adr/0009-frontend-architecture.md
+// 결정 근거: satisfactory-ops-vault/docs/decisions/REGISTER.md D-006
 export default defineConfig({
   site: 'https://edssert.github.io',
   base: '/satisfactory-ops',

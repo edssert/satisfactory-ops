@@ -1,8 +1,11 @@
 # AGENTS.md
 
-이 저장소에서 일하는 **AI 에이전트를 위한 진입 문서**다. 사람용 소개는 [`README.md`](README.md),
-Claude Code 전용 운영 지침은 [`CLAUDE.md`](CLAUDE.md)에 있다.
-**두 문서가 어긋나면 `CLAUDE.md`가 정본이다.** 이 문서는 그것을 압축하고 실행 방법을 덧붙인 것이다.
+문서 볼트 루트는 `C:\Dev\satisfactory-ops\satisfactory-ops-vault`다. 이 문서에서 `docs/`로
+표기한 경로는 모두 해당 볼트 루트를 기준으로 한다. 저장소 루트는 Obsidian 볼트가 아니다.
+
+이 저장소에서 일하는 **모든 AI 에이전트의 유일한 진입 문서**다. 사람용 소개는 [`README.md`](README.md),
+제품 문서 진입점은 [`satisfactory-ops-vault/PROJECT-HUB.md`](satisfactory-ops-vault/PROJECT-HUB.md)다.
+`CLAUDE.md`는 다른 도구의 호환용 포인터이며 별도 규칙 정본이 아니다.
 
 문서·주석·커밋 메시지 본문은 한국어로 쓴다. 코드 식별자와 파일명만 영어다.
 
@@ -10,10 +13,9 @@ Claude Code 전용 운영 지침은 [`CLAUDE.md`](CLAUDE.md)에 있다.
 
 ## 1. 이 저장소가 무엇인가
 
-Satisfactory(게임)의 **공장 설계 플레이북** 웹앱이다. 기존 도구는 전부 계산기여서
-"강화철판 5/분에 기계 몇 대?"는 답해도 "지금 뭘 해야 하는지", "지금 이 배치가 왜 T6에 문제가 되는지"는
-답하지 않는데, 이 앱은 마일스톤 단위로 그 두 가지를 답한다.
-계산기 기능도 들어 있지만 부가물이다 — **계산기를 더 잘 만드는 경쟁은 하지 않는다**(ADR-0005).
+Satisfactory(게임)의 **통합 공장 운영·설계 웹앱**이다. 목표 생산량 계산, 진행 가이드, 지도,
+실축 수동 배치, 공정 검증과 시공 도면을 한 데이터 모델로 잇는다. 생산 계산기는 부가물이 아니라
+기본 능력이다. SCIM의 기능 정확도를 바닥선으로 삼고, 더 명료한 UI와 계산→설계 인계로 앞선다.
 
 기술적으로는 서버 없는 Astro 7 정적 사이트다. 게임 수치는 전부 게임 설치본에서 빌드타임에 뽑아 오고,
 사용자 데이터는 브라우저를 벗어나지 않는다.
@@ -27,13 +29,13 @@ Satisfactory(게임)의 **공장 설계 플레이북** 웹앱이다. 기존 도�
 | 규칙 | 왜 | 확인 |
 |---|---|---|
 | 게임 수치를 기억으로 쓰지 않는다 | 기억한 수치가 실제로 틀려 배포된 적이 있다 | 수치는 `src/data/app/*.json`에서 오거나 `src/lib/` 솔버가 계산한다. 새 사실은 `source` + `confidence`(`verified`/`consensus`/`disputed`/`unsourced`)를 붙이고 근거를 `docs/research/`에 남긴다 |
-| 아이템·건물 이름을 코드나 마크업에 타이핑하지 않는다 | 게임 공식 한국어 로케일이 정본이라 손으로 쓰면 게임 화면과 대조가 안 된다 (ADR-0017) | `src/lib/gamedata.ts`에서 조회한다. `npm run check:coverage`가 렌더된 HTML과 데이터를 대조해 잡는다 |
-| 색은 `src/styles/tokens.css`의 커스텀 프로퍼티만 쓴다 | 하드코딩 hex는 테마 전환에서 깨진다 | `grep -rn "#[0-9a-fA-F]\{6\}" src/styles src/components \| grep -v tokens.css` — **기존 위반이 `map.css`·`ResourceMap.tsx`에 남아 있으니** 자기 diff에 새 줄이 늘지 않았는지만 본다. 값의 정본은 `docs/DESIGN-BRIEF.md` |
-| 자원·상태 구분에 색상만 쓰지 않는다 | 색각 이상 대응 (FRD G-3) | 항상 텍스트 라벨을 병기한다 |
-| 세이브 파일을 서버로 보내지 않는다 | 프라이버시 제약 C-2. 백엔드가 아예 없다 (ADR-0010) | `.sav` 파싱은 전부 브라우저 안에서 끝난다. `fetch`로 사용자 데이터를 내보내는 코드를 추가하지 않는다 |
-| 이 저장소를 OneDrive 안으로 옮기지 않는다 | `.git` 동기화가 저장소를 깨뜨린다 (ADR-0002) | 위치는 `C:\Dev\satisfactory-ops` 고정 |
-| `public/assets/` 이미지는 MIT 대상이 아니다 | Coffee Stain Studios 자산이며 공식 위키에서 가져왔다 (ADR-0003) | 출처 표기를 지우지 않는다. 상업적 사용·게임사 사칭 금지 |
-| ADR은 수정하지 않는다 | 결정 이력이 남아야 한다 | 결정이 바뀌면 새 ADR을 쓰고 이전 것을 `Superseded by ADR-XXXX`로 바꾼다 |
+| 아이템·건물 이름을 코드나 마크업에 타이핑하지 않는다 | 게임 공식 한국어 로케일이 정본이라 손으로 쓰면 게임 화면과 대조가 안 된다 (D-011) | `src/lib/gamedata.ts`에서 조회한다. `npm run check:coverage`가 렌더된 HTML과 데이터를 대조해 잡는다 |
+| 색은 `src/styles/tokens.css`의 커스텀 프로퍼티만 쓴다 | 하드코딩 hex는 테마 전환에서 깨진다 | `grep -rn "#[0-9a-fA-F]\{6\}" src/styles src/components \| grep -v tokens.css` — **기존 위반이 `map.css`·`ResourceMap.tsx`에 남아 있으니** 자기 diff에 새 줄이 늘지 않았는지만 본다. 의미와 진화 규격은 `docs/DESIGN.md` |
+| 자원·상태 구분에 색상만 쓰지 않는다 | 색각 이상 대응 (`PRODUCT` QUAL-01) | 항상 텍스트·형태·패턴 중 하나를 병기한다 |
+| 세이브 파일을 서버로 보내지 않는다 | `PRODUCT` 원칙 6, D-006 | `.sav` 파싱은 전부 브라우저 안에서 끝난다. 사용자 데이터를 외부로 보내는 코드를 추가하지 않는다 |
+| 이 저장소를 OneDrive 안으로 옮기지 않는다 | `.git` 동기화가 저장소를 깨뜨릴 수 있다 | 위치는 `C:\Dev\satisfactory-ops` 고정 |
+| `public/assets/` 게임 자산은 MIT 대상이 아니다 | 각 자산의 출처·사용 조건이 별도다 | `ASSETS.md`와 매니페스트의 출처 표기를 유지한다. 게임사 사칭을 금지한다 |
+| 오래된 문서를 현재 규칙처럼 따르지 않는다 | Claude 조사와 초기 ADR을 근거에서 제외했다 | `PROJECT-HUB.md`에서 시작해 6개 정본과 다시 검증한 Research만 읽는다 |
 | 값은 HTML에, 움직임만 JS로 | CSS 카운터 + 스크롤 애니메이션으로 숫자를 만들었다가 화면에 `0`이 남은 적이 있다 | `node .claude/skills/no-js-fallback/scripts/nojs.mjs <경로>` |
 | 이견을 숨기지 않는다 | 커뮤니티 의견이 실제로 갈리는 주제가 여럿이다 (메인 버스 유용성 등) | 양쪽을 다 쓰고 어느 쪽이 왜 더 믿을 만한지 밝힌다 |
 
@@ -120,10 +122,10 @@ node .claude/skills/no-js-fallback/scripts/nojs.mjs guide        # JS 끄고 값
 | 경로 | 무엇 | 손대도 되나 |
 |---|---|---|
 | `src/pages/` | 라우트 = 파일. 정적 HTML이 기본값 | ○ |
-| `src/components/` | Preact 아일랜드. **상태를 소유하는 최소 단위만** | ○ |
+| `src/components/` | Preact UI와 작업 공간. 화면 복잡도에 따라 컴포넌트 또는 라우트 단위 경계 | ○ |
 | `src/lib/` | 순수 로직. DOM을 모른다 (솔버·배치·세이브 파싱) | ○ |
 | `src/state/` | 사용자 데이터. 게임 데이터를 모른다 | ○ (스키마 바꾸면 마이그레이션 필수) |
-| `src/styles/tokens.css` | 색·간격 토큰. 정본은 `docs/DESIGN-BRIEF.md` | ○ |
+| `src/styles/tokens.css` | 색·간격 실행 토큰. 의미 규격은 `satisfactory-ops-vault/docs/DESIGN.md` | ○ |
 | `src/data/curated/*.json` | 수기 콘텐츠. 게임 객체는 **클래스명으로만** 참조하고 `confidence`·`sources` 필수 | ○ |
 | `src/data/glossary.json` | 용어집 17건 (게임 원본에 없는 학습 레이어) | ○ |
 | `src/data/*.json`, `src/data/ko/*.json` | **1단 생성물.** `scripts/build-data.mjs` 산출 | ✕ 손으로 고치지 않는다 |
@@ -131,16 +133,17 @@ node .claude/skills/no-js-fallback/scripts/nojs.mjs guide        # JS 끄고 값
 | `scripts/` | 데이터 생성·검증·스크린샷 도구 | ○ (파일 상단 주석에 목적·사용법·종료 코드가 적혀 있다) |
 | `tests/` | `node --test`. 러너 의존성 0 | ○ |
 | `public/assets/` | Coffee Stain Studios 자산 (맵·아이콘) | 추가만. 출처 표기 유지 |
-| `docs/` | PRD·FRD·TRD·ARCHITECTURE·DATA-MODEL·DESIGN-BRIEF·adr(19건)·research(55건) | ○ (ADR은 수정 대신 supersede) |
+| `satisfactory-ops-vault/` | 독립 Obsidian 볼트. 제품·기능·기술 정본, 결정, RFC, Runbook, Research | ○ (`docs/DOCUMENTATION.md` 적용) |
 | `.claude/skills/` | 이 저장소 전용 검사 절차 + 스크립트 | ○ |
 | `legacy/` | 이식 전 단일 HTML. 배포되지 않는다 | 참고용 |
 | `dist/`, `.cache/`, `.astro/`, `.tmp-research/` | 생성물. gitignore 대상 | ✕ |
 
-### 아일랜드 경계 (ADR-0009)
+### 아일랜드 경계 (D-006)
 
-- 문서 화면은 아일랜드를 쓰지 않는다. **JS 0KB가 기본값이다**
-- 페이지 전체를 아일랜드로 만들지 않는다
-- 아일랜드는 데이터를 직접 import하지 않는다. **페이지가 서브셋을 만들어 props로 넘긴다**
+- 문서·레퍼런스 화면은 HTML 우선이며, 상호작용이 실제 효용을 줄 때만 점진적으로 향상한다
+- 계산기·공장 설계판·지도·세이브 진단은 각각 **독립 사용자 작업 공간** 하나를 라우트 단위 Preact 앱으로 구성할 수 있다
+- 작업 공간 데이터는 페이지 props, 검증된 라우트 전용 정적 페이로드 또는 워커 청크로 공급한다. 전체 게임 데이터의 무분별한 번들링은 허용하지 않는다
+- 경계의 크기는 관성으로 고정하지 않고 상태 결합도, 키보드 조작, Undo/Redo, 성능 프로파일로 판단한다
 
 ---
 
@@ -164,7 +167,7 @@ dist/                                      ← 정적 HTML + 아일랜드 JS + �
 - 1단은 **게임 설치가 필요하다.** 이 개발 기기에서는
   `C:/Program Files (x86)/Steam/steamapps/common/Satisfactory/CommunityResources/Docs/en-US.json` 을 자동 탐색한다.
   다른 경로면 `node scripts/build-data.mjs --docs="D:/.../en-US.json"` 또는 환경변수 `SATISFACTORY_DOCS`.
-- 게임이 없는 기기(그리고 CI)에서는 **1단을 돌리지 않는다.** 커밋된 산출물을 믿는다 (ADR-0008 완화책).
+- 게임이 없는 기기(그리고 CI)에서는 **1단을 돌리지 않는다.** 커밋된 산출물을 검증해 사용한다 (D-004).
 - `--check`는 **최신성 검사**다. 파일을 쓰지 않고, 산출물이 원본·큐레이션과 어긋나면 exit 3로 죽는다.
   `npm run build`가 이것을 먼저 돌리므로, 조용히 틀린 수치가 배포될 수 없다.
 - 게임 원본을 새로 해석해 필드를 쓰려 할 때는 §8의 `external-data-claim` 절차를 반드시 밟는다.
@@ -216,8 +219,8 @@ Claude Code는 이것을 자동으로 불러오지만, **다른 에이전트도 
 2. 화면을 바꿨으면 `squeeze.mjs`를 돌리고 **스크린샷 PNG를 실제로 열어 봤다**
 3. 새 게임 수치를 썼으면 `source` + `confidence`가 붙어 있고 근거가 `docs/research/`에 있다
 4. 새 사실이 코드나 마크업에 타이핑돼 있지 않다 — 데이터에서 온다
-5. 되돌리기 어려운 기술 선택을 했으면 ADR을 새로 썼다
-6. 기능을 추가·변경했으면 `docs/FRD.md`가, 구조를 바꿨으면 `docs/ARCHITECTURE.md`가 낡지 않았다
+5. 복수 도메인이나 데이터 계약을 바꾸는 기술 선택은 RFC와 결정 등록부에 반영했다
+6. 기능을 바꿨으면 `PRODUCT.md`, 구조를 바꿨으면 `ENGINEERING.md`, 자산을 바꿨으면 `ASSETS.md`가 낡지 않았다
 7. `git status`에 `nul`이나 `.tmp-research/` 산출물이 딸려 오지 않았다
 
 검증 못 한 수치를 "대략"으로 채우지 않는다. 모르면 비워 두고 `openQuestions`에 남긴다.
@@ -228,26 +231,25 @@ Claude Code는 이것을 자동으로 불러오지만, **다른 에이전트도 
 
 | 이 질문이면 | 이 문서 |
 |---|---|
-| 누구를 위해 왜 만드나 | `docs/PRD.md` |
-| 이 화면은 무엇을 해야 하나 (F1~F13) | `docs/FRD.md` |
-| 성능·호환성·보안 기준은 | `docs/TRD.md` |
-| 모듈 경계·데이터 흐름은 | `docs/ARCHITECTURE.md` |
-| 이 JSON의 필드는 무슨 뜻인가 | `docs/DATA-MODEL.md` |
-| 이 색·서체를 써도 되나 | `docs/DESIGN-BRIEF.md` (정본은 `src/styles/tokens.css`) |
-| 왜 이렇게 정했나 | `docs/adr/` (19건, 0014는 미작성 — 세이브 파서 대기) |
-| 이 수치의 근거는 | `docs/research/` (55건) |
+| 제품 범위·기능·품질·완료 조건은 | `satisfactory-ops-vault/docs/PRODUCT.md` |
+| 모듈·데이터·런타임 경계는 | `satisfactory-ops-vault/docs/ENGINEERING.md` |
+| 이 색·서체·모션을 어떻게 발전시키나 | `satisfactory-ops-vault/docs/DESIGN.md` (실행 토큰은 `src/styles/tokens.css`) |
+| 자산·탑뷰·토대·운송 자산 규격은 | `satisfactory-ops-vault/docs/ASSETS.md` |
+| 지금 유효한 큰 결정은 | `satisfactory-ops-vault/docs/DECISIONS.md` |
+| 지금 무엇을 어떤 순서로 끝내나 | `satisfactory-ops-vault/docs/ROADMAP.md` |
+| 검증된 외부 근거는 | `satisfactory-ops-vault/docs/research/` |
 | Claude Code 운영 지침 | `CLAUDE.md` |
 | 사람용 소개·라이선스 | `README.md` |
 
-주요 ADR: 0005 포지셔닝 · 0008 게임 데이터 소스 · 0009 프론트엔드 · 0010 백엔드 없음 ·
-0011 상태·영속 · 0012 데이터 저장 · 0013 생산 솔버 · 0015 노드 좌표 · 0017 한국어 표시명 ·
-0019 빌드타임 SQL · 0020 대체 제작법 등급
+문서 변경은 `PRODUCT` → 영향받은 기술 정본 → `ROADMAP` 순서로 한다. 새 ADR·세션 로그·출처 채널별
+조사 파일은 만들지 않는다.
 
 ---
 
 ## 11. 하지 않는 것
 
-- 계산기 기능으로 기존 도구와 경쟁하지 않는다 (satisfactory-calculator, satisfactorytools는 링크로 연결한다)
+- 계산 기능 결손을 외부 도구 링크로 대신하지 않는다. 비교 링크는 교차 검증과 참고에만 쓴다
+- 계산 결과를 자동 공간 배치하지 않는다. 필요한 설비와 조건을 대기열로 넘기고 사용자가 직접 설계한다
 - 세이브 파일을 서버로 보내지 않는다
 - 검증 못 한 수치를 "대략" 붙여 쓰지 않는다
 - 게임사 브랜딩을 사칭하지 않는다. FICSIT 미학을 차용하되 공식 제품인 척하지 않는다

@@ -8,7 +8,7 @@
 import { shopTabs, tech } from '../lib/tech';
 
 interface Props {
-  here: 'tiers' | 'mam' | 'shop' | 'recipes' | 'reference' | null;
+  here: 'tiers' | 'mam' | 'shop' | 'recipes' | 'reference' | 'assets' | null;
 }
 const { here } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -24,6 +24,7 @@ const links = [
   { key: 'mam', ko: 'MAM', href: `${base}/dex/mam/`, n: tech.$counts.mam },
   { key: 'shop', ko: '싱크 상점', href: `${base}/dex/shop/`, n: shopCount },
   { key: 'recipes', ko: '대체 제작법', href: `${base}/dex/recipes/`, n: null },
+  { key: 'assets', ko: '설계 재료', href: `${base}/dex/assets/`, n: null },
   { key: 'reference', ko: '표', href: `${base}/dex/reference/`, n: null },
 ];
 ---

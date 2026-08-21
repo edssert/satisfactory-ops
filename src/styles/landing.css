@@ -240,7 +240,15 @@
 .machine-stage { min-height: 100svh; padding-block: clamp(80px, 10vw, 150px); background: var(--surface); }
 .machine-heading { display: grid; grid-template-columns: 180px 1fr minmax(280px, .55fr); gap: clamp(28px, 5vw, 84px); align-items: end; }
 .machine-heading > p:last-child { margin: 0; color: var(--ink-2); line-height: 1.75; }
-.machine-window { margin-top: 80px; overflow-x: auto; scrollbar-width: none; }
+.machine-lanes { display: grid; min-width: 0; gap: 38px; margin-top: 70px; }
+.machine-lane { min-width: 0; }
+.machine-lane > header { display: flex; align-items: end; justify-content: space-between; width: min(100% - 40px, 1320px); margin-inline: auto; border-bottom: var(--hair) solid var(--line-strong); padding-bottom: 10px; }
+.machine-lane > header h3 { margin: 0; font: 700 var(--t-h3) var(--font-mono); }
+.machine-lane > header p { margin: 5px 0 0; color: var(--ink-3); font: var(--t-caption) var(--font-mono); }
+.machine-lane > header > span { color: var(--ink-3); font: var(--t-caption) var(--font-mono); }
+.machine-window { width: 100%; min-width: 0; margin-top: 18px; overflow-x: auto; scrollbar-width: none; }
+.machine-rail.is-empty { width: min(100% - 40px, 1320px); }
+.machine-empty { width: 100%; margin: 0; padding: 32px; border: var(--hair) dashed var(--line-strong); color: var(--ink-3); text-align: center; }
 .machine-window::-webkit-scrollbar { display: none; }
 .machine-rail { display: flex; width: max-content; gap: 12px; padding-inline: max(20px, calc((100vw - 1320px) / 2)); }
 .machine-portrait {
@@ -259,6 +267,7 @@
 .machine-portrait img { position: relative; width: 100%; height: 250px; object-fit: contain; filter: drop-shadow(var(--shadow-media)); transition: transform .5s var(--ease); }
 .machine-portrait:hover img { transform: translateY(-8px) scale(1.04); }
 .machine-portrait h3 { position: relative; margin: 0; font-size: 1.15rem; }
+.machine-tier { position: relative; display: inline-block; margin-bottom: 6px; color: var(--primary); font: 700 .62rem var(--font-mono); letter-spacing: .08em; }
 .machine-portrait p { position: relative; margin: 7px 0 0; color: var(--ink-3); font-family: var(--font-mono); font-size: .68rem; letter-spacing: .05em; }
 
 /* Workspaces */

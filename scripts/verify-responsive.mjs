@@ -20,7 +20,7 @@ const WIDTHS = [360, 390, 768, 1024, 1440, 1920, 3840];
 const ROUTES = [
   ['홈', '/'],
   ['가이드', '/guide/'],
-  ['설계', '/planner/'],
+  ['설계', '/planner/', '.vp-catalog h2'],
   ['직접 만들기', '/builder/'],
   ['지도', '/map/'],
   ['진단', '/checkup/'],
@@ -77,7 +77,7 @@ page.on('console', (message) => {
 page.on('pageerror', (error) => runtimeErrors.push(`${current}: ${String(error)}`));
 
 try {
-  for (const [label, route] of ROUTES) {
+  for (const [label, route, routeHeadingSelector] of ROUTES) {
     for (const width of WIDTHS) {
       current = `${label} ${width}px`;
       await page.setViewportSize({ width, height: 900 });
@@ -85,12 +85,13 @@ try {
       assert(response?.ok(), `${current} 응답 실패: ${response?.status() ?? '없음'}`);
       await page.waitForTimeout(180);
 
-      const state = await page.evaluate(() => {
+      const state = await page.evaluate((headingSelector) => {
         const documentBox = document.scrollingElement;
         const main = document.querySelector('main')?.getBoundingClientRect();
-        const heading = document.querySelector('main h1')?.getBoundingClientRect();
-        const headingStyle = document.querySelector('main h1')
-          ? getComputedStyle(document.querySelector('main h1'))
+        const headingElement = document.querySelector(headingSelector);
+        const heading = headingElement?.getBoundingClientRect();
+        const headingStyle = headingElement
+          ? getComputedStyle(headingElement)
           : null;
         return {
           viewport: document.documentElement.clientWidth,
@@ -99,7 +100,7 @@ try {
           heading: heading ? { left: heading.left, right: heading.right, width: heading.width, height: heading.height } : null,
           headingClipped: headingStyle ? /hidden|clip/.test(`${headingStyle.overflowX} ${headingStyle.overflowY}`) : false,
         };
-      });
+      }, routeHeadingSelector ?? 'main h1');
 
       assert(state.documentWidth <= state.viewport + 1,
         `${current} 문서 가로 넘침: ${state.documentWidth}>${state.viewport}`);

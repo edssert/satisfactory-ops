@@ -1,0 +1,4294 @@
+{
+  "$schemaVersion": 2,
+  "$source": {
+    "id": "anders-assets-2023",
+    "author": "AndersPottemager",
+    "archiveUrl": "https://www.dropbox.com/scl/fi/fjso2avbeocyqyvchlecg/Assets.zip?dl=1&rlkey=6ut90yf5j7614acf9on95f42g",
+    "archiveSha256": "400A20946B4049078388D26261C0A3E83B87BD7E04E5D423A2B0756C73452BAC",
+    "sheetSizePx": {
+      "width": 4096,
+      "height": 4096
+    },
+    "analysisMethod": "alpha mask, quarter-scale dilation, connected components"
+  },
+  "$counts": {
+    "detectedComponents": 91,
+    "semanticGroups": 84,
+    "identifiedGroups": 19,
+    "classIdentifiedGroups": 14,
+    "roleIdentifiedGroups": 20,
+    "unidentifiedGroups": 31
+  },
+  "components": [
+    {
+      "id": "Sheet_00.png#1",
+      "sheet": "Sheet_00.png",
+      "candidateId": 1,
+      "detectedBoxPx": {
+        "x": 1004,
+        "y": 32,
+        "width": 680,
+        "height": 704
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "class-identified",
+      "identity": "Build_ConstructorMk1_C",
+      "assetId": null,
+      "buildingClasses": [
+        "Build_ConstructorMk1_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_00.png#2",
+      "sheet": "Sheet_00.png",
+      "candidateId": 2,
+      "detectedBoxPx": {
+        "x": 1840,
+        "y": 56,
+        "width": 800,
+        "height": 1396
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "class-identified",
+      "identity": "Build_OilRefinery_C",
+      "assetId": null,
+      "buildingClasses": [
+        "Build_OilRefinery_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_00.png#3",
+      "sheet": "Sheet_00.png",
+      "candidateId": 3,
+      "detectedBoxPx": {
+        "x": 188,
+        "y": 80,
+        "width": 648,
+        "height": 708
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "class-identified",
+      "identity": "Build_FoundryMk1_C",
+      "assetId": null,
+      "buildingClasses": [
+        "Build_FoundryMk1_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_00.png#4",
+      "sheet": "Sheet_00.png",
+      "candidateId": 4,
+      "detectedBoxPx": {
+        "x": 2772,
+        "y": 100,
+        "width": 1240,
+        "height": 1332
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "class-identified",
+      "identity": "Build_ManufacturerMk1_C",
+      "assetId": null,
+      "buildingClasses": [
+        "Build_ManufacturerMk1_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_00.png#5",
+      "sheet": "Sheet_00.png",
+      "candidateId": 5,
+      "detectedBoxPx": {
+        "x": 1004,
+        "y": 812,
+        "width": 696,
+        "height": 1000
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "class-identified",
+      "identity": "Build_AssemblerMk1_C",
+      "assetId": null,
+      "buildingClasses": [
+        "Build_AssemblerMk1_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_00.png#6",
+      "sheet": "Sheet_00.png",
+      "candidateId": 6,
+      "detectedBoxPx": {
+        "x": 204,
+        "y": 1004,
+        "width": 596,
+        "height": 664
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_00.png#7",
+      "sheet": "Sheet_00.png",
+      "candidateId": 7,
+      "detectedBoxPx": {
+        "x": 2732,
+        "y": 1604,
+        "width": 1268,
+        "height": 1144
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "class-identified",
+      "identity": "Build_GeneratorNuclear_C",
+      "assetId": null,
+      "buildingClasses": [
+        "Build_GeneratorNuclear_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_00.png#8",
+      "sheet": "Sheet_00.png",
+      "candidateId": 8,
+      "detectedBoxPx": {
+        "x": 1892,
+        "y": 1652,
+        "width": 700,
+        "height": 1740
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "class-identified",
+      "identity": "Build_GeneratorCoal_C",
+      "assetId": null,
+      "buildingClasses": [
+        "Build_GeneratorCoal_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_00.png#9",
+      "sheet": "Sheet_00.png",
+      "candidateId": 9,
+      "detectedBoxPx": {
+        "x": 444,
+        "y": 1788,
+        "width": 136,
+        "height": 136
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_00.png#10",
+      "sheet": "Sheet_00.png",
+      "candidateId": 10,
+      "detectedBoxPx": {
+        "x": 216,
+        "y": 2020,
+        "width": 1360,
+        "height": 1336
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "class-identified",
+      "identity": "Build_Blender_C",
+      "assetId": null,
+      "buildingClasses": [
+        "Build_Blender_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_00.png#11",
+      "sheet": "Sheet_00.png",
+      "candidateId": 11,
+      "detectedBoxPx": {
+        "x": 236,
+        "y": 2028,
+        "width": 156,
+        "height": 156
+      },
+      "componentRole": "occupancy-frame-marker",
+      "parentGroupId": "Sheet_00.png#group-10",
+      "identityStatus": "component",
+      "identity": "Occupancy frame corner marker",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_00.png#12",
+      "sheet": "Sheet_00.png",
+      "candidateId": 12,
+      "detectedBoxPx": {
+        "x": 1400,
+        "y": 2028,
+        "width": 156,
+        "height": 156
+      },
+      "componentRole": "occupancy-frame-marker",
+      "parentGroupId": "Sheet_00.png#group-10",
+      "identityStatus": "component",
+      "identity": "Occupancy frame corner marker",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_00.png#13",
+      "sheet": "Sheet_00.png",
+      "candidateId": 13,
+      "detectedBoxPx": {
+        "x": 2860,
+        "y": 2944,
+        "width": 1064,
+        "height": 948
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "class-identified",
+      "identity": "Build_Packager_C",
+      "assetId": null,
+      "buildingClasses": [
+        "Build_Packager_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_00.png#14",
+      "sheet": "Sheet_00.png",
+      "candidateId": 14,
+      "detectedBoxPx": {
+        "x": 236,
+        "y": 3192,
+        "width": 156,
+        "height": 156
+      },
+      "componentRole": "occupancy-frame-marker",
+      "parentGroupId": "Sheet_00.png#group-10",
+      "identityStatus": "component",
+      "identity": "Occupancy frame corner marker",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_00.png#15",
+      "sheet": "Sheet_00.png",
+      "candidateId": 15,
+      "detectedBoxPx": {
+        "x": 1400,
+        "y": 3192,
+        "width": 156,
+        "height": 156
+      },
+      "componentRole": "occupancy-frame-marker",
+      "parentGroupId": "Sheet_00.png#group-10",
+      "identityStatus": "component",
+      "identity": "Occupancy frame corner marker",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_00.png#16",
+      "sheet": "Sheet_00.png",
+      "candidateId": 16,
+      "detectedBoxPx": {
+        "x": 1932,
+        "y": 3560,
+        "width": 680,
+        "height": 428
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "class-identified",
+      "identity": "Build_SmelterMk1_C",
+      "assetId": null,
+      "buildingClasses": [
+        "Build_SmelterMk1_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_00.png#17",
+      "sheet": "Sheet_00.png",
+      "candidateId": 17,
+      "detectedBoxPx": {
+        "x": 136,
+        "y": 3564,
+        "width": 752,
+        "height": 424
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_00.png#18",
+      "sheet": "Sheet_00.png",
+      "candidateId": 18,
+      "detectedBoxPx": {
+        "x": 1036,
+        "y": 3572,
+        "width": 744,
+        "height": 408
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_00.png#19",
+      "sheet": "Sheet_00.png",
+      "candidateId": 19,
+      "detectedBoxPx": {
+        "x": 3768,
+        "y": 3736,
+        "width": 156,
+        "height": 156
+      },
+      "componentRole": "occupancy-frame-marker",
+      "parentGroupId": "Sheet_00.png#group-13",
+      "identityStatus": "component",
+      "identity": "Occupancy frame corner marker",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_01.png#1",
+      "sheet": "Sheet_01.png",
+      "candidateId": 1,
+      "detectedBoxPx": {
+        "x": 2784,
+        "y": 160,
+        "width": 1088,
+        "height": 372
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#2",
+      "sheet": "Sheet_01.png",
+      "candidateId": 2,
+      "detectedBoxPx": {
+        "x": 156,
+        "y": 172,
+        "width": 2448,
+        "height": 1676
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "class-identified",
+      "identity": "Build_HadronCollider_C",
+      "assetId": null,
+      "buildingClasses": [
+        "Build_HadronCollider_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_01.png#3",
+      "sheet": "Sheet_01.png",
+      "candidateId": 3,
+      "detectedBoxPx": {
+        "x": 2784,
+        "y": 608,
+        "width": 1088,
+        "height": 372
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#4",
+      "sheet": "Sheet_01.png",
+      "candidateId": 4,
+      "detectedBoxPx": {
+        "x": 2784,
+        "y": 1056,
+        "width": 1088,
+        "height": 372
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#5",
+      "sheet": "Sheet_01.png",
+      "candidateId": 5,
+      "detectedBoxPx": {
+        "x": 2780,
+        "y": 1500,
+        "width": 1096,
+        "height": 376
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#6",
+      "sheet": "Sheet_01.png",
+      "candidateId": 6,
+      "detectedBoxPx": {
+        "x": 2780,
+        "y": 1948,
+        "width": 1096,
+        "height": 376
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#7",
+      "sheet": "Sheet_01.png",
+      "candidateId": 7,
+      "detectedBoxPx": {
+        "x": 1836,
+        "y": 2028,
+        "width": 552,
+        "height": 552
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "identified",
+      "identity": "Build_Foundation_8x1_01_C",
+      "assetId": "Build_Foundation_8x1_01_C",
+      "buildingClasses": [
+        "Build_Foundation_8x1_01_C"
+      ],
+      "role": "foundation",
+      "variant": null,
+      "approvedCropPx": {
+        "x": 1836,
+        "y": 2028,
+        "width": 552,
+        "height": 552
+      },
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_01.png#8",
+      "sheet": "Sheet_01.png",
+      "candidateId": 8,
+      "detectedBoxPx": {
+        "x": 232,
+        "y": 2108,
+        "width": 1328,
+        "height": 1264
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "class-identified",
+      "identity": "Build_WaterPump_C",
+      "assetId": null,
+      "buildingClasses": [
+        "Build_WaterPump_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_01.png#9",
+      "sheet": "Sheet_01.png",
+      "candidateId": 9,
+      "detectedBoxPx": {
+        "x": 2736,
+        "y": 2544,
+        "width": 164,
+        "height": 164
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#10",
+      "sheet": "Sheet_01.png",
+      "candidateId": 10,
+      "detectedBoxPx": {
+        "x": 2992,
+        "y": 2544,
+        "width": 164,
+        "height": 164
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#11",
+      "sheet": "Sheet_01.png",
+      "candidateId": 11,
+      "detectedBoxPx": {
+        "x": 3284,
+        "y": 2588,
+        "width": 380,
+        "height": 328
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#12",
+      "sheet": "Sheet_01.png",
+      "candidateId": 12,
+      "detectedBoxPx": {
+        "x": 2000,
+        "y": 2764,
+        "width": 296,
+        "height": 240
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#13",
+      "sheet": "Sheet_01.png",
+      "candidateId": 13,
+      "detectedBoxPx": {
+        "x": 2736,
+        "y": 2796,
+        "width": 160,
+        "height": 168
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#14",
+      "sheet": "Sheet_01.png",
+      "candidateId": 14,
+      "detectedBoxPx": {
+        "x": 2992,
+        "y": 2796,
+        "width": 160,
+        "height": 168
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#15",
+      "sheet": "Sheet_01.png",
+      "candidateId": 15,
+      "detectedBoxPx": {
+        "x": 2720,
+        "y": 3044,
+        "width": 180,
+        "height": 184
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#16",
+      "sheet": "Sheet_01.png",
+      "candidateId": 16,
+      "detectedBoxPx": {
+        "x": 2976,
+        "y": 3044,
+        "width": 180,
+        "height": 184
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#17",
+      "sheet": "Sheet_01.png",
+      "candidateId": 17,
+      "detectedBoxPx": {
+        "x": 3304,
+        "y": 3052,
+        "width": 316,
+        "height": 312
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#18",
+      "sheet": "Sheet_01.png",
+      "candidateId": 18,
+      "detectedBoxPx": {
+        "x": 2020,
+        "y": 3172,
+        "width": 184,
+        "height": 184
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#19",
+      "sheet": "Sheet_01.png",
+      "candidateId": 19,
+      "detectedBoxPx": {
+        "x": 236,
+        "y": 3192,
+        "width": 156,
+        "height": 156
+      },
+      "componentRole": "occupancy-frame-marker",
+      "parentGroupId": "Sheet_01.png#group-8",
+      "identityStatus": "component",
+      "identity": "Occupancy frame corner marker",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_01.png#20",
+      "sheet": "Sheet_01.png",
+      "candidateId": 20,
+      "detectedBoxPx": {
+        "x": 1400,
+        "y": 3192,
+        "width": 156,
+        "height": 156
+      },
+      "componentRole": "occupancy-frame-marker",
+      "parentGroupId": "Sheet_01.png#group-8",
+      "identityStatus": "component",
+      "identity": "Occupancy frame corner marker",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_01.png#21",
+      "sheet": "Sheet_01.png",
+      "candidateId": 21,
+      "detectedBoxPx": {
+        "x": 2732,
+        "y": 3308,
+        "width": 168,
+        "height": 168
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#22",
+      "sheet": "Sheet_01.png",
+      "candidateId": 22,
+      "detectedBoxPx": {
+        "x": 2988,
+        "y": 3308,
+        "width": 168,
+        "height": 168
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#23",
+      "sheet": "Sheet_01.png",
+      "candidateId": 23,
+      "detectedBoxPx": {
+        "x": 132,
+        "y": 3524,
+        "width": 376,
+        "height": 376
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#24",
+      "sheet": "Sheet_01.png",
+      "candidateId": 24,
+      "detectedBoxPx": {
+        "x": 900,
+        "y": 3524,
+        "width": 372,
+        "height": 376
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#25",
+      "sheet": "Sheet_01.png",
+      "candidateId": 25,
+      "detectedBoxPx": {
+        "x": 520,
+        "y": 3528,
+        "width": 372,
+        "height": 372
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#26",
+      "sheet": "Sheet_01.png",
+      "candidateId": 26,
+      "detectedBoxPx": {
+        "x": 1284,
+        "y": 3528,
+        "width": 372,
+        "height": 372
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#27",
+      "sheet": "Sheet_01.png",
+      "candidateId": 27,
+      "detectedBoxPx": {
+        "x": 1996,
+        "y": 3528,
+        "width": 300,
+        "height": 244
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#28",
+      "sheet": "Sheet_01.png",
+      "candidateId": 28,
+      "detectedBoxPx": {
+        "x": 3336,
+        "y": 3528,
+        "width": 236,
+        "height": 240
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#29",
+      "sheet": "Sheet_01.png",
+      "candidateId": 29,
+      "detectedBoxPx": {
+        "x": 3620,
+        "y": 3532,
+        "width": 184,
+        "height": 232
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#30",
+      "sheet": "Sheet_01.png",
+      "candidateId": 30,
+      "detectedBoxPx": {
+        "x": 2708,
+        "y": 3552,
+        "width": 212,
+        "height": 192
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#31",
+      "sheet": "Sheet_01.png",
+      "candidateId": 31,
+      "detectedBoxPx": {
+        "x": 3108,
+        "y": 3556,
+        "width": 184,
+        "height": 184
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#32",
+      "sheet": "Sheet_01.png",
+      "candidateId": 32,
+      "detectedBoxPx": {
+        "x": 2952,
+        "y": 3560,
+        "width": 120,
+        "height": 176
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_02.png#1",
+      "sheet": "Sheet_02.png",
+      "candidateId": 1,
+      "detectedBoxPx": {
+        "x": 856,
+        "y": 252,
+        "width": 2384,
+        "height": 2920
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "class-identified",
+      "identity": "Build_SpaceElevator_C",
+      "assetId": null,
+      "buildingClasses": [
+        "Build_SpaceElevator_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_02.png#2",
+      "sheet": "Sheet_02.png",
+      "candidateId": 2,
+      "detectedBoxPx": {
+        "x": 1096,
+        "y": 3456,
+        "width": 1892,
+        "height": 344
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "class-identified",
+      "identity": "Satisfactory logo",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "brand-reference",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#1",
+      "sheet": "Texture 02.png",
+      "candidateId": 1,
+      "detectedBoxPx": {
+        "x": 1004,
+        "y": 152,
+        "width": 700,
+        "height": 1040
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "identified",
+      "identity": "Build_AssemblerMk1_C",
+      "assetId": "Build_AssemblerMk1_C",
+      "buildingClasses": [
+        "Build_AssemblerMk1_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "approvedCropPx": {
+        "x": 1004,
+        "y": 152,
+        "width": 700,
+        "height": 1040
+      },
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#2",
+      "sheet": "Texture 02.png",
+      "candidateId": 2,
+      "detectedBoxPx": {
+        "x": 216,
+        "y": 168,
+        "width": 592,
+        "height": 708
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "identified",
+      "identity": "Build_FoundryMk1_C",
+      "assetId": "Build_FoundryMk1_C",
+      "buildingClasses": [
+        "Build_FoundryMk1_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "approvedCropPx": {
+        "x": 216,
+        "y": 168,
+        "width": 592,
+        "height": 708
+      },
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#3",
+      "sheet": "Texture 02.png",
+      "candidateId": 3,
+      "detectedBoxPx": {
+        "x": 2016,
+        "y": 172,
+        "width": 1216,
+        "height": 1304
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "identified",
+      "identity": "Build_ManufacturerMk1_C",
+      "assetId": "Build_ManufacturerMk1_C",
+      "buildingClasses": [
+        "Build_ManufacturerMk1_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "approvedCropPx": {
+        "x": 2016,
+        "y": 172,
+        "width": 1216,
+        "height": 1304
+      },
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#4",
+      "sheet": "Texture 02.png",
+      "candidateId": 4,
+      "detectedBoxPx": {
+        "x": 3520,
+        "y": 172,
+        "width": 384,
+        "height": 684
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "identified",
+      "identity": "Build_StorageContainerMk1_C",
+      "assetId": "Build_StorageContainerMk1_C",
+      "buildingClasses": [
+        "Build_StorageContainerMk1_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "approvedCropPx": {
+        "x": 3520,
+        "y": 172,
+        "width": 384,
+        "height": 684
+      },
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#5",
+      "sheet": "Texture 02.png",
+      "candidateId": 5,
+      "detectedBoxPx": {
+        "x": 172,
+        "y": 992,
+        "width": 680,
+        "height": 704
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "identified",
+      "identity": "Build_ConstructorMk1_C",
+      "assetId": "Build_ConstructorMk1_C",
+      "buildingClasses": [
+        "Build_ConstructorMk1_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "approvedCropPx": {
+        "x": 172,
+        "y": 992,
+        "width": 680,
+        "height": 704
+      },
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#6",
+      "sheet": "Texture 02.png",
+      "candidateId": 6,
+      "detectedBoxPx": {
+        "x": 3500,
+        "y": 1004,
+        "width": 424,
+        "height": 744
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "identified",
+      "identity": "Build_SmelterMk1_C",
+      "assetId": "Build_SmelterMk1_C",
+      "buildingClasses": [
+        "Build_SmelterMk1_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "approvedCropPx": {
+        "x": 3500,
+        "y": 1004,
+        "width": 424,
+        "height": 744
+      },
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#7",
+      "sheet": "Texture 02.png",
+      "candidateId": 7,
+      "detectedBoxPx": {
+        "x": 980,
+        "y": 1356,
+        "width": 728,
+        "height": 1372
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "identified",
+      "identity": "Build_OilRefinery_C",
+      "assetId": "Build_OilRefinery_C",
+      "buildingClasses": [
+        "Build_OilRefinery_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "approvedCropPx": {
+        "x": 980,
+        "y": 1356,
+        "width": 728,
+        "height": 1372
+      },
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#8",
+      "sheet": "Texture 02.png",
+      "candidateId": 8,
+      "detectedBoxPx": {
+        "x": 348,
+        "y": 2060,
+        "width": 72,
+        "height": 96
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "identified",
+      "identity": "ConveyorDirectionForward",
+      "assetId": "ConveyorDirectionForward",
+      "buildingClasses": [],
+      "role": "transport-direction",
+      "variant": null,
+      "approvedCropPx": {
+        "x": 348,
+        "y": 2060,
+        "width": 72,
+        "height": 96
+      },
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#9",
+      "sheet": "Texture 02.png",
+      "candidateId": 9,
+      "detectedBoxPx": {
+        "x": 540,
+        "y": 2060,
+        "width": 72,
+        "height": 96
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "identified",
+      "identity": "ConveyorDirectionReverse",
+      "assetId": "ConveyorDirectionReverse",
+      "buildingClasses": [],
+      "role": "transport-direction",
+      "variant": null,
+      "approvedCropPx": {
+        "x": 540,
+        "y": 2060,
+        "width": 72,
+        "height": 96
+      },
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#10",
+      "sheet": "Texture 02.png",
+      "candidateId": 10,
+      "detectedBoxPx": {
+        "x": 484,
+        "y": 2212,
+        "width": 240,
+        "height": 240
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "identified",
+      "identity": "ConveyorBeltTurn90Mk1",
+      "assetId": "ConveyorBeltTurn90Mk1",
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "approvedCropPx": {
+        "x": 484,
+        "y": 2212,
+        "width": 240,
+        "height": 240
+      },
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#11",
+      "sheet": "Texture 02.png",
+      "candidateId": 11,
+      "detectedBoxPx": {
+        "x": 292,
+        "y": 2284,
+        "width": 184,
+        "height": 168
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "identified",
+      "identity": "ConveyorBeltStraightMk1",
+      "assetId": "ConveyorBeltStraightMk1",
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "approvedCropPx": {
+        "x": 292,
+        "y": 2284,
+        "width": 184,
+        "height": 168
+      },
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#12",
+      "sheet": "Texture 02.png",
+      "candidateId": 12,
+      "detectedBoxPx": {
+        "x": 164,
+        "y": 2540,
+        "width": 312,
+        "height": 296
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "role-identified",
+      "identity": "Conveyor belt branch tile A",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#13",
+      "sheet": "Texture 02.png",
+      "candidateId": 13,
+      "detectedBoxPx": {
+        "x": 484,
+        "y": 2540,
+        "width": 312,
+        "height": 296
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "role-identified",
+      "identity": "Conveyor belt branch tile B",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#14",
+      "sheet": "Texture 02.png",
+      "candidateId": 14,
+      "detectedBoxPx": {
+        "x": 2924,
+        "y": 2924,
+        "width": 1064,
+        "height": 1064
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "role-identified",
+      "identity": "Foundation tile variant",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "foundation",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#15",
+      "sheet": "Texture 02.png",
+      "candidateId": 15,
+      "detectedBoxPx": {
+        "x": 712,
+        "y": 2976,
+        "width": 208,
+        "height": 192
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "role-identified",
+      "identity": "Pipeline fitting",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#16",
+      "sheet": "Texture 02.png",
+      "candidateId": 16,
+      "detectedBoxPx": {
+        "x": 424,
+        "y": 2984,
+        "width": 176,
+        "height": 172
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "role-identified",
+      "identity": "Pipeline fitting",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#17",
+      "sheet": "Texture 02.png",
+      "candidateId": 17,
+      "detectedBoxPx": {
+        "x": 168,
+        "y": 2988,
+        "width": 176,
+        "height": 168
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "role-identified",
+      "identity": "Pipeline fitting",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#18",
+      "sheet": "Texture 02.png",
+      "candidateId": 18,
+      "detectedBoxPx": {
+        "x": 2512,
+        "y": 3088,
+        "width": 352,
+        "height": 352
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "identified",
+      "identity": "Build_ConveyorAttachmentSplitter_C",
+      "assetId": "Build_ConveyorAttachmentSplitter_C",
+      "buildingClasses": [
+        "Build_ConveyorAttachmentSplitter_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "approvedCropPx": {
+        "x": 2512,
+        "y": 3088,
+        "width": 352,
+        "height": 352
+      },
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#19",
+      "sheet": "Texture 02.png",
+      "candidateId": 19,
+      "detectedBoxPx": {
+        "x": 1184,
+        "y": 3096,
+        "width": 320,
+        "height": 208
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "identified",
+      "identity": "PipelineStraightMk1",
+      "assetId": "PipelineStraightMk1",
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "approvedCropPx": {
+        "x": 1184,
+        "y": 3096,
+        "width": 320,
+        "height": 208
+      },
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#20",
+      "sheet": "Texture 02.png",
+      "candidateId": 20,
+      "detectedBoxPx": {
+        "x": 1568,
+        "y": 3096,
+        "width": 320,
+        "height": 208
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "role-identified",
+      "identity": "Pipeline straight variant",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#21",
+      "sheet": "Texture 02.png",
+      "candidateId": 21,
+      "detectedBoxPx": {
+        "x": 2052,
+        "y": 3140,
+        "width": 308,
+        "height": 248
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "identified",
+      "identity": "ConveyorLiftHeadA",
+      "assetId": "ConveyorLiftHeadA",
+      "buildingClasses": [
+        "Build_ConveyorLiftMk1_C",
+        "Build_ConveyorLiftMk2_C",
+        "Build_ConveyorLiftMk3_C",
+        "Build_ConveyorLiftMk4_C",
+        "Build_ConveyorLiftMk5_C",
+        "Build_ConveyorLiftMk6_C"
+      ],
+      "role": "transport-part",
+      "variant": "direction-unverified",
+      "approvedCropPx": {
+        "x": 2052,
+        "y": 3140,
+        "width": 308,
+        "height": 248
+      },
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#22",
+      "sheet": "Texture 02.png",
+      "candidateId": 22,
+      "detectedBoxPx": {
+        "x": 172,
+        "y": 3176,
+        "width": 172,
+        "height": 172
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "identified",
+      "identity": "PipelineTurn90Mk1",
+      "assetId": "PipelineTurn90Mk1",
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "approvedCropPx": {
+        "x": 172,
+        "y": 3176,
+        "width": 172,
+        "height": 172
+      },
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#23",
+      "sheet": "Texture 02.png",
+      "candidateId": 23,
+      "detectedBoxPx": {
+        "x": 424,
+        "y": 3176,
+        "width": 176,
+        "height": 172
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "role-identified",
+      "identity": "Pipeline elbow variant",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#24",
+      "sheet": "Texture 02.png",
+      "candidateId": 24,
+      "detectedBoxPx": {
+        "x": 744,
+        "y": 3232,
+        "width": 208,
+        "height": 192
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "role-identified",
+      "identity": "Pipeline fitting",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#25",
+      "sheet": "Texture 02.png",
+      "candidateId": 25,
+      "detectedBoxPx": {
+        "x": 1184,
+        "y": 3352,
+        "width": 320,
+        "height": 208
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "role-identified",
+      "identity": "Pipeline straight variant",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#26",
+      "sheet": "Texture 02.png",
+      "candidateId": 26,
+      "detectedBoxPx": {
+        "x": 1568,
+        "y": 3352,
+        "width": 320,
+        "height": 208
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "role-identified",
+      "identity": "Pipeline straight variant",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#27",
+      "sheet": "Texture 02.png",
+      "candidateId": 27,
+      "detectedBoxPx": {
+        "x": 168,
+        "y": 3368,
+        "width": 172,
+        "height": 172
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "role-identified",
+      "identity": "Pipeline elbow variant",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#28",
+      "sheet": "Texture 02.png",
+      "candidateId": 28,
+      "detectedBoxPx": {
+        "x": 424,
+        "y": 3372,
+        "width": 176,
+        "height": 172
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "role-identified",
+      "identity": "Pipeline elbow variant",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#29",
+      "sheet": "Texture 02.png",
+      "candidateId": 29,
+      "detectedBoxPx": {
+        "x": 704,
+        "y": 3464,
+        "width": 240,
+        "height": 240
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "identified",
+      "identity": "PipelineJunctionCrossMk1",
+      "assetId": "PipelineJunctionCrossMk1",
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "approvedCropPx": {
+        "x": 704,
+        "y": 3464,
+        "width": 240,
+        "height": 240
+      },
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#30",
+      "sheet": "Texture 02.png",
+      "candidateId": 30,
+      "detectedBoxPx": {
+        "x": 2512,
+        "y": 3536,
+        "width": 352,
+        "height": 352
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "identified",
+      "identity": "Build_ConveyorAttachmentMerger_C",
+      "assetId": "Build_ConveyorAttachmentMerger_C",
+      "buildingClasses": [
+        "Build_ConveyorAttachmentMerger_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "approvedCropPx": {
+        "x": 2512,
+        "y": 3536,
+        "width": 352,
+        "height": 352
+      },
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#31",
+      "sheet": "Texture 02.png",
+      "candidateId": 31,
+      "detectedBoxPx": {
+        "x": 168,
+        "y": 3564,
+        "width": 172,
+        "height": 172
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "role-identified",
+      "identity": "Pipeline elbow variant",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#32",
+      "sheet": "Texture 02.png",
+      "candidateId": 32,
+      "detectedBoxPx": {
+        "x": 424,
+        "y": 3564,
+        "width": 176,
+        "height": 172
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "role-identified",
+      "identity": "Pipeline elbow variant",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#33",
+      "sheet": "Texture 02.png",
+      "candidateId": 33,
+      "detectedBoxPx": {
+        "x": 2064,
+        "y": 3600,
+        "width": 284,
+        "height": 224
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "identified",
+      "identity": "ConveyorLiftHeadB",
+      "assetId": "ConveyorLiftHeadB",
+      "buildingClasses": [
+        "Build_ConveyorLiftMk1_C",
+        "Build_ConveyorLiftMk2_C",
+        "Build_ConveyorLiftMk3_C",
+        "Build_ConveyorLiftMk4_C",
+        "Build_ConveyorLiftMk5_C",
+        "Build_ConveyorLiftMk6_C"
+      ],
+      "role": "transport-part",
+      "variant": "direction-unverified",
+      "approvedCropPx": {
+        "x": 2064,
+        "y": 3600,
+        "width": 284,
+        "height": 224
+      },
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#34",
+      "sheet": "Texture 02.png",
+      "candidateId": 34,
+      "detectedBoxPx": {
+        "x": 1184,
+        "y": 3608,
+        "width": 320,
+        "height": 208
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "role-identified",
+      "identity": "Pipeline straight variant",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#35",
+      "sheet": "Texture 02.png",
+      "candidateId": 35,
+      "detectedBoxPx": {
+        "x": 1568,
+        "y": 3608,
+        "width": 320,
+        "height": 208
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "role-identified",
+      "identity": "Pipeline straight variant",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#36",
+      "sheet": "Texture 02.png",
+      "candidateId": 36,
+      "detectedBoxPx": {
+        "x": 728,
+        "y": 3716,
+        "width": 192,
+        "height": 248
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "role-identified",
+      "identity": "Pipeline fitting",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#37",
+      "sheet": "Texture 02.png",
+      "candidateId": 37,
+      "detectedBoxPx": {
+        "x": 448,
+        "y": 3744,
+        "width": 128,
+        "height": 192
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "role-identified",
+      "identity": "Pipeline end fitting",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#38",
+      "sheet": "Texture 02.png",
+      "candidateId": 38,
+      "detectedBoxPx": {
+        "x": 172,
+        "y": 3756,
+        "width": 172,
+        "height": 172
+      },
+      "componentRole": "primary-or-standalone",
+      "parentGroupId": null,
+      "identityStatus": "role-identified",
+      "identity": "Pipeline elbow variant",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "approvedCropPx": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    }
+  ],
+  "groups": [
+    {
+      "id": "Sheet_00.png#group-1",
+      "sheet": "Sheet_00.png",
+      "primaryComponentId": "Sheet_00.png#1",
+      "componentIds": [
+        "Sheet_00.png#1"
+      ],
+      "identityStatus": "class-identified",
+      "identity": "Build_ConstructorMk1_C",
+      "assetId": null,
+      "buildingClasses": [
+        "Build_ConstructorMk1_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_00.png#group-2",
+      "sheet": "Sheet_00.png",
+      "primaryComponentId": "Sheet_00.png#2",
+      "componentIds": [
+        "Sheet_00.png#2"
+      ],
+      "identityStatus": "class-identified",
+      "identity": "Build_OilRefinery_C",
+      "assetId": null,
+      "buildingClasses": [
+        "Build_OilRefinery_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_00.png#group-3",
+      "sheet": "Sheet_00.png",
+      "primaryComponentId": "Sheet_00.png#3",
+      "componentIds": [
+        "Sheet_00.png#3"
+      ],
+      "identityStatus": "class-identified",
+      "identity": "Build_FoundryMk1_C",
+      "assetId": null,
+      "buildingClasses": [
+        "Build_FoundryMk1_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_00.png#group-4",
+      "sheet": "Sheet_00.png",
+      "primaryComponentId": "Sheet_00.png#4",
+      "componentIds": [
+        "Sheet_00.png#4"
+      ],
+      "identityStatus": "class-identified",
+      "identity": "Build_ManufacturerMk1_C",
+      "assetId": null,
+      "buildingClasses": [
+        "Build_ManufacturerMk1_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_00.png#group-5",
+      "sheet": "Sheet_00.png",
+      "primaryComponentId": "Sheet_00.png#5",
+      "componentIds": [
+        "Sheet_00.png#5"
+      ],
+      "identityStatus": "class-identified",
+      "identity": "Build_AssemblerMk1_C",
+      "assetId": null,
+      "buildingClasses": [
+        "Build_AssemblerMk1_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_00.png#group-6",
+      "sheet": "Sheet_00.png",
+      "primaryComponentId": "Sheet_00.png#6",
+      "componentIds": [
+        "Sheet_00.png#6"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_00.png#group-7",
+      "sheet": "Sheet_00.png",
+      "primaryComponentId": "Sheet_00.png#7",
+      "componentIds": [
+        "Sheet_00.png#7"
+      ],
+      "identityStatus": "class-identified",
+      "identity": "Build_GeneratorNuclear_C",
+      "assetId": null,
+      "buildingClasses": [
+        "Build_GeneratorNuclear_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_00.png#group-8",
+      "sheet": "Sheet_00.png",
+      "primaryComponentId": "Sheet_00.png#8",
+      "componentIds": [
+        "Sheet_00.png#8"
+      ],
+      "identityStatus": "class-identified",
+      "identity": "Build_GeneratorCoal_C",
+      "assetId": null,
+      "buildingClasses": [
+        "Build_GeneratorCoal_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_00.png#group-9",
+      "sheet": "Sheet_00.png",
+      "primaryComponentId": "Sheet_00.png#9",
+      "componentIds": [
+        "Sheet_00.png#9"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_00.png#group-10",
+      "sheet": "Sheet_00.png",
+      "primaryComponentId": "Sheet_00.png#10",
+      "componentIds": [
+        "Sheet_00.png#10",
+        "Sheet_00.png#11",
+        "Sheet_00.png#12",
+        "Sheet_00.png#14",
+        "Sheet_00.png#15"
+      ],
+      "identityStatus": "class-identified",
+      "identity": "Build_Blender_C",
+      "assetId": null,
+      "buildingClasses": [
+        "Build_Blender_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_00.png#group-13",
+      "sheet": "Sheet_00.png",
+      "primaryComponentId": "Sheet_00.png#13",
+      "componentIds": [
+        "Sheet_00.png#13",
+        "Sheet_00.png#19"
+      ],
+      "identityStatus": "class-identified",
+      "identity": "Build_Packager_C",
+      "assetId": null,
+      "buildingClasses": [
+        "Build_Packager_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_00.png#group-16",
+      "sheet": "Sheet_00.png",
+      "primaryComponentId": "Sheet_00.png#16",
+      "componentIds": [
+        "Sheet_00.png#16"
+      ],
+      "identityStatus": "class-identified",
+      "identity": "Build_SmelterMk1_C",
+      "assetId": null,
+      "buildingClasses": [
+        "Build_SmelterMk1_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_00.png#group-17",
+      "sheet": "Sheet_00.png",
+      "primaryComponentId": "Sheet_00.png#17",
+      "componentIds": [
+        "Sheet_00.png#17"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_00.png#group-18",
+      "sheet": "Sheet_00.png",
+      "primaryComponentId": "Sheet_00.png#18",
+      "componentIds": [
+        "Sheet_00.png#18"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#group-1",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#1",
+      "componentIds": [
+        "Sheet_01.png#1"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#group-2",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#2",
+      "componentIds": [
+        "Sheet_01.png#2"
+      ],
+      "identityStatus": "class-identified",
+      "identity": "Build_HadronCollider_C",
+      "assetId": null,
+      "buildingClasses": [
+        "Build_HadronCollider_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_01.png#group-3",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#3",
+      "componentIds": [
+        "Sheet_01.png#3"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#group-4",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#4",
+      "componentIds": [
+        "Sheet_01.png#4"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#group-5",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#5",
+      "componentIds": [
+        "Sheet_01.png#5"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#group-6",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#6",
+      "componentIds": [
+        "Sheet_01.png#6"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#group-7",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#7",
+      "componentIds": [
+        "Sheet_01.png#7"
+      ],
+      "identityStatus": "identified",
+      "identity": "Build_Foundation_8x1_01_C",
+      "assetId": "Build_Foundation_8x1_01_C",
+      "buildingClasses": [
+        "Build_Foundation_8x1_01_C"
+      ],
+      "role": "foundation",
+      "variant": null,
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_01.png#group-8",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#8",
+      "componentIds": [
+        "Sheet_01.png#8",
+        "Sheet_01.png#19",
+        "Sheet_01.png#20"
+      ],
+      "identityStatus": "class-identified",
+      "identity": "Build_WaterPump_C",
+      "assetId": null,
+      "buildingClasses": [
+        "Build_WaterPump_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_01.png#group-9",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#9",
+      "componentIds": [
+        "Sheet_01.png#9"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#group-10",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#10",
+      "componentIds": [
+        "Sheet_01.png#10"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#group-11",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#11",
+      "componentIds": [
+        "Sheet_01.png#11"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#group-12",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#12",
+      "componentIds": [
+        "Sheet_01.png#12"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#group-13",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#13",
+      "componentIds": [
+        "Sheet_01.png#13"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#group-14",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#14",
+      "componentIds": [
+        "Sheet_01.png#14"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#group-15",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#15",
+      "componentIds": [
+        "Sheet_01.png#15"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#group-16",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#16",
+      "componentIds": [
+        "Sheet_01.png#16"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#group-17",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#17",
+      "componentIds": [
+        "Sheet_01.png#17"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#group-18",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#18",
+      "componentIds": [
+        "Sheet_01.png#18"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#group-21",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#21",
+      "componentIds": [
+        "Sheet_01.png#21"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#group-22",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#22",
+      "componentIds": [
+        "Sheet_01.png#22"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#group-23",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#23",
+      "componentIds": [
+        "Sheet_01.png#23"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#group-24",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#24",
+      "componentIds": [
+        "Sheet_01.png#24"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#group-25",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#25",
+      "componentIds": [
+        "Sheet_01.png#25"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#group-26",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#26",
+      "componentIds": [
+        "Sheet_01.png#26"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#group-27",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#27",
+      "componentIds": [
+        "Sheet_01.png#27"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#group-28",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#28",
+      "componentIds": [
+        "Sheet_01.png#28"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#group-29",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#29",
+      "componentIds": [
+        "Sheet_01.png#29"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#group-30",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#30",
+      "componentIds": [
+        "Sheet_01.png#30"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#group-31",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#31",
+      "componentIds": [
+        "Sheet_01.png#31"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_01.png#group-32",
+      "sheet": "Sheet_01.png",
+      "primaryComponentId": "Sheet_01.png#32",
+      "componentIds": [
+        "Sheet_01.png#32"
+      ],
+      "identityStatus": "unidentified",
+      "identity": null,
+      "assetId": null,
+      "buildingClasses": [],
+      "role": null,
+      "variant": null,
+      "confidence": "unsourced",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "번호가 나타내는 게임 클래스 또는 작도 보조 요소를 식별한다."
+    },
+    {
+      "id": "Sheet_02.png#group-1",
+      "sheet": "Sheet_02.png",
+      "primaryComponentId": "Sheet_02.png#1",
+      "componentIds": [
+        "Sheet_02.png#1"
+      ],
+      "identityStatus": "class-identified",
+      "identity": "Build_SpaceElevator_C",
+      "assetId": null,
+      "buildingClasses": [
+        "Build_SpaceElevator_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Sheet_02.png#group-2",
+      "sheet": "Sheet_02.png",
+      "primaryComponentId": "Sheet_02.png#2",
+      "componentIds": [
+        "Sheet_02.png#2"
+      ],
+      "identityStatus": "class-identified",
+      "identity": "Satisfactory logo",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "brand-reference",
+      "variant": null,
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#group-1",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#1",
+      "componentIds": [
+        "Texture 02.png#1"
+      ],
+      "identityStatus": "identified",
+      "identity": "Build_AssemblerMk1_C",
+      "assetId": "Build_AssemblerMk1_C",
+      "buildingClasses": [
+        "Build_AssemblerMk1_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#group-2",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#2",
+      "componentIds": [
+        "Texture 02.png#2"
+      ],
+      "identityStatus": "identified",
+      "identity": "Build_FoundryMk1_C",
+      "assetId": "Build_FoundryMk1_C",
+      "buildingClasses": [
+        "Build_FoundryMk1_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#group-3",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#3",
+      "componentIds": [
+        "Texture 02.png#3"
+      ],
+      "identityStatus": "identified",
+      "identity": "Build_ManufacturerMk1_C",
+      "assetId": "Build_ManufacturerMk1_C",
+      "buildingClasses": [
+        "Build_ManufacturerMk1_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#group-4",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#4",
+      "componentIds": [
+        "Texture 02.png#4"
+      ],
+      "identityStatus": "identified",
+      "identity": "Build_StorageContainerMk1_C",
+      "assetId": "Build_StorageContainerMk1_C",
+      "buildingClasses": [
+        "Build_StorageContainerMk1_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#group-5",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#5",
+      "componentIds": [
+        "Texture 02.png#5"
+      ],
+      "identityStatus": "identified",
+      "identity": "Build_ConstructorMk1_C",
+      "assetId": "Build_ConstructorMk1_C",
+      "buildingClasses": [
+        "Build_ConstructorMk1_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#group-6",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#6",
+      "componentIds": [
+        "Texture 02.png#6"
+      ],
+      "identityStatus": "identified",
+      "identity": "Build_SmelterMk1_C",
+      "assetId": "Build_SmelterMk1_C",
+      "buildingClasses": [
+        "Build_SmelterMk1_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#group-7",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#7",
+      "componentIds": [
+        "Texture 02.png#7"
+      ],
+      "identityStatus": "identified",
+      "identity": "Build_OilRefinery_C",
+      "assetId": "Build_OilRefinery_C",
+      "buildingClasses": [
+        "Build_OilRefinery_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#group-8",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#8",
+      "componentIds": [
+        "Texture 02.png#8"
+      ],
+      "identityStatus": "identified",
+      "identity": "ConveyorDirectionForward",
+      "assetId": "ConveyorDirectionForward",
+      "buildingClasses": [],
+      "role": "transport-direction",
+      "variant": null,
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#group-9",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#9",
+      "componentIds": [
+        "Texture 02.png#9"
+      ],
+      "identityStatus": "identified",
+      "identity": "ConveyorDirectionReverse",
+      "assetId": "ConveyorDirectionReverse",
+      "buildingClasses": [],
+      "role": "transport-direction",
+      "variant": null,
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#group-10",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#10",
+      "componentIds": [
+        "Texture 02.png#10"
+      ],
+      "identityStatus": "identified",
+      "identity": "ConveyorBeltTurn90Mk1",
+      "assetId": "ConveyorBeltTurn90Mk1",
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#group-11",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#11",
+      "componentIds": [
+        "Texture 02.png#11"
+      ],
+      "identityStatus": "identified",
+      "identity": "ConveyorBeltStraightMk1",
+      "assetId": "ConveyorBeltStraightMk1",
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#group-12",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#12",
+      "componentIds": [
+        "Texture 02.png#12"
+      ],
+      "identityStatus": "role-identified",
+      "identity": "Conveyor belt branch tile A",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#group-13",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#13",
+      "componentIds": [
+        "Texture 02.png#13"
+      ],
+      "identityStatus": "role-identified",
+      "identity": "Conveyor belt branch tile B",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#group-14",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#14",
+      "componentIds": [
+        "Texture 02.png#14"
+      ],
+      "identityStatus": "role-identified",
+      "identity": "Foundation tile variant",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "foundation",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#group-15",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#15",
+      "componentIds": [
+        "Texture 02.png#15"
+      ],
+      "identityStatus": "role-identified",
+      "identity": "Pipeline fitting",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#group-16",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#16",
+      "componentIds": [
+        "Texture 02.png#16"
+      ],
+      "identityStatus": "role-identified",
+      "identity": "Pipeline fitting",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#group-17",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#17",
+      "componentIds": [
+        "Texture 02.png#17"
+      ],
+      "identityStatus": "role-identified",
+      "identity": "Pipeline fitting",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#group-18",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#18",
+      "componentIds": [
+        "Texture 02.png#18"
+      ],
+      "identityStatus": "identified",
+      "identity": "Build_ConveyorAttachmentSplitter_C",
+      "assetId": "Build_ConveyorAttachmentSplitter_C",
+      "buildingClasses": [
+        "Build_ConveyorAttachmentSplitter_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#group-19",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#19",
+      "componentIds": [
+        "Texture 02.png#19"
+      ],
+      "identityStatus": "identified",
+      "identity": "PipelineStraightMk1",
+      "assetId": "PipelineStraightMk1",
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#group-20",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#20",
+      "componentIds": [
+        "Texture 02.png#20"
+      ],
+      "identityStatus": "role-identified",
+      "identity": "Pipeline straight variant",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#group-21",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#21",
+      "componentIds": [
+        "Texture 02.png#21"
+      ],
+      "identityStatus": "identified",
+      "identity": "ConveyorLiftHeadA",
+      "assetId": "ConveyorLiftHeadA",
+      "buildingClasses": [
+        "Build_ConveyorLiftMk1_C",
+        "Build_ConveyorLiftMk2_C",
+        "Build_ConveyorLiftMk3_C",
+        "Build_ConveyorLiftMk4_C",
+        "Build_ConveyorLiftMk5_C",
+        "Build_ConveyorLiftMk6_C"
+      ],
+      "role": "transport-part",
+      "variant": "direction-unverified",
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#group-22",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#22",
+      "componentIds": [
+        "Texture 02.png#22"
+      ],
+      "identityStatus": "identified",
+      "identity": "PipelineTurn90Mk1",
+      "assetId": "PipelineTurn90Mk1",
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#group-23",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#23",
+      "componentIds": [
+        "Texture 02.png#23"
+      ],
+      "identityStatus": "role-identified",
+      "identity": "Pipeline elbow variant",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#group-24",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#24",
+      "componentIds": [
+        "Texture 02.png#24"
+      ],
+      "identityStatus": "role-identified",
+      "identity": "Pipeline fitting",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#group-25",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#25",
+      "componentIds": [
+        "Texture 02.png#25"
+      ],
+      "identityStatus": "role-identified",
+      "identity": "Pipeline straight variant",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#group-26",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#26",
+      "componentIds": [
+        "Texture 02.png#26"
+      ],
+      "identityStatus": "role-identified",
+      "identity": "Pipeline straight variant",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#group-27",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#27",
+      "componentIds": [
+        "Texture 02.png#27"
+      ],
+      "identityStatus": "role-identified",
+      "identity": "Pipeline elbow variant",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#group-28",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#28",
+      "componentIds": [
+        "Texture 02.png#28"
+      ],
+      "identityStatus": "role-identified",
+      "identity": "Pipeline elbow variant",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#group-29",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#29",
+      "componentIds": [
+        "Texture 02.png#29"
+      ],
+      "identityStatus": "identified",
+      "identity": "PipelineJunctionCrossMk1",
+      "assetId": "PipelineJunctionCrossMk1",
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#group-30",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#30",
+      "componentIds": [
+        "Texture 02.png#30"
+      ],
+      "identityStatus": "identified",
+      "identity": "Build_ConveyorAttachmentMerger_C",
+      "assetId": "Build_ConveyorAttachmentMerger_C",
+      "buildingClasses": [
+        "Build_ConveyorAttachmentMerger_C"
+      ],
+      "role": "building",
+      "variant": null,
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#group-31",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#31",
+      "componentIds": [
+        "Texture 02.png#31"
+      ],
+      "identityStatus": "role-identified",
+      "identity": "Pipeline elbow variant",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#group-32",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#32",
+      "componentIds": [
+        "Texture 02.png#32"
+      ],
+      "identityStatus": "role-identified",
+      "identity": "Pipeline elbow variant",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#group-33",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#33",
+      "componentIds": [
+        "Texture 02.png#33"
+      ],
+      "identityStatus": "identified",
+      "identity": "ConveyorLiftHeadB",
+      "assetId": "ConveyorLiftHeadB",
+      "buildingClasses": [
+        "Build_ConveyorLiftMk1_C",
+        "Build_ConveyorLiftMk2_C",
+        "Build_ConveyorLiftMk3_C",
+        "Build_ConveyorLiftMk4_C",
+        "Build_ConveyorLiftMk5_C",
+        "Build_ConveyorLiftMk6_C"
+      ],
+      "role": "transport-part",
+      "variant": "direction-unverified",
+      "confidence": "verified",
+      "sources": [
+        "anders-assets-2023",
+        "src/data/curated/topview-assets.json"
+      ],
+      "openQuestion": null
+    },
+    {
+      "id": "Texture 02.png#group-34",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#34",
+      "componentIds": [
+        "Texture 02.png#34"
+      ],
+      "identityStatus": "role-identified",
+      "identity": "Pipeline straight variant",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#group-35",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#35",
+      "componentIds": [
+        "Texture 02.png#35"
+      ],
+      "identityStatus": "role-identified",
+      "identity": "Pipeline straight variant",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#group-36",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#36",
+      "componentIds": [
+        "Texture 02.png#36"
+      ],
+      "identityStatus": "role-identified",
+      "identity": "Pipeline fitting",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#group-37",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#37",
+      "componentIds": [
+        "Texture 02.png#37"
+      ],
+      "identityStatus": "role-identified",
+      "identity": "Pipeline end fitting",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    },
+    {
+      "id": "Texture 02.png#group-38",
+      "sheet": "Texture 02.png",
+      "primaryComponentId": "Texture 02.png#38",
+      "componentIds": [
+        "Texture 02.png#38"
+      ],
+      "identityStatus": "role-identified",
+      "identity": "Pipeline elbow variant",
+      "assetId": null,
+      "buildingClasses": [],
+      "role": "transport-part",
+      "variant": null,
+      "confidence": "consensus",
+      "sources": [
+        "anders-assets-2023",
+        "scripts/analyze-topview-sheets.py"
+      ],
+      "openQuestion": "정확한 게임 클래스·Mk·방향·조합 역할을 확정한다."
+    }
+  ]
+}

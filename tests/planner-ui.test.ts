@@ -43,6 +43,7 @@ let win: InstanceType<typeof Window>;
 let doc: Document;
 let render: (v: unknown, p: unknown) => void;
 let h: (t: unknown, p: unknown) => unknown;
+let act: (callback: () => unknown) => unknown;
 let Planner: unknown;
 
 before(async () => {
@@ -52,13 +53,19 @@ before(async () => {
   writeFileSync(file, out.code.replace(/(from\s+["'])(\.\.?\/[^"']+?)(["'])/g, '$1$2.ts$3'), 'utf8');
   win = new Window({ url: 'https://x.test/', width: 1400, height: 800 });
   const globals = globalThis as Record<string, unknown>;
-  for (const key of ['window', 'document', 'navigator', 'HTMLElement', 'SVGElement', 'Element', 'Node', 'Event', 'MouseEvent', 'PointerEvent', 'localStorage', 'requestAnimationFrame', 'cancelAnimationFrame', 'getComputedStyle', 'ResizeObserver', 'Blob', 'URL']) {
+  for (const key of ['window', 'document', 'navigator', 'HTMLElement', 'SVGElement', 'Element', 'Node', 'Event', 'MouseEvent', 'PointerEvent', 'localStorage', 'requestAnimationFrame', 'cancelAnimationFrame', 'getComputedStyle', 'Blob', 'URL']) {
     const value = (win as unknown as Record<string, unknown>)[key];
     if (value === undefined) continue;
     try { globals[key] = value; } catch { Object.defineProperty(globals, key, { value, configurable: true, writable: true }); }
   }
+  class TestResizeObserver {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  }
+  Object.defineProperty(globals, 'ResizeObserver', { value: TestResizeObserver, configurable: true, writable: true });
   const preact = await import('preact');
-  (preact.options as unknown as { debounceRendering?: (cb: () => void) => void }).debounceRendering = (cb) => cb();
+  act = (await import('preact/test-utils')).act as never;
   render = preact.render as never;
   h = preact.h as never;
   Planner = (await import(pathToFileURL(process.cwd() + '/' + file).href)).default;
@@ -68,57 +75,71 @@ before(async () => {
 function mount() {
   win.localStorage.clear();
   doc.body.innerHTML = '<div id="root"></div>';
-  render(h(Planner, {
-    machines,
-    beltImageUrl: '/assets/conveyor.webp',
-    beltTurnImageUrl: '/assets/conveyor-turn.webp',
-    beltDirectionImageUrl: '/assets/conveyor-direction.webp',
-    pipeImageUrl: '/assets/pipe.webp',
-    pipeTurnImageUrl: '/assets/pipe-turn.webp',
-    liftImageUrl: '/assets/lift.png',
-    foundationImageUrl: '/assets/foundation.png',
-    proof: { fileCount: 9, publicFileCount: 8, observationCount: 9933, toleranceM: .05 },
-  }), doc.getElementById('root'));
+  act(() => {
+    render(h(Planner, {
+      machines,
+      beltImageUrl: '/assets/conveyor.webp',
+      beltTurnImageUrl: '/assets/conveyor-turn.webp',
+      beltDirectionImageUrl: '/assets/conveyor-direction.webp',
+      pipeImageUrl: '/assets/pipe.webp',
+      pipeTurnImageUrl: '/assets/pipe-turn.webp',
+      liftImageUrl: '/assets/lift.png',
+      foundationImageUrl: '/assets/foundation.png',
+    }), doc.getElementById('root'));
+  });
 }
 const all = (selector: string) => [...doc.querySelectorAll(selector)];
 const button = (text: string) => all('button').find((entry) => entry.textContent?.includes(text)) as HTMLElement | undefined;
-const clickSvg = (entry: Element | null | undefined) => entry?.dispatchEvent(new win.window.MouseEvent('click', { bubbles: true, cancelable: true }) as unknown as Event);
+const clickSvg = (entry: Element | null | undefined) => act(() => {
+  entry?.dispatchEvent(new win.window.MouseEvent('click', { bubbles: true, cancelable: true }) as unknown as Event);
+});
+const clickButton = (text: string) => clickSvg(button(text));
 const clickCanvas = (x = 640, y = 360) => {
-  void x; void y;
-  (doc.querySelector('.vp-stage') as HTMLElement | null)?.click();
+  act(() => {
+    doc.querySelector('.vp-stage')?.dispatchEvent(new win.window.MouseEvent('click', {
+      bubbles: true,
+      cancelable: true,
+      clientX: x,
+      clientY: y,
+    }) as unknown as Event);
+  });
 };
 
 test('파운데이션은 빈 판에서 실제 이미지 타일로 직접 추가·삭제한다', () => {
   mount();
   assert.equal(all('.vp-foundation').length, 0);
-  button('파운데이션 8 m × 8 m')?.click();
+  const foundationTool = button('파운데이션');
+  clickSvg(foundationTool);
   assert.equal(all('.vp-foundation').length, 0);
-  assert.ok(doc.querySelector('.vp-machine.is-armed'));
+  assert.equal(foundationTool?.classList.contains('is-armed'), true);
   clickCanvas();
   assert.equal(all('.vp-foundation').length, 1);
   assert.equal(doc.querySelector('.vp-foundation image')?.getAttribute('href'), '/assets/foundation.png');
   assert.equal(doc.querySelector('.vp-foundation rect')?.getAttribute('width'), '8');
-  button('선택 삭제')?.click();
-  assert.equal(all('.vp-foundation').length, 0);
+  assert.equal(foundationTool?.classList.contains('is-armed'), true);
+  clickCanvas(760, 360);
+  assert.equal(all('.vp-foundation').length, 2);
+  clickSvg(doc.querySelector('[data-action="delete-selection"]'));
+  assert.equal(all('.vp-foundation').length, 1);
 });
 
 test('기계를 회전해도 이름과 IN·OUT 라벨은 정방향을 유지한다', () => {
   mount();
-  button('제련기')?.click();
+  clickButton('제련기');
   clickCanvas();
   assert.deepEqual(all('.vp-port-label').map((entry) => entry.textContent), ['IN', 'OUT']);
   assert.equal(all('.vp-machine-size').length, 0);
   assert.equal(all('.vp-machine-label').length, 0);
-  button('90° 회전')?.click();
+  clickButton('90° 회전');
   assert.match(doc.querySelector('.vp-placement')?.getAttribute('transform') ?? '', /rotate\(90\)/);
   assert.match(doc.querySelector('.vp-port')?.getAttribute('transform') ?? '', /rotate\(-90\)/);
 });
 
 test('실제 포트를 연결하면 선이 아니라 컨베이어 이미지 구간이 생긴다', () => {
   mount();
-  button('제련기')?.click();
+  clickButton('제련기');
   clickCanvas(430, 360);
-  button('제작기')?.click();
+  clickButton('제작기');
   clickCanvas(800, 360);
   clickSvg(all('.vp-placement')[0]?.querySelector('.vp-port.is-output'));
   clickSvg(all('.vp-placement')[1]?.querySelector('.vp-port.is-input'));
@@ -129,11 +150,11 @@ test('실제 포트를 연결하면 선이 아니라 컨베이어 이미지 구�
 
 test('전체 초기화는 설비·토대·물류를 한 번에 비운다', () => {
   mount();
-  button('파운데이션 8 m × 8 m')?.click();
+  clickButton('파운데이션');
   clickCanvas();
-  button('제련기')?.click();
+  clickButton('제련기');
   clickCanvas(400, 360);
-  button('전체 초기화')?.click();
+  clickButton('전체 초기화');
   assert.equal(all('.vp-foundation').length, 0);
   assert.equal(all('.vp-placement').length, 0);
   assert.equal(all('.vp-route').length, 0);
@@ -143,14 +164,14 @@ test('전체 초기화는 설비·토대·물류를 한 번에 비운다', () =>
 test('실행 취소·다시 실행은 최근 50단계의 편집 상태를 복원한다', () => {
   mount();
   for (let index = 0; index < 51; index += 1) {
-    button('제련기')?.click();
+    clickButton('제련기');
     clickCanvas();
   }
   assert.equal(all('.vp-placement').length, 51);
-  for (let index = 0; index < 50; index += 1) button('실행 취소')?.click();
+  for (let index = 0; index < 50; index += 1) clickButton('실행 취소');
   assert.equal(all('.vp-placement').length, 1);
   assert.equal((button('실행 취소') as HTMLButtonElement).disabled, true);
-  for (let index = 0; index < 50; index += 1) button('다시 실행')?.click();
+  for (let index = 0; index < 50; index += 1) clickButton('다시 실행');
   assert.equal(all('.vp-placement').length, 51);
   assert.equal((button('다시 실행') as HTMLButtonElement).disabled, true);
 });
@@ -163,46 +184,46 @@ test('카탈로그 항목은 클릭 배치와 HTML 드래그앤드롭을 함께 
 
 test('도면 레이어는 토대와 설비를 독립적으로 숨기고 다시 표시한다', () => {
   mount();
-  button('파운데이션 8 m × 8 m')?.click();
+  clickButton('파운데이션');
   clickCanvas();
-  button('제련기')?.click();
+  clickButton('제련기');
   clickCanvas();
   const layerInput = (label: string) => all('.vp-layers label')
     .find((entry) => entry.textContent?.includes(label))?.querySelector('input') as HTMLInputElement;
-  layerInput('토대').click();
+  clickSvg(layerInput('토대'));
   assert.equal(all('.vp-foundation').length, 0);
   assert.equal(all('.vp-placement').length, 1);
-  layerInput('설비').click();
+  clickSvg(layerInput('설비'));
   assert.equal(all('.vp-placement').length, 0);
-  layerInput('토대').click();
-  layerInput('설비').click();
+  clickSvg(layerInput('토대'));
+  clickSvg(layerInput('설비'));
   assert.equal(all('.vp-foundation').length, 1);
   assert.equal(all('.vp-placement').length, 1);
 });
 
 test('도면 맞춤은 배치된 공정을 화면 중심으로 가져온다', () => {
   mount();
-  button('파운데이션 8 m × 8 m')?.click();
+  clickButton('파운데이션');
   clickCanvas();
-  button('제련기')?.click();
+  clickButton('제련기');
   clickCanvas();
-  button('도면 맞춤')?.click();
+  clickButton('도면 맞춤');
   assert.match(doc.querySelector('.vp-notice')?.textContent ?? '', /도면 전체를 화면에 맞췄습니다/);
 });
 
 test('기기 레시피·클럭·소머슬룹을 설정하면 계산 유량이 바뀐다', () => {
   mount();
-  button('제작기')?.click();
+  clickButton('제작기');
   clickCanvas();
   const selects = all('.vp-machine-config select') as HTMLSelectElement[];
   selects[0].value = 'Recipe_Alternate_IronPlate_C';
-  selects[0].dispatchEvent(new win.window.Event('change', { bubbles: true }) as unknown as Event);
+  act(() => selects[0].dispatchEvent(new win.window.Event('change', { bubbles: true }) as unknown as Event));
   const clock = doc.querySelector('.vp-machine-config input') as HTMLInputElement;
   clock.value = '200';
-  clock.dispatchEvent(new win.window.Event('input', { bubbles: true }) as unknown as Event);
+  act(() => clock.dispatchEvent(new win.window.Event('input', { bubbles: true }) as unknown as Event));
   const sloop = all('.vp-machine-config select').at(-1) as HTMLSelectElement;
   sloop.value = '1';
-  sloop.dispatchEvent(new win.window.Event('change', { bubbles: true }) as unknown as Event);
+  act(() => sloop.dispatchEvent(new win.window.Event('change', { bubbles: true }) as unknown as Event));
   assert.match(doc.querySelector('.vp-rate-summary')?.textContent ?? '', /출력 철판 120\/분/);
   assert.match(doc.querySelector('.vp-rate-summary')?.textContent ?? '', /계산 전력/);
 });

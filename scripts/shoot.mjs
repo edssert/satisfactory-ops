@@ -3,7 +3,7 @@
  * shoot.mjs — 빌드한 화면을 실제 브라우저로 열어 사진을 찍는다.
  *
  * 눈으로 못 보고 고치다가 같은 곳을 여러 번 틀렸다. 배포 전에 화면을 직접 본다.
- * 사용: node scripts/shoot.mjs <경로> [출력.png] [--w=1440] [--h=900] [--full] [--reduce] [--nojs] [--wait=ms] [--click=선택자]
+ * 사용: node scripts/shoot.mjs <경로> [출력.png] [--w=1440] [--h=900] [--full] [--element=선택자] [--reduce] [--nojs] [--wait=ms] [--click=선택자[@x,y]]
  */
 import { chromium } from 'playwright';
 import http from 'node:http';
@@ -25,7 +25,8 @@ const WAIT = num('wait', 900);
 const FULL = argv.includes('--full');
 const REDUCE = argv.includes('--reduce');
 const NOJS = argv.includes('--nojs');
-const CLICK = argv.find((a) => a.startsWith('--click='))?.slice(8);
+const CLICKS = argv.filter((a) => a.startsWith('--click=')).map((a) => a.slice(8));
+const ELEMENT = argv.find((a) => a.startsWith('--element='))?.slice(10);
 
 const DIST = path.resolve('dist');
 const BASE = '/satisfactory-ops';
@@ -79,14 +80,27 @@ if (WHEEL) {
   }
   await page.waitForTimeout(700);
 }
-if (CLICK) {
-  await page.click(CLICK).catch(() => errs.push(`못 누름: ${CLICK}`));
-  await page.waitForTimeout(500);
+for (const click of CLICKS) {
+  const [selector, offset] = click.split('@');
+  if (offset) {
+    const [x, y] = offset.split(',').map(Number);
+    const target = page.locator(selector).first();
+    if (Number.isFinite(x) && Number.isFinite(y)) {
+      await target.click({ position: { x, y } }).catch(() => errs.push(`못 누름: ${click}`));
+    } else errs.push(`못 누름: ${click}`);
+  } else {
+    await page.click(selector).catch(() => errs.push(`못 누름: ${selector}`));
+  }
+  await page.waitForTimeout(350);
 }
 await page.waitForTimeout(WAIT);
-await page.screenshot({ path: out, fullPage: FULL });
+if (ELEMENT) {
+  await page.locator(ELEMENT).first().screenshot({ path: out });
+} else {
+  await page.screenshot({ path: out, fullPage: FULL });
+}
 await browser.close();
 server.close();
-console.log(out, FULL ? '(전체)' : `${W}x${H}`);
+console.log(out, ELEMENT ? `(요소 ${ELEMENT})` : FULL ? '(전체)' : `${W}x${H}`);
 if (errs.length) console.log('콘솔 오류:\n  ' + errs.slice(0, 6).join('\n  '));
 if (missed.length) console.log('404:\n  ' + [...new Set(missed)].slice(0, 8).join('\n  '));

@@ -157,7 +157,7 @@ export default function StartPath({ gap, hubCost, portableMiners, inventoryNote,
             </li>
           </ol>
 
-          <div class="scroll-x">
+          <div class="scroll-x" tabIndex={0}>
             <table>
               <caption>첫 마일스톤(기초 건축물)까지의 격차 — 스킵 시작 기준</caption>
               <thead>
