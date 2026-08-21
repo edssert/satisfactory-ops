@@ -27,6 +27,7 @@ import type {
   PortReference,
   QuarterTurn,
   TransportRoute,
+  ValidationIssue,
   Vec3,
 } from '../domain/factory/types';
 
@@ -34,6 +35,7 @@ export interface DrawingMachine extends MachineSpec {
   imageUrl: string;
   imageKind: 'topview' | 'icon';
   occupancyFrame?: { x: number; y: number; width: number; height: number };
+  statusImageUrls?: { active: string; activeWithCrystal: string; standby: string; error: string };
   recipes: DrawingRecipe[];
   somersloopSlots: number;
   basePowerMW: number;
@@ -187,7 +189,7 @@ function boundsOf(spec: MachineSpec): Box3 {
   };
 }
 
-function imageRect(spec: DrawingMachine, bounds: Box3) {
+export function imageRect(spec: DrawingMachine, bounds: Box3) {
   const width = bounds.max.x - bounds.min.x;
   const height = bounds.max.y - bounds.min.y;
   const frame = spec.occupancyFrame;
@@ -200,6 +202,40 @@ function imageRect(spec: DrawingMachine, bounds: Box3) {
     width: imageWidth,
     height: imageHeight,
   };
+}
+
+export type MachineVisualState = 'active' | 'activeWithCrystal' | 'standby' | 'error';
+
+export function machineVisualState(
+  placement: Placement,
+  spec: DrawingMachine,
+  placements: Placement[],
+  routes: TransportRoute[],
+  issues: ValidationIssue[],
+): MachineVisualState {
+  const connected = new Set(routes.flatMap((route) => [
+    `${route.from.placementId}:${route.from.portId}`,
+    `${route.to.placementId}:${route.to.portId}`,
+  ]));
+  if (spec.ports.some((port) => !connected.has(`${placement.id}:${port.id}`)) ||
+      issues.some((issue) => issue.severity === 'error' && issue.subjectIds.includes(placement.id))) return 'error';
+
+  const byId = new Map(placements.map((entry) => [entry.id, entry]));
+  const operation = placement.operation;
+  if (operation) {
+    for (const [itemId, required] of Object.entries(operation.inputRates)) {
+      const supplied = routes.filter((route) => route.to.placementId === placement.id && route.itemId === itemId)
+        .reduce((sum, route) => sum + (byId.get(route.from.placementId)?.operation?.outputRates[itemId] ?? route.flowPerMinute), 0);
+      if (supplied + 1e-6 < required) return 'standby';
+    }
+    for (const [itemId, produced] of Object.entries(operation.outputRates)) {
+      const demanded = routes.filter((route) => route.from.placementId === placement.id && route.itemId === itemId)
+        .reduce((sum, route) => sum + (byId.get(route.to.placementId)?.operation?.inputRates[itemId] ?? route.flowPerMinute), 0);
+      if (demanded + 1e-6 < produced) return 'standby';
+    }
+    if ((operation.powerShards ?? 0) > 0 || (operation.clockPercent ?? 100) > 100) return 'activeWithCrystal';
+  }
+  return 'active';
 }
 
 function operationFor(machine: DrawingMachine, recipe: DrawingRecipe, clockPercent = 100, powerShards = 0, somersloops = 0) {
@@ -676,6 +712,13 @@ export default function ValidatedFactoryPlanner({
   }
 
   function pointerDown(event: PointerEvent, placement: Placement) {
+    if (event.button === 1) {
+      event.preventDefault();
+      event.stopPropagation();
+      beginCanvasPan(event);
+      return;
+    }
+    if (event.button !== 0) return;
     event.stopPropagation();
     const svg = svgRef.current;
     if (!svg) return;
@@ -687,6 +730,13 @@ export default function ValidatedFactoryPlanner({
   }
 
   function foundationPointerDown(event: PointerEvent, tile: FoundationTile) {
+    if (event.button === 1) {
+      event.preventDefault();
+      event.stopPropagation();
+      beginCanvasPan(event);
+      return;
+    }
+    if (event.button !== 0) return;
     event.stopPropagation();
     const svg = svgRef.current;
     if (!svg) return;
@@ -753,8 +803,25 @@ export default function ValidatedFactoryPlanner({
     });
   }
 
+  function beginCanvasPan(event: PointerEvent) {
+    event.preventDefault();
+    drag.current = {
+      kind: 'canvas',
+      startClientX: event.clientX,
+      startClientY: event.clientY,
+      startPanX: pan.x,
+      startPanY: pan.y,
+    };
+    svgRef.current?.setPointerCapture(event.pointerId);
+  }
+
   function canvasPointerDown(event: PointerEvent) {
     const target = event.target as Element;
+    if (event.button === 1) {
+      beginCanvasPan(event);
+      return;
+    }
+    if (event.button !== 0) return;
     if (target.closest('.vp-placement, .vp-foundation, .vp-port')) return;
     const svg = svgRef.current;
     if (!svg) return;
@@ -769,18 +836,30 @@ export default function ValidatedFactoryPlanner({
       svg.setPointerCapture(event.pointerId);
       return;
     }
-    drag.current = {
-      kind: 'canvas',
-      startClientX: event.clientX,
-      startClientY: event.clientY,
-      startPanX: pan.x,
-      startPanY: pan.y,
-    };
-    svgRef.current?.setPointerCapture(event.pointerId);
+    beginCanvasPan(event);
     setSelectedId(null);
     setSelectedFoundationId(null);
     setGroupSelection([]);
     setPendingPort(null);
+  }
+
+  function canvasWheel(event: WheelEvent) {
+    event.preventDefault();
+    const svg = svgRef.current;
+    if (!svg || event.deltaY === 0) return;
+    const point = svgPoint(svg, event as unknown as PointerEvent);
+    const rect = svg.getBoundingClientRect();
+    const ratioX = Math.min(1, Math.max(0, (event.clientX - rect.left) / Math.max(rect.width, 1)));
+    const ratioY = Math.min(1, Math.max(0, (event.clientY - rect.top) / Math.max(rect.height, 1)));
+    const nextZoom = Math.min(2.4, Math.max(.55, zoom * (event.deltaY < 0 ? 1.12 : 1 / 1.12)));
+    if (nextZoom === zoom) return;
+    const nextWidth = 128 / nextZoom;
+    const nextHeight = nextWidth * Math.max(.48, box.height / Math.max(box.width, 1));
+    setZoom(nextZoom);
+    setPan({
+      x: point.x + (0.5 - ratioX) * nextWidth,
+      y: point.y + (0.5 - ratioY) * nextHeight,
+    });
   }
 
   function canvasClick(event: MouseEvent) {
@@ -1123,7 +1202,7 @@ export default function ValidatedFactoryPlanner({
         </header>
 
         <div class="vp-stage" ref={stageRef} onClick={canvasClick} onDragOver={stageDragOver} onDrop={stageDrop}>
-          <div class="vp-ruler"><strong>8 m · 파운데이션 1칸</strong><span>카탈로그 드롭 · 배경 드래그 이동 · Shift+드래그 영역 선택 · Ctrl+Z 실행 취소</span></div>
+          <div class="vp-ruler"><strong>8 m · 파운데이션 1칸</strong><span>카탈로그 드롭 · 휠 클릭 드래그 이동 · 휠 확대/축소 · Shift+드래그 영역 선택 · Ctrl+Z 실행 취소</span></div>
           <div class="vp-zoom">
             <button type="button" onClick={() => setZoom((value) => Math.min(2.4, value + .2))} aria-label="확대">+</button>
             <span>{Math.round(zoom * 100)}%</span>
@@ -1137,6 +1216,8 @@ export default function ValidatedFactoryPlanner({
             onPointerMove={pointerMove}
             onPointerUp={finishPointer}
             onPointerCancel={finishPointer}
+            onWheel={(event) => canvasWheel(event as unknown as WheelEvent)}
+            onAuxClick={(event) => event.preventDefault()}
           >
             <defs>
               <pattern id="vp-meter-grid" width="1" height="1" patternUnits="userSpaceOnUse">
@@ -1182,6 +1263,7 @@ export default function ValidatedFactoryPlanner({
               const art = imageRect(spec, bounds);
               const selected = selectedId === placement.id || groupSelection.includes(placement.id);
               const compactLogistics = /ConveyorAttachment(?:Splitter|Merger)/.test(spec.buildingClass);
+              const visualState = machineVisualState(placement, spec, placements, transports, validation.issues);
               return (
                 <g
                   key={placement.id}
@@ -1191,7 +1273,7 @@ export default function ValidatedFactoryPlanner({
                 >
                   <rect x={bounds.min.x} y={bounds.min.y} width={width} height={height} class="vp-clearance" />
                   <image
-                    href={spec.imageUrl}
+                    href={spec.statusImageUrls?.[visualState] ?? spec.imageUrl}
                     x={art.x}
                     y={art.y}
                     width={art.width}

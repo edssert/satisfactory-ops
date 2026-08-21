@@ -1,7 +1,13 @@
 {
   "$schemaVersion": 1,
-  "id": "anders-material-study-2026",
+  "id": "satisfactory-factory-uv-sheet-2026",
   "grid": { "columns": 3, "rows": 3, "cellPx": 256 },
+  "textureArrays": {
+    "albedoPattern": ".cache/game-asset-export/factory-base-bc-slices/TX2D_FactoryBase_BC-slice-{index}.png",
+    "mreoPattern": ".cache/game-asset-export/factory-base-mreo-slices/TX2D_FactoryBase_MREO-slice-{index}.png",
+    "normalPattern": ".cache/game-asset-export/factory-base-normal-slices/TX2D_FactoryBase_N-slice-{index}.png",
+    "normalSlices": 7
+  },
   "sources": [
     "https://www.reddit.com/r/SatisfactoryGame/comments/q5619z/",
     "https://www.reddit.com/r/SatisfactoryGame/comments/qom52d/",
@@ -9,19 +15,34 @@
     "https://github.com/DavidHGillen/Satisfactory_ModelingTools"
   ],
   "cells": [
-    { "row": 0, "column": 0, "role": "paint-primary", "color": "#ea9c42", "metallic": 0.55, "roughness": 0.32, "emission": 0 },
-    { "row": 0, "column": 1, "role": "paint-secondary", "color": "#5e6d81", "metallic": 0.55, "roughness": 0.34, "emission": 0 },
-    { "row": 0, "column": 2, "role": "rubber", "color": "#2c333e", "metallic": 0, "roughness": 0.78, "emission": 0 },
-    { "row": 1, "column": 0, "role": "steel", "color": "#81a2a9", "metallic": 1, "roughness": 0.2, "emission": 0 },
-    { "row": 1, "column": 1, "role": "neutral-metal", "color": "#596a7a", "metallic": 0.88, "roughness": 0.36, "emission": 0 },
-    { "row": 1, "column": 2, "role": "paint-red", "color": "#b3261e", "metallic": 0.45, "roughness": 0.35, "emission": 0 },
-    { "row": 2, "column": 0, "role": "light-metal", "color": "#b3b9b4", "metallic": 1, "roughness": 0.15, "emission": 0 },
-    { "row": 2, "column": 1, "role": "dark-metal", "color": "#1f2021", "metallic": 0.82, "roughness": 0.3, "emission": 0 },
-    { "row": 2, "column": 2, "role": "emissive-void", "color": "#000000", "metallic": 0, "roughness": 0.5, "emission": 0 }
+    { "row": 0, "column": 0, "role": "paint-primary", "color": "#fa9549", "metallic": 0.55, "roughness": 0.32, "emission": 0 },
+    { "row": 0, "column": 1, "role": "composite", "color": "#bcc1ca", "metallic": 0.15, "roughness": 0.48, "emission": 0 },
+    { "row": 0, "column": 2, "role": "rubber-plastic-dark", "color": "#292728", "metallic": 0, "roughness": 0.78, "emission": 0 },
+    { "row": 1, "column": 0, "role": "paint-secondary", "color": "#4f5da4", "metallic": 0.55, "roughness": 0.34, "emission": 0 },
+    { "row": 1, "column": 1, "role": "rough-metal", "color": "#8a8c8a", "metallic": 0.88, "roughness": 0.5, "emission": 0 },
+    { "row": 1, "column": 2, "role": "plastic-red", "color": "#ff4947", "metallic": 0, "roughness": 0.42, "emission": 0 },
+    { "row": 2, "column": 0, "role": "chrome", "color": "#c3c3c3", "metallic": 1, "roughness": 0.15, "emission": 0 },
+    { "row": 2, "column": 1, "role": "dark-steel", "color": "#181818", "metallic": 0.82, "roughness": 0.3, "emission": 0 },
+    {
+      "row": 2,
+      "column": 2,
+      "role": "lights-and-void",
+      "color": "#000000",
+      "metallic": 0,
+      "roughness": 0.5,
+      "emission": 0,
+      "subcells": [
+        { "role": "glowing-light", "x": 0, "y": 0, "width": 0.5, "height": 0.5, "color": "#ffd000", "metallic": 0, "roughness": 0.2, "emission": 1 },
+        { "role": "input-light", "x": 0.5, "y": 0, "width": 0.25, "height": 0.5, "color": "#ff6500", "metallic": 0, "roughness": 0.2, "emission": 1 },
+        { "role": "output-light", "x": 0.75, "y": 0, "width": 0.25, "height": 0.5, "color": "#00efb5", "metallic": 0, "roughness": 0.2, "emission": 1 },
+        { "role": "standard-light", "x": 0, "y": 0.5, "width": 0.5, "height": 0.5, "color": "#ffe58a", "metallic": 0, "roughness": 0.2, "emission": 0.75 },
+        { "role": "pure-void", "x": 0.5, "y": 0.5, "width": 0.5, "height": 0.5, "color": "#000000", "metallic": 0, "roughness": 0.5, "emission": 0 }
+      ]
+    }
   ],
   "packedChannels": {
     "reflection": { "red": "metallic", "green": "roughness", "blue": "emission-strength" },
-    "paintMasks": { "green": "paint-primary", "blue": "paint-secondary" }
+    "uvSheet": "3x3 factory material roles with nested lights-and-void cell"
   },
   "confidence": "consensus"
 }

@@ -91,17 +91,38 @@ Anders가 공개한 제작 원리는 `게임 자산 추출 → glTF → Blender 
 7. 원본 19개 자산과 동일 화면에 배치해 시점·실루엣·재질·발광·그림자·점유 코너를 승인한 뒤에만
    `candidate`에서 `approved`로 승격한다.
 
+동일 유형 결함이 두 번 발생하거나 여러 부품에 공통 결함이 한 번 발생하면 개별 재질·좌표 조정을
+중단하고 파이프라인 감사를 수행한다. 각 기기는 인게임 대조군별 필수 부품 행렬을 가져야 하며,
+원시 VAT 자세는 Idle/정지 변형 적용 증거 없이 제품 후보가 될 수 없다.
+
+조립 검증은 수직 탑뷰에서 시작하지 않는다. 정면·후면·좌·우 직교뷰와 네 방향 아이소메트릭에서
+부품 접합, asset basis, 높이, 좌우, 포트 방향을 먼저 통과한 뒤 수직 탑뷰와 점유 프레임을 생성한다.
+
+`Decal_Normal` 겹침 면은 underlying 재질과 같은 중립 베이스에 normal만 적용한다. 금속 면의
+은색↔짙은 회색 변화는 시선각과 조명 반사에 따른 정상 반응으로 판정하며 색상만으로 재질 오류를 선언하지 않는다.
+
+현재 게임 `BP_ProductionIndicatorInstanced` CDO의 상태색을 그대로 사용한다. 활성은 `#00FF00`, 파워
+샤드 활성(`mStateActiveWithCrystalData`)은 `#6C8AE1`, 오류는 `#FF0000`, 대기는 `#FFFF00`이다. 오류와
+대기는 게임 정의의 점멸 패턴 1을 갖지만 정적 WebP는 색 상태만 보존한다. 앱은 포트·품목 오류를 빨강,
+입력 부족·출력 잉여를 노랑, 파워 샤드 또는 100% 초과 클럭을 하늘색, 균형 가동을 초록으로 표시한다.
+근거 추출물은 `.tmp-research/cue4parse-pilot/inspect/BP_ProductionIndicatorInstanced.uasset.json`이다.
+
 현재 재현 기준은 FModel `7c86ee47`/CUE4Parse `7afcbb32`, Blender 5.2.0 LTS다. Blender 단계는
 `scripts/topview/render-topview.py`로 실행하며 다음 계약을 갖는다.
 
 - `--scene`은 전수 게임 자산 그래프와 일치 검사를 통과한 클래스별 장면 레시피다. 수동 `--glb` 나열은
   격리 진단에만 사용한다.
-- 현재 CUE4Parse glTF 좌표 계약에서 Unreal 상대 좌표는 Blender `(-X,Y,Z)`와 반전된 yaw로 변환한다.
+- 현재 CUE4Parse glTF 좌표 계약에서 Unreal 상대 좌표는 Blender `(X,-Y,Z)`와 반전된 yaw로 변환한다.
 - `--footprint`과 `--footprint-center`는 시각 메시 크기가 아니라 게임 하드 클리어런스 XY 합집합이다.
 - 텍스처가 있는 재질은 `--material-albedo`와 `--material-ao`로 복원하고, 실제 재질의 발광 설정이
   확인된 부분만 `--material-emissive-accent`로 강화한다.
 - PNG와 `.blend`를 함께 만들며, 배포 WebP의 SHA-256과 정규화된 `occupancyFrame`은
   `topview-assets.json`에 기록한다.
+
+제품용 수직 탑뷰는 렌더러를 직접 호출하지 않고 `scripts/topview/run-validated-render.mjs` 하네스로만
+생성한다. 하네스는 Blender 예외 종료 코드, 카메라 `ORTHO`/월드 `-Z`, `frontTiltDeg=0`, 게임 하드
+클리어런스 코너 네 절점과 기준본 해시를 검사하고 `.cache/topview/validated/`에 승인 전 후보와 영수증을
+격리한다. 검증 영수증만으로 public 자산이나 완료 이미지로 승격하지 않는다.
 
 전수 색인은 `.cache/game-asset-index/factory-assets.ndjson`, 자동 장면 계약은
 `.cache/game-asset-index/factory-scenes.json`에 생성한다. `scripts/game-assets/query-factory-assets.mjs`는
@@ -123,8 +144,10 @@ Anders가 공개한 제작 원리는 `게임 자산 추출 → glTF → Blender 
 실험 코드는 제품 파이프라인에 남기지 않고 실패 이유를 Research에 기록한다.
 
 현재 Anders 시트에서 검출한 픽셀 연결 성분은 91건이고, 흰 점유 코너를 본체에 결합한 의미 자산 그룹은
-84건이다. 그룹 중 19건은 런타임 자산과 연결됐고, 14건은 게임 클래스를 식별했으며, 20건은 운송 부품
-등의 역할을 식별했다. 이 집계는 서로 겹칠 수 있으며 31건은 아직 미식별이다. 미식별 그룹을 추측으로
+84건이다. 그룹 중 19건은 런타임 자산과 연결됐고, 12건은 게임 클래스를 식별했으며, 22건은 기기·운송
+부품 등의 역할만 식별했다. 기존 제작기 매핑 2건은 현재 게임 Blueprint·아이콘·메시와 불일치해 역할
+식별 상태로 강등했다. 이 집계는 서로 겹칠 수 있으며 31건은 아직 미식별이다. 미식별 그룹을 추측으로
 런타임 자산에 승격하지 않는다.
-컨베이어 리프트는 `Texture 02.png#21`과 `#33`의 독립 탑뷰 변형을 사용한다. Mk.1~6은 공통 탑뷰를
-재사용하고, 높이는 이미지 길이가 아니라 Z 값·라벨·레이어 가림 순서로 표현한다.
+Anders `Texture 02.png#21`과 `#33`은 컨베이어 리프트의 방향·끝단 구성 참고 부품으로만 사용한다.
+컨베이어 벨트와 리프트는 Mk별 색·표면·등급 표식이 다르므로 Mk.1~6 각각 현재 게임 메시·재질로 별도
+렌더한다. 높이는 이미지 길이가 아니라 Z 값·라벨·레이어 가림 순서로 표현한다.

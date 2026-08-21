@@ -15,9 +15,9 @@ const errors = [];
 if (!contract) errors.push(`자동 장면 계약 누락 ${recipe.buildingClass}`);
 
 const expectations = [
-  { recipeId: 'static-frame', componentId: 'FGColoredInstanceMeshProxy_GEN_VARIABLE', mesh: 'SmelterMk1_static.glb', transform: [-5.478708e-8, -0.3, 0, 179.99995] },
-  { recipeId: 'current-vat-idle-body', componentId: 'FGVertexAnimatedMesh_GEN_VARIABLE', mesh: 'SM_VAT_Smelter_01.glb', transform: [0, 0.000004880058, 0.05, 0.00004438202] },
-  { recipeId: 'ladder-interaction', componentId: 'BP_LadderComponent_GEN_VARIABLE', mesh: null, transform: [1.8999951, -3.2000027, 2.65, 0.00062069343] }
+  { recipeId: 'static-frame', componentId: 'FGColoredInstanceMeshProxy_GEN_VARIABLE', mesh: 'SmelterMk1_static.glb', transform: [5.478708e-8, 0.3, 0, 179.99995] },
+  { recipeId: 'current-vat-idle-body', componentId: 'FGVertexAnimatedMesh_GEN_VARIABLE', mesh: 'SM_VAT_Smelter_01.glb', transform: [0, -0.000004880058, 0.05, 180.00004438202] },
+  { recipeId: 'ladder-interaction', componentId: 'BP_LadderComponent_GEN_VARIABLE', mesh: null, transform: [-1.8999951, 3.2000027, 2.65, 0.00062069343] }
 ];
 
 for (const expectation of expectations) {
@@ -36,6 +36,13 @@ const indicatorRecipe = recipe.components.find((entry) => entry.id === 'producti
 if (!indicatorContract?.indirectBlueprint?.meshReferences.some((entry) => entry.includes('SM_ProductionLight_01')) ||
     basename(indicatorRecipe?.path ?? '') !== 'SM_ProductionLight_01.glb') {
   errors.push('생산 표시등 간접 Blueprint 메시 불일치');
+}
+if (!recipe.canonicalOrientation?.authority?.includes('smelter-current-top') || recipe.camera?.displayYawDeg !== 0) {
+  errors.push('인게임 대조군 기반 canonical orientation 불일치');
+}
+const expectedIndicatorTransform = [-1.00342896, 4.1428882, 2.849815, 0];
+if (indicatorRecipe && expectedIndicatorTransform.some((value, index) => Math.abs(value - indicatorRecipe.transform[index]) > 1e-5)) {
+  errors.push('생산 표시등 CDO→Blender 축 변환 불일치');
 }
 
 if (errors.length) {

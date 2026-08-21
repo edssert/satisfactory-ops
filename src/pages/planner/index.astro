@@ -11,12 +11,15 @@ import '../../styles/validated-planner.css';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const buildingById = new Map(buildings.map((building) => [building.id, building]));
 const itemById = new Map(items.map((entry) => [entry.id, entry]));
-const topviewByClass = new Map(topviewData.assets.map((asset) => [asset.buildingClass, asset]));
-const topviewById = new Map(topviewData.assets.map((asset) => [asset.assetId, asset]));
+const usableTopviews = topviewData.assets.filter((asset) => asset.reviewStatus !== 'rejected');
+const topviewByClass = new Map(usableTopviews.map((asset) => [asset.buildingClass, asset]));
+const topviewById = new Map(usableTopviews.map((asset) => [asset.assetId, asset]));
+const assetUrl = (asset: (typeof topviewData.assets)[number]) =>
+  `${base}/${asset.path}${'sha256' in asset && asset.sha256 ? `?v=${asset.sha256.slice(0, 12)}` : ''}`;
 const topviewUrl = (assetId: string) => {
   const asset = topviewById.get(assetId);
   if (!asset) throw new Error(`탑뷰 자산 매니페스트 누락: ${assetId}`);
-  return `${base}/${asset.path}`;
+  return assetUrl(asset);
 };
 const foundationTopview = topviewByClass.get('Build_Foundation_8x1_01_C');
 
@@ -26,14 +29,20 @@ const machines: DrawingMachine[] = portsData.$completeBuildings.flatMap((buildin
   const materialPorts = spec.ports.filter((port) => port.medium !== 'power');
   if (!building || !spec.hardBoxes.length || !materialPorts.length) return [];
   const topview = topviewByClass.get(buildingClass);
+  if (!topview) return [];
+  const statusImages = 'statusImages' in topview ? topview.statusImages : undefined;
   return [{
     ...spec,
     ports: materialPorts,
-    imageUrl: topview
-      ? `${base}/${topview.path}`
-      : `${base}/assets/buildings-png/${buildingClass}.png`,
-    imageKind: topview ? 'topview' as const : 'icon' as const,
-    occupancyFrame: topview && 'occupancyFrame' in topview ? topview.occupancyFrame : undefined,
+    imageUrl: assetUrl(topview),
+    imageKind: 'topview' as const,
+    occupancyFrame: 'occupancyFrame' in topview ? topview.occupancyFrame : undefined,
+    statusImageUrls: statusImages ? {
+      active: `${base}/${statusImages.active.path}?v=${statusImages.active.sha256.slice(0, 12)}`,
+      activeWithCrystal: `${base}/${statusImages.activeWithCrystal.path}?v=${statusImages.activeWithCrystal.sha256.slice(0, 12)}`,
+      standby: `${base}/${statusImages.standby.path}?v=${statusImages.standby.sha256.slice(0, 12)}`,
+      error: `${base}/${statusImages.error.path}?v=${statusImages.error.sha256.slice(0, 12)}`,
+    } : undefined,
     recipes: recipes.filter((recipe) => !recipe.isBuildingRecipe && recipe.producedIn.includes(buildingClass)).map((recipe) => ({
       id: recipe.id,
       name: recipe.ko,
@@ -67,7 +76,7 @@ const machines: DrawingMachine[] = portsData.$completeBuildings.flatMap((buildin
       pipeTurnImageUrl={topviewUrl('PipelineTurn90Mk1')}
       liftImageUrl={topviewUrl('ConveyorLiftHeadA')}
       foundationImageUrl={foundationTopview
-        ? `${base}/${foundationTopview.path}`
+        ? assetUrl(foundationTopview)
         : `${base}/assets/buildings-png/Build_Foundation_8x1_01_C.png`}
     />
   </div>

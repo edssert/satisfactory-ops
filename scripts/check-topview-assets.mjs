@@ -47,15 +47,18 @@ function walk(directory) {
 
 if (manifest.$schemaVersion !== 3) errors.push(`schemaVersion: ${manifest.$schemaVersion}`);
 const ids = new Set();
+const assetsById = new Map();
 const paths = new Set();
 const usedFiles = new Set();
 const buildingProfiles = new Map();
 const allowedRoles = new Set(['building', 'foundation', 'transport-part', 'transport-direction', 'golden-reference']);
 const allowedReview = new Set(['candidate', 'approved', 'rejected', 'superseded']);
+const sha256Pattern = /^[0-9a-f]{64}$/;
 
 for (const asset of manifest.assets) {
   if (!asset.assetId || ids.has(asset.assetId)) errors.push(`중복 또는 빈 assetId: ${asset.assetId}`);
   ids.add(asset.assetId);
+  assetsById.set(asset.assetId, asset);
   if (!allowedRoles.has(asset.role)) errors.push(`${asset.assetId}: role=${asset.role}`);
   if (!allowedReview.has(asset.reviewStatus)) errors.push(`${asset.assetId}: reviewStatus=${asset.reviewStatus}`);
   if (!manifest.$sources[asset.sourceId]) errors.push(`${asset.assetId}: sourceId=${asset.sourceId}`);
@@ -83,6 +86,22 @@ for (const asset of manifest.assets) {
     const { x, y, width, height } = asset.occupancyFrame;
     if (![x, y, width, height].every(Number.isFinite) || x < 0 || y < 0 || width <= 0 || height <= 0 ||
         x + width > 1.001 || y + height > 1.001) errors.push(`${asset.assetId}: occupancyFrame 오류`);
+  }
+  if (asset.statusImages) {
+    for (const state of ['active', 'activeWithCrystal', 'standby', 'error']) {
+      const variant = asset.statusImages[state];
+      if (!variant?.path?.startsWith('assets/planner/top-view/') || !sha256Pattern.test(variant?.sha256 ?? '')) {
+        errors.push(`${asset.assetId}: 상태 자산 ${state} 계약 오류`);
+        continue;
+      }
+      const variantPath = resolve(publicRoot, variant.path);
+      if (!existsSync(variantPath)) errors.push(`${asset.assetId}: 상태 자산 ${state} 파일 누락 ${variant.path}`);
+      else {
+        usedFiles.add(variantPath);
+        const variantHash = createHash('sha256').update(readFileSync(variantPath)).digest('hex');
+        if (variantHash !== variant.sha256) errors.push(`${asset.assetId}: 상태 자산 ${state} SHA-256 불일치`);
+      }
+    }
   }
   if (asset.buildingClass && asset.role === 'building') {
     buildingProfiles.set(asset.buildingClass, asset.visualProfile);
@@ -113,6 +132,9 @@ for (const candidate of candidateCatalog.components ?? []) {
   if (candidate.identityStatus === 'identified' && (!candidate.assetId || !ids.has(candidate.assetId))) {
     errors.push(`${candidate.id}: 승인 assetId 불일치 ${candidate.assetId}`);
   }
+  if (candidate.identityStatus === 'identified' && assetsById.get(candidate.assetId)?.reviewStatus === 'rejected') {
+    errors.push(`${candidate.id}: 거절된 자산을 identified로 사용 ${candidate.assetId}`);
+  }
   if (['role-identified', 'unidentified'].includes(candidate.identityStatus) && !candidate.openQuestion) errors.push(`${candidate.id}: openQuestion 누락`);
 }
 
@@ -139,6 +161,15 @@ for (const group of candidateCatalog.groups ?? []) {
   if (['role-identified', 'unidentified'].includes(group.identityStatus) && !group.openQuestion) errors.push(`${group.id}: openQuestion 누락`);
 }
 if (assignedComponents.size !== candidateIds.size) errors.push(`Anders 그룹 미소속 성분: ${candidateIds.size - assignedComponents.size}건`);
+const countedGroups = {
+  identifiedGroups: (candidateCatalog.groups ?? []).filter((entry) => entry.identityStatus === 'identified').length,
+  classIdentifiedGroups: (candidateCatalog.groups ?? []).filter((entry) => entry.identityStatus === 'class-identified').length,
+  roleIdentifiedGroups: (candidateCatalog.groups ?? []).filter((entry) => entry.identityStatus === 'role-identified').length,
+  unidentifiedGroups: (candidateCatalog.groups ?? []).filter((entry) => entry.identityStatus === 'unidentified').length,
+};
+for (const [key, value] of Object.entries(countedGroups)) {
+  if (candidateCatalog.$counts?.[key] !== value) errors.push(`Anders 그룹 집계 ${key}: ${candidateCatalog.$counts?.[key]} != ${value}`);
+}
 
 if (layoutCorpus.$schemaVersion !== 2) errors.push(`Anders 도면 코퍼스 schemaVersion: ${layoutCorpus.$schemaVersion}`);
 const corpusSourceIds = new Set();
@@ -148,7 +179,6 @@ for (const source of layoutCorpus.sources ?? []) {
   if (!source.kind || !source.status || !source.rightsStatus) errors.push(`${source.id}: 출처 종류/상태/권리 누락`);
 }
 
-const sha256Pattern = /^[0-9a-f]{64}$/;
 const mediaIds = new Set();
 const corpusHashes = new Map();
 const registerCorpusHash = (hash, owner) => {
@@ -269,7 +299,7 @@ for (const cell of materialProfile.cells ?? []) {
 }
 
 const confidenceValues = new Set(['verified', 'consensus', 'disputed', 'unsourced']);
-const featureStatuses = new Set(['present', 'present-but-projection-pending', 'pending-final-validation']);
+const featureStatuses = new Set(['present', 'present-but-projection-pending', 'present-but-material-pending', 'pending-final-validation', 'pending-vat', 'pending-isometric']);
 for (const recipeEntry of sceneRecipes) {
   const recipe = recipeEntry.data;
   if (recipe.$schemaVersion !== 1 || !recipe.id || !recipe.buildingClass) {
@@ -278,7 +308,7 @@ for (const recipeEntry of sceneRecipes) {
   }
   const footprint = recipe.footprint;
   if (!footprint || ![footprint.widthM, footprint.lengthM, footprint.heightM].every((value) => Number.isFinite(value) && value > 0) ||
-      !confidenceValues.has(footprint.confidence)) {
+      !confidenceValues.has(footprint.confidence) || footprint.cornerEnvelope !== 'game-hard-clearance') {
     errors.push(`${recipe.id}: 실축 점유영역 오류`);
   }
   const componentIds = new Set();
@@ -307,6 +337,39 @@ for (const recipeEntry of sceneRecipes) {
       else if (!existsSync(resolve(root, rawPath))) warnings.push(`${recipe.id}: ${channel}/${materialName} 로컬 텍스처 없음`);
     }
   }
+  for (const [materialName, color] of Object.entries(recipe.materials?.baseColor ?? {})) {
+    if (!materialName || !/^#[0-9a-f]{6}$/i.test(color)) errors.push(`${recipe.id}: baseColor/${materialName} 오류`);
+  }
+  for (const selector of recipe.materials?.emissiveGeometrySelectors ?? []) {
+    if (!selector.id || !selector.material || !Number.isInteger(selector.expectedComponents) || selector.expectedComponents <= 0 ||
+        !/^#[0-9a-f]{6}$/i.test(selector.color ?? '') || !Number.isFinite(selector.strength) || selector.strength <= 0) {
+      errors.push(`${recipe.id}: 발광 기하 선택자 기본 필드 오류 ${selector.id}`);
+    }
+    for (const group of [selector.sizeM, selector.centerM]) {
+      if (!group || ['x', 'y', 'z'].some((axis) => !Array.isArray(group[axis]) || group[axis].length !== 2 ||
+          !group[axis].every(Number.isFinite) || group[axis][0] > group[axis][1])) {
+        errors.push(`${recipe.id}: 발광 기하 선택자 범위 오류 ${selector.id}`);
+      }
+    }
+  }
+  for (const selector of recipe.materials?.opacityGeometrySelectors ?? []) {
+    const opacityValue = selector.perComponentOpacity ?? selector.combinedOpacity;
+    if (!selector.id || !selector.material || !Number.isInteger(selector.expectedComponents) || selector.expectedComponents <= 0 ||
+        !Number.isFinite(opacityValue) || opacityValue < 0 || opacityValue >= 1 ||
+        (selector.overlapLayers !== undefined && (!Number.isInteger(selector.overlapLayers) || selector.overlapLayers <= 0))) {
+      errors.push(`${recipe.id}: 투과 기하 선택자 기본 필드 오류 ${selector.id}`);
+    }
+    for (const group of [selector.sizeM, selector.centerM]) {
+      if (!group || ['x', 'y', 'z'].some((axis) => !Array.isArray(group[axis]) || group[axis].length !== 2 ||
+          !group[axis].every(Number.isFinite) || group[axis][0] > group[axis][1])) {
+        errors.push(`${recipe.id}: 투과 기하 선택자 범위 오류 ${selector.id}`);
+      }
+    }
+  }
+  const staticMaterialName = recipe.buildingClass === 'Build_SmelterMk1_C' ? 'MI_SmelterMk1_01' : 'MI_ConstructorMk1';
+  if (!Array.isArray(recipe.materials?.normalOnly) || recipe.materials?.baseColor?.Decal_Normal !== recipe.materials?.baseColor?.[staticMaterialName]) {
+    errors.push(`${recipe.id}: 지연 normal 데칼 중립 underlay 계약 누락`);
+  }
   const featureIds = new Set();
   for (const feature of recipe.assemblyFeatures ?? []) {
     if (!feature.id || featureIds.has(feature.id)) errors.push(`${recipe.id}: 조립 특징 중복/빈 ID ${feature.id}`);
@@ -316,17 +379,78 @@ for (const recipeEntry of sceneRecipes) {
   }
   const incomplete = (recipe.assemblyFeatures ?? []).filter((feature) => feature.status !== 'present');
   if (incomplete.length) warnings.push(`${recipe.id}: 골든 비교 게이트 미통과 ${incomplete.map((feature) => feature.id).join(', ')}`);
+  for (const [groupName, checks] of [['materialChecks', recipe.materialChecks], ['cameraLightingChecks', recipe.cameraLightingChecks]]) {
+    if (!Array.isArray(checks) || !checks.length) errors.push(`${recipe.id}: ${groupName} 누락`);
+    const ids = new Set();
+    for (const check of checks ?? []) {
+      if (!check.id || ids.has(check.id) || !['present', 'pending'].includes(check.status)) errors.push(`${recipe.id}: ${groupName} 항목 오류 ${check.id}`);
+      ids.add(check.id);
+    }
+    const pending = (checks ?? []).filter((check) => check.status !== 'present');
+    if (pending.length) warnings.push(`${recipe.id}: ${groupName} 미완료 ${pending.map((check) => check.id).join(', ')}`);
+  }
+  const audit = recipe.pipelineAudit;
+  if (audit?.repeatedDefectThreshold !== 2 || audit?.systemicDefectThreshold !== 1 || audit?.rawVatCandidateAllowed !== false ||
+      !Array.isArray(audit?.requiredStages) || !audit.requiredStages.includes('view-feature-matrix')) {
+    errors.push(`${recipe.id}: 반복 결함 파이프라인 감사 계약 오류`);
+  }
+  if (recipe.buildingClass === 'Build_SmelterMk1_C') {
+    const controlIds = new Set((goldenCases.cases.find((entry) => entry.currentGameControls)?.currentGameControls ?? []).map((entry) => entry.id));
+    const featureIdsForViews = new Set((recipe.assemblyFeatures ?? []).map((entry) => entry.id));
+    const matrixControlIds = new Set();
+    for (const view of recipe.validationViews ?? []) {
+      if (!controlIds.has(view.controlId) || matrixControlIds.has(view.controlId) || !Array.isArray(view.requiredFeatures) || !view.requiredFeatures.length) {
+        errors.push(`${recipe.id}: 뷰 검증 행렬 오류 ${view.controlId}`);
+      }
+      matrixControlIds.add(view.controlId);
+      for (const featureId of view.requiredFeatures ?? []) if (!featureIdsForViews.has(featureId)) errors.push(`${recipe.id}/${view.controlId}: 없는 필수 특징 ${featureId}`);
+    }
+    if (matrixControlIds.size !== controlIds.size) errors.push(`${recipe.id}: 뷰 검증 행렬 ${matrixControlIds.size}/${controlIds.size}`);
+  }
+  for (const component of recipe.components ?? []) {
+    if (component.vatPose?.status !== undefined && !['applied', 'base-pose-verified'].includes(component.vatPose.status)) {
+      warnings.push(`${recipe.id}/${component.id}: Idle VAT 미적용으로 제품 후보 금지`);
+    }
+    if (component.vatPose?.status === 'base-pose-verified' &&
+        (component.vatPose.basisCorrectionDeg !== 180 || component.vatPose.viewMatrixVerified !== true)) {
+      errors.push(`${recipe.id}/${component.id}: VAT base pose 검증 증거 오류`);
+    }
+    if (component.vatPose?.status === 'applied') {
+      const pose = component.vatPose;
+      if (pose.lookupUvLayer !== 'UVMap.002' || pose.expectedGroups !== 7 || pose.allowQuaternionDeformation !== false ||
+          !sha256Pattern.test(pose.positionDataSha256 ?? '') || !sha256Pattern.test(pose.rotationDataSha256 ?? '')) {
+        errors.push(`${recipe.id}/${component.id}: Idle VAT 적용 증거 오류`);
+      }
+      for (const [pathKey, hashKey] of [['positionData', 'positionDataSha256'], ['rotationData', 'rotationDataSha256']]) {
+        const absolute = resolve(root, pose[pathKey]);
+        if (existsSync(absolute)) {
+          const actual = createHash('sha256').update(readFileSync(absolute)).digest('hex');
+          if (actual !== pose[hashKey]) errors.push(`${recipe.id}/${component.id}: ${pathKey} SHA-256 불일치`);
+        }
+      }
+    }
+  }
   if (!['orthographic-top', 'orthographic-oblique'].includes(recipe.camera?.projection) || !Number.isFinite(recipe.camera?.frontTiltDeg)) {
     errors.push(`${recipe.id}: 카메라 투영 계약 오류`);
   }
   if (recipe.camera?.projection === 'orthographic-top' && recipe.camera.frontTiltDeg !== 0) {
     errors.push(`${recipe.id}: 런타임 수직 탑뷰는 frontTiltDeg=0이어야 함`);
   }
+  if (recipe.buildingClass === 'Build_SmelterMk1_C' && (recipe.canonicalOrientation?.screenEdge !== 'bottom' || recipe.camera?.displayYawDeg !== 0 ||
+      !recipe.canonicalOrientation?.authority?.includes('smelter-current-top'))) {
+    errors.push(`${recipe.id}: 인게임 대조군 기반 canonical orientation 오류`);
+  }
   if (recipe.referenceComparisonCamera &&
-      (recipe.referenceComparisonCamera.projection !== 'orthographic-oblique' || !Number.isFinite(recipe.referenceComparisonCamera.frontTiltDeg))) {
+      (recipe.referenceComparisonCamera.projection !== 'orthographic-oblique' || !Number.isFinite(recipe.referenceComparisonCamera.frontTiltDeg) ||
+       !Number.isFinite(recipe.referenceComparisonCamera.displayYawDeg))) {
     errors.push(`${recipe.id}: 연구용 사선 비교 카메라 계약 오류`);
   }
-  if (!recipe.lighting?.groundAo || typeof recipe.lighting?.bloom !== 'boolean') errors.push(`${recipe.id}: 조명/AO 계약 오류`);
+  if (typeof recipe.lighting?.groundAo !== 'boolean' || typeof recipe.lighting?.bloom !== 'boolean' ||
+      (!recipe.lighting.groundAo && recipe.lighting.shadowMode !== 'alpha-near-and-wide-postprocess')) {
+    errors.push(`${recipe.id}: 조명/AO 계약 오류`);
+  }
+  if (![recipe.lighting?.keyEnergy, recipe.lighting?.fillEnergy, recipe.lighting?.worldStrength].every((value) => Number.isFinite(value) && value >= 0) ||
+      !Number.isFinite(recipe.lighting?.exposure)) errors.push(`${recipe.id}: 스튜디오 조명 수치 오류`);
 }
 
 for (const file of walk(assetRoot)) {

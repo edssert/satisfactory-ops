@@ -3,6 +3,8 @@
 //       dotnet run --project scripts/game-assets/Cue4ParseCatalog -- export <Paks 디렉터리> <출력 디렉터리> <ObjectPath...>
 //       dotnet run --project scripts/game-assets/Cue4ParseCatalog -- inspect <Paks 디렉터리> <출력 디렉터리> <PackagePath...>
 //       dotnet run --project scripts/game-assets/Cue4ParseCatalog -- export-array <Paks 디렉터리> <출력 디렉터리> <TextureObjectPath>
+//       dotnet run --project scripts/game-assets/Cue4ParseCatalog -- export-mesh-uv <Paks 디렉터리> <출력 디렉터리> <StaticMeshObjectPath>
+//       dotnet run --project scripts/game-assets/Cue4ParseCatalog -- export-texture-floats <Paks 디렉터리> <출력 디렉터리> <TextureObjectPath>
 // 종료: 0 성공, 1 일부 패키지 분석 실패, 2 인자/입력 오류.
 
 using System.Diagnostics;
@@ -11,6 +13,7 @@ using System.Text.Json;
 using CUE4Parse.Compression;
 using CUE4Parse.FileProvider;
 using CUE4Parse.UE4.Assets.Exports.Texture;
+using CUE4Parse.UE4.Assets.Exports.StaticMesh;
 using CUE4Parse.UE4.Objects.Core.Misc;
 using CUE4Parse.UE4.Objects.Core.Serialization;
 using CUE4Parse.UE4.Versions;
@@ -24,9 +27,11 @@ var mode = args.FirstOrDefault();
 if ((mode == "catalog" && args.Length != 3) ||
     (mode is "export" or "inspect" && args.Length < 4) ||
     (mode == "export-array" && args.Length != 4) ||
-    mode is not ("catalog" or "export" or "inspect" or "export-array"))
+    (mode == "export-mesh-uv" && args.Length != 4) ||
+    (mode == "export-texture-floats" && args.Length != 4) ||
+    mode is not ("catalog" or "export" or "inspect" or "export-array" or "export-mesh-uv" or "export-texture-floats"))
 {
-    Console.Error.WriteLine("사용: Cue4ParseCatalog <catalog|export|inspect|export-array> <Paks 디렉터리> <출력 디렉터리> [ObjectPath|PackagePath...]");
+    Console.Error.WriteLine("사용: Cue4ParseCatalog <catalog|export|inspect|export-array|export-mesh-uv|export-texture-floats> <Paks 디렉터리> <출력 디렉터리> [ObjectPath|PackagePath...]");
     return 2;
 }
 
@@ -100,6 +105,53 @@ if (mode == "export-array")
         Console.WriteLine($"SLICE={index} FILE={file}");
     }
     Console.WriteLine($"SLICES={slices.Length}");
+    return 0;
+}
+
+if (mode == "export-mesh-uv")
+{
+    var mesh = provider.LoadPackageObject<UStaticMesh>(args[3]);
+    var lod = mesh.RenderData?.LODs?.FirstOrDefault() ?? throw new InvalidOperationException($"LOD0 없음: {args[3]}");
+    var vertexBuffer = lod.VertexBuffer ?? throw new InvalidOperationException($"VertexBuffer 없음: {args[3]}");
+    var channels = Enumerable.Range(0, vertexBuffer.NumTexCoords)
+        .Select(channel => vertexBuffer.UV.Select(vertex => new[] { vertex.UV[channel].U, vertex.UV[channel].V }).ToArray())
+        .ToArray();
+    var colors = lod.ColorVertexBuffer?.Data.Select(color => new[] { color.R, color.G, color.B, color.A }).ToArray() ?? [];
+    var row = new
+    {
+        schemaVersion = 1,
+        sourceObject = args[3],
+        mesh = mesh.Name,
+        lod = 0,
+        vertices = vertexBuffer.NumVertices,
+        texCoords = vertexBuffer.NumTexCoords,
+        useFullPrecisionUVs = vertexBuffer.UseFullPrecisionUVs,
+        channels,
+        colors
+    };
+    var file = Path.Combine(output, $"{mesh.Name}-uv.json");
+    await File.WriteAllTextAsync(file, System.Text.Json.JsonSerializer.Serialize(row), new UTF8Encoding(false));
+    Console.WriteLine($"MESH={mesh.Name} VERTICES={vertexBuffer.NumVertices} TEXCOORDS={vertexBuffer.NumTexCoords} FILE={file}");
+    return 0;
+}
+
+if (mode == "export-texture-floats")
+{
+    var texture = provider.LoadPackageObject<UTexture2D>(args[3]);
+    var decoded = texture.Decode() ?? throw new InvalidOperationException($"텍스처 디코딩 실패: {args[3]}");
+    if (decoded.PixelFormat != CUE4Parse.UE4.Assets.Exports.Texture.EPixelFormat.PF_FloatRGBA)
+        throw new InvalidOperationException($"PF_FloatRGBA가 아님: {decoded.PixelFormat}");
+    var pixels = new float[decoded.Width * decoded.Height][];
+    for (var pixel = 0; pixel < pixels.Length; pixel++)
+    {
+        pixels[pixel] = Enumerable.Range(0, 4)
+            .Select(channel => (float)BitConverter.UInt16BitsToHalf(BitConverter.ToUInt16(decoded.Data, (pixel * 4 + channel) * 2)))
+            .ToArray();
+    }
+    var row = new { schemaVersion = 1, sourceObject = args[3], texture = texture.Name, decoded.Width, decoded.Height, pixels };
+    var file = Path.Combine(output, $"{texture.Name}-floats.json");
+    await File.WriteAllTextAsync(file, System.Text.Json.JsonSerializer.Serialize(row, new JsonSerializerOptions { WriteIndented = true }), new UTF8Encoding(false));
+    Console.WriteLine($"TEXTURE={texture.Name} SIZE={decoded.Width}x{decoded.Height} FILE={file}");
     return 0;
 }
 

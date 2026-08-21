@@ -206,6 +206,7 @@ Claude Code는 이것을 자동으로 불러오지만, **다른 에이전트도 
 | `no-js-fallback` | 카운터·프로그레스 바·스크롤 연동 효과를 넣을 때, 값이 `0`이나 빈칸으로 보일 때 | `node .claude/skills/no-js-fallback/scripts/nojs.mjs <경로>` — JS를 끄고 열어 값이 남는지 본다 |
 | `external-data-claim` | `.sav`를 파싱할 때, `Docs.json`의 새 필드를 쓸 때, "이 필드는 X를 뜻한다"고 쓰려 할 때 | `node .claude/skills/external-data-claim/scripts/field-scope.mjs <필드명> [--gen]` — 그 필드를 가진 nativeClass를 센다. **소유자가 둘 이상이면 exit 3**(오류가 아니라 "좁혀야 함"이라는 판정이다) |
 | `research-fanout` | 넓은 기술·논문·원 제작자 조사가 첫 후보에 수렴할 때. 병렬화는 명시적 권한이 있을 때만 | 없음 (능력 수집·정본 통합 절차) |
+| `topview-asset-pipeline` | 게임 기기 메시·재질·Blueprint를 조립하거나 제품 탑뷰를 생성·수정할 때 | `node scripts/topview/run-validated-render.mjs <scene.json> <output-dir> [--baseline=<approved.png>]` — 직접 제품 렌더를 차단하고 ORTHO/-Z·하드 코너를 독립 검사한 영수증 생성 |
 
 사용자 전역 `~/.codex/skills/`에는 다음 자기개선 스킬이 있다. 저장소 클론에 포함되지는 않으므로 없는
 환경에서는 `satisfactory-ops-vault/docs/research/capability-evaluation-method-2026.md`의 같은 절차를

@@ -15,8 +15,8 @@
     "detectedComponents": 91,
     "semanticGroups": 84,
     "identifiedGroups": 19,
-    "classIdentifiedGroups": 14,
-    "roleIdentifiedGroups": 20,
+    "classIdentifiedGroups": 12,
+    "roleIdentifiedGroups": 22,
     "unidentifiedGroups": 31
   },
   "components": [
@@ -32,21 +32,19 @@
       },
       "componentRole": "primary-or-standalone",
       "parentGroupId": null,
-      "identityStatus": "class-identified",
-      "identity": "Build_ConstructorMk1_C",
+      "identityStatus": "role-identified",
+      "identity": "Unresolved production building",
       "assetId": null,
-      "buildingClasses": [
-        "Build_ConstructorMk1_C"
-      ],
+      "buildingClasses": [],
       "role": "building",
       "variant": null,
       "approvedCropPx": null,
-      "confidence": "consensus",
+      "confidence": "disputed",
       "sources": [
         "anders-assets-2023",
         "scripts/analyze-topview-sheets.py"
       ],
-      "openQuestion": null
+      "openQuestion": "현재 게임 기기 아이콘·Blueprint·메시와 대조해 정확한 클래스를 다시 식별한다."
     },
     {
       "id": "Sheet_00.png#2",
@@ -1581,26 +1579,19 @@
       },
       "componentRole": "primary-or-standalone",
       "parentGroupId": null,
-      "identityStatus": "identified",
-      "identity": "Build_ConstructorMk1_C",
-      "assetId": "Build_ConstructorMk1_C",
-      "buildingClasses": [
-        "Build_ConstructorMk1_C"
-      ],
+      "identityStatus": "role-identified",
+      "identity": "Unresolved production building",
+      "assetId": null,
+      "buildingClasses": [],
       "role": "building",
       "variant": null,
-      "approvedCropPx": {
-        "x": 172,
-        "y": 992,
-        "width": 680,
-        "height": 704
-      },
-      "confidence": "verified",
+      "approvedCropPx": null,
+      "confidence": "disputed",
       "sources": [
         "anders-assets-2023",
         "src/data/curated/topview-assets.json"
       ],
-      "openQuestion": null
+      "openQuestion": "제작기 오분류를 해제했다. 현재 게임 기기와 대조해 정확한 클래스를 다시 식별한다."
     },
     {
       "id": "Texture 02.png#6",
@@ -2053,14 +2044,7 @@
       "identityStatus": "identified",
       "identity": "ConveyorLiftHeadA",
       "assetId": "ConveyorLiftHeadA",
-      "buildingClasses": [
-        "Build_ConveyorLiftMk1_C",
-        "Build_ConveyorLiftMk2_C",
-        "Build_ConveyorLiftMk3_C",
-        "Build_ConveyorLiftMk4_C",
-        "Build_ConveyorLiftMk5_C",
-        "Build_ConveyorLiftMk6_C"
-      ],
+      "buildingClasses": [],
       "role": "transport-part",
       "variant": "direction-unverified",
       "approvedCropPx": {
@@ -2394,14 +2378,7 @@
       "identityStatus": "identified",
       "identity": "ConveyorLiftHeadB",
       "assetId": "ConveyorLiftHeadB",
-      "buildingClasses": [
-        "Build_ConveyorLiftMk1_C",
-        "Build_ConveyorLiftMk2_C",
-        "Build_ConveyorLiftMk3_C",
-        "Build_ConveyorLiftMk4_C",
-        "Build_ConveyorLiftMk5_C",
-        "Build_ConveyorLiftMk6_C"
-      ],
+      "buildingClasses": [],
       "role": "transport-part",
       "variant": "direction-unverified",
       "approvedCropPx": {
@@ -2556,20 +2533,18 @@
       "componentIds": [
         "Sheet_00.png#1"
       ],
-      "identityStatus": "class-identified",
-      "identity": "Build_ConstructorMk1_C",
+      "identityStatus": "role-identified",
+      "identity": "Unresolved production building",
       "assetId": null,
-      "buildingClasses": [
-        "Build_ConstructorMk1_C"
-      ],
+      "buildingClasses": [],
       "role": "building",
       "variant": null,
-      "confidence": "consensus",
+      "confidence": "disputed",
       "sources": [
         "anders-assets-2023",
         "scripts/analyze-topview-sheets.py"
       ],
-      "openQuestion": null
+      "openQuestion": "현재 게임 기기 아이콘·Blueprint·메시와 대조해 정확한 클래스를 다시 식별한다."
     },
     {
       "id": "Sheet_00.png#group-2",
@@ -3600,20 +3575,18 @@
       "componentIds": [
         "Texture 02.png#5"
       ],
-      "identityStatus": "identified",
-      "identity": "Build_ConstructorMk1_C",
-      "assetId": "Build_ConstructorMk1_C",
-      "buildingClasses": [
-        "Build_ConstructorMk1_C"
-      ],
+      "identityStatus": "role-identified",
+      "identity": "Unresolved production building",
+      "assetId": null,
+      "buildingClasses": [],
       "role": "building",
       "variant": null,
-      "confidence": "verified",
+      "confidence": "disputed",
       "sources": [
         "anders-assets-2023",
         "src/data/curated/topview-assets.json"
       ],
-      "openQuestion": null
+      "openQuestion": "제작기 오분류를 해제했다. 현재 게임 기기와 대조해 정확한 클래스를 다시 식별한다."
     },
     {
       "id": "Texture 02.png#group-6",
@@ -3931,14 +3904,7 @@
       "identityStatus": "identified",
       "identity": "ConveyorLiftHeadA",
       "assetId": "ConveyorLiftHeadA",
-      "buildingClasses": [
-        "Build_ConveyorLiftMk1_C",
-        "Build_ConveyorLiftMk2_C",
-        "Build_ConveyorLiftMk3_C",
-        "Build_ConveyorLiftMk4_C",
-        "Build_ConveyorLiftMk5_C",
-        "Build_ConveyorLiftMk6_C"
-      ],
+      "buildingClasses": [],
       "role": "transport-part",
       "variant": "direction-unverified",
       "confidence": "verified",
@@ -4180,14 +4146,7 @@
       "identityStatus": "identified",
       "identity": "ConveyorLiftHeadB",
       "assetId": "ConveyorLiftHeadB",
-      "buildingClasses": [
-        "Build_ConveyorLiftMk1_C",
-        "Build_ConveyorLiftMk2_C",
-        "Build_ConveyorLiftMk3_C",
-        "Build_ConveyorLiftMk4_C",
-        "Build_ConveyorLiftMk5_C",
-        "Build_ConveyorLiftMk6_C"
-      ],
+      "buildingClasses": [],
       "role": "transport-part",
       "variant": "direction-unverified",
       "confidence": "verified",

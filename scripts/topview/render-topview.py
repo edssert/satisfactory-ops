@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import argparse
+from collections import defaultdict, deque
 import json
 import math
 import sys
@@ -33,20 +34,35 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--material-alpha", action="append", default=[])
     parser.add_argument("--material-pbr", action="append", default=[])
     parser.add_argument("--material-paint", action="append", default=[])
+    parser.add_argument("--material-base-color", action="append", default=[])
     parser.add_argument("--material-emissive-accent", action="append", default=[])
     parser.add_argument("--material-state-mask", action="append", default=[])
     parser.add_argument("--state-color", default="#18ff45")
+    parser.add_argument("--state-color-override")
     parser.add_argument("--state-strength", type=float, default=4.0)
     parser.add_argument("--footprint", nargs=2, type=float)
     parser.add_argument("--footprint-height", type=float, default=0.0)
     parser.add_argument("--footprint-center", nargs=2, type=float, default=(0.0, 0.0))
     parser.add_argument("--display-yaw", type=float, default=0.0)
     parser.add_argument("--camera-tilt", type=float, default=0.0)
+    parser.add_argument("--display-yaw-override", type=float)
+    parser.add_argument("--camera-tilt-override", type=float)
+    parser.add_argument("--hide-corners", action="store_true")
+    parser.add_argument("--diagnostic-allow-incomplete-vat", action="store_true")
+    parser.add_argument("--harness-token")
     parser.add_argument("--ground-ao", action="store_true")
     parser.add_argument("--bloom", action="store_true")
     parser.add_argument("--sun", action="store_true")
+    parser.add_argument("--key-energy", type=float, default=1.9)
+    parser.add_argument("--fill-energy", type=float, default=0.72)
+    parser.add_argument("--world-strength", type=float, default=0.24)
+    parser.add_argument("--exposure", type=float, default=0.0)
+    parser.set_defaults(emissive_geometry_selectors=[], opacity_geometry_selectors=[])
     script_args = sys.argv[sys.argv.index("--") + 1 :] if "--" in sys.argv else []
     args = parser.parse_args(script_args)
+    args.camera_projection = "orthographic-unverified"
+    args.corner_envelope = None
+    args.runtime_top_validation = False
     return apply_scene_config(args) if args.scene else args
 
 
@@ -62,6 +78,15 @@ def apply_scene_config(args: argparse.Namespace) -> argparse.Namespace:
     body_components = [
         component for component in config["components"]
         if component.get("renderMode") == "body" and component.get("enabled", True)
+    ]
+    for component in body_components:
+        if component.get("vatPose"):
+            component["vatPose"]["positionData"] = resolve_source(component["vatPose"]["positionData"])
+            component["vatPose"]["rotationData"] = resolve_source(component["vatPose"]["rotationData"])
+    args.body_component_specs = body_components
+    args.pending_vat_components = [
+        component["id"] for component in body_components
+        if component.get("vatPose", {}).get("status") not in (None, "applied", "base-pose-verified")
     ]
     indicator_components = [
         component for component in config["components"]
@@ -96,26 +121,50 @@ def apply_scene_config(args: argparse.Namespace) -> argparse.Namespace:
     args.material_state_mask = material_entries("stateMask")
     args.material_alpha = material.get("alpha", [])
     args.material_pbr = material.get("pbr", [])
+    args.material_normal_only = material.get("normalOnly", [])
     args.material_paint = [
         f"{name}={colors['primary']},{colors['secondary']}"
         for name, colors in material.get("paint", {}).items()
     ]
+    args.material_base_color = [f"{name}={color}" for name, color in material.get("baseColor", {}).items()]
     args.material_emissive_accent = material.get("emissiveAccent", [])
+    args.emissive_geometry_selectors = material.get("emissiveGeometrySelectors", [])
+    args.opacity_geometry_selectors = material.get("opacityGeometrySelectors", [])
     state = material.get("state", {})
-    args.state_color = state.get("color", args.state_color)
+    args.state_color = args.state_color_override if args.state_color_override is not None else state.get("color", args.state_color)
     args.state_strength = state.get("strength", args.state_strength)
 
     footprint = config["footprint"]
+    if footprint.get("cornerEnvelope") != "game-hard-clearance":
+        raise ValueError(
+            f"{scene_path}: 점유 코너는 game-hard-clearance만 허용합니다. "
+            "시각 메시 외곽으로 임의 확장할 수 없습니다."
+        )
     args.footprint = [footprint["widthM"], footprint["lengthM"]]
     args.footprint_height = footprint["heightM"]
     args.footprint_center = footprint.get("centerM", [0, 0])
+    args.corner_envelope = footprint["cornerEnvelope"]
     camera = config["camera"]
-    args.display_yaw = camera.get("displayYawDeg", 0)
-    args.camera_tilt = camera.get("frontTiltDeg", 0)
+    args.camera_projection = camera.get("projection", "orthographic-unverified")
+    args.display_yaw = args.display_yaw_override if args.display_yaw_override is not None else camera.get("displayYawDeg", 0)
+    args.camera_tilt = args.camera_tilt_override if args.camera_tilt_override is not None else camera.get("frontTiltDeg", 0)
+    args.runtime_top_validation = (
+        args.camera_projection == "orthographic-top"
+        and args.camera_tilt_override is None
+    )
+    if args.runtime_top_validation and args.harness_token != "validated-render-v1":
+        raise ValueError(
+            f"{scene_path}: 제품 탑뷰 직접 렌더를 금지합니다. "
+            "scripts/topview/run-validated-render.mjs 하네스를 사용하십시오."
+        )
     lighting = config["lighting"]
     args.ground_ao = lighting.get("groundAo", False)
     args.bloom = lighting.get("bloom", False)
     args.sun = lighting.get("sun", False)
+    args.key_energy = lighting.get("keyEnergy", args.key_energy)
+    args.fill_energy = lighting.get("fillEnergy", args.fill_energy)
+    args.world_strength = lighting.get("worldStrength", args.world_strength)
+    args.exposure = lighting.get("exposure", args.exposure)
     return args
 
 
@@ -125,6 +174,50 @@ def bounds(objects: list[bpy.types.Object]) -> tuple[Vector, Vector]:
         Vector((min(point.x for point in points), min(point.y for point in points), min(point.z for point in points))),
         Vector((max(point.x for point in points), max(point.y for point in points), max(point.z for point in points))),
     )
+
+
+def apply_vat_idle_pose(component: dict, imported: list[bpy.types.Object]) -> None:
+    pose = component.get("vatPose")
+    if not pose or pose.get("status") != "applied":
+        return
+    position_data = json.loads(Path(pose["positionData"]).read_text(encoding="utf-8"))
+    rotation_data = json.loads(Path(pose["rotationData"]).read_text(encoding="utf-8"))
+    if position_data.get("Width") != 1 or position_data.get("Height") != 9 or len(position_data.get("pixels", [])) != 9:
+        raise RuntimeError(f"{component['id']}: Idle POS는 1×9여야 합니다.")
+    if rotation_data.get("Width") != 1 or rotation_data.get("Height") != 9 or len(rotation_data.get("pixels", [])) != 9:
+        raise RuntimeError(f"{component['id']}: Idle Quat는 1×9여야 합니다.")
+    if pose.get("allowQuaternionDeformation"):
+        raise RuntimeError(f"{component['id']}: 현재 구현은 quaternion 변형을 허용하지 않습니다.")
+
+    scale = float(pose["upscale"]) / 100.0
+    total_groups = {}
+    for obj in imported:
+        if obj.type != "MESH" or not any(slot.material and slot.material.name.casefold() == "mi_vat_smelter" for slot in obj.material_slots):
+            continue
+        uv_layer = obj.data.uv_layers.get(pose["lookupUvLayer"])
+        if uv_layer is None:
+            raise RuntimeError(f"{component['id']}: {pose['lookupUvLayer']} 누락")
+        vertex_rows: dict[int, int] = {}
+        for polygon in obj.data.polygons:
+            for loop_index in polygon.loop_indices:
+                vertex_index = obj.data.loops[loop_index].vertex_index
+                lookup = uv_layer.data[loop_index].uv.y
+                row = round(pose["rowOffset"] + pose["rowScale"] * lookup)
+                previous = vertex_rows.get(vertex_index)
+                if previous is not None and previous != row:
+                    raise RuntimeError(f"{component['id']}: 정점 {vertex_index} VAT 행 불일치 {previous}/{row}")
+                vertex_rows[vertex_index] = row
+        for vertex_index, row in vertex_rows.items():
+            if row < 0 or row >= len(position_data["pixels"]):
+                raise RuntimeError(f"{component['id']}: VAT 행 범위 오류 {row}")
+            red, green, blue, _ = position_data["pixels"][row]
+            offset = Vector((red, -green, blue)) * scale
+            obj.data.vertices[vertex_index].co += offset
+            group = total_groups.setdefault(row, {"vertices": 0, "offset": [round(value, 6) for value in offset]})
+            group["vertices"] += 1
+    if len(total_groups) != pose["expectedGroups"]:
+        raise RuntimeError(f"{component['id']}: VAT 그룹 {len(total_groups)}개, 기대 {pose['expectedGroups']}개")
+    print(f"VAT_POSE={component['id']} GROUPS={json.dumps(total_groups, sort_keys=True)}")
 
 
 def scaled(color: tuple[float, float, float], factor: float) -> tuple[float, float, float, float]:
@@ -191,6 +284,16 @@ def parse_paint_map(entries: list[str]) -> dict[str, tuple[tuple[float, float, f
     return result
 
 
+def parse_color_map(entries: list[str]) -> dict[str, tuple[float, float, float, float]]:
+    result = {}
+    for entry in entries:
+        name, separator, raw_color = entry.partition("=")
+        if not separator:
+            raise ValueError(f"기본색 매핑은 material=#rrggbb 형식이어야 합니다: {entry}")
+        result[name.casefold()] = parse_hex_color(raw_color)
+    return result
+
+
 def add_image_node(nodes: bpy.types.Nodes, path: Path, *, non_color: bool = False) -> bpy.types.Node:
     node = nodes.new("ShaderNodeTexImage")
     node.image = bpy.data.images.load(str(path), check_existing=True)
@@ -222,6 +325,9 @@ def apply_pbr_material(
     reflection_paths: dict[str, Path],
     alpha_materials: set[str],
     paint_colors: dict[str, tuple[tuple[float, float, float, float], tuple[float, float, float, float]]],
+    base_colors: dict[str, tuple[float, float, float, float]],
+    emissive_accent_materials: set[str],
+    normal_only_materials: set[str],
 ) -> None:
     material.use_nodes = True
     nodes = material.node_tree.nodes
@@ -230,6 +336,12 @@ def apply_pbr_material(
     output = nodes.new("ShaderNodeOutputMaterial")
     bsdf = nodes.new("ShaderNodeBsdfPrincipled")
     material_key = material.name.casefold()
+    if material_key in normal_only_materials:
+        transparent = nodes.new("ShaderNodeBsdfTransparent")
+        links.new(transparent.outputs["BSDF"], output.inputs["Surface"])
+        if hasattr(material, "surface_render_method"):
+            material.surface_render_method = "DITHERED"
+        return
     albedo_path = albedo_paths.get(material_key)
     ao_path = ao_paths.get(material_key)
     normal_path = normal_paths.get(material_key)
@@ -241,7 +353,7 @@ def apply_pbr_material(
     else:
         albedo = None
         base = nodes.new("ShaderNodeRGB")
-        base.outputs[0].default_value = (*palette(material.name), 1)
+        base.outputs[0].default_value = base_colors.get(material_key, (*palette(material.name), 1))
         base_color = base.outputs[0]
 
     if ao_path:
@@ -285,6 +397,29 @@ def apply_pbr_material(
         normal_output = add_directx_normal(nodes, links, normal_path)
         links.new(normal_output, bsdf.inputs["Normal"])
 
+    if albedo and material_key in emissive_accent_materials:
+        accent_channels = nodes.new("ShaderNodeSeparateColor")
+        orange_difference = nodes.new("ShaderNodeMath")
+        orange_difference.operation = "SUBTRACT"
+        orange_threshold = nodes.new("ShaderNodeMath")
+        orange_threshold.operation = "GREATER_THAN"
+        orange_threshold.inputs[1].default_value = 0.12
+        hot_tint = nodes.new("ShaderNodeMixRGB")
+        hot_tint.blend_type = "MULTIPLY"
+        hot_tint.inputs[0].default_value = 1.0
+        hot_tint.inputs[2].default_value = (1.25, 1.08, 0.9, 1)
+        masked_emission = nodes.new("ShaderNodeMixRGB")
+        masked_emission.inputs[1].default_value = (0, 0, 0, 1)
+        links.new(albedo.outputs["Color"], accent_channels.inputs["Color"])
+        links.new(accent_channels.outputs["Red"], orange_difference.inputs[0])
+        links.new(accent_channels.outputs["Blue"], orange_difference.inputs[1])
+        links.new(orange_difference.outputs[0], orange_threshold.inputs[0])
+        links.new(albedo.outputs["Color"], hot_tint.inputs[1])
+        links.new(orange_threshold.outputs[0], masked_emission.inputs[0])
+        links.new(hot_tint.outputs["Color"], masked_emission.inputs[2])
+        links.new(masked_emission.outputs["Color"], bsdf.inputs["Emission Color"])
+        bsdf.inputs["Emission Strength"].default_value = 0.15
+
     if reflection_path:
         reflection = add_image_node(nodes, reflection_path, non_color=True)
         channels = nodes.new("ShaderNodeSeparateColor")
@@ -325,6 +460,7 @@ def apply_fake_material(
     emissive_accent_materials: set[str],
     state_mask_paths: dict[str, Path],
     state_color_value: tuple[float, float, float, float],
+    base_colors: dict[str, tuple[float, float, float, float]],
 ) -> None:
     material.use_nodes = True
     nodes = material.node_tree.nodes
@@ -340,7 +476,7 @@ def apply_fake_material(
     ao_multiply.inputs[0].default_value = 1.0
     facing = nodes.new("ShaderNodeLayerWeight")
     ramp = nodes.new("ShaderNodeValToRGB")
-    color = palette(material.name)
+    color = base_colors.get(material.name.casefold(), (*palette(material.name), 1))[:3]
     ramp.color_ramp.elements[0].position = 0.05
     ramp.color_ramp.elements[0].color = scaled(color, 0.34)
     ramp.color_ramp.elements[1].position = 0.98
@@ -509,7 +645,7 @@ def add_occupancy_corners(
     depth: float,
     ground_z: float,
     height: float,
-) -> None:
+) -> tuple[float, float, float, float]:
     """실축 점유 부피의 투영 사각형을 카메라 전면 오버레이로 그린다.
 
     지면 사각형만 쓰면 사선 평행투영에서 높은 설비가 프레임을 넘어 보인다.
@@ -561,6 +697,7 @@ def add_occupancy_corners(
         obj = bpy.data.objects.new(curve.name, curve)
         bpy.context.scene.collection.objects.link(obj)
         obj.parent = camera
+    return minimum_x, minimum_y, maximum_x, maximum_y
 
 
 def add_ao_ground(center_x: float, center_y: float, width: float, depth: float, z: float) -> None:
@@ -574,7 +711,10 @@ def add_ao_ground(center_x: float, center_y: float, width: float, depth: float, 
     links = material.node_tree.links
     nodes.clear()
     output = nodes.new("ShaderNodeOutputMaterial")
-    transparent = nodes.new("ShaderNodeBsdfTransparent")
+    surface = nodes.new("ShaderNodeBsdfPrincipled")
+    surface.inputs["Base Color"].default_value = (0, 0, 0, 1)
+    surface.inputs["Roughness"].default_value = 1.0
+    surface.inputs["Metallic"].default_value = 0.0
     ao_near = nodes.new("ShaderNodeAmbientOcclusion")
     ao_mid = nodes.new("ShaderNodeAmbientOcclusion")
     ao_far = nodes.new("ShaderNodeAmbientOcclusion")
@@ -591,8 +731,10 @@ def add_ao_ground(center_x: float, center_y: float, width: float, depth: float, 
     links.new(ao_mid.outputs["Color"], multiply_near.inputs[2])
     links.new(multiply_near.outputs["Color"], multiply_far.inputs[1])
     links.new(ao_far.outputs["Color"], multiply_far.inputs[2])
-    links.new(multiply_far.outputs["Color"], transparent.inputs["Color"])
-    links.new(transparent.outputs["BSDF"], output.inputs["Surface"])
+    invert_ao = nodes.new("ShaderNodeInvert")
+    links.new(multiply_far.outputs["Color"], invert_ao.inputs["Color"])
+    links.new(invert_ao.outputs["Color"], surface.inputs["Alpha"])
+    links.new(surface.outputs["BSDF"], output.inputs["Surface"])
     if hasattr(material, "surface_render_method"):
         material.surface_render_method = "DITHERED"
     ground.data.materials.append(material)
@@ -610,6 +752,20 @@ def fit_orthographic_camera(camera: bpy.types.Object, points: list[Vector], marg
     camera.location += camera.matrix_world.to_3x3() @ local_center
     camera.data.ortho_scale = max(maximum_x - minimum_x, maximum_y - minimum_y) * margin
     bpy.context.view_layer.update()
+
+
+def validate_runtime_top_camera(camera: bpy.types.Object, configured_tilt_deg: float) -> None:
+    """런타임 탑뷰가 수직 정사영이라는 기하 계약을 렌더 전에 강제한다."""
+    if camera.data.type != "ORTHO":
+        raise RuntimeError(f"런타임 탑뷰 카메라는 ORTHO여야 합니다: {camera.data.type}")
+    if abs(configured_tilt_deg) > 1e-9:
+        raise RuntimeError(f"런타임 탑뷰 카메라 기울기는 0°여야 합니다: {configured_tilt_deg}")
+    forward = (camera.matrix_world.to_quaternion() @ Vector((0, 0, -1))).normalized()
+    if abs(forward.x) > 1e-8 or abs(forward.y) > 1e-8 or abs(forward.z + 1.0) > 1e-8:
+        raise RuntimeError(
+            "런타임 탑뷰 카메라 축이 월드 -Z와 일치하지 않습니다: "
+            f"forward=({forward.x:.12f},{forward.y:.12f},{forward.z:.12f})"
+        )
 
 
 def configure_bloom(scene: bpy.types.Scene) -> None:
@@ -631,25 +787,201 @@ def configure_bloom(scene: bpy.types.Scene) -> None:
     scene.render.use_compositing = True
 
 
-def add_material_study_lights() -> None:
+def add_material_study_lights(key_energy: float, fill_energy: float) -> None:
     key_data = bpy.data.lights.new("MaterialStudyKey", type="SUN")
-    key_data.energy = 1.9
+    key_data.energy = key_energy
     key_data.angle = math.radians(11)
     key = bpy.data.objects.new("MaterialStudyKey", key_data)
     key.rotation_euler = (math.radians(28), math.radians(-22), math.radians(-32))
     bpy.context.scene.collection.objects.link(key)
 
     fill_data = bpy.data.lights.new("MaterialStudyFill", type="SUN")
-    fill_data.energy = 0.72
+    fill_data.energy = fill_energy
     fill_data.angle = math.radians(18)
     fill = bpy.data.objects.new("MaterialStudyFill", fill_data)
     fill.rotation_euler = (math.radians(42), math.radians(18), math.radians(142))
     bpy.context.scene.collection.objects.link(fill)
 
 
+def apply_emissive_geometry_selectors(
+    selectors: list[dict],
+    objects: list[bpy.types.Object],
+) -> None:
+    def within(value: float, limits: list[float]) -> bool:
+        return limits[0] - 1e-5 <= value <= limits[1] + 1e-5
+
+    for selector in selectors:
+        material_name = selector["material"].casefold()
+        matches: list[tuple[bpy.types.Object, set[int]]] = []
+        for obj in objects:
+            if obj.type != "MESH":
+                continue
+            mesh = obj.data
+            slot_indices = {
+                index for index, slot in enumerate(obj.material_slots)
+                if slot.material and slot.material.name.casefold() == material_name
+            }
+            if not slot_indices:
+                continue
+            vertex_to_polygons = defaultdict(set)
+            for polygon in mesh.polygons:
+                if polygon.material_index in slot_indices:
+                    for vertex in polygon.vertices:
+                        vertex_to_polygons[vertex].add(polygon.index)
+            pending = {
+                polygon.index for polygon in mesh.polygons
+                if polygon.material_index in slot_indices
+            }
+            while pending:
+                seed = pending.pop()
+                component = {seed}
+                queue = deque([seed])
+                while queue:
+                    polygon = mesh.polygons[queue.popleft()]
+                    neighbours = set().union(*(vertex_to_polygons[vertex] for vertex in polygon.vertices)) & pending
+                    for neighbour in neighbours:
+                        pending.remove(neighbour)
+                        component.add(neighbour)
+                        queue.append(neighbour)
+                vertices = {
+                    vertex
+                    for polygon_index in component
+                    for vertex in mesh.polygons[polygon_index].vertices
+                }
+                points = [obj.matrix_world @ mesh.vertices[index].co for index in vertices]
+                minimum = [min(point[axis] for point in points) for axis in range(3)]
+                maximum = [max(point[axis] for point in points) for axis in range(3)]
+                size = [maximum[axis] - minimum[axis] for axis in range(3)]
+                center = [(maximum[axis] + minimum[axis]) / 2 for axis in range(3)]
+                if all(within(size[axis], selector["sizeM"][axis_name]) for axis, axis_name in enumerate(("x", "y", "z"))) and \
+                   all(within(center[axis], selector["centerM"][axis_name]) for axis, axis_name in enumerate(("x", "y", "z"))):
+                    matches.append((obj, component))
+
+        expected = selector["expectedComponents"]
+        if len(matches) != expected:
+            raise RuntimeError(f"{selector['id']}: 발광 기하 {len(matches)}개, 기대 {expected}개")
+        material = bpy.data.materials.new(f"TopViewEmissive_{selector['id']}")
+        material.use_nodes = True
+        nodes = material.node_tree.nodes
+        nodes.clear()
+        output = nodes.new("ShaderNodeOutputMaterial")
+        emission = nodes.new("ShaderNodeEmission")
+        emission.inputs["Color"].default_value = parse_hex_color(selector["color"])
+        emission.inputs["Strength"].default_value = selector["strength"]
+        material.node_tree.links.new(emission.outputs["Emission"], output.inputs["Surface"])
+        slots: dict[int, int] = {}
+        for obj, component in matches:
+            key = id(obj.data)
+            if key not in slots:
+                obj.data.materials.append(material)
+                slots[key] = len(obj.data.materials) - 1
+            for polygon_index in component:
+                obj.data.polygons[polygon_index].material_index = slots[key]
+        print(f"EMISSIVE_SELECTOR={selector['id']} COMPONENTS={len(matches)}")
+
+
+def apply_opacity_geometry_selectors(
+    selectors: list[dict],
+    objects: list[bpy.types.Object],
+) -> None:
+    """탑뷰 전용 가림 처리: 공용 재질의 지정 연결 성분만 목표 합성 불투명도로 분리한다."""
+    def within(value: float, limits: list[float]) -> bool:
+        return limits[0] - 1e-5 <= value <= limits[1] + 1e-5
+
+    for selector in selectors:
+        material_name = selector["material"].casefold()
+        matches: list[tuple[bpy.types.Object, set[int]]] = []
+        source_material = None
+        for obj in objects:
+            if obj.type != "MESH":
+                continue
+            mesh = obj.data
+            slot_indices = set()
+            for index, slot in enumerate(obj.material_slots):
+                if slot.material and slot.material.name.casefold() == material_name:
+                    slot_indices.add(index)
+                    source_material = slot.material
+            if not slot_indices:
+                continue
+            vertex_to_polygons = defaultdict(set)
+            for polygon in mesh.polygons:
+                if polygon.material_index in slot_indices:
+                    for vertex in polygon.vertices:
+                        vertex_to_polygons[vertex].add(polygon.index)
+            pending = {polygon.index for polygon in mesh.polygons if polygon.material_index in slot_indices}
+            while pending:
+                seed = pending.pop()
+                component = {seed}
+                queue = deque([seed])
+                while queue:
+                    polygon = mesh.polygons[queue.popleft()]
+                    neighbours = set().union(*(vertex_to_polygons[vertex] for vertex in polygon.vertices)) & pending
+                    for neighbour in neighbours:
+                        pending.remove(neighbour)
+                        component.add(neighbour)
+                        queue.append(neighbour)
+                vertices = {
+                    vertex
+                    for polygon_index in component
+                    for vertex in mesh.polygons[polygon_index].vertices
+                }
+                points = [obj.matrix_world @ mesh.vertices[index].co for index in vertices]
+                minimum = [min(point[axis] for point in points) for axis in range(3)]
+                maximum = [max(point[axis] for point in points) for axis in range(3)]
+                size = [maximum[axis] - minimum[axis] for axis in range(3)]
+                center = [(maximum[axis] + minimum[axis]) / 2 for axis in range(3)]
+                if all(within(size[axis], selector["sizeM"][axis_name]) for axis, axis_name in enumerate(("x", "y", "z"))) and \
+                   all(within(center[axis], selector["centerM"][axis_name]) for axis, axis_name in enumerate(("x", "y", "z"))):
+                    matches.append((obj, component))
+
+        expected = selector["expectedComponents"]
+        if len(matches) != expected or source_material is None:
+            raise RuntimeError(f"{selector['id']}: 투과 기하 {len(matches)}개, 기대 {expected}개")
+        combined_opacity = selector.get("combinedOpacity")
+        if "perComponentOpacity" in selector:
+            layer_opacity = selector["perComponentOpacity"]
+            reported_opacity = layer_opacity
+        else:
+            overlap_layers = selector.get("overlapLayers", 1)
+            layer_opacity = 0.0 if combined_opacity == 0 else 1.0 - pow(1.0 - combined_opacity, 1.0 / overlap_layers)
+            reported_opacity = combined_opacity
+        material = source_material.copy()
+        material.name = f"TopViewOpacity_{selector['id']}"
+        nodes = material.node_tree.nodes
+        links = material.node_tree.links
+        output = next((node for node in nodes if node.type == "OUTPUT_MATERIAL"), None)
+        if output is None or not output.inputs["Surface"].links:
+            raise RuntimeError(f"{selector['id']}: 원본 재질 Surface 연결 누락")
+        source_link = output.inputs["Surface"].links[0]
+        source_socket = source_link.from_socket
+        links.remove(source_link)
+        transparent = nodes.new("ShaderNodeBsdfTransparent")
+        mix = nodes.new("ShaderNodeMixShader")
+        mix.inputs[0].default_value = layer_opacity
+        links.new(transparent.outputs["BSDF"], mix.inputs[1])
+        links.new(source_socket, mix.inputs[2])
+        links.new(mix.outputs[0], output.inputs["Surface"])
+        if hasattr(material, "surface_render_method"):
+            material.surface_render_method = "DITHERED"
+        slots: dict[int, int] = {}
+        for obj, component in matches:
+            key = id(obj.data)
+            if key not in slots:
+                obj.data.materials.append(material)
+                slots[key] = len(obj.data.materials) - 1
+            for polygon_index in component:
+                obj.data.polygons[polygon_index].material_index = slots[key]
+        print(
+            f"OPACITY_SELECTOR={selector['id']} COMPONENTS={len(matches)} "
+            f"LAYER_OPACITY={layer_opacity:.6f} TARGET_OPACITY={reported_opacity:.6f}"
+        )
+
+
 args = parse_args()
 if not args.glb:
     raise ValueError("--scene 또는 --glb로 본체 메시를 지정해야 합니다.")
+if getattr(args, "pending_vat_components", []) and not args.diagnostic_allow_incomplete_vat:
+    raise RuntimeError(f"Idle VAT 미적용 제품 렌더 금지: {', '.join(args.pending_vat_components)}")
 Path(args.output).resolve().parent.mkdir(parents=True, exist_ok=True)
 Path(args.blend).resolve().parent.mkdir(parents=True, exist_ok=True)
 for obj in list(bpy.data.objects):
@@ -669,6 +1001,8 @@ for component_index, glb in enumerate(args.glb):
         for obj in imported:
             if obj.parent is None:
                 obj.parent = parent
+    if getattr(args, "body_component_specs", None):
+        apply_vat_idle_pose(args.body_component_specs[component_index], imported)
 
 if args.indicator_glb:
     before = set(bpy.context.scene.objects)
@@ -700,14 +1034,27 @@ normal_paths = parse_material_map(args.material_normal)
 reflection_paths = parse_material_map(args.material_reflection)
 alpha_materials = {name.casefold() for name in args.material_alpha}
 pbr_materials = {name.casefold() for name in args.material_pbr}
+normal_only_materials = {name.casefold() for name in args.material_normal_only}
 paint_colors = parse_paint_map(args.material_paint)
+base_colors = parse_color_map(args.material_base_color)
 emissive_accent_materials = {name.casefold() for name in args.material_emissive_accent}
 state_mask_paths = parse_material_map(args.material_state_mask)
 parsed_state_color = parse_hex_color(args.state_color)
 state_color_value = tuple(channel * args.state_strength for channel in parsed_state_color[:3]) + (1.0,)
 for material in bpy.data.materials:
     if material.name.casefold() in pbr_materials:
-        apply_pbr_material(material, albedo_paths, ao_paths, normal_paths, reflection_paths, alpha_materials, paint_colors)
+        apply_pbr_material(
+            material,
+            albedo_paths,
+            ao_paths,
+            normal_paths,
+            reflection_paths,
+            alpha_materials,
+            paint_colors,
+            base_colors,
+            emissive_accent_materials,
+            normal_only_materials,
+        )
     else:
         apply_fake_material(
             material,
@@ -720,7 +1067,11 @@ for material in bpy.data.materials:
             emissive_accent_materials,
             state_mask_paths,
             state_color_value,
+            base_colors,
         )
+
+apply_emissive_geometry_selectors(args.emissive_geometry_selectors, mesh_objects)
+apply_opacity_geometry_selectors(args.opacity_geometry_selectors, mesh_objects)
 
 if args.footprint:
     footprint_width, footprint_depth = args.footprint
@@ -772,8 +1123,11 @@ if args.footprint:
         for z_sign in (0, 1)
     )
 fit_orthographic_camera(camera, frame_points)
-if args.footprint:
-    add_occupancy_corners(
+if args.runtime_top_validation:
+    validate_runtime_top_camera(camera, args.camera_tilt)
+corner_frame_local = None
+if args.footprint and not args.hide_corners:
+    corner_frame_local = add_occupancy_corners(
         camera,
         footprint_x,
         footprint_y,
@@ -796,20 +1150,39 @@ scene.render.image_settings.color_depth = "8"
 scene.render.resolution_percentage = 100
 scene.view_settings.view_transform = "Standard"
 scene.view_settings.look = "Medium High Contrast"
+scene.view_settings.exposure = args.exposure
 if args.bloom:
     configure_bloom(scene)
 if args.sun:
-    add_material_study_lights()
+    add_material_study_lights(args.key_energy, args.fill_energy)
 
 world = bpy.data.worlds.new("World") if not bpy.data.worlds else bpy.data.worlds[0]
 scene.world = world
 world.use_nodes = True
 background = world.node_tree.nodes.get("Background")
 background.inputs["Color"].default_value = (.018, .022, .028, 1)
-background.inputs["Strength"].default_value = 0.24 if args.sun else 0.0
+background.inputs["Strength"].default_value = args.world_strength if args.sun else 0.0
 
 scene["source_bounds"] = [*minimum, *maximum]
 scene["source_size"] = [width, depth, height]
+scene["camera_projection_contract"] = args.camera_projection
+scene["camera_tilt_deg"] = args.camera_tilt
+scene["camera_forward_world"] = [
+    *(camera.matrix_world.to_quaternion() @ Vector((0, 0, -1))).normalized()
+]
+scene["runtime_top_validated"] = args.runtime_top_validation
+scene["corner_envelope_contract"] = args.corner_envelope or "unverified"
+if args.footprint:
+    scene["hard_footprint_m"] = [footprint_x, footprint_y, footprint_width, footprint_depth, args.footprint_height]
+if corner_frame_local:
+    minimum_x, minimum_y, maximum_x, maximum_y = corner_frame_local
+    scale = camera.data.ortho_scale
+    scene["hard_footprint_frame_normalized"] = [
+        0.5 + minimum_x / scale,
+        0.5 - maximum_y / scale,
+        (maximum_x - minimum_x) / scale,
+        (maximum_y - minimum_y) / scale,
+    ]
 bpy.ops.wm.save_as_mainfile(filepath=str(Path(args.blend).resolve()))
 bpy.ops.render.render(write_still=True)
 print(f"BOUNDS={width:.4f},{depth:.4f},{height:.4f}")

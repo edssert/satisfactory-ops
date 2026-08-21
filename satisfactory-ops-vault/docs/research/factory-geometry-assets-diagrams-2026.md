@@ -117,8 +117,9 @@ Three.js 실시간 캡처보다 Blender 배치 렌더가 된다. Three.js는 랜
   Unreal `(X,Y,Z)` m에 대해 Blender `(X,-Y,Z)` m다.
 - Blueprint CDO에서 생산 표시등 상대 위치·회전을 읽어 별도 메시를 결합했다. 임의의 녹색 점을 그림에
   덧붙이지 않는다.
-- Anders가 설명한 `Albedo × Facing × AO → Emission` 무조명 구조를 재현하고, 게임 하드 클리어런스
-  XY 합집합에 흰 점유 코너를 생성했다. `scripts/topview/render-topview.py`가 이 렌더 단계를 재현한다.
+- Anders가 설명한 `Albedo × Facing × AO → Emission` 무조명 구조를 재현하고, 각 건물 게임 데이터의
+  하드 클리어런스 박스에만 흰 점유 코너를 생성했다. 시각 메시의 돌출부는 코너 크기를 바꾸지 않는다.
+  `scripts/topview/render-topview.py`가 이 렌더 단계를 재현한다.
 
 첫 파일럿의 단일 청회색 팔레트와 생산 표시등 재질 전체를 녹색으로 만든 방식은 폐기했다. 표시등의 실제
 Albedo와 ReflectionMap을 복원해 회색 하우징을 유지하고 ReflectionMap B 채널의 원형 렌즈 링만 녹색

@@ -215,12 +215,12 @@ test('물류 도면은 직선·회전·방향·파이프와 양방향 리프트 
     assert.ok(asset, assetId);
     assert.equal(existsSync(`public/${asset.path}`), true, assetId);
   }
-  const liftClasses = Array.from({ length: 6 }, (_, index) => `Build_ConveyorLiftMk${index + 1}_C`);
   for (const assetId of ['ConveyorLiftHeadA', 'ConveyorLiftHeadB']) {
     const lift = assetsById.get(assetId);
     assert.ok(lift, assetId);
     assert.equal(existsSync(`public/${lift.path}`), true, assetId);
-    assert.deepEqual(lift.sharedBuildingClasses, liftClasses, assetId);
+    assert.equal(lift.reviewStatus, 'candidate', assetId);
+    assert.match(('note' in lift ? lift.note : '') ?? '', /Mk별 완성 자산이 아닌/, assetId);
   }
 });
 

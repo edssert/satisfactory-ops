@@ -10,6 +10,7 @@
     "lengthM": 10,
     "heightM": 8.5,
     "centerM": [0, 0],
+    "cornerEnvelope": "game-hard-clearance",
     "confidence": "verified"
   },
   "components": [
@@ -17,7 +18,7 @@
       "id": "static-frame",
       "renderMode": "body",
       "path": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Mesh/SmelterMk1_static.glb",
-      "transform": [-5.478708e-8, -0.3, 0, 179.99995],
+      "transform": [5.478708e-8, 0.3, 0, 179.99995],
       "source": "Build_SmelterMk1_C.FGColoredInstanceMeshProxy",
       "confidence": "verified",
       "contains": ["static-frame", "ports", "feet", "ladder", "decal-surfaces"]
@@ -26,10 +27,25 @@
       "id": "current-vat-idle-body",
       "renderMode": "body",
       "path": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Mesh/SM_VAT_Smelter_01.glb",
-      "transform": [0, 0.000004880058, 0.05, 0.00004438202],
+      "transform": [0, -0.000004880058, 0.05, 180.00004438202],
       "source": "Build_SmelterMk1_C.FGVertexAnimatedMesh_GEN_VARIABLE",
       "materialOverride": "MI_VAT_Smelter_Idle",
-      "pose": "exported-base-pose; idle 1x9 VAT offset validation pending",
+      "vatPose": {
+        "status": "base-pose-verified",
+        "basisCorrectionDeg": 180,
+        "viewMatrixVerified": true,
+        "positionData": ".cache/game-asset-export/texture-floats/TX_Smelter_Idle_Pos-floats.json",
+        "rotationData": ".cache/game-asset-export/texture-floats/TX_Smelter_Idle_Quat-floats.json",
+        "upscale": 200,
+        "lookupUvLayer": "UVMap.002",
+        "rowOffset": 1,
+        "rowScale": -1,
+        "expectedGroups": 7,
+        "positionDataSha256": "988d87a36c4df1806168915b3cd89e25bcd6e8042eac7b76b94fec899f6173bb",
+        "rotationDataSha256": "017e35a2c7654b0a4a63df5c8c50863d9c11c0cf9455d438afb7f9ddd1ef4c23",
+        "allowQuaternionDeformation": false,
+        "reason": "원시 자세는 인게임 Idle 조립과 다르므로 제품 후보로 사용할 수 없다."
+      },
       "confidence": "verified",
       "contains": ["furnace-vessel", "rear-cabinet", "four-polished-pipes", "coil", "top-panels", "hazard-trim"]
     },
@@ -37,7 +53,7 @@
       "id": "production-indicator",
       "renderMode": "production-indicator",
       "path": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/-Shared/ProductionIndicator/Mesh/SM_ProductionLight_01.glb",
-      "transform": [1.00342896, -4.1428882, 2.849815, 180],
+      "transform": [-1.00342896, 4.1428882, 2.849815, 0],
       "source": "Build_SmelterMk1_C.BP_ProductionIndicatorInstanced_GEN_VARIABLE",
       "confidence": "verified",
       "contains": ["indicator-housing", "indicator-lens", "indicator-cap"]
@@ -46,7 +62,7 @@
       "id": "ladder-interaction",
       "renderMode": "metadata-only",
       "enabled": false,
-      "transform": [1.8999951, -3.2000027, 2.65, 0.00062069343],
+      "transform": [-1.8999951, 3.2000027, 2.65, 0.00062069343],
       "source": "Build_SmelterMk1_C.BP_LadderComponent_GEN_VARIABLE",
       "confidence": "verified",
       "contains": ["climb-interaction-volume"],
@@ -65,24 +81,25 @@
     "albedo": {
       "MI_SK_Smelter": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Texture/TX_SK_Smelter_01_BC.png",
       "MI_VAT_Smelter": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Texture/TX_SK_Smelter_01_BC.png",
-      "MI_SmelterMk1_01": ".cache/game-asset-export/factory-base-bc-slices/TX2D_FactoryBase_BC-slice-00.png",
+      "MI_SmelterMk1_01": ".cache/topview/satisfactory-material-atlas.png",
       "MI_ProdLight": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/-Shared/ProductionIndicator/Textures/TX_ProductionLight_01_Albedo.png",
       "DecalColor_Masked": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Alb.png"
     },
     "ao": {
       "MI_SK_Smelter": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Texture/TX_SK_Smelter_01_AOMasks.png",
-      "MI_VAT_Smelter": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Texture/TX_SK_Smelter_01_AOMasks.png",
-      "MI_SmelterMk1_01": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Texture/TX_SmelterMk1_static_AO.png"
+      "MI_VAT_Smelter": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Texture/TX_SK_Smelter_01_AOMasks.png"
     },
     "normal": {
       "MI_SK_Smelter": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Texture/TX_SK_Smelter_01_N.png",
       "MI_VAT_Smelter": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Texture/TX_SK_Smelter_01_N.png",
+      "MI_SmelterMk1_01": ".cache/topview/satisfactory-normal-atlas.png",
       "DecalColor_Masked": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Nor.png",
       "Decal_Normal": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/PanelAtlas_Nor.png"
     },
     "reflection": {
       "MI_SK_Smelter": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Texture/TX_SK_Smelter_01_Refl.png",
       "MI_VAT_Smelter": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Texture/TX_SK_Smelter_01_Refl.png",
+      "MI_SmelterMk1_01": ".cache/topview/satisfactory-reflection-atlas.png",
       "MI_ProdLight": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/-Shared/ProductionIndicator/Textures/TX_ProductionLight_01_Reflection.png"
     },
     "stateMask": {
@@ -90,12 +107,27 @@
     },
     "paint": {
       "MI_SK_Smelter": { "primary": "#fa9549", "secondary": "#4f5da4" },
-      "MI_VAT_Smelter": { "primary": "#fa9549", "secondary": "#4f5da4" },
-      "MI_SmelterMk1_01": { "primary": "#fa9549", "secondary": "#4f5da4" }
+      "MI_VAT_Smelter": { "primary": "#fa9549", "secondary": "#4f5da4" }
+    },
+    "baseColor": {
+      "MI_SmelterMk1_01": "#687787",
+      "Decal_Normal": "#687787"
     },
     "alpha": [],
     "pbr": ["MI_VAT_Smelter", "MI_SmelterMk1_01", "DecalColor_Masked", "Decal_Normal"],
-    "emissiveAccent": ["MI_VAT_Smelter", "DecalColor_Masked"],
+    "normalOnly": [],
+    "emissiveAccent": ["DecalColor_Masked"],
+    "emissiveGeometrySelectors": [
+      {
+        "id": "port-slot-lights",
+        "material": "MI_SmelterMk1_01",
+        "expectedComponents": 6,
+        "sizeM": { "x": [0.03, 0.08], "y": [0.12, 0.2], "z": [0, 0.003] },
+        "centerM": { "x": [-0.4, 0.4], "y": [4.25, 4.55], "z": [0.7, 2.85] },
+        "color": "#ffd36a",
+        "strength": 5
+      }
+    ],
     "state": { "color": "#ff5b2e", "strength": 5 }
   },
   "camera": {
@@ -105,17 +137,28 @@
     "source": "runtime planner assets require metric top-down projection",
     "confidence": "verified"
   },
+  "canonicalOrientation": {
+    "authority": "smelter-current-top + BP_ProductionIndicatorInstanced_GEN_VARIABLE",
+    "screenEdge": "bottom",
+    "rule": "전면 주황 프레임과 경광등을 화면 아래쪽에 두고 좌우 부속은 인게임 대조군과 일치시킨다."
+  },
   "referenceComparisonCamera": {
     "projection": "orthographic-oblique",
     "frontTiltDeg": 33.5573,
+    "displayYawDeg": 0,
     "purpose": "Anders 2023 골든의 외관 연구 전용이며 런타임 탑뷰 생성에는 사용하지 않는다.",
     "confidence": "consensus"
   },
   "lighting": {
-    "groundAo": true,
-    "aoLayers": 3,
+    "groundAo": false,
+    "shadowMode": "alpha-near-and-wide-postprocess",
+    "aoLayers": 2,
     "bloom": true,
     "sun": true,
+    "keyEnergy": 1.7,
+    "fillEnergy": 1.0,
+    "worldStrength": 0.42,
+    "exposure": 1.1,
     "method": "조립 검수는 원본 PBR 채널과 태양광/AO, Anders 스타일화는 별도 최종 프로파일",
     "confidence": "verified"
   },
@@ -123,14 +166,54 @@
     { "id": "furnace-vessel", "owner": "current-vat-idle-body", "status": "present", "controls": ["top", "isometric-a", "isometric-c"] },
     { "id": "rear-cabinet", "owner": "current-vat-idle-body", "status": "present", "controls": ["top", "side-a", "side-b"] },
     { "id": "four-polished-pipes", "owner": "current-vat-idle-body", "status": "present", "controls": ["top", "side-a", "isometric-c"] },
+    { "id": "lower-pipe-cover", "owner": "current-vat-idle-body", "status": "present", "controls": ["top", "isometric-a", "isometric-d", "basis180-side"] },
+    { "id": "front-orange-frame", "owner": "static-frame", "status": "present", "controls": ["end-a", "isometric-a", "isometric-d"] },
     { "id": "ladder", "owner": "static-frame", "status": "present", "controls": ["side-b", "isometric-a"] },
     { "id": "ladder-interaction", "owner": "ladder-interaction", "status": "present", "controls": ["game-blueprint-cdo"] },
     { "id": "power-connector-housing", "owner": "static-frame", "status": "present", "controls": ["side-a", "side-b", "isometric-a"] },
     { "id": "input-output-port-housings", "owner": "static-frame", "status": "present", "controls": ["end-a", "end-b", "top"] },
     { "id": "production-indicator", "owner": "production-indicator", "status": "present", "controls": ["end-a", "isometric-a", "isometric-c"] },
-    { "id": "three-slot-lights", "owner": "current-vat-idle-body", "status": "present-but-projection-pending", "controls": ["end-a"] },
+    { "id": "three-slot-lights", "owner": "static-frame", "status": "present", "controls": ["end-a", "material-slot-debug", "emissive-selector-6"] },
     { "id": "occupancy-corners", "owner": "renderer", "status": "present", "controls": ["anders-golden"] },
-    { "id": "contact-shadow", "owner": "renderer", "status": "pending-final-validation", "controls": ["anders-golden"] }
+    { "id": "contact-shadow", "owner": "renderer", "status": "present", "controls": ["transparent-alpha-pass"] }
+  ],
+  "materialChecks": [
+    { "id": "vat-albedo-paint-ao-normal-reflection-emission", "status": "present" },
+    { "id": "production-indicator-albedo-reflection-state", "status": "present" },
+    { "id": "port-slot-emissive-geometry", "status": "present" },
+    { "id": "static-factory-uv-sheet-selection", "status": "present" },
+    { "id": "deferred-normal-decal-neutral-underlay", "status": "present" }
+  ],
+  "cameraLightingChecks": [
+    { "id": "runtime-orthographic-top", "status": "present" },
+    { "id": "transparent-near-and-wide-shadow", "status": "present" },
+    { "id": "neutral-key-fill-lighting", "status": "present" }
+  ],
+  "pipelineAudit": {
+    "repeatedDefectThreshold": 2,
+    "systemicDefectThreshold": 1,
+    "rawVatCandidateAllowed": false,
+    "requiredStages": [
+      "package-graph",
+      "blueprint-components",
+      "vat-id-pivot-and-idle-pose",
+      "material-parent-and-uv-sheet",
+      "runtime-camera-contract",
+      "view-feature-matrix",
+      "golden-style-only-comparison"
+    ]
+  },
+  "validationViews": [
+    { "controlId": "smelter-current-top", "requiredFeatures": ["furnace-vessel", "four-polished-pipes", "lower-pipe-cover", "ladder", "power-connector-housing", "production-indicator", "input-output-port-housings"] },
+    { "controlId": "smelter-current-side-a", "requiredFeatures": ["rear-cabinet", "four-polished-pipes", "lower-pipe-cover", "power-connector-housing", "input-output-port-housings"] },
+    { "controlId": "smelter-current-side-b", "requiredFeatures": ["rear-cabinet", "four-polished-pipes", "lower-pipe-cover", "ladder", "production-indicator", "input-output-port-housings"] },
+    { "controlId": "smelter-current-end-a", "requiredFeatures": ["front-orange-frame", "production-indicator", "three-slot-lights", "input-output-port-housings"] },
+    { "controlId": "smelter-current-end-b", "requiredFeatures": ["rear-cabinet", "input-output-port-housings"] },
+    { "controlId": "smelter-current-isometric-a", "requiredFeatures": ["furnace-vessel", "four-polished-pipes", "lower-pipe-cover", "ladder", "power-connector-housing", "production-indicator", "front-orange-frame"] },
+    { "controlId": "smelter-current-isometric-b", "requiredFeatures": ["furnace-vessel", "rear-cabinet", "four-polished-pipes", "lower-pipe-cover", "power-connector-housing"] },
+    { "controlId": "smelter-current-isometric-c", "requiredFeatures": ["furnace-vessel", "rear-cabinet", "four-polished-pipes", "lower-pipe-cover", "ladder", "production-indicator"] },
+    { "controlId": "smelter-current-isometric-d", "requiredFeatures": ["furnace-vessel", "rear-cabinet", "lower-pipe-cover", "input-output-port-housings"] },
+    { "controlId": "smelter-current-near-top", "requiredFeatures": ["furnace-vessel", "rear-cabinet", "four-polished-pipes", "lower-pipe-cover", "power-connector-housing"] }
   ],
   "validation": {
     "metricAuthority": ["footprint", "game-cdo-transforms"],

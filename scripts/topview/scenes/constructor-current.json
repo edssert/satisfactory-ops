@@ -1,0 +1,153 @@
+{
+  "$schemaVersion": 1,
+  "id": "constructor-current-cl-502094",
+  "buildingClass": "Build_ConstructorMk1_C",
+  "status": "assembly-in-progress",
+  "geometryAuthority": "game-install-cl-502094",
+  "footprint": {
+    "widthM": 8,
+    "lengthM": 10,
+    "heightM": 6,
+    "centerM": [0, 0],
+    "cornerEnvelope": "game-hard-clearance",
+    "confidence": "verified"
+  },
+  "components": [
+    {
+      "id": "static-frame",
+      "renderMode": "body",
+      "path": ".cache/constructor-export/FactoryGame/Content/FactoryGame/Buildable/Factory/ConstructorMk1/Mesh/ConstructorMk1_static.glb",
+      "transform": [0, 0, 0, 0],
+      "source": "Build_ConstructorMk1_C.FGColoredInstanceMeshProxy_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "current-vat-body",
+      "renderMode": "body",
+      "path": ".cache/constructor-export/FactoryGame/Content/FactoryGame/Buildable/Factory/ConstructorMk1/Mesh/SM_VAT_Constructor_MK1.glb",
+      "transform": [0, 0, 0, 180],
+      "assetBasisCorrectionDeg": 180,
+      "poseStatus": "base-pose-verified",
+      "source": "Build_ConstructorMk1_C.AnimatedMesh_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "production-indicator",
+      "renderMode": "production-indicator",
+      "path": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/-Shared/ProductionIndicator/Mesh/SM_ProductionLight_01.glb",
+      "transform": [-1.3317853, 4.6716705, 4.9824213, 90.00018],
+      "source": "Build_ConstructorMk1_C.BP_ProductionIndicatorInstanced_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "ladder-interaction",
+      "renderMode": "metadata-only",
+      "enabled": false,
+      "transform": [-2.1000012, 3.3999988, 3.2, 0.0002672311],
+      "source": "Build_ConstructorMk1_C.Ladder_GEN_VARIABLE",
+      "confidence": "verified"
+    }
+  ],
+  "materials": {
+    "albedo": {
+      "MI_ConstructorMk1": ".cache/topview/satisfactory-material-atlas.png",
+      "MI_VAT_Constructorr": ".cache/constructor-export/FactoryGame/Content/FactoryGame/Buildable/Factory/ConstructorMk1/Textures/TX_SK_Constructor_01_BC.png",
+      "MI_ProdLight": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/-Shared/ProductionIndicator/Textures/TX_ProductionLight_01_Albedo.png",
+      "DecalColor_Masked": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Alb.png"
+    },
+    "ao": {
+      "MI_VAT_Constructorr": ".cache/constructor-export/FactoryGame/Content/FactoryGame/Buildable/Factory/ConstructorMk1/Textures/TX_SK_Constructor_01_AOMasks.png"
+    },
+    "normal": {
+      "MI_ConstructorMk1": ".cache/topview/satisfactory-normal-atlas.png",
+      "MI_VAT_Constructorr": ".cache/constructor-export/FactoryGame/Content/FactoryGame/Buildable/Factory/ConstructorMk1/Textures/TX_SK_Constructor_01_N.png",
+      "DecalColor_Masked": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Nor.png",
+      "Decal_Normal": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/PanelAtlas_Nor.png"
+    },
+    "reflection": {
+      "MI_ConstructorMk1": ".cache/topview/satisfactory-reflection-atlas.png",
+      "MI_VAT_Constructorr": ".cache/constructor-export/FactoryGame/Content/FactoryGame/Buildable/Factory/ConstructorMk1/Textures/TX_SK_Constructor_01_Refl.png",
+      "MI_ProdLight": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/-Shared/ProductionIndicator/Textures/TX_ProductionLight_01_Reflection.png"
+    },
+    "stateMask": {
+      "MI_ProdLight": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/-Shared/ProductionIndicator/Textures/TX_ProductionLight_01_Reflection.png"
+    },
+    "paint": {
+      "MI_VAT_Constructorr": { "primary": "#fa9549", "secondary": "#4f5da4" }
+    },
+    "baseColor": {
+      "MI_ConstructorMk1": "#687787",
+      "Decal_Normal": "#687787"
+    },
+    "alpha": [],
+    "pbr": ["MI_ConstructorMk1", "MI_VAT_Constructorr", "DecalColor_Masked", "Decal_Normal"],
+    "normalOnly": [],
+    "emissiveAccent": ["DecalColor_Masked"],
+    "emissiveGeometrySelectors": [],
+    "opacityGeometrySelectors": [
+      {
+        "id": "upper-service-grating",
+        "material": "MI_ConstructorMk1",
+        "expectedComponents": 3,
+        "sizeM": { "x": [3.13, 3.14], "y": [7.82, 7.83], "z": [0.01, 0.08] },
+        "centerM": { "x": [-0.01, 0.01], "y": [0.75, 0.78], "z": [5.65, 5.77] },
+        "combinedOpacity": 0.85,
+        "overlapLayers": 3
+      },
+      {
+        "id": "upper-grid-decals",
+        "material": "DecalColor_Masked",
+        "expectedComponents": 60,
+        "sizeM": { "x": [0, 0.7], "y": [0, 0.7], "z": [0, 0.01] },
+        "centerM": { "x": [-1.6, 1.6], "y": [-3.2, 4.7], "z": [5.7, 5.73] },
+        "perComponentOpacity": 0.5
+      }
+    ],
+    "state": { "color": "#00ff00", "strength": 5 }
+  },
+  "camera": {
+    "projection": "orthographic-top",
+    "frontTiltDeg": 0,
+    "displayYawDeg": 0,
+    "confidence": "verified"
+  },
+  "stateIndicator": {
+    "pointM": [-1.6434, 4.6717],
+    "maskRadiusNormalized": 0.058
+  },
+  "lighting": {
+    "groundAo": false,
+    "shadowMode": "alpha-near-and-wide-postprocess",
+    "aoLayers": 2,
+    "bloom": true,
+    "sun": true,
+    "keyEnergy": 1.7,
+    "fillEnergy": 1.0,
+    "worldStrength": 0.42,
+    "exposure": 1.1,
+    "method": "조립 검수용 중립 PBR",
+    "confidence": "consensus"
+  },
+  "assemblyFeatures": [
+    { "id": "static-frame", "owner": "static-frame", "status": "present" },
+    { "id": "vat-body", "owner": "current-vat-body", "status": "present" },
+    { "id": "production-indicator", "owner": "production-indicator", "status": "present" },
+    { "id": "ladder", "owner": "static-frame", "status": "present" },
+    { "id": "power-connector", "owner": "static-frame", "status": "present" },
+    { "id": "input-output-ports", "owner": "static-frame", "status": "present" }
+  ],
+  "materialChecks": [
+    { "id": "static-factory-uv-sheet", "status": "present" },
+    { "id": "vat-pbr-channels", "status": "present" }
+  ],
+  "cameraLightingChecks": [
+    { "id": "four-isometric-assembly-views", "status": "present" },
+    { "id": "runtime-orthographic-top", "status": "present" }
+  ],
+  "pipelineAudit": {
+    "repeatedDefectThreshold": 2,
+    "systemicDefectThreshold": 1,
+    "rawVatCandidateAllowed": false,
+    "requiredStages": ["package-graph", "blueprint-components", "asset-basis", "four-isometric-views", "view-feature-matrix", "runtime-top-after-assembly"]
+  }
+}

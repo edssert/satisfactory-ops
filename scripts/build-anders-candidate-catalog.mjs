@@ -29,7 +29,7 @@ try {
 
 const source = manifest.$sources['anders-2023'];
 const approvedByKey = new Map();
-for (const asset of manifest.assets.filter((entry) => entry.sourceId === 'anders-2023')) {
+for (const asset of manifest.assets.filter((entry) => entry.sourceId === 'anders-2023' && entry.reviewStatus === 'approved')) {
   const sheet = asset.sheet ?? source.sheet;
   const key = `${sheet}#${asset.candidateId}`;
   if (approvedByKey.has(key)) {
@@ -40,7 +40,7 @@ for (const asset of manifest.assets.filter((entry) => entry.sourceId === 'anders
 }
 
 const roleOverrides = new Map([
-  ['Sheet_00.png#1', { identity: 'Build_ConstructorMk1_C', role: 'building', buildingClasses: ['Build_ConstructorMk1_C'], confidence: 'consensus', identityStatus: 'class-identified' }],
+  ['Sheet_00.png#1', { identity: 'Unresolved production building', role: 'building', buildingClasses: [], confidence: 'disputed', identityStatus: 'role-identified' }],
   ['Sheet_00.png#2', { identity: 'Build_OilRefinery_C', role: 'building', buildingClasses: ['Build_OilRefinery_C'], confidence: 'consensus', identityStatus: 'class-identified' }],
   ['Sheet_00.png#3', { identity: 'Build_FoundryMk1_C', role: 'building', buildingClasses: ['Build_FoundryMk1_C'], confidence: 'consensus', identityStatus: 'class-identified' }],
   ['Sheet_00.png#4', { identity: 'Build_ManufacturerMk1_C', role: 'building', buildingClasses: ['Build_ManufacturerMk1_C'], confidence: 'consensus', identityStatus: 'class-identified' }],
@@ -56,6 +56,7 @@ const roleOverrides = new Map([
   ['Sheet_02.png#1', { identity: 'Build_SpaceElevator_C', role: 'building', buildingClasses: ['Build_SpaceElevator_C'], confidence: 'consensus', identityStatus: 'class-identified' }],
   ['Sheet_02.png#2', { identity: 'Satisfactory logo', role: 'brand-reference', confidence: 'verified', identityStatus: 'class-identified' }],
   ['Texture 02.png#8', { identity: 'Conveyor direction marker A', role: 'transport-direction', confidence: 'verified' }],
+  ['Texture 02.png#5', { identity: 'Unresolved production building', role: 'building', buildingClasses: [], confidence: 'disputed', identityStatus: 'role-identified' }],
   ['Texture 02.png#9', { identity: 'Conveyor direction marker B', role: 'transport-direction', confidence: 'verified' }],
   ['Texture 02.png#10', { identity: 'Conveyor belt 90-degree tile', role: 'transport-part', confidence: 'verified' }],
   ['Texture 02.png#11', { identity: 'Conveyor belt straight tile', role: 'transport-part', confidence: 'verified' }],
