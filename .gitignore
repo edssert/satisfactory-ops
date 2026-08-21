@@ -28,3 +28,9 @@ Thumbs.db
 
 # 테스트가 만드는 임시 번들
 src/components/.planner-test.mjs
+
+# 로컬 게임 자산 추출 도구 생성물
+scripts/game-assets/Cue4ParseCatalog/bin/
+scripts/game-assets/Cue4ParseCatalog/obj/
+scripts/topview/__pycache__/
+zlib-ng2.dll

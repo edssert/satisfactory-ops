@@ -350,6 +350,10 @@ if (!toolsPage) {
     }
     /* base 를 안 붙인 절대 경로는 GitHub Pages 하위 경로에서 전부 404 가 된다 */
     if (/src="\/assets\//.test(hit.s)) fail('설계 페이지에 base 없는 자산 경로가 있습니다');
+    if (hit.s.includes('/assets/planner/top-view/golden/')) fail('설계판에 비교용 golden-reference 자산이 직렬화됐습니다');
+    if (!hit.s.includes('/assets/planner/top-view/buildings/production/Build_SmelterMk1_C.error.webp')) {
+      fail('설계판 제련기가 현재 게임 상태 자산을 사용하지 않습니다');
+    }
     if (hit.s.includes('자동 배치')) fail('수동 설계판에 폐기한 자동 배치 문구가 남아 있습니다');
     if (!miss) pass('설계판이 건물·채굴기·발전기와 함께 그려짐');
   }

@@ -10,11 +10,16 @@ import argparse
 from collections import defaultdict, deque
 import json
 import math
+import re
 import sys
 from pathlib import Path
 
 import bpy
 from mathutils import Vector
+
+
+def canonical_material_key(name: str) -> str:
+    return re.sub(r"\.\d{3}$", "", name.casefold())
 
 
 def parse_args() -> argparse.Namespace:
@@ -33,6 +38,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--material-reflection", action="append", default=[])
     parser.add_argument("--material-alpha", action="append", default=[])
     parser.add_argument("--material-pbr", action="append", default=[])
+    parser.add_argument("--material-normal-only", action="append", default=[])
     parser.add_argument("--material-paint", action="append", default=[])
     parser.add_argument("--material-base-color", action="append", default=[])
     parser.add_argument("--material-emissive-accent", action="append", default=[])
@@ -335,7 +341,7 @@ def apply_pbr_material(
     nodes.clear()
     output = nodes.new("ShaderNodeOutputMaterial")
     bsdf = nodes.new("ShaderNodeBsdfPrincipled")
-    material_key = material.name.casefold()
+    material_key = canonical_material_key(material.name)
     if material_key in normal_only_materials:
         transparent = nodes.new("ShaderNodeBsdfTransparent")
         links.new(transparent.outputs["BSDF"], output.inputs["Surface"])
@@ -476,12 +482,12 @@ def apply_fake_material(
     ao_multiply.inputs[0].default_value = 1.0
     facing = nodes.new("ShaderNodeLayerWeight")
     ramp = nodes.new("ShaderNodeValToRGB")
-    color = base_colors.get(material.name.casefold(), (*palette(material.name), 1))[:3]
+    material_key = canonical_material_key(material.name)
+    color = base_colors.get(material_key, (*palette(material.name), 1))[:3]
     ramp.color_ramp.elements[0].position = 0.05
     ramp.color_ramp.elements[0].color = scaled(color, 0.34)
     ramp.color_ramp.elements[1].position = 0.98
     ramp.color_ramp.elements[1].color = scaled(color, 1.15)
-    material_key = material.name.casefold()
     albedo_path = albedo_paths.get(material_key)
     ao_path = ao_paths.get(material_key)
     normal_path = normal_paths.get(material_key)
@@ -819,7 +825,7 @@ def apply_emissive_geometry_selectors(
             mesh = obj.data
             slot_indices = {
                 index for index, slot in enumerate(obj.material_slots)
-                if slot.material and slot.material.name.casefold() == material_name
+                if slot.material and canonical_material_key(slot.material.name) == material_name
             }
             if not slot_indices:
                 continue
@@ -898,7 +904,7 @@ def apply_opacity_geometry_selectors(
             mesh = obj.data
             slot_indices = set()
             for index, slot in enumerate(obj.material_slots):
-                if slot.material and slot.material.name.casefold() == material_name:
+                if slot.material and canonical_material_key(slot.material.name) == material_name:
                     slot_indices.add(index)
                     source_material = slot.material
             if not slot_indices:
@@ -997,6 +1003,8 @@ for component_index, glb in enumerate(args.glb):
         parent = bpy.data.objects.new(f"ComponentTransform{component_index}", None)
         parent.location = (x, y, z)
         parent.rotation_euler[2] = math.radians(yaw)
+        if getattr(args, "body_component_specs", None) and args.body_component_specs[component_index].get("scale"):
+            parent.scale = tuple(args.body_component_specs[component_index]["scale"])
         bpy.context.scene.collection.objects.link(parent)
         for obj in imported:
             if obj.parent is None:
@@ -1042,7 +1050,7 @@ state_mask_paths = parse_material_map(args.material_state_mask)
 parsed_state_color = parse_hex_color(args.state_color)
 state_color_value = tuple(channel * args.state_strength for channel in parsed_state_color[:3]) + (1.0,)
 for material in bpy.data.materials:
-    if material.name.casefold() in pbr_materials:
+    if canonical_material_key(material.name) in pbr_materials:
         apply_pbr_material(
             material,
             albedo_paths,

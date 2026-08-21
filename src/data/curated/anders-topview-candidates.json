@@ -14,8 +14,8 @@
   "$counts": {
     "detectedComponents": 91,
     "semanticGroups": 84,
-    "identifiedGroups": 19,
-    "classIdentifiedGroups": 12,
+    "identifiedGroups": 18,
+    "classIdentifiedGroups": 13,
     "roleIdentifiedGroups": 22,
     "unidentifiedGroups": 31
   },
@@ -1605,21 +1605,16 @@
       },
       "componentRole": "primary-or-standalone",
       "parentGroupId": null,
-      "identityStatus": "identified",
+      "identityStatus": "class-identified",
       "identity": "Build_SmelterMk1_C",
-      "assetId": "Build_SmelterMk1_C",
+      "assetId": null,
       "buildingClasses": [
         "Build_SmelterMk1_C"
       ],
       "role": "building",
       "variant": null,
-      "approvedCropPx": {
-        "x": 3500,
-        "y": 1004,
-        "width": 424,
-        "height": 744
-      },
-      "confidence": "verified",
+      "approvedCropPx": null,
+      "confidence": "consensus",
       "sources": [
         "anders-assets-2023",
         "src/data/curated/topview-assets.json"
@@ -3595,15 +3590,15 @@
       "componentIds": [
         "Texture 02.png#6"
       ],
-      "identityStatus": "identified",
+      "identityStatus": "class-identified",
       "identity": "Build_SmelterMk1_C",
-      "assetId": "Build_SmelterMk1_C",
+      "assetId": null,
       "buildingClasses": [
         "Build_SmelterMk1_C"
       ],
       "role": "building",
       "variant": null,
-      "confidence": "verified",
+      "confidence": "consensus",
       "sources": [
         "anders-assets-2023",
         "src/data/curated/topview-assets.json"

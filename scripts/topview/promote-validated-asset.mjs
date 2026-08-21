@@ -50,8 +50,14 @@ if (!occupancyFrame || ![occupancyFrame.x, occupancyFrame.y, occupancyFrame.widt
   process.exit(2);
 }
 const image = sharp(candidateBuffer).ensureAlpha();
-const info = await image.metadata();
-await image.webp({ quality: 100, nearLossless: true, effort: 6 }).toFile(outputPath);
+const { data: normalizedPixels, info } = await image.raw().toBuffer({ resolveWithObject: true });
+for (let offset = 0; offset < normalizedPixels.length; offset += 4) {
+  if (normalizedPixels[offset + 3] !== 0) continue;
+  normalizedPixels[offset] = 0;
+  normalizedPixels[offset + 1] = 0;
+  normalizedPixels[offset + 2] = 0;
+}
+await sharp(normalizedPixels, { raw: info }).webp({ lossless: true, effort: 6 }).toFile(outputPath);
 const outputHash = createHash('sha256').update(readFileSync(outputPath)).digest('hex');
 const metadata = {
   sourceCandidateSha256: actualCandidateHash,

@@ -50,6 +50,24 @@
       "contains": ["furnace-vessel", "rear-cabinet", "four-polished-pipes", "coil", "top-panels", "hazard-trim"]
     },
     {
+      "id": "input0-belt-stub-mk1",
+      "renderMode": "body",
+      "path": ".cache/game-asset-export/conveyor-mk1/FactoryGame/Content/FactoryGame/Buildable/Factory/ConveyorBeltMk1/Mesh/SM_ConveyorBelt_Mk1.glb",
+      "transform": [-1, -3.445625, 8.31, 0],
+      "scale": [1, 0.5, 1],
+      "source": "SM_ConveyorBelt_Mk1 + Input0 verified port normal",
+      "confidence": "verified"
+    },
+    {
+      "id": "output2-belt-stub-mk1",
+      "renderMode": "body",
+      "path": ".cache/game-asset-export/conveyor-mk1/FactoryGame/Content/FactoryGame/Buildable/Factory/ConveyorBeltMk1/Mesh/SM_ConveyorBelt_Mk1.glb",
+      "transform": [-1, 2.445625, 8.31, 0],
+      "scale": [1, 0.5, 1],
+      "source": "SM_ConveyorBelt_Mk1 + Output2 verified port normal",
+      "confidence": "verified"
+    },
+    {
       "id": "production-indicator",
       "renderMode": "production-indicator",
       "path": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/-Shared/ProductionIndicator/Mesh/SM_ProductionLight_01.glb",
@@ -82,6 +100,7 @@
       "MI_SK_Smelter": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Texture/TX_SK_Smelter_01_BC.png",
       "MI_VAT_Smelter": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Texture/TX_SK_Smelter_01_BC.png",
       "MI_SmelterMk1_01": ".cache/topview/satisfactory-material-atlas.png",
+      "MI_ConveyorBelt_Mk1_01": ".cache/game-asset-export/conveyor-mk1/FactoryGame/Content/FactoryGame/Buildable/Factory/ConveyorBeltMk1/Texture/TX_ConveyorBeltMk1_BC.png",
       "MI_ProdLight": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/-Shared/ProductionIndicator/Textures/TX_ProductionLight_01_Albedo.png",
       "DecalColor_Masked": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Alb.png"
     },
@@ -93,6 +112,7 @@
       "MI_SK_Smelter": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Texture/TX_SK_Smelter_01_N.png",
       "MI_VAT_Smelter": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Texture/TX_SK_Smelter_01_N.png",
       "MI_SmelterMk1_01": ".cache/topview/satisfactory-normal-atlas.png",
+      "MI_ConveyorBelt_Mk1_01": ".cache/game-asset-export/conveyor-mk1/FactoryGame/Content/FactoryGame/Buildable/Factory/ConveyorBeltMk1/Texture/TX_ConveyorBeltMk1_N.png",
       "DecalColor_Masked": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Nor.png",
       "Decal_Normal": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/PanelAtlas_Nor.png"
     },
@@ -100,6 +120,7 @@
       "MI_SK_Smelter": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Texture/TX_SK_Smelter_01_Refl.png",
       "MI_VAT_Smelter": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SmelterMk1/Texture/TX_SK_Smelter_01_Refl.png",
       "MI_SmelterMk1_01": ".cache/topview/satisfactory-reflection-atlas.png",
+      "MI_ConveyorBelt_Mk1_01": ".cache/game-asset-export/conveyor-mk1/FactoryGame/Content/FactoryGame/Buildable/Factory/ConveyorBeltMk1/Texture/TX_ConveyorBeltMk1_MREO.png",
       "MI_ProdLight": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/-Shared/ProductionIndicator/Textures/TX_ProductionLight_01_Reflection.png"
     },
     "stateMask": {
@@ -114,7 +135,7 @@
       "Decal_Normal": "#687787"
     },
     "alpha": [],
-    "pbr": ["MI_VAT_Smelter", "MI_SmelterMk1_01", "DecalColor_Masked", "Decal_Normal"],
+    "pbr": ["MI_VAT_Smelter", "MI_SmelterMk1_01", "MI_ConveyorBelt_Mk1_01", "DecalColor_Masked", "Decal_Normal"],
     "normalOnly": [],
     "emissiveAccent": ["DecalColor_Masked"],
     "emissiveGeometrySelectors": [
@@ -128,7 +149,7 @@
         "strength": 5
       }
     ],
-    "state": { "color": "#ff5b2e", "strength": 5 }
+    "state": { "color": "#00ff00", "strength": 5 }
   },
   "camera": {
     "projection": "orthographic-top",
@@ -136,6 +157,10 @@
     "displayYawDeg": 0,
     "source": "runtime planner assets require metric top-down projection",
     "confidence": "verified"
+  },
+  "stateIndicator": {
+    "pointM": [-1.00343, 4.45451],
+    "maskRadiusNormalized": 0.058
   },
   "canonicalOrientation": {
     "authority": "smelter-current-top + BP_ProductionIndicatorInstanced_GEN_VARIABLE",
@@ -172,6 +197,8 @@
     { "id": "ladder-interaction", "owner": "ladder-interaction", "status": "present", "controls": ["game-blueprint-cdo"] },
     { "id": "power-connector-housing", "owner": "static-frame", "status": "present", "controls": ["side-a", "side-b", "isometric-a"] },
     { "id": "input-output-port-housings", "owner": "static-frame", "status": "present", "controls": ["end-a", "end-b", "top"] },
+    { "id": "input0-belt-stub", "owner": "input0-belt-stub-mk1", "status": "present", "controls": ["verified-port-coordinate", "conveyor-mk1-game-mesh"] },
+    { "id": "output2-belt-stub", "owner": "output2-belt-stub-mk1", "status": "present", "controls": ["verified-port-coordinate", "conveyor-mk1-game-mesh"] },
     { "id": "production-indicator", "owner": "production-indicator", "status": "present", "controls": ["end-a", "isometric-a", "isometric-c"] },
     { "id": "three-slot-lights", "owner": "static-frame", "status": "present", "controls": ["end-a", "material-slot-debug", "emissive-selector-6"] },
     { "id": "occupancy-corners", "owner": "renderer", "status": "present", "controls": ["anders-golden"] },

@@ -87,8 +87,8 @@ await sharp({ create: { width: info.width, height: info.height, channels: 4, bac
     { input: wideShadowLayer, blend: 'over' },
     { input: nearShadowLayer, blend: 'over' },
     { input: bloomLayer, blend: 'over' },
-    ...(stateBloomLayer ? [{ input: stateBloomLayer, blend: 'over' }] : []),
     { input: graded, blend: 'over' },
+    ...(stateBloomLayer ? [{ input: stateBloomLayer, blend: 'over' }] : []),
   ])
   .png({ compressionLevel: 9, adaptiveFiltering: true })
   .toFile(output);

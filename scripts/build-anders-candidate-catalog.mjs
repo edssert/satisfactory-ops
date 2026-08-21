@@ -57,6 +57,7 @@ const roleOverrides = new Map([
   ['Sheet_02.png#2', { identity: 'Satisfactory logo', role: 'brand-reference', confidence: 'verified', identityStatus: 'class-identified' }],
   ['Texture 02.png#8', { identity: 'Conveyor direction marker A', role: 'transport-direction', confidence: 'verified' }],
   ['Texture 02.png#5', { identity: 'Unresolved production building', role: 'building', buildingClasses: [], confidence: 'disputed', identityStatus: 'role-identified' }],
+  ['Texture 02.png#6', { identity: 'Build_SmelterMk1_C', role: 'building', buildingClasses: ['Build_SmelterMk1_C'], confidence: 'consensus', identityStatus: 'class-identified' }],
   ['Texture 02.png#9', { identity: 'Conveyor direction marker B', role: 'transport-direction', confidence: 'verified' }],
   ['Texture 02.png#10', { identity: 'Conveyor belt 90-degree tile', role: 'transport-part', confidence: 'verified' }],
   ['Texture 02.png#11', { identity: 'Conveyor belt straight tile', role: 'transport-part', confidence: 'verified' }],

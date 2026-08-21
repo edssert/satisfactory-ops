@@ -327,6 +327,10 @@ for (const recipeEntry of sceneRecipes) {
         !component.transform.every(Number.isFinite))) {
       errors.push(`${recipe.id}/${component.id}: transform은 [x,y,z,yaw]여야 함`);
     }
+    if (component.scale && (!Array.isArray(component.scale) || component.scale.length !== 3 ||
+        !component.scale.every((value) => Number.isFinite(value) && value > 0))) {
+      errors.push(`${recipe.id}/${component.id}: scale은 양수 [x,y,z]여야 함`);
+    }
     if (component.renderMode === 'excluded' && !component.reason) errors.push(`${recipe.id}/${component.id}: 제외 근거 누락`);
   }
   if (!enabledBodies) errors.push(`${recipe.id}: 활성 본체 메시 없음`);

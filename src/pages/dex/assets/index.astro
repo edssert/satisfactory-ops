@@ -14,7 +14,7 @@ import '../../../styles/tech.css';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const topviewByClass = new Map(topviewData.assets.flatMap((asset) => {
-  if ('buildingClass' in asset && asset.buildingClass) return [[asset.buildingClass, asset] as const];
+  if (asset.role === 'building' && 'buildingClass' in asset && asset.buildingClass) return [[asset.buildingClass, asset] as const];
   return [];
 }));
 const groupsByClass = new Map<string, typeof candidateData.groups>();
