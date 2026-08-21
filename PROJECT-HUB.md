@@ -63,6 +63,12 @@ updated: 2026-08-21
 > `tests/persist.test.ts`가 고정한다. 실제 가이드의 `lib/progress.ts`가 같은 경계를 호출하므로
 > 테스트 전용 코드가 아니라 공개 번들에서 실행된다.
 
+> [!success] 2026-08-21 네이티브 스크롤 접근성 체크포인트
+> Lenis를 축소 모션에서도 유지하되 보간을 끄는 공식 `respectReducedMotion` 경로로 통합했다. 해시의
+> 96px 오프셋 이중 적용을 제거하고, 내부 이동 관성을 정리한다. `scripts/verify-scroll.mjs`가 빌드된
+> 앱에서 키보드·해시·동적 축소 모션·뒤로가기 복원·직접 URL 진입을 Chromium으로 검증하며
+> `npm run verify`의 필수 단계다. 근거와 한계는 [[lenis-native-scroll-accessibility]]에 있다.
+
 ## 설계 결정
 
 - [[0025-validated-factory-domain|ADR-0025 검증된 공장 도메인]]
@@ -78,6 +84,7 @@ updated: 2026-08-21
 - [[public-save-blueprint-corpus]]
 - [[design-web-2026]]
 - [[design-landing-craft]]
+- [[lenis-native-scroll-accessibility]]
 
 ## 완료 판정
 

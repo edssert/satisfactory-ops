@@ -12,6 +12,7 @@
 .env
 .idea/
 .playwright-cli/
+output/
 .tmp-research/
 .vscode/
 .obsidian/cache/

@@ -79,7 +79,7 @@ satisfactory-ops/
 │  │  ├─ persist.ts        localStorage · 스키마 버전 · 마이그레이션 사다리
 │  │  └─ progress.ts       signals 스토어 + 파생값(현재 티어·다음 할 일)
 │  ├─ components/          Preact 아일랜드 (상태를 소유하는 최소 단위)
-│  ├─ layouts/Base.astro   헤더·푸터·테마·SW 등록·업데이트 토스트
+│  ├─ layouts/Base.astro   헤더·푸터·테마·네이티브 기반 Lenis 향상
 │  ├─ pages/               라우트 = 파일
 │  ├─ styles/              tokens.css(브리프 정본) · base.css · 컴포넌트별 CSS
 │  └─ fonts/               IBM Plex Mono 라틴 서브셋 (자체 호스팅, ADR-0018)

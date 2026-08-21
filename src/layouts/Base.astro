@@ -115,17 +115,19 @@ const nav = [
       import Lenis from 'lenis';
       import 'lenis/dist/lenis.css';
 
-      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        const lenis = new Lenis({
-          autoRaf: true,
-          anchors: { offset: -96 },
-          duration: 1.05,
-          smoothWheel: true,
-          syncTouch: false,
-          prevent: (node) => node instanceof HTMLElement && Boolean(node.closest('[data-lenis-prevent]')),
-        });
-        window.addEventListener('pagehide', () => lenis.destroy(), { once: true });
-      }
+      const lenis = new Lenis({
+        autoRaf: true,
+        /* scroll-padding-top이 헤더 높이의 정본이다. 별도 offset을 더하면 96px가 이중 적용된다. */
+        anchors: true,
+        duration: 1.05,
+        respectReducedMotion: true,
+        smoothWheel: true,
+        stopInertiaOnNavigate: true,
+        /* iOS 16 미만에서 불안정한 관성 모사는 켜지 않고 네이티브 터치를 유지한다. */
+        syncTouch: false,
+        prevent: (node) => node instanceof HTMLElement && Boolean(node.closest('[data-lenis-prevent]')),
+      });
+      window.addEventListener('pagehide', () => lenis.destroy(), { once: true });
     </script>
   </body>
 </html>
