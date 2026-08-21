@@ -88,6 +88,11 @@ updated: 2026-08-21
 > `check:guide`와 `test:guide-ui`가 구조·근거·폐기 주장·반응형·키보드·직접 링크를 고정하며 근거는
 > [[guide-content-rewrite]]에 있다.
 
+> [!success] 2026-08-21 전 화면 반응형 체크포인트
+> 홈·가이드·설계·직접 만들기·지도·진단·도감·도구·변경 기록을 360~3840px의 7개 폭에서 실제
+> Chromium으로 전수 렌더한다. 문서 가로 넘침, 주 콘텐츠 이탈, 제목 잘림, 런타임 오류, 자산 404를
+> `test:responsive`가 배포 전 차단하며 픽셀 리뷰 근거는 [[responsive-domain-qa]]에 있다.
+
 ## 설계 결정
 
 - [[0025-validated-factory-domain|ADR-0025 검증된 공장 도메인]]
@@ -107,6 +112,7 @@ updated: 2026-08-21
 - [[landing-progressive-enhancement]]
 - [[design-token-theme-system]]
 - [[guide-content-rewrite]]
+- [[responsive-domain-qa]]
 
 ## 완료 판정
 

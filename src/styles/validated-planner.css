@@ -78,7 +78,14 @@
 .vp-status > span.is-review { background: var(--status-warning); }
 .vp-status strong { font-size: .77rem; }
 .vp-status small { color: var(--ink-3); font-family: var(--font-mono); font-size: .59rem; }
-.vp-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.vp-actions {
+  display: flex;
+  min-width: 0;
+  max-width: 100%;
+  flex: 1 1 520px;
+  flex-wrap: wrap;
+  gap: 6px;
+}
 .vp-actions button,
 .vp-import-button,
 .vp-zoom button {
@@ -213,7 +220,11 @@
 .plan-method h2 { margin: 12px 0 7px; font-size: 1rem; }
 .plan-method p { margin: 0; color: var(--ink-3); font-size: .7rem; line-height: 1.7; }
 
-@media (max-width: 980px) {
+/*
+ * 좌측 카탈로그 292px + 검사 패널 네 열의 최소폭 882px + 페이지 여백이 필요하다.
+ * 980px에서만 접으면 981~1253px 구간에서 작업영역이 문서를 가로로 민다.
+ */
+@media (max-width: 1260px) {
   .plan-intro { grid-template-columns: 1fr; }
   .vp { grid-template-columns: 1fr; }
   .vp-catalog { max-height: none; grid-template-rows: auto auto auto auto; border-right: 0; border-bottom: 1px solid var(--line-strong); }
