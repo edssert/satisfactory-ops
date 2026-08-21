@@ -1,6 +1,6 @@
 ---
 name: external-data-claim
-description: Checks any claim about what external data means before it reaches the screen — save-file entries, game data-dump fields, wiki tables, community datasets. Requires naming the claim, finding an independent cross-check, running an order-of-magnitude test, and locking the result with a regression check. Use when parsing a .sav file, adding a field from the game's Docs.json, importing a community JSON dataset, reading a wiki table into app data, or whenever about to write "this field means X". Triggers on 세이브 파싱, 원본 데이터, Docs.json, 필드 해석, 위키 수치, 커뮤니티 데이터셋, 진행도 읽기, "이 값은 ~를 뜻한다".
+description: Validates claims about external game, save, wiki, research, and community data with evidence proportional to inference risk and impact. Use when interpreting a field, importing external datasets, promoting a research claim into product data, or deciding confidence and regression coverage.
 license: MIT
 ---
 
@@ -26,7 +26,12 @@ license: MIT
 
 ---
 
-## 절차 (다섯 단계, 건너뛰지 않는다)
+## 위험에 비례한 검증 절차
+
+명시적 공식 스키마를 그대로 옮기는 낮은 위험 작업과, 이름만 보고 의미를 추론하는 세이브 필드 작업에
+같은 조사량을 강제하지 않는다. 다만 **추론이 있거나 사용자 판단·설계·진행도에 영향을 주는 주장**은
+아래 다섯 단계를 모두 수행한다. 낮은 위험의 명시적 값은 1·4·5를 기본으로 하고, 모호함이 생기면 즉시
+전체 절차로 승격한다.
 
 ### 1. 주장을 한 문장으로 적는다
 
@@ -53,7 +58,7 @@ license: MIT
 | "이 수치가 = 분당 산출이다" | 게임 안 표시값·위키 표와 **한 자릿수** 안에 있는가 |
 | "이 좌표계가 = 맵 좌표다" | 이미 검증된 다른 데이터셋(자원 노드)으로 **역산**하면 맞는가 |
 
-### 3. 독립 대조원을 찾는다 — 최소 하나
+### 3. 추론한 의미는 독립 대조원으로 확인한다
 
 **독립**이란 같은 파일의 다른 필드가 아니라 **다른 계층**에서 온 것을 말한다.
 
@@ -68,8 +73,9 @@ license: MIT
 실제로 ①을 잡은 것은 사다리 1이었다: 파란 슬러그를 8개 주웠다고 나왔고, 창고에 5개 +
 동력 조각 1개가 있었다. 앞뒤가 맞았다. 228이었다면 창고가 설명을 못 한다.
 
-**대조원을 못 찾으면 그 해석은 앱에 넣지 않는다.** `docs/research/` 의 "미해결"에만 적는다.
-CLAUDE.md 의 confidence 등급으로는 `unsourced` 다.
+공식 원본이 필드 의미와 단위를 명시한 경우 그 정의 자체가 1차 근거다. 원본이 구조만 제공하고 의미를
+우리가 추론한 경우에는 독립 대조원이 필요하다. 대조원을 못 찾은 추론은 파일럿·연구에서
+`unsourced`로 다룰 수 있지만 검증된 제품 사실로 승격하지 않는다.
 
 ### 4. 자릿수를 먼저 본다
 
@@ -130,7 +136,7 @@ node .claude/skills/external-data-claim/scripts/field-scope.mjs beltItemsPerMinu
 
 ---
 
-## 반려 기준 — 하나라도 걸리면 화면에 내지 않는다
+## 제품 사실 승격 게이트
 
 - [ ] 주장을 한 문장으로 적었는가 (§1 형식)
 - [ ] 근거가 "그 자리에 있다"는 **존재**뿐인가 → 반려. 존재는 상태가 아니다
@@ -140,14 +146,15 @@ node .claude/skills/external-data-claim/scripts/field-scope.mjs beltItemsPerMinu
 - [ ] 통과한 해석을 회귀 검사로 잠갔는가. 그 검사를 **일부러 깨뜨려** 정말 죽는지 봤는가
 - [ ] 대조에 실패한 해석을 "대략 맞는다"로 넘기지 않았는가
 
-## 화면에 낼 때
+## 제품에 반영할 때
 
 CLAUDE.md 의 등급을 그대로 쓴다. 대조원 개수가 등급을 정한다.
 
-- 원본에서 생성 + 대조 통과 → `verified`
+- 공식 정의를 그대로 생성했거나 추론을 독립 대조해 통과 → `verified`
 - 원본에 없고 커뮤니티 출처 둘 이상 일치 → `consensus`, 화면에 "커뮤니티 합의" 표기
 - 출처가 갈림 → `disputed`, 양쪽 다 노출
 - 대조원 없음 → **앱에 넣지 않는다.** `docs/research/` 의 미해결로만
 
-근거는 `docs/research/<주제>.md` 에 남긴다. 대조에 쓴 값과 그 출처를 같이 적어라 —
-다음 사람이 같은 대조를 처음부터 다시 하지 않도록.
+근거는 `PROJECT-HUB`에서 해당 책임을 맡은 기존 Research 정본에 통합한다. 대조에 쓴 값과 그 출처를
+같이 적어 다음 사람이 같은 대조를 처음부터 다시 하지 않도록 한다. 새 문서는 기존 책임 문서로 표현할 수
+없는 독립 연구 도메인일 때만 만든다.

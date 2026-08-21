@@ -1,6 +1,6 @@
 ---
 name: visual-verify
-description: Gates any UI change behind an actual screenshot that has been opened and looked at — builds the site, runs a layout-squeeze checker at desktop/tablet/phone widths, shoots the page or a single element, and requires reading the PNG before the change may be called done. Use after editing any .astro, .tsx, or .css file in this repo, before saying a screen is fixed, when a layout looks off, or when reporting UI work as complete. Triggers on 화면 고침, 레이아웃, 스타일, CSS, 깨짐, 눌림, 잘림, 스크린샷, 사진 찍어, "됐다", "고쳤다", "확인했다".
+description: Validates rendered UI, top-view assets, factory diagrams, and exported visuals by opening real outputs, comparing golden references, and recording what changed. Use after browser UI edits, Blender/image asset changes, SVG/PNG export work, or before claiming visual quality or reference fidelity.
 license: MIT
 ---
 
@@ -63,6 +63,29 @@ node .claude/skills/visual-verify/scripts/shot-el.mjs guide '.fc-svg' shot.png -
 그리고 완료 보고에 **본 것을 한 줄로 적는다**: "390px 사진에서 소머슬룹 칸이 136px 로
 펴진 것을 확인했다." 이렇게 적을 수 없으면 안 본 것이다.
 
+## 탑뷰·도면·독립 이미지 모드
+
+웹 화면이 아니라 Blender 탑뷰·SVG·PNG를 바꿨을 때도 실제 파일을 열어 본다. 목표 레퍼런스, 직전 후보,
+새 후보를 같은 배율·배경·점유 프레임으로 나란히 비교한다.
+
+```bash
+node scripts/topview/compare-golden.mjs <golden> <candidate> .tmp-research/topview-compare.png
+```
+
+생성된 비교 PNG와 JSON을 모두 열고, 차이가 의도된 게임 버전 형상인지 렌더 오류인지 구분한다. 비교
+도구는 후보를 자동 승인하지 않는다.
+
+- 실루엣과 카메라가 같은 탑뷰 축을 유지하는가
+- 게임 하드 점유 프레임과 흰 코너가 실제 미터 경계에 맞는가
+- 재질 셀별 색, 금속·고무·도색 구분이 레퍼런스와 같은가
+- 입력·출력·용융·상태등 발광의 위치·색·번짐 반경이 맞는가
+- 내부 AO와 외곽 접촉 그림자가 세부를 뭉개지 않는가
+- 투명 알파, 그림자 가장자리, 100%·200% 배율에서 잡티가 없는가
+- 복합 도면에서 토대·벨트·파이프와 섞였을 때 다른 프로파일처럼 튀지 않는가
+
+구조 검증 통과를 시각 승인으로 대체하지 않는다. 반대로 한 장이 예뻐 보여도 실축·포트·알파·복합 도면
+검사가 없으면 골든 마스터가 아니다. 비교 결과는 기준별 점수와 실패 좌표/영역을 남긴다.
+
 ---
 
 ## squeeze.mjs 읽는 법
@@ -97,7 +120,7 @@ node .claude/skills/visual-verify/scripts/shot-el.mjs guide '.fc-svg' shot.png -
 
 ---
 
-## 반려 기준
+## 완료 증거
 
 - [ ] PNG 를 **Read 로 열었는가.** 안 열었으면 "고쳤다"고 말하지 않는다
 - [ ] 고친 자리가 사진 안에 보이는가

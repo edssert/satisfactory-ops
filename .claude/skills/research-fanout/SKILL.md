@@ -1,121 +1,66 @@
 ---
 name: research-fanout
-description: Plans a parallel research fan-out before launching subagents — divides the WebSearch budget explicitly per agent, assigns one output file per agent so scopes cannot overlap, allocates model and effort by task type, and routes known endpoints through WebFetch or curl so they never consume the shared search budget. Use before spawning two or more research subagents, when a research run stalls or runs out of searches, when collecting wiki numbers or community consensus, or when writing a subagent prompt. Triggers on 병렬 리서치, 에이전트 여러 개, 조사 분담, 검색 한도, WebSearch 한도, 서브에이전트 프롬프트, docs/research 추가.
+description: Structures broad evidence research across tools, repositories, papers, creator sources, and real artifacts, using parallel agents only when explicitly authorized. Use when research scope is broad, multiple solution families must be represented, or searches risk converging on the first plausible answer.
 license: MIT
 ---
 
-# 병렬 조사 — 나가기 전에 예산부터 나눈다
+# 넓게 찾고 하나의 정본으로 합친다
 
-## 이 스킬이 존재하는 이유
+이 스킬의 목적은 검색 횟수를 줄이는 것이 아니라 첫 후보에서 멈추지 않고 서로 다른 해결 계열의 능력을
+수집하는 것이다. 전역 `capability-harvest`가 있으면 그 능력 단위·다축 점수 방식을 함께 사용한다.
 
-에이전트 6개를 한꺼번에 내보냈다가 중반에 WebSearch 한도가 바닥났다. 10개 주제 중
-**1개만** 끝났다. 나머지 5개 에이전트는 검색이 막힌 채로 "찾지 못했습니다"를 반환했고,
-그게 진짜 없어서인지 예산이 없어서인지 구분할 수 없었다.
+## 1. 연구 지도를 먼저 만든다
 
-한도는 **세션 전체가 공유한다.** 메인 대화도, 모든 에이전트도 같은 통에서 꺼내 쓴다.
-이 저장소는 `.claude/settings.json` 에서 `CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION` 을
-1000으로 올려 뒀다(조사가 본 작업인 프로젝트라서). 그래도 무한은 아니다.
+대상 과업마다 다음 레인을 확인한다.
 
----
+1. 공식 사양·문서·도구
+2. 유지보수되는 고별 저장소·상용 선도 제품
+3. 별은 적어도 도메인에 직접 맞는 최신 전문 저장소
+4. 원 제작자 파일·댓글·영상·실사용 사례
+5. 논문·표준·벤치마크·참조 구현
+6. 인접 생태계의 다른 접근
+7. 설치된 전역·프로젝트 스킬과 플러그인
 
-## 1. 검색 없이 되는 것부터 뺀다
+하나를 찾았다고 멈추지 않는다. 새 검색이 새 능력 대신 중복 후보만 추가할 때 탐색 범위가 포화됐다고
+판정한다.
 
-**WebSearch 와 WebFetch 는 다른 통이다.** 검색이 아니라 특정 URL 을 여는 것은 한도에
-걸리지 않는다. 실제로 검색이 막힌 상태에서 이 방법으로 조사 4건을 마쳤다.
+## 2. 아는 URL과 모르는 후보를 분리한다
 
-엔드포인트를 **아는** 것은 전부 여기로 보낸다. 셸에서 바로 확인할 수도 있다:
+원 저장소·공식 API·논문 DOI·이미 확보한 아카이브처럼 주소를 아는 자료는 직접 연다. 검색은 새로운
+후보와 해결 계열을 찾는 데 사용한다. 서비스별 임의의 고정 검색 예산을 보편 규칙으로 만들지 말고,
+현재 도구 한도와 과업 가치에 따라 조사량을 정한다.
 
-```bash
-# 위키 문서 원문 (파싱된 HTML 말고 위키텍스트 — 표가 그대로 나온다)
-curl -s "https://satisfactory.wiki.gg/api.php?action=parse&page=Power_Slug&prop=wikitext&format=json&formatversion=2"
+## 3. 병렬화는 권한과 독립성이 있을 때만
 
-# 위키 안에서 검색 — WebSearch 예산을 한 번도 안 쓴다
-curl -s "https://satisfactory.wiki.gg/api.php?action=query&list=search&srsearch=power%20slug&format=json&formatversion=2&srlimit=5"
+서브에이전트는 사용자가 위임·병렬 조사를 요청했거나 현재 환경 지침이 허용할 때만 사용한다. 병렬화할
+경우 후보 저장소별이 아니라 **해결 계열별**로 나누며, 각 작업은 겹치지 않는 임시 산출물을
+`.tmp-research/`에 남긴다. 정본 문서를 여러 에이전트가 동시에 고치게 하지 않는다.
 
-# GitHub 저장소 안 파일 목록 · 원문
-curl -s "https://api.github.com/repos/<owner>/<repo>/contents/<dir>"
-curl -s "https://raw.githubusercontent.com/<owner>/<repo>/main/<path>"
+각 조사 단위는 다음을 반환한다.
 
-# 데이터 파일이 언제 마지막으로 갱신됐는가 (pushed_at 말고 이것을 본다)
-curl -s "https://api.github.com/repos/<owner>/<repo>/commits?path=<데이터파일>&per_page=1"
-```
+- 원문 URL, 접근일, 버전/커밋, 활동, 별 수, 라이선스
+- 후보의 전체 평가가 아니라 흡수할 능력 단위
+- 실제 프로젝트 표본에 적용할 파일럿
+- 확인한 실패·불확실성·악영향
+- 추가로 열어야 할 직접 URL
 
-WebSearch 를 써야 하는 것은 **어디에 있는지 모르는 것**뿐이다: 커뮤니티 여론, 공략 글의
-존재 여부, 논쟁의 양상. 수치는 대개 검색이 필요 없다 — 어느 위키 문서인지 알기 때문이다.
+## 4. 능력을 합성한다
 
-## 2. 예산을 숫자로 나눈다
+메인 작업은 저장소 하나를 승자로 고르는 대신 `install`, `integrate`, `adapt-code`, `adapt-pattern`,
+`data`, `test`, `reference`, `monitor` 형태로 장점을 합친다. 낮은 별 수·비용·복잡성·중복은 폐기 근거가
+아니다. 구체적 악영향이 있는 부분만 제외하고 안전한 통찰은 흡수한다.
 
-프롬프트에 **"검색은 N회 안에서"** 를 적는다. 안 적으면 첫 에이전트가 다 쓴다.
+## 5. 정본에 통합한다
 
-| 일의 성격 | 1인당 WebSearch | 비고 |
-|---|---|---|
-| 아는 URL 에서 수치 수집 | **0~2회** | 위키 API·raw 파일. 검색이 필요 없다 |
-| 특정 저장소·도구 조사 | **3~6회** | 후보를 찾을 때만 |
-| 커뮤니티 여론·논쟁 수집 | **8~15회** | Reddit·포럼. 여기가 제일 비싸다 |
-| 넓은 탐색(무엇이 있는지 모름) | **15~25회** | 한 차수에 한 명만 내보낸다 |
+조사 세션·출처·에이전트별 새 노트를 만들지 않는다. 기존 책임 Research와 평가 방법, ROADMAP에
+근거·다축 점수·파일럿·재검증 조건을 통합한다. 미확인 주장은 `openQuestions` 또는 미해결 절에 남긴다.
 
-**차수를 나눈다.** 1차 3~4명 → 결과를 보고 2차. 6명을 한꺼번에 내보내면 중간에 방향을
-틀 수가 없고, 예산도 한 번에 날아간다.
+## 완료 증거
 
-## 3. 스코프 = 출력 파일 하나 = 에이전트 하나
+- 주요 해결 계열이 모두 후보 지도에 있음
+- 고별 후보와 최신 전문 후보가 함께 있음
+- 후보별이 아니라 능력별 흡수 표가 있음
+- 상위 능력을 같은 실제 표본으로 비교할 파일럿이 있음
+- 원문·버전·라이선스·불확실성이 정본에 기록됨
+- 병렬 임시 산출물이 정본으로 합성됐고 중복 노트가 생기지 않음
 
-파일이 겹치면 스코프가 겹친 것이다. `docs/research/` 는 접두사로 갈라 둔다:
-
-`eco-*` 생태계 · `arch-*` 아키텍처 · `data-*` 데이터 · `design-*` 디자인 ·
-`save-*` 세이브 · `guides-*` 공략 · `progression-*` 진행 · `layout-*` 배치
-
-프롬프트에 **인접 문서를 명시**한다: "`guides-reddit-manifold.md` 는 다른 에이전트가
-맡았으니 매니폴드 논쟁은 조사하지 마라." 이게 없으면 둘이 같은 스레드를 읽는다.
-
-## 4. 모델과 effort
-
-| 일 | 모델 / effort |
-|---|---|
-| 수집·목록화·표 옮기기 | `sonnet` / medium — 넓게 병렬 |
-| 아키텍처 판단·스키마 결정·교차검증 판정·ADR | 기본 모델 / high — 좁게 직렬 |
-| 적대적 검증(내 결론을 깨 봐라) | 기본 모델 / high — 반드시 **다른** 에이전트에게 |
-
-판단이 갈리는 문제는 **독립 제안 → 심사위원 패널 → 합성안**으로 간다. 한 에이전트에게
-"조사하고 결론까지 내라"고 하면 자기가 찾은 것만으로 결론을 낸다.
-
----
-
-## 5. 서브에이전트 프롬프트 골격
-
-이 다섯 줄은 **모든** 조사 프롬프트에 넣는다. 빠지면 반환값을 신뢰할 수 없다.
-
-```
-## 검색 예산
-- WebSearch 는 최대 N회. 초과 금지.
-- WebFetch·curl 은 제한 없음. 아래 URL 은 검색 없이 직접 열어라: <목록>
-
-## 규칙
-- 수치에는 출처 URL 을 붙여라. 확인 못 한 것은 "미해결"에 적고 본문 표에 넣지 마라.
-- 2차 요약(블로그가 위키를 옮겨 적은 것) 인용 금지. 1차 출처를 열어라.
-- 접근이 막히면(로그인 벽·봇 차단) 우회했다고 쓰지 말고 **막힌 사실과 대체 소스**를
-  문서 머리에 적어라.
-- 결과를 `docs/research/<접두사>-<주제>.md` 에 **파일로 써라.** 반환값만으로는 안 된다.
-- 예산이 모자라 못 끝냈으면 **어디까지 했고 무엇이 남았는지** 마지막에 적어라.
-```
-
-마지막 줄이 핵심이다. 이게 있으면 "못 찾았다"와 "예산이 없었다"를 구분할 수 있다.
-
----
-
-## 6. 돌아온 뒤
-
-- **반환값을 믿지 말고 파일을 확인한다.** 파일이 없으면 그 조사는 없던 것이다
-- 수치는 `external-data-claim` 스킬의 절차로 대조한다. 조사 결과도 외부 데이터다
-- 등급을 붙인다: `verified` / `consensus` / `disputed` / 미검증(앱에 안 넣음)
-- 이견이 나오면 **양쪽 다 남긴다.** 한쪽만 남기면 다음 사람이 같은 조사를 반복한다
-- 되돌리기 어려운 결정이면 ADR 을 쓴다. **기각한 대안과 사유**가 ADR 의 절반이다
-
-## 반려 기준
-
-- [ ] 에이전트마다 검색 상한을 **숫자로** 줬는가
-- [ ] 아는 URL 을 WebFetch/curl 로 돌렸는가 (검색으로 낭비하지 않았는가)
-- [ ] 에이전트마다 출력 파일이 하나씩이고 서로 안 겹치는가
-- [ ] 인접 에이전트가 무엇을 맡았는지 프롬프트에 적었는가
-- [ ] "예산이 모자라면 남은 것을 적어라"를 넣었는가
-- [ ] 돌아온 뒤 `docs/research/` 에 파일이 실제로 있는가
-- [ ] 판단이 필요한 일을 수집 담당 경량 에이전트에게 맡기지 않았는가

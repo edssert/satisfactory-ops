@@ -1,6 +1,6 @@
 ---
 name: no-js-fallback
-description: Keeps every number and every sentence in the HTML itself, with JavaScript and scroll-driven CSS adding motion only — never producing the value. Provides a checker that reloads the built page with JavaScript disabled and fails when text is missing, when a data attribute disagrees with what is on screen, or when an animation-driven CSS counter supplies a number. Use when adding a counter, ticker, progress bar, reveal, parallax, or any scroll-linked effect, when writing animation-timeline or @property CSS, or when a value renders as 0 or blank. Triggers on 카운터, 숫자 애니메이션, 스크롤 연동, animation-timeline, 점진적 향상, "0 으로 보인다", "값이 안 나온다".
+description: Preserves semantic values and useful fallback states when JavaScript or motion is unavailable without limiting advanced animation or interactive workspaces. Use for counters, progress, scroll motion, reveals, hydrated values, route workspaces, and no-JS/reduced-motion validation.
 license: MIT
 ---
 
@@ -51,17 +51,17 @@ license: MIT
 }
 ```
 
-① `@supports` ② `prefers-reduced-motion` ③ **미지원 상태가 정상 상태**.
-셋 중 하나라도 빠지면 어딘가에서 화면이 빈다. (`modern-web-baseline` 스킬 참조 —
-스크롤 구동 애니메이션은 2026-08 기준 전역 85%, **점진적 향상으로만** 쓴다.)
+① `@supports` ② `prefers-reduced-motion` ③ **미지원 상태의 의미가 완전함**.
+고급 GSAP·WebGL·스크롤 장면을 사용해도 되며, 미지원·축소 모션 상태에는 같은 값과 과업으로 진입할 수
+있는 정적 표현을 제공한다.
 
 ### 3. 애니메이션이 건드려도 되는 것
 
 | 써도 됨 | 쓰면 안 됨 |
 |---|---|
 | `transform` · `opacity` · `filter` · 색 | `content` · `counter-increment` |
-| 이미 자리를 잡은 요소의 크기 변형 | 레이아웃(`display`·`width`가 0 에서 시작) |
-| 나타남/사라짐의 **속도** | 나타남/사라짐의 **여부** |
+| 이미 존재하는 콘텐츠의 변형·클립·전환 | 값 자체를 `content`나 런타임 계산에만 저장 |
+| 스크롤 장면의 단계적 등장·퇴장 | JS 실패 시 콘텐츠와 과업 진입점이 영구히 없음 |
 
 기준: **애니메이션이 0% 에서 영원히 멈춰도 화면이 온전한가?** 아니면 고쳐라.
 
@@ -93,12 +93,11 @@ JS 를 **끈** 브라우저로 같은 화면을 열어 네 가지를 본다:
 
 ---
 
-## 아일랜드는 어디까지 하나
+## 문서와 전문 작업공간의 경계
 
-ADR-0009: 문서 화면은 아일랜드를 쓰지 않는다. 아일랜드는 **상태를 소유하는 최소 단위**만.
-
-그래서 아일랜드가 붙기 전 화면이 곧 "JS 없는 화면"이다. 아일랜드가 쓸 데이터는 페이지가
-서브셋으로 만들어 props 로 넘기므로, **정적 HTML 에 이미 값이 들어 있어야 정상**이다.
+D-006에 따라 문서·레퍼런스 화면은 HTML 우선이고, 계산기·설계판·지도·세이브 진단은 라우트 단위
+Preact 작업공간이 될 수 있다. 작업공간을 억지로 작은 아일랜드로 쪼개지 않는다. 대신 초기 HTML에는
+화면 목적, 로딩·오류 상태, 데이터 출처, 기본 조작 진입점처럼 JS 없이도 유용한 의미를 남긴다.
 `nojs.mjs` 의 3번(글자량) 검사가 그 경계를 지킨다 — 아일랜드가 내용을 만들고 있으면
 비율이 떨어진다.
 
@@ -108,7 +107,7 @@ ADR-0009: 문서 화면은 아일랜드를 쓰지 않는다. 아일랜드는 **�
 
 ---
 
-## 반려 기준
+## 완료 증거
 
 - [ ] 화면에 나오는 수가 **HTML 안의 글자**인가. CSS 나 JS 가 만들고 있지 않은가
 - [ ] 그 수에 `data-tick`(또는 같은 관례)이 붙어 빌드 검사가 볼 수 있는가
