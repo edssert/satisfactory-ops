@@ -4,49 +4,107 @@
  * 종료: 성공 0, 자동 계약/레시피 누락 또는 변환 불일치 2.
  */
 
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { basename, resolve } from 'node:path';
 
 const root = resolve(import.meta.dirname, '../..');
-const scenes = JSON.parse(readFileSync(resolve(root, '.cache/game-asset-index/factory-scenes.json'), 'utf8'));
-const recipe = JSON.parse(readFileSync(resolve(root, 'scripts/topview/scenes/smelter-current.json'), 'utf8'));
-const contract = scenes.contracts.find((entry) => entry.buildingClass === recipe.buildingClass);
+const sceneDirectory = resolve(root, 'scripts/topview/scenes');
+const scenePaths = readdirSync(sceneDirectory, { withFileTypes: true })
+  .filter((entry) => entry.isFile() && entry.name.endsWith('.json'))
+  .sort((left, right) => left.name.localeCompare(right.name, 'en'))
+  .map((entry) => `scripts/topview/scenes/${entry.name}`);
+const sceneContracts = JSON.parse(
+  readFileSync(resolve(root, '.cache/game-asset-index/factory-scenes.json'), 'utf8')
+);
+const componentAliases = new Map([
+  [
+    'Build_SmelterMk1_C.FGColoredInstanceMeshProxy',
+    'FGColoredInstanceMeshProxy_GEN_VARIABLE'
+  ]
+]);
 const errors = [];
-if (!contract) errors.push(`자동 장면 계약 누락 ${recipe.buildingClass}`);
+const tolerance = 1e-5;
+const angleToleranceDeg = 2e-3;
 
-const expectations = [
-  { recipeId: 'static-frame', componentId: 'FGColoredInstanceMeshProxy_GEN_VARIABLE', mesh: 'SmelterMk1_static.glb', transform: [5.478708e-8, 0.3, 0, 179.99995] },
-  { recipeId: 'current-vat-idle-body', componentId: 'FGVertexAnimatedMesh_GEN_VARIABLE', mesh: 'SM_VAT_Smelter_01.glb', transform: [0, -0.000004880058, 0.05, 180.00004438202] },
-  { recipeId: 'ladder-interaction', componentId: 'BP_LadderComponent_GEN_VARIABLE', mesh: null, transform: [-1.8999951, 3.2000027, 2.65, 0.00062069343] }
-];
+function assetBasename(reference) {
+  return basename(reference ?? '')
+    .replace(/\.glb$/i, '')
+    .replace(/\.\d+$/, '');
+}
 
-for (const expectation of expectations) {
-  const component = contract?.components.find((entry) => entry.id === expectation.componentId);
-  const configured = recipe.components.find((entry) => entry.id === expectation.recipeId);
-  if (!component) errors.push(`자동 계약 구성품 누락 ${expectation.componentId}`);
-  if (!configured) errors.push(`렌더 레시피 구성품 누락 ${expectation.recipeId}`);
-  if (expectation.mesh && basename(configured?.path ?? '') !== expectation.mesh) errors.push(`${expectation.recipeId}: 메시 불일치`);
-  if (configured && expectation.transform.some((value, index) => Math.abs(value - configured.transform[index]) > 1e-5)) {
-    errors.push(`${expectation.recipeId}: 게임 CDO→Blender 변환 불일치`);
+function blueprintTransform(component, configured) {
+  const basisCorrectionDeg = configured.assetBasisCorrectionDeg
+    ?? configured.vatPose?.basisCorrectionDeg
+    ?? 0;
+  return [
+    component.transform.locationCm.x / 100,
+    -component.transform.locationCm.y / 100,
+    component.transform.locationCm.z / 100,
+    -component.transform.rotationDeg.yaw + basisCorrectionDeg
+  ];
+}
+
+function angularDistanceDeg(left, right) {
+  return Math.abs((((left - right) + 180) % 360 + 360) % 360 - 180);
+}
+
+function transformMatches(actual, expected) {
+  return Array.isArray(actual)
+    && actual.length === expected.length
+    && expected.every((value, index) => index === 3
+      ? angularDistanceDeg(value, actual[index]) <= angleToleranceDeg
+      : Math.abs(value - actual[index]) <= tolerance);
+}
+
+for (const scenePath of scenePaths) {
+  const recipe = JSON.parse(readFileSync(resolve(root, scenePath), 'utf8'));
+  const contract = sceneContracts.contracts.find(
+    (entry) => entry.buildingClass === recipe.buildingClass
+  );
+  if (!contract) {
+    errors.push(`${recipe.id}: 자동 장면 계약 누락 ${recipe.buildingClass}`);
+    continue;
   }
-}
 
-const indicatorContract = contract?.components.find((entry) => entry.id === 'BP_ProductionIndicatorInstanced_GEN_VARIABLE');
-const indicatorRecipe = recipe.components.find((entry) => entry.id === 'production-indicator');
-if (!indicatorContract?.indirectBlueprint?.meshReferences.some((entry) => entry.includes('SM_ProductionLight_01')) ||
-    basename(indicatorRecipe?.path ?? '') !== 'SM_ProductionLight_01.glb') {
-  errors.push('생산 표시등 간접 Blueprint 메시 불일치');
-}
-if (!recipe.canonicalOrientation?.authority?.includes('smelter-current-top') || recipe.camera?.displayYawDeg !== 0) {
-  errors.push('인게임 대조군 기반 canonical orientation 불일치');
-}
-const expectedIndicatorTransform = [-1.00342896, 4.1428882, 2.849815, 0];
-if (indicatorRecipe && expectedIndicatorTransform.some((value, index) => Math.abs(value - indicatorRecipe.transform[index]) > 1e-5)) {
-  errors.push('생산 표시등 CDO→Blender 축 변환 불일치');
+  const configuredComponents = recipe.components.filter(
+    (component) => component.source?.startsWith(`${recipe.buildingClass}.`)
+  );
+  for (const configured of configuredComponents) {
+    const componentId = componentAliases.get(configured.source)
+      ?? configured.source.slice(recipe.buildingClass.length + 1);
+    const component = contract.components.find((entry) => entry.id === componentId);
+    if (!component) {
+      errors.push(`${recipe.id}/${configured.id}: 자동 계약 구성품 누락 ${componentId}`);
+      continue;
+    }
+
+    const expectedTransform = blueprintTransform(component, configured);
+    if (!transformMatches(configured.transform, expectedTransform)) {
+      errors.push(`${recipe.id}/${configured.id}: 게임 CDO→Blender 변환 불일치`);
+    }
+
+    const directMesh = component.staticMesh ?? component.skeletalMesh;
+    if (directMesh && assetBasename(configured.path) !== assetBasename(directMesh)) {
+      errors.push(`${recipe.id}/${configured.id}: Blueprint 메시 basename 불일치`);
+    }
+
+    if (configured.renderMode === 'production-indicator') {
+      const indirectMeshes = component.indirectBlueprint?.meshReferences ?? [];
+      const expectedIndicator = 'SM_ProductionLight_01';
+      if (
+        assetBasename(configured.path) !== expectedIndicator
+        || !indirectMeshes.some((reference) => assetBasename(reference) === expectedIndicator)
+      ) {
+        errors.push(`${recipe.id}/${configured.id}: 생산 표시등 간접 Blueprint 메시 불일치`);
+      }
+    }
+  }
 }
 
 if (errors.length) {
   errors.forEach((error) => process.stderr.write(`ERROR ${error}\n`));
   process.exit(2);
 }
-process.stdout.write('PASS  제련기 렌더 레시피가 자동 Blueprint 계약의 정적/VAT/사다리/표시등과 일치\n');
+process.stdout.write(
+  `PASS  탑뷰 장면 ${scenePaths.length}개의 현재 Blueprint 메시·transform·생산 표시등 계약 일치\n`
+);

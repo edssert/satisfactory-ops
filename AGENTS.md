@@ -88,9 +88,10 @@ npm run dev
 | `npm run dev` | 화면을 눈으로 볼 때 | `Dev server running at http://localhost:4321` | 포트 충돌. `npx astro dev stop` 후 재실행 |
 | `npm run build` | 배포물·스크린샷·커버리지 검사 전 | `79 page(s) built` + 서비스워커 생성 줄 | `gamedata.must()`가 던졌다면 데이터 참조가 깨진 것이다 — 없는 클래스명을 큐레이션 파일에 적었을 확률이 높다 |
 | `npm run data:check` | 커밋 전 항상 | `앱 데이터가 최신입니다` | **exit 1** 입력 없음 · **exit 2** 검증 실패 · **exit 3** `src/data/app/*.json`이 낡음 → `npm run data:app`으로 다시 생성 |
-| `npm test` | `src/lib/` 또는 `tests/`를 건드렸을 때 | `pass 122 / fail 0` | 골든 값 불일치. 수치를 바꾼 게 의도라면 테스트도 같이 고치고 근거를 남긴다 |
+| `npm test` | `src/lib/` 또는 `tests/`를 건드렸을 때 | `pass 152 / fail 0` | 골든 값 불일치. 수치를 바꾼 게 의도라면 테스트도 같이 고치고 근거를 남긴다 |
 | `npm run check` | 타입만 볼 때 | `0 errors` | `npx astro check --minimumSeverity error`와 같다 |
 | `npm run check:skills` | 저장소 스킬을 고쳤을 때 | `PASS 저장소 스킬 ...` | frontmatter·상대 참조가 깨졌거나 폐기 ADR·구형 모델·Claude 전용 검색 설정이 다시 들어왔다 |
+| `npm run check:architecture` | 런타임 TS/TSX 경계를 고쳤을 때 | `no dependency violations found` | 순환, 미해결 import, lib/domain→UI, state→생성 데이터 경계를 위반했다 |
 | `npm run db:check` | 큐레이션 JSON을 고쳤을 때 | `검증 통과.` + 적재 집계 줄 | **exit 2** 외래 키가 깨졌다 — 큐레이션이 참조하는 클래스명이 게임 데이터에 없다 |
 | `npm run check:coverage` | 표·목록·그림을 고쳤을 때 | 모든 줄이 `PASS` | **exit 2** `dist/`가 없다(`npm run build` 먼저) · **exit 3** 화면이 데이터 행을 조용히 떨어뜨렸다. 필터가 행을 버리는 병이라 코드를 고쳐야 한다 |
 | `npm run verify` | **작업을 끝냈다고 말하기 전** | 위 전부가 순서대로 통과 | 앞 단계에서 죽으면 뒷 단계는 아예 안 돈다. 개별 명령으로 좁혀 본다 |
@@ -98,6 +99,9 @@ npm run dev
 | `npm run data:game` / `data:game:ko` / `data:app` | 위를 단계별로 | — | 1단은 새니티 13건, 2단은 검증 18건을 통과해야 파일을 쓴다 |
 | `npm run db` | SQLite로 질의하고 싶을 때 | `.cache/game.db` 생성 | `node scripts/db.mjs "SELECT ..."` 로 임의 질의. DB는 커밋하지 않는다 |
 | `npm run tech` / `npm run assets` | 테크 데이터·아이콘 색인을 다시 만들 때 | — | **`src/data/` 에 파일을 쓴다.** 다른 작업과 겹치면 충돌한다 |
+| `npm run game:assets:check` | 설치본 메시·Blueprint·장면 레시피를 고쳤을 때 | 패키지 6,706건 + 모든 장면 계약 `PASS` | `.cache/game-asset-index/`가 없거나 CDO 메시·transform·생산 표시등이 장면과 어긋났다 |
+| `npm run game:graph` / `game:graph:check` | 설치본 색인·앱 데이터·탑뷰 계약을 연결하거나 검사할 때 | 노드·간선 수 + 드리프트 0 + 런타임 누출 0 | 입력 해시가 바뀌었거나 관계·상태 자산·런타임 경계가 끊겼다. 파생 DB는 `.cache/game-graph.db` |
+| `npm run game:graph:query -- search <검색어>` | 설치 파일·메시·재질·장면·자산을 찾을 때 | 증거 경로가 붙은 JSON 행 | `building`, `trace`, `path` 하위 명령으로 관계를 더 좁힌다 |
 | `npm run test:sw` | 서비스워커를 고쳤을 때 | 런타임 테스트 통과 | 라우트가 자기 문서를 못 돌려주면 캐시 키가 빗나간 것이다 |
 | `npm run test:save <경로.sav>` | 세이브 파서를 고쳤을 때 | 브라우저에서 실제 `.sav`를 먹여 본다 | 경로를 안 주면 `[실패] 세이브 파일 경로를 주세요` |
 | `npm run font` | 서체를 바꿀 때 | 서브셋 생성 | 외부 도구 `pyftsubset`(fonttools)이 PATH에 있어야 한다 |
@@ -206,6 +210,7 @@ Claude Code는 이것을 자동으로 불러오지만, **다른 에이전트도 
 | `no-js-fallback` | 카운터·프로그레스 바·스크롤 연동 효과를 넣을 때, 값이 `0`이나 빈칸으로 보일 때 | `node .claude/skills/no-js-fallback/scripts/nojs.mjs <경로>` — JS를 끄고 열어 값이 남는지 본다 |
 | `external-data-claim` | `.sav`를 파싱할 때, `Docs.json`의 새 필드를 쓸 때, "이 필드는 X를 뜻한다"고 쓰려 할 때 | `node .claude/skills/external-data-claim/scripts/field-scope.mjs <필드명> [--gen]` — 그 필드를 가진 nativeClass를 센다. **소유자가 둘 이상이면 exit 3**(오류가 아니라 "좁혀야 함"이라는 판정이다) |
 | `research-fanout` | 넓은 기술·논문·원 제작자 조사가 첫 후보에 수렴할 때. 병렬화는 명시적 권한이 있을 때만 | 없음 (능력 수집·정본 통합 절차) |
+| `graph-engineering` | 설치본 증거 관계, 공정·물류·전력·해금 그래프를 추가·변경할 때 | 목적별 projection 선언 → 포트·edge ID·출처 보존 → 속성·드리프트·아키텍처 검사 |
 | `topview-asset-pipeline` | 게임 기기 메시·재질·Blueprint를 조립하거나 제품 탑뷰를 생성·수정할 때 | `node scripts/topview/run-validated-render.mjs <scene.json> <output-dir> [--baseline=<approved.png>]` — 직접 제품 렌더를 차단하고 ORTHO/-Z·하드 코너를 독립 검사한 영수증 생성 |
 
 사용자 전역 `~/.codex/skills/`에는 다음 자기개선 스킬이 있다. 저장소 클론에 포함되지는 않으므로 없는

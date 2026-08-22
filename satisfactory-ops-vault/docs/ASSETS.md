@@ -132,8 +132,15 @@ Anders가 공개한 제작 원리는 `게임 자산 추출 → glTF → Blender 
 
 전수 색인은 `.cache/game-asset-index/factory-assets.ndjson`, 자동 장면 계약은
 `.cache/game-asset-index/factory-scenes.json`에 생성한다. `scripts/game-assets/query-factory-assets.mjs`는
-건물 구성품과 재질 부모 체인을 질의하고, `check-factory-assets.mjs`와 `check-scene-recipe.mjs`는 제련기
-필수 구성품·VAT 루트 재질·CDO 변환을 검사한다. 생성 캐시는 커밋하지 않는다.
+건물 구성품과 재질 부모 체인을 질의한다. `check-factory-assets.mjs`는 전수 인덱스와 자동 계약을 검사하고,
+`check-scene-recipe.mjs`는 `scripts/topview/scenes/*.json`을 자동 열거해 현재 Blueprint 메시·CDO
+`(X,-Y,Z,-yaw)` 변환·간접 생산 표시등을 대조한다. 위치 오차는 1e-5m, Unreal rotator의 ±180° 래핑은
+원형 거리 0.002° 이내만 허용한다.
+
+`scripts/game-assets/game-graph.mjs`는 위 두 캐시와 생성 앱 데이터·장면 레시피·탑뷰 매니페스트를
+`.cache/game-graph.db`로 연결한다. `game:graph:query`의 `search`, `building`, `trace`, `path`로
+패키지→컴포넌트→메시·재질→장면→승인 자산의 증거를 찾고, `game:graph:check`로 입력 해시 드리프트,
+dangling 관계, 상태 자산 4종과 참조 전용 자산의 런타임 누출을 막는다. 모든 생성 캐시는 커밋하지 않는다.
 
 채굴기 Mk.1은 현재 게임 메시, 실제 Output0 좌표, Mk.1 벨트 스텁, 수직 정사영과 하드 점유 코너 계약을
 통과해 `approved`다. 자동화 바이오매스 연소기는 아직 `candidate`다. 구조 검사는 파일 SHA-256, 양수
