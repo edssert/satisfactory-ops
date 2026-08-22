@@ -59,8 +59,8 @@ $ npm run data:check
 --check: 앱 데이터가 최신입니다. 파일을 쓰지 않았습니다.
 
 $ npm run build
-[build] 79 page(s) built in 3.63s
-[sfops-service-worker] 서비스워커 생성: 819개 파일 / 15.00MB 프리캐시 (버전 ...)
+[build] 80 page(s) built
+[sfops-service-worker] 서비스워커 생성: <파일 수>개 / <크기>MB 프리캐시 (버전 ...)
 [build] Complete!
 ```
 
@@ -86,12 +86,13 @@ npm run dev
 |---|---|---|---|
 | `npm ci` | 클론 직후 | — | Node 22 미만이면 `engines` 경고 |
 | `npm run dev` | 화면을 눈으로 볼 때 | `Dev server running at http://localhost:4321` | 포트 충돌. `npx astro dev stop` 후 재실행 |
-| `npm run build` | 배포물·스크린샷·커버리지 검사 전 | `79 page(s) built` + 서비스워커 생성 줄 | `gamedata.must()`가 던졌다면 데이터 참조가 깨진 것이다 — 없는 클래스명을 큐레이션 파일에 적었을 확률이 높다 |
+| `npm run build` | 배포물·스크린샷·커버리지 검사 전 | `80 page(s) built` + 서비스워커 생성 줄 | `gamedata.must()`가 던졌다면 데이터 참조가 깨진 것이다 — 없는 클래스명을 큐레이션 파일에 적었을 확률이 높다 |
 | `npm run data:check` | 커밋 전 항상 | `앱 데이터가 최신입니다` | **exit 1** 입력 없음 · **exit 2** 검증 실패 · **exit 3** `src/data/app/*.json`이 낡음 → `npm run data:app`으로 다시 생성 |
 | `npm test` | `src/lib/` 또는 `tests/`를 건드렸을 때 | `pass 152 / fail 0` | 골든 값 불일치. 수치를 바꾼 게 의도라면 테스트도 같이 고치고 근거를 남긴다 |
 | `npm run check` | 타입만 볼 때 | `0 errors` | `npx astro check --minimumSeverity error`와 같다 |
 | `npm run check:skills` | 저장소 스킬을 고쳤을 때 | `PASS 저장소 스킬 ...` | frontmatter·상대 참조가 깨졌거나 폐기 ADR·구형 모델·Claude 전용 검색 설정이 다시 들어왔다 |
 | `npm run check:architecture` | 런타임 TS/TSX 경계를 고쳤을 때 | `no dependency violations found` | 순환, 미해결 import, lib/domain→UI, state→생성 데이터 경계를 위반했다 |
+| `npm run check:hygiene` | 렌더·브라우저·테스트 뒤와 커밋 전 | 루트 임시 파일·비ASCII 폴더·테스트 번들 누출 0 | `debug.log`·`nul`·깨진 썸네일 경로·목적 폴더 밖 `output` 파일이 남았다 |
 | `npm run db:check` | 큐레이션 JSON을 고쳤을 때 | `검증 통과.` + 적재 집계 줄 | **exit 2** 외래 키가 깨졌다 — 큐레이션이 참조하는 클래스명이 게임 데이터에 없다 |
 | `npm run check:coverage` | 표·목록·그림을 고쳤을 때 | 모든 줄이 `PASS` | **exit 2** `dist/`가 없다(`npm run build` 먼저) · **exit 3** 화면이 데이터 행을 조용히 떨어뜨렸다. 필터가 행을 버리는 병이라 코드를 고쳐야 한다 |
 | `npm run verify` | **작업을 끝냈다고 말하기 전** | 위 전부가 순서대로 통과 | 앞 단계에서 죽으면 뒷 단계는 아예 안 돈다. 개별 명령으로 좁혀 본다 |
@@ -141,6 +142,7 @@ node .claude/skills/no-js-fallback/scripts/nojs.mjs guide        # JS 끄고 값
 | `satisfactory-ops-vault/` | 독립 Obsidian 볼트. 제품·기능·기술 정본, 결정, RFC, Runbook, Research | ○ (`docs/DOCUMENTATION.md` 적용) |
 | `.claude/skills/` | 이 저장소 전용 검사 절차 + 스크립트 | ○ |
 | `legacy/` | 이식 전 단일 HTML. 배포되지 않는다 | 참고용 |
+| `output/` | 브라우저·시각 검수 증거. `playwright/`, `archive/<날짜-목적>/`처럼 목적별 하위 폴더만 둔다 | 생성물. gitignore 대상 |
 | `dist/`, `.cache/`, `.astro/`, `.tmp-research/` | 생성물. gitignore 대상 | ✕ |
 
 ### 아일랜드 경계 (D-006)

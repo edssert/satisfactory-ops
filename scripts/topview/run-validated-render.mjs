@@ -48,6 +48,10 @@ if (!existsSync(blender)) {
   process.exit(2);
 }
 mkdirSync(outputDir, { recursive: true });
+const blenderRuntimeRoot = resolve(root, '.cache/blender-runtime');
+const blenderUserResources = resolve(blenderRuntimeRoot, 'user-resources');
+const blenderXdgCache = resolve(blenderRuntimeRoot, 'xdg-cache');
+for (const path of [blenderUserResources, blenderXdgCache]) mkdirSync(path, { recursive: true });
 const slug = scene.id.replace(/[^a-z0-9-]+/gi, '-').toLowerCase();
 const raw = resolve(outputDir, `${slug}.raw.png`);
 const blend = resolve(outputDir, `${slug}.blend`);
@@ -56,7 +60,12 @@ const comparison = resolve(outputDir, `${slug}.comparison.png`);
 const receipt = resolve(outputDir, `${slug}.receipt.json`);
 
 function run(command, args) {
-  const result = spawnSync(command, args, { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+  const result = spawnSync(command, args, {
+    cwd: root,
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe'],
+    env: { ...process.env, BLENDER_USER_RESOURCES: blenderUserResources, XDG_CACHE_HOME: blenderXdgCache },
+  });
   process.stdout.write(result.stdout ?? '');
   process.stderr.write(result.stderr ?? '');
   if (result.status !== 0) process.exit(3);

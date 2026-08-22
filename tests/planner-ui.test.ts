@@ -1,7 +1,7 @@
 /** 검증형 설계판의 핵심 조작을 happy-dom에서 실제로 누른다. */
 import { strict as assert } from 'node:assert';
-import test, { before } from 'node:test';
-import { readFileSync, writeFileSync } from 'node:fs';
+import test, { after, before } from 'node:test';
+import { readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { transformSync } from 'esbuild';
 import { Window } from 'happy-dom';
 import { pathToFileURL } from 'node:url';
@@ -85,6 +85,11 @@ before(async () => {
   foundationCellOrigin = plannerModule.foundationCellOrigin;
   transportTurnPath = plannerModule.transportTurnPath;
   doc = win.document as unknown as Document;
+});
+
+after(() => {
+  win?.close();
+  rmSync('src/components/.planner-test.mjs', { force: true });
 });
 
 function mount() {

@@ -128,7 +128,9 @@ Anders가 공개한 제작 원리는 `게임 자산 추출 → glTF → Blender 
 제품용 수직 탑뷰는 렌더러를 직접 호출하지 않고 `scripts/topview/run-validated-render.mjs` 하네스로만
 생성한다. 하네스는 Blender 예외 종료 코드, 카메라 `ORTHO`/월드 `-Z`, `frontTiltDeg=0`, 게임 하드
 클리어런스 코너 네 절점과 기준본 해시를 검사하고 `.cache/topview/validated/`에 승인 전 후보와 영수증을
-격리한다. 검증 영수증만으로 public 자산이나 완료 이미지로 승격하지 않는다.
+격리한다. Blender 사용자 리소스와 캐시는 `.cache/blender-runtime/`으로 고정해 저장소 루트에 깨진
+썸네일 경로나 로케일 의존 폴더가 생기지 않게 한다. `npm run check:hygiene`가 이 경계를 검증한다.
+검증 영수증만으로 public 자산이나 완료 이미지로 승격하지 않는다.
 
 전수 색인은 `.cache/game-asset-index/factory-assets.ndjson`, 자동 장면 계약은
 `.cache/game-asset-index/factory-scenes.json`에 생성한다. `scripts/game-assets/query-factory-assets.mjs`는
