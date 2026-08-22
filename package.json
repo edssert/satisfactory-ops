@@ -21,6 +21,7 @@
     "test": "node --max-old-space-size=1024 --test tests/solver.test.ts tests/planner.test.ts tests/planner-ui.test.ts tests/sw.test.ts tests/sw-runtime.test.ts tests/recipe-select.test.ts tests/layout.test.ts tests/floorplan.test.ts tests/module-plan.test.ts tests/diagnose.test.ts tests/factory-domain.test.ts tests/persist.test.ts",
     "verify": "npm run data:check && npm test && astro check --minimumSeverity error && npm run check:docs && npm run check:skills && npm run check:tokens && npm run check:assets && npm run check:guide && npm run db:check && npm run build && npm run test:a11y && npm run test:nojs && npm run test:scroll && npm run test:theme && npm run test:guide-ui && npm run test:responsive && npm run check:coverage",
     "test:sw": "node --test tests/sw-runtime.test.ts",
+    "test:planner-ui": "node scripts/verify-planner-ui.mjs",
     "test:nojs": "node .claude/skills/no-js-fallback/scripts/nojs.mjs \"\" && node .claude/skills/no-js-fallback/scripts/nojs.mjs guide",
     "test:scroll": "node scripts/verify-scroll.mjs",
     "test:theme": "node scripts/verify-theme.mjs",

@@ -300,6 +300,8 @@ for (const cell of materialProfile.cells ?? []) {
 
 const confidenceValues = new Set(['verified', 'consensus', 'disputed', 'unsourced']);
 const featureStatuses = new Set(['present', 'present-but-projection-pending', 'present-but-material-pending', 'pending-final-validation', 'pending-vat', 'pending-isometric']);
+const close = (left, right, tolerance = 1e-5) => Math.abs(left - right) <= tolerance;
+const normalizedAngle = (degrees) => ((degrees + 180) % 360 + 360) % 360 - 180;
 for (const recipeEntry of sceneRecipes) {
   const recipe = recipeEntry.data;
   if (recipe.$schemaVersion !== 1 || !recipe.id || !recipe.buildingClass) {
@@ -308,6 +310,7 @@ for (const recipeEntry of sceneRecipes) {
   }
   const footprint = recipe.footprint;
   if (!footprint || ![footprint.widthM, footprint.lengthM, footprint.heightM].every((value) => Number.isFinite(value) && value > 0) ||
+      (footprint.groundZM !== undefined && !Number.isFinite(footprint.groundZM)) ||
       !confidenceValues.has(footprint.confidence) || footprint.cornerEnvelope !== 'game-hard-clearance') {
     errors.push(`${recipe.id}: 실축 점유영역 오류`);
   }
@@ -334,6 +337,43 @@ for (const recipeEntry of sceneRecipes) {
     if (component.renderMode === 'excluded' && !component.reason) errors.push(`${recipe.id}/${component.id}: 제외 근거 누락`);
   }
   if (!enabledBodies) errors.push(`${recipe.id}: 활성 본체 메시 없음`);
+  const portIds = new Set();
+  for (const port of recipe.portVisibility ?? []) {
+    if (!port.id || portIds.has(port.id)) errors.push(`${recipe.id}: 포트 가시성 중복/빈 ID ${port.id}`);
+    portIds.add(port.id);
+    const position = port.positionM;
+    const normal = port.outwardNormalM;
+    const stub = (recipe.components ?? []).find((component) => component.id === port.stubComponent);
+    if (!['input', 'output'].includes(port.direction) || !Array.isArray(position) || position.length !== 3 || !position.every(Number.isFinite) ||
+        !Array.isArray(normal) || normal.length !== 3 || !normal.every(Number.isFinite) ||
+        !close(Math.hypot(...normal), 1) || !close(normal[2], 0) || !stub || stub.renderMode !== 'body' ||
+        !Number.isFinite(port.stubSourceLengthM) || port.stubSourceLengthM <= 0 || port.extendToHardBoundary !== true ||
+        port.occlusionPolicy !== 'localized-transparency') {
+      errors.push(`${recipe.id}/${port.id}: 실제 벨트 포트 가시성 계약 오류`);
+      continue;
+    }
+    const [componentX, componentY, componentZ, componentYaw] = stub.transform;
+    const expectedYaw = Math.atan2(normal[1], normal[0]) * 180 / Math.PI;
+    const [centerX, centerY] = footprint.centerM ?? [0, 0];
+    const xMin = centerX - footprint.widthM / 2;
+    const xMax = centerX + footprint.widthM / 2;
+    const yMin = centerY - footprint.lengthM / 2;
+    const yMax = centerY + footprint.lengthM / 2;
+    const distances = [];
+    if (normal[0] > 0) distances.push((xMax - position[0]) / normal[0]);
+    if (normal[0] < 0) distances.push((xMin - position[0]) / normal[0]);
+    if (normal[1] > 0) distances.push((yMax - position[1]) / normal[1]);
+    if (normal[1] < 0) distances.push((yMin - position[1]) / normal[1]);
+    const expectedLength = Math.min(...distances.filter((value) => value >= 0));
+    const renderedLength = port.stubSourceLengthM * stub.scale[0];
+    if (![componentX, componentY, componentZ].every((value, index) => close(value, position[index])) ||
+        !close(normalizedAngle(componentYaw - expectedYaw), 0) || !close(renderedLength, expectedLength) ||
+        !close(stub.scale[1], 1) || !close(stub.scale[2], 1)) {
+      errors.push(`${recipe.id}/${port.id}: 벨트 스텁 축·좌표·길이 불일치 ` +
+        `transform=${stub.transform.join(',')} scale=${stub.scale.join(',')} expectedYaw=${expectedYaw} expectedLength=${expectedLength}`);
+    }
+  }
+  if (!(recipe.portVisibility ?? []).length) errors.push(`${recipe.id}: 실제 포트 가시성 계약 누락`);
   for (const [channel, mappings] of Object.entries(recipe.materials ?? {})) {
     if (!['albedo', 'ao', 'normal', 'reflection', 'stateMask'].includes(channel)) continue;
     for (const [materialName, rawPath] of Object.entries(mappings)) {
@@ -370,7 +410,8 @@ for (const recipeEntry of sceneRecipes) {
       }
     }
   }
-  const staticMaterialName = recipe.buildingClass === 'Build_SmelterMk1_C' ? 'MI_SmelterMk1_01' : 'MI_ConstructorMk1';
+  const staticMaterialName = recipe.materials?.staticBaseMaterial
+    ?? (recipe.buildingClass === 'Build_SmelterMk1_C' ? 'MI_SmelterMk1_01' : 'MI_ConstructorMk1');
   if (!Array.isArray(recipe.materials?.normalOnly) || recipe.materials?.baseColor?.Decal_Normal !== recipe.materials?.baseColor?.[staticMaterialName]) {
     errors.push(`${recipe.id}: 지연 normal 데칼 중립 underlay 계약 누락`);
   }

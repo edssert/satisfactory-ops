@@ -1,0 +1,139 @@
+{
+  "$schemaVersion": 1,
+  "id": "miner-mk1-current-cl-502094",
+  "buildingClass": "Build_MinerMk1_C",
+  "status": "validated-current-game",
+  "geometryAuthority": "game-install-cl-502094",
+  "footprint": {
+    "widthM": 6,
+    "lengthM": 14,
+    "heightM": 16.3,
+    "groundZM": 0,
+    "centerM": [0, -2],
+    "cornerEnvelope": "game-hard-clearance",
+    "confidence": "verified"
+  },
+  "components": [
+    {
+      "id": "static-frame",
+      "renderMode": "body",
+      "path": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/MinerMK1/Mesh/MinerMk1_static.glb",
+      "transform": [0, 0, 0, 0],
+      "source": "Build_MinerMk1_C.FGColoredInstanceMeshProxy_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "skeletal-body",
+      "renderMode": "body",
+      "path": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/MinerMK1/Mesh/SK_MinerMk1.glb",
+      "transform": [0, 0, 0, 0],
+      "poseStatus": "base-pose-verified",
+      "source": "Build_MinerMk1_C.MainMesh_skl_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "output0-belt-stub-mk1",
+      "renderMode": "body",
+      "path": ".cache/game-asset-export/conveyor-mk1/FactoryGame/Content/FactoryGame/Buildable/Factory/ConveyorBeltMk1/Mesh/SM_ConveyorBelt_Mk1.glb",
+      "transform": [0, -8, 1, -90],
+      "scale": [0.5, 1, 1],
+      "source": "SM_ConveyorBelt_Mk1 + Output0 verified port normal",
+      "confidence": "verified"
+    },
+    {
+      "id": "production-indicator",
+      "renderMode": "production-indicator",
+      "path": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/-Shared/ProductionIndicator/Mesh/SM_ProductionLight_01.glb",
+      "transform": [0.000013675, -7.6602576, 2.8210806, 180.00053],
+      "source": "Build_MinerMk1_C.BP_ProductionIndicatorInstanced_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "ladder-interaction",
+      "renderMode": "metadata-only",
+      "enabled": false,
+      "transform": [2.499967, -3.050001, 4.5, -179.99947],
+      "source": "Build_MinerMk1_C.Ladder_1_GEN_VARIABLE",
+      "confidence": "verified"
+    }
+  ],
+  "materials": {
+    "staticBaseMaterial": "MI_Factory_Base_01",
+    "albedo": {
+      "MI_Factory_Base_01": ".cache/topview/satisfactory-material-atlas.png",
+      "MI_ConveyorBelt_Mk1_01": ".cache/game-asset-export/conveyor-mk1/FactoryGame/Content/FactoryGame/Buildable/Factory/ConveyorBeltMk1/Texture/TX_ConveyorBeltMk1_BC.png",
+      "MI_ProdLight": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/-Shared/ProductionIndicator/Textures/TX_ProductionLight_01_Albedo.png",
+      "DecalColor_Masked": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Alb.png"
+    },
+    "ao": {},
+    "normal": {
+      "MI_Factory_Base_01": ".cache/topview/satisfactory-normal-atlas.png",
+      "MI_ConveyorBelt_Mk1_01": ".cache/game-asset-export/conveyor-mk1/FactoryGame/Content/FactoryGame/Buildable/Factory/ConveyorBeltMk1/Texture/TX_ConveyorBeltMk1_N.png",
+      "DecalColor_Masked": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Nor.png",
+      "Decal_Normal": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/PanelAtlas_Nor.png"
+    },
+    "reflection": {
+      "MI_Factory_Base_01": ".cache/topview/satisfactory-reflection-atlas.png",
+      "MI_ConveyorBelt_Mk1_01": ".cache/game-asset-export/conveyor-mk1/FactoryGame/Content/FactoryGame/Buildable/Factory/ConveyorBeltMk1/Texture/TX_ConveyorBeltMk1_MREO.png",
+      "MI_ProdLight": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/-Shared/ProductionIndicator/Textures/TX_ProductionLight_01_Reflection.png"
+    },
+    "stateMask": {
+      "MI_ProdLight": ".tmp-research/cue4parse-pilot/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/-Shared/ProductionIndicator/Textures/TX_ProductionLight_01_Reflection.png"
+    },
+    "paint": {},
+    "baseColor": { "MI_Factory_Base_01": "#687787", "Decal_Normal": "#687787" },
+    "alpha": [],
+    "pbr": ["MI_Factory_Base_01", "MI_ConveyorBelt_Mk1_01", "DecalColor_Masked", "Decal_Normal"],
+    "normalOnly": [],
+    "emissiveAccent": ["DecalColor_Masked"],
+    "emissiveGeometrySelectors": [],
+    "state": { "color": "#00ff00", "strength": 5 }
+  },
+  "camera": { "projection": "orthographic-top", "frontTiltDeg": 0, "displayYawDeg": 0, "confidence": "verified" },
+  "stateIndicator": { "pointM": [0.000013675, -7.97137], "maskRadiusNormalized": 0.058 },
+  "portVisibility": [
+    {
+      "id": "Output0",
+      "direction": "output",
+      "positionM": [0, -8, 1],
+      "outwardNormalM": [0, -1, 0],
+      "stubComponent": "output0-belt-stub-mk1",
+      "stubSourceLengthM": 2,
+      "extendToHardBoundary": true,
+      "occlusionPolicy": "localized-transparency"
+    }
+  ],
+  "lighting": {
+    "groundAo": false,
+    "shadowMode": "alpha-near-and-wide-postprocess",
+    "aoLayers": 2,
+    "bloom": true,
+    "sun": true,
+    "keyEnergy": 1.7,
+    "fillEnergy": 1.0,
+    "worldStrength": 0.42,
+    "exposure": 1.1,
+    "method": "현재 게임 PBR + 실제 Mk.1 출력 벨트 스텁",
+    "confidence": "verified"
+  },
+  "assemblyFeatures": [
+    { "id": "static-frame", "owner": "static-frame", "status": "present" },
+    { "id": "skeletal-body", "owner": "skeletal-body", "status": "present" },
+    { "id": "production-indicator", "owner": "production-indicator", "status": "present" },
+    { "id": "output0-belt-stub", "owner": "output0-belt-stub-mk1", "status": "present" }
+  ],
+  "materialChecks": [
+    { "id": "factory-uv-sheet", "status": "present" },
+    { "id": "conveyor-mk1-pbr", "status": "present" }
+  ],
+  "cameraLightingChecks": [
+    { "id": "runtime-orthographic-top", "status": "present" },
+    { "id": "hard-footprint-ground-z", "status": "present" }
+  ],
+  "pipelineAudit": {
+    "repeatedDefectThreshold": 2,
+    "systemicDefectThreshold": 1,
+    "rawVatCandidateAllowed": false,
+    "requiredStages": ["package-graph", "blueprint-components", "asset-basis", "four-isometric-views", "view-feature-matrix", "runtime-top-after-assembly"]
+  }
+}

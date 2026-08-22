@@ -16,7 +16,7 @@ import {
 } from '../domain/factory/editor-state';
 import { drawingPixelSize, factoryDrawingBounds, type DrawingBounds } from '../domain/factory/drawing-bounds';
 import { routeAroundMachines } from '../domain/factory/route';
-import { transportPathParts } from '../domain/factory/transport-geometry';
+import { transportPathParts, type TransportTurnPart } from '../domain/factory/transport-geometry';
 import { validateFactoryPlan } from '../domain/factory/validate';
 import type {
   Box3,
@@ -54,13 +54,6 @@ export interface DrawingRecipe {
 
 interface Props {
   machines: DrawingMachine[];
-  beltImageUrl: string;
-  beltTurnImageUrl: string;
-  beltDirectionImageUrl: string;
-  pipeImageUrl: string;
-  pipeTurnImageUrl: string;
-  liftImageUrl: string;
-  foundationImageUrl: string;
 }
 
 type DragState = {
@@ -259,6 +252,23 @@ function fmt(value: number): string {
   return Number.isInteger(value) ? String(value) : value.toFixed(1);
 }
 
+/** 커서가 들어 있는 8m 셀의 좌상단을 반환한다. 교차점 반올림은 다음 셀로 튀므로 쓰지 않는다. */
+export function foundationCellOrigin(point: Pick<Vec3, 'x' | 'y'>): { x: number; y: number } {
+  return {
+    x: Math.floor(point.x / FOUNDATION) * FOUNDATION,
+    y: Math.floor(point.y / FOUNDATION) * FOUNDATION,
+  };
+}
+
+/** 잘라낸 이미지의 회전 중심에 의존하지 않고 두 연결 방향으로 90° 곡선을 만든다. */
+export function transportTurnPath(turn: TransportTurnPart, radiusM = 2): string {
+  const startX = turn.at.x + turn.connectionA.x * radiusM;
+  const startY = turn.at.y + turn.connectionA.y * radiusM;
+  const endX = turn.at.x + turn.connectionB.x * radiusM;
+  const endY = turn.at.y + turn.connectionB.y * radiusM;
+  return `M ${startX} ${startY} Q ${turn.at.x} ${turn.at.y} ${endX} ${endY}`;
+}
+
 function svgPoint(svg: SVGSVGElement, event: PointerEvent): Vec3 {
   let matrix: DOMMatrix | null = null;
   try { matrix = svg.getScreenCTM?.() ?? null; } catch { matrix = null; }
@@ -313,16 +323,7 @@ function syncTransportRates(routes: TransportRoute[], placements: Placement[]): 
   });
 }
 
-export default function ValidatedFactoryPlanner({
-  machines,
-  beltImageUrl,
-  beltTurnImageUrl,
-  beltDirectionImageUrl,
-  pipeImageUrl,
-  pipeTurnImageUrl,
-  liftImageUrl,
-  foundationImageUrl,
-}: Props) {
+export default function ValidatedFactoryPlanner({ machines }: Props) {
   const byClass = useMemo(() => new Map(machines.map((machine) => [machine.buildingClass, machine])), [machines]);
   const [placements, setPlacements] = useState<Placement[]>([]);
   const [foundations, setFoundations] = useState<FoundationTile[]>([]);
@@ -476,10 +477,14 @@ export default function ValidatedFactoryPlanner({
     [...recipe.ingredients, ...recipe.products].map((part) => [part.item, part.name] as const)
   )))), [machines]);
   const ghostMachine = placementTool?.kind === 'machine' ? byClass.get(placementTool.buildingClass) : undefined;
-  const ghostPoint = cursorWorld ? {
-    x: Math.round(cursorWorld.x / (placementTool?.kind === 'foundation' ? FOUNDATION : SNAP)) * (placementTool?.kind === 'foundation' ? FOUNDATION : SNAP),
-    y: Math.round(cursorWorld.y / (placementTool?.kind === 'foundation' ? FOUNDATION : SNAP)) * (placementTool?.kind === 'foundation' ? FOUNDATION : SNAP),
-  } : null;
+  const ghostPoint = cursorWorld
+    ? placementTool?.kind === 'foundation'
+      ? foundationCellOrigin(cursorWorld)
+      : {
+          x: Math.round(cursorWorld.x / SNAP) * SNAP,
+          y: Math.round(cursorWorld.y / SNAP) * SNAP,
+        }
+    : null;
 
   const viewWidth = 128 / zoom;
   const viewHeight = viewWidth * Math.max(.48, box.height / Math.max(box.width, 1));
@@ -870,7 +875,8 @@ export default function ValidatedFactoryPlanner({
     if (!svg) return;
     const point = svgPoint(svg, event as unknown as PointerEvent);
     if (placementTool.kind === 'foundation') {
-      addFoundation(Math.round(point.x / FOUNDATION) * FOUNDATION, Math.round(point.y / FOUNDATION) * FOUNDATION);
+      const origin = foundationCellOrigin(point);
+      addFoundation(origin.x, origin.y);
       return;
     }
     const machine = byClass.get(placementTool.buildingClass);
@@ -907,7 +913,8 @@ export default function ValidatedFactoryPlanner({
     if (!svg) return;
     const point = svgPoint(svg, event as unknown as PointerEvent);
     if (payload === 'foundation') {
-      addFoundation(Math.round(point.x / FOUNDATION) * FOUNDATION, Math.round(point.y / FOUNDATION) * FOUNDATION);
+      const origin = foundationCellOrigin(point);
+      addFoundation(origin.x, origin.y);
       return;
     }
     if (!payload.startsWith('machine:')) return;
@@ -1031,31 +1038,21 @@ export default function ValidatedFactoryPlanner({
         {segments.map((segment, segmentIndex) => (
           <g class="vp-belt-segment" transform={`translate(${segment.center.x} ${segment.center.y}) rotate(${segment.angleDeg})`} key={`${route.id}-belt-${segmentIndex}`}>
             <rect x={-segment.planarLengthM / 2} y="-1.05" width={segment.planarLengthM} height="2.1" rx=".7" class="vp-belt-frame" />
-            {Array.from({ length: Math.ceil(segment.planarLengthM / 2) }, (_, tileIndex) => {
-              const startX = -segment.planarLengthM / 2 + tileIndex * 2;
-              const tileWidth = Math.min(2, segment.planarLengthM - tileIndex * 2);
-              return tileWidth > 0 ? (
-                <image
-                  key={`${segmentIndex}-${tileIndex}`}
-                  href={beltImageUrl}
-                  x={startX - .015}
-                  y="-.88"
-                  width={tileWidth + .03}
-                  height="1.76"
-                  preserveAspectRatio="none"
-                  class="vp-belt-tile"
-                />
-              ) : null;
+            <rect x={-segment.planarLengthM / 2} y="-.88" width={segment.planarLengthM} height="1.76" rx=".54" class="vp-belt-surface" />
+            {Array.from({ length: Math.max(1, Math.floor(segment.planarLengthM / .72)) }, (_, slatIndex) => {
+              const x = -segment.planarLengthM / 2 + (slatIndex + .5) * segment.planarLengthM / Math.max(1, Math.floor(segment.planarLengthM / .72));
+              return <path key={`${segmentIndex}-slat-${slatIndex}`} d={`M ${x} -.72 V .72`} class="vp-belt-slat" />;
             })}
             <path d={`M ${-segment.planarLengthM / 2} -.88 H ${segment.planarLengthM / 2} M ${-segment.planarLengthM / 2} .88 H ${segment.planarLengthM / 2}`} class="vp-belt-rail" />
             {segment.planarLengthM >= 2.5 && (
-              <image href={beltDirectionImageUrl} x="-.42" y="-.62" width=".84" height="1.24" transform="rotate(90)" class="vp-belt-direction" />
+              <path d="M -.42 -.42 L 0 0 L -.42 .42 M .12 -.42 L .54 0 L .12 .42" class="vp-belt-direction" />
             )}
           </g>
         ))}
         {turns.map((turn, index) => (
-          <g class="vp-belt-turn" transform={`translate(${turn.at.x} ${turn.at.y}) rotate(${turn.assetRotationDeg})`} key={`${route.id}-turn-${index}`}>
-            <image href={beltTurnImageUrl} x="-2" y="-2" width="4" height="4" preserveAspectRatio="none" />
+          <g class="vp-belt-turn" key={`${route.id}-turn-${index}`}>
+            <path d={transportTurnPath(turn)} class="vp-belt-turn-frame" />
+            <path d={transportTurnPath(turn)} class="vp-belt-turn-surface" />
           </g>
         ))}
         {layers.flow && !elevated && labelSegment && route.flowPerMinute > 0 && (
@@ -1078,18 +1075,14 @@ export default function ValidatedFactoryPlanner({
       <g class={`vp-route is-fluid${elevated ? ' is-elevated' : ''}`} key={`${route.id}-${elevated ? 'high' : 'low'}`} aria-label="파이프라인">
         {segments.map((segment, segmentIndex) => (
           <g class="vp-pipe-segment" transform={`translate(${segment.center.x} ${segment.center.y}) rotate(${segment.angleDeg})`} key={`${route.id}-pipe-${segmentIndex}`}>
-            {Array.from({ length: Math.ceil(segment.planarLengthM / 4) }, (_, tileIndex) => {
-              const startX = -segment.planarLengthM / 2 + tileIndex * 4;
-              const tileWidth = Math.min(4, segment.planarLengthM - tileIndex * 4);
-              return tileWidth > 0 ? (
-                <image key={`${segmentIndex}-${tileIndex}`} href={pipeImageUrl} x={startX - .02} y="-1.22" width={tileWidth + .04} height="2.44" preserveAspectRatio="none" />
-              ) : null;
-            })}
+            <rect x={-segment.planarLengthM / 2} y="-1.18" width={segment.planarLengthM} height="2.36" rx="1.05" class="vp-pipe-shell" />
+            <rect x={-segment.planarLengthM / 2} y="-.79" width={segment.planarLengthM} height="1.58" rx=".72" class="vp-pipe-core" />
           </g>
         ))}
         {turns.map((turn, index) => (
-          <g class="vp-pipe-turn" transform={`translate(${turn.at.x} ${turn.at.y}) rotate(${turn.assetRotationDeg})`} key={`${route.id}-pipe-turn-${index}`}>
-            <image href={pipeTurnImageUrl} x="-2" y="-2" width="4" height="4" preserveAspectRatio="none" />
+          <g class="vp-pipe-turn" key={`${route.id}-pipe-turn-${index}`}>
+            <path d={transportTurnPath(turn)} class="vp-pipe-turn-shell" />
+            <path d={transportTurnPath(turn)} class="vp-pipe-turn-core" />
           </g>
         ))}
         {layers.flow && !elevated && labelSegment && route.flowPerMinute > 0 && (
@@ -1106,7 +1099,8 @@ export default function ValidatedFactoryPlanner({
     return transportPathParts(route.pathM).lifts.map((lift, index) => (
       <g class="vp-lift" transform={`translate(${lift.x} ${lift.y})`} key={`${route.id}-lift-${index}`}>
         <rect x="-1.1" y="-1.1" width="2.2" height="2.2" rx=".28" class="vp-lift-bed" />
-        <image href={liftImageUrl} x="-1.18" y="-1.18" width="2.36" height="2.36" preserveAspectRatio="xMidYMid meet" />
+        <rect x="-.7" y="-1.22" width="1.4" height="2.44" rx=".34" class="vp-lift-column" />
+        <path d="M -.38 -.58 H .38 M -.38 0 H .38 M -.38 .58 H .38" class="vp-lift-ribs" />
         {layers.elevation && (
           <g class="vp-lift-label" transform="translate(0 -1.65)">
             <rect x="-2.25" y="-.65" width="4.5" height="1.3" rx=".22" />
@@ -1138,7 +1132,7 @@ export default function ValidatedFactoryPlanner({
             onDragEnd={() => setCursorWorld(null)}
             title="클릭한 뒤 위치를 고르거나 캔버스로 드래그"
           >
-            <img src={foundationImageUrl} alt="" draggable={false} />
+            <span class="vp-foundation-swatch" aria-hidden="true"><i /></span>
             <span><strong>파운데이션</strong><small>클릭 후 배치 · 드래그 가능</small></span>
             <span class="vp-place-hint" aria-hidden="true">배치</span>
           </button>
@@ -1240,14 +1234,8 @@ export default function ValidatedFactoryPlanner({
                 onPointerDown={(event) => foundationPointerDown(event as unknown as PointerEvent, tile)}
               >
                 <rect x={tile.xM} y={tile.yM} width={tile.sizeM} height={tile.sizeM} class="vp-foundation-bed" />
-                <image
-                  href={foundationImageUrl}
-                  x={tile.xM - .025}
-                  y={tile.yM - .025}
-                  width={tile.sizeM + .05}
-                  height={tile.sizeM + .05}
-                  preserveAspectRatio="none"
-                />
+                <rect x={tile.xM + .32} y={tile.yM + .32} width={tile.sizeM - .64} height={tile.sizeM - .64} rx=".24" class="vp-foundation-panel" />
+                <path d={`M ${tile.xM + .7} ${tile.yM + .7} H ${tile.xM + 7.3} M ${tile.xM + .7} ${tile.yM + 7.3} H ${tile.xM + 7.3}`} class="vp-foundation-rail" />
                 <rect x={tile.xM} y={tile.yM} width={tile.sizeM} height={tile.sizeM} class="vp-foundation-hit" />
                 {layers.elevation && tile.zM > 0 && <text x={tile.xM + .5} y={tile.yM + 1.1} class="vp-z-label">Z +{fmt(tile.zM)} m</text>}
               </g>
@@ -1294,19 +1282,20 @@ export default function ValidatedFactoryPlanner({
                     <text x={bounds.min.x + .5} y={bounds.min.y + 1.1} class="vp-z-label" transform={`rotate(${-placement.rotation} ${bounds.min.x + .5} ${bounds.min.y + 1.1})`}>Z +{fmt(placement.positionM.z)} m</text>
                   )}
                   {spec.ports.map((port) => {
+                    if (port.medium === 'power') return null;
                     const active = pendingPort?.placementId === placement.id && pendingPort.portId === port.id;
+                    const laneLengthM = compactLogistics ? 1.1 : 1.8;
+                    const lanePath = `M 0 0 L ${port.normal.x * laneLengthM} ${port.normal.y * laneLengthM}`;
                     return (
                       <g
                         key={port.id}
                         class={`vp-port is-${port.medium} is-${port.direction}${compactLogistics ? ' is-compact' : ''}${active ? ' is-active' : ''}`}
-                        transform={`translate(${port.positionM.x} ${port.positionM.y}) rotate(${-placement.rotation})`}
+                        transform={`translate(${port.positionM.x} ${port.positionM.y})`}
                         onPointerDown={(event) => event.stopPropagation()}
                         onClick={(event) => { event.stopPropagation(); connectPort({ placementId: placement.id, portId: port.id }); }}
                       >
-                        <circle r={compactLogistics ? '.42' : '.62'} />
-                        {compactLogistics
-                          ? <path d="M -.16 -.2 L .2 0 L -.16 .2" class="vp-port-chevron" />
-                          : <text class="vp-port-label">{port.direction === 'input' ? 'IN' : port.direction === 'output' ? 'OUT' : 'IO'}</text>}
+                        <path d={lanePath} class="vp-port-hitbox" />
+                        <path d={lanePath} class="vp-port-lane" />
                         <title>{port.direction === 'input' ? '입력' : port.direction === 'output' ? '출력' : '양방향'} · {port.medium === 'solid' ? '컨베이어' : '파이프'} · 표본 {port.sampleCount}</title>
                       </g>
                     );
@@ -1318,7 +1307,6 @@ export default function ValidatedFactoryPlanner({
             {layers.logistics && transports.filter((route) => route.medium === 'solid').flatMap((route) => renderLift(route))}
             {placementTool?.kind === 'foundation' && ghostPoint && (
               <g class="vp-placement-ghost">
-                <image href={foundationImageUrl} x={ghostPoint.x - .025} y={ghostPoint.y - .025} width={FOUNDATION + .05} height={FOUNDATION + .05} preserveAspectRatio="none" />
                 <rect x={ghostPoint.x} y={ghostPoint.y} width={FOUNDATION} height={FOUNDATION} />
               </g>
             )}

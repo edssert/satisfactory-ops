@@ -242,14 +242,22 @@
 .machine-heading > p:last-child { margin: 0; color: var(--ink-2); line-height: 1.75; }
 .machine-lanes { display: grid; min-width: 0; gap: 38px; margin-top: 70px; }
 .machine-lane { min-width: 0; }
-.machine-lane > header { display: flex; align-items: end; justify-content: space-between; width: min(100% - 40px, 1320px); margin-inline: auto; border-bottom: var(--hair) solid var(--line-strong); padding-bottom: 10px; }
+.machine-lane > header { display: flex; align-items: end; justify-content: space-between; gap: 24px; width: min(calc(100% - 40px), 1320px); margin-inline: auto; border-bottom: var(--hair) solid var(--line-strong); padding-bottom: 10px; }
 .machine-lane > header h3 { margin: 0; font: 700 var(--t-h3) var(--font-mono); }
 .machine-lane > header p { margin: 5px 0 0; color: var(--ink-3); font: var(--t-caption) var(--font-mono); }
-.machine-lane > header > span { color: var(--ink-3); font: var(--t-caption) var(--font-mono); }
-.machine-window { width: 100%; min-width: 0; margin-top: 18px; overflow-x: auto; scrollbar-width: none; }
-.machine-rail.is-empty { width: min(100% - 40px, 1320px); }
+.machine-lane-meta { display: flex; flex: none; align-items: center; gap: 14px; }
+.machine-lane-meta > span { color: var(--ink-3); font: var(--t-caption) var(--font-mono); white-space: nowrap; }
+.machine-controls { display: flex; gap: 6px; }
+.machine-controls button { display: grid; width: 38px; height: 34px; place-items: center; border: var(--hair) solid var(--line-strong); border-radius: 0; background: var(--bg); color: var(--ink-1); font: 700 1rem var(--font-mono); cursor: pointer; }
+.machine-controls button:hover:not(:disabled),
+.machine-controls button:focus-visible { border-color: var(--primary); color: var(--primary); outline: none; }
+.machine-controls button:disabled { color: var(--ink-3); cursor: default; opacity: .42; }
+.machine-window { width: 100%; min-width: 0; margin-top: 18px; padding-bottom: 12px; overflow-x: auto; scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent; overscroll-behavior-inline: contain; scroll-snap-type: inline proximity; }
+.machine-window::-webkit-scrollbar { height: 8px; }
+.machine-window::-webkit-scrollbar-track { background: transparent; }
+.machine-window::-webkit-scrollbar-thumb { border: 2px solid transparent; background: var(--line-strong); background-clip: padding-box; }
+.machine-rail.is-empty { width: min(calc(100% - 40px), 1320px); margin-inline: auto; padding-inline: 0; }
 .machine-empty { width: 100%; margin: 0; padding: 32px; border: var(--hair) dashed var(--line-strong); color: var(--ink-3); text-align: center; }
-.machine-window::-webkit-scrollbar { display: none; }
 .machine-rail { display: flex; width: max-content; gap: 12px; padding-inline: max(20px, calc((100vw - 1320px) / 2)); }
 .machine-portrait {
   position: relative;
@@ -261,6 +269,7 @@
   border: 1px solid var(--line);
   background: var(--bg);
   overflow: hidden;
+  scroll-snap-align: start;
 }
 .machine-portrait::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 35%, color-mix(in oklab, var(--primary) 12%, transparent), transparent 46%); }
 .machine-no { position: absolute; top: 16px; left: 16px; font-family: var(--font-mono); font-size: .7rem; color: var(--ink-3); }
@@ -348,6 +357,8 @@
   .machine-stage { padding-block: 90px; }
   .machine-portrait { width: 260px; min-height: 350px; }
   .machine-portrait img { height: 220px; }
+  .machine-lane > header { align-items: start; }
+  .machine-lane-meta { align-items: flex-end; flex-direction: column; gap: 8px; }
   .workspace-card { grid-template-columns: 32px 1fr; }
   .workspace-card strong { grid-column: 2; }
   .close-inner h2 { font-size: 4rem; }

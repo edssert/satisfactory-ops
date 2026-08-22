@@ -53,6 +53,8 @@ let act: (callback: () => unknown) => unknown;
 let Planner: unknown;
 let imageRect: (spec: DrawingMachine, bounds: { min: { x: number; y: number; z: number }; max: { x: number; y: number; z: number } }) => { x: number; y: number; width: number; height: number };
 let visualState: (...args: unknown[]) => string;
+let foundationCellOrigin: (point: { x: number; y: number }) => { x: number; y: number };
+let transportTurnPath: (turn: { at: { x: number; y: number; z: number }; connectionA: { x: number; y: number }; connectionB: { x: number; y: number } }, radiusM?: number) => string;
 
 before(async () => {
   const src = readFileSync('src/components/ValidatedFactoryPlanner.tsx', 'utf8');
@@ -80,6 +82,8 @@ before(async () => {
   Planner = plannerModule.default;
   imageRect = plannerModule.imageRect;
   visualState = plannerModule.machineVisualState as typeof visualState;
+  foundationCellOrigin = plannerModule.foundationCellOrigin;
+  transportTurnPath = plannerModule.transportTurnPath;
   doc = win.document as unknown as Document;
 });
 
@@ -87,18 +91,33 @@ function mount() {
   win.localStorage.clear();
   doc.body.innerHTML = '<div id="root"></div>';
   act(() => {
-    render(h(Planner, {
-      machines,
-      beltImageUrl: '/assets/conveyor.webp',
-      beltTurnImageUrl: '/assets/conveyor-turn.webp',
-      beltDirectionImageUrl: '/assets/conveyor-direction.webp',
-      pipeImageUrl: '/assets/pipe.webp',
-      pipeTurnImageUrl: '/assets/pipe-turn.webp',
-      liftImageUrl: '/assets/lift.png',
-      foundationImageUrl: '/assets/foundation.png',
-    }), doc.getElementById('root'));
+    render(h(Planner, { machines }), doc.getElementById('root'));
   });
 }
+
+test('파운데이션은 커서가 들어 있는 셀의 좌상단으로 스냅한다', () => {
+  assert.deepEqual(foundationCellOrigin({ x: .1, y: .1 }), { x: 0, y: 0 });
+  assert.deepEqual(foundationCellOrigin({ x: 7.9, y: 7.9 }), { x: 0, y: 0 });
+  assert.deepEqual(foundationCellOrigin({ x: 8, y: 8 }), { x: 8, y: 8 });
+  assert.deepEqual(foundationCellOrigin({ x: -0.1, y: -0.1 }), { x: -8, y: -8 });
+});
+
+test('90도 연결부는 8개 진입·이탈 순서에서 실제 연결 벡터를 잇는다', () => {
+  const pairs = [
+    [[-1, 0], [0, -1]], [[0, -1], [-1, 0]],
+    [[0, -1], [1, 0]], [[1, 0], [0, -1]],
+    [[1, 0], [0, 1]], [[0, 1], [1, 0]],
+    [[0, 1], [-1, 0]], [[-1, 0], [0, 1]],
+  ] as const;
+  for (const [a, b] of pairs) {
+    const path = transportTurnPath({
+      at: { x: 10, y: 20, z: 0 },
+      connectionA: { x: a[0], y: a[1] },
+      connectionB: { x: b[0], y: b[1] },
+    }, 2);
+    assert.equal(path, `M ${10 + a[0] * 2} ${20 + a[1] * 2} Q 10 20 ${10 + b[0] * 2} ${20 + b[1] * 2}`);
+  }
+});
 
 test('Blender 기하 점유 프레임은 8×10m 그리드에 등방 배율로 정확히 맞는다', () => {
   const spec = {
@@ -154,7 +173,7 @@ const clickCanvas = (x = 640, y = 360) => {
   });
 };
 
-test('파운데이션은 빈 판에서 실제 이미지 타일로 직접 추가·삭제한다', () => {
+test('파운데이션은 빈 판에서 자체 벡터 타일로 직접 추가·삭제한다', () => {
   mount();
   assert.equal(all('.vp-foundation').length, 0);
   const foundationTool = button('파운데이션');
@@ -163,7 +182,8 @@ test('파운데이션은 빈 판에서 실제 이미지 타일로 직접 추가�
   assert.equal(foundationTool?.classList.contains('is-armed'), true);
   clickCanvas();
   assert.equal(all('.vp-foundation').length, 1);
-  assert.equal(doc.querySelector('.vp-foundation image')?.getAttribute('href'), '/assets/foundation.png');
+  assert.equal(all('.vp-foundation image').length, 0);
+  assert.equal(all('.vp-foundation-panel').length, 1);
   assert.equal(doc.querySelector('.vp-foundation rect')?.getAttribute('width'), '8');
   assert.equal(foundationTool?.classList.contains('is-armed'), true);
   clickCanvas(760, 360);
@@ -172,19 +192,22 @@ test('파운데이션은 빈 판에서 실제 이미지 타일로 직접 추가�
   assert.equal(all('.vp-foundation').length, 1);
 });
 
-test('기계를 회전해도 이름과 IN·OUT 라벨은 정방향을 유지한다', () => {
+test('기계를 회전해도 문자 배지 없이 실제 포트부터 하드 경계까지 연결 레인을 강조한다', () => {
   mount();
   clickButton('제련기');
   clickCanvas();
-  assert.deepEqual(all('.vp-port-label').map((entry) => entry.textContent), ['IN', 'OUT']);
+  assert.equal(all('.vp-port-label').length, 0);
+  assert.equal(all('.vp-port-lane').length, 2);
+  assert.deepEqual(all('.vp-port-lane').map((entry) => entry.getAttribute('d')), ['M 0 0 L 0 -1.8', 'M 0 0 L 0 1.8']);
+  assert.deepEqual(all('.vp-port title').map((entry) => entry.textContent?.split(' · ')[0]), ['입력', '출력']);
   assert.equal(all('.vp-machine-size').length, 0);
   assert.equal(all('.vp-machine-label').length, 0);
   clickButton('90° 회전');
   assert.match(doc.querySelector('.vp-placement')?.getAttribute('transform') ?? '', /rotate\(90\)/);
-  assert.match(doc.querySelector('.vp-port')?.getAttribute('transform') ?? '', /rotate\(-90\)/);
+  assert.doesNotMatch(doc.querySelector('.vp-port')?.getAttribute('transform') ?? '', /rotate/);
 });
 
-test('실제 포트를 연결하면 선이 아니라 컨베이어 이미지 구간이 생긴다', () => {
+test('실제 포트를 연결하면 외부 이미지 없이 자체 컨베이어 구간이 생긴다', () => {
   mount();
   clickButton('제련기');
   clickCanvas(430, 360);
@@ -193,8 +216,9 @@ test('실제 포트를 연결하면 선이 아니라 컨베이어 이미지 구�
   clickSvg(all('.vp-placement')[0]?.querySelector('.vp-port.is-output'));
   clickSvg(all('.vp-placement')[1]?.querySelector('.vp-port.is-input'));
   assert.equal(all('.vp-route[aria-label="컨베이어 벨트"]').length, 1);
-  assert.ok(all('.vp-belt-tile').length > 0);
-  assert.equal(doc.querySelector('.vp-belt-tile')?.getAttribute('href'), '/assets/conveyor.webp');
+  assert.ok(all('.vp-belt-surface').length > 0);
+  assert.ok(all('.vp-belt-slat').length > 0);
+  assert.equal(all('.vp-route image').length, 0);
 });
 
 test('전체 초기화는 설비·토대·물류를 한 번에 비운다', () => {

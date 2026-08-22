@@ -48,6 +48,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--state-strength", type=float, default=4.0)
     parser.add_argument("--footprint", nargs=2, type=float)
     parser.add_argument("--footprint-height", type=float, default=0.0)
+    parser.add_argument("--footprint-ground-z", type=float)
     parser.add_argument("--footprint-center", nargs=2, type=float, default=(0.0, 0.0))
     parser.add_argument("--display-yaw", type=float, default=0.0)
     parser.add_argument("--camera-tilt", type=float, default=0.0)
@@ -148,6 +149,7 @@ def apply_scene_config(args: argparse.Namespace) -> argparse.Namespace:
         )
     args.footprint = [footprint["widthM"], footprint["lengthM"]]
     args.footprint_height = footprint["heightM"]
+    args.footprint_ground_z = footprint.get("groundZM")
     args.footprint_center = footprint.get("centerM", [0, 0])
     args.corner_envelope = footprint["cornerEnvelope"]
     camera = config["camera"]
@@ -1000,11 +1002,16 @@ for component_index, glb in enumerate(args.glb):
     imported = [obj for obj in bpy.context.scene.objects if obj not in before]
     if component_index in component_transforms:
         x, y, z, yaw = component_transforms[component_index]
-        parent = bpy.data.objects.new(f"ComponentTransform{component_index}", None)
+        component_spec = args.body_component_specs[component_index] if getattr(args, "body_component_specs", None) else {}
+        component_id = component_spec.get("id", f"component-{component_index}")
+        parent = bpy.data.objects.new(f"Component_{component_id}", None)
         parent.location = (x, y, z)
         parent.rotation_euler[2] = math.radians(yaw)
-        if getattr(args, "body_component_specs", None) and args.body_component_specs[component_index].get("scale"):
-            parent.scale = tuple(args.body_component_specs[component_index]["scale"])
+        if component_spec.get("scale"):
+            parent.scale = tuple(component_spec["scale"])
+        parent["source_component_id"] = component_id
+        parent["source_transform"] = [x, y, z, yaw]
+        parent["source_scale"] = list(component_spec.get("scale", [1, 1, 1]))
         bpy.context.scene.collection.objects.link(parent)
         for obj in imported:
             if obj.parent is None:
@@ -1124,7 +1131,7 @@ if args.footprint:
         Vector((
             footprint_x + x_sign * footprint_width / 2,
             footprint_y + y_sign * footprint_depth / 2,
-            minimum.z + z_sign * (args.footprint_height or height),
+            (args.footprint_ground_z if args.footprint_ground_z is not None else minimum.z) + z_sign * (args.footprint_height or height),
         ))
         for x_sign in (-1, 1)
         for y_sign in (-1, 1)
@@ -1135,13 +1142,14 @@ if args.runtime_top_validation:
     validate_runtime_top_camera(camera, args.camera_tilt)
 corner_frame_local = None
 if args.footprint and not args.hide_corners:
+    footprint_ground_z = args.footprint_ground_z if args.footprint_ground_z is not None else minimum.z
     corner_frame_local = add_occupancy_corners(
         camera,
         footprint_x,
         footprint_y,
         footprint_width,
         footprint_depth,
-        minimum.z,
+        footprint_ground_z,
         args.footprint_height or height,
     )
 
@@ -1181,7 +1189,10 @@ scene["camera_forward_world"] = [
 scene["runtime_top_validated"] = args.runtime_top_validation
 scene["corner_envelope_contract"] = args.corner_envelope or "unverified"
 if args.footprint:
-    scene["hard_footprint_m"] = [footprint_x, footprint_y, footprint_width, footprint_depth, args.footprint_height]
+    scene["hard_footprint_m"] = [
+        footprint_x, footprint_y, footprint_width, footprint_depth, args.footprint_height,
+        args.footprint_ground_z if args.footprint_ground_z is not None else minimum.z,
+    ]
 if corner_frame_local:
     minimum_x, minimum_y, maximum_x, maximum_y = corner_frame_local
     scale = camera.data.ortho_scale

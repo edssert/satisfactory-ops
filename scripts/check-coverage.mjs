@@ -26,6 +26,7 @@ if (!fs.existsSync(DIST)) {
 const read = (p) => JSON.parse(fs.readFileSync(p, 'utf8'));
 const items = read(path.join(APP, 'items.json'));
 const buildings = read(path.join(APP, 'buildings.json'));
+const topviews = read(path.join(ROOT, 'src/data/curated/topview-assets.json'));
 
 /** dist 안의 모든 html */
 function htmlFiles(dir) {
@@ -336,8 +337,6 @@ if (!toolsPage) {
       ['vp-stage', '도면판 자체'],
       ['제련기', '건물 목록'],
       ['채굴기 Mk.1', '채굴기'],
-      ['바이오매스 연소기', '자동 급유 발전기'],
-      ['컨베이어 분배기', '물류 설비'],
       ['왼쪽에서 검증 설비를 놓으세요.', '빈 판 안내'],
       ['도면 맞춤', '도면 맞춤 단추'],
     ];
@@ -350,12 +349,23 @@ if (!toolsPage) {
     }
     /* base 를 안 붙인 절대 경로는 GitHub Pages 하위 경로에서 전부 404 가 된다 */
     if (/src="\/assets\//.test(hit.s)) fail('설계 페이지에 base 없는 자산 경로가 있습니다');
-    if (hit.s.includes('/assets/planner/top-view/golden/')) fail('설계판에 비교용 golden-reference 자산이 직렬화됐습니다');
+    const runtimeAssets = topviews.assets.filter((asset) =>
+      asset.sourceId === 'game-install-cl-502094'
+      && asset.reviewStatus === 'approved'
+      && asset.role === 'building'
+    );
+    const externalAssets = topviews.assets.filter((asset) => asset.sourceId !== 'game-install-cl-502094');
+    for (const asset of runtimeAssets) {
+      if (!hit.s.includes(asset.path)) fail(`설계판에 승인된 현재 게임 자산이 없습니다: ${asset.assetId}`);
+    }
+    for (const asset of externalAssets) {
+      if (hit.s.includes(asset.path)) fail(`설계판에 외부 비교 자산이 직렬화됐습니다: ${asset.assetId}`);
+    }
     if (!hit.s.includes('/assets/planner/top-view/buildings/production/Build_SmelterMk1_C.error.webp')) {
       fail('설계판 제련기가 현재 게임 상태 자산을 사용하지 않습니다');
     }
     if (hit.s.includes('자동 배치')) fail('수동 설계판에 폐기한 자동 배치 문구가 남아 있습니다');
-    if (!miss) pass('설계판이 건물·채굴기·발전기와 함께 그려짐');
+    if (!miss) pass(`설계판이 승인된 현재 게임 탑뷰 ${runtimeAssets.length}건과 함께 그려짐`);
   }
 
   /* 한글이 글자 단위로 쪼개지는 것을 한 번 겪었다. 규칙으로 박는다 */

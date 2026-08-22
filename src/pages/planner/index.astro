@@ -5,25 +5,17 @@ import ValidatedFactoryPlanner, { type DrawingMachine } from '../../components/V
 import { buildings, items, recipes } from '../../lib/gamedata';
 import { requireMachineSpec } from '../../domain/factory/specs';
 import portsData from '../../data/curated/machine-ports.json';
-import topviewData from '../../data/curated/topview-assets.json';
+import { runtimeTopviewAssets, type TopviewAsset } from '../../lib/topview-assets';
 import '../../styles/validated-planner.css';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const buildingById = new Map(buildings.map((building) => [building.id, building]));
 const itemById = new Map(items.map((entry) => [entry.id, entry]));
-const usableTopviews = topviewData.assets.filter((asset) => asset.reviewStatus !== 'rejected');
-const topviewByClass = new Map(usableTopviews
+const topviewByClass = new Map(runtimeTopviewAssets
   .filter((asset) => asset.role === 'building' && 'buildingClass' in asset)
   .map((asset) => [asset.buildingClass, asset]));
-const topviewById = new Map(usableTopviews.map((asset) => [asset.assetId, asset]));
-const assetUrl = (asset: (typeof topviewData.assets)[number]) =>
+const assetUrl = (asset: TopviewAsset) =>
   `${base}/${asset.path}${'sha256' in asset && asset.sha256 ? `?v=${asset.sha256.slice(0, 12)}` : ''}`;
-const topviewUrl = (assetId: string) => {
-  const asset = topviewById.get(assetId);
-  if (!asset) throw new Error(`탑뷰 자산 매니페스트 누락: ${assetId}`);
-  return assetUrl(asset);
-};
-const foundationTopview = topviewByClass.get('Build_Foundation_8x1_01_C');
 
 const machines: DrawingMachine[] = portsData.$completeBuildings.flatMap((buildingClass) => {
   const building = buildingById.get(buildingClass);
@@ -71,15 +63,6 @@ const machines: DrawingMachine[] = portsData.$completeBuildings.flatMap((buildin
     <ValidatedFactoryPlanner
       client:load
       machines={machines}
-      beltImageUrl={topviewUrl('ConveyorBeltStraightMk1')}
-      beltTurnImageUrl={topviewUrl('ConveyorBeltTurn90Mk1')}
-      beltDirectionImageUrl={topviewUrl('ConveyorDirectionForward')}
-      pipeImageUrl={topviewUrl('PipelineStraightMk1')}
-      pipeTurnImageUrl={topviewUrl('PipelineTurn90Mk1')}
-      liftImageUrl={topviewUrl('ConveyorLiftHeadA')}
-      foundationImageUrl={foundationTopview
-        ? assetUrl(foundationTopview)
-        : `${base}/assets/buildings-png/Build_Foundation_8x1_01_C.png`}
     />
   </div>
 </Base>

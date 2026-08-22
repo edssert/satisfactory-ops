@@ -33,7 +33,7 @@ const route = raw === '' ? '/' : `/${raw.replace(/^\/+|\/+$/g, '')}/`;
 const num = (k, d) => Number(argv.find((a) => a.startsWith(`--${k}=`))?.split('=')[1] ?? d);
 const MIN_W = num('min', 48);
 const onlyW = argv.find((a) => a.startsWith('--w='));
-const WIDTHS = onlyW ? [num('w', 1440)] : [1440, 768, 390];
+const WIDTHS = onlyW ? [num('w', 1440)] : [2560, 1920, 1440, 1024, 768, 390];
 
 const DIST = path.resolve('dist');
 const BASE = '/satisfactory-ops';
@@ -77,7 +77,7 @@ for (const W of WIDTHS) {
   await page.waitForTimeout(600);
 
   const found = await page.evaluate((MIN_W) => {
-    const out = { page: null, squeezed: [], overflow: [], clipped: [] };
+    const out = { page: null, squeezed: [], overflow: [], clipped: [], contracts: [] };
     const selOf = (el) => {
       const id = el.id ? `#${el.id}` : '';
       const cls = typeof el.className === 'string' && el.className ? '.' + el.className.trim().split(/\s+/).slice(0, 2).join('.') : '';
@@ -152,6 +152,22 @@ for (const W of WIDTHS) {
     out.squeezed = dedupe(out.squeezed);
     out.overflow = dedupe(out.overflow);
     out.clipped = dedupe(out.clipped);
+
+    for (const lane of document.querySelectorAll('.machine-lane')) {
+      const names = [...lane.querySelectorAll('.machine-portrait h3')].map((el) => txt(el));
+      const duplicate = names.find((name, index) => name && names.indexOf(name) !== index);
+      if (duplicate) out.contracts.push(`랜딩 자산 중복: ${duplicate}`);
+
+      const rail = lane.querySelector('.machine-rail');
+      const windowEl = lane.querySelector('.machine-window');
+      if (rail?.classList.contains('is-empty') && rail.getBoundingClientRect().width < 240) {
+        out.contracts.push(`빈 자산 레일 폭 붕괴: ${Math.round(rail.getBoundingClientRect().width)}px`);
+      }
+      if (windowEl && windowEl.scrollWidth > windowEl.clientWidth + 2) {
+        const hasControls = Boolean(lane.querySelector('[data-machine-prev]') && lane.querySelector('[data-machine-next]'));
+        if (!hasControls) out.contracts.push('수평 자산 레일에 포인터 이동 컨트롤 없음');
+      }
+    }
     return out;
   }, MIN_W);
 
@@ -160,6 +176,7 @@ for (const W of WIDTHS) {
   for (const s of found.squeezed) hits.push(`눌린 칸  ${s.w}px (옆 칸 ${s.sib}px)  ${s.sel}  「${s.text}」`);
   for (const o of found.overflow) hits.push(`넘침    ${o.inner}>${o.box}  ${o.sel}  「${o.text}」`);
   for (const c of found.clipped) hits.push(`잘림    ${c.inner}>${c.box}  ${c.sel}  「${c.text}」`);
+  for (const contract of found.contracts) hits.push(`계약 위반  ${contract}`);
 
   console.log(`\n[${W}px] ${route}`);
   if (hits.length) {

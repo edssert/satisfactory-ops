@@ -11,6 +11,7 @@ import type { FactoryPlan, Placement } from '../src/domain/factory/types.ts';
 import { validateFactoryPlan } from '../src/domain/factory/validate.ts';
 import portRows from '../src/data/curated/machine-ports.json' with { type: 'json' };
 import topviewRows from '../src/data/curated/topview-assets.json' with { type: 'json' };
+import { runtimeTopviewAssets } from '../src/lib/topview-assets.ts';
 
 function foundationGrid(minX: number, maxX: number, minY: number, maxY: number) {
   const tiles = [];
@@ -183,45 +184,23 @@ test('과경사와 경사 중 회전은 각각 시공 오류로 분리된다', (
   assert.equal(codes.has('ROUTE_TURN_INCLINE'), true);
 });
 
-test('배치 가능한 설비는 원근 아이콘 폴백 없이 실제 탑뷰를 갖는다', () => {
-  const assets = new Map(topviewRows.assets
+test('설계판에 공개하는 설비는 현재 설치본에서 직접 만든 승인 탑뷰만 쓴다', () => {
+  const assets = new Map(runtimeTopviewAssets
     .filter((entry) => 'buildingClass' in entry)
     .map((entry) => [entry.buildingClass, entry]));
-  const materialConnected = new Set(portRows.ports
-    .filter((port) => port.medium !== 'power')
-    .map((port) => port.buildingClass));
-  const catalog = portRows.$completeBuildings.filter((buildingClass) => materialConnected.has(buildingClass));
-  const missing = catalog.filter((buildingClass) => !assets.has(buildingClass));
-  assert.deepEqual(missing, []);
-  for (const buildingClass of catalog) {
-    const asset = assets.get(buildingClass);
-    assert.ok(asset, buildingClass);
+  assert.ok(assets.size > 0);
+  for (const [buildingClass, asset] of assets) {
+    assert.equal(asset.sourceId, 'game-install-cl-502094', buildingClass);
+    assert.equal(asset.reviewStatus, 'approved', buildingClass);
     assert.equal(existsSync(`public/${asset.path}`), true, buildingClass);
   }
 });
 
-test('물류 도면은 직선·회전·방향·파이프와 양방향 리프트 탑뷰를 빠짐없이 가진다', () => {
-  const required = [
-    'ConveyorBeltStraightMk1',
-    'ConveyorBeltTurn90Mk1',
-    'ConveyorDirectionForward',
-    'PipelineStraightMk1',
-    'PipelineTurn90Mk1',
-    'PipelineJunctionCrossMk1',
-  ];
-  const assetsById = new Map(topviewRows.assets.map((entry) => [entry.assetId, entry]));
-  for (const assetId of required) {
-    const asset = assetsById.get(assetId);
-    assert.ok(asset, assetId);
-    assert.equal(existsSync(`public/${asset.path}`), true, assetId);
-  }
-  for (const assetId of ['ConveyorLiftHeadA', 'ConveyorLiftHeadB']) {
-    const lift = assetsById.get(assetId);
-    assert.ok(lift, assetId);
-    assert.equal(existsSync(`public/${lift.path}`), true, assetId);
-    assert.equal(lift.reviewStatus, 'candidate', assetId);
-    assert.match(('note' in lift ? lift.note : '') ?? '', /Mk별 완성 자산이 아닌/, assetId);
-  }
+test('외부 대조 자산은 매니페스트에 남아도 런타임 공개 집합에는 들어오지 않는다', () => {
+  const runtimeIds = new Set(runtimeTopviewAssets.map((entry) => entry.assetId));
+  const external = topviewRows.assets.filter((entry) => entry.sourceId === 'anders-2023');
+  assert.ok(external.length > 0);
+  assert.deepEqual(external.filter((entry) => runtimeIds.has(entry.assetId)), []);
 });
 
 test('직교 라우터는 중간 설비의 하드 클리어런스를 우회한다', () => {
