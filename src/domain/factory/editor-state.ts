@@ -9,9 +9,11 @@ import type {
   MachineSpec,
   Placement,
   QuarterTurn,
+  RailRoute,
   TransportRoute,
   Vec3,
 } from './types';
+import { transportSpecForFlow } from './transport-specs.ts';
 
 export interface StoredPlacement {
   id: string;
@@ -22,10 +24,11 @@ export interface StoredPlacement {
 }
 
 export interface StoredPlan {
-  schemaVersion: 4;
+  schemaVersion: 6;
   placements: StoredPlacement[];
   foundations: FoundationTile[];
   transports: TransportRoute[];
+  rails: RailRoute[];
 }
 
 function isFiniteNumber(value: unknown): value is number {
@@ -38,11 +41,10 @@ function isVec3(value: unknown): value is Vec3 {
   return isFiniteNumber(point.x) && isFiniteNumber(point.y) && isFiniteNumber(point.z);
 }
 
-export function isStoredPlan(value: unknown): value is StoredPlan {
+function hasStoredPlanShape(value: unknown): value is Omit<StoredPlan, 'schemaVersion'> & { schemaVersion: number } {
   if (!value || typeof value !== 'object') return false;
   const candidate = value as Partial<StoredPlan>;
-  return candidate.schemaVersion === 4
-    && Array.isArray(candidate.placements)
+  return Array.isArray(candidate.placements)
     && Array.isArray(candidate.foundations)
     && Array.isArray(candidate.transports)
     && candidate.placements.every((entry) => (
@@ -74,13 +76,40 @@ export function isStoredPlan(value: unknown): value is StoredPlan {
     ));
 }
 
+export function isStoredPlan(value: unknown): value is StoredPlan {
+  if (!hasStoredPlanShape(value) || value.schemaVersion !== 6) return false;
+  return value.transports.every((route) => typeof route.transportClass === 'string' && route.transportClass.length > 0)
+    && Array.isArray(value.rails)
+    && value.rails.every((rail) => typeof rail?.id === 'string' && Array.isArray(rail.pathM) && rail.pathM.length >= 2 && rail.pathM.every(isVec3));
+}
+
+export function migrateStoredPlan(value: unknown): StoredPlan | null {
+  if (isStoredPlan(value)) return structuredClone(value);
+  if (!hasStoredPlanShape(value) || ![4, 5].includes(value.schemaVersion)) return null;
+  const migrated: StoredPlan = {
+    ...structuredClone(value),
+    schemaVersion: 6,
+    transports: value.transports.map((route) => {
+      const spec = transportSpecForFlow(route.medium, route.flowPerMinute);
+      return {
+        ...route,
+        transportClass: spec.buildingClass,
+        capacityPerMinute: spec.capacityPerMinute,
+      };
+    }),
+    rails: [],
+  };
+  return isStoredPlan(migrated) ? migrated : null;
+}
+
 export function toStoredPlan(
   placements: Placement[],
   foundations: FoundationTile[],
   transports: TransportRoute[],
+  rails: RailRoute[] = [],
 ): StoredPlan {
   return {
-    schemaVersion: 4,
+    schemaVersion: 6,
     placements: placements.map(({ id, spec, positionM, rotation, operation }) => ({
       id,
       buildingClass: spec.buildingClass,
@@ -90,6 +119,7 @@ export function toStoredPlan(
     })),
     foundations: structuredClone(foundations),
     transports: structuredClone(transports),
+    rails: structuredClone(rails),
   };
 }
 
@@ -106,13 +136,14 @@ export function restoreStoredPlan(stored: StoredPlan, specs: ReadonlyMap<string,
     placements,
     foundations: structuredClone(stored.foundations),
     transports: structuredClone(stored.transports),
+    rails: structuredClone(stored.rails),
   };
 }
 
 export function nextEditorSequence(stored: StoredPlan): number {
   return Math.max(
     1,
-    ...[...stored.placements, ...stored.foundations, ...stored.transports]
+    ...[...stored.placements, ...stored.foundations, ...stored.transports, ...stored.rails]
       .map((entry) => Number(entry.id.split('-').at(-1)) + 1 || 1),
   );
 }

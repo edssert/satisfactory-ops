@@ -11,6 +11,22 @@
 
 ---
 
+## 0. 실행 속도와 대화
+
+- 프로젝트 기본 추론 강도는 `.codex/config.toml`의 `medium`이다. 사용자가 달리 지정할 때만 바꾼다.
+- 우선순위는 **현재 사용자 지시 → 실제 파일·렌더·실행 결과 → 정본 문서 → 과거 계획**이다. 현재 증거와
+  ROADMAP이 충돌하면 문서를 먼저 고치고 낡은 작업을 실행하지 않는다.
+- `micro`·`bounded` 작업은 목표가 확인되면 읽기 배치 한 번 뒤 첫 코드·렌더·테스트 산출물을 만든다.
+  계획 문서, 전수 조사, release 검증을 산출물보다 먼저 두지 않는다.
+- 구현을 요청받은 가역적 앱 변경은 표적 검사와 실제 화면 확인 뒤 바로 앱에 연결한다. 사용자가 승인 게이트를
+  요청했거나 권리·파괴적 변경·해결되지 않은 시각 이견이 있을 때만 멈춰 묻는다.
+- 진행 보고는 중요한 결과·결정 변경·막힘만 자연스러운 한두 문장으로 쓴다. `완료/진행 중/다음` 틀을
+  강제하지 않고, ADHD 응답 모드가 켜져 있어도 모드 이름을 말하지 않는다.
+- 계획 UI는 여러 파일·단계가 실제로 남은 작업에만 쓰고, 별도 계획 문서는 `architectural` 작업에만 만든다.
+- 변경 중에는 표적 검사를 쓰고 `verify:release`는 앱에 연결한 완료 경계에서 한 번만 실행한다.
+
+---
+
 ## 1. 이 저장소가 무엇인가
 
 Satisfactory(게임)의 **통합 공장 운영·설계 웹앱**이다. 목표 생산량 계산, 진행 가이드, 지도,
@@ -36,7 +52,7 @@ Satisfactory(게임)의 **통합 공장 운영·설계 웹앱**이다. 목표 �
 | 이 저장소를 OneDrive 안으로 옮기지 않는다 | `.git` 동기화가 저장소를 깨뜨릴 수 있다 | 위치는 `C:\Dev\satisfactory-ops` 고정 |
 | `public/assets/` 게임 자산은 MIT 대상이 아니다 | 각 자산의 출처·사용 조건이 별도다 | `ASSETS.md`와 매니페스트의 출처 표기를 유지한다. 게임사 사칭을 금지한다 |
 | 오래된 문서를 현재 규칙처럼 따르지 않는다 | Claude 조사와 초기 ADR을 근거에서 제외했다 | `PROJECT-HUB.md`에서 시작해 6개 정본과 다시 검증한 Research만 읽는다 |
-| 값은 HTML에, 움직임만 JS로 | CSS 카운터 + 스크롤 애니메이션으로 숫자를 만들었다가 화면에 `0`이 남은 적이 있다 | `node .claude/skills/no-js-fallback/scripts/nojs.mjs <경로>` |
+| 값은 HTML에, 움직임만 JS로 | CSS 카운터 + 스크롤 애니메이션으로 숫자를 만들었다가 화면에 `0`이 남은 적이 있다 | `node .agents/skills/satisfactory-browser-evidence/scripts/nojs.mjs <경로>` |
 | 이견을 숨기지 않는다 | 커뮤니티 의견이 실제로 갈리는 주제가 여럿이다 (메인 버스 유용성 등) | 양쪽을 다 쓰고 어느 쪽이 왜 더 믿을 만한지 밝힌다 |
 
 ---
@@ -95,7 +111,8 @@ npm run dev
 | `npm run check:hygiene` | 렌더·브라우저·테스트 뒤와 커밋 전 | 루트 임시 파일·비ASCII 폴더·테스트 번들 누출 0 | `debug.log`·`nul`·깨진 썸네일 경로·목적 폴더 밖 `output` 파일이 남았다 |
 | `npm run db:check` | 큐레이션 JSON을 고쳤을 때 | `검증 통과.` + 적재 집계 줄 | **exit 2** 외래 키가 깨졌다 — 큐레이션이 참조하는 클래스명이 게임 데이터에 없다 |
 | `npm run check:coverage` | 표·목록·그림을 고쳤을 때 | 모든 줄이 `PASS` | **exit 2** `dist/`가 없다(`npm run build` 먼저) · **exit 3** 화면이 데이터 행을 조용히 떨어뜨렸다. 필터가 행을 버리는 병이라 코드를 고쳐야 한다 |
-| `npm run verify` | **작업을 끝냈다고 말하기 전** | 위 전부가 순서대로 통과 | 앞 단계에서 죽으면 뒷 단계는 아예 안 돈다. 개별 명령으로 좁혀 본다 |
+| `npm run verify:quick` | 구현 체크포인트·커밋 전 빠른 회귀 | 데이터·단위 테스트·타입·문서·스킬·아키텍처·위생 검사 통과 | 실패한 개별 명령으로 좁힌다. 빌드·Chromium 전수 검사는 의도적으로 생략한다 |
+| `npm run verify` / `verify:release` | **배포 또는 작업 전체를 끝냈다고 말하기 전** | 빠른 회귀 + 빌드 + 자산 + 접근성·반응형·설계판 실제 브라우저 검증이 순서대로 통과 | 앞 단계에서 죽으면 뒷 단계는 아예 안 돈다. 개별 명령으로 좁혀 본다 |
 | `npm run data` | 게임이 패치됐을 때 (게임 설치 필요) | 1단→2단→테크→아이콘 색인까지 재생성 | 게임 설치본을 못 찾으면 exit 1. `--docs=` 나 `SATISFACTORY_DOCS`로 경로를 준다 |
 | `npm run data:game` / `data:game:ko` / `data:app` | 위를 단계별로 | — | 1단은 새니티 13건, 2단은 검증 18건을 통과해야 파일을 쓴다 |
 | `npm run db` | SQLite로 질의하고 싶을 때 | `.cache/game.db` 생성 | `node scripts/db.mjs "SELECT ..."` 로 임의 질의. DB는 커밋하지 않는다 |
@@ -112,10 +129,10 @@ npm run dev
 
 ```bash
 npm run build
-node .claude/skills/visual-verify/scripts/squeeze.mjs guide      # 1440·768·390 세 폭에서 눌림·넘침·잘림
+node .agents/skills/satisfactory-browser-evidence/scripts/squeeze.mjs guide      # 여러 폭에서 눌림·넘침·잘림
 node scripts/shoot.mjs guide shot.png --w=1440                   # 화면 전체
-node .claude/skills/visual-verify/scripts/shot-el.mjs guide '.fc-svg' el.png   # 한 조각만
-node .claude/skills/no-js-fallback/scripts/nojs.mjs guide        # JS 끄고 값이 남는지
+node .agents/skills/satisfactory-browser-evidence/scripts/shot-el.mjs guide '.fc-svg' el.png   # 한 조각만
+node .agents/skills/satisfactory-browser-evidence/scripts/nojs.mjs guide        # JS 끄고 값이 남는지
 ```
 
 경로는 **앞 슬래시 없이** 준다 (§7 참고). 첫 화면은 빈 문자열 `""`.
@@ -140,7 +157,8 @@ node .claude/skills/no-js-fallback/scripts/nojs.mjs guide        # JS 끄고 값
 | `tests/` | `node --test`. 러너 의존성 0 | ○ |
 | `public/assets/` | Coffee Stain Studios 자산 (맵·아이콘) | 추가만. 출처 표기 유지 |
 | `satisfactory-ops-vault/` | 독립 Obsidian 볼트. 제품·기능·기술 정본, 결정, RFC, Runbook, Research | ○ (`docs/DOCUMENTATION.md` 적용) |
-| `.claude/skills/` | 이 저장소 전용 검사 절차 + 스크립트 | ○ |
+| `.agents/skills/` | Codex가 자동 라우팅하는 저장소 전용 정본 스킬 + 스크립트 | ○ |
+| `.claude/skills/` | Claude Code 호환 포인터. 절차·스크립트 정본을 두지 않는다 | 포인터만 |
 | `legacy/` | 이식 전 단일 HTML. 배포되지 않는다 | 참고용 |
 | `output/` | 브라우저·시각 검수 증거. `playwright/`, `archive/<날짜-목적>/`처럼 목적별 하위 폴더만 둔다 | 생성물. gitignore 대상 |
 | `dist/`, `.cache/`, `.astro/`, `.tmp-research/` | 생성물. gitignore 대상 | ✕ |
@@ -177,7 +195,7 @@ dist/                                      ← 정적 HTML + 아일랜드 JS + �
 - 게임이 없는 기기(그리고 CI)에서는 **1단을 돌리지 않는다.** 커밋된 산출물을 검증해 사용한다 (D-004).
 - `--check`는 **최신성 검사**다. 파일을 쓰지 않고, 산출물이 원본·큐레이션과 어긋나면 exit 3로 죽는다.
   `npm run build`가 이것을 먼저 돌리므로, 조용히 틀린 수치가 배포될 수 없다.
-- 게임 원본을 새로 해석해 필드를 쓰려 할 때는 §8의 `external-data-claim` 절차를 반드시 밟는다.
+- 게임 원본을 새로 해석해 필드를 쓰려 할 때는 §8의 `satisfactory-data-evidence` 절차를 반드시 밟는다.
 
 ---
 
@@ -193,27 +211,25 @@ dist/                                      ← 정적 HTML + 아일랜드 JS + �
 | `python - <<'PY'` 같은 큰 heredoc이 중간에 잘린다 | 셸 경유 heredoc이 자주 깨진다 | 패치 스크립트를 **파일로 써서** 실행한다 |
 | `[hidden]` 을 걸었는데 요소가 계속 보인다 | `display`를 준 요소에는 `[hidden]`이 안 먹는다 | `[hidden] { display: none !important }` 를 명시하거나 조건부 렌더로 뺀다 |
 | 세이브에서 수집품 개수가 16배 틀린다 | 세이브의 수집품 액터는 「주운 것」이 아니라 **「지나간 지역에 아직 놓여 있는 것」**이다 | 실제로 주운 목록은 레벨마다 따로 있는 `collectables` 다 |
-| 화면이 "그때 필요한 벨트: 작업자용 엘리베이터"라고 답한다 | `mSpeed`는 컨베이어에서만 처리량이다. `FGBuildableElevator`에도 같은 필드가 있고 값이 800이다 | `node .claude/skills/external-data-claim/scripts/field-scope.mjs mSpeed` 로 소유 클래스를 세고 `nativeClass`로 거른 뒤 쓴다 |
+| 화면이 "그때 필요한 벨트: 작업자용 엘리베이터"라고 답한다 | `mSpeed`는 컨베이어에서만 처리량이다. `FGBuildableElevator`에도 같은 필드가 있고 값이 800이다 | `node .agents/skills/satisfactory-data-evidence/scripts/field-scope.mjs mSpeed` 로 소유 클래스를 세고 `nativeClass`로 거른 뒤 쓴다 |
 | 옆 칸이 한 글자 폭으로 눌렸다 | 한 칸에 `white-space: nowrap`을 주면 그 칸의 최소 너비가 벌어진다 | `min-width: 0`. 그리고 `squeeze.mjs`로 재 본다 |
 | 숫자가 화면에 `0`으로 남는다 | 값을 CSS 카운터 + 스크롤 애니메이션이 만들었다 | 값은 서버가 렌더한 글자여야 한다. `nojs.mjs`로 확인 |
 | 부동소수점 때문에 기계가 한 대 더/덜 나온다 | 올림 비교 | `src/lib/rational.ts`(BigInt 유리수)를 쓰고, 올림은 `Math.ceil(x - 1e-9)` |
-| 조사 에이전트가 중반에 "찾지 못했습니다"만 반환한다 | WebSearch 한도를 세션 전체가 공유한다 | 에이전트마다 검색 상한을 지정한다. 엔드포인트를 아는 것은 WebFetch/`curl`로 돌린다 (§8 `research-fanout`) |
+| 조사가 첫 후보에 수렴한다 | 검색 결과가 한 해결 계열에 편향됐다 | 전역 `capability-harvest`로 공식·고별·최신 전문·인접 생태계를 능력 단위로 비교한다 |
 
 ---
 
-## 8. 스킬 (`.claude/skills/`)
+## 8. 프로젝트 스킬 (`.agents/skills/`)
 
-Claude Code는 이것을 자동으로 불러오지만, **다른 에이전트도 SKILL.md의 절차를 읽고
-그 안의 스크립트를 그대로 실행할 수 있다.** 스크립트는 평범한 Node 파일이라 특별한 런타임이 필요 없다.
+Codex가 요청에 맞는 스킬을 자동으로 라우팅한다. `.claude/skills/`는 Claude Code 호환 포인터만 두며
+절차와 스크립트의 정본은 아래 네 스킬이다.
 
 | 스킬 | 언제 | 딸린 스크립트 |
 |---|---|---|
-| `visual-verify` | `.astro`·`.tsx`·`.css`를 고친 **직후**. "고쳤다"고 말하기 전 | `node .claude/skills/visual-verify/scripts/squeeze.mjs <경로>` — 세 폭에서 눌림·넘침·잘림을 좌표로 짚어 준다<br>`node .claude/skills/visual-verify/scripts/shot-el.mjs <경로> '<선택자>' <출력.png>` — 한 조각만 크게 |
-| `no-js-fallback` | 카운터·프로그레스 바·스크롤 연동 효과를 넣을 때, 값이 `0`이나 빈칸으로 보일 때 | `node .claude/skills/no-js-fallback/scripts/nojs.mjs <경로>` — JS를 끄고 열어 값이 남는지 본다 |
-| `external-data-claim` | `.sav`를 파싱할 때, `Docs.json`의 새 필드를 쓸 때, "이 필드는 X를 뜻한다"고 쓰려 할 때 | `node .claude/skills/external-data-claim/scripts/field-scope.mjs <필드명> [--gen]` — 그 필드를 가진 nativeClass를 센다. **소유자가 둘 이상이면 exit 3**(오류가 아니라 "좁혀야 함"이라는 판정이다) |
-| `research-fanout` | 넓은 기술·논문·원 제작자 조사가 첫 후보에 수렴할 때. 병렬화는 명시적 권한이 있을 때만 | 없음 (능력 수집·정본 통합 절차) |
-| `graph-engineering` | 설치본 증거 관계, 공정·물류·전력·해금 그래프를 추가·변경할 때 | 목적별 projection 선언 → 포트·edge ID·출처 보존 → 속성·드리프트·아키텍처 검사 |
-| `topview-asset-pipeline` | 게임 기기 메시·재질·Blueprint를 조립하거나 제품 탑뷰를 생성·수정할 때 | `node scripts/topview/run-validated-render.mjs <scene.json> <output-dir> [--baseline=<approved.png>]` — 직접 제품 렌더를 차단하고 ORTHO/-Z·하드 코너를 독립 검사한 영수증 생성 |
+| `satisfactory-browser-evidence` | Astro·Preact·CSS 변경, no-JS 의미, 반응형·시각 완료 주장 | `squeeze.mjs`, `shot-el.mjs`, `nojs.mjs`를 한 브라우저 증거 경계로 통합 |
+| `satisfactory-data-evidence` | 세이브·Docs.json·위키·커뮤니티 데이터의 의미를 제품 사실로 승격할 때 | `field-scope.mjs`로 필드 소유자를 센 뒤 독립 대조·자릿수·회귀 게이트 적용 |
+| `satisfactory-knowledge-graph` | 설치본·생성 데이터·공정·설계·탑뷰 관계의 경로·영향·드리프트를 다룰 때 | 질문별 최소 투영, 출처·상태 보존, `game:graph:check` |
+| `satisfactory-asset-reconstruction` | 메시·재질·Blueprint 조립과 제품 탑뷰 후보를 만들거나 승격할 때 | `run-validated-render.mjs`와 사람 승인 경계를 유지 |
 
 사용자 전역 `~/.codex/skills/`에는 다음 자기개선 스킬이 있다. 저장소 클론에 포함되지는 않으므로 없는
 환경에서는 `satisfactory-ops-vault/docs/research/capability-evaluation-method-2026.md`의 같은 절차를
@@ -225,7 +241,7 @@ Claude Code는 이것을 자동으로 불러오지만, **다른 에이전트도 
 | `skill-evolution` | 전역·프로젝트 스킬과 자기 자신을 감사해 낡은 가정·과도한 금지·범위 축소를 수정·검증 |
 | `capability-radar` | 새 기술·릴리스·보안·호환성 변화를 주기 스캔해 앞의 두 스킬로 전달 |
 
-`npm run build`가 선행돼야 하는 것: `squeeze.mjs`, `shot-el.mjs`, `nojs.mjs`, `scripts/shoot.mjs`, `npm run check:coverage`.
+`npm run build`가 선행돼야 하는 것: 프로젝트 브라우저 증거 스킬의 세 스크립트, `scripts/shoot.mjs`, `npm run check:coverage`.
 
 > 참고: `factory-flow-diagram`(공정 흐름도 작도 규칙) 스킬은 이 저장소가 아니라 사용자 전역
 > `~/.claude/skills/`에 있다. 저장소만 클론한 에이전트에게는 없으므로 찾지 마라.

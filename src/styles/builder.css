@@ -22,6 +22,9 @@
   box-shadow: var(--lit-strong);
   backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
 }
+.fb-goal-row { display: flex; min-width: 0; flex-wrap: wrap; gap: var(--s3); align-items: end; }
+.fb-add-goal { align-self: end; }
+.fb-remove-goal { min-height: 44px; }
 .fb-field {
   display: grid;
   gap: var(--s2);
@@ -67,6 +70,7 @@
   color: var(--danger);
   font-size: var(--t-small);
 }
+.fb-cycle { margin: 0; padding: var(--s3) var(--s4); border-left: 2px solid var(--status-ok); background: var(--raised); color: var(--ink-2); font-size: var(--t-small); }
 
 /* ------------------------------------------------------------------ 합계 */
 .fb-summary {
@@ -89,6 +93,7 @@
   color: var(--ink-3);
 }
 .fb-v { font-size: var(--t-h3); font-weight: 600; }
+.fb-handoff { min-height: 100%; justify-content: center; }
 
 /* ------------------------------------------------------------------ 본문 */
 .fb-cols { display: grid; gap: var(--s8); }
@@ -135,6 +140,8 @@
   white-space: nowrap;
 }
 .fb-clock { color: var(--ink-3); }
+.fb-recipe-choice select { max-width: 220px; height: 32px; border: var(--hair) solid var(--line-strong); background: var(--bg); color: var(--ink); font-size: var(--t-caption); }
+.fb-transport { flex: 1 1 220px; color: var(--primary); font: var(--t-caption) var(--font-mono); }
 
 .fb-cut {
   flex: none;
@@ -175,6 +182,7 @@
 }
 .fb-chip:hover { border-color: var(--line-strong); color: var(--ink); }
 .fb-chip.is-on { border-color: var(--primary); color: var(--primary-ink); }
+.fb-byproducts { margin: var(--s3) 0 0 40px; color: var(--status-warning); font-size: var(--t-caption); line-height: 1.55; }
 
 .fb-empty { color: var(--ink-2); font-size: var(--t-small); }
 

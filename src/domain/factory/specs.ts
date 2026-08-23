@@ -1,4 +1,5 @@
 import buildingRows from '../../data/app/buildings.json' with { type: 'json' };
+import plannerScope from '../../data/app/planner-asset-scope.json' with { type: 'json' };
 import portRows from '../../data/curated/machine-ports.json' with { type: 'json' };
 import type { Box3, MachineSpec, PortSpec, Vec3 } from './types.ts';
 
@@ -45,12 +46,27 @@ const ports = (portRows.ports as PortRow[]).reduce<Map<string, PortSpec[]>>((map
   return map;
 }, new Map());
 const completeBuildings = new Set(portRows.$completeBuildings as string[]);
+const footprintOverrides = new Map(plannerScope.targets
+  .filter((target) => 'footprintOverride' in target)
+  .map((target) => [target.buildingClass, target.footprintOverride]));
 
 const specs = new Map((buildingRows as BuildingRow[]).map((row) => {
-  const hardBoxes: Box3[] = (row.footprint?.boxes ?? []).map((box) => ({
-    min: { x: box.xM, y: box.yM, z: box.zM },
-    max: { x: box.xM + box.widthM, y: box.yM + box.lengthM, z: box.zM + box.heightM },
-  }));
+  const hardBoxes: Box3[] = (row.footprint?.boxes ?? []).map((box) => {
+    const x2 = box.xM + box.widthM;
+    const y2 = box.yM + box.lengthM;
+    const z2 = box.zM + box.heightM;
+    return {
+      min: { x: Math.min(box.xM, x2), y: Math.min(box.yM, y2), z: Math.min(box.zM, z2) },
+      max: { x: Math.max(box.xM, x2), y: Math.max(box.yM, y2), z: Math.max(box.zM, z2) },
+    };
+  });
+  const override = footprintOverrides.get(row.id);
+  if (!hardBoxes.length && override) {
+    hardBoxes.push({
+      min: { x: -override.widthM / 2, y: -override.lengthM / 2, z: 0 },
+      max: { x: override.widthM / 2, y: override.lengthM / 2, z: override.heightM },
+    });
+  }
   const spec: MachineSpec = {
     buildingClass: row.id,
     name: row.ko,

@@ -13,8 +13,23 @@ import path from 'node:path';
 import { test } from 'node:test';
 import { add, ceil, div, format, fromNumber, mul, toNumber } from '../src/lib/rational.ts';
 import { solve, machineAdvice, type RecipeBook, type SolverRecipe } from '../src/lib/solver.ts';
+import { solveProductionNetwork } from '../src/domain/production/network-solver.ts';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
+
+test('복수 목표와 재활용 순환을 하나의 순생산 방정식으로 푼다', () => {
+  const recipes = new Map([
+    ['A', { id: 'make-a', primaryItemId: 'A', outputPerMinute: 10, machineId: 'MachineA', ingredients: [{ itemId: 'B', rate: 5 }, { itemId: 'Ore', rate: 2 }], products: [{ itemId: 'A', rate: 10 }] }],
+    ['B', { id: 'make-b', primaryItemId: 'B', outputPerMinute: 10, machineId: 'MachineB', ingredients: [{ itemId: 'A', rate: 2 }], products: [{ itemId: 'B', rate: 10 }] }],
+  ]);
+  const result = solveProductionNetwork([{ itemId: 'A', rate: 10 }, { itemId: 'B', rate: 5 }], (itemId) => recipes.get(itemId));
+  assert.equal(result.ok, true);
+  if (!result.ok) return;
+  assert.equal(result.cyclic, true);
+  assert.ok(Math.abs(result.nodes.find((node) => node.itemId === 'A')!.runs - 1.2222222222) < 1e-8);
+  assert.ok(Math.abs(result.nodes.find((node) => node.itemId === 'B')!.runs - 1.1111111111) < 1e-8);
+  assert.ok(Math.abs(result.raw.find((part) => part.itemId === 'Ore')!.rate - 2.4444444444) < 1e-8);
+});
 const read = (p: string) => JSON.parse(fs.readFileSync(path.join(ROOT, p), 'utf8'));
 
 const recipes = read('src/data/app/recipes.json') as (SolverRecipe & {

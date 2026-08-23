@@ -4,7 +4,7 @@
     {
       "id": "smelter-anders-blender-2023",
       "assetId": "Golden_Build_SmelterMk1_C_Anders2023",
-      "reference": "public/assets/planner/top-view/golden/Build_SmelterMk1_C_Anders2023.webp",
+      "reference": "scripts/topview/references/assets/planner/top-view/golden/Build_SmelterMk1_C_Anders2023.webp",
       "referenceSource": "anders-2023",
       "occupancyFrame": { "x": 0.0561, "y": 0.0294, "width": 0.8972, "height": 0.9412 },
       "referenceFramePx": { "width": 384, "height": 640, "ratio": 0.6 },

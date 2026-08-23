@@ -5,14 +5,17 @@
  */
 
 import { readFileSync, readdirSync } from 'node:fs';
-import { basename, resolve } from 'node:path';
+import { basename, relative, resolve } from 'node:path';
 
 const root = resolve(import.meta.dirname, '../..');
 const sceneDirectory = resolve(root, 'scripts/topview/scenes');
-const scenePaths = readdirSync(sceneDirectory, { withFileTypes: true })
-  .filter((entry) => entry.isFile() && entry.name.endsWith('.json'))
-  .sort((left, right) => left.name.localeCompare(right.name, 'en'))
-  .map((entry) => `scripts/topview/scenes/${entry.name}`);
+const listScenePaths = (directory) => readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+  const absolute = resolve(directory, entry.name);
+  return entry.isDirectory()
+    ? listScenePaths(absolute)
+    : entry.name.endsWith('.json') ? [relative(root, absolute).replaceAll('\\', '/')] : [];
+});
+const scenePaths = listScenePaths(sceneDirectory);
 const sceneContracts = JSON.parse(
   readFileSync(resolve(root, '.cache/game-asset-index/factory-scenes.json'), 'utf8')
 );
@@ -56,6 +59,18 @@ function transformMatches(actual, expected) {
       : Math.abs(value - actual[index]) <= tolerance);
 }
 
+function rotationEulerMatches(actual, component) {
+  if (actual === undefined) return true;
+  const expected = [
+    component.transform.rotationDeg.roll,
+    -component.transform.rotationDeg.pitch,
+    -component.transform.rotationDeg.yaw,
+  ];
+  return Array.isArray(actual)
+    && actual.length === 3
+    && expected.every((value, index) => angularDistanceDeg(value, actual[index]) <= angleToleranceDeg);
+}
+
 for (const scenePath of scenePaths) {
   const recipe = JSON.parse(readFileSync(resolve(root, scenePath), 'utf8'));
   const contract = sceneContracts.contracts.find(
@@ -81,6 +96,9 @@ for (const scenePath of scenePaths) {
     const expectedTransform = blueprintTransform(component, configured);
     if (!transformMatches(configured.transform, expectedTransform)) {
       errors.push(`${recipe.id}/${configured.id}: 게임 CDO→Blender 변환 불일치`);
+    }
+    if (!rotationEulerMatches(configured.rotationEulerDeg, component)) {
+      errors.push(`${recipe.id}/${configured.id}: 게임 CDO→Blender pitch/roll 변환 불일치`);
     }
 
     const directMesh = component.staticMesh ?? component.skeletalMesh;

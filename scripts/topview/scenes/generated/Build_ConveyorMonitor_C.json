@@ -1,0 +1,140 @@
+{
+  "$schemaVersion": 1,
+  "id": "conveyormonitor-batch-cl-502094",
+  "buildingClass": "Build_ConveyorMonitor_C",
+  "status": "generated-current-game-candidate",
+  "geometryAuthority": "game-install-cl-502094",
+  "sourceBlueprint": "FactoryGame/Content/FactoryGame/Buildable/Factory/ConveyorMonitor/Build_ConveyorMonitor.uasset",
+  "footprint": {
+    "widthM": 2,
+    "lengthM": 2.2,
+    "heightM": 1,
+    "groundZM": 0,
+    "centerM": [
+      0,
+      0
+    ],
+    "cornerEnvelope": "game-hard-clearance",
+    "confidence": "verified"
+  },
+  "components": [
+    {
+      "id": "FGColoredInstanceMeshProxy_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/ConveyorThroughputDisplay/Mesh/SM_ThroughputDisplay_01.glb",
+      "transform": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_ConveyorMonitor_C.FGColoredInstanceMeshProxy_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "NODE_AddStaticMeshComponent-0",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/Engine/Content/BasicShapes/Plane.glb",
+      "transform": [
+        -0.04612033,
+        0,
+        0.40301327,
+        0
+      ],
+      "scale": [
+        1.370742,
+        1.847369,
+        1
+      ],
+      "source": "Build_ConveyorMonitor_C.NODE_AddStaticMeshComponent-0",
+      "confidence": "verified"
+    }
+  ],
+  "materials": {
+    "albedo": {},
+    "ao": {},
+    "normal": {},
+    "reflection": {},
+    "stateMask": {},
+    "paint": {},
+    "baseColor": {},
+    "alpha": [],
+    "pbr": [],
+    "normalOnly": [],
+    "emissiveAccent": [],
+    "emissiveGeometrySelectors": [],
+    "state": {
+      "color": "#00ff00",
+      "strength": 5
+    }
+  },
+  "camera": {
+    "projection": "orthographic-top",
+    "frontTiltDeg": 0,
+    "displayYawDeg": 0,
+    "source": "runtime planner assets require metric top-down projection",
+    "confidence": "verified"
+  },
+  "canonicalOrientation": {
+    "authority": "Build_ConveyorMonitor_C Blueprint component transforms",
+    "screenEdge": "source-orientation",
+    "rule": "현재 게임 Blueprint 좌표계를 유지하고 포트 회전은 별도 배치 계약에서 검증한다."
+  },
+  "lighting": {
+    "groundAo": false,
+    "shadowMode": "alpha-near-and-wide-postprocess",
+    "aoLayers": 2,
+    "bloom": true,
+    "sun": true,
+    "keyEnergy": 1.7,
+    "fillEnergy": 1,
+    "worldStrength": 0.42,
+    "exposure": 1.1,
+    "method": "조립 검수용 중립 PBR",
+    "confidence": "verified"
+  },
+  "assemblyFeatures": [
+    {
+      "id": "FGColoredInstanceMeshProxy_GEN_VARIABLE",
+      "owner": "FGColoredInstanceMeshProxy_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "NODE_AddStaticMeshComponent-0",
+      "owner": "NODE_AddStaticMeshComponent-0",
+      "status": "present"
+    }
+  ],
+  "pipelineAudit": {
+    "coordinateBasis": "scene=(unrealX,-unrealY,unrealZ,-unrealYaw)",
+    "requiredStages": [
+      "package-graph",
+      "blueprint-components",
+      "view-feature-matrix",
+      "runtime-top-after-assembly"
+    ],
+    "repeatedDefectThreshold": 2,
+    "systemicDefectThreshold": 1,
+    "rawVatCandidateAllowed": false
+  },
+  "validationContract": "batch-static",
+  "portVisibilityRequired": false,
+  "portVisibility": [],
+  "materialChecks": [
+    {
+      "id": "cue4parse-imported-game-materials",
+      "status": "present"
+    }
+  ],
+  "cameraLightingChecks": [
+    {
+      "id": "runtime-orthographic-top",
+      "status": "present"
+    }
+  ]
+}

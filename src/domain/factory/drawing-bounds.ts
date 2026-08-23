@@ -1,6 +1,6 @@
 /** 도면 화면 맞춤과 파일 내보내기가 공유하는 실제 미터 좌표 경계. */
 import { transformBox } from './geometry.ts';
-import type { Box3, FoundationTile, Placement, TransportRoute } from './types.ts';
+import type { Box3, FoundationTile, Placement, Vec3 } from './types.ts';
 
 export interface DrawingBounds {
   x: number;
@@ -28,7 +28,7 @@ function machineBounds(placement: Placement): Box3 {
 export function factoryDrawingBounds(
   placements: Placement[],
   foundations: FoundationTile[],
-  transports: TransportRoute[],
+  transports: { pathM: Vec3[] }[],
   paddingM = 4,
 ): DrawingBounds | null {
   const boxes = placements.map(machineBounds);

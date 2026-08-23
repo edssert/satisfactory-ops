@@ -2,16 +2,18 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { existsSync } from 'node:fs';
 import { drawingPixelSize, factoryDrawingBounds } from '../src/domain/factory/drawing-bounds.ts';
-import { isStoredPlan, restoreStoredPlan, toStoredPlan } from '../src/domain/factory/editor-state.ts';
+import { isStoredPlan, migrateStoredPlan, restoreStoredPlan, toStoredPlan } from '../src/domain/factory/editor-state.ts';
 import { portWorldPosition } from '../src/domain/factory/geometry.ts';
 import { routeAroundMachines } from '../src/domain/factory/route.ts';
 import { drawingSupported, requireMachineSpec } from '../src/domain/factory/specs.ts';
 import { transportPathParts } from '../src/domain/factory/transport-geometry.ts';
+import { transportSpecForFlow } from '../src/domain/factory/transport-specs.ts';
 import type { FactoryPlan, Placement } from '../src/domain/factory/types.ts';
 import { validateFactoryPlan } from '../src/domain/factory/validate.ts';
 import portRows from '../src/data/curated/machine-ports.json' with { type: 'json' };
 import topviewRows from '../src/data/curated/topview-assets.json' with { type: 'json' };
 import { runtimeTopviewAssets } from '../src/lib/topview-assets.ts';
+import { parsePlannerHandoff } from '../src/state/planner-handoff.ts';
 
 function foundationGrid(minX: number, maxX: number, minY: number, maxY: number) {
   const tiles = [];
@@ -59,6 +61,7 @@ const validPlan: FactoryPlan = {
     medium: 'solid',
     itemId: 'Desc_IronIngot_C',
     flowPerMinute: 30,
+    transportClass: 'Build_ConveyorBeltMk1_C',
     capacityPerMinute: 60,
     pathM: [portWorldPosition(smelter, output), portWorldPosition(constructor, input)],
   }],
@@ -135,13 +138,70 @@ test('편집 JSON은 운전 설정·수동 경로·층고를 바꾸지 않고 �
     { x: 12, y: 7, z: 1 },
     { x: 12, y: -3, z: 1 },
   ];
-  const stored = toStoredPlan(edited.placements, edited.foundations, edited.transports);
+  const rails = [{ id: 'rail-1', pathM: [{ x: -8, y: -8, z: 0 }, { x: 24, y: -8, z: 0 }] }];
+  const stored = toStoredPlan(edited.placements, edited.foundations, edited.transports, rails);
   const parsed = JSON.parse(JSON.stringify(stored)) as unknown;
   assert.equal(isStoredPlan(parsed), true);
   if (!isStoredPlan(parsed)) return;
   const specs = new Map(edited.placements.map((placement) => [placement.spec.buildingClass, placement.spec]));
   const restored = restoreStoredPlan(parsed, specs);
-  assert.deepEqual(toStoredPlan(restored.placements, restored.foundations, restored.transports), stored);
+  assert.deepEqual(toStoredPlan(restored.placements, restored.foundations, restored.transports, restored.rails), stored);
+});
+
+test('이전 도면의 고정 용량 경로는 게임 데이터 기반 최소 Mk로 마이그레이션된다', () => {
+  const legacy = toStoredPlan(validPlan.placements, validPlan.foundations, validPlan.transports) as unknown as Record<string, unknown>;
+  legacy.schemaVersion = 4;
+  legacy.transports = (legacy.transports as Array<Record<string, unknown>>).map(({ transportClass: _transportClass, ...route }) => ({
+    ...route,
+    flowPerMinute: 61,
+    capacityPerMinute: 60,
+  }));
+  const migrated = migrateStoredPlan(legacy);
+  assert.ok(migrated);
+  assert.equal(migrated.schemaVersion, 6);
+  assert.equal(migrated.transports[0].capacityPerMinute, 120);
+  assert.equal(migrated.transports[0].transportClass, transportSpecForFlow('solid', 61).buildingClass);
+});
+
+test('철도 경로는 설비 없이도 유효한 미터 좌표 도면으로 저장·검증된다', () => {
+  const plan: FactoryPlan = {
+    schemaVersion: 1,
+    id: 'rail-only',
+    placements: [],
+    foundations: [],
+    transports: [],
+    rails: [{ id: 'rail-1', pathM: [{ x: 0, y: 0, z: 0 }, { x: 32, y: 0, z: 0 }] }],
+    powerSources: [],
+    powerEdges: [],
+  };
+  assert.equal(validateFactoryPlan(plan, { validatePower: false }).publishable, true);
+  plan.rails![0].pathM[1] = { x: 0, y: 0, z: 0 };
+  assert.equal(validateFactoryPlan(plan, { validatePower: false }).issues.some((entry) => entry.code === 'RAIL_GEOMETRY'), true);
+});
+
+test('운송 규격은 게임 데이터에서 유량을 만족하는 최소 벨트·파이프 Mk를 고른다', () => {
+  assert.equal(transportSpecForFlow('solid', 61).capacityPerMinute, 120);
+  assert.equal(transportSpecForFlow('solid', 781).capacityPerMinute, 1200);
+  assert.equal(transportSpecForFlow('fluid', 301).capacityPerMinute, 600);
+});
+
+test('계산→설계 대기열은 설비·레시피·클럭·남은 대수·목표 유량을 검증한다', () => {
+  const handoff = parsePlannerHandoff({
+    schemaVersion: 1,
+    createdAt: '2026-08-23T00:00:00.000Z',
+    entries: [{
+      id: 'handoff:constructor',
+      buildingClass: 'Build_ConstructorMk1_C',
+      recipeId: 'Recipe_IronPlate_C',
+      clockPercent: 50,
+      remaining: 2,
+      targetItemId: 'Desc_IronPlate_C',
+      targetFlowPerMinute: 20,
+    }],
+  });
+  assert.ok(handoff);
+  assert.equal(handoff.entries[0].remaining, 2);
+  assert.equal(parsePlannerHandoff({ ...handoff, entries: [{ ...handoff.entries[0], remaining: 0 }] }), null);
 });
 
 test('도면 내보내기 경계는 실제 미터 축척과 고해상도 픽셀 크기를 공유한다', () => {
@@ -236,12 +296,12 @@ test('같은 높이의 벨트가 접속 장치 없이 교차하면 발행을 막
     transports: [
       {
         id: 'route-a', from: { placementId: 'a', portId: 'Output2' }, to: { placementId: 'b', portId: 'Input0' },
-        medium: 'solid' as const, itemId: 'test', flowPerMinute: 0, capacityPerMinute: 60,
+        medium: 'solid' as const, itemId: 'test', flowPerMinute: 0, transportClass: 'Build_ConveyorBeltMk1_C', capacityPerMinute: 60,
         pathM: [{ x: -12, y: -10, z: 1 }, { x: -12, y: 0, z: 1 }, { x: 12, y: 0, z: 1 }, { x: 12, y: 9, z: 1 }],
       },
       {
         id: 'route-b', from: { placementId: 'c', portId: 'Output2' }, to: { placementId: 'd', portId: 'Input0' },
-        medium: 'solid' as const, itemId: 'test', flowPerMinute: 0, capacityPerMinute: 60,
+        medium: 'solid' as const, itemId: 'test', flowPerMinute: 0, transportClass: 'Build_ConveyorBeltMk1_C', capacityPerMinute: 60,
         pathM: [{ x: 12, y: -10, z: 1 }, { x: 0, y: -10, z: 1 }, { x: 0, y: 9, z: 1 }, { x: -12, y: 9, z: 1 }],
       },
     ],

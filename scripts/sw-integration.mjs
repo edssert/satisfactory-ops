@@ -57,11 +57,14 @@ const EXCLUDE = [
    * 큰 그림(키아트·배경). 첫 화면 것 하나면 되고 나머지는 스크롤해야 나온다.
    */
   /assets[\/]art[\/]/i,
+  /* 고정 설비 탑뷰 149파일은 플래너·도감을 열 때만 런타임 캐시한다. */
+  /assets[\/]planner[\/]top-view[\/]/i,
   /*
    * 세이브 파서 청크 2.6MB. 일부러 지연 import 로 만들어 뒀는데 프리캐시가 그걸 무력화했다 —
    * 세이브를 열 생각이 없는 사람도 받고 있었다. 파일을 고르는 순간 받는다.
    */
   /_astro[\/]build\.[A-Za-z0-9_-]+\.js$/,
+  /_astro[\/]checkup\.worker-[A-Za-z0-9_-]+\.js$/,
 ];
 
 function walk(dir, out = []) {

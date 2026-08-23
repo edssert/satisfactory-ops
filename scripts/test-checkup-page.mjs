@@ -41,7 +41,7 @@ const up = await page.textContent('[data-s-up]');
  */
 const text = await page.evaluate(() => document.body.innerText);
 const leak = [...text.matchAll(/(Desc_[A-Za-z0-9_]+_C|Build_[A-Za-z0-9_]+_C|Recipe_[A-Za-z0-9_]+_C|\*\*)/g)].map((m) => m[1]);
-await page.screenshot({ path: 'checkup.png', fullPage: true });
+await page.screenshot({ path: 'output/playwright/checkup.png', fullPage: true });
 await browser.close();
 server.close();
 

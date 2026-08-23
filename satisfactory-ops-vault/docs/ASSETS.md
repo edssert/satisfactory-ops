@@ -17,6 +17,9 @@ public/assets/
 ├─ items/
 ├─ map/
 └─ brand/
+
+scripts/topview/references/
+└─ assets/planner/top-view/  # 연구 대조 전용, 배포 제외
 ```
 
 파일명은 원본 클래스 또는 안정적인 내부 식별자에서 파생한다. `final`, `new`, `fixed`, 제작자 이름 같은
@@ -24,7 +27,9 @@ public/assets/
 
 Anders 원본 시트의 전수 후보 정본은 `src/data/curated/anders-topview-candidates.json`이다. 모든 후보는
 `<sheet>#<candidateId>` 안정 ID, 감지 박스, 식별 상태, 클래스·역할, 신뢰도, 출처, 미해결 질문을 가진다.
-`topview-assets.json`에는 이 후보 중 실제 크롭·축척·시각 승인을 받은 런타임 자산만 등록한다.
+`topview-assets.json`은 현재 게임 설치본에서 재구성해 시각 승인한 런타임 자산과 연구 대조 자산을 함께
+색인하되, 후자는 `reference-only`와 `scripts/topview/references/` 경로로 격리한다. `public/`, `dist/`,
+서비스워커에는 현재 게임 출처의 `approved` 자산만 들어간다.
 
 완성 도면 문맥 색인은 `src/data/curated/anders-layout-corpus.json`이다. 출처, 원본·축소본 SHA-256,
 픽셀 크기, 제작자, 분석 대상을 분리해 기록하고 자산 그룹이 실제 기계·벨트·파이프·리프트 흐름에서
@@ -145,8 +150,16 @@ Anders가 공개한 제작 원리는 `게임 자산 추출 → glTF → Blender 
 dangling 관계, 상태 자산 4종과 참조 전용 자산의 런타임 누출을 막는다. 모든 생성 캐시는 커밋하지 않는다.
 
 채굴기 Mk.1은 현재 게임 메시, 실제 Output0 좌표, Mk.1 벨트 스텁, 수직 정사영과 하드 점유 코너 계약을
-통과해 `approved`다. 자동화 바이오매스 연소기는 아직 `candidate`다. 구조 검사는 파일 SHA-256, 양수
-실축, 0~1 범위 점유 프레임을 확인한다. Blender 설치와 렌더 성공만으로 시각 승인을 대체하지 않는다.
+통과해 `approved`다. 자동화 바이오매스 연소기도 입력부를 가리는 별도 투명도 처리 없이 활성·파워 샤드·
+대기·오류 4상태를 현재 게임 메시로 승인해 앱에 연결했다. 구조 검사는 파일 SHA-256, 양수 실축, 0~1 범위
+점유 프레임을 확인한다. Blender 설치와 렌더 성공만으로 시각 승인을 대체하지 않는다.
+`npm run check:assets:release`는 현재 게임 승인 자산의 exact allowlist와 외부 reference SHA-256 denylist를
+`public/`, `dist/`, 서비스워커에 적용한다.
+
+고정 설비·장치 래스터 대상은 `requiresRasterTopview()`로 63건이며 모두 현재 게임 설치본 기반 자산으로
+승격했다. `scripts/topview/batch-topviews.mjs`는 자동 장면 계약에서 메시를 일괄 추출·렌더하고,
+`src/data/curated/topview-batch-review.json`은 실제 검수에서 통과·제외한 후보를 기록한다. 토대·경로·
+높이 가변 지지대·구멍·철도 신호는 이 집계에 넣지 않고 설계판 합성 계약에서 다룬다.
 
 ## 7. 승인 기준
 

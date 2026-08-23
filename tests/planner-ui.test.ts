@@ -96,7 +96,7 @@ function mount() {
   win.localStorage.clear();
   doc.body.innerHTML = '<div id="root"></div>';
   act(() => {
-    render(h(Planner, { machines }), doc.getElementById('root'));
+    render(h(Planner, { machines, railName: '철도' }), doc.getElementById('root'));
   });
 }
 
@@ -220,10 +220,25 @@ test('실제 포트를 연결하면 외부 이미지 없이 자체 컨베이어 
   clickCanvas(800, 360);
   clickSvg(all('.vp-placement')[0]?.querySelector('.vp-port.is-output'));
   clickSvg(all('.vp-placement')[1]?.querySelector('.vp-port.is-input'));
-  assert.equal(all('.vp-route[aria-label="컨베이어 벨트"]').length, 1);
+  assert.equal(all('.vp-route.is-solid').length, 1);
+  assert.match(all('.vp-route.is-solid')[0].getAttribute('aria-label') ?? '', /Mk\.1/);
   assert.ok(all('.vp-belt-surface').length > 0);
   assert.ok(all('.vp-belt-slat').length > 0);
   assert.equal(all('.vp-route image').length, 0);
+});
+
+test('철도는 시작점과 끝점을 사용자가 찍는 자체 벡터 경로로 그린다', () => {
+  mount();
+  clickButton('철도');
+  clickCanvas(420, 360);
+  clickCanvas(820, 360);
+  assert.equal(all('.vp-rail').length, 1);
+  assert.ok(all('.vp-rail-track').length > 0);
+  assert.ok(all('.vp-rail-tie').length > 0);
+  assert.equal(all('.vp-rail image').length, 0);
+  clickSvg(all('.vp-rail')[0]);
+  clickButton('선택 삭제');
+  assert.equal(all('.vp-rail').length, 0);
 });
 
 test('전체 초기화는 설비·토대·물류를 한 번에 비운다', () => {
@@ -250,7 +265,7 @@ test('경광등은 입출력 누락과 품목 불일치 연결에서 빨강 자�
   clickSvg(placements[1].querySelector('.vp-port.is-input'));
   clickSvg(placements[1].querySelector('.vp-port.is-output'));
   clickSvg(placements[2].querySelector('.vp-port.is-input'));
-  assert.equal(all('.vp-route[aria-label="컨베이어 벨트"]').length, 2);
+  assert.equal(all('.vp-route.is-solid').length, 2);
   assert.equal(placements[1].querySelector('.vp-machine-image')?.getAttribute('href'), '/topview/constructor-error.webp');
 });
 
@@ -259,7 +274,7 @@ test('60/분 생산기를 30/분 소비기에 연결하면 생산기는 노랑, 
   const consumerSpec = { buildingClass: 'Smelter', name: '제련기', hardBoxes: [], powerDemandMW: 4, ports: [{ id: 'in', direction: 'input', medium: 'solid' }] };
   const producer = { id: 'miner', spec: producerSpec, positionM: { x: 0, y: 0, z: 0 }, rotation: 0, operation: { inputRates: {}, outputRates: { ore: 60 }, clockPercent: 100 } };
   const consumer = { id: 'smelter', spec: consumerSpec, positionM: { x: 0, y: 10, z: 0 }, rotation: 0, operation: { inputRates: { ore: 30 }, outputRates: {}, clockPercent: 100, powerShards: 0 } };
-  const route = { id: 'route', from: { placementId: 'miner', portId: 'out' }, to: { placementId: 'smelter', portId: 'in' }, medium: 'solid', itemId: 'ore', flowPerMinute: 60, capacityPerMinute: 60, pathM: [] };
+  const route = { id: 'route', from: { placementId: 'miner', portId: 'out' }, to: { placementId: 'smelter', portId: 'in' }, medium: 'solid', itemId: 'ore', flowPerMinute: 60, transportClass: 'Build_ConveyorBeltMk1_C', capacityPerMinute: 60, pathM: [] };
   assert.equal(visualState(producer, producerSpec, [producer, consumer], [route], []), 'standby');
   assert.equal(visualState(consumer, consumerSpec, [producer, consumer], [route], []), 'active');
   consumer.operation.clockPercent = 150;

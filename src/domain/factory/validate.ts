@@ -95,13 +95,14 @@ export interface FactoryValidationOptions {
 
 export function validateFactoryPlan(plan: FactoryPlan, options: FactoryValidationOptions = {}): ValidationResult {
   const issues: ValidationIssue[] = [];
-  if (!plan.placements.length) {
+  if (!plan.placements.length && !(plan.rails?.length)) {
     issues.push(issue('EMPTY_PLAN', [plan.id], '설비가 하나도 없는 빈 판은 시공 도면으로 발행할 수 없습니다.'));
   }
   const ids = [
     ...plan.foundations.map((entry) => entry.id),
     ...plan.placements.map((entry) => entry.id),
     ...plan.transports.map((entry) => entry.id),
+    ...(plan.rails ?? []).map((entry) => entry.id),
     ...plan.powerSources.map((entry) => entry.id),
     ...plan.powerEdges.map((entry) => entry.id),
   ];
@@ -109,6 +110,12 @@ export function validateFactoryPlan(plan: FactoryPlan, options: FactoryValidatio
   if (duplicateIds.length) issues.push(issue('DUPLICATE_ID', duplicateIds, '계획 안의 식별자는 중복될 수 없습니다.'));
 
   const placements = placementMap(plan);
+  for (const rail of plan.rails ?? []) {
+    const invalid = rail.pathM.length < 2
+      || rail.pathM.some((point) => ![point.x, point.y, point.z].every(Number.isFinite))
+      || rail.pathM.slice(1).some((point, index) => distance(rail.pathM[index], point) <= EPSILON);
+    if (invalid) issues.push(issue('RAIL_GEOMETRY', [rail.id], '철도 경로는 서로 다른 두 개 이상의 유효한 미터 좌표가 필요합니다.'));
+  }
   for (const placement of plan.placements) {
     if (!placement.spec.ports.length || placement.spec.ports.some((port) => port.confidence !== 'verified')) {
       issues.push(issue(
@@ -166,6 +173,7 @@ export function validateFactoryPlan(plan: FactoryPlan, options: FactoryValidatio
     }
     const parts = transportPathParts(route.pathM);
     parts.lifts.forEach((part) => {
+      if (route.medium !== 'solid') return;
       if (part.heightM < LIFT_MIN_HEIGHT_M - EPSILON || part.heightM > LIFT_MAX_HEIGHT_M + EPSILON) {
         issues.push(issue('LIFT_HEIGHT', [route.id], '컨베이어 리프트의 수직 높이는 4–48 m 범위여야 합니다.', { lengthM: part.heightM }));
       }

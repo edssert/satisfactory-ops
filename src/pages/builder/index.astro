@@ -3,11 +3,10 @@
  * 직접 만들기 — 목표 품목과 분당 수량을 넣으면 공정 전체를 펼친다.
  *
  * 페이지는 데이터 서브셋을 만들어 아일랜드에 props 로 넘긴다. 아일랜드가 데이터를
- * 직접 import 하지 않는다(ADR-0009). 넘기는 양은 25KB 남짓이라 네트워크 요청이 없다.
+ * 직접 import 하지 않는다(ADR-0009). 계산식과 공식 표시 이름을 정적 props로 넘겨 네트워크 요청이 없다.
  *
- * 기본 레시피만 넘긴다. 대체 제작법은 하드 드라이브로 얻는 것이라 사람마다 가진 게
- * 다르고, 그걸 고르는 화면은 아직 만들지 않았다 — 지금 넣으면 안 가진 레시피로
- * 계획을 세우게 된다.
+ * 표준 제작법을 기본값으로 두고 대체 제작법 후보도 함께 넘긴다. 사용자가 결과 행에서
+ * 선택하면 전체 원료·설비·전력과 설계 대기열이 같은 계약으로 다시 계산된다.
  */
 import Base from '../../layouts/Base.astro';
 import '../../styles/fx.css';
@@ -22,9 +21,11 @@ const itemById = new Map(items.map((i) => [i.id, i]));
 
 /** 아이템 → 기본 레시피. 대체 제작법과 포장 해제는 뺀다 */
 const byProduct = new Map<string, (typeof recipes)[number]>();
+const alternatesByProduct = new Map<string, (typeof recipes)[number][]>();
 for (const r of recipes) {
   if (r.isBuildingRecipe || r.producedIn.length === 0) continue;
-  if (/^Recipe_Alternate_/.test(r.id) || isUnpackaging(r)) continue;
+  if (isUnpackaging(r)) continue;
+  const alternate = /^Recipe_Alternate_/.test(r.id);
   for (const p of r.products) {
     /*
      * 원자재는 계산의 바닥이다. 변환기가 SAM 으로 철광석을 만들 수 있어서 그냥 두면
@@ -32,7 +33,11 @@ for (const r of recipes) {
      * 공정이 24단계를 넘겨 버린다. 캐는 것은 캐는 것으로 둔다.
      */
     if (itemById.get(p.item)?.kind === 'resource') continue;
-    if (!byProduct.has(p.item)) byProduct.set(p.item, r);
+    if (alternate) {
+      const rows = alternatesByProduct.get(p.item) ?? [];
+      rows.push(r);
+      alternatesByProduct.set(p.item, rows);
+    } else if (!byProduct.has(p.item)) byProduct.set(p.item, r);
   }
 }
 
@@ -40,7 +45,9 @@ const payloadItems: {
   i: string;
   k: string;
   e: string;
-  r?: { o: number; g: [string, number][]; m: string };
+  f?: 1;
+  r?: { id: string; k: string; o: number; g: [string, number][]; p: [string, number][]; m: string; a?: 1 };
+  a?: { id: string; k: string; o: number; g: [string, number][]; p: [string, number][]; m: string; a?: 1 }[];
 }[] = [];
 
 for (const [itemId, r] of byProduct) {
@@ -50,27 +57,63 @@ for (const [itemId, r] of byProduct) {
     i: itemId,
     k: it.ko,
     e: it.en,
+    f: it.isFluid ? 1 : undefined,
     r: {
+      id: r.id,
+      k: r.ko,
       o: r.products.find((p) => p.item === itemId)!.perMinute,
       g: r.ingredients.map((g) => [g.item, g.perMinute] as [string, number]),
+      p: r.products.map((product) => [product.item, product.perMinute] as [string, number]),
       m: r.producedIn[0]!,
     },
+    a: (alternatesByProduct.get(itemId) ?? []).flatMap((alternate) => {
+      const product = alternate.products.find((entry) => entry.item === itemId);
+      if (!product) return [];
+      return [{
+        id: alternate.id,
+        k: alternate.ko,
+        o: product.perMinute,
+        g: alternate.ingredients.map((ingredient) => [ingredient.item, ingredient.perMinute] as [string, number]),
+        p: alternate.products.map((entry) => [entry.item, entry.perMinute] as [string, number]),
+        m: alternate.producedIn[0]!,
+        a: 1 as const,
+      }];
+    }),
   });
 }
 /** 원자재는 레시피 없이 이름만 넘긴다 — 계산의 바닥이다 */
 for (const i of items) {
   if (i.kind === 'resource' && !byProduct.has(i.id)) {
-    payloadItems.push({ i: i.id, k: i.ko, e: i.en });
+    payloadItems.push({ i: i.id, k: i.ko, e: i.en, f: i.isFluid ? 1 : undefined });
   }
 }
+/** 재료·부산물로만 등장하는 항목도 공식 이름을 보존한다. */
+const payloadItemIds = new Set(payloadItems.map((item) => item.i));
+for (const item of items) {
+  if (!payloadItemIds.has(item.id)) payloadItems.push({ i: item.id, k: item.ko, e: item.en, f: item.isFluid ? 1 : undefined });
+}
 
-const usedMachines = new Set(payloadItems.map((x) => x.r?.m).filter(Boolean) as string[]);
+const usedMachines = new Set(payloadItems.flatMap((item) => [
+  item.r?.m,
+  ...(item.a ?? []).map((recipe) => recipe.m),
+]).filter(Boolean) as string[]);
 const buildingById = new Map(buildings.map((b) => [b.id, b]));
 const payloadMachines = [...usedMachines].map((id) => {
   const b = buildingById.get(id);
   /* 가변 전력 건물은 powerMW 가 null 이다. 상한을 쓴다 — 낮춰 잡으면 발전 계획이 어긋난다 */
   return { i: id, k: b?.ko ?? id, p: b?.powerMW ?? b?.powerMaxMW ?? null };
 });
+const payloadTransports = buildings
+  .filter((building) => /^Build_ConveyorBeltMk\d+_C$/.test(building.id)
+    || /^Build_Pipeline(?:MK2)?_C$/.test(building.id))
+  .map((building) => ({
+    i: building.id,
+    k: building.ko,
+    m: building.beltItemsPerMinute ? 'solid' as const : 'fluid' as const,
+    r: building.beltItemsPerMinute ?? building.pipeFlowM3PerMinute ?? 0,
+  }))
+  .filter((transport) => transport.r > 0)
+  .sort((left, right) => left.r - right.r);
 
 const bytes = JSON.stringify({ payloadItems, payloadMachines }).length;
 ---
@@ -94,13 +137,15 @@ const bytes = JSON.stringify({ payloadItems, payloadMachines }).length;
       client:load
       items={payloadItems}
       machines={payloadMachines}
+      transports={payloadTransports}
       initial="Desc_IronPlateReinforced_C"
       initialRate={5}
       iconBase={`${base}/assets`}
+      plannerUrl={`${base}/planner/`}
     />
 
     <p class="caption foot">
-      기본 제작법 기준입니다. 대체 제작법은 사람마다 가진 것이 달라 넣지 않았습니다.
+      표준 제작법이 기본이며 결과 행에서 대체 제작법을 선택할 수 있습니다.
       전력은 클럭에 지수(1.321929)를 적용한 값입니다. 데이터 {Math.round(bytes / 1024)}KB 를
       화면과 함께 보내므로 조작에 네트워크 요청이 없습니다.
     </p>

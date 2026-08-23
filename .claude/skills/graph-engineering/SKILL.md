@@ -1,43 +1,8 @@
 ---
 name: graph-engineering
-description: 설치본 자산, 게임 데이터, 공장 설계, 탑뷰 증거처럼 여러 관계를 함께 추적하거나 영향·누락·경로를 검증할 때 사용하는 Satisfactory Ops 전용 그래프 엔지니어링 절차다.
+description: Claude Code compatibility entry for Satisfactory knowledge-graph work. Use the canonical project skill instead of maintaining a separate procedure here.
 ---
 
-# 그래프 엔지니어링
+# 호환 포인터
 
-기존 정본을 그래프로 **투영**한다. 그래프를 게임 설치본, 생성 데이터, 문서 정본을 대신하는 새 정본으로 만들지 않는다.
-
-## 언제 쓰는가
-
-- 설비에서 실제 메시·VAT·재질·텍스처·포트까지 근거 경로를 찾아야 할 때
-- 아이템·레시피·설비 또는 배치·포트·운송 관계의 영향과 불변식을 바꿀 때
-- 탑뷰 장면이 설치본 근거에서 승인 자산과 런타임까지 끊기지 않았는지 검증할 때
-- 여러 체크포인트와 사람 승인 게이트를 세션 밖에서도 재구성해야 할 때
-
-단일 파일의 지역적 수정이나 이미 직접 참조로 답할 수 있는 질문에는 그래프를 만들지 않는다.
-
-## 계약
-
-1. `satisfactory-ops-vault/PROJECT-HUB.md`에서 관련 정본을 먼저 찾는다.
-2. 질문에 필요한 최소 하위 그래프만 선택한다.
-3. 노드와 간선의 중요한 주장은 설치본 패키지, 생성 데이터 경로, 코드 심벌, 테스트 또는 승인 영수증을 근거로 갖는다.
-4. 사실 상태를 `observed`, `inferred`, `proposed`, `unknown`으로 구분한다.
-5. 설치본 그래프는 `.cache/game-asset-index/factory-assets.ndjson`과 `factory-scenes.json`에서 재생성한다. 캐시를 손으로 고치지 않는다.
-6. 제품 그래프는 `src/data/app/*.json`과 `src/domain/factory/`에서 투영한다. 표시 이름과 게임 수치를 그래프 계약에 복제하지 않는다.
-7. 탑뷰 증거 그래프는 `scripts/topview/scenes/`, 렌더 영수증, `src/data/curated/topview-assets.json`, 런타임 필터를 잇는다. 사람 승인을 자동 추론하지 않는다.
-8. 변경 후 `npm run graph:check`를 실행하고, 제품 코드를 바꿨으면 관련 단위·브라우저 검사도 함께 실행한다.
-
-## 관계 해석
-
-공통 관계는 `depends_on`, `implemented_by`, `constrained_by`, `verified_by`, `supersedes`, `blocked_by`를 우선 사용한다. 설치본 파생 그래프의 기계 관계명과 질의 예시는 [game-graph-schema.md](references/game-graph-schema.md)를 따른다.
-
-중요 관계마다 출발점·관계·도착점·상태·근거를 남긴다. 임시 명령 로그, 숨은 추론, 개인 정보, 세션 전용 상태는 지속 문서에 저장하지 않는다.
-
-## 완료 판정
-
-- 모든 간선의 양 끝 노드가 존재한다.
-- Blueprint 구성품의 직접·간접 메시와 transform 근거가 보존된다.
-- 재질 부모와 텍스처 참조를 역방향으로 찾을 수 있다.
-- 앱 레시피의 아이템·설비 참조와 설계판 운송의 배치·포트 참조가 유효하다.
-- 현재 게임 자산의 장면 → 검증 렌더 → 승인 매니페스트 → 런타임 경로가 끊기지 않는다.
-- 후보 또는 사람 승인 대기 상태가 자동으로 승인 상태로 바뀌지 않는다.
+정본은 [`satisfactory-knowledge-graph`](../../../.agents/skills/satisfactory-knowledge-graph/SKILL.md)다. 관계 스키마도 정본 스킬의 `references/`에서 읽는다.

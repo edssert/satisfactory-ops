@@ -9,4 +9,5 @@ export function isRuntimeTopviewAsset(asset: TopviewAsset): boolean {
   return asset.sourceId === RUNTIME_TOPVIEW_SOURCE && asset.reviewStatus === 'approved';
 }
 
-export const runtimeTopviewAssets = topviewData.assets.filter(isRuntimeTopviewAsset);
+export const topviewAssets = topviewData.assets;
+export const runtimeTopviewAssets = topviewAssets.filter(isRuntimeTopviewAsset);

@@ -29,23 +29,13 @@ jobs:
 
       - run: npm ci
 
-      # 앱 데이터가 원본 데이터와 어긋나 있으면 여기서 죽는다 (조용히 틀린 수치를 배포하지 않는다)
-      - name: 데이터 검증
-        run: node scripts/build-app-data.mjs --check
+      - name: Chromium 설치
+        run: npx playwright install --with-deps chromium
 
-      # 생산 체인 골든 테스트 (TRD 8.1)
-      - name: 단위 테스트
-        run: node --test tests/solver.test.ts tests/recipe-select.test.ts tests/layout.test.ts tests/floorplan.test.ts
-
-      - name: 타입 검사
-        run: npx astro check --minimumSeverity error
-
-      - run: npm run build
-
-      # 서비스워커 검증은 dist/ 가 있어야 의미가 있다. 런타임 테스트는 sw.js 를 실제로 실행해
-      # 각 라우트가 자기 문서를 돌려주는지 본문으로 확인한다.
-      - name: 서비스워커 검증
-        run: node --test tests/sw.test.ts tests/sw-runtime.test.ts
+      # 로컬 완료 주장과 배포 게이트를 하나로 유지한다. 데이터·전체 단위 테스트·타입·문서·아키텍처·
+      # 자산·빌드·접근성·no-JS·반응형·플래너 조작·서비스워커 오프라인을 모두 통과해야 업로드한다.
+      - name: Release 검증
+        run: npm run verify:release
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

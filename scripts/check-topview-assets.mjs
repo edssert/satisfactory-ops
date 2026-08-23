@@ -18,6 +18,7 @@ import { resolve, relative, sep } from 'node:path';
 const root = resolve(import.meta.dirname, '..');
 const publicRoot = resolve(root, 'public');
 const assetRoot = resolve(publicRoot, 'assets/planner/top-view');
+const referenceAssetRoot = resolve(root, 'scripts/topview/references');
 const manifestPath = resolve(root, 'src/data/curated/topview-assets.json');
 const candidateCatalogPath = resolve(root, 'src/data/curated/anders-topview-candidates.json');
 const layoutCorpusPath = resolve(root, 'src/data/curated/anders-layout-corpus.json');
@@ -32,9 +33,15 @@ const layoutCorpus = JSON.parse(readFileSync(layoutCorpusPath, 'utf8'));
 const redditArchive = JSON.parse(readFileSync(redditArchivePath, 'utf8'));
 const goldenCases = JSON.parse(readFileSync(goldenCasesPath, 'utf8'));
 const materialProfile = JSON.parse(readFileSync(materialProfilePath, 'utf8'));
-const sceneRecipes = readdirSync(sceneRoot)
-  .filter((name) => name.endsWith('.json'))
-  .map((name) => ({ path: resolve(sceneRoot, name), data: JSON.parse(readFileSync(resolve(sceneRoot, name), 'utf8')) }));
+const runtimeSourceIds = new Set(Object.entries(manifest.$sources)
+  .filter(([, source]) => source.type === 'local-game-extraction')
+  .map(([sourceId]) => sourceId));
+const sceneFiles = (directory) => readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+  const absolute = resolve(directory, entry.name);
+  return entry.isDirectory() ? sceneFiles(absolute) : entry.name.endsWith('.json') ? [absolute] : [];
+});
+const sceneRecipes = sceneFiles(sceneRoot)
+  .map((path) => ({ path, data: JSON.parse(readFileSync(path, 'utf8')) }));
 const errors = [];
 const warnings = [];
 
@@ -52,7 +59,7 @@ const paths = new Set();
 const usedFiles = new Set();
 const buildingProfiles = new Map();
 const allowedRoles = new Set(['building', 'foundation', 'transport-part', 'transport-direction', 'golden-reference']);
-const allowedReview = new Set(['candidate', 'approved', 'rejected', 'superseded']);
+const allowedReview = new Set(['approved', 'reference-only', 'rejected', 'superseded']);
 const sha256Pattern = /^[0-9a-f]{64}$/;
 
 for (const asset of manifest.assets) {
@@ -63,14 +70,23 @@ for (const asset of manifest.assets) {
   if (!allowedReview.has(asset.reviewStatus)) errors.push(`${asset.assetId}: reviewStatus=${asset.reviewStatus}`);
   if (!manifest.$sources[asset.sourceId]) errors.push(`${asset.assetId}: sourceId=${asset.sourceId}`);
   if (!asset.derivation || !asset.visualProfile) errors.push(`${asset.assetId}: 파생·시각 프로파일 누락`);
-  if (!asset.path?.startsWith('assets/planner/top-view/') || asset.path.includes('..') || !asset.path.endsWith('.webp')) {
+  const isRuntimeAsset = runtimeSourceIds.has(asset.sourceId);
+  const expectedPrefix = isRuntimeAsset
+    ? 'assets/planner/top-view/'
+    : 'scripts/topview/references/assets/planner/top-view/';
+  if (!asset.path?.startsWith(expectedPrefix) || asset.path.includes('..') || !asset.path.endsWith('.webp')) {
     errors.push(`${asset.assetId}: 잘못된 path=${asset.path}`);
     continue;
   }
+  if (isRuntimeAsset && asset.reviewStatus !== 'approved') errors.push(`${asset.assetId}: 승인 전 자산은 public 매니페스트에 둘 수 없음`);
+  if (!isRuntimeAsset && asset.role !== 'golden-reference' && asset.reviewStatus !== 'reference-only') {
+    errors.push(`${asset.assetId}: 외부 대조 자산은 reference-only여야 함`);
+  }
   if (paths.has(asset.path)) errors.push(`중복 path: ${asset.path}`);
   paths.add(asset.path);
-  const absolute = resolve(publicRoot, asset.path);
-  if (!absolute.startsWith(`${assetRoot}${sep}`)) errors.push(`${asset.assetId}: 경로 이탈`);
+  const absolute = resolve(isRuntimeAsset ? publicRoot : root, asset.path);
+  const boundary = isRuntimeAsset ? assetRoot : referenceAssetRoot;
+  if (!absolute.startsWith(`${boundary}${sep}`)) errors.push(`${asset.assetId}: 경로 이탈`);
   if (!existsSync(absolute) || !statSync(absolute).isFile()) errors.push(`${asset.assetId}: 파일 누락 ${asset.path}`);
   else {
     usedFiles.add(absolute);
@@ -88,6 +104,7 @@ for (const asset of manifest.assets) {
         x + width > 1.001 || y + height > 1.001) errors.push(`${asset.assetId}: occupancyFrame 오류`);
   }
   if (asset.statusImages) {
+    if (!isRuntimeAsset) errors.push(`${asset.assetId}: 외부 대조 자산에 런타임 상태 파일이 있음`);
     for (const state of ['active', 'activeWithCrystal', 'standby', 'error']) {
       const variant = asset.statusImages[state];
       if (!variant?.path?.startsWith('assets/planner/top-view/') || !sha256Pattern.test(variant?.sha256 ?? '')) {
@@ -103,7 +120,7 @@ for (const asset of manifest.assets) {
       }
     }
   }
-  if (asset.buildingClass && asset.role === 'building') {
+  if (isRuntimeAsset && asset.buildingClass && asset.role === 'building') {
     buildingProfiles.set(asset.buildingClass, asset.visualProfile);
   }
 }
@@ -267,7 +284,7 @@ if (goldenCases.$schemaVersion !== 1 || !Array.isArray(goldenCases.cases) || !go
     if (!asset || asset.role !== 'golden-reference' || asset.reviewStatus !== 'approved') {
       errors.push(`${golden.id}: 승인 golden-reference asset 불일치`);
     }
-    if (resolve(root, golden.reference) !== resolve(publicRoot, asset?.path ?? '')) {
+    if (resolve(root, golden.reference) !== resolve(root, asset?.path ?? '')) {
       errors.push(`${golden.id}: reference 경로 불일치`);
     }
     const current = golden.currentGameFootprintM;
@@ -334,6 +351,10 @@ for (const recipeEntry of sceneRecipes) {
         !component.scale.every((value) => Number.isFinite(value) && value > 0))) {
       errors.push(`${recipe.id}/${component.id}: scale은 양수 [x,y,z]여야 함`);
     }
+    if (component.rotationEulerDeg && (!Array.isArray(component.rotationEulerDeg)
+        || component.rotationEulerDeg.length !== 3 || !component.rotationEulerDeg.every(Number.isFinite))) {
+      errors.push(`${recipe.id}/${component.id}: rotationEulerDeg는 [roll,-pitch,-yaw]여야 함`);
+    }
     if (component.renderMode === 'excluded' && !component.reason) errors.push(`${recipe.id}/${component.id}: 제외 근거 누락`);
   }
   if (!enabledBodies) errors.push(`${recipe.id}: 활성 본체 메시 없음`);
@@ -373,7 +394,9 @@ for (const recipeEntry of sceneRecipes) {
         `transform=${stub.transform.join(',')} scale=${stub.scale.join(',')} expectedYaw=${expectedYaw} expectedLength=${expectedLength}`);
     }
   }
-  if (!(recipe.portVisibility ?? []).length) errors.push(`${recipe.id}: 실제 포트 가시성 계약 누락`);
+  if (recipe.portVisibilityRequired === true && !(recipe.portVisibility ?? []).length) {
+    errors.push(`${recipe.id}: 실제 포트 가시성 계약 누락`);
+  }
   for (const [channel, mappings] of Object.entries(recipe.materials ?? {})) {
     if (!['albedo', 'ao', 'normal', 'reflection', 'stateMask'].includes(channel)) continue;
     for (const [materialName, rawPath] of Object.entries(mappings)) {
@@ -412,7 +435,10 @@ for (const recipeEntry of sceneRecipes) {
   }
   const staticMaterialName = recipe.materials?.staticBaseMaterial
     ?? (recipe.buildingClass === 'Build_SmelterMk1_C' ? 'MI_SmelterMk1_01' : 'MI_ConstructorMk1');
-  if (!Array.isArray(recipe.materials?.normalOnly) || recipe.materials?.baseColor?.Decal_Normal !== recipe.materials?.baseColor?.[staticMaterialName]) {
+  const usesDeferredNormal = Object.keys(recipe.materials?.normal ?? {}).includes('Decal_Normal')
+    || (recipe.materials?.pbr ?? []).includes('Decal_Normal');
+  if (usesDeferredNormal && (!Array.isArray(recipe.materials?.normalOnly)
+      || recipe.materials?.baseColor?.Decal_Normal !== recipe.materials?.baseColor?.[staticMaterialName])) {
     errors.push(`${recipe.id}: 지연 normal 데칼 중립 underlay 계약 누락`);
   }
   const featureIds = new Set();
@@ -503,7 +529,7 @@ for (const file of walk(assetRoot)) {
 }
 
 const profileGroups = Map.groupBy([...buildingProfiles], ([, profile]) => profile);
-const candidateBuildings = manifest.assets.filter((asset) => asset.role === 'building' && asset.reviewStatus !== 'approved');
+const candidateBuildings = manifest.assets.filter((asset) => runtimeSourceIds.has(asset.sourceId) && asset.role === 'building' && asset.reviewStatus !== 'approved');
 const unidentifiedCandidates = candidateCatalog.groups.filter((candidate) => candidate.identityStatus === 'unidentified');
 if (profileGroups.size > 1) warnings.push(`설비 visualProfile ${profileGroups.size}종 혼용: ${[...profileGroups.keys()].join(', ')}`);
 if (candidateBuildings.length) warnings.push(`설비 승인 대기 ${candidateBuildings.length}건: ${candidateBuildings.map((asset) => asset.assetId).join(', ')}`);

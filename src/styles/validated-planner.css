@@ -36,6 +36,17 @@
 .vp-search input { width: 100%; border: 1px solid var(--line-strong); border-radius: 0; padding: 10px 12px; background: var(--surface); color: var(--ink-1); }
 .vp-search input:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
 .vp-machine-list { min-height: 0; overflow-y: auto; }
+.vp-handoff { border-bottom: 1px solid var(--line-strong); background: color-mix(in oklab, var(--primary) 7%, var(--bg)); }
+.vp-handoff > header { display: flex; gap: 8px; align-items: center; justify-content: space-between; padding: 12px 14px; }
+.vp-handoff h3 { margin: 3px 0 0; font-size: .82rem; }
+.vp-handoff > header button { border: 1px solid var(--line-strong); padding: 4px 7px; background: transparent; color: var(--ink-2); font-size: .58rem; }
+.vp-handoff-item { display: grid; width: 100%; grid-template-columns: 42px minmax(0, 1fr) auto; gap: 9px; align-items: center; border: 0; border-top: 1px solid var(--line); padding: 9px 12px; background: transparent; color: var(--ink-1); text-align: left; }
+.vp-handoff-item:hover { background: var(--surface); }
+.vp-handoff-item img { width: 42px; height: 42px; object-fit: contain; }
+.vp-handoff-item span { display: grid; min-width: 0; gap: 3px; }
+.vp-handoff-item strong { font-size: .74rem; word-break: keep-all; }
+.vp-handoff-item small { overflow: hidden; color: var(--ink-3); font: .54rem var(--font-mono); text-overflow: ellipsis; white-space: nowrap; }
+.vp-handoff-item > span:last-child { color: var(--primary); font: .56rem var(--font-mono); }
 .vp-machine {
   display: grid;
   width: 100%;
@@ -54,8 +65,14 @@
 .vp-machine[draggable="true"] { cursor: grab; }
 .vp-machine[draggable="true"]:active { cursor: grabbing; }
 .vp-machine.is-foundation { background: color-mix(in oklab, var(--surface) 72%, var(--bg)); }
+.vp-machine.is-rail { background: color-mix(in oklab, var(--diagram-structure) 18%, var(--bg)); }
 .vp-foundation-swatch { display: grid; width: 48px; height: 48px; flex: 0 0 auto; place-items: center; border: 2px solid var(--line-strong); background: var(--diagram-structure); }
 .vp-foundation-swatch i { width: 34px; height: 34px; border: 1px solid var(--ink-3); background: color-mix(in oklab, var(--diagram-structure) 76%, var(--surface)); }
+.vp-rail-swatch { position: relative; display: grid; width: 48px; height: 48px; place-items: center; background: var(--diagram-structure); transform: rotate(-28deg); }
+.vp-rail-swatch i { position: absolute; width: 42px; height: 2px; background: var(--ink-2); }
+.vp-rail-swatch i:first-child { transform: translateY(-9px); }
+.vp-rail-swatch i:last-child { transform: translateY(9px); }
+.vp-rail-swatch i:nth-child(2) { width: 32px; border-block: 1px dashed var(--primary); background: transparent; transform: rotate(90deg); }
 .vp-machine.is-armed { background: color-mix(in oklab, var(--primary) 12%, var(--surface)); box-shadow: inset 3px 0 var(--primary); }
 .vp-machine img { width: 52px; height: 52px; object-fit: contain; filter: drop-shadow(0 7px 5px color-mix(in oklab, var(--shadow-color) 36%, transparent)); }
 .vp-machine span { display: grid; min-width: 0; gap: 5px; }
@@ -159,6 +176,8 @@
 .vp-belt-turn-surface { stroke: color-mix(in oklab, var(--diagram-structure) 82%, var(--bg)); stroke-width: 1.76; }
 .vp-pipe-shell { fill: var(--line-strong); }
 .vp-pipe-core { fill: color-mix(in oklab, var(--action-strong) 66%, var(--diagram-structure)); }
+.vp-pipe-grade { fill: none; stroke: var(--ink-1); stroke-width: .12; opacity: .8; }
+.vp-pipe-direction { fill: none; stroke: var(--ink-1); stroke-width: .16; stroke-linecap: square; stroke-linejoin: miter; }
 .vp-pipe-turn-shell { stroke: var(--line-strong); stroke-width: 2.36; }
 .vp-pipe-turn-core { stroke: color-mix(in oklab, var(--action-strong) 66%, var(--diagram-structure)); stroke-width: 1.58; }
 .vp-belt-motion { fill: none; stroke: var(--status-warning); stroke-width: .18; stroke-dasharray: .65 .9; animation: vp-belt-flow 1.2s linear infinite; }
@@ -173,6 +192,16 @@
 .vp-lift-bed { fill: var(--diagram-structure); stroke: var(--line-strong); stroke-width: .12; }
 .vp-lift-column { fill: color-mix(in oklab, var(--diagram-structure) 72%, var(--surface)); stroke: var(--status-warning); stroke-width: .12; }
 .vp-lift-ribs { fill: none; stroke: var(--ink-2); stroke-width: .13; }
+.vp-pipe-riser { pointer-events: none; filter: drop-shadow(0 1.2px .8px color-mix(in oklab, var(--diagram-shadow) 68%, transparent)); }
+.vp-pipe-riser-shell { fill: var(--line-strong); stroke: var(--ink-3); stroke-width: .12; }
+.vp-pipe-riser-core { fill: color-mix(in oklab, var(--action-strong) 66%, var(--diagram-structure)); }
+.vp-pipe-riser-band { fill: none; stroke: var(--ink-1); stroke-width: .1; }
+.vp-rail { cursor: pointer; }
+.vp-rail-bed { fill: color-mix(in oklab, var(--diagram-structure) 76%, var(--bg)); stroke: var(--line-strong); stroke-width: .16; }
+.vp-rail.is-selected .vp-rail-bed { stroke: var(--primary); stroke-width: .3; }
+.vp-rail-track { fill: none; stroke: var(--ink-1); stroke-width: .28; }
+.vp-rail-tie { fill: none; stroke: var(--primary); stroke-width: .16; }
+.vp-rail-ghost path { fill: none; stroke: var(--primary); stroke-width: 6; stroke-dasharray: 1 .7; opacity: .55; pointer-events: none; }
 @keyframes vp-belt-flow { to { stroke-dashoffset: -1.55; } }
 @media (prefers-reduced-motion: reduce) { .vp-belt-motion { animation: none; } }
 
@@ -259,6 +288,10 @@
   .vp-catalog header > p:last-child { display: none; }
   .vp-search { display: grid; align-items: center; border-right: 1px solid var(--line); border-bottom: 0; }
   .vp-machine-list { display: flex; overflow-x: auto; overflow-y: hidden; }
+  .vp-handoff { display: flex; height: 100%; flex: none; }
+  .vp-handoff > header { width: 128px; flex: none; align-items: flex-start; }
+  .vp-handoff > div { display: flex; }
+  .vp-handoff-item { width: 230px; height: 100%; flex: none; border-top: 0; border-left: 1px solid var(--line); }
   .vp-machine { width: 230px; height: 100%; flex: none; border-right: 1px solid var(--line); border-bottom: 0; }
   .vp-workspace { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) 210px; }
   .vp-toolbar { grid-column: 1; }

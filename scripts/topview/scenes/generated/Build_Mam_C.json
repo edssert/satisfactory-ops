@@ -1,0 +1,370 @@
+{
+  "$schemaVersion": 1,
+  "id": "mam-batch-cl-502094",
+  "buildingClass": "Build_Mam_C",
+  "status": "generated-current-game-candidate",
+  "geometryAuthority": "game-install-cl-502094",
+  "sourceBlueprint": "FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Build_Mam.uasset",
+  "footprint": {
+    "widthM": 6,
+    "lengthM": 9,
+    "heightM": 5,
+    "groundZM": 0,
+    "centerM": [
+      0,
+      0
+    ],
+    "cornerEnvelope": "game-hard-clearance",
+    "confidence": "verified"
+  },
+  "components": [
+    {
+      "id": "MainMesh_static_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Mesh/SM_Mam_02.glb",
+      "transform": [
+        0,
+        0,
+        0,
+        90.00008
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_Mam_C.MainMesh_static_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Book_02D_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_Book_02D.glb",
+      "transform": [
+        0.6668466,
+        1.8396867000000001,
+        1.3686188000000001,
+        165.96376
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_Mam_C.SM_Book_02D_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_MamAlienTech_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Mesh/SM_MamAlienTech_01.glb",
+      "transform": [
+        0.381768,
+        1.07397446,
+        1.3376512,
+        500
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_Mam_C.SM_MamAlienTech_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_MamCaterium_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Mesh/SM_MamCaterium_01.glb",
+      "transform": [
+        0.5019910399999999,
+        1.7437247,
+        1.3259964,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_Mam_C.SM_MamCaterium_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_MamFauna_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Mesh/SM_MamFauna_01.glb",
+      "transform": [
+        0.7456337000000001,
+        -0.18286213,
+        1.3420612,
+        -130
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_Mam_C.SM_MamFauna_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_MamFauna_02_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Mesh/SM_MamFauna_02.glb",
+      "transform": [
+        0.57454456,
+        0.32713172999999995,
+        1.3273239000000001,
+        15.4251
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_Mam_C.SM_MamFauna_02_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_MamMycelia_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Mesh/SM_MamMycelia_01.glb",
+      "transform": [
+        0.20197452999999999,
+        2.9534183,
+        1.432724,
+        113.50943
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_Mam_C.SM_MamMycelia_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_MamNotes_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Mesh/SM_MamNotes_01.glb",
+      "transform": [
+        0,
+        0,
+        0,
+        90.00008
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_Mam_C.SM_MamNotes_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_MamNutrients_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Mesh/SM_MamNutrients_01.glb",
+      "transform": [
+        1.0467493,
+        1.1818742,
+        1.3251317,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_Mam_C.SM_MamNutrients_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_MamQuartz_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Mesh/SM_MamQuartz_01.glb",
+      "transform": [
+        0.9292306,
+        0.32993766999999996,
+        1.3219626,
+        83.822525
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_Mam_C.SM_MamQuartz_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_MamSlugs_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Mesh/SM_MamSlugs_01.glb",
+      "transform": [
+        0.57191246,
+        2.3404398,
+        1.3559529000000001,
+        212.25566
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_Mam_C.SM_MamSlugs_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_MamSulphur_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Mesh/SM_MamSulphur_01.glb",
+      "transform": [
+        0.6337796800000001,
+        -0.5754982,
+        1.3269440000000001,
+        -40.348644
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_Mam_C.SM_MamSulphur_01_GEN_VARIABLE",
+      "confidence": "verified"
+    }
+  ],
+  "materials": {
+    "albedo": {},
+    "ao": {},
+    "normal": {},
+    "reflection": {},
+    "stateMask": {},
+    "paint": {},
+    "baseColor": {},
+    "alpha": [],
+    "pbr": [],
+    "normalOnly": [],
+    "emissiveAccent": [],
+    "emissiveGeometrySelectors": [],
+    "state": {
+      "color": "#00ff00",
+      "strength": 5
+    }
+  },
+  "camera": {
+    "projection": "orthographic-top",
+    "frontTiltDeg": 0,
+    "displayYawDeg": 0,
+    "source": "runtime planner assets require metric top-down projection",
+    "confidence": "verified"
+  },
+  "canonicalOrientation": {
+    "authority": "Build_Mam_C Blueprint component transforms",
+    "screenEdge": "source-orientation",
+    "rule": "현재 게임 Blueprint 좌표계를 유지하고 포트 회전은 별도 배치 계약에서 검증한다."
+  },
+  "lighting": {
+    "groundAo": false,
+    "shadowMode": "alpha-near-and-wide-postprocess",
+    "aoLayers": 2,
+    "bloom": true,
+    "sun": true,
+    "keyEnergy": 1.7,
+    "fillEnergy": 1,
+    "worldStrength": 0.42,
+    "exposure": 1.1,
+    "method": "조립 검수용 중립 PBR",
+    "confidence": "verified"
+  },
+  "assemblyFeatures": [
+    {
+      "id": "MainMesh_static_GEN_VARIABLE",
+      "owner": "MainMesh_static_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Book_02D_GEN_VARIABLE",
+      "owner": "SM_Book_02D_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_MamAlienTech_01_GEN_VARIABLE",
+      "owner": "SM_MamAlienTech_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_MamCaterium_01_GEN_VARIABLE",
+      "owner": "SM_MamCaterium_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_MamFauna_01_GEN_VARIABLE",
+      "owner": "SM_MamFauna_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_MamFauna_02_GEN_VARIABLE",
+      "owner": "SM_MamFauna_02_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_MamMycelia_01_GEN_VARIABLE",
+      "owner": "SM_MamMycelia_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_MamNotes_01_GEN_VARIABLE",
+      "owner": "SM_MamNotes_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_MamNutrients_01_GEN_VARIABLE",
+      "owner": "SM_MamNutrients_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_MamQuartz_01_GEN_VARIABLE",
+      "owner": "SM_MamQuartz_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_MamSlugs_01_GEN_VARIABLE",
+      "owner": "SM_MamSlugs_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_MamSulphur_01_GEN_VARIABLE",
+      "owner": "SM_MamSulphur_01_GEN_VARIABLE",
+      "status": "present"
+    }
+  ],
+  "pipelineAudit": {
+    "coordinateBasis": "scene=(unrealX,-unrealY,unrealZ,-unrealYaw)",
+    "requiredStages": [
+      "package-graph",
+      "blueprint-components",
+      "view-feature-matrix",
+      "runtime-top-after-assembly"
+    ],
+    "repeatedDefectThreshold": 2,
+    "systemicDefectThreshold": 1,
+    "rawVatCandidateAllowed": false
+  },
+  "validationContract": "batch-static",
+  "portVisibilityRequired": false,
+  "portVisibility": [],
+  "materialChecks": [
+    {
+      "id": "cue4parse-imported-game-materials",
+      "status": "present"
+    }
+  ],
+  "cameraLightingChecks": [
+    {
+      "id": "runtime-orthographic-top",
+      "status": "present"
+    }
+  ]
+}

@@ -21,6 +21,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
+import { derivePlannerAssetScope } from './lib/planner-asset-policy.mjs';
 
 const ROOT = path.resolve(fileURLToPath(new URL('.', import.meta.url)), '..');
 const SRC = path.join(ROOT, 'src/data');
@@ -246,6 +247,27 @@ const curatedFiles = fs.existsSync(CURATED)
 const curated = {};
 for (const f of curatedFiles) curated[f.replace(/\.json$/, '')] = readJson(path.join(CURATED, f));
 
+const plannerPolicy = curated['planner-asset-policy'];
+if (!plannerPolicy) die(1, 'planner-asset-policy.json이 없습니다.');
+let plannerScopeResult;
+try {
+  plannerScopeResult = derivePlannerAssetScope(en.buildings, buildings, plannerPolicy);
+} catch (error) {
+  die(2, '설계 자산 범위 정책을 적용할 수 없습니다: ' + error.message);
+}
+const plannerAssetScope = {
+  $schemaVersion: plannerScopeResult.schemaVersion,
+  $comment: 'scripts/build-app-data.mjs 산출물입니다. 직접 수정하지 마세요. 게임 nativeClass와 검증된 제품 정책의 교집합입니다.',
+  buildCl: plannerScopeResult.buildCl,
+  gameBuild: plannerScopeResult.gameBuild,
+  source: plannerScopeResult.source,
+  confidence: plannerScopeResult.confidence,
+  counts: plannerScopeResult.counts,
+  hashes: plannerScopeResult.hashes,
+  targets: plannerScopeResult.included,
+  implicitPowerNetwork: plannerScopeResult.implicitPowerNetwork,
+};
+
 /** 큐레이션 JSON 안에서 게임 클래스명처럼 생긴 문자열을 전부 찾아 존재를 검증한다. */
 function collectClassRefs(node, out = []) {
   if (typeof node === 'string') {
@@ -376,6 +398,20 @@ const checks = [
     buildings.find((b) => b.id === 'Build_MinerMk2_C')?.unlockTier === 4],
   ['건물 해금 티어가 절반 이상 채워짐',
     buildings.filter((b) => b.unlockTier !== null).length > buildings.length * 0.5],
+  ['설계 자산 정책이 모든 건설 가능 클래스를 배치·자동 연결·제외로 완전 분할',
+    plannerScopeResult.unclassified.length === 0
+      && plannerScopeResult.counts.buildable === plannerScopeResult.counts.included
+        + plannerScopeResult.counts.implicitPowerNetwork + plannerScopeResult.counts.excluded,
+    () => '미분류: ' + plannerScopeResult.unclassified.slice(0, 8).map((row) => row.buildingClass).join(', ')],
+  ['설계 자산 범위가 검토한 설치본 정책 지문과 일치',
+    plannerScopeResult.counts.buildable === plannerPolicy.expected.buildable
+      && plannerScopeResult.hashes.included === plannerPolicy.expected.hashes.included
+      && plannerScopeResult.hashes.implicitPowerNetwork === plannerPolicy.expected.hashes.implicitPowerNetwork
+      && plannerScopeResult.hashes.excluded === plannerPolicy.expected.hashes.excluded
+      && plannerScopeResult.hashes.buildablePartition === plannerPolicy.expected.hashes.buildablePartition,
+    () => JSON.stringify({ counts: plannerScopeResult.counts, hashes: plannerScopeResult.hashes })],
+  ['운전 표시등 설비 28개의 상태 계약을 설치본 근거로 보존',
+    plannerScopeResult.counts.byStatusMode['production-indicator-4-state'] === plannerPolicy.productionIndicatorClasses.length],
 ];
 
 // 자원 노드 조인 검증 — 이름 불일치로 조용히 0건이 되는 사고를 빌드에서 막는다
@@ -533,6 +569,7 @@ const outputs = {
   'recipes.json': recipes,
   'buildings.json': buildings,
   'milestones.json': milestones,
+  'planner-asset-scope.json': plannerAssetScope,
   'hub.json': hub,
   'index.json': index,
   'resource-nodes.json': { $source: rawNodes.$source, $transform: rawNodes.$transform, $counts: nodesByRes, nodes: resourceNodes },

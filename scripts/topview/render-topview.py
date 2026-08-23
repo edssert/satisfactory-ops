@@ -1006,7 +1006,11 @@ for component_index, glb in enumerate(args.glb):
         component_id = component_spec.get("id", f"component-{component_index}")
         parent = bpy.data.objects.new(f"Component_{component_id}", None)
         parent.location = (x, y, z)
-        parent.rotation_euler[2] = math.radians(yaw)
+        rotation_euler_deg = component_spec.get("rotationEulerDeg")
+        if rotation_euler_deg:
+            parent.rotation_euler = tuple(math.radians(value) for value in rotation_euler_deg)
+        else:
+            parent.rotation_euler[2] = math.radians(yaw)
         if component_spec.get("scale"):
             parent.scale = tuple(component_spec["scale"])
         parent["source_component_id"] = component_id
@@ -1107,6 +1111,7 @@ camera_data = bpy.data.cameras.new("TopViewCamera")
 camera_data.type = "ORTHO"
 camera = bpy.data.objects.new("TopViewCamera", camera_data)
 camera_distance = max(width, depth, height) * 2.0
+camera_data.clip_end = max(1000.0, camera_distance * 4.0)
 tilt = math.radians(args.camera_tilt)
 display_yaw = math.radians(args.display_yaw)
 front = Vector((math.sin(display_yaw), -math.cos(display_yaw), 0))

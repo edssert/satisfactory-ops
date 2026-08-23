@@ -1,0 +1,183 @@
+{
+  "$schemaVersion": 1,
+  "id": "generatornuclear-batch-cl-502094",
+  "buildingClass": "Build_GeneratorNuclear_C",
+  "status": "generated-current-game-candidate",
+  "geometryAuthority": "game-install-cl-502094",
+  "sourceBlueprint": "FactoryGame/Content/FactoryGame/Buildable/Factory/GeneratorNuclear/Build_GeneratorNuclear.uasset",
+  "footprint": {
+    "widthM": 36,
+    "lengthM": 42,
+    "heightM": 36,
+    "groundZM": 0,
+    "centerM": [
+      0,
+      0
+    ],
+    "cornerEnvelope": "game-hard-clearance",
+    "confidence": "verified"
+  },
+  "components": [
+    {
+      "id": "FGColoredInstanceMeshProxy_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/GeneratorNuclear/Mesh/SM_Generator_Nuclear.glb",
+      "transform": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_GeneratorNuclear_C.FGColoredInstanceMeshProxy_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "NODE_AddStaticMeshComponent-0",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/VFX/Mesh/SM_SmokePlane_01.glb",
+      "transform": [
+        0.00002927,
+        0.7576408000000001,
+        33.83366,
+        0
+      ],
+      "scale": [
+        1,
+        1.201169,
+        0.755757
+      ],
+      "source": "Build_GeneratorNuclear_C.NODE_AddStaticMeshComponent-0",
+      "confidence": "verified"
+    },
+    {
+      "id": "GeneratorNuclear_Skl_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/GeneratorNuclear/Mesh/SK_Generator_Nuclear.glb",
+      "transform": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_GeneratorNuclear_C.GeneratorNuclear_Skl_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "BP_ProductionIndicatorInstanced_GEN_VARIABLE",
+      "renderMode": "production-indicator",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/-Shared/ProductionIndicator/Mesh/SM_ProductionLight_01.glb",
+      "transform": [
+        -4.2038785,
+        -17.536471,
+        11.270164,
+        135
+      ],
+      "source": "Build_GeneratorNuclear_C.BP_ProductionIndicatorInstanced_GEN_VARIABLE",
+      "confidence": "verified"
+    }
+  ],
+  "materials": {
+    "albedo": {},
+    "ao": {},
+    "normal": {},
+    "reflection": {},
+    "stateMask": {},
+    "paint": {},
+    "baseColor": {},
+    "alpha": [],
+    "pbr": [],
+    "normalOnly": [],
+    "emissiveAccent": [],
+    "emissiveGeometrySelectors": [],
+    "state": {
+      "color": "#00ff00",
+      "strength": 5
+    }
+  },
+  "camera": {
+    "projection": "orthographic-top",
+    "frontTiltDeg": 0,
+    "displayYawDeg": 0,
+    "source": "runtime planner assets require metric top-down projection",
+    "confidence": "verified"
+  },
+  "validationContract": "batch-static",
+  "portVisibilityRequired": false,
+  "portVisibility": [],
+  "stateIndicator": {
+    "pointM": [
+      -4.2038785,
+      -17.536471
+    ],
+    "maskRadiusNormalized": 0.058
+  },
+  "canonicalOrientation": {
+    "authority": "Build_GeneratorNuclear_C Blueprint component transforms",
+    "screenEdge": "source-orientation",
+    "rule": "현재 게임 Blueprint 좌표계를 유지하고 포트 회전은 별도 배치 계약에서 검증한다."
+  },
+  "lighting": {
+    "groundAo": false,
+    "shadowMode": "alpha-near-and-wide-postprocess",
+    "aoLayers": 2,
+    "bloom": true,
+    "sun": true,
+    "keyEnergy": 1.7,
+    "fillEnergy": 1,
+    "worldStrength": 0.42,
+    "exposure": 1.1,
+    "method": "조립 검수용 중립 PBR",
+    "confidence": "verified"
+  },
+  "assemblyFeatures": [
+    {
+      "id": "FGColoredInstanceMeshProxy_GEN_VARIABLE",
+      "owner": "FGColoredInstanceMeshProxy_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "NODE_AddStaticMeshComponent-0",
+      "owner": "NODE_AddStaticMeshComponent-0",
+      "status": "present"
+    },
+    {
+      "id": "GeneratorNuclear_Skl_GEN_VARIABLE",
+      "owner": "GeneratorNuclear_Skl_GEN_VARIABLE",
+      "status": "present"
+    }
+  ],
+  "materialChecks": [
+    {
+      "id": "cue4parse-imported-game-materials",
+      "status": "present"
+    }
+  ],
+  "cameraLightingChecks": [
+    {
+      "id": "runtime-orthographic-top",
+      "status": "present"
+    }
+  ],
+  "pipelineAudit": {
+    "repeatedDefectThreshold": 2,
+    "systemicDefectThreshold": 1,
+    "rawVatCandidateAllowed": false,
+    "coordinateBasis": "scene=(unrealX,-unrealY,unrealZ,-unrealYaw)",
+    "requiredStages": [
+      "package-graph",
+      "blueprint-components",
+      "view-feature-matrix",
+      "runtime-top-after-assembly"
+    ]
+  }
+}

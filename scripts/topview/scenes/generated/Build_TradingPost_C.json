@@ -1,0 +1,3130 @@
+{
+  "$schemaVersion": 1,
+  "id": "tradingpost-batch-cl-502094",
+  "buildingClass": "Build_TradingPost_C",
+  "status": "generated-current-game-candidate",
+  "geometryAuthority": "game-install-cl-502094",
+  "sourceBlueprint": "FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Build_TradingPost.uasset",
+  "footprint": {
+    "widthM": 14,
+    "lengthM": 26,
+    "heightM": 15.5,
+    "groundZM": 0,
+    "centerM": [
+      0,
+      0
+    ],
+    "cornerEnvelope": "game-hard-clearance",
+    "confidence": "verified"
+  },
+  "components": [
+    {
+      "id": "cakepiece_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/FicsitCakeETC/Mesh/SM_CakePiece_01.glb",
+      "transform": [
+        3.9185974,
+        7.50235,
+        2.329963,
+        145.25453
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.cakepiece_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Cola_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/FicsitCakeETC/Mesh/SM_FicssitCola_01.glb",
+      "transform": [
+        -2.6175458,
+        3.5727344,
+        2.2906003999999998,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.Cola_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Disco Support_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_HubCamera_01.glb",
+      "transform": [
+        0.19207909999999997,
+        4.378847400000001,
+        4.4752158,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1.4477175
+      ],
+      "source": "Build_TradingPost_C.Disco Support_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Helmet_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Character/Player/Mesh/Helmet_01.glb",
+      "transform": [
+        1.8348593,
+        8.1450806,
+        3.2308749999999997,
+        -10.426651
+      ],
+      "scale": [
+        1.1,
+        1.1,
+        1.1
+      ],
+      "source": "Build_TradingPost_C.Helmet_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "LowerVegetation_Plant_001_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/World/Environment/Foliage/SmallFoliage/LowerVegatation/LowerVegetation_Plant_001.glb",
+      "transform": [
+        -4.3889260000000005,
+        3.1387567,
+        2.7929745,
+        -147.0031
+      ],
+      "scale": [
+        0.5178582,
+        0.5178582,
+        0.5178582
+      ],
+      "source": "Build_TradingPost_C.LowerVegetation_Plant_001_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "LowerVegetation_Plant_017_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/World/Environment/Foliage/SmallFoliage/LowerVegatation/LowerVegetation_Plant_017.glb",
+      "transform": [
+        -3.7102716,
+        3.2756683,
+        2.5034367,
+        -108.5019
+      ],
+      "scale": [
+        0.5786435,
+        0.5786435,
+        0.5786435
+      ],
+      "source": "Build_TradingPost_C.LowerVegetation_Plant_017_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "LowerVegetation_Plant_020_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/World/Environment/Foliage/SmallFoliage/LowerVegatation/LowerVegetation_Plant_020.glb",
+      "transform": [
+        4.8086606,
+        4.3208948,
+        2.5944525,
+        -186.96388
+      ],
+      "scale": [
+        0.5702551,
+        0.5702551,
+        0.5702551
+      ],
+      "source": "Build_TradingPost_C.LowerVegetation_Plant_020_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "MainMesh_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Mesh/SM_Hub_Stg_01.glb",
+      "transform": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.MainMesh_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Mug1_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/FicsitCakeETC/Mesh/SM_FicsitMug_01.glb",
+      "transform": [
+        -0.12600306,
+        0.19700800000000002,
+        0,
+        280
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.Mug1_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Mug2_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/FicsitCakeETC/Mesh/SM_FicsitMug_02.glb",
+      "transform": [
+        -0.30818056,
+        0.026526763,
+        0.24165525,
+        -20.000002
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.Mug2_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Mug_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/FicsitCakeETC/Mesh/SM_FicsitMug_01.glb",
+      "transform": [
+        0.060314259999999995,
+        0.20919899,
+        0,
+        220
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.Mug_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "pizza1_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/Ficzza/Mesh/SM_Banan_01.glb",
+      "transform": [
+        0,
+        0,
+        0,
+        -30.711874
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.pizza1_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "pizza_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/Ficzza/Mesh/SM_Kebab_01.glb",
+      "transform": [
+        0,
+        0,
+        0,
+        -3.1805547e-15
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.pizza_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SkelMeshProxyBuildEffectOnly_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Mesh/SM_TradingPostMeshBF_01.glb",
+      "transform": [
+        0,
+        0,
+        -0.66595,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SkelMeshProxyBuildEffectOnly_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Alpaca_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_Alpaca_01.glb",
+      "transform": [
+        -1.2126133000000001,
+        7.166269499999999,
+        2.9847623,
+        -77.50528
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_Alpaca_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Blender_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_Blender_01.glb",
+      "transform": [
+        3.5942856,
+        8.0877686,
+        2.3264946,
+        -19.22184
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_Blender_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Book_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_Book_01.glb",
+      "transform": [
+        1.6636938000000001,
+        8.026654,
+        2.3200943,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_Book_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Book_01B_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_Book_01B.glb",
+      "transform": [
+        1.75983,
+        8.0500116,
+        2.3232822,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_Book_01B_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Book_02_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_Book_02.glb",
+      "transform": [
+        1.925965,
+        7.911021,
+        2.3613477,
+        5.8029133e-9
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_Book_02_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Book_02B_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_Book_02B.glb",
+      "transform": [
+        4.5938922,
+        0.9665587600000001,
+        2.4167752,
+        -1080
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_Book_02B_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Book_02C_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_Book_02C.glb",
+      "transform": [
+        -3.2054932000000003,
+        0.7224402000000001,
+        2.3357877,
+        -360
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_Book_02C_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Book_03_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_Book_03.glb",
+      "transform": [
+        1.8158191,
+        8.029494,
+        2.3198825,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_Book_03_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Book_03B_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_Book_03B.glb",
+      "transform": [
+        -2.9081094000000003,
+        0.68164406,
+        2.2955328,
+        -180
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_Book_03B_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Candle_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_Candle_01.glb",
+      "transform": [
+        2.0086908,
+        8.0092505,
+        2.7675156,
+        -110.04961
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_Candle_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_CoffeeMachine_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_CoffeeMachine_01.glb",
+      "transform": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_CoffeeMachine_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Cup_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Equipment/Cup/Mesh/SM_Cup.glb",
+      "transform": [
+        -3.9626007,
+        3,
+        2.2926254,
+        -120.60438
+      ],
+      "scale": [
+        1.25,
+        1.25,
+        1.25
+      ],
+      "source": "Build_TradingPost_C.SM_Cup_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_DeskLamp_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_DeskLamp_01.glb",
+      "transform": [
+        -3.9794644,
+        0.6566728000000001,
+        2.2942099,
+        50
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_DeskLamp_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_DiscoBall_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/DiscoBall/SM_DiscoBall.glb",
+      "transform": [
+        0.19207909999999997,
+        4.378847400000001,
+        4.1709814,
+        0
+      ],
+      "scale": [
+        0.3225,
+        0.3225,
+        0.3225
+      ],
+      "source": "Build_TradingPost_C.SM_DiscoBall_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_DiscoFloor_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/DiscoFloor/SM_DiscoFloor.glb",
+      "transform": [
+        1.07832184,
+        4.4612656,
+        1.2878334,
+        90
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_DiscoFloor_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_DoorMat_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_DoorMat_01.glb",
+      "transform": [
+        -3.2985086,
+        5.004421,
+        1.2591377,
+        -175
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_DoorMat_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Embroidery_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_Embroidery_01.glb",
+      "transform": [
+        -4.352783,
+        3.7615735,
+        3.5154132,
+        90
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_Embroidery_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FicsitManual_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_FicsitManual_01.glb",
+      "transform": [
+        -2.8204172,
+        3.7710736000000002,
+        2.2945712,
+        30
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_FicsitManual_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FicsmasBlanket_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_FicsmasBlanket_01.glb",
+      "transform": [
+        -4.8624106000000005,
+        -3.7529248,
+        -3.2740744,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_FicsmasBlanket_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FicsmasCandle_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_FicsmasCandle_01.glb",
+      "transform": [
+        -0.03935594,
+        -0.077816896,
+        -0.8433687999999999,
+        0.72319067
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_FicsmasCandle_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FicsmasCandle_02_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_FicsmasCandle_01.glb",
+      "transform": [
+        -9.263805999999999,
+        -1.449325,
+        -0.60849247,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_FicsmasCandle_02_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FicsmasCard_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_FicsmasCard_01.glb",
+      "transform": [
+        -7.3202673,
+        -2.76195,
+        0.22885553000000003,
+        -180
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_FicsmasCard_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FicsmasCard_02_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_FicsmasCard_02.glb",
+      "transform": [
+        -6.927987000000001,
+        -2.7610733,
+        0.13385999,
+        180
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_FicsmasCard_02_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FicsmasCard_03_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_FicsmasCard_03.glb",
+      "transform": [
+        -2.0995511,
+        4.073605,
+        -0.8378829,
+        -3.583397e-15
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_FicsmasCard_03_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FicsmasCard_04_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_FicsmasCard_04.glb",
+      "transform": [
+        -1.9100346,
+        4.0767869999999995,
+        -0.6546209000000001,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_FicsmasCard_04_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FicsmasCard_05_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_FicsmasCard_05.glb",
+      "transform": [
+        -6.9509656,
+        -2.7592923000000003,
+        0.4003234,
+        -180
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_FicsmasCard_05_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FicsmasCard_06_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_FicsmasCard_06.glb",
+      "transform": [
+        -2.2283354,
+        4.0753476,
+        -0.59678814,
+        -360
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_FicsmasCard_06_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FicsmasSock_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_FicsmasSock_01.glb",
+      "transform": [
+        -5.715928,
+        -3.2906975999999997,
+        -0.55690823,
+        -90
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_FicsmasSock_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FicsmasSock_02_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_FicsmasSock_02.glb",
+      "transform": [
+        -5.0919153,
+        -3.2906975999999997,
+        -0.55690823,
+        -90
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_FicsmasSock_02_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FicsmasSock_03_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_FicsmasSock_02.glb",
+      "transform": [
+        -6.3412994000000005,
+        -3.2906975999999997,
+        -0.55690823,
+        -90
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_FicsmasSock_03_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FicsmasSock_04_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_FicsmasSock_01.glb",
+      "transform": [
+        -4.4833917,
+        -3.2906975999999997,
+        -0.55690823,
+        -90
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_FicsmasSock_04_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FicsmasStar_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_FicsmasStar_01.glb",
+      "transform": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_FicsmasStar_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Ficzza_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/Ficzza/Mesh/SM_Kebab_01.glb",
+      "transform": [
+        0,
+        0,
+        0,
+        -3.1805547e-15
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_Ficzza_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FiczzaBox_Closed_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/Ficzza/Mesh/SM_FiczzaBox_Closed_01.glb",
+      "transform": [
+        4.339149,
+        7.2033105,
+        2.3295744,
+        34.897312
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_FiczzaBox_Closed_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FiczzaBox_Closed_02_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/Ficzza/Mesh/SM_FiczzaBox_Closed_01.glb",
+      "transform": [
+        0.007788822,
+        0.005751672,
+        0.051051083000000004,
+        5.829624
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_FiczzaBox_Closed_02_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FiczzaBox_Open1_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/Ficzza/Mesh/SM_FiczzaBox_01.glb",
+      "transform": [
+        4.355173300000001,
+        6.287582,
+        2.329963,
+        -22.452278
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_FiczzaBox_Open1_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FiczzaBox_Open2_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/Ficzza/Mesh/SM_FiczzaBox_01.glb",
+      "transform": [
+        -2.4991634,
+        7.31685,
+        1.7282117,
+        16.631071
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_FiczzaBox_Open2_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FiczzaBox_Open_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/Ficzza/Mesh/SM_FiczzaBox_01.glb",
+      "transform": [
+        -0.006115195,
+        0.0006889804,
+        0.05135212,
+        -6.428235
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_FiczzaBox_Open_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FridgeMagnet_010_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_FridgeMagnet_01.glb",
+      "transform": [
+        -7.06625,
+        -2.7622293,
+        0.21619143000000002,
+        -180
+      ],
+      "scale": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "source": "Build_TradingPost_C.SM_FridgeMagnet_010_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FridgeMagnet_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_FridgeMagnet_01.glb",
+      "transform": [
+        -1.9611407,
+        4.0747305,
+        -0.7505102499999999,
+        0
+      ],
+      "scale": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "source": "Build_TradingPost_C.SM_FridgeMagnet_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FridgeMagnet_02_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_FridgeMagnet_02.glb",
+      "transform": [
+        -2.3100687,
+        4.0788843,
+        -0.45644257000000005,
+        0
+      ],
+      "scale": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "source": "Build_TradingPost_C.SM_FridgeMagnet_02_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FridgeMagnet_03_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_FridgeMagnet_02.glb",
+      "transform": [
+        -2.142699,
+        4.0788843,
+        -0.45674736000000005,
+        -180
+      ],
+      "scale": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "source": "Build_TradingPost_C.SM_FridgeMagnet_03_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FridgeMagnet_04_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_FridgeMagnet_01.glb",
+      "transform": [
+        -2.2332126,
+        4.0747305,
+        -0.7519701000000001,
+        -1.7345323e-12
+      ],
+      "scale": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "source": "Build_TradingPost_C.SM_FridgeMagnet_04_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FridgeMagnet_05_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_FridgeMagnet_01.glb",
+      "transform": [
+        -7.087077000000001,
+        -2.7622293,
+        0.4806823,
+        0
+      ],
+      "scale": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "source": "Build_TradingPost_C.SM_FridgeMagnet_05_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FridgeMagnet_06_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_FridgeMagnet_01.glb",
+      "transform": [
+        -6.8185376,
+        -2.7622293,
+        0.48396121999999997,
+        -180
+      ],
+      "scale": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "source": "Build_TradingPost_C.SM_FridgeMagnet_06_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FridgeMagnet_07_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_FridgeMagnet_02.glb",
+      "transform": [
+        -7.2007696999999995,
+        -2.7634586000000003,
+        0.30983934,
+        0
+      ],
+      "scale": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "source": "Build_TradingPost_C.SM_FridgeMagnet_07_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FridgeMagnet_08_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_FridgeMagnet_02.glb",
+      "transform": [
+        -7.452394000000001,
+        -2.7634586000000003,
+        0.30380176999999997,
+        0
+      ],
+      "scale": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "source": "Build_TradingPost_C.SM_FridgeMagnet_08_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FridgeMagnet_09_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_FridgeMagnet_01.glb",
+      "transform": [
+        -6.7941046,
+        -2.7622293,
+        0.21357012,
+        -180
+      ],
+      "scale": [
+        0.7,
+        0.7,
+        0.7
+      ],
+      "source": "Build_TradingPost_C.SM_FridgeMagnet_09_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FridgeMagnet_C_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_FridgeMagnet_C.glb",
+      "transform": [
+        -2.0381224000000002,
+        4.0791376,
+        -0.55421425,
+        -3.9923482e-16
+      ],
+      "scale": [
+        0.8,
+        0.8,
+        0.8
+      ],
+      "source": "Build_TradingPost_C.SM_FridgeMagnet_C_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_FridgeMagnet_S_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_FridgeMagnet_S.glb",
+      "transform": [
+        -1.7667514,
+        4.0782782,
+        -0.56885418,
+        -5.2341144e-14
+      ],
+      "scale": [
+        0.8,
+        0.8,
+        0.8
+      ],
+      "source": "Build_TradingPost_C.SM_FridgeMagnet_S_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_GingerBreadCookies_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_GingerBreadCookies_01.glb",
+      "transform": [
+        -0.8010415000000001,
+        3.7555444,
+        -0.9482586999999999,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_GingerBreadCookies_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Glogg_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_Glogg_01.glb",
+      "transform": [
+        -0.9881247999999999,
+        4.3725613,
+        -0.9501586000000001,
+        -32.028435
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_Glogg_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Halmbock_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_Halmbock_01.glb",
+      "transform": [
+        -8.531183,
+        -3.147039,
+        -0.9817402,
+        126.9923
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_Halmbock_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_HazmatSuit_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Resource/Parts/HazmatSuit/SM_HazmatSuit_01.glb",
+      "transform": [
+        1.8651477,
+        8.3543835,
+        1.4030331,
+        -90.22612
+      ],
+      "scale": [
+        0.9297461,
+        0.9297461,
+        0.9297461
+      ],
+      "source": "Build_TradingPost_C.SM_HazmatSuit_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_HubComputer_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_HubComputer_01.glb",
+      "transform": [
+        -1.1157118e-9,
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_HubComputer_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_HubFrost_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_HubFrost_01.glb",
+      "transform": [
+        -4.8624106000000005,
+        -3.7529248,
+        -3.2740744,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_HubFrost_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_HubGarland_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_HubGarland_01.glb",
+      "transform": [
+        -4.8624106000000005,
+        -3.7529248,
+        -3.2740744,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_HubGarland_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_HubMirror_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_HubMirror_01.glb",
+      "transform": [
+        5.0343964,
+        1.2710294,
+        3.2707022,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_HubMirror_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_HubMonitor_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_HubMonitor_01.glb",
+      "transform": [
+        -1.1157118e-9,
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_HubMonitor_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_HubPot_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_HubPot_01.glb",
+      "transform": [
+        -4.393091,
+        3.1480040000000002,
+        2.6664014,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_HubPot_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_HubPot_02_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_HubPot_02.glb",
+      "transform": [
+        -3.7147052,
+        3.2834125,
+        2.2930865,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_HubPot_02_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_HubPot_03_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_HubPot_03.glb",
+      "transform": [
+        -3.9047872999999997,
+        3.6965402,
+        2.292792,
+        0
+      ],
+      "scale": [
+        1.1876367,
+        1.1876367,
+        1.1876367
+      ],
+      "source": "Build_TradingPost_C.SM_HubPot_03_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_HubPot_04_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_HubPot_01.glb",
+      "transform": [
+        4.8172763,
+        4.3120706,
+        2.4348859,
+        0
+      ],
+      "scale": [
+        1.296769,
+        1.296769,
+        1.296769
+      ],
+      "source": "Build_TradingPost_C.SM_HubPot_04_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_HubPot_05_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_HubPot_02.glb",
+      "transform": [
+        4.822148,
+        4.797977599999999,
+        2.4327328,
+        0
+      ],
+      "scale": [
+        1.1324813,
+        1.1324813,
+        1.1324813
+      ],
+      "source": "Build_TradingPost_C.SM_HubPot_05_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_HubSign_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_HubSign_01.glb",
+      "transform": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_HubSign_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Joystick_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_GoldenJoystick.glb",
+      "transform": [
+        -3.7138256999999997,
+        2.717339,
+        2.2921864,
+        -6
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_Joystick_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_LavaLamp_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_LavaLamp_01.glb",
+      "transform": [
+        -3.119002,
+        0.42882736,
+        2.2922427,
+        73.13642
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_LavaLamp_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_LunchTray_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_LunchTray_01.glb",
+      "transform": [
+        4.4908704,
+        7.2342053,
+        2.3260817,
+        -160
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_LunchTray_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_LunchTray_02_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_LunchTray_01.glb",
+      "transform": [
+        4.5082507,
+        7.2150073,
+        2.3533952,
+        -150
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_LunchTray_02_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Matches_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_Matches_01.glb",
+      "transform": [
+        -8.38803,
+        -3.0351706000000003,
+        -0.9820601999999999,
+        46.536285
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_Matches_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_MeseeksBox_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_MeseeksBox_01.glb",
+      "transform": [
+        -3.2445641999999997,
+        7.829586000000001,
+        2.9860629999999997,
+        60
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_MeseeksBox_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_MicroWave_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_MicroWave_01.glb",
+      "transform": [
+        4.1945179999999995,
+        7.8536649999999995,
+        2.3243369,
+        -40
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_MicroWave_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Orange_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_Orange_01.glb",
+      "transform": [
+        -0.43537285,
+        2.5182742,
+        -0.9476899,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_Orange_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_OstHyvel_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_OstHyvel_01.glb",
+      "transform": [
+        4.3116144,
+        7.4673376,
+        2.3252307,
+        40
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_OstHyvel_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_PartyAttachment_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartySpotlight/Mesh/SM_PartyAttachment_01.glb",
+      "transform": [
+        1.6359462,
+        7.2885004,
+        4.2917654,
+        -26.071754
+      ],
+      "scale": [
+        0.661456,
+        0.6614563,
+        0.6614563
+      ],
+      "source": "Build_TradingPost_C.SM_PartyAttachment_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_PartyAttachment_02_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartySpotlight/Mesh/SM_PartyAttachment_01.glb",
+      "transform": [
+        -1.5980215000000002,
+        1.4003432,
+        4.2989676,
+        149.10771
+      ],
+      "scale": [
+        0.661456,
+        0.661456,
+        0.661456
+      ],
+      "source": "Build_TradingPost_C.SM_PartyAttachment_02_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_PartyGarland_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartyGarland/Mesh/SM_PartyGarland_01.glb",
+      "transform": [
+        0.7716652,
+        1.6513045,
+        4.596752599999999,
+        10.837762
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_PartyGarland_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_PartyGarland_02_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartyGarland/Mesh/SM_PartyGarland_02.glb",
+      "transform": [
+        4.280943,
+        4.1472083,
+        4.571355,
+        88.305756
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_PartyGarland_02_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_PartyGarland_03_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartyGarland/Mesh/SM_PartyGarland_02.glb",
+      "transform": [
+        3.1201909999999997,
+        2.3525278,
+        4.634339,
+        21.814157
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_PartyGarland_03_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_PartyGarland_04_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartyGarland/Mesh/SM_PartyGarland_04.glb",
+      "transform": [
+        4.355305,
+        5.3831256,
+        4.6559289999999995,
+        99.70903
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_PartyGarland_04_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_PartyGarland_05_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartyGarland/Mesh/SM_PartyGarland_01.glb",
+      "transform": [
+        3.2606992000000004,
+        6.0308025999999995,
+        4.596752599999999,
+        -32.452526
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_PartyGarland_05_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_PartyGarland_06_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartyGarland/Mesh/SM_PartyGarland_03.glb",
+      "transform": [
+        1.0215491,
+        7.1768920000000005,
+        4.5930588,
+        -21.681576
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_PartyGarland_06_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_PartyGarland_07_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartyGarland/Mesh/SM_PartyGarland_03.glb",
+      "transform": [
+        -1.683903,
+        1.7536206,
+        4.5930588,
+        -16.178377
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_PartyGarland_07_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_PartyGarlandTape_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartyGarland/Mesh/SM_PartyGarlandTape_01.glb",
+      "transform": [
+        -0.47851166,
+        1.4082617,
+        4.5519537,
+        3.0271962
+      ],
+      "scale": [
+        1,
+        1,
+        1.0512191
+      ],
+      "source": "Build_TradingPost_C.SM_PartyGarlandTape_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_PartyGarlandTape_02_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartyGarland/Mesh/SM_PartyGarlandTape_01.glb",
+      "transform": [
+        1.9234784999999999,
+        1.8770026,
+        4.5584048,
+        10.9878845
+      ],
+      "scale": [
+        1,
+        1,
+        1.6695527
+      ],
+      "source": "Build_TradingPost_C.SM_PartyGarlandTape_02_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_PartyGarlandTape_03_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartyGarland/Mesh/SM_PartyGarlandTape_01.glb",
+      "transform": [
+        4.2329802999999995,
+        2.8095352000000005,
+        4.5519537,
+        50.964462
+      ],
+      "scale": [
+        1,
+        1,
+        2.7214522
+      ],
+      "source": "Build_TradingPost_C.SM_PartyGarlandTape_03_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_PartyGarlandTape_04_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartyGarland/Mesh/SM_PartyGarlandTape_01.glb",
+      "transform": [
+        4.2879025,
+        5.372897,
+        4.5519537,
+        -33.174313
+      ],
+      "scale": [
+        1,
+        1,
+        0.62537
+      ],
+      "source": "Build_TradingPost_C.SM_PartyGarlandTape_04_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_PartyGarlandTape_05_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartyGarland/Mesh/SM_PartyGarlandTape_01.glb",
+      "transform": [
+        4.3123547,
+        5.386849,
+        4.551132,
+        104.0507
+      ],
+      "scale": [
+        1,
+        1,
+        3.2744806
+      ],
+      "source": "Build_TradingPost_C.SM_PartyGarlandTape_05_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_PartyGarlandTape_06_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartyGarland/Mesh/SM_PartyGarlandTape_01.glb",
+      "transform": [
+        4.260709,
+        5.391247,
+        4.5519537,
+        -41.428493
+      ],
+      "scale": [
+        1,
+        1,
+        0.62537
+      ],
+      "source": "Build_TradingPost_C.SM_PartyGarlandTape_06_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_PartyGarlandTape_07_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartyGarland/Mesh/SM_PartyGarlandTape_01.glb",
+      "transform": [
+        2.1881702,
+        6.708937,
+        4.5519537,
+        -33.174313
+      ],
+      "scale": [
+        1,
+        1,
+        1.512377
+      ],
+      "source": "Build_TradingPost_C.SM_PartyGarlandTape_07_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_PartySpotlight_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartySpotlight/Mesh/SM_PartySpotlight_01.glb",
+      "transform": [
+        0,
+        0,
+        0,
+        -4.1309626e-11
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_PartySpotlight_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_PartySpotlight_02_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartySpotlight/Mesh/SM_PartySpotlight_01.glb",
+      "transform": [
+        0,
+        0,
+        0,
+        -6.2856316e-14
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_PartySpotlight_02_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Pencils_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_Pencils_01.glb",
+      "transform": [
+        -3.752761,
+        1.13166664,
+        2.2951232999999998,
+        40
+      ],
+      "scale": [
+        1.25,
+        1.2500001,
+        1.2500001
+      ],
+      "source": "Build_TradingPost_C.SM_Pencils_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Philodendron_03_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/World/Environment/Foliage/SmallFoliage/Philodendron/SM_Philodendron_03.glb",
+      "transform": [
+        -3.9212700000000003,
+        3.722411,
+        2.5038554,
+        0
+      ],
+      "scale": [
+        0.27004498,
+        0.27004498,
+        0.27004498
+      ],
+      "source": "Build_TradingPost_C.SM_Philodendron_03_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Philodendron_04_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/World/Environment/Foliage/SmallFoliage/Philodendron/SM_Philodendron_04.glb",
+      "transform": [
+        4.8257837,
+        4.8129532,
+        2.633863,
+        145.90102
+      ],
+      "scale": [
+        0.21,
+        0.21000001,
+        0.21000001
+      ],
+      "source": "Build_TradingPost_C.SM_Philodendron_04_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_PictureFrame_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_PictureFrame_01.glb",
+      "transform": [
+        1.7884924,
+        8.0772144,
+        2.7703244000000002,
+        10
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_PictureFrame_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_PictureFrame_03_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_PictureFrame_03.glb",
+      "transform": [
+        -4.3546629999999995,
+        3.7587088,
+        3.050244,
+        90
+      ],
+      "scale": [
+        0.35206485,
+        0.35206485,
+        0.35206485
+      ],
+      "source": "Build_TradingPost_C.SM_PictureFrame_03_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_PictureFrame_04_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_PictureFrame_02.glb",
+      "transform": [
+        -3.4518558,
+        0.2846826,
+        3.3919183,
+        -180
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_PictureFrame_04_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_PioneerCutout_00_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/CardboardPioneers/SM_PioneerCutout_01.glb",
+      "transform": [
+        1.5671817,
+        1.4641986,
+        1.2823553,
+        40
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_PioneerCutout_00_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_PioneerCutout_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/CardboardPioneers/SM_PioneerCutout_00.glb",
+      "transform": [
+        3.9861362000000002,
+        4.6895078,
+        1.2801186999999998,
+        100
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_PioneerCutout_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_PostCard_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_PostCard_01.glb",
+      "transform": [
+        -4.096465,
+        2.8735605,
+        3.4850396999999997,
+        89.60714
+      ],
+      "scale": [
+        0.18,
+        0.17999999,
+        0.17999999
+      ],
+      "source": "Build_TradingPost_C.SM_PostCard_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_RubiksCube_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_RubiksCube_01.glb",
+      "transform": [
+        1.9300578,
+        8.040478,
+        1.8685583,
+        50
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_RubiksCube_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_SantaStatue_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_SantaStatue_01.glb",
+      "transform": [
+        -0.01904888,
+        -0.61037567,
+        -0.83940575,
+        -103.17377
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_SantaStatue_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_SmokeMachine_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/SmokeMachine/Mesh/SM_SmokeMachine_01.glb",
+      "transform": [
+        2.2759937,
+        1.3921797,
+        1.2873582,
+        35
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_SmokeMachine_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_SnowGlobe_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Mesh/SM_SnowGlobe_01.glb",
+      "transform": [
+        -2.9142682000000004,
+        4.263568,
+        -0.8696927,
+        -180.86995
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_SnowGlobe_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_SnusDosa_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_SnusDosa_01.glb",
+      "transform": [
+        2.010099,
+        8.156136,
+        1.8758029999999999,
+        -28.77274
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_SnusDosa_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Socks_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_Socks_01.glb",
+      "transform": [
+        1.6602354,
+        8.179687,
+        1.8647166000000002,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_Socks_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Stool_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_Stool_01.glb",
+      "transform": [
+        -3.9059155,
+        6.3864825,
+        1.2590907,
+        7.5681925
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_Stool_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Stool_02_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_Stool_01.glb",
+      "transform": [
+        -3.7930447,
+        1.8846922000000002,
+        1.463211,
+        7.5681925
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_Stool_02_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_ToiletBag_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_ToiletBag_01.glb",
+      "transform": [
+        4.8742026,
+        1.5813990999999998,
+        2.3787975,
+        67.540146
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_ToiletBag_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_ToiletCover_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/HubToilet/Mesh/SM_ToiletCover_01.glb",
+      "transform": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_ToiletCover_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_ToiletDecor_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/HubToilet/Mesh/SM_ToiletDecor_01.glb",
+      "transform": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_ToiletDecor_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_toothbrush_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_toothbrush_01.glb",
+      "transform": [
+        4.96253,
+        0.99024,
+        2.7977267,
+        -150.88657
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_toothbrush_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_toothbrushcup_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_toothbrushcup_01.glb",
+      "transform": [
+        4.9752594,
+        0.9664470000000001,
+        2.791351,
+        -122.36593
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_toothbrushcup_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Toothpaste_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_Toothpaste_01.glb",
+      "transform": [
+        4.954645,
+        1.3083064,
+        2.7922662000000003,
+        6.8348055
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.SM_Toothpaste_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Speaker_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartySpeaker/SM_PartySpeaker.glb",
+      "transform": [
+        -1.9442067,
+        3.4363806,
+        1.4562752,
+        4
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.Speaker_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "ToiletPoster_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/SM_ToiletPoster_01.glb",
+      "transform": [
+        3.73,
+        0.38398530000000003,
+        2.9774826,
+        180
+      ],
+      "scale": [
+        0.81330824,
+        0.7229208,
+        0.81330824
+      ],
+      "source": "Build_TradingPost_C.ToiletPoster_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "MainMesh_skl_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Mesh/SK_Tradingpost.glb",
+      "transform": [
+        0,
+        0,
+        -0.66595,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_TradingPost_C.MainMesh_skl_GEN_VARIABLE",
+      "confidence": "verified"
+    }
+  ],
+  "materials": {
+    "albedo": {},
+    "ao": {},
+    "normal": {},
+    "reflection": {},
+    "stateMask": {},
+    "paint": {},
+    "baseColor": {},
+    "alpha": [],
+    "pbr": [],
+    "normalOnly": [],
+    "emissiveAccent": [],
+    "emissiveGeometrySelectors": [],
+    "state": {
+      "color": "#00ff00",
+      "strength": 5
+    }
+  },
+  "camera": {
+    "projection": "orthographic-top",
+    "frontTiltDeg": 0,
+    "displayYawDeg": 0,
+    "source": "runtime planner assets require metric top-down projection",
+    "confidence": "verified"
+  },
+  "validationContract": "batch-static",
+  "portVisibilityRequired": false,
+  "portVisibility": [],
+  "canonicalOrientation": {
+    "authority": "Build_TradingPost_C Blueprint component transforms",
+    "screenEdge": "source-orientation",
+    "rule": "현재 게임 Blueprint 좌표계를 유지하고 포트 회전은 별도 배치 계약에서 검증한다."
+  },
+  "lighting": {
+    "groundAo": false,
+    "shadowMode": "alpha-near-and-wide-postprocess",
+    "aoLayers": 2,
+    "bloom": true,
+    "sun": true,
+    "keyEnergy": 1.7,
+    "fillEnergy": 1,
+    "worldStrength": 0.42,
+    "exposure": 1.1,
+    "method": "조립 검수용 중립 PBR",
+    "confidence": "verified"
+  },
+  "assemblyFeatures": [
+    {
+      "id": "cakepiece_GEN_VARIABLE",
+      "owner": "cakepiece_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Cola_GEN_VARIABLE",
+      "owner": "Cola_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Disco Support_GEN_VARIABLE",
+      "owner": "Disco Support_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Helmet_01_GEN_VARIABLE",
+      "owner": "Helmet_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "LowerVegetation_Plant_001_GEN_VARIABLE",
+      "owner": "LowerVegetation_Plant_001_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "LowerVegetation_Plant_017_GEN_VARIABLE",
+      "owner": "LowerVegetation_Plant_017_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "LowerVegetation_Plant_020_GEN_VARIABLE",
+      "owner": "LowerVegetation_Plant_020_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "MainMesh_GEN_VARIABLE",
+      "owner": "MainMesh_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Mug1_GEN_VARIABLE",
+      "owner": "Mug1_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Mug2_GEN_VARIABLE",
+      "owner": "Mug2_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Mug_GEN_VARIABLE",
+      "owner": "Mug_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "pizza1_GEN_VARIABLE",
+      "owner": "pizza1_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "pizza_GEN_VARIABLE",
+      "owner": "pizza_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SkelMeshProxyBuildEffectOnly_GEN_VARIABLE",
+      "owner": "SkelMeshProxyBuildEffectOnly_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Alpaca_01_GEN_VARIABLE",
+      "owner": "SM_Alpaca_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Blender_01_GEN_VARIABLE",
+      "owner": "SM_Blender_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Book_01_GEN_VARIABLE",
+      "owner": "SM_Book_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Book_01B_GEN_VARIABLE",
+      "owner": "SM_Book_01B_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Book_02_GEN_VARIABLE",
+      "owner": "SM_Book_02_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Book_02B_GEN_VARIABLE",
+      "owner": "SM_Book_02B_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Book_02C_GEN_VARIABLE",
+      "owner": "SM_Book_02C_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Book_03_GEN_VARIABLE",
+      "owner": "SM_Book_03_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Book_03B_GEN_VARIABLE",
+      "owner": "SM_Book_03B_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Candle_01_GEN_VARIABLE",
+      "owner": "SM_Candle_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_CoffeeMachine_01_GEN_VARIABLE",
+      "owner": "SM_CoffeeMachine_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Cup_GEN_VARIABLE",
+      "owner": "SM_Cup_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_DeskLamp_01_GEN_VARIABLE",
+      "owner": "SM_DeskLamp_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_DiscoBall_GEN_VARIABLE",
+      "owner": "SM_DiscoBall_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_DiscoFloor_GEN_VARIABLE",
+      "owner": "SM_DiscoFloor_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_DoorMat_01_GEN_VARIABLE",
+      "owner": "SM_DoorMat_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Embroidery_01_GEN_VARIABLE",
+      "owner": "SM_Embroidery_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FicsitManual_01_GEN_VARIABLE",
+      "owner": "SM_FicsitManual_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FicsmasBlanket_01_GEN_VARIABLE",
+      "owner": "SM_FicsmasBlanket_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FicsmasCandle_01_GEN_VARIABLE",
+      "owner": "SM_FicsmasCandle_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FicsmasCandle_02_GEN_VARIABLE",
+      "owner": "SM_FicsmasCandle_02_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FicsmasCard_01_GEN_VARIABLE",
+      "owner": "SM_FicsmasCard_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FicsmasCard_02_GEN_VARIABLE",
+      "owner": "SM_FicsmasCard_02_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FicsmasCard_03_GEN_VARIABLE",
+      "owner": "SM_FicsmasCard_03_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FicsmasCard_04_GEN_VARIABLE",
+      "owner": "SM_FicsmasCard_04_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FicsmasCard_05_GEN_VARIABLE",
+      "owner": "SM_FicsmasCard_05_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FicsmasCard_06_GEN_VARIABLE",
+      "owner": "SM_FicsmasCard_06_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FicsmasSock_01_GEN_VARIABLE",
+      "owner": "SM_FicsmasSock_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FicsmasSock_02_GEN_VARIABLE",
+      "owner": "SM_FicsmasSock_02_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FicsmasSock_03_GEN_VARIABLE",
+      "owner": "SM_FicsmasSock_03_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FicsmasSock_04_GEN_VARIABLE",
+      "owner": "SM_FicsmasSock_04_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FicsmasStar_01_GEN_VARIABLE",
+      "owner": "SM_FicsmasStar_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Ficzza_GEN_VARIABLE",
+      "owner": "SM_Ficzza_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FiczzaBox_Closed_01_GEN_VARIABLE",
+      "owner": "SM_FiczzaBox_Closed_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FiczzaBox_Closed_02_GEN_VARIABLE",
+      "owner": "SM_FiczzaBox_Closed_02_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FiczzaBox_Open1_GEN_VARIABLE",
+      "owner": "SM_FiczzaBox_Open1_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FiczzaBox_Open2_GEN_VARIABLE",
+      "owner": "SM_FiczzaBox_Open2_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FiczzaBox_Open_GEN_VARIABLE",
+      "owner": "SM_FiczzaBox_Open_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FridgeMagnet_010_GEN_VARIABLE",
+      "owner": "SM_FridgeMagnet_010_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FridgeMagnet_01_GEN_VARIABLE",
+      "owner": "SM_FridgeMagnet_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FridgeMagnet_02_GEN_VARIABLE",
+      "owner": "SM_FridgeMagnet_02_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FridgeMagnet_03_GEN_VARIABLE",
+      "owner": "SM_FridgeMagnet_03_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FridgeMagnet_04_GEN_VARIABLE",
+      "owner": "SM_FridgeMagnet_04_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FridgeMagnet_05_GEN_VARIABLE",
+      "owner": "SM_FridgeMagnet_05_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FridgeMagnet_06_GEN_VARIABLE",
+      "owner": "SM_FridgeMagnet_06_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FridgeMagnet_07_GEN_VARIABLE",
+      "owner": "SM_FridgeMagnet_07_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FridgeMagnet_08_GEN_VARIABLE",
+      "owner": "SM_FridgeMagnet_08_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FridgeMagnet_09_GEN_VARIABLE",
+      "owner": "SM_FridgeMagnet_09_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FridgeMagnet_C_GEN_VARIABLE",
+      "owner": "SM_FridgeMagnet_C_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_FridgeMagnet_S_GEN_VARIABLE",
+      "owner": "SM_FridgeMagnet_S_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_GingerBreadCookies_01_GEN_VARIABLE",
+      "owner": "SM_GingerBreadCookies_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Glogg_01_GEN_VARIABLE",
+      "owner": "SM_Glogg_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Halmbock_01_GEN_VARIABLE",
+      "owner": "SM_Halmbock_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_HazmatSuit_01_GEN_VARIABLE",
+      "owner": "SM_HazmatSuit_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_HubComputer_01_GEN_VARIABLE",
+      "owner": "SM_HubComputer_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_HubFrost_01_GEN_VARIABLE",
+      "owner": "SM_HubFrost_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_HubGarland_01_GEN_VARIABLE",
+      "owner": "SM_HubGarland_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_HubMirror_01_GEN_VARIABLE",
+      "owner": "SM_HubMirror_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_HubMonitor_01_GEN_VARIABLE",
+      "owner": "SM_HubMonitor_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_HubPot_01_GEN_VARIABLE",
+      "owner": "SM_HubPot_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_HubPot_02_GEN_VARIABLE",
+      "owner": "SM_HubPot_02_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_HubPot_03_GEN_VARIABLE",
+      "owner": "SM_HubPot_03_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_HubPot_04_GEN_VARIABLE",
+      "owner": "SM_HubPot_04_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_HubPot_05_GEN_VARIABLE",
+      "owner": "SM_HubPot_05_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_HubSign_01_GEN_VARIABLE",
+      "owner": "SM_HubSign_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Joystick_01_GEN_VARIABLE",
+      "owner": "SM_Joystick_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_LavaLamp_01_GEN_VARIABLE",
+      "owner": "SM_LavaLamp_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_LunchTray_01_GEN_VARIABLE",
+      "owner": "SM_LunchTray_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_LunchTray_02_GEN_VARIABLE",
+      "owner": "SM_LunchTray_02_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Matches_01_GEN_VARIABLE",
+      "owner": "SM_Matches_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_MeseeksBox_01_GEN_VARIABLE",
+      "owner": "SM_MeseeksBox_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_MicroWave_01_GEN_VARIABLE",
+      "owner": "SM_MicroWave_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Orange_01_GEN_VARIABLE",
+      "owner": "SM_Orange_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_OstHyvel_01_GEN_VARIABLE",
+      "owner": "SM_OstHyvel_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_PartyAttachment_01_GEN_VARIABLE",
+      "owner": "SM_PartyAttachment_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_PartyAttachment_02_GEN_VARIABLE",
+      "owner": "SM_PartyAttachment_02_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_PartyGarland_01_GEN_VARIABLE",
+      "owner": "SM_PartyGarland_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_PartyGarland_02_GEN_VARIABLE",
+      "owner": "SM_PartyGarland_02_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_PartyGarland_03_GEN_VARIABLE",
+      "owner": "SM_PartyGarland_03_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_PartyGarland_04_GEN_VARIABLE",
+      "owner": "SM_PartyGarland_04_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_PartyGarland_05_GEN_VARIABLE",
+      "owner": "SM_PartyGarland_05_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_PartyGarland_06_GEN_VARIABLE",
+      "owner": "SM_PartyGarland_06_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_PartyGarland_07_GEN_VARIABLE",
+      "owner": "SM_PartyGarland_07_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_PartyGarlandTape_01_GEN_VARIABLE",
+      "owner": "SM_PartyGarlandTape_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_PartyGarlandTape_02_GEN_VARIABLE",
+      "owner": "SM_PartyGarlandTape_02_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_PartyGarlandTape_03_GEN_VARIABLE",
+      "owner": "SM_PartyGarlandTape_03_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_PartyGarlandTape_04_GEN_VARIABLE",
+      "owner": "SM_PartyGarlandTape_04_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_PartyGarlandTape_05_GEN_VARIABLE",
+      "owner": "SM_PartyGarlandTape_05_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_PartyGarlandTape_06_GEN_VARIABLE",
+      "owner": "SM_PartyGarlandTape_06_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_PartyGarlandTape_07_GEN_VARIABLE",
+      "owner": "SM_PartyGarlandTape_07_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_PartySpotlight_01_GEN_VARIABLE",
+      "owner": "SM_PartySpotlight_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_PartySpotlight_02_GEN_VARIABLE",
+      "owner": "SM_PartySpotlight_02_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Pencils_01_GEN_VARIABLE",
+      "owner": "SM_Pencils_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Philodendron_03_GEN_VARIABLE",
+      "owner": "SM_Philodendron_03_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Philodendron_04_GEN_VARIABLE",
+      "owner": "SM_Philodendron_04_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_PictureFrame_01_GEN_VARIABLE",
+      "owner": "SM_PictureFrame_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_PictureFrame_03_GEN_VARIABLE",
+      "owner": "SM_PictureFrame_03_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_PictureFrame_04_GEN_VARIABLE",
+      "owner": "SM_PictureFrame_04_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_PioneerCutout_00_GEN_VARIABLE",
+      "owner": "SM_PioneerCutout_00_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_PioneerCutout_01_GEN_VARIABLE",
+      "owner": "SM_PioneerCutout_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_PostCard_01_GEN_VARIABLE",
+      "owner": "SM_PostCard_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_RubiksCube_01_GEN_VARIABLE",
+      "owner": "SM_RubiksCube_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_SantaStatue_01_GEN_VARIABLE",
+      "owner": "SM_SantaStatue_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_SmokeMachine_01_GEN_VARIABLE",
+      "owner": "SM_SmokeMachine_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_SnowGlobe_01_GEN_VARIABLE",
+      "owner": "SM_SnowGlobe_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_SnusDosa_01_GEN_VARIABLE",
+      "owner": "SM_SnusDosa_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Socks_01_GEN_VARIABLE",
+      "owner": "SM_Socks_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Stool_01_GEN_VARIABLE",
+      "owner": "SM_Stool_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Stool_02_GEN_VARIABLE",
+      "owner": "SM_Stool_02_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_ToiletBag_01_GEN_VARIABLE",
+      "owner": "SM_ToiletBag_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_ToiletCover_01_GEN_VARIABLE",
+      "owner": "SM_ToiletCover_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_ToiletDecor_01_GEN_VARIABLE",
+      "owner": "SM_ToiletDecor_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_toothbrush_01_GEN_VARIABLE",
+      "owner": "SM_toothbrush_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_toothbrushcup_01_GEN_VARIABLE",
+      "owner": "SM_toothbrushcup_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Toothpaste_01_GEN_VARIABLE",
+      "owner": "SM_Toothpaste_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Speaker_GEN_VARIABLE",
+      "owner": "Speaker_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "ToiletPoster_GEN_VARIABLE",
+      "owner": "ToiletPoster_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "MainMesh_skl_GEN_VARIABLE",
+      "owner": "MainMesh_skl_GEN_VARIABLE",
+      "status": "present"
+    }
+  ],
+  "materialChecks": [
+    {
+      "id": "cue4parse-imported-game-materials",
+      "status": "present"
+    }
+  ],
+  "cameraLightingChecks": [
+    {
+      "id": "runtime-orthographic-top",
+      "status": "present"
+    }
+  ],
+  "pipelineAudit": {
+    "repeatedDefectThreshold": 2,
+    "systemicDefectThreshold": 1,
+    "rawVatCandidateAllowed": false,
+    "coordinateBasis": "scene=(unrealX,-unrealY,unrealZ,-unrealYaw)",
+    "requiredStages": [
+      "package-graph",
+      "blueprint-components",
+      "view-feature-matrix",
+      "runtime-top-after-assembly"
+    ]
+  }
+}

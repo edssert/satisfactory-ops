@@ -74,7 +74,13 @@ export interface TransportRoute {
   medium: Exclude<Medium, 'power'>;
   itemId: string;
   flowPerMinute: number;
+  transportClass: string;
   capacityPerMinute: number;
+  pathM: Vec3[];
+}
+
+export interface RailRoute {
+  id: string;
   pathM: Vec3[];
 }
 
@@ -95,6 +101,7 @@ export interface FactoryPlan {
   foundations: FoundationTile[];
   placements: Placement[];
   transports: TransportRoute[];
+  rails?: RailRoute[];
   powerSources: PowerSource[];
   powerEdges: PowerEdge[];
 }
@@ -116,6 +123,7 @@ export interface ValidationIssue {
     | 'ROUTE_TURN_RADIUS'
     | 'ROUTE_INCLINE'
     | 'ROUTE_TURN_INCLINE'
+    | 'RAIL_GEOMETRY'
     | 'LIFT_HEIGHT'
     | 'PORT_DIRECTION'
     | 'PORT_MEDIUM'

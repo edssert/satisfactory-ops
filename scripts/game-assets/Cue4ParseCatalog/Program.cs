@@ -68,7 +68,22 @@ provider.LoadVirtualPaths();
 if (mode == "export")
 {
     var session = new ExportSession { MaxDegreeOfParallelism = Math.Min(Environment.ProcessorCount, 8) };
-    foreach (var objectPath in args.Skip(3)) session.Add(provider.LoadPackageObject(objectPath));
+    var loadFailures = 0;
+    var loaded = 0;
+    foreach (var objectPath in args.Skip(3))
+    {
+        try
+        {
+            session.Add(provider.LoadPackageObject(objectPath));
+            loaded++;
+        }
+        catch (Exception error)
+        {
+            loadFailures++;
+            Console.Error.WriteLine($"EXPORT=FAIL_LOAD {objectPath} {error.Message}");
+        }
+    }
+    if (loaded == 0) return 1;
     var results = await session.RunAsync(output, new ExportOptions(EMeshFormat.Gltf2));
     foreach (var result in results)
     {
@@ -76,7 +91,7 @@ if (mode == "export")
         if (result.Error is not null) Console.Error.WriteLine(result.Error);
         foreach (var file in result.DiskFilePaths ?? []) Console.WriteLine($"FILE={file}");
     }
-    return results.All(result => result.Success) ? 0 : 1;
+    return loadFailures == 0 && results.All(result => result.Success) ? 0 : 1;
 }
 
 if (mode == "inspect")

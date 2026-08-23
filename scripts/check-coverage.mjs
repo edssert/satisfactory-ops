@@ -13,6 +13,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { requiresRasterTopview } from '../src/lib/planner-asset-scope.ts';
 
 const ROOT = process.cwd();
 const DIST = path.join(ROOT, 'dist');
@@ -26,6 +27,7 @@ if (!fs.existsSync(DIST)) {
 const read = (p) => JSON.parse(fs.readFileSync(p, 'utf8'));
 const items = read(path.join(APP, 'items.json'));
 const buildings = read(path.join(APP, 'buildings.json'));
+const plannerAssetScope = read(path.join(APP, 'planner-asset-scope.json'));
 const topviews = read(path.join(ROOT, 'src/data/curated/topview-assets.json'));
 
 /** dist 안의 모든 html */
@@ -124,6 +126,7 @@ const pass = (msg) => notes.push(`  PASS  ${msg}`);
   const noRef = need.filter((e) => e.iconRef?.dir !== 'schematics');
   const noFile = need.filter(
     (e) =>
+
       e.iconRef?.dir === 'schematics' &&
       !fs.existsSync(path.join(ROOT, 'public/assets/schematics', `${e.iconRef.id}.png`))
   );
@@ -153,6 +156,31 @@ const pass = (msg) => notes.push(`  PASS  ${msg}`);
     );
   } else {
     pass(`보상 종류 배지 ${badges.length}개 확보`);
+  }
+}
+
+// ─────────────────────────────── 1-d. 설계 자산 도감이 생성 범위를 전부 렌더했는가
+{
+  const page = allHtml.find((entry) => entry.p.endsWith(`dex${path.sep}assets${path.sep}index.html`));
+  if (!page) {
+    fail('설계 자산 도감 페이지가 빌드되지 않았습니다');
+  } else {
+    const expectedRows = plannerAssetScope.targets.filter(requiresRasterTopview);
+    const expected = new Set(expectedRows.map((target) => target.buildingClass));
+    const rendered = new Set(
+      [...page.s.matchAll(/data-building-class="(Build_[A-Za-z0-9_]+_C)"/g)].map((match) => match[1]),
+    );
+    const missing = [...expected].filter((id) => !rendered.has(id));
+    const extra = [...rendered].filter((id) => !expected.has(id));
+    if (missing.length || extra.length || rendered.size !== expected.size) {
+      fail(
+        `설계 자산 도감 범위 불일치 — 생성 ${expected.size} · 렌더 ${rendered.size} · ` +
+        `누락 ${missing.length} · 범위 밖 ${extra.length}\n` +
+        `      ${[...missing, ...extra].slice(0, 10).join(', ')}`,
+      );
+    } else {
+      pass(`설계 탑뷰 도감이 개별 이미지 대상 ${expected.size}건을 정확히 렌더`);
+    }
   }
 }
 
@@ -349,10 +377,14 @@ if (!toolsPage) {
     }
     /* base 를 안 붙인 절대 경로는 GitHub Pages 하위 경로에서 전부 404 가 된다 */
     if (/src="\/assets\//.test(hit.s)) fail('설계 페이지에 base 없는 자산 경로가 있습니다');
+    const requiredTopviewClasses = new Set(plannerAssetScope.targets
+      .filter(requiresRasterTopview)
+      .map((target) => target.buildingClass));
     const runtimeAssets = topviews.assets.filter((asset) =>
       asset.sourceId === 'game-install-cl-502094'
       && asset.reviewStatus === 'approved'
       && asset.role === 'building'
+      && requiredTopviewClasses.has(asset.buildingClass)
     );
     const externalAssets = topviews.assets.filter((asset) => asset.sourceId !== 'game-install-cl-502094');
     for (const asset of runtimeAssets) {

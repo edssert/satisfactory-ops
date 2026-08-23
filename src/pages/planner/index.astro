@@ -4,26 +4,23 @@ import Base from '../../layouts/Base.astro';
 import ValidatedFactoryPlanner, { type DrawingMachine } from '../../components/ValidatedFactoryPlanner';
 import { buildings, items, recipes } from '../../lib/gamedata';
 import { requireMachineSpec } from '../../domain/factory/specs';
-import portsData from '../../data/curated/machine-ports.json';
 import { runtimeTopviewAssets, type TopviewAsset } from '../../lib/topview-assets';
 import '../../styles/validated-planner.css';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const buildingById = new Map(buildings.map((building) => [building.id, building]));
 const itemById = new Map(items.map((entry) => [entry.id, entry]));
-const topviewByClass = new Map(runtimeTopviewAssets
-  .filter((asset) => asset.role === 'building' && 'buildingClass' in asset)
-  .map((asset) => [asset.buildingClass, asset]));
+const railName = buildingById.get('Build_RailroadTrack_C')?.ko ?? '';
 const assetUrl = (asset: TopviewAsset) =>
   `${base}/${asset.path}${'sha256' in asset && asset.sha256 ? `?v=${asset.sha256.slice(0, 12)}` : ''}`;
 
-const machines: DrawingMachine[] = portsData.$completeBuildings.flatMap((buildingClass) => {
+const machines: DrawingMachine[] = runtimeTopviewAssets.flatMap((topview) => {
+  if (topview.role !== 'building' || !('buildingClass' in topview) || !topview.buildingClass) return [];
+  const buildingClass = topview.buildingClass;
   const building = buildingById.get(buildingClass);
   const spec = requireMachineSpec(buildingClass);
   const materialPorts = spec.ports.filter((port) => port.medium !== 'power');
-  if (!building || !spec.hardBoxes.length || !materialPorts.length) return [];
-  const topview = topviewByClass.get(buildingClass);
-  if (!topview) return [];
+  if (!building || !spec.hardBoxes.length) return [];
   const statusImages = 'statusImages' in topview ? topview.statusImages : undefined;
   return [{
     ...spec,
@@ -49,7 +46,11 @@ const machines: DrawingMachine[] = portsData.$completeBuildings.flatMap((buildin
     powerExponent: building.powerExponent ?? 1,
     productionBoostPowerExponent: building.productionBoostPowerExponent ?? 2,
   }];
-});
+}).sort((left, right) => (
+  (buildingById.get(left.buildingClass)?.unlockTier ?? 99)
+    - (buildingById.get(right.buildingClass)?.unlockTier ?? 99)
+  || left.name.localeCompare(right.name, 'ko')
+));
 ---
 
 <Base
@@ -63,6 +64,7 @@ const machines: DrawingMachine[] = portsData.$completeBuildings.flatMap((buildin
     <ValidatedFactoryPlanner
       client:load
       machines={machines}
+      railName={railName}
     />
   </div>
 </Base>

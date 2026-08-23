@@ -1,0 +1,962 @@
+{
+  "$schemaVersion": 1,
+  "id": "hadroncollider-batch-cl-502094",
+  "buildingClass": "Build_HadronCollider_C",
+  "status": "generated-current-game-candidate",
+  "geometryAuthority": "game-install-cl-502094",
+  "sourceBlueprint": "FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Build_HadronCollider.uasset",
+  "footprint": {
+    "widthM": 52,
+    "lengthM": 27,
+    "heightM": 28,
+    "groundZM": 0,
+    "centerM": [
+      -7,
+      -0.5
+    ],
+    "cornerEnvelope": "game-hard-clearance",
+    "confidence": "verified"
+  },
+  "components": [
+    {
+      "id": "FGColoredInstanceMeshProxy_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Mesh/SM_HadronCollider_01.glb",
+      "transform": [
+        10,
+        2,
+        0,
+        -180
+      ],
+      "rotationEulerDeg": [
+        0,
+        0,
+        -180
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_HadronCollider_C.FGColoredInstanceMeshProxy_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Spool_01_01_A_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Mesh/SM_HC_Spool_01.glb",
+      "transform": [
+        16.415641,
+        -3.1505338,
+        1.0660442,
+        329.9999
+      ],
+      "rotationEulerDeg": [
+        179.99995,
+        -0.00046014786,
+        329.9999
+      ],
+      "scale": [
+        0.32,
+        0.32,
+        0.32
+      ],
+      "source": "Build_HadronCollider_C.Spool_01_01_A_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Spool_01_01_B_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Mesh/SM_HC_Spool_02.glb",
+      "transform": [
+        14.532820999999998,
+        -2.0538065,
+        1.5743471,
+        329.9999
+      ],
+      "rotationEulerDeg": [
+        179.99995,
+        29.999466,
+        329.9999
+      ],
+      "scale": [
+        0.32,
+        0.32,
+        0.32
+      ],
+      "source": "Build_HadronCollider_C.Spool_01_01_B_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Spool_01_02_A_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Mesh/SM_HC_Spool_01.glb",
+      "transform": [
+        -11.618601000000002,
+        0.0000333786,
+        -6.679873700000001,
+        -0.00005108932
+      ],
+      "rotationEulerDeg": [
+        0.0000384352,
+        -59.999554,
+        -0.00005108932
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_HadronCollider_C.Spool_01_02_A_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Spool_01_02_B_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Mesh/SM_HC_Spool_02.glb",
+      "transform": [
+        -11.826436000000001,
+        0.008997202,
+        -6.805541,
+        -0.00007596641
+      ],
+      "rotationEulerDeg": [
+        -0.0002509108,
+        -60.00046,
+        -0.00007596641
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_HadronCollider_C.Spool_01_02_B_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Spool_01_03_A_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Mesh/SM_HC_Spool_01.glb",
+      "transform": [
+        -11.618005,
+        9.536743e-7,
+        -20.09301,
+        179.99976
+      ],
+      "rotationEulerDeg": [
+        179.99991,
+        -59.999172,
+        179.99976
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_HadronCollider_C.Spool_01_03_A_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Spool_01_03_B_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Mesh/SM_HC_Spool_02.glb",
+      "transform": [
+        -11.835968000000001,
+        0.008948803,
+        -20.464384,
+        179.9998
+      ],
+      "rotationEulerDeg": [
+        -179.99992,
+        -59.999084,
+        179.9998
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_HadronCollider_C.Spool_01_03_B_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Spool_01_04_A_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Mesh/SM_HC_Spool_01.glb",
+      "transform": [
+        -0.008594217,
+        -0.000057023484,
+        -26.821406000000003,
+        179.99971
+      ],
+      "rotationEulerDeg": [
+        179.99995,
+        0.00076498115,
+        179.99971
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_HadronCollider_C.Spool_01_04_A_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Spool_01_04_B_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Mesh/SM_HC_Spool_02.glb",
+      "transform": [
+        -0.0013160706,
+        0.00891304,
+        -27.272350000000003,
+        179.9999
+      ],
+      "rotationEulerDeg": [
+        -179.99997,
+        0.00086743396,
+        179.9999
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_HadronCollider_C.Spool_01_04_B_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Spool_01_05_A_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Mesh/SM_HC_Spool_01.glb",
+      "transform": [
+        11.648722,
+        -0.00014209747,
+        -20.119209,
+        179.99963
+      ],
+      "rotationEulerDeg": [
+        179.99991,
+        60.000607,
+        179.99963
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_HadronCollider_C.Spool_01_05_A_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Spool_02_01_A_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Mesh/SM_HC_Spool_01.glb",
+      "transform": [
+        7.077082000000001,
+        2.2410722,
+        6.0345355,
+        1049.9999
+      ],
+      "rotationEulerDeg": [
+        540.00024,
+        -29.999496,
+        1049.9999
+      ],
+      "scale": [
+        0.65,
+        0.65,
+        0.65
+      ],
+      "source": "Build_HadronCollider_C.Spool_02_01_A_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Spool_02_01_B_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Mesh/SM_HC_Spool_02.glb",
+      "transform": [
+        3.3129633000000003,
+        4.423303000000001,
+        4.714075,
+        329.99994
+      ],
+      "rotationEulerDeg": [
+        179.99995,
+        -0.0006532669,
+        329.99994
+      ],
+      "scale": [
+        0.65511084,
+        0.65511084,
+        0.65511084
+      ],
+      "source": "Build_HadronCollider_C.Spool_02_01_B_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Spool_02_02_A_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Mesh/SM_HC_Spool_01.glb",
+      "transform": [
+        11.533003,
+        0.000028170072,
+        -6.6668646,
+        -0.0003993233
+      ],
+      "rotationEulerDeg": [
+        0.0022350715,
+        60.00046,
+        -0.0003993233
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_HadronCollider_C.Spool_02_02_A_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Spool_02_03_A_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Mesh/SM_HC_Spool_01.glb",
+      "transform": [
+        11.512509999999999,
+        0.0003159743,
+        -20.032463,
+        179.996
+      ],
+      "rotationEulerDeg": [
+        179.99794,
+        59.998913,
+        179.996
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_HadronCollider_C.Spool_02_03_A_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Spool_02_03_B_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Mesh/SM_HC_Spool_02.glb",
+      "transform": [
+        11.674439999999999,
+        -0.000031677012,
+        -20.193425,
+        -179.99948
+      ],
+      "rotationEulerDeg": [
+        -179.99997,
+        59.999405,
+        -179.99948
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_HadronCollider_C.Spool_02_03_B_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Spool_02_04_B_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Mesh/SM_HC_Spool_02.glb",
+      "transform": [
+        0.017530124,
+        0.00029027283,
+        -26.928784,
+        -179.99937
+      ],
+      "rotationEulerDeg": [
+        -179.99991,
+        -0.0006352076,
+        -179.99937
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_HadronCollider_C.Spool_02_04_B_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Spool_02_05_A_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Mesh/SM_HC_Spool_01.glb",
+      "transform": [
+        -0.022320087000000002,
+        0.0008976863000000001,
+        -26.67976,
+        179.9978
+      ],
+      "rotationEulerDeg": [
+        179.99898,
+        -0.0010450189,
+        179.9978
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_HadronCollider_C.Spool_02_05_A_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Spool_02_05_B_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Mesh/SM_HC_Spool_02.glb",
+      "transform": [
+        11.556011000000002,
+        -0.000060558994000000004,
+        -6.578735,
+        0.0012902776
+      ],
+      "rotationEulerDeg": [
+        0.00018520479,
+        59.99893,
+        0.0012902776
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_HadronCollider_C.Spool_02_05_B_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Spool_03_01_A_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Mesh/SM_HC_Spool_01.glb",
+      "transform": [
+        -0.7076726999999999,
+        9.186406,
+        22.812566,
+        -0.000010899485
+      ],
+      "rotationEulerDeg": [
+        0.00001582406,
+        -59.99993,
+        -0.000010899485
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_HadronCollider_C.Spool_03_01_A_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Spool_03_01_B_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Mesh/SM_HC_Spool_02.glb",
+      "transform": [
+        17.580298,
+        9.176514,
+        4.4647372,
+        -0.0000029998137
+      ],
+      "rotationEulerDeg": [
+        0.000008238593,
+        -29.999985,
+        -0.0000029998137
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_HadronCollider_C.Spool_03_01_B_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Spool_03_02_A_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Mesh/SM_HC_Spool_01.glb",
+      "transform": [
+        11.50666,
+        0.00022583008,
+        -6.676489,
+        -0.000020289697
+      ],
+      "rotationEulerDeg": [
+        -0.00000782201,
+        60.00008,
+        -0.000020289697
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_HadronCollider_C.Spool_03_02_A_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Spool_03_02_B_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Mesh/SM_HC_Spool_02.glb",
+      "transform": [
+        11.710618,
+        -0.000025024414,
+        6.7319904,
+        -0.0000029904302
+      ],
+      "rotationEulerDeg": [
+        0.000052990854,
+        -59.999985,
+        -0.0000029904302
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_HadronCollider_C.Spool_03_02_B_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Spool_03_03_A_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Mesh/SM_HC_Spool_01.glb",
+      "transform": [
+        11.508568,
+        0.00026123047,
+        -19.975608,
+        -179.99998
+      ],
+      "rotationEulerDeg": [
+        -179.99995,
+        59.999943,
+        -179.99998
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_HadronCollider_C.Spool_03_03_A_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Spool_03_03_B_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Mesh/SM_HC_Spool_02.glb",
+      "transform": [
+        11.707239999999999,
+        -0.000020751953,
+        20.273463,
+        -179.99998
+      ],
+      "rotationEulerDeg": [
+        179.99995,
+        -59.999577,
+        -179.99998
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_HadronCollider_C.Spool_03_03_B_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Spool_03_04_A_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Mesh/SM_HC_Spool_01.glb",
+      "transform": [
+        0.009123535,
+        0.00026489258000000004,
+        -26.61766,
+        179.99991
+      ],
+      "rotationEulerDeg": [
+        -179.9999,
+        -0.0002458868,
+        179.99991
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_HadronCollider_C.Spool_03_04_A_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Spool_03_04_B_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Mesh/SM_HC_Spool_02.glb",
+      "transform": [
+        -0.038948364,
+        -0.000017700195,
+        27.032021,
+        -179.99997
+      ],
+      "rotationEulerDeg": [
+        179.99995,
+        0.00022539623,
+        -179.99997
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_HadronCollider_C.Spool_03_04_B_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "Spool_03_05_A_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Mesh/SM_HC_Spool_01.glb",
+      "transform": [
+        -11.518927000000001,
+        0.0002758789,
+        -19.957225,
+        179.99968
+      ],
+      "rotationEulerDeg": [
+        -179.99976,
+        -60.00026,
+        179.99968
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_HadronCollider_C.Spool_03_05_A_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Input_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/FactoryInputs/Mesh/SM_Input_01.glb",
+      "transform": [
+        -2,
+        -9.999995,
+        0,
+        0.00004781132
+      ],
+      "rotationEulerDeg": [
+        0,
+        0,
+        0.00004781132
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_HadronCollider_C.SM_Input_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Input_02_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/FactoryInputs/Mesh/SM_Input_01.glb",
+      "transform": [
+        -6,
+        -9.999995,
+        0,
+        0.00004781132
+      ],
+      "rotationEulerDeg": [
+        0,
+        0,
+        0.00004781132
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_HadronCollider_C.SM_Input_02_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Output_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/FactoryInputs/Mesh/SM_Output_01.glb",
+      "transform": [
+        -4,
+        13.999993,
+        0,
+        179.99992
+      ],
+      "rotationEulerDeg": [
+        0,
+        0,
+        179.99992
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_HadronCollider_C.SM_Output_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_Pipe_InPut_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/FactoryInputs/Mesh/SM_Pipe_InPut_01.glb",
+      "transform": [
+        2,
+        -9.9999945,
+        1.75,
+        0.00004781132
+      ],
+      "rotationEulerDeg": [
+        0,
+        0,
+        0.00004781132
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_HadronCollider_C.SM_Pipe_InPut_01_GEN_VARIABLE",
+      "confidence": "verified"
+    }
+  ],
+  "materials": {
+    "albedo": {},
+    "ao": {},
+    "normal": {},
+    "reflection": {},
+    "stateMask": {},
+    "paint": {},
+    "baseColor": {},
+    "alpha": [],
+    "pbr": [],
+    "normalOnly": [],
+    "emissiveAccent": [],
+    "emissiveGeometrySelectors": [],
+    "state": {
+      "color": "#00ff00",
+      "strength": 5
+    }
+  },
+  "camera": {
+    "projection": "orthographic-top",
+    "frontTiltDeg": 0,
+    "displayYawDeg": 0,
+    "source": "runtime planner assets require metric top-down projection",
+    "confidence": "verified"
+  },
+  "validationContract": "batch-static",
+  "portVisibilityRequired": false,
+  "portVisibility": [],
+  "canonicalOrientation": {
+    "authority": "Build_HadronCollider_C Blueprint component transforms",
+    "screenEdge": "source-orientation",
+    "rule": "현재 게임 Blueprint 좌표계를 유지하고 포트 회전은 별도 배치 계약에서 검증한다."
+  },
+  "lighting": {
+    "groundAo": false,
+    "shadowMode": "alpha-near-and-wide-postprocess",
+    "aoLayers": 2,
+    "bloom": true,
+    "sun": true,
+    "keyEnergy": 1.7,
+    "fillEnergy": 1,
+    "worldStrength": 0.42,
+    "exposure": 1.1,
+    "method": "조립 검수용 중립 PBR",
+    "confidence": "verified"
+  },
+  "assemblyFeatures": [
+    {
+      "id": "FGColoredInstanceMeshProxy_GEN_VARIABLE",
+      "owner": "FGColoredInstanceMeshProxy_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Spool_01_01_A_GEN_VARIABLE",
+      "owner": "Spool_01_01_A_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Spool_01_01_B_GEN_VARIABLE",
+      "owner": "Spool_01_01_B_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Spool_01_02_A_GEN_VARIABLE",
+      "owner": "Spool_01_02_A_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Spool_01_02_B_GEN_VARIABLE",
+      "owner": "Spool_01_02_B_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Spool_01_03_A_GEN_VARIABLE",
+      "owner": "Spool_01_03_A_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Spool_01_03_B_GEN_VARIABLE",
+      "owner": "Spool_01_03_B_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Spool_01_04_A_GEN_VARIABLE",
+      "owner": "Spool_01_04_A_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Spool_01_04_B_GEN_VARIABLE",
+      "owner": "Spool_01_04_B_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Spool_01_05_A_GEN_VARIABLE",
+      "owner": "Spool_01_05_A_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Spool_02_01_A_GEN_VARIABLE",
+      "owner": "Spool_02_01_A_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Spool_02_01_B_GEN_VARIABLE",
+      "owner": "Spool_02_01_B_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Spool_02_02_A_GEN_VARIABLE",
+      "owner": "Spool_02_02_A_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Spool_02_03_A_GEN_VARIABLE",
+      "owner": "Spool_02_03_A_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Spool_02_03_B_GEN_VARIABLE",
+      "owner": "Spool_02_03_B_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Spool_02_04_B_GEN_VARIABLE",
+      "owner": "Spool_02_04_B_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Spool_02_05_A_GEN_VARIABLE",
+      "owner": "Spool_02_05_A_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Spool_02_05_B_GEN_VARIABLE",
+      "owner": "Spool_02_05_B_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Spool_03_01_A_GEN_VARIABLE",
+      "owner": "Spool_03_01_A_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Spool_03_01_B_GEN_VARIABLE",
+      "owner": "Spool_03_01_B_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Spool_03_02_A_GEN_VARIABLE",
+      "owner": "Spool_03_02_A_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Spool_03_02_B_GEN_VARIABLE",
+      "owner": "Spool_03_02_B_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Spool_03_03_A_GEN_VARIABLE",
+      "owner": "Spool_03_03_A_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Spool_03_03_B_GEN_VARIABLE",
+      "owner": "Spool_03_03_B_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Spool_03_04_A_GEN_VARIABLE",
+      "owner": "Spool_03_04_A_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Spool_03_04_B_GEN_VARIABLE",
+      "owner": "Spool_03_04_B_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "Spool_03_05_A_GEN_VARIABLE",
+      "owner": "Spool_03_05_A_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Input_01_GEN_VARIABLE",
+      "owner": "SM_Input_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Input_02_GEN_VARIABLE",
+      "owner": "SM_Input_02_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Output_01_GEN_VARIABLE",
+      "owner": "SM_Output_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_Pipe_InPut_01_GEN_VARIABLE",
+      "owner": "SM_Pipe_InPut_01_GEN_VARIABLE",
+      "status": "present"
+    }
+  ],
+  "materialChecks": [
+    {
+      "id": "cue4parse-imported-game-materials",
+      "status": "present"
+    }
+  ],
+  "cameraLightingChecks": [
+    {
+      "id": "runtime-orthographic-top",
+      "status": "present"
+    }
+  ],
+  "pipelineAudit": {
+    "repeatedDefectThreshold": 2,
+    "systemicDefectThreshold": 1,
+    "rawVatCandidateAllowed": false,
+    "coordinateBasis": "scene=(unrealX,-unrealY,unrealZ,-unrealYaw)",
+    "requiredStages": [
+      "package-graph",
+      "blueprint-components",
+      "view-feature-matrix",
+      "runtime-top-after-assembly"
+    ]
+  }
+}

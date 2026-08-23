@@ -1,0 +1,201 @@
+{
+  "$schemaVersion": 1,
+  "$comment": "게임 설치본의 건설 가능 클래스에서 설계판 자산 완료 범위를 도출하는 정책이다. 표시 이름과 게임 수치는 넣지 않는다.",
+  "buildCl": 502094,
+  "gameBuild": "++FactoryGame+rel-main-anniversary-2026-CL-502094",
+  "confidence": "verified",
+  "source": {
+    "rawBuildings": "src/data/buildings.json",
+    "appBuildings": "src/data/app/buildings.json",
+    "factoryScenes": ".cache/game-asset-index/factory-scenes.json",
+    "requirements": [
+      "satisfactory-ops-vault/docs/PRODUCT.md#PLAN-08",
+      "satisfactory-ops-vault/docs/PRODUCT.md#ASSET-01",
+      "satisfactory-ops-vault/docs/ASSETS.md"
+    ]
+  },
+  "eligibility": {
+    "requiresBuildCost": true
+  },
+  "footprintOverrides": [
+    { "buildingClass": "Build_BlueprintDesigner_C", "widthM": 32, "lengthM": 32, "heightM": 32, "source": ".cache/topview/batch/inspect/Build_BlueprintDesigner.uasset.json#Default__Build_BlueprintDesigner_C.mDimensions+BoxComponent.BoxExtent", "confidence": "verified" },
+    { "buildingClass": "Build_BlueprintDesigner_MK2_C", "widthM": 40, "lengthM": 40, "heightM": 40, "source": ".cache/topview/batch/inspect/Build_BlueprintDesigner_MK2.uasset.json#Default__Build_BlueprintDesigner_MK2_C.mDimensions+BoxComponent.BoxExtent", "confidence": "verified" }
+  ],
+  "include": {
+    "nativeClasses": [
+      { "nativeClass": "FGBuildableManufacturer", "plannerKind": "facility", "representation": "static-topview" },
+      { "nativeClass": "FGBuildableManufacturerVariablePower", "plannerKind": "facility", "representation": "static-topview" },
+      { "nativeClass": "FGBuildableBlueprintDesigner", "plannerKind": "facility", "representation": "static-topview" },
+      { "nativeClass": "FGBuildableMAM", "plannerKind": "facility", "representation": "static-topview" },
+      { "nativeClass": "FGBuildableResourceSink", "plannerKind": "facility", "representation": "static-topview" },
+      { "nativeClass": "FGBuildableResourceSinkShop", "plannerKind": "facility", "representation": "static-topview" },
+      { "nativeClass": "FGBuildableTradingPost", "plannerKind": "facility", "representation": "static-topview" },
+      { "nativeClass": "FGBuildableSpaceElevator", "plannerKind": "facility", "representation": "static-topview" },
+      { "nativeClass": "FGBuildableFactorySimpleProducer", "plannerKind": "facility", "representation": "static-topview" },
+
+      { "nativeClass": "FGBuildableGeneratorFuel", "plannerKind": "generator", "representation": "static-topview" },
+      { "nativeClass": "FGBuildableGeneratorNuclear", "plannerKind": "generator", "representation": "static-topview" },
+      { "nativeClass": "FGBuildableGeneratorGeoThermal", "plannerKind": "generator", "representation": "static-topview" },
+      { "nativeClass": "FGBuildablePowerBooster", "plannerKind": "generator", "representation": "static-topview" },
+
+      { "nativeClass": "FGBuildableResourceExtractor", "plannerKind": "extractor", "representation": "static-topview" },
+      { "nativeClass": "FGBuildableWaterPump", "plannerKind": "extractor", "representation": "static-topview" },
+      { "nativeClass": "FGBuildableFrackingExtractor", "plannerKind": "extractor", "representation": "static-topview" },
+      { "nativeClass": "FGBuildableFrackingActivator", "plannerKind": "extractor", "representation": "static-topview" },
+
+      { "nativeClass": "FGBuildableStorage", "plannerKind": "storage", "representation": "static-topview" },
+      { "nativeClass": "FGBuildableStackableShelf", "plannerKind": "storage", "representation": "static-topview" },
+      { "nativeClass": "FGBuildablePowerStorage", "plannerKind": "storage", "representation": "static-topview" },
+      { "nativeClass": "FGBuildablePipeReservoir", "plannerKind": "storage", "representation": "static-topview" },
+
+      { "nativeClass": "FGBuildableAttachmentMerger", "plannerKind": "logistics-device", "representation": "node-device" },
+      { "nativeClass": "FGBuildableAttachmentSplitter", "plannerKind": "logistics-device", "representation": "node-device" },
+      { "nativeClass": "FGBuildableMergerPriority", "plannerKind": "logistics-device", "representation": "node-device" },
+      { "nativeClass": "FGBuildableSplitterSmart", "plannerKind": "logistics-device", "representation": "node-device" },
+      { "nativeClass": "FGBuildableConveyorMonitor", "plannerKind": "logistics-device", "representation": "inline-device" },
+      { "nativeClass": "FGBuildablePipelinePump", "plannerKind": "logistics-device", "representation": "inline-device" },
+      { "nativeClass": "FGBuildablePipelineJunction", "plannerKind": "logistics-device", "representation": "node-device" },
+      { "nativeClass": "FGBuildablePipeHyperJunction", "plannerKind": "logistics-device", "representation": "node-device" },
+      { "nativeClass": "FGBuildablePassthrough", "plannerKind": "logistics-device", "representation": "opening-attachment" },
+      { "nativeClass": "FGBuildablePassthroughPipeHyper", "plannerKind": "logistics-device", "representation": "opening-attachment" },
+
+      { "nativeClass": "FGBuildablePoleConveyor", "plannerKind": "logistics-support", "representation": "support-attachment" },
+      { "nativeClass": "FGBuildablePolePipe", "plannerKind": "logistics-support", "representation": "support-attachment" },
+      { "nativeClass": "FGBuildablePoleStackable", "plannerKind": "logistics-support", "representation": "support-attachment" },
+      { "nativeClass": "FGBuildablePoleBase", "plannerKind": "logistics-support", "representation": "support-attachment" },
+
+      { "nativeClass": "FGBuildableConveyorBelt", "plannerKind": "belt", "representation": "parametric-belt" },
+      { "nativeClass": "FGBuildableConveyorLift", "plannerKind": "lift", "representation": "parametric-lift" },
+      { "nativeClass": "FGBuildablePipeline", "plannerKind": "pipeline", "representation": "parametric-pipeline" },
+      { "nativeClass": "FGBuildablePipeHyper", "plannerKind": "hypertube", "representation": "parametric-hypertube" },
+
+      { "nativeClass": "FGBuildableDockingStation", "plannerKind": "transport", "representation": "static-topview" },
+      { "nativeClass": "FGBuildableDroneStation", "plannerKind": "transport", "representation": "static-topview" },
+      { "nativeClass": "FGBuildablePortal", "plannerKind": "transport", "representation": "static-topview" },
+      { "nativeClass": "FGBuildablePortalSatellite", "plannerKind": "transport", "representation": "static-topview" },
+      { "nativeClass": "FGBuildableRailroadAttachment", "plannerKind": "transport", "representation": "static-topview" },
+      { "nativeClass": "FGBuildableRailroadSignal", "plannerKind": "transport", "representation": "static-topview" },
+      { "nativeClass": "FGBuildableRailroadStation", "plannerKind": "transport", "representation": "static-topview" },
+      { "nativeClass": "FGBuildableTrainPlatformCargo", "plannerKind": "transport", "representation": "static-topview" },
+      { "nativeClass": "FGBuildableTrainPlatformEmpty", "plannerKind": "transport", "representation": "static-topview" },
+      { "nativeClass": "FGBuildableRailroadTrack", "plannerKind": "rail", "representation": "parametric-rail" },
+
+      { "nativeClass": "FGBuildableFoundationLightweight", "plannerKind": "foundation", "representation": "foundation-piece" },
+      { "nativeClass": "FGBuildableRampLightweight", "plannerKind": "foundation-slope", "representation": "foundation-slope" }
+    ],
+    "classOverrides": [
+      { "buildingClass": "Build_WorkBench_C", "plannerKind": "facility", "representation": "static-topview", "reason": "건설 가능한 수동 생산 설비" },
+      { "buildingClass": "Build_Workshop_C", "plannerKind": "facility", "representation": "static-topview", "reason": "건설 가능한 장비 생산 설비" },
+      { "buildingClass": "Build_ConveyorPoleWall_C", "plannerKind": "logistics-support", "representation": "support-attachment", "reason": "컨베이어 벽 지지대" },
+      { "buildingClass": "Build_PipelineSupportWall_C", "plannerKind": "logistics-support", "representation": "support-attachment", "reason": "파이프라인 벽 지지대" },
+      { "buildingClass": "Build_HyperTubeWallSupport_C", "plannerKind": "logistics-support", "representation": "support-attachment", "reason": "하이퍼튜브 벽 지지대" },
+      { "buildingClass": "Build_ConveyorWallHole_C", "plannerKind": "logistics-device", "representation": "opening-attachment", "reason": "컨베이어 벽면 구멍" },
+      { "buildingClass": "Build_PipelineSupportWallHole_C", "plannerKind": "logistics-device", "representation": "opening-attachment", "reason": "파이프라인 벽면 구멍" },
+      { "buildingClass": "Build_HyperTubeWallHole_C", "plannerKind": "logistics-device", "representation": "opening-attachment", "reason": "하이퍼튜브 벽면 구멍" }
+      ,{ "buildingClass": "Build_RailroadBlockSignal_C", "plannerKind": "rail", "representation": "rail-attachment", "reason": "철도 경로 위에 합성되는 블록 신호" }
+      ,{ "buildingClass": "Build_RailroadPathSignal_C", "plannerKind": "rail", "representation": "rail-attachment", "reason": "철도 경로 위에 합성되는 경로 신호" }
+    ]
+  },
+  "implicitPowerNetwork": {
+    "placementMode": "assumed-connected",
+    "capabilities": ["catalog", "power-calculation"],
+    "nativeClasses": [
+      { "nativeClass": "FGBuildableWire", "plannerKind": "power-network", "representation": "implicit-connected", "reason": "도감·전력 모델에는 유지하고 설계판에서 연결된 것으로 간주" },
+      { "nativeClass": "FGBuildablePowerPole", "plannerKind": "power-network", "representation": "implicit-connected", "reason": "도감·전력 모델에는 유지하고 설계판에서 연결된 것으로 간주" },
+      { "nativeClass": "FGBuildableCircuitSwitch", "plannerKind": "power-network", "representation": "implicit-connected", "reason": "도감·전력 모델에는 유지하고 설계판에서 연결된 것으로 간주" },
+      { "nativeClass": "FGBuildablePriorityPowerSwitch", "plannerKind": "power-network", "representation": "implicit-connected", "reason": "도감·전력 모델에는 유지하고 설계판에서 연결된 것으로 간주" }
+    ]
+  },  "exclude": {
+    "nativeClasses": [
+
+      { "nativeClass": "FGBuildableWallLightweight", "reason": "요청된 토대 범위 밖 벽·난간" },
+      { "nativeClass": "FGBuildableCornerWallLightweight", "reason": "요청된 토대 범위 밖 모퉁이 지붕" },
+      { "nativeClass": "FGBuildableCornerWall", "reason": "요청된 토대 범위 밖 모퉁이 벽" },
+      { "nativeClass": "FGBuildableWall", "reason": "요청된 토대 범위 밖 벽" },
+      { "nativeClass": "FGBuildableDoor", "reason": "요청된 토대 범위 밖 문" },
+      { "nativeClass": "FGBuildablePillarLightweight", "reason": "요청된 토대 범위 밖 기둥" },
+      { "nativeClass": "FGBuildableBeam", "reason": "요청된 토대 범위 밖 빔" },
+      { "nativeClass": "FGBuildableFactoryBuilding", "reason": "요청된 토대 범위 밖 빔 부착물" },
+      { "nativeClass": "FGBuildableWalkwayLightweight", "reason": "요청된 토대 범위 밖 통로" },
+      { "nativeClass": "FGBuildableWalkway", "reason": "요청된 토대 범위 밖 통로" },
+      { "nativeClass": "FGBuildableStair", "reason": "토대 경사·계단 계열이 아닌 보행 계단" },
+      { "nativeClass": "FGBuildableLadder", "reason": "공장 생산·물류 범위 밖 보행 장치" },
+      { "nativeClass": "FGBuildableElevator", "reason": "공장 생산·물류 범위 밖 작업자 이동 장치" },
+      { "nativeClass": "FGBuildableElevatorFloorStop", "reason": "공장 생산·물류 범위 밖 작업자 이동 장치" },
+      { "nativeClass": "FGBuildableBarrierCorner", "reason": "요청된 토대 범위 밖 장벽" },
+
+      { "nativeClass": "FGBuildableWidgetSign", "reason": "공장 생산·물류 범위 밖 표지판" },
+      { "nativeClass": "FGBuildableLightSource", "reason": "공장 생산·물류 범위 밖 조명" },
+      { "nativeClass": "FGBuildableFloodlight", "reason": "공장 생산·물류 범위 밖 조명" },
+      { "nativeClass": "FGBuildableLightsControlPanel", "reason": "공장 생산·물류 범위 밖 조명 제어" },
+
+      { "nativeClass": "FGBuildableFactory", "reason": "공장 생산·물류 범위 밖 작업자 이동 장치" },
+      { "nativeClass": "FGBuildableJumppad", "reason": "공장 생산·물류 범위 밖 작업자 이동 장치" },
+      { "nativeClass": "FGBuildableRadarTower", "reason": "지도 도메인의 탐색 설비" },
+      { "nativeClass": "FGBuildableSnowDispenser", "reason": "계절 장식 장치" },
+      { "nativeClass": "FGBuildableSnowCannon", "reason": "계절 장식 장치" }
+    ],
+    "classOverrides": [
+      { "buildingClass": "Build_LookoutTower_C", "reason": "공장 생산·물류 범위 밖 관측 구조물" },
+      { "buildingClass": "Build_LargeFan_C", "reason": "장식 구조물" },
+      { "buildingClass": "Build_LargeVent_C", "reason": "장식 구조물" },
+      { "buildingClass": "Build_WreathDecor_C", "reason": "계절 장식" },
+      { "buildingClass": "Build_Snowman_C", "reason": "계절 장식" },
+      { "buildingClass": "Build_CandyCaneDecor_C", "reason": "계절 장식" },
+      { "buildingClass": "Build_TreeGiftProducer_C", "reason": "계절 이벤트 전용 생산 장식" },
+      { "buildingClass": "Build_StorageHazard_C", "reason": "공장 공정 설계 범위 밖 개인 위험물 보관함" },
+      { "buildingClass": "Build_StorageMedkit_C", "reason": "공장 공정 설계 범위 밖 개인 의료품 보관함" },
+      { "buildingClass": "Build_StoragePlayer_C", "reason": "공장 공정 설계 범위 밖 개인 보관함" },
+      { "buildingClass": "Build_PortalPotty_C", "reason": "공장 생산·물류 범위 밖 부활 지점" }
+    ],
+    "classPatterns": [
+      {
+        "nativeClass": "FGBuildableRampLightweight",
+        "buildingClassPattern": "^Build_Roof_(A|Orange|Tar|Window)_0[1-4]_C$",
+        "reason": "토대 경사 계열 nativeClass에 함께 들어 있는 지붕 16종"
+      }
+    ]
+  },
+  "expected": {
+    "buildable": 509,
+    "included": 309,
+    "implicitPowerNetwork": 10,
+    "excluded": 190,
+    "hashes": {
+      "included": "8f892968fa603e92ee3073d3c5bff7e3762af97520d74cf9c6a2e5e5e806c66c",
+      "implicitPowerNetwork": "6ea7fecb8b3777249564914bd79fc002d515da45398e5b37fb62a015093bfeb6",
+      "excluded": "135fe04c846fca32e1e5db5471e3f404ddceac5822e7e83bdf55d31e78298b24",
+      "buildablePartition": "9adb97ca6b40255fc3bd9be50d42f34b9201317242503fe076a211d332a2977a"
+    }
+  },
+  "productionIndicatorClasses": [
+    "Build_AlienPowerBuilding_C",
+    "Build_AssemblerMk1_C",
+    "Build_Blender_C",
+    "Build_ConstructorMk1_C",
+    "Build_Converter_C",
+    "Build_DroneStation_C",
+    "Build_FluidTruckStation_C",
+    "Build_FoundryMk1_C",
+    "Build_FrackingSmasher_C",
+    "Build_GeneratorBiomass_Automated_C",
+    "Build_GeneratorCoal_C",
+    "Build_GeneratorFuel_C",
+    "Build_GeneratorGeoThermal_C",
+    "Build_GeneratorNuclear_C",
+    "Build_ManufacturerMk1_C",
+    "Build_MinerMk1_C",
+    "Build_MinerMk2_C",
+    "Build_MinerMk3_C",
+    "Build_OilPump_C",
+    "Build_OilRefinery_C",
+    "Build_Packager_C",
+    "Build_PipelinePump_C",
+    "Build_PipelinePumpMk2_C",
+    "Build_QuantumEncoder_C",
+    "Build_SmelterMk1_C",
+    "Build_TrainStation_C",
+    "Build_TruckStation_C",
+    "Build_WaterPump_C"
+  ]
+}

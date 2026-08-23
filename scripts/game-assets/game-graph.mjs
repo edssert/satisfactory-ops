@@ -54,6 +54,15 @@ function sha256(path) {
   return createHash('sha256').update(readFileSync(path)).digest('hex');
 }
 
+function filesRecursive(directory, extension) {
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const absolute = resolve(directory, entry.name);
+    return entry.isDirectory()
+      ? filesRecursive(absolute, extension)
+      : entry.name.endsWith(extension) ? [absolute] : [];
+  });
+}
+
 function sourceFiles() {
   return [
     ASSET_GRAPH,
@@ -63,10 +72,7 @@ function sourceFiles() {
     resolve(APP, 'buildings.json'),
     resolve(APP, 'milestones.json'),
     TOPVIEW_MANIFEST,
-    ...readdirSync(TOPVIEW_SCENES, { withFileTypes: true })
-      .filter((entry) => entry.isFile() && entry.name.endsWith('.json'))
-      .map((entry) => resolve(TOPVIEW_SCENES, entry.name))
-      .sort(),
+    ...filesRecursive(TOPVIEW_SCENES, '.json').sort(),
   ];
 }
 
@@ -362,16 +368,13 @@ function collectGraph() {
     }
   }
 
-  for (const entry of readdirSync(TOPVIEW_SCENES, { withFileTypes: true })
-    .filter((candidate) => candidate.isFile() && candidate.name.endsWith('.json'))
-    .sort((left, right) => left.name.localeCompare(right.name, 'en'))) {
-    const scenePath = resolve(TOPVIEW_SCENES, entry.name);
+  for (const scenePath of filesRecursive(TOPVIEW_SCENES, '.json').sort()) {
     const scene = readJson(scenePath);
     const source = evidence(scenePath);
     const sceneId = `scene:${source}`;
     const buildingId = `building:${scene.buildingClass}`;
     sceneByBuilding.set(scene.buildingClass, sceneId);
-    addNode(sceneId, 'scene', entry.name, source, {
+    addNode(sceneId, 'scene', basename(scenePath), source, {
       buildingClass: scene.buildingClass,
       projection: scene.camera?.projection,
       frontTiltDeg: scene.camera?.frontTiltDeg,
@@ -414,6 +417,8 @@ function collectGraph() {
   const manifestSource = evidence(TOPVIEW_MANIFEST);
   const runtimeFileId = addFile(RUNTIME_FILTER, evidence(RUNTIME_FILTER), { role: 'runtime-filter' });
   for (const asset of manifest.assets ?? []) {
+    const isRuntimeAsset = asset.sourceId?.startsWith(CURRENT_SOURCE_PREFIX)
+      && asset.reviewStatus === 'approved';
     const assetId = `asset:${asset.assetId}`;
     addNode(assetId, 'asset', asset.assetId, manifestSource, {
       buildingClass: asset.buildingClass,
@@ -426,8 +431,12 @@ function collectGraph() {
       addEdge(assetId, 'ASSET_FOR', `building:${asset.buildingClass}`, manifestSource);
     }
     if (asset.path) {
-      const fileId = addFile(resolve(ROOT, 'public', asset.path), manifestSource, { role: 'runtime-asset' });
-      addEdge(assetId, 'EXPOSED_BY', fileId, manifestSource, { state: 'active' });
+      const fileId = addFile(
+        resolve(ROOT, ...(isRuntimeAsset ? ['public', asset.path] : [asset.path])),
+        manifestSource,
+        { role: isRuntimeAsset ? 'runtime-asset' : 'reference-asset' },
+      );
+      addEdge(assetId, isRuntimeAsset ? 'EXPOSED_BY' : 'STORED_AS', fileId, manifestSource, { state: 'active' });
     }
     for (const [state, image] of Object.entries(asset.statusImages ?? {})) {
       const fileId = addFile(resolve(ROOT, 'public', image.path), manifestSource, {
@@ -439,7 +448,7 @@ function collectGraph() {
     if (sceneId && asset.derivation === 'game-mesh-render') {
       addEdge(assetId, 'RENDERED_FROM', sceneId, manifestSource);
     }
-    if (asset.sourceId?.startsWith(CURRENT_SOURCE_PREFIX) && asset.reviewStatus === 'approved') {
+    if (isRuntimeAsset) {
       addEdge(assetId, 'EXPOSED_BY', runtimeFileId, manifestSource, { role: 'runtime-filter' });
     }
   }

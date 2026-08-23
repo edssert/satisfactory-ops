@@ -45,6 +45,10 @@ test('생성된 sw.js 가 모든 라우트를 캐시에서 찾을 수 있다', {
   assert.ok(m, 'ASSETS 목록을 찾을 수 없음');
   const assets: string[] = JSON.parse(m[1]!);
   const cached = new Set(assets);
+  assert.equal(assets.some((asset) => asset.includes('/assets/planner/top-view/')), false,
+    '탑뷰 전체를 install 프리캐시에 넣으면 첫 방문이 수십 MB로 커집니다.');
+  assert.equal(assets.some((asset) => /checkup\.worker-.*\.js$/.test(asset)), false,
+    '세이브 Worker는 파일을 고르기 전에 프리캐시하면 안 됩니다.');
 
   // 네비게이션 변환이 실제로 주입되었는가
   assert.ok(sw.includes('function navigationCacheKey'), 'sw.js 에 키 변환이 없다');

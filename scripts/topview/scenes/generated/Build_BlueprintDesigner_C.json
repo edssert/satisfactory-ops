@@ -1,0 +1,968 @@
+{
+  "$schemaVersion": 1,
+  "id": "blueprintdesigner-batch-cl-502094",
+  "buildingClass": "Build_BlueprintDesigner_C",
+  "status": "generated-current-game-candidate",
+  "geometryAuthority": "game-install-cl-502094",
+  "sourceBlueprint": "FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Build_BlueprintDesigner.uasset",
+  "footprint": {
+    "widthM": 32,
+    "lengthM": 32,
+    "heightM": 32,
+    "groundZM": 0,
+    "centerM": [
+      0,
+      0
+    ],
+    "cornerEnvelope": "game-hard-clearance",
+    "confidence": "verified"
+  },
+  "components": [
+    {
+      "id": "FloorMesh",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Building/Foundation/ConcreteSet/Meshes/SM_Foundation_Concrete_8x1.glb",
+      "transform": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.FloorMesh",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseBetween_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_BaseBetween_01.glb",
+      "transform": [
+        -4,
+        -8,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_BaseBetween_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseBetween_02_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_BaseBetween_01.glb",
+      "transform": [
+        4,
+        -8,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_BaseBetween_02_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseBetween_03_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_BaseBetween_01.glb",
+      "transform": [
+        8,
+        4,
+        0,
+        90
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_BaseBetween_03_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseBetween_04_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_BaseBetween_01.glb",
+      "transform": [
+        8,
+        -4,
+        0,
+        90
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_BaseBetween_04_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseBetween_05_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_BaseBetween_01.glb",
+      "transform": [
+        -8,
+        -4,
+        0,
+        -90
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_BaseBetween_05_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseBetween_06_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_BaseBetween_01.glb",
+      "transform": [
+        -8,
+        4,
+        0,
+        -90
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_BaseBetween_06_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseBetween_07_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_BaseBetween_01.glb",
+      "transform": [
+        -4,
+        8,
+        0,
+        -180
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_BaseBetween_07_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseBetween_08_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_BaseBetween_01.glb",
+      "transform": [
+        4,
+        8,
+        0,
+        -180
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_BaseBetween_08_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseCenter_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_BaseCenter_01.glb",
+      "transform": [
+        4,
+        4,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_BaseCenter_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseCenter_02_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_BaseCenter_01.glb",
+      "transform": [
+        4,
+        -4,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_BaseCenter_02_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseCenter_03_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_BaseCenter_01.glb",
+      "transform": [
+        -4,
+        -4,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_BaseCenter_03_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseCenter_04_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_BaseCenter_01.glb",
+      "transform": [
+        -4,
+        4,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_BaseCenter_04_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseCorner_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_BaseCorner_01.glb",
+      "transform": [
+        8,
+        -8,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_BaseCorner_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseCorner_02_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_BaseCorner_01.glb",
+      "transform": [
+        -8,
+        -8,
+        0,
+        -90
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_BaseCorner_02_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseCorner_03_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_BaseCorner_01.glb",
+      "transform": [
+        -8,
+        8,
+        0,
+        -180
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_BaseCorner_03_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseCorner_04_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_BaseCorner_01.glb",
+      "transform": [
+        8,
+        8,
+        0,
+        90
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_BaseCorner_04_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_010_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_Beam_01.glb",
+      "transform": [
+        8.25,
+        -8.25,
+        -12,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_Beam_010_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_011_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_Beam_01.glb",
+      "transform": [
+        8.249999,
+        4.0000012,
+        7.75,
+        -18.434956
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_Beam_011_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_012_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_Beam_01.glb",
+      "transform": [
+        -4.0000024000000005,
+        -8.2500024,
+        7.749995,
+        180.00323
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_Beam_012_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_013_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_Beam_01.glb",
+      "transform": [
+        8.25,
+        -8.25,
+        -4,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_Beam_013_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_014_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_Beam_01.glb",
+      "transform": [
+        8.25,
+        -8.25,
+        -12,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_Beam_014_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_015_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_Beam_01.glb",
+      "transform": [
+        -4,
+        -8.25,
+        7.75,
+        -180
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_Beam_015_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_016_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_Beam_01.glb",
+      "transform": [
+        8.25,
+        4,
+        7.749995999999999,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_Beam_016_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_Beam_01.glb",
+      "transform": [
+        8.25,
+        -8.25,
+        -4,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_Beam_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_02_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_Beam_01.glb",
+      "transform": [
+        8.25,
+        -8.25,
+        -12,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_Beam_02_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_03_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_Beam_01.glb",
+      "transform": [
+        -4,
+        -8.25,
+        7.75,
+        -180
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_Beam_03_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_04_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_Beam_01.glb",
+      "transform": [
+        8.25,
+        4,
+        7.749995999999999,
+        -115.86634
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_Beam_04_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_05_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_Beam_01.glb",
+      "transform": [
+        8.25,
+        -8.25,
+        -4,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_Beam_05_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_06_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_Beam_01.glb",
+      "transform": [
+        8.25,
+        -8.25,
+        -12,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_Beam_06_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_07_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_Beam_01.glb",
+      "transform": [
+        8.249999,
+        4.0000012,
+        7.75,
+        -18.434956
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_Beam_07_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_08_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_Beam_01.glb",
+      "transform": [
+        -4.0000024000000005,
+        -8.2500024,
+        7.749995,
+        -10.025002
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_Beam_08_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_09_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_Beam_01.glb",
+      "transform": [
+        8.25,
+        -8.25,
+        -4,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_Beam_09_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_FactoryLegsProxy_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_FactoryLegsProxy.glb",
+      "transform": [
+        0,
+        0,
+        0.5,
+        0
+      ],
+      "scale": [
+        35.5,
+        35.5,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_FactoryLegsProxy_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_TopCorner_01_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_TopCorner_01.glb",
+      "transform": [
+        8,
+        -8,
+        25,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_TopCorner_01_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_TopCorner_02_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_TopCorner_01.glb",
+      "transform": [
+        -8,
+        -8,
+        25,
+        -90.00001
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_TopCorner_02_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_TopCorner_03_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_TopCorner_01.glb",
+      "transform": [
+        -8,
+        8,
+        25,
+        -180
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_TopCorner_03_GEN_VARIABLE",
+      "confidence": "verified"
+    },
+    {
+      "id": "SM_BlueprintDesigner_TopCorner_04_GEN_VARIABLE",
+      "renderMode": "body",
+      "path": "C:/Dev/satisfactory-ops/.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Mesh/SM_BlueprintDesigner_TopCorner_01.glb",
+      "transform": [
+        8,
+        8,
+        25,
+        90
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source": "Build_BlueprintDesigner_C.SM_BlueprintDesigner_TopCorner_04_GEN_VARIABLE",
+      "confidence": "verified"
+    }
+  ],
+  "materials": {
+    "albedo": {},
+    "ao": {},
+    "normal": {},
+    "reflection": {},
+    "stateMask": {},
+    "paint": {},
+    "baseColor": {},
+    "alpha": [],
+    "pbr": [],
+    "normalOnly": [],
+    "emissiveAccent": [],
+    "emissiveGeometrySelectors": [],
+    "state": {
+      "color": "#00ff00",
+      "strength": 5
+    }
+  },
+  "camera": {
+    "projection": "orthographic-top",
+    "frontTiltDeg": 0,
+    "displayYawDeg": 0,
+    "source": "runtime planner assets require metric top-down projection",
+    "confidence": "verified"
+  },
+  "validationContract": "batch-static",
+  "portVisibilityRequired": false,
+  "portVisibility": [],
+  "canonicalOrientation": {
+    "authority": "Build_BlueprintDesigner_C Blueprint component transforms",
+    "screenEdge": "source-orientation",
+    "rule": "현재 게임 Blueprint 좌표계를 유지하고 포트 회전은 별도 배치 계약에서 검증한다."
+  },
+  "lighting": {
+    "groundAo": false,
+    "shadowMode": "alpha-near-and-wide-postprocess",
+    "aoLayers": 2,
+    "bloom": true,
+    "sun": true,
+    "keyEnergy": 1.7,
+    "fillEnergy": 1,
+    "worldStrength": 0.42,
+    "exposure": 1.1,
+    "method": "조립 검수용 중립 PBR",
+    "confidence": "verified"
+  },
+  "assemblyFeatures": [
+    {
+      "id": "FloorMesh",
+      "owner": "FloorMesh",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseBetween_01_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_BaseBetween_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseBetween_02_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_BaseBetween_02_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseBetween_03_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_BaseBetween_03_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseBetween_04_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_BaseBetween_04_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseBetween_05_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_BaseBetween_05_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseBetween_06_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_BaseBetween_06_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseBetween_07_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_BaseBetween_07_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseBetween_08_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_BaseBetween_08_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseCenter_01_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_BaseCenter_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseCenter_02_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_BaseCenter_02_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseCenter_03_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_BaseCenter_03_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseCenter_04_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_BaseCenter_04_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseCorner_01_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_BaseCorner_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseCorner_02_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_BaseCorner_02_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseCorner_03_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_BaseCorner_03_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_BaseCorner_04_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_BaseCorner_04_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_010_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_Beam_010_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_011_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_Beam_011_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_012_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_Beam_012_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_013_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_Beam_013_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_014_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_Beam_014_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_015_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_Beam_015_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_016_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_Beam_016_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_01_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_Beam_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_02_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_Beam_02_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_03_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_Beam_03_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_04_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_Beam_04_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_05_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_Beam_05_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_06_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_Beam_06_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_07_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_Beam_07_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_08_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_Beam_08_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_Beam_09_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_Beam_09_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_FactoryLegsProxy_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_FactoryLegsProxy_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_TopCorner_01_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_TopCorner_01_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_TopCorner_02_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_TopCorner_02_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_TopCorner_03_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_TopCorner_03_GEN_VARIABLE",
+      "status": "present"
+    },
+    {
+      "id": "SM_BlueprintDesigner_TopCorner_04_GEN_VARIABLE",
+      "owner": "SM_BlueprintDesigner_TopCorner_04_GEN_VARIABLE",
+      "status": "present"
+    }
+  ],
+  "materialChecks": [
+    {
+      "id": "cue4parse-imported-game-materials",
+      "status": "present"
+    }
+  ],
+  "cameraLightingChecks": [
+    {
+      "id": "runtime-orthographic-top",
+      "status": "present"
+    }
+  ],
+  "pipelineAudit": {
+    "repeatedDefectThreshold": 2,
+    "systemicDefectThreshold": 1,
+    "rawVatCandidateAllowed": false,
+    "coordinateBasis": "scene=(unrealX,-unrealY,unrealZ,-unrealYaw)",
+    "requiredStages": [
+      "package-graph",
+      "blueprint-components",
+      "view-feature-matrix",
+      "runtime-top-after-assembly"
+    ]
+  }
+}

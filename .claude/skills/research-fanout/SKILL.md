@@ -1,66 +1,8 @@
 ---
 name: research-fanout
-description: Structures broad evidence research across tools, repositories, papers, creator sources, and real artifacts, using parallel agents only when explicitly authorized. Use when research scope is broad, multiple solution families must be represented, or searches risk converging on the first plausible answer.
-license: MIT
+description: Claude Code compatibility entry for broad capability research. Use the global capability-harvest procedure and this repository's research invariants.
 ---
 
-# 넓게 찾고 하나의 정본으로 합친다
+# 호환 포인터
 
-이 스킬의 목적은 검색 횟수를 줄이는 것이 아니라 첫 후보에서 멈추지 않고 서로 다른 해결 계열의 능력을
-수집하는 것이다. 전역 `capability-harvest`가 있으면 그 능력 단위·다축 점수 방식을 함께 사용한다.
-
-## 1. 연구 지도를 먼저 만든다
-
-대상 과업마다 다음 레인을 확인한다.
-
-1. 공식 사양·문서·도구
-2. 유지보수되는 고별 저장소·상용 선도 제품
-3. 별은 적어도 도메인에 직접 맞는 최신 전문 저장소
-4. 원 제작자 파일·댓글·영상·실사용 사례
-5. 논문·표준·벤치마크·참조 구현
-6. 인접 생태계의 다른 접근
-7. 설치된 전역·프로젝트 스킬과 플러그인
-
-하나를 찾았다고 멈추지 않는다. 새 검색이 새 능력 대신 중복 후보만 추가할 때 탐색 범위가 포화됐다고
-판정한다.
-
-## 2. 아는 URL과 모르는 후보를 분리한다
-
-원 저장소·공식 API·논문 DOI·이미 확보한 아카이브처럼 주소를 아는 자료는 직접 연다. 검색은 새로운
-후보와 해결 계열을 찾는 데 사용한다. 서비스별 임의의 고정 검색 예산을 보편 규칙으로 만들지 말고,
-현재 도구 한도와 과업 가치에 따라 조사량을 정한다.
-
-## 3. 병렬화는 권한과 독립성이 있을 때만
-
-서브에이전트는 사용자가 위임·병렬 조사를 요청했거나 현재 환경 지침이 허용할 때만 사용한다. 병렬화할
-경우 후보 저장소별이 아니라 **해결 계열별**로 나누며, 각 작업은 겹치지 않는 임시 산출물을
-`.tmp-research/`에 남긴다. 정본 문서를 여러 에이전트가 동시에 고치게 하지 않는다.
-
-각 조사 단위는 다음을 반환한다.
-
-- 원문 URL, 접근일, 버전/커밋, 활동, 별 수, 라이선스
-- 후보의 전체 평가가 아니라 흡수할 능력 단위
-- 실제 프로젝트 표본에 적용할 파일럿
-- 확인한 실패·불확실성·악영향
-- 추가로 열어야 할 직접 URL
-
-## 4. 능력을 합성한다
-
-메인 작업은 저장소 하나를 승자로 고르는 대신 `install`, `integrate`, `adapt-code`, `adapt-pattern`,
-`data`, `test`, `reference`, `monitor` 형태로 장점을 합친다. 낮은 별 수·비용·복잡성·중복은 폐기 근거가
-아니다. 구체적 악영향이 있는 부분만 제외하고 안전한 통찰은 흡수한다.
-
-## 5. 정본에 통합한다
-
-조사 세션·출처·에이전트별 새 노트를 만들지 않는다. 기존 책임 Research와 평가 방법, ROADMAP에
-근거·다축 점수·파일럿·재검증 조건을 통합한다. 미확인 주장은 `openQuestions` 또는 미해결 절에 남긴다.
-
-## 완료 증거
-
-- 주요 해결 계열이 모두 후보 지도에 있음
-- 고별 후보와 최신 전문 후보가 함께 있음
-- 후보별이 아니라 능력별 흡수 표가 있음
-- 상위 능력을 같은 실제 표본으로 비교할 파일럿이 있음
-- 원문·버전·라이선스·불확실성이 정본에 기록됨
-- 병렬 임시 산출물이 정본으로 합성됐고 중복 노트가 생기지 않음
-
+전역 `capability-harvest`가 정본이다. 저장소에서는 `AGENTS.md`의 조사·정본·출처 규칙을 함께 적용하며 별도 fanout 절차를 복제하지 않는다.

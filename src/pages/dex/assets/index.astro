@@ -3,63 +3,56 @@
 import Base from '../../../layouts/Base.astro';
 import TechNav from '../../../components/TechNav.astro';
 import { buildings } from '../../../lib/gamedata';
-import { runtimeTopviewAssets } from '../../../lib/topview-assets';
+import { comparePlannerAssetTargets, requiresRasterTopview } from '../../../lib/planner-asset-scope';
+import { RUNTIME_TOPVIEW_SOURCE, topviewAssets } from '../../../lib/topview-assets';
+import plannerScope from '../../../data/app/planner-asset-scope.json';
 import portData from '../../../data/curated/machine-ports.json';
 import '../../../styles/tech.css';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const topviewByClass = new Map(runtimeTopviewAssets.flatMap((asset) => {
-  if (asset.role === 'building' && 'buildingClass' in asset && asset.buildingClass) return [[asset.buildingClass, asset] as const];
-  return [];
-}));
+const buildingByClass = new Map(buildings.map((building) => [building.id, building]));
+const assetsByClass = Map.groupBy(
+  topviewAssets.filter((asset) => asset.role !== 'golden-reference' && 'buildingClass' in asset && asset.buildingClass),
+  (asset) => asset.buildingClass,
+);
 const portClasses = new Set(portData.$completeBuildings);
-const categories = new Set(['manufacturer', 'extractor', 'generator', 'logistics', 'storage', 'transport', 'power', 'hub']);
-const relevant = buildings.filter((building) => (
-  categories.has(building.category) || /^Build_Foundation_/.test(building.id)
-));
-
 const CATEGORY: Record<string, string> = {
-  manufacturer: '생산', extractor: '추출', generator: '발전', logistics: '물류', storage: '저장',
-  transport: '운송', power: '전력', hub: '특수', structure: '토대',
+  facility: '설비', extractor: '추출', generator: '발전', storage: '저장',
+  'logistics-device': '물류 장치', 'logistics-support': '물류 지지대',
+  belt: '컨베이어', lift: '리프트', pipeline: '파이프', hypertube: '하이퍼튜브',
+  transport: '운송', rail: '철도', foundation: '토대', 'foundation-slope': '토대 경사', 'power-network': '전력망',
 };
 const tierLabel = (tier: number | null) => tier == null ? '미분류' : `티어 ${tier}`;
-const CATEGORY_ORDER: Record<string, number> = {
-  extractor: 0, manufacturer: 1, generator: 2, structure: 3, storage: 4, logistics: 5, transport: 6, power: 7, hub: 8,
-};
-const rows = relevant.map((building) => {
-  const topview = topviewByClass.get(building.id);
+const auditTargets = plannerScope.targets.filter(requiresRasterTopview)
+  .sort(comparePlannerAssetTargets);
+const rows = auditTargets.map((target) => {
+  const building = buildingByClass.get(target.buildingClass);
+  if (!building) throw new Error(`설계 자산 범위가 없는 건물을 참조합니다: ${target.buildingClass}`);
+  const assets = assetsByClass.get(target.buildingClass) ?? [];
+  const topview = assets.find((asset) => asset.sourceId === RUNTIME_TOPVIEW_SOURCE && asset.reviewStatus === 'approved');
+  const candidate = assets.find((asset) => asset.sourceId === RUNTIME_TOPVIEW_SOURCE && asset.reviewStatus === 'candidate');
+  const reference = assets.find((asset) => asset.sourceId !== RUNTIME_TOPVIEW_SOURCE);
+  const assetStateKey = topview ? 'approved' : candidate ? 'candidate' : reference ? 'reference' : 'missing';
   return {
+    target,
     building,
     topview,
     image: topview?.path ?? null,
-    assetState: topview?.reviewStatus === 'approved'
-      ? '승인'
-      : topview?.visualProfile === 'game-mesh-dark-2026'
-        ? '시각 불일치 후보'
-        : topview
-          ? '공통 탑뷰 후보'
-          : '누락',
-    assetStateKey: topview?.reviewStatus === 'approved'
-      ? 'approved'
-      : topview?.visualProfile === 'game-mesh-dark-2026'
-        ? 'mismatch'
-        : topview
-          ? 'candidate'
-          : 'missing',
+    assetStateKey,
+    assetState: topview ? '승인' : candidate ? '후보' : reference ? '연구 대조만' : '누락',
     portState: portClasses.has(building.id) ? '재검증 표본 있음' : '미검증',
   };
-}).sort((left, right) => (
-  (left.building.unlockTier ?? 99) - (right.building.unlockTier ?? 99)
-  || (CATEGORY_ORDER[left.building.category] ?? 99) - (CATEGORY_ORDER[right.building.category] ?? 99)
-  || left.building.ko.localeCompare(right.building.ko, 'ko')
-));
-const tiers = [...new Set(rows.map((row) => row.building.unlockTier))].map((tier) => ({
+});
+const tiers = [...new Set(rows.map((row) => row.target.unlockTier))].map((tier) => ({
   tier,
-  rows: rows.filter((row) => row.building.unlockTier === tier),
+  rows: rows.filter((row) => row.target.unlockTier === tier),
 }));
 const approved = rows.filter((row) => row.assetStateKey === 'approved').length;
-const candidates = rows.filter((row) => ['candidate', 'mismatch'].includes(row.assetStateKey)).length;
-const missing = rows.length - approved - candidates;
+const candidates = rows.filter((row) => row.assetStateKey === 'candidate').length;
+const references = rows.filter((row) => row.assetStateKey === 'reference').length;
+const missing = rows.filter((row) => row.assetStateKey === 'missing').length;
+const composedRepresentations = plannerScope.targets.length - rows.length;
+const implicitConnections = plannerScope.implicitPowerNetwork.length;
 ---
 
 <Base
@@ -71,14 +64,17 @@ const missing = rows.length - approved - candidates;
     <TechNav here="assets" />
     <header class="asset-audit-head">
       <p class="marker"><span class="num">설계 재료</span></p>
-      <h1>티어별 기계·물류·토대 검수</h1>
-      <p class="lede">게임 설치본의 해금 순서에 따라 정렬했습니다. 아이콘은 탑뷰가 아닙니다. 탑뷰가 없거나
-        시각 프로파일이 다른 항목을 숨기지 않고 그대로 표시합니다.</p>
+      <h1>티어별 설계 탑뷰 검수</h1>
+      <p class="lede">게임 설치본의 해금 순서에 따라 실제 개별 탑뷰가 필요한 고정 설비·부착물만 정렬했습니다.
+        토대 변형과 벨트·리프트·파이프·철도는 별도 이미지를 만들지 않고 설계판의 합성 계약으로 처리합니다.</p>
       <dl class="asset-audit-counts">
         <div><dt>대상</dt><dd>{rows.length}</dd></div>
         <div><dt>탑뷰 승인</dt><dd>{approved}</dd></div>
         <div><dt>후보</dt><dd>{candidates}</dd></div>
+        <div><dt>연구 대조만</dt><dd>{references}</dd></div>
         <div><dt>누락</dt><dd>{missing}</dd></div>
+        <div><dt>합성 계약</dt><dd>{composedRepresentations}</dd></div>
+        <div><dt>자동 연결</dt><dd>{implicitConnections}</dd></div>
       </dl>
     </header>
 
@@ -89,8 +85,8 @@ const missing = rows.length - approved - candidates;
           <span>{tierRows.length}개</span>
         </header>
         <div class="asset-grid">
-          {tierRows.map(({ building, topview, image, assetState, assetStateKey, portState }) => (
-            <article class:list={['asset-card', `is-${assetStateKey}`]}>
+          {tierRows.map(({ target, building, topview, image, assetState, assetStateKey, portState }) => (
+            <article class:list={['asset-card', `is-${assetStateKey}`]} data-building-class={target.buildingClass}>
               <div class="asset-preview">
                 {image
                   ? <img src={`${base}/${image}`} alt="" width="200" height="200" loading="lazy" />
@@ -98,12 +94,12 @@ const missing = rows.length - approved - candidates;
                 <span>{assetState}</span>
               </div>
               <div class="asset-copy">
-                <p>{CATEGORY[building.category] ?? building.category}</p>
+                <p>{CATEGORY[target.plannerKind] ?? target.plannerKind}</p>
                 <h2>{building.ko}</h2>
                 <dl>
                   <div><dt>게임 하드 박스</dt><dd>{building.footprint ? `${building.footprint.widthM} × ${building.footprint.lengthM} × ${building.footprint.heightM} m` : '없음'}</dd></div>
                   <div><dt>포트</dt><dd>{portState}</dd></div>
-                  <div><dt>프로파일</dt><dd>{topview?.visualProfile ?? '탑뷰 없음'}</dd></div>
+                  <div><dt>표현 계약</dt><dd>{topview?.visualProfile ?? target.representation}</dd></div>
                 </dl>
               </div>
             </article>
@@ -153,7 +149,8 @@ const missing = rows.length - approved - candidates;
   .asset-card.is-approved { border-color: color-mix(in oklab, var(--status-ok) 35%, var(--line)); }
   .asset-card.is-missing { border-color: color-mix(in oklab, var(--status-danger) 45%, var(--line)); }
   .asset-card.is-candidate,
-  .asset-card.is-mismatch { border-color: color-mix(in oklab, var(--status-warning) 45%, var(--line)); }
+  .asset-card.is-reference { border-color: color-mix(in oklab, var(--status-warning) 45%, var(--line)); }
+  .asset-card.is-implicit { border-color: color-mix(in oklab, var(--primary) 45%, var(--line)); }
   .asset-preview { position: relative; display: grid; min-height: 148px; place-items: center; overflow: hidden; border-right: var(--hair) solid var(--line); background: var(--bg); }
   .asset-preview img { width: 92px; height: 116px; object-fit: contain; }
   .asset-preview span { position: absolute; inset: 7px auto auto 7px; padding: 3px 6px; background: var(--bg); color: var(--ink-2); font: 700 .58rem var(--font-mono); }

@@ -9,7 +9,8 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { basename, dirname, join, relative, resolve } from 'node:path';
 
 const root = resolve(import.meta.dirname, '..');
-const skillsRoot = resolve(root, '.claude/skills');
+const skillsRoot = resolve(root, '.agents/skills');
+const compatibilityRoot = resolve(root, '.claude/skills');
 const errors = [];
 const rows = [];
 const forbiddenLegacy = [
@@ -57,10 +58,40 @@ for (const skillFile of walk(skillsRoot).filter((path) => basename(path) === 'SK
 }
 
 if (!rows.length) errors.push('저장소 전용 스킬이 없음');
+const expectedCanonical = [
+  'satisfactory-asset-reconstruction',
+  'satisfactory-browser-evidence',
+  'satisfactory-data-evidence',
+  'satisfactory-knowledge-graph',
+];
+const actualCanonical = rows.map((row) => row.name).sort();
+if (JSON.stringify(actualCanonical) !== JSON.stringify(expectedCanonical)) {
+  errors.push(`정본 스킬 집합 불일치: ${actualCanonical.join(', ')}`);
+}
+
+const compatibilityTargets = new Map([
+  ['external-data-claim', 'satisfactory-data-evidence'],
+  ['graph-engineering', 'satisfactory-knowledge-graph'],
+  ['no-js-fallback', 'satisfactory-browser-evidence'],
+  ['research-fanout', 'capability-harvest'],
+  ['topview-asset-pipeline', 'satisfactory-asset-reconstruction'],
+  ['visual-verify', 'satisfactory-browser-evidence'],
+]);
+const compatibilityFiles = walk(compatibilityRoot).filter((path) => basename(path) === 'SKILL.md');
+for (const skillFile of compatibilityFiles) {
+  const folderName = basename(dirname(skillFile));
+  const text = readFileSync(skillFile, 'utf8');
+  const expected = compatibilityTargets.get(folderName);
+  if (!expected || !text.includes(expected)) errors.push(`${folderName}: 정본 호환 포인터 누락`);
+  const extraFiles = walk(dirname(skillFile)).filter((file) => file !== skillFile);
+  if (extraFiles.length) errors.push(`${folderName}: 호환 폴더에 중복 리소스 ${extraFiles.map((file) => relative(root, file)).join(', ')}`);
+}
+if (compatibilityFiles.length !== compatibilityTargets.size) {
+  errors.push(`Claude 호환 포인터 수 불일치: ${compatibilityFiles.length}`);
+}
 if (errors.length) {
   for (const error of errors) process.stderr.write(`ERROR ${error}\n`);
   process.exit(2);
 }
 for (const row of rows) process.stdout.write(`  ${row.name.padEnd(24)} ${String(row.lines).padStart(3)}줄 · script ${row.scripts} · ref ${row.references}\n`);
-process.stdout.write(`PASS  저장소 스킬 ${rows.length}개 · frontmatter/참조/레거시 가정 검사\n`);
-
+process.stdout.write(`PASS  정본 스킬 ${rows.length}개 · Claude 호환 포인터 ${compatibilityFiles.length}개 · frontmatter/참조/레거시 가정 검사\n`);

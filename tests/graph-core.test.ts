@@ -106,6 +106,7 @@ const route = (id: string, from: string, to: string): TransportRoute => ({
   medium: 'solid',
   itemId: 'item',
   flowPerMinute: 60,
+  transportClass: 'Build_ConveyorBeltMk1_C',
   capacityPerMinute: 60,
   pathM: [],
 });

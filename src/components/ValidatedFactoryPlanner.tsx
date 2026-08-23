@@ -7,7 +7,7 @@
  */
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import {
-  isStoredPlan,
+  migrateStoredPlan,
   nextEditorSequence,
   restoreStoredPlan,
   toStoredPlan,
@@ -17,7 +17,14 @@ import {
 import { drawingPixelSize, factoryDrawingBounds, type DrawingBounds } from '../domain/factory/drawing-bounds';
 import { routeAroundMachines } from '../domain/factory/route';
 import { transportPathParts, type TransportTurnPart } from '../domain/factory/transport-geometry';
+import { resolveTransportSpec, transportSpecForFlow } from '../domain/factory/transport-specs';
 import { validateFactoryPlan } from '../domain/factory/validate';
+import {
+  loadPlannerHandoff,
+  savePlannerHandoff,
+  type PlannerHandoff,
+  type PlannerHandoffEntry,
+} from '../state/planner-handoff';
 import type {
   Box3,
   FactoryPlan,
@@ -26,6 +33,7 @@ import type {
   Placement,
   PortReference,
   QuarterTurn,
+  RailRoute,
   TransportRoute,
   ValidationIssue,
   Vec3,
@@ -54,6 +62,7 @@ export interface DrawingRecipe {
 
 interface Props {
   machines: DrawingMachine[];
+  railName: string;
 }
 
 type DragState = {
@@ -73,7 +82,11 @@ type DragState = {
   start: Vec3;
 };
 
-type PlacementTool = { kind: 'foundation' } | { kind: 'machine'; buildingClass: string };
+type PlacementTool = { kind: 'foundation' } | { kind: 'rail' } | {
+  kind: 'machine';
+  buildingClass: string;
+  handoff?: PlannerHandoffEntry;
+};
 
 const SAVE_KEY = 'sfops.validated-planner.v4';
 const FOUNDATION = 8;
@@ -163,6 +176,49 @@ async function standaloneSvgBlob(svg: SVGSVGElement, bounds: DrawingBounds): Pro
     }
     image.setAttribute('href', embedded);
   }
+  const namespace = 'http://www.w3.org/2000/svg';
+  const metadata = document.createElementNS(namespace, 'metadata');
+  metadata.textContent = JSON.stringify({
+    schemaVersion: 1,
+    scale: { pixelsPerMeter: 64, meterGridM: 1, foundationGridM: 8 },
+    layers: ['foundations', 'lower-logistics', 'machines', 'upper-logistics', 'labels'],
+    contracts: ['game-hard-clearance', 'transport-mark-flow-capacity', 'elevation-z'],
+  });
+  clone.prepend(metadata);
+
+  const rootStyle = getComputedStyle(document.documentElement);
+  const color = (token: string) => rootStyle.getPropertyValue(token).trim() || 'currentColor';
+  const legend = document.createElementNS(namespace, 'g');
+  const legendWidth = Math.min(44, Math.max(24, bounds.width * .58));
+  const legendHeight = 5.4;
+  legend.setAttribute('class', 'construction-legend');
+  legend.setAttribute('transform', `translate(${bounds.x + .8} ${bounds.y + bounds.height - legendHeight - .8})`);
+  const background = document.createElementNS(namespace, 'rect');
+  background.setAttribute('width', String(legendWidth));
+  background.setAttribute('height', String(legendHeight));
+  background.setAttribute('rx', '.35');
+  background.setAttribute('fill', color('--bg'));
+  background.setAttribute('fill-opacity', '.92');
+  background.setAttribute('stroke', color('--line-strong'));
+  background.setAttribute('stroke-width', '.08');
+  legend.append(background);
+  [
+    'Satisfactory Ops 시공 도면 · 64 px/m',
+    '그리드 1 m · 파운데이션 8 m · 흰 코너 = 게임 하드 점유',
+    '운송 라벨 = Mk · 품목 · 유량/용량 · 화살표 = 흐름 방향',
+    '하부 운송 → 설비 → 상부 운송/리프트 · Z 라벨 = 높이',
+  ].forEach((label, index) => {
+    const text = document.createElementNS(namespace, 'text');
+    text.setAttribute('x', '.65');
+    text.setAttribute('y', String(1.05 + index * 1.18));
+    text.setAttribute('fill', color(index === 0 ? '--ink-1' : '--ink-2'));
+    text.setAttribute('font-family', color('--font-mono'));
+    text.setAttribute('font-size', index === 0 ? '.62' : '.5');
+    text.setAttribute('font-weight', index === 0 ? '700' : '500');
+    text.textContent = label;
+    legend.append(text);
+  });
+  clone.append(legend);
   const xml = new XMLSerializer().serializeToString(clone);
   return new Blob([xml], { type: 'image/svg+xml;charset=utf-8' });
 }
@@ -319,21 +375,32 @@ function syncTransportRates(routes: TransportRoute[], placements: Placement[]): 
     const from = placements.find((placement) => placement.id === route.from.placementId);
     const to = placements.find((placement) => placement.id === route.to.placementId);
     const rate = (from && portRate(from, route.from.portId)) || (to && portRate(to, route.to.portId));
-    return rate ? { ...route, ...rate } : route;
+    if (!rate) return route;
+    const transport = transportSpecForFlow(route.medium, rate.flowPerMinute);
+    return {
+      ...route,
+      ...rate,
+      transportClass: transport.buildingClass,
+      capacityPerMinute: transport.capacityPerMinute,
+    };
   });
 }
 
-export default function ValidatedFactoryPlanner({ machines }: Props) {
+export default function ValidatedFactoryPlanner({ machines, railName }: Props) {
   const byClass = useMemo(() => new Map(machines.map((machine) => [machine.buildingClass, machine])), [machines]);
   const [placements, setPlacements] = useState<Placement[]>([]);
   const [foundations, setFoundations] = useState<FoundationTile[]>([]);
   const [transports, setTransports] = useState<TransportRoute[]>([]);
+  const [rails, setRails] = useState<RailRoute[]>([]);
+  const [handoff, setHandoff] = useState<PlannerHandoff | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedFoundationId, setSelectedFoundationId] = useState<string | null>(null);
+  const [selectedRailId, setSelectedRailId] = useState<string | null>(null);
   const [groupSelection, setGroupSelection] = useState<string[]>([]);
   const [pendingPort, setPendingPort] = useState<PortReference | null>(null);
   const [placementTool, setPlacementTool] = useState<PlacementTool | null>(null);
   const [cursorWorld, setCursorWorld] = useState<Vec3 | null>(null);
+  const [railStart, setRailStart] = useState<Vec3 | null>(null);
   const [marquee, setMarquee] = useState<{ start: Vec3; end: Vec3 } | null>(null);
   const [query, setQuery] = useState('');
   const [layers, setLayers] = useState<DrawingLayers>({ foundations: true, machines: true, logistics: true, elevation: true, flow: true });
@@ -354,26 +421,28 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
     try {
       const raw = localStorage.getItem(SAVE_KEY);
       if (raw) {
-        const stored = JSON.parse(raw) as unknown;
-        if (isStoredPlan(stored)) {
+        const stored = migrateStoredPlan(JSON.parse(raw) as unknown);
+        if (stored) {
           const restored = restoreStoredPlan(stored, byClass);
           setPlacements(restored.placements);
           setFoundations(restored.foundations);
           setTransports(restored.transports);
+          setRails(restored.rails);
           seq.current = nextEditorSequence(stored);
         }
       }
     } catch {
       // 저장 손상은 빈 검증 도면으로 격리한다.
     }
+    setHandoff(loadPlannerHandoff());
     setReady(true);
   }, [byClass]);
 
   useEffect(() => {
     if (!ready) return;
-    const stored = toStoredPlan(placements, foundations, transports);
+    const stored = toStoredPlan(placements, foundations, transports, rails);
     localStorage.setItem(SAVE_KEY, JSON.stringify(stored));
-  }, [ready, placements, foundations, transports]);
+  }, [ready, placements, foundations, transports, rails]);
 
   useEffect(() => {
     const host = stageRef.current;
@@ -396,6 +465,7 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
         setPlacementTool(null);
         setCursorWorld(null);
         setPendingPort(null);
+        setRailStart(null);
         setNotice('배치 취소');
         return;
       }
@@ -452,7 +522,7 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [byClass, groupSelection, historyCounts, placements, selectedFoundationId, selectedId]);
+  }, [byClass, groupSelection, historyCounts, placements, selectedFoundationId, selectedId, selectedRailId]);
 
   const plan: FactoryPlan = useMemo(() => {
     return {
@@ -461,10 +531,11 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
       foundations,
       placements,
       transports,
+      rails,
       powerSources: [],
       powerEdges: [],
     };
-  }, [foundations, placements, transports]);
+  }, [foundations, placements, transports, rails]);
   const validation = useMemo(() => validateFactoryPlan(plan, { validatePower: false }), [plan]);
 
   const visibleMachines = useMemo(() => machines.filter((machine) => (
@@ -497,10 +568,12 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
   function clearTransientSelection() {
     setSelectedId(null);
     setSelectedFoundationId(null);
+    setSelectedRailId(null);
     setGroupSelection([]);
     setPendingPort(null);
     setPlacementTool(null);
     setCursorWorld(null);
+    setRailStart(null);
     setMarquee(null);
   }
 
@@ -509,12 +582,13 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
     setPlacements(restored.placements);
     setFoundations(restored.foundations);
     setTransports(restored.transports);
+    setRails(restored.rails);
     seq.current = nextEditorSequence(stored);
     clearTransientSelection();
   }
 
   function recordHistory() {
-    const snapshot = toStoredPlan(placements, foundations, transports);
+    const snapshot = toStoredPlan(placements, foundations, transports, rails);
     const previous = history.current.past.at(-1);
     if (!previous || JSON.stringify(previous) !== JSON.stringify(snapshot)) {
       history.current.past.push(snapshot);
@@ -527,7 +601,7 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
   function undo() {
     const previous = history.current.past.pop();
     if (!previous) return;
-    history.current.future.push(toStoredPlan(placements, foundations, transports));
+    history.current.future.push(toStoredPlan(placements, foundations, transports, rails));
     if (history.current.future.length > 50) history.current.future.shift();
     applyStoredState(previous);
     updateHistoryCounts();
@@ -537,28 +611,52 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
   function redo() {
     const next = history.current.future.pop();
     if (!next) return;
-    history.current.past.push(toStoredPlan(placements, foundations, transports));
+    history.current.past.push(toStoredPlan(placements, foundations, transports, rails));
     if (history.current.past.length > 50) history.current.past.shift();
     applyStoredState(next);
     updateHistoryCounts();
     setNotice('다시 실행 · Ctrl+Z로 실행 취소');
   }
 
-  function addMachine(machine: DrawingMachine, positionM: Vec3) {
+  function addMachine(machine: DrawingMachine, positionM: Vec3, handoffEntry?: PlannerHandoffEntry) {
     recordHistory();
+    const handoffRecipe = handoffEntry
+      ? machine.recipes.find((recipe) => recipe.id === handoffEntry.recipeId)
+      : undefined;
+    const defaultRecipe = machine.recipes.find((recipe) => !recipe.isAlternate) ?? machine.recipes[0];
     const placement: Placement = {
       id: `machine-${seq.current++}`,
       spec: machine,
       positionM,
       rotation: 0,
-      operation: machine.recipes[0] ? operationFor(machine, machine.recipes.find((recipe) => !recipe.isAlternate) ?? machine.recipes[0]) : undefined,
+      operation: handoffRecipe
+        ? operationFor(machine, handoffRecipe, handoffEntry!.clockPercent)
+        : defaultRecipe ? operationFor(machine, defaultRecipe) : undefined,
     };
     setPlacements((current) => [...current, placement]);
     setSelectedId(placement.id);
     setSelectedFoundationId(null);
+    setSelectedRailId(null);
     setGroupSelection([]);
-    setPlacementTool(null);
-    setNotice(`${machine.name} 배치 완료`);
+    if (handoffEntry) {
+      const remaining = handoffEntry.remaining - 1;
+      setHandoff((current) => {
+        if (!current) return current;
+        const entries = current.entries.flatMap((entry) => (
+          entry.id !== handoffEntry.id ? [entry] : remaining > 0 ? [{ ...entry, remaining }] : []
+        ));
+        const next = entries.length ? { ...current, entries } : null;
+        savePlannerHandoff(next);
+        return next;
+      });
+      setPlacementTool(remaining > 0
+        ? { kind: 'machine', buildingClass: machine.buildingClass, handoff: { ...handoffEntry, remaining } }
+        : null);
+      setNotice(`${machine.name} 배치 완료${remaining > 0 ? ` · 대기열 ${remaining}대 남음` : ' · 대기열 항목 완료'}`);
+    } else {
+      setPlacementTool(null);
+      setNotice(`${machine.name} 배치 완료`);
+    }
   }
 
   function addFoundation(xM: number, yM: number, zM = 0) {
@@ -571,6 +669,7 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
     setFoundations((current) => [...current, tile]);
     setSelectedFoundationId(tile.id);
     setSelectedId(null);
+    setSelectedRailId(null);
     setGroupSelection([]);
     setNotice('파운데이션 배치 완료 · 계속 좌클릭해 배치하거나 Esc로 종료');
   }
@@ -579,6 +678,7 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
     setPlacementTool({ kind: 'machine', buildingClass: machine.buildingClass });
     setSelectedId(null);
     setSelectedFoundationId(null);
+    setSelectedRailId(null);
     setGroupSelection([]);
     setNotice(`${machine.name} · 캔버스에서 놓을 위치를 좌클릭하세요. Esc 취소`);
   }
@@ -587,11 +687,28 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
     setPlacementTool({ kind: 'foundation' });
     setSelectedId(null);
     setSelectedFoundationId(null);
+    setSelectedRailId(null);
     setGroupSelection([]);
     setNotice('파운데이션 · 캔버스에서 연속 배치할 위치를 좌클릭하세요. Esc 종료');
   }
 
+  function queueRail() {
+    setPlacementTool({ kind: 'rail' });
+    setRailStart(null);
+    setSelectedId(null);
+    setSelectedFoundationId(null);
+    setSelectedRailId(null);
+    setGroupSelection([]);
+    setNotice('철도 · 시작점과 끝점을 차례로 클릭하세요. Esc 종료');
+  }
+
   function removeSelected() {
+    if (selectedRailId) {
+      recordHistory();
+      setRails((current) => current.filter((rail) => rail.id !== selectedRailId));
+      setSelectedRailId(null);
+      return;
+    }
     if (selectedFoundationId) {
       recordHistory();
       setFoundations((current) => current.filter((tile) => tile.id !== selectedFoundationId));
@@ -624,16 +741,19 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
   }
 
   function resetPlan() {
-    if (!placements.length && !foundations.length && !transports.length) return;
+    if (!placements.length && !foundations.length && !transports.length && !rails.length) return;
     recordHistory();
     setPlacements([]);
     setFoundations([]);
     setTransports([]);
+    setRails([]);
     setSelectedId(null);
     setSelectedFoundationId(null);
+    setSelectedRailId(null);
     setPendingPort(null);
     setPlacementTool(null);
     setCursorWorld(null);
+    setRailStart(null);
     setGroupSelection([]);
     setMarquee(null);
     setZoom(1);
@@ -646,8 +766,9 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
     nextPlacements = placements,
     nextFoundations = foundations,
     nextTransports = transports,
+    nextRails = rails,
   ) {
-    const bounds = factoryDrawingBounds(nextPlacements, nextFoundations, nextTransports, 6);
+    const bounds = factoryDrawingBounds(nextPlacements, nextFoundations, [...nextTransports, ...nextRails], 6);
     if (!bounds) {
       setZoom(1);
       setPan({ x: 0, y: 0 });
@@ -660,13 +781,24 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
     setNotice('도면 전체를 화면에 맞췄습니다.');
   }
 
+  function queueHandoff(entry: PlannerHandoffEntry) {
+    const machine = byClass.get(entry.buildingClass);
+    if (!machine) return;
+    setPlacementTool({ kind: 'machine', buildingClass: machine.buildingClass, handoff: entry });
+    setSelectedId(null);
+    setSelectedFoundationId(null);
+    setSelectedRailId(null);
+    setGroupSelection([]);
+    setNotice(`${machine.name} · 계산 대기열 ${entry.remaining}대 중 놓을 위치를 고르세요.`);
+  }
+
   function toggleLayer(layer: DrawingLayer) {
     setLayers((current) => ({ ...current, [layer]: !current[layer] }));
   }
 
   async function exportDrawing(format: 'svg' | 'png') {
     const svg = svgRef.current;
-    const bounds = factoryDrawingBounds(placements, foundations, transports, 4);
+    const bounds = factoryDrawingBounds(placements, foundations, [...transports, ...rails], 4);
     if (!svg || !bounds) return;
     try {
       const svgBlob = await standaloneSvgBlob(svg, bounds);
@@ -879,11 +1011,36 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
       addFoundation(origin.x, origin.y);
       return;
     }
+    if (placementTool.kind === 'rail') {
+      const snapped = { x: Math.round(point.x / SNAP) * SNAP, y: Math.round(point.y / SNAP) * SNAP, z: 0 };
+      if (!railStart) {
+        setRailStart(snapped);
+        setNotice('철도 시작점 선택 · 끝점을 클릭하세요.');
+        return;
+      }
+      if (Math.hypot(snapped.x - railStart.x, snapped.y - railStart.y) <= 1e-6) {
+        setNotice('철도 끝점은 시작점과 달라야 합니다.');
+        return;
+      }
+      recordHistory();
+      setRails((current) => [...current, { id: `rail-${seq.current++}`, pathM: [railStart, snapped] }]);
+      setRailStart(null);
+      setNotice('철도 구간 배치 완료 · 다음 시작점을 클릭하거나 Esc로 종료');
+      return;
+    }
     const machine = byClass.get(placementTool.buildingClass);
-    if (machine) addMachine(machine, { x: Math.round(point.x / SNAP) * SNAP, y: Math.round(point.y / SNAP) * SNAP, z: 0 });
+    if (machine) addMachine(
+      machine,
+      { x: Math.round(point.x / SNAP) * SNAP, y: Math.round(point.y / SNAP) * SNAP, z: 0 },
+      placementTool.handoff,
+    );
   }
 
   function beginCatalogDrag(event: DragEvent, tool: PlacementTool) {
+    if (tool.kind === 'rail') {
+      queueRail();
+      return;
+    }
     const payload = tool.kind === 'foundation' ? 'foundation' : `machine:${tool.buildingClass}`;
     event.dataTransfer?.setData('application/x-sfops-placement', payload);
     event.dataTransfer?.setData('text/plain', payload);
@@ -955,6 +1112,7 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
     if (from && to && from.port.medium === to.port.medium && from.port.medium !== 'power') {
       const medium: 'solid' | 'fluid' = from.port.medium === 'solid' ? 'solid' : 'fluid';
       const rate = portRate(from.placement, from.port.id) ?? portRate(to.placement, to.port.id);
+      const transport = transportSpecForFlow(medium, rate?.flowPerMinute ?? 0);
       recordHistory();
       setTransports((current) => [...current, {
         id: `route-${seq.current++}`,
@@ -963,7 +1121,8 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
         medium,
         itemId: rate?.itemId ?? 'unassigned',
         flowPerMinute: rate?.flowPerMinute ?? 0,
-        capacityPerMinute: medium === 'solid' ? 60 : 300,
+        transportClass: transport.buildingClass,
+        capacityPerMinute: transport.capacityPerMinute,
         pathM: routeAroundMachines(from.placement, from.port, to.placement, to.port, placements),
       }]);
       setPendingPort(null);
@@ -999,7 +1158,7 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
   }
 
   function exportPlan() {
-    const payload = JSON.stringify(toStoredPlan(placements, foundations, transports), null, 2);
+    const payload = JSON.stringify(toStoredPlan(placements, foundations, transports, rails), null, 2);
     const url = URL.createObjectURL(new Blob([payload], { type: 'application/json' }));
     const link = document.createElement('a');
     link.href = url;
@@ -1013,12 +1172,12 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
     const file = input.files?.[0];
     if (!file) return;
     try {
-      const stored = JSON.parse(await file.text()) as unknown;
-      if (!isStoredPlan(stored)) throw new Error('지원하지 않는 도면 스키마');
+      const stored = migrateStoredPlan(JSON.parse(await file.text()) as unknown);
+      if (!stored) throw new Error('지원하지 않는 도면 스키마');
       const restored = restoreStoredPlan(stored, byClass);
       recordHistory();
       applyStoredState(stored);
-      fitToPlan(restored.placements, restored.foundations, restored.transports);
+      fitToPlan(restored.placements, restored.foundations, restored.transports, restored.rails);
       setNotice(`${file.name} 도면을 복원했습니다.`);
     } catch (error) {
       setNotice(`가져오기 실패 · ${error instanceof Error ? error.message : '파일을 확인하세요.'}`);
@@ -1028,19 +1187,21 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
   }
 
   function renderSolidRoute(route: TransportRoute, elevated: boolean) {
+    const transport = resolveTransportSpec(route);
     const parts = transportPathParts(route.pathM);
     const segments = parts.belts.filter((segment) => elevated ? segment.center.z > 2.1 : segment.center.z <= 2.1);
     const turns = parts.turns.filter((turn) => elevated ? turn.at.z > 2.1 : turn.at.z <= 2.1);
     if (!segments.length) return null;
     const labelSegment = segments.reduce((longest, segment) => !longest || segment.planarLengthM > longest.planarLengthM ? segment : longest, undefined as (typeof segments)[number] | undefined);
     return (
-      <g class={`vp-route is-solid${elevated ? ' is-elevated' : ''}`} key={`${route.id}-${elevated ? 'high' : 'low'}`} aria-label="컨베이어 벨트">
+      <g class={`vp-route is-solid is-mk-${transport.mark}${elevated ? ' is-elevated' : ''}`} key={`${route.id}-${elevated ? 'high' : 'low'}`} aria-label={transport.name}>
         {segments.map((segment, segmentIndex) => (
           <g class="vp-belt-segment" transform={`translate(${segment.center.x} ${segment.center.y}) rotate(${segment.angleDeg})`} key={`${route.id}-belt-${segmentIndex}`}>
             <rect x={-segment.planarLengthM / 2} y="-1.05" width={segment.planarLengthM} height="2.1" rx=".7" class="vp-belt-frame" />
             <rect x={-segment.planarLengthM / 2} y="-.88" width={segment.planarLengthM} height="1.76" rx=".54" class="vp-belt-surface" />
-            {Array.from({ length: Math.max(1, Math.floor(segment.planarLengthM / .72)) }, (_, slatIndex) => {
-              const x = -segment.planarLengthM / 2 + (slatIndex + .5) * segment.planarLengthM / Math.max(1, Math.floor(segment.planarLengthM / .72));
+            {Array.from({ length: Math.max(1, Math.floor(segment.planarLengthM / Math.max(.38, .76 - transport.mark * .06))) }, (_, slatIndex) => {
+              const slatCount = Math.max(1, Math.floor(segment.planarLengthM / Math.max(.38, .76 - transport.mark * .06)));
+              const x = -segment.planarLengthM / 2 + (slatIndex + .5) * segment.planarLengthM / slatCount;
               return <path key={`${segmentIndex}-slat-${slatIndex}`} d={`M ${x} -.72 V .72`} class="vp-belt-slat" />;
             })}
             <path d={`M ${-segment.planarLengthM / 2} -.88 H ${segment.planarLengthM / 2} M ${-segment.planarLengthM / 2} .88 H ${segment.planarLengthM / 2}`} class="vp-belt-rail" />
@@ -1055,10 +1216,10 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
             <path d={transportTurnPath(turn)} class="vp-belt-turn-surface" />
           </g>
         ))}
-        {layers.flow && !elevated && labelSegment && route.flowPerMinute > 0 && (
+        {layers.flow && !elevated && labelSegment && (
           <g class="vp-route-label" transform={`translate(${labelSegment.center.x} ${labelSegment.center.y - 1.7})`}>
-            <rect x="-4.5" y="-.7" width="9" height="1.4" rx=".24" />
-            <text>{itemNames.get(route.itemId) ?? route.itemId} · {fmt(route.flowPerMinute)}/분</text>
+            <rect x="-8" y="-.7" width="16" height="1.4" rx=".24" />
+            <text>{transport.name} · {itemNames.get(route.itemId) ?? route.itemId} · {fmt(route.flowPerMinute)}/{fmt(route.capacityPerMinute)}/분</text>
           </g>
         )}
       </g>
@@ -1066,17 +1227,24 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
   }
 
   function renderFluidRoute(route: TransportRoute, elevated: boolean) {
+    const transport = resolveTransportSpec(route);
     const parts = transportPathParts(route.pathM);
     const segments = parts.belts.filter((segment) => elevated ? segment.center.z > 2.1 : segment.center.z <= 2.1);
     const turns = parts.turns.filter((turn) => elevated ? turn.at.z > 2.1 : turn.at.z <= 2.1);
     const labelSegment = segments.reduce((longest, segment) => !longest || segment.planarLengthM > longest.planarLengthM ? segment : longest, undefined as (typeof segments)[number] | undefined);
     if (!segments.length) return null;
     return (
-      <g class={`vp-route is-fluid${elevated ? ' is-elevated' : ''}`} key={`${route.id}-${elevated ? 'high' : 'low'}`} aria-label="파이프라인">
+      <g class={`vp-route is-fluid is-mk-${transport.mark}${elevated ? ' is-elevated' : ''}`} key={`${route.id}-${elevated ? 'high' : 'low'}`} aria-label={transport.name}>
         {segments.map((segment, segmentIndex) => (
           <g class="vp-pipe-segment" transform={`translate(${segment.center.x} ${segment.center.y}) rotate(${segment.angleDeg})`} key={`${route.id}-pipe-${segmentIndex}`}>
             <rect x={-segment.planarLengthM / 2} y="-1.18" width={segment.planarLengthM} height="2.36" rx="1.05" class="vp-pipe-shell" />
             <rect x={-segment.planarLengthM / 2} y="-.79" width={segment.planarLengthM} height="1.58" rx=".72" class="vp-pipe-core" />
+            {Array.from({ length: transport.mark }, (_, bandIndex) => (
+              <path key={`${segmentIndex}-band-${bandIndex}`} d={`M ${(bandIndex - (transport.mark - 1) / 2) * .42} -1.05 V 1.05`} class="vp-pipe-grade" />
+            ))}
+            {segment.planarLengthM >= 2.5 && (
+              <path d="M -.42 -.42 L 0 0 L -.42 .42 M .12 -.42 L .54 0 L .12 .42" class="vp-pipe-direction" />
+            )}
           </g>
         ))}
         {turns.map((turn, index) => (
@@ -1085,10 +1253,10 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
             <path d={transportTurnPath(turn)} class="vp-pipe-turn-core" />
           </g>
         ))}
-        {layers.flow && !elevated && labelSegment && route.flowPerMinute > 0 && (
+        {layers.flow && !elevated && labelSegment && (
           <g class="vp-route-label" transform={`translate(${labelSegment.center.x} ${labelSegment.center.y - 1.9})`}>
-            <rect x="-5.4" y="-.7" width="10.8" height="1.4" rx=".24" />
-            <text>{itemNames.get(route.itemId) ?? route.itemId} · {fmt(route.flowPerMinute)} m³/분</text>
+            <rect x="-9" y="-.7" width="18" height="1.4" rx=".24" />
+            <text>{transport.name} · {itemNames.get(route.itemId) ?? route.itemId} · {fmt(route.flowPerMinute)}/{fmt(route.capacityPerMinute)} m³/분</text>
           </g>
         )}
       </g>
@@ -1096,19 +1264,87 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
   }
 
   function renderLift(route: TransportRoute) {
+    const transport = resolveTransportSpec(route);
+    if (route.medium === 'fluid') {
+      return transportPathParts(route.pathM).lifts.map((lift, index) => (
+        <g class={`vp-pipe-riser is-mk-${transport.mark}`} transform={`translate(${lift.x} ${lift.y})`} key={`${route.id}-riser-${index}`}>
+          <circle r="1.18" class="vp-pipe-riser-shell" />
+          <circle r=".78" class="vp-pipe-riser-core" />
+          {Array.from({ length: transport.mark }, (_, bandIndex) => (
+            <circle key={bandIndex} r={.92 + bandIndex * .13} class="vp-pipe-riser-band" />
+          ))}
+          {layers.elevation && (
+            <g class="vp-lift-label" transform="translate(0 -1.65)">
+              <rect x="-3.5" y="-.65" width="7" height="1.3" rx=".22" />
+              <text>파이프 Mk.{transport.mark} · {fmt(lift.heightM)} m · Z +{fmt(lift.highZ)} m</text>
+            </g>
+          )}
+        </g>
+      ));
+    }
     return transportPathParts(route.pathM).lifts.map((lift, index) => (
-      <g class="vp-lift" transform={`translate(${lift.x} ${lift.y})`} key={`${route.id}-lift-${index}`}>
+      <g class={`vp-lift is-mk-${transport.mark}`} transform={`translate(${lift.x} ${lift.y})`} key={`${route.id}-lift-${index}`}>
         <rect x="-1.1" y="-1.1" width="2.2" height="2.2" rx=".28" class="vp-lift-bed" />
         <rect x="-.7" y="-1.22" width="1.4" height="2.44" rx=".34" class="vp-lift-column" />
-        <path d="M -.38 -.58 H .38 M -.38 0 H .38 M -.38 .58 H .38" class="vp-lift-ribs" />
+        {Array.from({ length: transport.mark + 2 }, (_, ribIndex) => {
+          const y = -.72 + ribIndex * 1.44 / (transport.mark + 1);
+          return <path key={ribIndex} d={`M -.38 ${y} H .38`} class="vp-lift-ribs" />;
+        })}
         {layers.elevation && (
           <g class="vp-lift-label" transform="translate(0 -1.65)">
             <rect x="-2.25" y="-.65" width="4.5" height="1.3" rx=".22" />
-            <text>리프트 {fmt(lift.heightM)} m · Z +{fmt(lift.highZ)} m</text>
+            <text>리프트 Mk.{transport.mark} · {fmt(lift.heightM)} m · Z +{fmt(lift.highZ)} m</text>
           </g>
         )}
       </g>
     ));
+  }
+
+  function renderRail(rail: RailRoute) {
+    const segments = rail.pathM.slice(1).map((end, index) => {
+      const start = rail.pathM[index];
+      const dx = end.x - start.x;
+      const dy = end.y - start.y;
+      const length = Math.hypot(dx, dy);
+      return {
+        center: { x: (start.x + end.x) / 2, y: (start.y + end.y) / 2 },
+        length,
+        angleDeg: Math.atan2(dy, dx) * 180 / Math.PI,
+      };
+    });
+    const label = segments.reduce((longest, segment) => segment.length > (longest?.length ?? 0) ? segment : longest, undefined as (typeof segments)[number] | undefined);
+    return (
+      <g
+        class={`vp-rail${selectedRailId === rail.id ? ' is-selected' : ''}`}
+        key={rail.id}
+        aria-label={railName}
+        onClick={(event) => {
+          event.stopPropagation();
+          setSelectedRailId(rail.id);
+          setSelectedId(null);
+          setSelectedFoundationId(null);
+          setGroupSelection([]);
+        }}
+      >
+        {segments.map((segment, segmentIndex) => (
+          <g transform={`translate(${segment.center.x} ${segment.center.y}) rotate(${segment.angleDeg})`} key={`${rail.id}-${segmentIndex}`}>
+            <rect x={-segment.length / 2} y="-3" width={segment.length} height="6" rx=".35" class="vp-rail-bed" />
+            <path d={`M ${-segment.length / 2} -1.55 H ${segment.length / 2} M ${-segment.length / 2} 1.55 H ${segment.length / 2}`} class="vp-rail-track" />
+            {Array.from({ length: Math.max(1, Math.floor(segment.length / 1.6)) }, (_, tieIndex) => {
+              const ties = Math.max(1, Math.floor(segment.length / 1.6));
+              const x = -segment.length / 2 + (tieIndex + .5) * segment.length / ties;
+              return <path key={tieIndex} d={`M ${x} -2.45 V 2.45`} class="vp-rail-tie" />;
+            })}
+          </g>
+        ))}
+        {layers.flow && label && (
+          <g class="vp-route-label" transform={`translate(${label.center.x} ${label.center.y - 3.8})`}>
+            <rect x="-4" y="-.7" width="8" height="1.4" rx=".24" />
+            <text>{railName} · {fmt(segments.reduce((sum, segment) => sum + segment.length, 0))} m</text>
+          </g>
+        )}
+      </g>
+    );
   }
 
   return (
@@ -1123,6 +1359,28 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
           <input aria-label="설비 검색" value={query} onInput={(event) => setQuery(event.currentTarget.value)} placeholder="설비 검색" />
         </label>
         <div class="vp-machine-list">
+          {handoff?.entries.length ? (
+            <section class="vp-handoff" aria-label="계산에서 받은 설계 대기열">
+              <header>
+                <div><p class="vp-eyebrow">DESIGN QUEUE</p><h3>계산 대기열</h3></div>
+                <button type="button" onClick={() => { setHandoff(null); savePlannerHandoff(null); }}>비우기</button>
+              </header>
+              <div>
+                {handoff.entries.map((entry) => {
+                  const machine = byClass.get(entry.buildingClass);
+                  const recipe = machine?.recipes.find((candidate) => candidate.id === entry.recipeId);
+                  if (!machine) return null;
+                  return (
+                    <button type="button" class="vp-handoff-item" onClick={() => queueHandoff(entry)}>
+                    <img src={machine.imageUrl} alt="" loading="lazy" />
+                      <span><strong>{machine.name} × {entry.remaining}</strong><small>{recipe?.name ?? entry.recipeId} · {fmt(entry.clockPercent)}% · {fmt(entry.targetFlowPerMinute)}/분</small></span>
+                      <span aria-hidden="true">배치</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+          ) : null}
           <button
             type="button"
             draggable
@@ -1136,6 +1394,16 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
             <span><strong>파운데이션</strong><small>클릭 후 배치 · 드래그 가능</small></span>
             <span class="vp-place-hint" aria-hidden="true">배치</span>
           </button>
+          <button
+            type="button"
+            class={`vp-machine is-rail${placementTool?.kind === 'rail' ? ' is-armed' : ''}`}
+            onClick={queueRail}
+            title="시작점과 끝점을 직접 선택"
+          >
+            <span class="vp-rail-swatch" aria-hidden="true"><i /><i /><i /></span>
+            <span><strong>{railName}</strong><small>두 점을 클릭해 실축 경로 배치</small></span>
+            <span class="vp-place-hint" aria-hidden="true">작도</span>
+          </button>
           {visibleMachines.map((machine) => {
             return (
               <button
@@ -1147,7 +1415,7 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
                 onDragEnd={() => setCursorWorld(null)}
                 title="클릭한 뒤 위치를 고르거나 캔버스로 드래그"
               >
-                <img src={machine.imageUrl} alt="" draggable={false} />
+                <img src={machine.imageUrl} alt="" draggable={false} loading="lazy" />
                 <span><strong>{machine.name}</strong><small>클릭 후 배치 · 드래그 가능</small></span>
                 <span class="vp-place-hint" aria-hidden="true">배치</span>
               </button>
@@ -1161,7 +1429,7 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
           <div class="vp-status">
             <span class={validation.publishable ? 'is-ready' : 'is-review'} />
             <strong>{validation.publishable ? '시공 검증 통과' : `검토 ${validation.issues.length}건`}</strong>
-            <small>설비 {placements.length} · 토대 {foundations.length} · 물류 {transports.length}</small>
+            <small>설비 {placements.length} · 토대 {foundations.length} · 물류 {transports.length + rails.length}</small>
           </div>
           <div class="vp-actions">
             <button type="button" onClick={undo} disabled={!historyCounts.undo} title="Ctrl+Z">실행 취소</button>
@@ -1169,12 +1437,12 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
             <button type="button" onClick={rotateSelected} disabled={!selectedId}>90° 회전</button>
             <button type="button" onClick={() => changeElevation(-4)} disabled={!selectedId && !selectedFoundationId}>높이 −4 m</button>
             <button type="button" onClick={() => changeElevation(4)} disabled={!selectedId && !selectedFoundationId}>높이 +4 m</button>
-            <button type="button" data-action="delete-selection" onClick={removeSelected} disabled={!selectedId && !selectedFoundationId && !groupSelection.length}>선택 삭제{groupSelection.length ? ` (${groupSelection.length})` : ''}</button>
-            <button type="button" class="is-danger" onClick={resetPlan} disabled={!placements.length && !foundations.length}>전체 초기화</button>
-            <button type="button" onClick={() => fitToPlan()} disabled={!placements.length && !foundations.length && !transports.length}>도면 맞춤</button>
+            <button type="button" data-action="delete-selection" onClick={removeSelected} disabled={!selectedId && !selectedFoundationId && !selectedRailId && !groupSelection.length}>선택 삭제{groupSelection.length ? ` (${groupSelection.length})` : ''}</button>
+            <button type="button" class="is-danger" onClick={resetPlan} disabled={!placements.length && !foundations.length && !transports.length && !rails.length}>전체 초기화</button>
+            <button type="button" onClick={() => fitToPlan()} disabled={!placements.length && !foundations.length && !transports.length && !rails.length}>도면 맞춤</button>
             <button type="button" onClick={exportPlan}>JSON 내보내기</button>
-            <button type="button" onClick={() => void exportDrawing('svg')} disabled={!placements.length && !foundations.length && !transports.length}>SVG 도면</button>
-            <button type="button" onClick={() => void exportDrawing('png')} disabled={!placements.length && !foundations.length && !transports.length}>PNG 도면</button>
+            <button type="button" onClick={() => void exportDrawing('svg')} disabled={!placements.length && !foundations.length && !transports.length && !rails.length}>SVG 도면</button>
+            <button type="button" onClick={() => void exportDrawing('png')} disabled={!placements.length && !foundations.length && !transports.length && !rails.length}>PNG 도면</button>
             <label class="vp-import-button">
               JSON 가져오기
               <input type="file" accept="application/json,.json" onChange={importPlan} />
@@ -1241,6 +1509,7 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
               </g>
             ))}
 
+            {layers.logistics && rails.map(renderRail)}
             {layers.logistics && transports.map((route) => route.medium === 'solid' ? renderSolidRoute(route, false) : renderFluidRoute(route, false))}
 
             {layers.machines && [...placements].sort((a, b) => a.positionM.z - b.positionM.z).map((placement) => {
@@ -1304,10 +1573,15 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
               );
             })}
             {layers.logistics && transports.map((route) => route.medium === 'solid' ? renderSolidRoute(route, true) : renderFluidRoute(route, true))}
-            {layers.logistics && transports.filter((route) => route.medium === 'solid').flatMap((route) => renderLift(route))}
+            {layers.logistics && transports.flatMap((route) => renderLift(route))}
             {placementTool?.kind === 'foundation' && ghostPoint && (
               <g class="vp-placement-ghost">
                 <rect x={ghostPoint.x} y={ghostPoint.y} width={FOUNDATION} height={FOUNDATION} />
+              </g>
+            )}
+            {placementTool?.kind === 'rail' && railStart && cursorWorld && (
+              <g class="vp-rail-ghost">
+                <path d={`M ${railStart.x} ${railStart.y} L ${Math.round(cursorWorld.x / SNAP) * SNAP} ${Math.round(cursorWorld.y / SNAP) * SNAP}`} />
               </g>
             )}
             {ghostMachine && ghostPoint && (() => {
@@ -1330,7 +1604,7 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
               />
             )}
           </svg>
-          {!placements.length && (
+          {!placements.length && !foundations.length && !transports.length && !rails.length && (
             <div class="vp-empty">
               <span>01</span>
               <h3>왼쪽에서 설비나 토대를 놓으세요.</h3>
@@ -1342,7 +1616,7 @@ export default function ValidatedFactoryPlanner({ machines }: Props) {
         <section class="vp-inspector" aria-label="도면 검사 결과" aria-live="polite" tabIndex={0}>
           <div class="vp-inspector-title">
             <p class="vp-eyebrow">MACHINE CONTROL</p>
-            <h3>{selectedMachine ? selectedMachine.name : selectedFoundationId ? '선택한 파운데이션' : '설비를 선택하세요.'}</h3>
+            <h3>{selectedMachine ? selectedMachine.name : selectedFoundationId ? '선택한 파운데이션' : selectedRailId ? `선택한 ${railName}` : '설비를 선택하세요.'}</h3>
             {selectedPlacement && <p>높이 Z +{fmt(selectedPlacement.positionM.z)} m · Ctrl+C / Ctrl+V 복제</p>}
             {selectedFoundationId && <p>높이 Z +{fmt(foundations.find((tile) => tile.id === selectedFoundationId)?.zM ?? 0)} m</p>}
           </div>
