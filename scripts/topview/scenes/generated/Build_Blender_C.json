@@ -105,18 +105,61 @@
     }
   ],
   "materials": {
-    "albedo": {},
-    "ao": {},
-    "normal": {},
-    "reflection": {},
+    "albedo": {
+      "DecalColor_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Alb.png",
+      "MI_Blender": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Blender_BC.png",
+      "Decal_Normal": ".cache/topview/satisfactory-material-atlas.png",
+      "MI_Blender_VAT_Startup": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Blender/Textures/TX_Blender_Baked_BC.png",
+      "MI_BlenderBaked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Blender/Textures/TX_Blender_Baked_BC.png",
+      "MI_ProdLight": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/-Shared/ProductionIndicator/Textures/TX_ProductionLight_01_Albedo.png"
+    },
+    "ao": {
+      "MI_Blender": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Blender_AOMasks.png",
+      "MI_Blender_VAT_Startup": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Blender/Textures/TX_Blender_Baked_AOMasks.png",
+      "MI_BlenderBaked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Blender/Textures/TX_Blender_Baked_AOMasks.png"
+    },
+    "normal": {
+      "DecalColor_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Nor.png",
+      "MI_Blender": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Blender_N.png",
+      "Decal_Normal": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/PanelAtlas_Nor.png",
+      "MI_Blender_VAT_Startup": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Blender/Textures/TX_Blender_Baked_N.png",
+      "MI_BlenderBaked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Blender/Textures/TX_Blender_Baked_N.png"
+    },
+    "reflection": {
+      "MI_Blender": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Blender_Refl.png",
+      "Decal_Normal": ".cache/topview/satisfactory-reflection-atlas.png",
+      "MI_Blender_VAT_Startup": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Blender/Textures/TX_Blender_Baked_Refl.png",
+      "MI_BlenderBaked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Blender/Textures/TX_Blender_Baked_Refl.png",
+      "MI_ProdLight": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/-Shared/ProductionIndicator/Textures/TX_ProductionLight_01_Reflection.png"
+    },
     "stateMask": {},
-    "paint": {},
+    "paint": {
+      "MI_Blender_VAT_Startup": {
+        "primary": "#fa9549",
+        "secondary": "#4f5da4"
+      },
+      "MI_BlenderBaked": {
+        "primary": "#fa9549",
+        "secondary": "#4f5da4"
+      }
+    },
     "baseColor": {},
     "alpha": [],
-    "pbr": [],
+    "pbr": [
+      "DecalColor_Masked",
+      "MI_Blender",
+      "Decal_Normal",
+      "MI_Blender_VAT_Startup",
+      "MI_BlenderBaked",
+      "MI_ProdLight"
+    ],
     "normalOnly": [],
-    "emissiveAccent": [],
+    "emissiveAccent": [
+      "DecalColor_Masked",
+      "MI_ProdLight"
+    ],
     "emissiveGeometrySelectors": [],
+    "opacityGeometrySelectors": [],
     "state": {
       "color": "#00ff00",
       "strength": 5
@@ -193,8 +236,59 @@
   "portVisibility": [],
   "materialChecks": [
     {
-      "id": "cue4parse-imported-game-materials",
-      "status": "present"
+      "id": "cue4parse-game-texture-bindings",
+      "status": "present",
+      "bindings": [
+        {
+          "material": "DecalColor_Masked",
+          "channels": [
+            "albedo",
+            "normal"
+          ]
+        },
+        {
+          "material": "MI_Blender",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "Decal_Normal",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Blender_VAT_Startup",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_BlenderBaked",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_ProdLight",
+          "channels": [
+            "albedo",
+            "reflection"
+          ]
+        }
+      ]
     }
   ],
   "cameraLightingChecks": [

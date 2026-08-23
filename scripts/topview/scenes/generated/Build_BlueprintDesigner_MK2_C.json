@@ -1010,18 +1010,43 @@
     }
   ],
   "materials": {
-    "albedo": {},
-    "ao": {},
-    "normal": {},
-    "reflection": {},
+    "albedo": {
+      "MI_Foundation_Concrete": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Building/Foundation/ConcreteSet/Textures/TX_Concrete_BC.png",
+      "MI_BlueprintDesigner_Foundations_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Textures/TX_BlueprintDesignerFoundations_BC.png",
+      "MI_BlueprintDesigner_Cage_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Textures/TX_BlueprintDesignerCage_BC.png"
+    },
+    "ao": {
+      "MI_Foundation_Concrete": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Building/Foundation/ConcreteSet/Textures/TX_Concrete_AOMasks.png",
+      "MI_BlueprintDesigner_Foundations_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Textures/TX_BlueprintDesignerFoundations_AOMasks.png",
+      "MI_BlueprintDesigner_Cage_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Textures/TX_BlueprintDesignerCage_AOMasks.png"
+    },
+    "normal": {
+      "MI_Foundation_Concrete": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Building/Foundation/ConcreteSet/Textures/TX_Concrete_N.png",
+      "MI_BlueprintDesigner_Foundations_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Textures/TX_BlueprintDesignerFoundations_N.png",
+      "MI_BlueprintDesigner_Cage_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Textures/TX_BlueprintDesignerCage_N.png"
+    },
+    "reflection": {
+      "MI_BlueprintDesigner_Foundations_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Textures/TX_BlueprintDesignerFoundations_Refl.png",
+      "MI_BlueprintDesigner_Cage_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/BlueprintDesigner/Textures/TX_BlueprintDesignerCage_Refl.png"
+    },
     "stateMask": {},
-    "paint": {},
+    "paint": {
+      "MI_BlueprintDesigner_Cage_01": {
+        "primary": "#fa9549",
+        "secondary": "#4f5da4"
+      }
+    },
     "baseColor": {},
     "alpha": [],
-    "pbr": [],
+    "pbr": [
+      "MI_Foundation_Concrete",
+      "MI_BlueprintDesigner_Foundations_01",
+      "MI_BlueprintDesigner_Cage_01"
+    ],
     "normalOnly": [],
     "emissiveAccent": [],
     "emissiveGeometrySelectors": [],
+    "opacityGeometrySelectors": [],
     "state": {
       "color": "#00ff00",
       "strength": 5
@@ -1334,8 +1359,36 @@
   ],
   "materialChecks": [
     {
-      "id": "cue4parse-imported-game-materials",
-      "status": "present"
+      "id": "cue4parse-game-texture-bindings",
+      "status": "present",
+      "bindings": [
+        {
+          "material": "MI_Foundation_Concrete",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal"
+          ]
+        },
+        {
+          "material": "MI_BlueprintDesigner_Foundations_01",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_BlueprintDesigner_Cage_01",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        }
+      ]
     }
   ],
   "cameraLightingChecks": [

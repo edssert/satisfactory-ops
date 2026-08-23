@@ -38,18 +38,34 @@
     }
   ],
   "materials": {
-    "albedo": {},
-    "ao": {},
-    "normal": {},
-    "reflection": {},
+    "albedo": {
+      "MI_StorageShelf": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/StoragePlayer/Texture/TX_StorageShelf_BC.png"
+    },
+    "ao": {
+      "MI_StorageShelf": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/StoragePlayer/Texture/TX_StorageShelf_AOMask.png"
+    },
+    "normal": {
+      "MI_StorageShelf": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/StoragePlayer/Texture/TX_StorageShelf_N.png"
+    },
+    "reflection": {
+      "MI_StorageShelf": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/StoragePlayer/Texture/TX_StorageShelf_Refl.png"
+    },
     "stateMask": {},
-    "paint": {},
+    "paint": {
+      "MI_StorageShelf": {
+        "primary": "#fa9549",
+        "secondary": "#4f5da4"
+      }
+    },
     "baseColor": {},
     "alpha": [],
-    "pbr": [],
+    "pbr": [
+      "MI_StorageShelf"
+    ],
     "normalOnly": [],
     "emissiveAccent": [],
     "emissiveGeometrySelectors": [],
+    "opacityGeometrySelectors": [],
     "state": {
       "color": "#00ff00",
       "strength": 5
@@ -92,8 +108,19 @@
   ],
   "materialChecks": [
     {
-      "id": "cue4parse-imported-game-materials",
-      "status": "present"
+      "id": "cue4parse-game-texture-bindings",
+      "status": "present",
+      "bindings": [
+        {
+          "material": "MI_StorageShelf",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        }
+      ]
     }
   ],
   "cameraLightingChecks": [

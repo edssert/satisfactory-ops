@@ -46,6 +46,10 @@ async function promote(receipt, outputPath) {
     throw new Error(`후보 해시 불일치: ${candidatePath}`);
   }
   mkdirSync(dirname(outputPath), { recursive: true });
+  const temporaryPath = `${outputPath}.next.webp`;
+  const backupPath = `${outputPath}.previous.webp`;
+  rmSync(temporaryPath, { force: true });
+  rmSync(backupPath, { force: true });
   const image = sharp(candidatePath).ensureAlpha();
   const { data, info } = await image.raw().toBuffer({ resolveWithObject: true });
   for (let offset = 0; offset < data.length; offset += 4) {
@@ -54,7 +58,17 @@ async function promote(receipt, outputPath) {
     data[offset + 1] = 0;
     data[offset + 2] = 0;
   }
-  await sharp(data, { raw: info }).webp({ lossless: true, effort: 6 }).toFile(outputPath);
+  await sharp(data, { raw: info }).webp({ lossless: true, effort: 6 }).toFile(temporaryPath);
+  if (existsSync(outputPath)) renameSync(outputPath, backupPath);
+  try {
+    renameSync(temporaryPath, outputPath);
+    rmSync(backupPath, { force: true });
+  } catch (error) {
+    if (existsSync(backupPath) && !existsSync(outputPath)) renameSync(backupPath, outputPath);
+    throw error;
+  } finally {
+    rmSync(temporaryPath, { force: true });
+  }
   return {
     path: posix(relative(resolve(root, 'public'), outputPath)),
     sha256: sha256(outputPath),

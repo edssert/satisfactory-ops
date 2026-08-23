@@ -76,7 +76,12 @@ def parse_args() -> argparse.Namespace:
 def apply_scene_config(args: argparse.Namespace) -> argparse.Namespace:
     scene_path = Path(args.scene).resolve()
     config = json.loads(scene_path.read_text(encoding="utf-8"))
-    repository_root = scene_path.parents[3]
+    repository_root = next(
+        (parent for parent in scene_path.parents if (parent / "package.json").exists()),
+        None,
+    )
+    if repository_root is None:
+        raise ValueError(f"{scene_path}: package.json 기준 저장소 루트를 찾지 못했습니다.")
 
     def resolve_source(raw_path: str) -> str:
         path = Path(raw_path)

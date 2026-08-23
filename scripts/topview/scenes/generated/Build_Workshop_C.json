@@ -38,18 +38,40 @@
     }
   ],
   "materials": {
-    "albedo": {},
+    "albedo": {
+      "DecalColor_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Alb.png",
+      "MI_Workshop": ".cache/topview/satisfactory-material-atlas.png",
+      "Decal_Normal": ".cache/topview/satisfactory-material-atlas.png",
+      "MI_FactoryBaked_Workshop_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Workshop/Textures/T_Workshop_01_BC.png"
+    },
     "ao": {},
-    "normal": {},
-    "reflection": {},
+    "normal": {
+      "DecalColor_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Nor.png",
+      "MI_Workshop": ".cache/topview/satisfactory-normal-atlas.png",
+      "Decal_Normal": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/PanelAtlas_Nor.png",
+      "MI_FactoryBaked_Workshop_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Workshop/Textures/T_Workshop_01_N.png"
+    },
+    "reflection": {
+      "MI_Workshop": ".cache/topview/satisfactory-reflection-atlas.png",
+      "Decal_Normal": ".cache/topview/satisfactory-reflection-atlas.png",
+      "MI_FactoryBaked_Workshop_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Workshop/Textures/T_Workshop_01_Reflection.png"
+    },
     "stateMask": {},
     "paint": {},
     "baseColor": {},
     "alpha": [],
-    "pbr": [],
+    "pbr": [
+      "DecalColor_Masked",
+      "MI_Workshop",
+      "Decal_Normal",
+      "MI_FactoryBaked_Workshop_01"
+    ],
     "normalOnly": [],
-    "emissiveAccent": [],
+    "emissiveAccent": [
+      "DecalColor_Masked"
+    ],
     "emissiveGeometrySelectors": [],
+    "opacityGeometrySelectors": [],
     "state": {
       "color": "#00ff00",
       "strength": 5
@@ -104,8 +126,41 @@
   "portVisibility": [],
   "materialChecks": [
     {
-      "id": "cue4parse-imported-game-materials",
-      "status": "present"
+      "id": "cue4parse-game-texture-bindings",
+      "status": "present",
+      "bindings": [
+        {
+          "material": "DecalColor_Masked",
+          "channels": [
+            "albedo",
+            "normal"
+          ]
+        },
+        {
+          "material": "MI_Workshop",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "Decal_Normal",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_FactoryBaked_Workshop_01",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        }
+      ]
     }
   ],
   "cameraLightingChecks": [

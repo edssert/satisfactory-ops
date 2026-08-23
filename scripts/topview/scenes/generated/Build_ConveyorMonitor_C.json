@@ -56,18 +56,34 @@
     }
   ],
   "materials": {
-    "albedo": {},
-    "ao": {},
-    "normal": {},
-    "reflection": {},
+    "albedo": {
+      "MI_ThroughputDisplay": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/ConveyorThroughputDisplay/Texture/TX_ThroughputDisplay_BC.png"
+    },
+    "ao": {
+      "MI_ThroughputDisplay": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/ConveyorThroughputDisplay/Texture/TX_ThroughputDisplay_AOMask.png"
+    },
+    "normal": {
+      "MI_ThroughputDisplay": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/ConveyorThroughputDisplay/Texture/TX_ThroughputDisplay_N.png"
+    },
+    "reflection": {
+      "MI_ThroughputDisplay": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/ConveyorThroughputDisplay/Texture/TX_ThroughputDisplay_Refl.png"
+    },
     "stateMask": {},
-    "paint": {},
+    "paint": {
+      "MI_ThroughputDisplay": {
+        "primary": "#fa9549",
+        "secondary": "#4f5da4"
+      }
+    },
     "baseColor": {},
     "alpha": [],
-    "pbr": [],
+    "pbr": [
+      "MI_ThroughputDisplay"
+    ],
     "normalOnly": [],
     "emissiveAccent": [],
     "emissiveGeometrySelectors": [],
+    "opacityGeometrySelectors": [],
     "state": {
       "color": "#00ff00",
       "strength": 5
@@ -127,8 +143,19 @@
   "portVisibility": [],
   "materialChecks": [
     {
-      "id": "cue4parse-imported-game-materials",
-      "status": "present"
+      "id": "cue4parse-game-texture-bindings",
+      "status": "present",
+      "bindings": [
+        {
+          "material": "MI_ThroughputDisplay",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        }
+      ]
     }
   ],
   "cameraLightingChecks": [

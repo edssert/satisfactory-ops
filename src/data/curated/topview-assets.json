@@ -290,32 +290,6 @@
       }
     },
     {
-      "assetId": "Build_StorageContainerMk1_C",
-      "buildingClass": "Build_StorageContainerMk1_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/storage/Build_StorageContainerMk1_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "9b0ca277eb34b9267b9ddae6efb95c7cf9972bc33bdaceb173e0dcbe2468b852",
-      "hardFootprintM": {
-        "width": 5,
-        "length": 11
-      },
-      "occupancyFrame": {
-        "x": 0.293388436266,
-        "y": 0.045454559785,
-        "width": 0.413223127468,
-        "height": 0.909090880431
-      },
-      "approvedCandidateSha256": "28f61b7cd2a2b208891b053f3b2f1a26f1583995f433ef4c0ab850d4810c267f"
-    },
-    {
       "assetId": "Reference_Build_ConveyorAttachmentSplitter_C_anders_2023",
       "buildingClass": "Build_ConveyorAttachmentSplitter_C",
       "role": "building",
@@ -594,10 +568,10 @@
       "note": "Mk별 완성 자산이 아닌 방향 참고 부품"
     },
     {
-      "assetId": "Build_WorkBench_C",
-      "buildingClass": "Build_WorkBench_C",
+      "assetId": "Build_StorageContainerMk1_C",
+      "buildingClass": "Build_StorageContainerMk1_C",
       "role": "building",
-      "path": "assets/planner/top-view/buildings/production/Build_WorkBench_C.webp",
+      "path": "assets/planner/top-view/buildings/storage/Build_StorageContainerMk1_C.webp",
       "sourceId": "game-install-cl-502094",
       "derivation": "game-mesh-render",
       "visualProfile": "anders-reconstructed-blender-2026",
@@ -606,513 +580,7 @@
         "width": 1024,
         "height": 1024
       },
-      "sha256": "0a75db34f0d9129f05327ce0a5ce02f5be834ff0bce77f40fe4684c30bc72c67",
-      "hardFootprintM": {
-        "width": 4,
-        "length": 6
-      },
-      "occupancyFrame": {
-        "x": 0.201620812866,
-        "y": 0.052396716815,
-        "width": 0.596758374269,
-        "height": 0.895137561403
-      },
-      "approvedCandidateSha256": "78c20069cc210b4bfcf9c8351919d16d1fecd7dfcbae8014f0666d888e948b3b"
-    },
-    {
-      "assetId": "Build_Workshop_C",
-      "buildingClass": "Build_Workshop_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/production/Build_Workshop_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "d89e6b50d781d5819ef53c4786e78ec91bbe073478b3d6e5b44981e05e8e05f1",
-      "hardFootprintM": {
-        "width": 6,
-        "length": 10
-      },
-      "occupancyFrame": {
-        "x": 0.227272727273,
-        "y": 0.045454545455,
-        "width": 0.545454545455,
-        "height": 0.909090909091
-      },
-      "approvedCandidateSha256": "7a05b0c4673f63cb154f7925b5f9218e419e0094fd16cb11a94d2497bc2163d0"
-    },
-    {
-      "assetId": "Build_Mam_C",
-      "buildingClass": "Build_Mam_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/production/Build_Mam_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "d13dd49280d8dda33d700581ce831828bfe252e8f1ab59bdf1737a7164a1c1eb",
-      "hardFootprintM": {
-        "width": 6,
-        "length": 9
-      },
-      "occupancyFrame": {
-        "x": 0.196969685293,
-        "y": 0.04545452794,
-        "width": 0.606060629414,
-        "height": 0.90909094412
-      },
-      "approvedCandidateSha256": "75af71da98592085cd4576df937e5631188b2ae2fd2da9a77952607a34e16ad0"
-    },
-    {
-      "assetId": "Build_ConveyorMonitor_C",
-      "buildingClass": "Build_ConveyorMonitor_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/logistics/Build_ConveyorMonitor_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "b6d13b395fde05578897d6e5eccbe60c55122acf0f0f946257ef267e485b97e6",
-      "hardFootprintM": {
-        "width": 2,
-        "length": 2.2
-      },
-      "occupancyFrame": {
-        "x": 0.102000783225,
-        "y": 0.062200899504,
-        "width": 0.795998433549,
-        "height": 0.875598295882
-      },
-      "approvedCandidateSha256": "f10482c4ac2964c34c448ad8fbf02b31470df90e7f3a49880aeeb62c421ac4b5"
-    },
-    {
-      "assetId": "Build_ConveyorWallHole_C",
-      "buildingClass": "Build_ConveyorWallHole_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/logistics/Build_ConveyorWallHole_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "0e1c60a139e1a3ae20179edf6ecbcabdd61941059a3018b8b18fb1e32d2d9aaf",
-      "hardFootprintM": {
-        "width": 0.5,
-        "length": 2
-      },
-      "occupancyFrame": {
-        "x": 0.40562544405,
-        "y": 0.122501888704,
-        "width": 0.188749066898,
-        "height": 0.754996245093
-      },
-      "approvedCandidateSha256": "65dec7e4cf9773a60d82e490f03ae59a041a1bcc148a158cc967a886e88b4e5d"
-    },
-    {
-      "assetId": "Build_AssemblerMk1_C",
-      "buildingClass": "Build_AssemblerMk1_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/production/Build_AssemblerMk1_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "6244f83573758d34e0aa46ede7595ea7b591ca89858005eb9b36960b82efaab1",
-      "hardFootprintM": {
-        "width": 9,
-        "length": 16
-      },
-      "occupancyFrame": {
-        "x": 0.23028416568,
-        "y": 0.045454555307,
-        "width": 0.51136362528,
-        "height": 0.909090889387
-      },
-      "statusImages": {
-        "active": {
-          "path": "assets/planner/top-view/buildings/production/Build_AssemblerMk1_C.webp",
-          "sha256": "6244f83573758d34e0aa46ede7595ea7b591ca89858005eb9b36960b82efaab1"
-        },
-        "activeWithCrystal": {
-          "path": "assets/planner/top-view/buildings/production/Build_AssemblerMk1_C.crystal.webp",
-          "sha256": "55a016a5246e1279720a3a893fff6d1517bc5d9cd21e764c63edd2454a07329f"
-        },
-        "standby": {
-          "path": "assets/planner/top-view/buildings/production/Build_AssemblerMk1_C.standby.webp",
-          "sha256": "4d5e835cb74087db7b092f0cd5f5c7ac1fc6e4f972d86534e3daef4ec5ab1a3c"
-        },
-        "error": {
-          "path": "assets/planner/top-view/buildings/production/Build_AssemblerMk1_C.error.webp",
-          "sha256": "f987e1f120e4e0877ae15cfd055fcb41e46797dff972e08c297da8ffe39b45d1"
-        }
-      },
-      "approvedCandidateSha256": "de6c2d2219ebd10207ef8f35b803bb12da1a2f6b876f90f3afe1337d3ac79e45"
-    },
-    {
-      "assetId": "Build_ResourceSinkShop_C",
-      "buildingClass": "Build_ResourceSinkShop_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/production/Build_ResourceSinkShop_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "6f3beb47aec72d104cda340e5b4b4574a2bbaf343abdc8df50b4ab2ac61d360c",
-      "hardFootprintM": {
-        "width": 4,
-        "length": 6
-      },
-      "occupancyFrame": {
-        "x": 0.196969692591,
-        "y": 0.045454538887,
-        "width": 0.606060614818,
-        "height": 0.909090922227
-      },
-      "approvedCandidateSha256": "469b0f37e1c84e24e7f0b36b9ee4dfcb60ac63d53ad4260b79b880d75115589c"
-    },
-    {
-      "assetId": "Build_WaterPump_C",
-      "buildingClass": "Build_WaterPump_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/extraction/Build_WaterPump_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "195d32fd78f42717b9b5765276bbce6fcd02de7f76516cfd09e1f8a7968f3a06",
-      "hardFootprintM": {
-        "width": 20,
-        "length": 18
-      },
-      "occupancyFrame": {
-        "x": 0.0912481282,
-        "y": 0.045454552542,
-        "width": 0.8175037436,
-        "height": 0.73575338873
-      },
-      "statusImages": {
-        "active": {
-          "path": "assets/planner/top-view/buildings/extraction/Build_WaterPump_C.webp",
-          "sha256": "195d32fd78f42717b9b5765276bbce6fcd02de7f76516cfd09e1f8a7968f3a06"
-        },
-        "activeWithCrystal": {
-          "path": "assets/planner/top-view/buildings/extraction/Build_WaterPump_C.crystal.webp",
-          "sha256": "71c34bc643f93483c455bdd3d7dbbc5c7f3483242e958f2e4b0d9832992d6ea5"
-        },
-        "standby": {
-          "path": "assets/planner/top-view/buildings/extraction/Build_WaterPump_C.standby.webp",
-          "sha256": "9eedf8de292a1a74b2c23350e3d4c69885ef35a67b15e6b29ba9a78dcda7cbe1"
-        },
-        "error": {
-          "path": "assets/planner/top-view/buildings/extraction/Build_WaterPump_C.error.webp",
-          "sha256": "8fef01ea75f15392d67eb67f0cb6786ffa827fdf0933871ac72c7c43061d8fb5"
-        }
-      },
-      "approvedCandidateSha256": "4327e0808f2914689aa7dd4dfc7766ae18cc58f249598adde93a3a9d691e84c8"
-    },
-    {
-      "assetId": "Build_GeneratorCoal_C",
-      "buildingClass": "Build_GeneratorCoal_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/power/Build_GeneratorCoal_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "37591f64e4296d159433297ca2a9fb823c0ebfd9c4f53856889c18d623436d30",
-      "hardFootprintM": {
-        "width": 10,
-        "length": 26
-      },
-      "occupancyFrame": {
-        "x": 0.327484610801,
-        "y": 0.057465424729,
-        "width": 0.345030778398,
-        "height": 0.897080023834
-      },
-      "statusImages": {
-        "active": {
-          "path": "assets/planner/top-view/buildings/power/Build_GeneratorCoal_C.webp",
-          "sha256": "37591f64e4296d159433297ca2a9fb823c0ebfd9c4f53856889c18d623436d30"
-        },
-        "activeWithCrystal": {
-          "path": "assets/planner/top-view/buildings/power/Build_GeneratorCoal_C.crystal.webp",
-          "sha256": "bbd2de1a6e0191a1e33de4bb9703f14dbfee8bbf072b3332d512b4d2ed729fcf"
-        },
-        "standby": {
-          "path": "assets/planner/top-view/buildings/power/Build_GeneratorCoal_C.standby.webp",
-          "sha256": "3189a662a24c84fbdb2e7988cb12e7f32003cb05b00a52dc5c1932ceeb782b7f"
-        },
-        "error": {
-          "path": "assets/planner/top-view/buildings/power/Build_GeneratorCoal_C.error.webp",
-          "sha256": "455a991d3676deddffaaa1241899da69c79ebcb1bf1abe0c44138e1fc94d696a"
-        }
-      },
-      "approvedCandidateSha256": "5149cc1a063c912fce41f26410fa02d9021afc9eff40ec2332759e8270f9acfb"
-    },
-    {
-      "assetId": "Build_FoundryMk1_C",
-      "buildingClass": "Build_FoundryMk1_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/production/Build_FoundryMk1_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "fe2b2534011ba4efc24abd9fe84596bfd4b5e642f600ac30fd1a8b946ff9bec6",
-      "hardFootprintM": {
-        "width": 10,
-        "length": 10
-      },
-      "occupancyFrame": {
-        "x": 0.07648676299,
-        "y": 0.107518965838,
-        "width": 0.84702647402,
-        "height": 0.84702647402
-      },
-      "statusImages": {
-        "active": {
-          "path": "assets/planner/top-view/buildings/production/Build_FoundryMk1_C.webp",
-          "sha256": "fe2b2534011ba4efc24abd9fe84596bfd4b5e642f600ac30fd1a8b946ff9bec6"
-        },
-        "activeWithCrystal": {
-          "path": "assets/planner/top-view/buildings/production/Build_FoundryMk1_C.crystal.webp",
-          "sha256": "633e63d17188dc4a7f7d3375fc1322ecc2a5a873ac378f49a2d765eb72b0f907"
-        },
-        "standby": {
-          "path": "assets/planner/top-view/buildings/production/Build_FoundryMk1_C.standby.webp",
-          "sha256": "e73bea288a12dbd3744fc31548fabe932b1788648d3c89bc44bca54d155a8f1d"
-        },
-        "error": {
-          "path": "assets/planner/top-view/buildings/production/Build_FoundryMk1_C.error.webp",
-          "sha256": "c912fba0496b35c9db3eb6bc71b654cf5e317623ca760d14d7306abd26bf25b8"
-        }
-      },
-      "approvedCandidateSha256": "d6836b10e71fe41a0dd96f14d5fad8160078f075eea2f8dc5589bc064625f53d"
-    },
-    {
-      "assetId": "Build_PipelineJunction_Cross_C",
-      "buildingClass": "Build_PipelineJunction_Cross_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/logistics/Build_PipelineJunction_Cross_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "6ba75720b058bc8bfa0b72ca6cdc3001db9c7c66fe2eb35e3f8bb4beeca413a7",
-      "hardFootprintM": {
-        "width": 2.4,
-        "length": 2.4
-      },
-      "occupancyFrame": {
-        "x": 0.116286411571,
-        "y": 0.116286411571,
-        "width": 0.767427176857,
-        "height": 0.767427176857
-      },
-      "approvedCandidateSha256": "e9d845f0904480bf36bc3513f178f3d3df2645554db2fa9debe08c4894f21a4d"
-    },
-    {
-      "assetId": "Build_PipelineJunction_T_C",
-      "buildingClass": "Build_PipelineJunction_T_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/logistics/Build_PipelineJunction_T_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "f45630dee2b290016c659b62a8af02eebd4fc4236e25c964c5ae0e3ae72a678e",
-      "hardFootprintM": {
-        "width": 2.4,
-        "length": 2.4
-      },
-      "occupancyFrame": {
-        "x": 0.116286470078,
-        "y": 0.151702456647,
-        "width": 0.767427059844,
-        "height": 0.767427059844
-      },
-      "approvedCandidateSha256": "cfebea80958c93004821090ca994e097a8152abc836ff98337c5574010aa671c"
-    },
-    {
-      "assetId": "Build_PipelinePump_C",
-      "buildingClass": "Build_PipelinePump_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/logistics/Build_PipelinePump_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "ef300b59f1d61a866f0afdf3b10b8de75bd8fef7507b012406f77899a105f1ba",
-      "hardFootprintM": {
-        "width": 3.8,
-        "length": 1.2
-      },
-      "occupancyFrame": {
-        "x": 0.067351505737,
-        "y": 0.575666441608,
-        "width": 0.839145127175,
-        "height": 0.264993198748
-      },
-      "statusImages": {
-        "active": {
-          "path": "assets/planner/top-view/buildings/logistics/Build_PipelinePump_C.webp",
-          "sha256": "ef300b59f1d61a866f0afdf3b10b8de75bd8fef7507b012406f77899a105f1ba"
-        },
-        "activeWithCrystal": {
-          "path": "assets/planner/top-view/buildings/logistics/Build_PipelinePump_C.crystal.webp",
-          "sha256": "a8f66067d1a4f02a33b0c389ee04f17b78d5be80f52f50979e9b4943f8912221"
-        },
-        "standby": {
-          "path": "assets/planner/top-view/buildings/logistics/Build_PipelinePump_C.standby.webp",
-          "sha256": "b57d2ebdea09bd02ade8b117536710cdfdf16dea389f173156f8cf9ca63e51dd"
-        },
-        "error": {
-          "path": "assets/planner/top-view/buildings/logistics/Build_PipelinePump_C.error.webp",
-          "sha256": "78377ac48fa4db82154ecc0bf0403b20663b1e0f0d115ae0b204bc3e9b41c080"
-        }
-      },
-      "approvedCandidateSha256": "665df823347b26b542bf07e6765e89da2b77874ae0ee018b41465e4291f3d5c9"
-    },
-    {
-      "assetId": "Build_PipeStorageTank_C",
-      "buildingClass": "Build_PipeStorageTank_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/storage/Build_PipeStorageTank_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "afcb25b4f479b24fac076b31ba291c78e0335d8cfacd81f743870625488858fc",
-      "hardFootprintM": {
-        "width": 6,
-        "length": 6
-      },
-      "occupancyFrame": {
-        "x": 0.075119401636,
-        "y": 0.075119401636,
-        "width": 0.849761196727,
-        "height": 0.849761196727
-      },
-      "approvedCandidateSha256": "8f25467cf0e35bfea605b6ca0b0c77a1ce40ad3735925465c39d5ede14e8c1ae"
-    },
-    {
-      "assetId": "Build_HyperTubeJunction_C",
-      "buildingClass": "Build_HyperTubeJunction_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/logistics/Build_HyperTubeJunction_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "878ba3c124acd35ad78e57abfee73b36a6235fede1e55f38cc2ce3119924cbbf",
-      "hardFootprintM": {
-        "width": 2,
-        "length": 3.5
-      },
-      "occupancyFrame": {
-        "x": 0.330940444724,
-        "y": 0.160599370631,
-        "width": 0.338119110552,
-        "height": 0.591708423312
-      },
-      "approvedCandidateSha256": "cce2964c0410e7ddd407c254b2a1f0078420b3181e1bc5fa76e075cfd1fd6cf4"
-    },
-    {
-      "assetId": "Build_HypertubeTJunction_C",
-      "buildingClass": "Build_HypertubeTJunction_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/logistics/Build_HypertubeTJunction_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "6ec2a4ebf7b8a84454fc932aa284022acc9ba57b7268fb48b09fcf20e37607be",
-      "hardFootprintM": {
-        "width": 5,
-        "length": 2
-      },
-      "occupancyFrame": {
-        "x": 0.063544737189,
-        "y": 0.182556357754,
-        "width": 0.872910525622,
-        "height": 0.349164199843
-      },
-      "approvedCandidateSha256": "875ec04ff2679cab93cb959e2dc633be873473ac14d5f50fbed725f22897bbe5"
-    },
-    {
-      "assetId": "Build_StorageContainerMk2_C",
-      "buildingClass": "Build_StorageContainerMk2_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/storage/Build_StorageContainerMk2_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "4bc4591fac151aa2acd69c8b8bc7388c87c6a3f570cc9df0840566bd2ea41a23",
+      "sha256": "b5da038c30f7b7315904886ce49f414d7cae879e5266dc0ac37eba52128f1ac0",
       "hardFootprintM": {
         "width": 5,
         "length": 11
@@ -1123,577 +591,7 @@
         "width": 0.413223127468,
         "height": 0.909090880431
       },
-      "approvedCandidateSha256": "ce0b67b49e453473b9ca6bf887bb444feb57bf1284079c1312a2ee75d320a5d9"
-    },
-    {
-      "assetId": "Build_OilPump_C",
-      "buildingClass": "Build_OilPump_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/extraction/Build_OilPump_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "9bb9140b7e9033268ca3fe2a19f6879ff73572c829a96e0f3a9eef44f9f1e450",
-      "hardFootprintM": {
-        "width": 8,
-        "length": 13
-      },
-      "occupancyFrame": {
-        "x": 0.252424195883,
-        "y": 0.045454521307,
-        "width": 0.495151608235,
-        "height": 0.804621363382
-      },
-      "statusImages": {
-        "active": {
-          "path": "assets/planner/top-view/buildings/extraction/Build_OilPump_C.webp",
-          "sha256": "9bb9140b7e9033268ca3fe2a19f6879ff73572c829a96e0f3a9eef44f9f1e450"
-        },
-        "activeWithCrystal": {
-          "path": "assets/planner/top-view/buildings/extraction/Build_OilPump_C.crystal.webp",
-          "sha256": "aaf7bde6741484fa98f1160f9d77c601574ac15a436ee3a96b9cee312907769e"
-        },
-        "standby": {
-          "path": "assets/planner/top-view/buildings/extraction/Build_OilPump_C.standby.webp",
-          "sha256": "b27ddf0e51e7f2f70f05d7450abd1f3fc608eea653e3a2fe49c60b872ef5ca17"
-        },
-        "error": {
-          "path": "assets/planner/top-view/buildings/extraction/Build_OilPump_C.error.webp",
-          "sha256": "325bcee2cc4d4f7249a562499587d2ba4458f71b8a8797a5b30ee0a29828f09a"
-        }
-      },
-      "approvedCandidateSha256": "80b73135a8dd3cdd0aaa61980f130cca3d6d658315cca2e7b6b8557e209be1fc"
-    },
-    {
-      "assetId": "Build_GeneratorFuel_C",
-      "buildingClass": "Build_GeneratorFuel_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/power/Build_GeneratorFuel_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "d7fab2405f65933db89b4c2b9d299be1e78a615e712a4e2f51508eb14393bb8a",
-      "hardFootprintM": {
-        "width": 22,
-        "length": 20
-      },
-      "occupancyFrame": {
-        "x": 0.316756066899,
-        "y": 0.287139393174,
-        "width": 0.423247631915,
-        "height": 0.384770574468
-      },
-      "statusImages": {
-        "active": {
-          "path": "assets/planner/top-view/buildings/power/Build_GeneratorFuel_C.webp",
-          "sha256": "d7fab2405f65933db89b4c2b9d299be1e78a615e712a4e2f51508eb14393bb8a"
-        },
-        "activeWithCrystal": {
-          "path": "assets/planner/top-view/buildings/power/Build_GeneratorFuel_C.crystal.webp",
-          "sha256": "354edfcd8412d95f802ee43711a2f86111abb95d6043661c8fa636b3d7cadb9d"
-        },
-        "standby": {
-          "path": "assets/planner/top-view/buildings/power/Build_GeneratorFuel_C.standby.webp",
-          "sha256": "b0ca053f47443aa9d39bed4f1bbf322d67a41919dd6d94c376edd0cfe507fca8"
-        },
-        "error": {
-          "path": "assets/planner/top-view/buildings/power/Build_GeneratorFuel_C.error.webp",
-          "sha256": "04267a9487cb22ea751e03fb1d81a21c78e2fe3ce3c34944b68d79426eff7ece"
-        }
-      },
-      "approvedCandidateSha256": "5d1406de7698b135a1c276d3622e388e368a6eae260e11b2c71c323a73613814"
-    },
-    {
-      "assetId": "Build_OilRefinery_C",
-      "buildingClass": "Build_OilRefinery_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/production/Build_OilRefinery_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "d4ef4285586bf4d9e3ead09459213ea3a900a27f4458213a443123c5c59e3fd4",
-      "hardFootprintM": {
-        "width": 10,
-        "length": 22
-      },
-      "occupancyFrame": {
-        "x": 0.293388436266,
-        "y": 0.045454559785,
-        "width": 0.413223127468,
-        "height": 0.909090880431
-      },
-      "statusImages": {
-        "active": {
-          "path": "assets/planner/top-view/buildings/production/Build_OilRefinery_C.webp",
-          "sha256": "d4ef4285586bf4d9e3ead09459213ea3a900a27f4458213a443123c5c59e3fd4"
-        },
-        "activeWithCrystal": {
-          "path": "assets/planner/top-view/buildings/production/Build_OilRefinery_C.crystal.webp",
-          "sha256": "36f2e20058c39abb5c546a4e1dbc93f805d0147cfd60de5d8dafe9eb851cb430"
-        },
-        "standby": {
-          "path": "assets/planner/top-view/buildings/production/Build_OilRefinery_C.standby.webp",
-          "sha256": "c9659c92e026456d9fd2aa79474e296f6156a681121bcf5cded8206d67eed36e"
-        },
-        "error": {
-          "path": "assets/planner/top-view/buildings/production/Build_OilRefinery_C.error.webp",
-          "sha256": "28bc1c4ea8d99a1bfe6210158d80c15fe432d71018e486e2a928aeb0fd5d2076"
-        }
-      },
-      "approvedCandidateSha256": "4ef74d4beada4cb1afbaad9c5153ec4f6cf6c6d8cb072d225b1c1a9f050f92a4"
-    },
-    {
-      "assetId": "Build_Valve_C",
-      "buildingClass": "Build_Valve_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/logistics/Build_Valve_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "6a7e2302bc218ba71004b11e9717fe0aca89b32ce837e1fcc887b472fca080b6",
-      "hardFootprintM": {
-        "width": 2,
-        "length": 1.2
-      },
-      "occupancyFrame": {
-        "x": 0.045454533357,
-        "y": 0.276747048704,
-        "width": 0.744182019335,
-        "height": 0.446509229344
-      },
-      "approvedCandidateSha256": "f9ca5d626972c3707c42032cfce73333fcc2e1d4ef7c1d718196889f5b4b67ae"
-    },
-    {
-      "assetId": "Build_IndustrialTank_C",
-      "buildingClass": "Build_IndustrialTank_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/storage/Build_IndustrialTank_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "5a1a34ed631bd35852a41037f4e8d326acee340d2eb2191279cdd8e3c4ec3291",
-      "hardFootprintM": {
-        "width": 14,
-        "length": 14
-      },
-      "occupancyFrame": {
-        "x": 0.045454534195,
-        "y": 0.045454534195,
-        "width": 0.90909093161,
-        "height": 0.90909093161
-      },
-      "approvedCandidateSha256": "358f9ca0b0915cbb1a1a416b10f37682794241e7edf7cdb6b486744e255bd379"
-    },
-    {
-      "assetId": "Build_FluidTruckStation_C",
-      "buildingClass": "Build_FluidTruckStation_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/transport/Build_FluidTruckStation_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "0aea9cd6bb8f78d208e10725baa74c098520ea8b8727bc0bb42dc05688f53ced",
-      "hardFootprintM": {
-        "width": 17,
-        "length": 15
-      },
-      "occupancyFrame": {
-        "x": 0.056351087817,
-        "y": 0.253923510237,
-        "width": 0.79403816292,
-        "height": 0.700621928111
-      },
-      "statusImages": {
-        "active": {
-          "path": "assets/planner/top-view/buildings/transport/Build_FluidTruckStation_C.webp",
-          "sha256": "0aea9cd6bb8f78d208e10725baa74c098520ea8b8727bc0bb42dc05688f53ced"
-        },
-        "activeWithCrystal": {
-          "path": "assets/planner/top-view/buildings/transport/Build_FluidTruckStation_C.crystal.webp",
-          "sha256": "a017f222859dae22287bd07e5c6c162bd818d21b602250027d0fd86e29b1e7db"
-        },
-        "standby": {
-          "path": "assets/planner/top-view/buildings/transport/Build_FluidTruckStation_C.standby.webp",
-          "sha256": "98a5d33f2dfe56edf8bca912300b789025100e85e6f3554ad747b26b9dcaa875"
-        },
-        "error": {
-          "path": "assets/planner/top-view/buildings/transport/Build_FluidTruckStation_C.error.webp",
-          "sha256": "fd05f05c54c3f49f42f5c82203a2c076cb564e7371961ff697758a60914254fe"
-        }
-      },
-      "approvedCandidateSha256": "f93d9ff6673610553fb57cbd98067b8eea788ce11dc36fa7a8301bd12c05edd2"
-    },
-    {
-      "assetId": "Build_ManufacturerMk1_C",
-      "buildingClass": "Build_ManufacturerMk1_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/production/Build_ManufacturerMk1_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "47fe0bb25f39eabcbdea532237c1abb0dbc312be6d6732c12d45747957bc26be",
-      "hardFootprintM": {
-        "width": 18,
-        "length": 20
-      },
-      "occupancyFrame": {
-        "x": 0.090909090909,
-        "y": 0.045454545455,
-        "width": 0.818181818182,
-        "height": 0.909090909091
-      },
-      "statusImages": {
-        "active": {
-          "path": "assets/planner/top-view/buildings/production/Build_ManufacturerMk1_C.webp",
-          "sha256": "47fe0bb25f39eabcbdea532237c1abb0dbc312be6d6732c12d45747957bc26be"
-        },
-        "activeWithCrystal": {
-          "path": "assets/planner/top-view/buildings/production/Build_ManufacturerMk1_C.crystal.webp",
-          "sha256": "f5ad8d2e389ece31f131a872ef59cdc03b394ec8063ca3159e4d7a40a1c1c886"
-        },
-        "standby": {
-          "path": "assets/planner/top-view/buildings/production/Build_ManufacturerMk1_C.standby.webp",
-          "sha256": "7eca41d2e97753f1dc4a3697a19b6180075ad22d27927ebb21e9a391a44e6c6e"
-        },
-        "error": {
-          "path": "assets/planner/top-view/buildings/production/Build_ManufacturerMk1_C.error.webp",
-          "sha256": "9f067181b616b6c725db365fa9e750ea87b81dfaa6ee2392f2b1b4ba8baf3845"
-        }
-      },
-      "approvedCandidateSha256": "50e2e1495f79a450d60859cd5d491a368e6e1b475a30ae64cec8fdd51aa35d62"
-    },
-    {
-      "assetId": "Build_PipelinePumpMk2_C",
-      "buildingClass": "Build_PipelinePumpMk2_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/logistics/Build_PipelinePumpMk2_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "0bf10287536e4797d091c25f0aa797e573ae750003d612c61a8908031542e886",
-      "hardFootprintM": {
-        "width": 5,
-        "length": 1.2
-      },
-      "occupancyFrame": {
-        "x": 0.045454545455,
-        "y": 0.390909173272,
-        "width": 0.909090909091,
-        "height": 0.218181826852
-      },
-      "statusImages": {
-        "active": {
-          "path": "assets/planner/top-view/buildings/logistics/Build_PipelinePumpMk2_C.webp",
-          "sha256": "0bf10287536e4797d091c25f0aa797e573ae750003d612c61a8908031542e886"
-        },
-        "activeWithCrystal": {
-          "path": "assets/planner/top-view/buildings/logistics/Build_PipelinePumpMk2_C.crystal.webp",
-          "sha256": "2d8fae719e5b41021d22b1ddc8fbf204e796585682896305f8de0299886b3908"
-        },
-        "standby": {
-          "path": "assets/planner/top-view/buildings/logistics/Build_PipelinePumpMk2_C.standby.webp",
-          "sha256": "662ca9ba2dd170bd5c2691e49da67a9caba8b87375915353ed86f7458e92f81d"
-        },
-        "error": {
-          "path": "assets/planner/top-view/buildings/logistics/Build_PipelinePumpMk2_C.error.webp",
-          "sha256": "fd664bb50ab807e46a72d9b07d85c5d7181ce2dbf5bdf141eade2f057ab81aa6"
-        }
-      },
-      "approvedCandidateSha256": "d6a57169537f0d0039fa093d3e696c46df3c1a0158afeb99e101f5518118fab4"
-    },
-    {
-      "assetId": "Build_TrainStation_C",
-      "buildingClass": "Build_TrainStation_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/transport/Build_TrainStation_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "e5cdaf03dc981ff03e5f62c622356668389dad7023b0642b35ad80997536b531",
-      "hardFootprintM": {
-        "width": 16,
-        "length": 34
-      },
-      "occupancyFrame": {
-        "x": 0.305099780849,
-        "y": 0.045454563999,
-        "width": 0.427807469177,
-        "height": 0.909090872001
-      },
-      "statusImages": {
-        "active": {
-          "path": "assets/planner/top-view/buildings/transport/Build_TrainStation_C.webp",
-          "sha256": "e5cdaf03dc981ff03e5f62c622356668389dad7023b0642b35ad80997536b531"
-        },
-        "activeWithCrystal": {
-          "path": "assets/planner/top-view/buildings/transport/Build_TrainStation_C.crystal.webp",
-          "sha256": "80aeaa816f772e5c7595265865ce8125de1cbc0ddc60fe458d408c55464637ef"
-        },
-        "standby": {
-          "path": "assets/planner/top-view/buildings/transport/Build_TrainStation_C.standby.webp",
-          "sha256": "8ef602ab9db8784dd8570f5f00ae64fed75cffce7254306d6508bcf802cb017f"
-        },
-        "error": {
-          "path": "assets/planner/top-view/buildings/transport/Build_TrainStation_C.error.webp",
-          "sha256": "46b27b3c0d672b09024d0f01e0c32f1cc1833c48e583a5f9da50c9527a5d7515"
-        }
-      },
-      "approvedCandidateSha256": "324258a1f15b2f1ae648588f11634e9842ddee82c0f037ff1e62f74fe67574a5"
-    },
-    {
-      "assetId": "Build_Blender_C",
-      "buildingClass": "Build_Blender_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/production/Build_Blender_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "f96eb9634ee378da4280d841d4ab125d1fdf2f67c4fe639135efa6c7d1431800",
-      "hardFootprintM": {
-        "width": 18,
-        "length": 16
-      },
-      "occupancyFrame": {
-        "x": 0.375736237938,
-        "y": 0.295370957174,
-        "width": 0.460415346359,
-        "height": 0.409258085652
-      },
-      "statusImages": {
-        "active": {
-          "path": "assets/planner/top-view/buildings/production/Build_Blender_C.webp",
-          "sha256": "f96eb9634ee378da4280d841d4ab125d1fdf2f67c4fe639135efa6c7d1431800"
-        },
-        "activeWithCrystal": {
-          "path": "assets/planner/top-view/buildings/production/Build_Blender_C.crystal.webp",
-          "sha256": "a7087cc96ea95ea5670306a00054c16f15200e30be024d284cdf87d7aac1105e"
-        },
-        "standby": {
-          "path": "assets/planner/top-view/buildings/production/Build_Blender_C.standby.webp",
-          "sha256": "fbad858f10d31e7839310f0a661f143eec6a4449a5dbac61a7df09c0000dcc69"
-        },
-        "error": {
-          "path": "assets/planner/top-view/buildings/production/Build_Blender_C.error.webp",
-          "sha256": "6397f4a8bb7763eaeb6a8284f2b3944919e88f7c4c3a0f5bdbf4c1bff78232f3"
-        }
-      },
-      "approvedCandidateSha256": "d2ff3dcd1b70badb10185ed686d3673bd0a00fb63a95cdd21496f5e4a9ccfa2e"
-    },
-    {
-      "assetId": "Build_FrackingExtractor_C",
-      "buildingClass": "Build_FrackingExtractor_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/extraction/Build_FrackingExtractor_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "bc59739632ce0ed41748ca4621d56060bb0f7c4387867d87ee9a27fa747abd8a",
-      "hardFootprintM": {
-        "width": 5,
-        "length": 5
-      },
-      "occupancyFrame": {
-        "x": 0.045454545455,
-        "y": 0.045454545455,
-        "width": 0.909090909091,
-        "height": 0.909090909091
-      },
-      "approvedCandidateSha256": "ff8863f20ec38ae7233611005b55a32e104974ac5acfbe9b0ec7757869cc1927"
-    },
-    {
-      "assetId": "Build_MinerMk3_C",
-      "buildingClass": "Build_MinerMk3_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/extraction/Build_MinerMk3_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "60d87e6ff633cdf812c0ccdc636f63f563626b8f23f741da890c950c596c13a2",
-      "hardFootprintM": {
-        "width": 6,
-        "length": 14
-      },
-      "occupancyFrame": {
-        "x": 0.334392345296,
-        "y": 0.045454545455,
-        "width": 0.331215309409,
-        "height": 0.772835721954
-      },
-      "statusImages": {
-        "active": {
-          "path": "assets/planner/top-view/buildings/extraction/Build_MinerMk3_C.webp",
-          "sha256": "60d87e6ff633cdf812c0ccdc636f63f563626b8f23f741da890c950c596c13a2"
-        },
-        "activeWithCrystal": {
-          "path": "assets/planner/top-view/buildings/extraction/Build_MinerMk3_C.crystal.webp",
-          "sha256": "f7aec756323bd8b800890948093a860b2794c9816a9256715bcad356dd750dbb"
-        },
-        "standby": {
-          "path": "assets/planner/top-view/buildings/extraction/Build_MinerMk3_C.standby.webp",
-          "sha256": "f06442bf27e195e0c2401ef939cea058d08b665639c8481274ed1b9daf373215"
-        },
-        "error": {
-          "path": "assets/planner/top-view/buildings/extraction/Build_MinerMk3_C.error.webp",
-          "sha256": "5f24f9702bee6e1d143cdd56c887ac51a4361171d5fcb8619a1fd1025d5f1152"
-        }
-      },
-      "approvedCandidateSha256": "a5ba9d46f7de994f2cf8dd16e1dd34ade4668804d699889f00a30195775f827c"
-    },
-    {
-      "assetId": "Build_Converter_C",
-      "buildingClass": "Build_Converter_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/production/Build_Converter_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "68d836101b27ffe1bdebfa87eb6bc1cf1e6a9c82d7eaa35298f51b303d577639",
-      "hardFootprintM": {
-        "width": 16,
-        "length": 16
-      },
-      "occupancyFrame": {
-        "x": 0.045454555307,
-        "y": 0.045454555307,
-        "width": 0.909090889387,
-        "height": 0.909090889387
-      },
-      "statusImages": {
-        "active": {
-          "path": "assets/planner/top-view/buildings/production/Build_Converter_C.webp",
-          "sha256": "68d836101b27ffe1bdebfa87eb6bc1cf1e6a9c82d7eaa35298f51b303d577639"
-        },
-        "activeWithCrystal": {
-          "path": "assets/planner/top-view/buildings/production/Build_Converter_C.crystal.webp",
-          "sha256": "6433de999868e52158bf658772a98f0fdfaba825a5de8421607ab3b475346eef"
-        },
-        "standby": {
-          "path": "assets/planner/top-view/buildings/production/Build_Converter_C.standby.webp",
-          "sha256": "4a1ef88ba91848b0746f37fc9351bd8e830c4bbd3ccf3937632189f5b9a96ac5"
-        },
-        "error": {
-          "path": "assets/planner/top-view/buildings/production/Build_Converter_C.error.webp",
-          "sha256": "0bb57df45a63e607c9622ed5379cf3f399bb0491e69bd14b2f62cdd9f448f4ac"
-        }
-      },
-      "approvedCandidateSha256": "f27dbc2b3f44b9f9f6c9e7e8523432fb24669b35874d9a775debe18e1212a92c"
-    },
-    {
-      "assetId": "Build_Portal_C",
-      "buildingClass": "Build_Portal_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/transport/Build_Portal_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "e2b0d04c4b2fcefec009530e0a14d288931db084359d828d2b3aaf288d5b2709",
-      "hardFootprintM": {
-        "width": 8,
-        "length": 8
-      },
-      "occupancyFrame": {
-        "x": 0.084238775305,
-        "y": 0.068050627306,
-        "width": 0.863898771134,
-        "height": 0.863898719642
-      },
-      "approvedCandidateSha256": "da7e67b48a4a61c1f268b9ef402b0bd76999036001ec15f93bc16168b9359efc"
-    },
-    {
-      "assetId": "Build_PortalSatellite_C",
-      "buildingClass": "Build_PortalSatellite_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/transport/Build_PortalSatellite_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "04f60ac1e108c0dedea7f02aa390a814c876b83949ecacf0412a28c2bf33b5a1",
-      "hardFootprintM": {
-        "width": 8,
-        "length": 8
-      },
-      "occupancyFrame": {
-        "x": 0.047732252536,
-        "y": 0.051062275273,
-        "width": 0.897875556489,
-        "height": 0.897875556489
-      },
-      "approvedCandidateSha256": "38f4889aba73fb422522e60fb3d0a10732f67cedf5c423fca013e1495616aeb5"
+      "approvedCandidateSha256": "6705fdbc1a48205aa81fa66eba479a5b4728b5dcae673d9efa68083884f81091"
     },
     {
       "assetId": "Build_AlienPowerBuilding_C",
@@ -1708,7 +606,7 @@
         "width": 1024,
         "height": 1024
       },
-      "sha256": "9b4800b172a18df45be6b66a02926024fbb8c2f84d4bb143286fcb038ad67edc",
+      "sha256": "03a63888faf83f1c380d43d67ba1f14f130b601f6c49e438245851168ca9f24d",
       "hardFootprintM": {
         "width": 30,
         "length": 30
@@ -1722,22 +620,22 @@
       "statusImages": {
         "active": {
           "path": "assets/planner/top-view/buildings/power/Build_AlienPowerBuilding_C.webp",
-          "sha256": "9b4800b172a18df45be6b66a02926024fbb8c2f84d4bb143286fcb038ad67edc"
+          "sha256": "03a63888faf83f1c380d43d67ba1f14f130b601f6c49e438245851168ca9f24d"
         },
         "activeWithCrystal": {
           "path": "assets/planner/top-view/buildings/power/Build_AlienPowerBuilding_C.crystal.webp",
-          "sha256": "31115a0832fb0db5eada51210ccd0d67c2b4562bc105c8f8e71dd83fa6296541"
+          "sha256": "446bc2c78a3fc51b38fb6d1c8db4fb24dcc00d0b7381acd950a62f4c9079ec5c"
         },
         "standby": {
           "path": "assets/planner/top-view/buildings/power/Build_AlienPowerBuilding_C.standby.webp",
-          "sha256": "eca8b1c2392e5a155349f171f13041d5666e2422f75cc76fbfe07f38a12424ce"
+          "sha256": "8a82cbf88deff8c6103cdf9084ab16ff76bb986f6f9a9804d1743eef77e79a8e"
         },
         "error": {
           "path": "assets/planner/top-view/buildings/power/Build_AlienPowerBuilding_C.error.webp",
-          "sha256": "3917d398e3b1b4a7b6bf566b6b4528bd45ae7c94a7d5081078ee7e9859f31ed3"
+          "sha256": "6858986a3bfcb46960a4995c43d3dd22d831ab6133a7349681109a077d8c8ce5"
         }
       },
-      "approvedCandidateSha256": "17b3d3fb065f0437c693d167f5ca52e4a523991d855bf7fa26480d9a5506cc75"
+      "approvedCandidateSha256": "bda2320d4a9977b13463de51347fe1c232f1926fbfa3f12a27ee42dc2ff5750a"
     },
     {
       "assetId": "Build_TradingPost_C",
@@ -1752,7 +650,7 @@
         "width": 1024,
         "height": 1024
       },
-      "sha256": "d45c5e635380f8a46826b3f097ad94cf441967b80bca0f953e1446fbee84724a",
+      "sha256": "ad3c8e7fad2c3ba1d71eeab6f63782a524596ea1056b8f91c2497ba35e6d0637",
       "hardFootprintM": {
         "width": 14,
         "length": 26
@@ -1763,7 +661,7 @@
         "width": 0.488895688698,
         "height": 0.907949136154
       },
-      "approvedCandidateSha256": "a4fe97f44bd28e9122da6b7c4160ac90ee8f13471aa3e9862f8f00145da1434e"
+      "approvedCandidateSha256": "157a878a6c0b716af6ec3908f35395ca9cb7efd94e2f7fdcddd8715ac481e2a9"
     },
     {
       "assetId": "Build_ConveyorAttachmentMerger_C",
@@ -1778,7 +676,7 @@
         "width": 1024,
         "height": 1024
       },
-      "sha256": "fe5829bb6ed7e5bb571f6d480910cbc0f540ce03e40c3bcd950933f40f47960e",
+      "sha256": "cd82ce0e8a7320e7b235dfdc21da718a02538090f4a2e3f72d6e31ca9e2467b7",
       "hardFootprintM": {
         "width": 4,
         "length": 4
@@ -1789,7 +687,7 @@
         "width": 0.880117541943,
         "height": 0.880117541943
       },
-      "approvedCandidateSha256": "fe5889d478abe7bd67091f557e9ea644adc61a82b2752f715898f156e8faf292"
+      "approvedCandidateSha256": "f7f4170355f47d6bab91a0c0551d1329fba4846bf9a9aee563c2d053b99a828a"
     },
     {
       "assetId": "Build_ConveyorAttachmentSplitter_C",
@@ -1804,7 +702,7 @@
         "width": 1024,
         "height": 1024
       },
-      "sha256": "2f92017c8071f726aae110400a1b274cb8759ec775bb86cd5e9c4280bfe4f681",
+      "sha256": "1990af2e21585f39682a204ad8d12124bf13c97230b6eca42ccb9f7f5e9a36ed",
       "hardFootprintM": {
         "width": 4,
         "length": 4
@@ -1815,7 +713,7 @@
         "width": 0.880117172582,
         "height": 0.880117172582
       },
-      "approvedCandidateSha256": "7a94ab0d86a558b8078150f7e9e44917afde1a5335f191fbe2923d35ac08d14a"
+      "approvedCandidateSha256": "22c77fe2cb60cf5d2f4c91c57aceb821ad4940e81921f3477caec17998e54438"
     },
     {
       "assetId": "Build_PipelineSupportWallHole_C",
@@ -1830,7 +728,7 @@
         "width": 1024,
         "height": 1024
       },
-      "sha256": "2a569fc8ba6b440e67d1645743bc1225178103c13ef1965499d4a34d80c9d298",
+      "sha256": "4e187140d07bc25fae4aa08db1ec1eafe1078707410355e989a9eef5b9e4b884",
       "hardFootprintM": {
         "width": 0.935162,
         "length": 1.999858
@@ -1841,7 +739,7 @@
         "width": 0.425103760073,
         "height": 0.909090785932
       },
-      "approvedCandidateSha256": "825b35922c68548bf2cf6bacd1cb55ac5aaf45c42b0b9d99453466d466287eb8"
+      "approvedCandidateSha256": "d0c2c339fc94d7dcf71d18d706e56e211a9a5090423c9e0e3fdf2c9d641b5a93"
     },
     {
       "assetId": "Build_StackableShelf_C",
@@ -1856,7 +754,7 @@
         "width": 1024,
         "height": 1024
       },
-      "sha256": "aebba3a8c6aceeb9326ca362ecf8630e89e2b5dcc71bb3ad232d3157fabb6352",
+      "sha256": "8d1552338ae8d9f2a91fc038a2a245e582ec4d17ade05ec02cebe6137ea5f14a",
       "hardFootprintM": {
         "width": 4,
         "length": 2
@@ -1867,7 +765,7 @@
         "width": 0.909090889387,
         "height": 0.454545444693
       },
-      "approvedCandidateSha256": "bfe10d36966b846fa0ba7949114909b9796ea16d8828a61948f5761aad8a44e4"
+      "approvedCandidateSha256": "9154129fe8403412ad83bdbcbdaa8fa08ab98939bd4b5e8d94b3705211d9b18b"
     },
     {
       "assetId": "Build_ResourceSink_C",
@@ -1882,7 +780,7 @@
         "width": 1024,
         "height": 1024
       },
-      "sha256": "edef04eaec45ff015e3a53e261f39ed57faa67408deb84a8ef8f25eedd655963",
+      "sha256": "6fd4a149ba00ca59f339de494fff68bd51b3f4200d352ab890c84c3575f581dc",
       "hardFootprintM": {
         "width": 16,
         "length": 14
@@ -1893,7 +791,7 @@
         "width": 0.844258202112,
         "height": 0.738725948864
       },
-      "approvedCandidateSha256": "b745a23008610dfdedc4942ed87a33b5a9417f8bca0a0adcd2ddd457990c4175"
+      "approvedCandidateSha256": "af0f1ef983c90e627414535d1ce240723d6cbc08ee581cc8f0be7f9e99974f49"
     },
     {
       "assetId": "Build_GeneratorGeoThermal_C",
@@ -1908,7 +806,7 @@
         "width": 1024,
         "height": 1024
       },
-      "sha256": "6e5a797afafe635bff96f41d6a173d1e0e25b0995948ae80c1cd2469f8b75ef9",
+      "sha256": "d6c89da8c9ce6967fef270994a4d2a9f2f2b2e4c109cfb6140b0d13b3438da3b",
       "hardFootprintM": {
         "width": 20,
         "length": 19
@@ -1922,22 +820,22 @@
       "statusImages": {
         "active": {
           "path": "assets/planner/top-view/buildings/power/Build_GeneratorGeoThermal_C.webp",
-          "sha256": "6e5a797afafe635bff96f41d6a173d1e0e25b0995948ae80c1cd2469f8b75ef9"
+          "sha256": "d6c89da8c9ce6967fef270994a4d2a9f2f2b2e4c109cfb6140b0d13b3438da3b"
         },
         "activeWithCrystal": {
           "path": "assets/planner/top-view/buildings/power/Build_GeneratorGeoThermal_C.crystal.webp",
-          "sha256": "535bb99b0aa59c58e83573da2cdf0768334cf708ad45a1b5d5abc8e0910ff6c6"
+          "sha256": "9fd0f28fa3f5d4c6bd61dbd7d8c3ab34d4259b6aa7a095df832be40f474cf549"
         },
         "standby": {
           "path": "assets/planner/top-view/buildings/power/Build_GeneratorGeoThermal_C.standby.webp",
-          "sha256": "607c72fb712198bf779b8f80af08f979dc4c4455bfbbe1bf2a789cbf5ef7a217"
+          "sha256": "972e6588556318b771809a15d7151bb28206e517c860e44321172e05094083df"
         },
         "error": {
           "path": "assets/planner/top-view/buildings/power/Build_GeneratorGeoThermal_C.error.webp",
-          "sha256": "023c79185b5e713378dae871aaf8023f1818b162945fdc492ccd904704ffc0bd"
+          "sha256": "b73b9dd4cd2c1b361211722a2cd3b7714858e9d4a47cc0f8cf6e07ea6b47c06a"
         }
       },
-      "approvedCandidateSha256": "050f1d94df88bf090036cff1e1eb6a0f1aad230b243228f7298d2598feb25b55"
+      "approvedCandidateSha256": "015942deb1071e212426e3d0ff48f06caae24dd8e2697c466bc7e5b1a73539a4"
     },
     {
       "assetId": "Build_ConveyorAttachmentMergerPriority_C",
@@ -1952,7 +850,7 @@
         "width": 1024,
         "height": 1024
       },
-      "sha256": "4bee037be8997d8372f529781166a6df627e775f407912120037b42dac584cd4",
+      "sha256": "a1dcbcc88a5d0b66f24570d583531229fa979104a40862bf5f895e697a941ea0",
       "hardFootprintM": {
         "width": 4,
         "length": 4
@@ -1963,7 +861,7 @@
         "width": 0.880117541943,
         "height": 0.880117541943
       },
-      "approvedCandidateSha256": "ac5dc5af0b5715210d08ae931b33137d7cee6c5f0624bb7f17d397b9b27efe75"
+      "approvedCandidateSha256": "41def77946aa9ec6a659179ec58a3d2f171c88b2724f4959778b83d6facc7514"
     },
     {
       "assetId": "Build_ConveyorAttachmentSplitterProgrammable_C",
@@ -1978,7 +876,7 @@
         "width": 1024,
         "height": 1024
       },
-      "sha256": "0d38a614d10a5da64572fb9d9ce19c512b11ca3a13c7f1af6d62002ebdd85d59",
+      "sha256": "4484eecfa5fa57146772c8190f84039fa3a2265b29fdd7107d1efae048d81dcf",
       "hardFootprintM": {
         "width": 4,
         "length": 4
@@ -1989,7 +887,7 @@
         "width": 0.880117541943,
         "height": 0.880117541943
       },
-      "approvedCandidateSha256": "030ca7708cf5e108213ce9ba679124f225b50e978a7db2a32bfa5a53120d69f9"
+      "approvedCandidateSha256": "db008c7c6b89583139150e2575f189195d2f5a99d9167afa27a656e3a33eeb15"
     },
     {
       "assetId": "Build_ConveyorAttachmentSplitterSmart_C",
@@ -2004,7 +902,7 @@
         "width": 1024,
         "height": 1024
       },
-      "sha256": "5f37469917e802b430fb362aab61f66a628acd907e5a0b8e61647d37cc5ddf83",
+      "sha256": "bf2058e97c19c3217267f8bb5f6792c408c493c08bb41bef5f37196fcb77d50b",
       "hardFootprintM": {
         "width": 4,
         "length": 4
@@ -2015,7 +913,7 @@
         "width": 0.880117541943,
         "height": 0.880117541943
       },
-      "approvedCandidateSha256": "96f3b47dcace563e41ebfb7fe8254c6b50f7d9c3357fadba6ea146cb0b5ee416"
+      "approvedCandidateSha256": "4ebf0aab0cfc4c5b25debd5e2b2110a2aacc772805d516f0151d98a09ec08f7e"
     },
     {
       "assetId": "Build_TruckStation_C",
@@ -2030,7 +928,7 @@
         "width": 1024,
         "height": 1024
       },
-      "sha256": "4068518c8cbb654b5e36b938a8505fa32d630ecc3a08c0e30e23b0e0e0574e2d",
+      "sha256": "5729e412bb3339d7ee485f3b9ce05938917aa29783bfc161cf9585e00c827cfb",
       "hardFootprintM": {
         "width": 17,
         "length": 15
@@ -2044,22 +942,22 @@
       "statusImages": {
         "active": {
           "path": "assets/planner/top-view/buildings/transport/Build_TruckStation_C.webp",
-          "sha256": "4068518c8cbb654b5e36b938a8505fa32d630ecc3a08c0e30e23b0e0e0574e2d"
+          "sha256": "5729e412bb3339d7ee485f3b9ce05938917aa29783bfc161cf9585e00c827cfb"
         },
         "activeWithCrystal": {
           "path": "assets/planner/top-view/buildings/transport/Build_TruckStation_C.crystal.webp",
-          "sha256": "4181f4a192fb648c0354b17c2f08c8f0602353b91b97b5e6cecdb59da35dd6d9"
+          "sha256": "af045b56fe13a3bee42f819a5a80a4116476b1747197dc66a053a4d39e4026e3"
         },
         "standby": {
           "path": "assets/planner/top-view/buildings/transport/Build_TruckStation_C.standby.webp",
-          "sha256": "707ccbac561504aeca29518f7b98299fd6a2a81b35533ddef8da555437712362"
+          "sha256": "843138af7c2266b400c97b999cba391992f049629fb53789ae6028567618cb46"
         },
         "error": {
           "path": "assets/planner/top-view/buildings/transport/Build_TruckStation_C.error.webp",
-          "sha256": "0121db91e878b4c5226b9ac2baf6d963582bac121b957db8ef5f2f7e99bbfb0c"
+          "sha256": "6fabddb6eecaab55783f28a86c928f6d77d7fe74943da2e5f07ffe243658270e"
         }
       },
-      "approvedCandidateSha256": "5f8b1d7b0d493f48dbe9b50d2ea84a45c30f7d57e8f3803cd973f62245fe4f19"
+      "approvedCandidateSha256": "61af144ef3e2f8e5ead99f2d194473c24472fd47ebc75af020cace5e3a9fa64f"
     },
     {
       "assetId": "Build_MinerMk2_C",
@@ -2074,7 +972,7 @@
         "width": 1024,
         "height": 1024
       },
-      "sha256": "3670ed843f3471a95c79527da2f956e029f82f87ec19150cb5b72e38c6b247b1",
+      "sha256": "3f38b0bd9329dfd41107b71acc360af3263d862da3285fa22ad7b223ec64d85b",
       "hardFootprintM": {
         "width": 6,
         "length": 14
@@ -2088,22 +986,22 @@
       "statusImages": {
         "active": {
           "path": "assets/planner/top-view/buildings/extraction/Build_MinerMk2_C.webp",
-          "sha256": "3670ed843f3471a95c79527da2f956e029f82f87ec19150cb5b72e38c6b247b1"
+          "sha256": "3f38b0bd9329dfd41107b71acc360af3263d862da3285fa22ad7b223ec64d85b"
         },
         "activeWithCrystal": {
           "path": "assets/planner/top-view/buildings/extraction/Build_MinerMk2_C.crystal.webp",
-          "sha256": "c9558bb65893e8e4edefdfb8fa6e712a84fde06a1f719256471f6fceb7a57bac"
+          "sha256": "6ca6d636f06878feb4c301bf5d553eea6de7c8f43f73103be4083829f5eb2db0"
         },
         "standby": {
           "path": "assets/planner/top-view/buildings/extraction/Build_MinerMk2_C.standby.webp",
-          "sha256": "c960b484e97c3f8de8b8dbfcf2482592c1d004c3ccd3d5bd7c9011d9bf232fc5"
+          "sha256": "c7b987f64270c8cec8878679719a2c2d1aa239e9dfefc0a7265af2eb9f45e8b7"
         },
         "error": {
           "path": "assets/planner/top-view/buildings/extraction/Build_MinerMk2_C.error.webp",
-          "sha256": "fe28b646b9e5ff53682f654241f2749b300e01c4a543315799978aae562046ea"
+          "sha256": "f380c5364fe8b47d23bc17f0f3fc9649831f5cbc08a8781e9617f439d86b5717"
         }
       },
-      "approvedCandidateSha256": "fe275a81e1484e1d521ff1f018ba9128d5c896903082ee9c13a33d264569f37f"
+      "approvedCandidateSha256": "8e5c4c5f465ae25bc9135875b42b57311d1b1a2ff21219829d784baee4d0a517"
     },
     {
       "assetId": "Build_PowerStorageMk1_C",
@@ -2118,7 +1016,7 @@
         "width": 1024,
         "height": 1024
       },
-      "sha256": "70b63e734e7b06b0ee33375a973ce6d046c0997ce5cfda85cc760dae01a94d69",
+      "sha256": "322b5d2089245781f3cb4cb41d08f7fa07d4f4ab776db56bca7970f7e88febc5",
       "hardFootprintM": {
         "width": 6,
         "length": 6
@@ -2129,7 +1027,7 @@
         "width": 0.909090922227,
         "height": 0.909090922227
       },
-      "approvedCandidateSha256": "1312d58b9858e488de85b25650e6cb889ec825e6208cd9c323cb545a2d768e08"
+      "approvedCandidateSha256": "23bbb14b0f39c568c8e96eccdaabc6857730b04f6d8eeb8af8c2507ef7ee8531"
     },
     {
       "assetId": "Build_Packager_C",
@@ -2144,7 +1042,7 @@
         "width": 1024,
         "height": 1024
       },
-      "sha256": "12112b5cce138e82524291e29b5c6401360d4c689a07bd8b508e9d7503c89ee4",
+      "sha256": "d7ed1c73621cbe12dab72fdae441f8614d4a153525cd5c243b8b997cc75b1fba",
       "hardFootprintM": {
         "width": 8,
         "length": 8
@@ -2158,22 +1056,22 @@
       "statusImages": {
         "active": {
           "path": "assets/planner/top-view/buildings/production/Build_Packager_C.webp",
-          "sha256": "12112b5cce138e82524291e29b5c6401360d4c689a07bd8b508e9d7503c89ee4"
+          "sha256": "d7ed1c73621cbe12dab72fdae441f8614d4a153525cd5c243b8b997cc75b1fba"
         },
         "activeWithCrystal": {
           "path": "assets/planner/top-view/buildings/production/Build_Packager_C.crystal.webp",
-          "sha256": "0f12ea6690d76880f6f85cd309db4613fc23611ffe16c15f10b106da3c64f49f"
+          "sha256": "8f7ae0c06dd35f006a0ab76cbc02aea3fa19de1fb324266dcf7d48d23a806108"
         },
         "standby": {
           "path": "assets/planner/top-view/buildings/production/Build_Packager_C.standby.webp",
-          "sha256": "300bd87947394cbcf5a5cccee9ab46d8969ac07d8d4ce4668cbae31e778ccbe1"
+          "sha256": "91a7a8d47aeeb4b2ce78d8b9f359d3711f2b5b6a116b097675ba2dd2e5ee68ab"
         },
         "error": {
           "path": "assets/planner/top-view/buildings/production/Build_Packager_C.error.webp",
-          "sha256": "2a2c38b65908db9cbac3b9d4af31c9cd610bcda05ce40f8cfa85e1b9980f7ff9"
+          "sha256": "d5c37e1785a9f09147f80ce224d82125f8ee0be95d19b2031e7c630eb9201080"
         }
       },
-      "approvedCandidateSha256": "ffec2c4bcecc80a7dcdab53a2962c4ad26fbbd74cf595e97b8354a7d1633c8ac"
+      "approvedCandidateSha256": "0867dcbc86211e1a5a17b92e418e2ae72b314e14ac10b594547342e01cfa3ab5"
     },
     {
       "assetId": "Build_TrainDockingStation_C",
@@ -2188,7 +1086,7 @@
         "width": 1024,
         "height": 1024
       },
-      "sha256": "7563a5e20ab66e4b6fd17288f1560d8ef8ff618e20ddcaf6999ebfe26f0ff78a",
+      "sha256": "c9f57c21adc3919a22903b834f29aef8c8fd1880fca9fda8a29e0d5f33e61fbf",
       "hardFootprintM": {
         "width": 16,
         "length": 34
@@ -2199,7 +1097,7 @@
         "width": 0.426083276784,
         "height": 0.905426936182
       },
-      "approvedCandidateSha256": "1276a1413b731548ac6324827cc906f128036183ff2d99b8ee712f32b4c289d2"
+      "approvedCandidateSha256": "00efd3671ca7ff061fa206ca818ee79481a232ec9a587c1e1cfb85eeea781acb"
     },
     {
       "assetId": "Build_TrainDockingStationLiquid_C",
@@ -2214,7 +1112,7 @@
         "width": 1024,
         "height": 1024
       },
-      "sha256": "08593c54779eab46955f5a08b2bf2157f8bb3b3569c0594b9711536cf150c6cf",
+      "sha256": "d4e06279ae0fc9c99316bb2f9adb5d2bd3b607c12d47d5c5dba2be93c10499c4",
       "hardFootprintM": {
         "width": 16,
         "length": 34
@@ -2225,7 +1123,7 @@
         "width": 0.426705776154,
         "height": 0.906749774327
       },
-      "approvedCandidateSha256": "616589a208b6d2939d9720af26e9bb6132de11b2bb363a8a0603b2434e9eee15"
+      "approvedCandidateSha256": "547e9b600d28dc6e7396ad18b7e0ef01919e45a142ecce9ffb91ca6909623478"
     },
     {
       "assetId": "Build_FrackingSmasher_C",
@@ -2240,7 +1138,7 @@
         "width": 1024,
         "height": 1024
       },
-      "sha256": "c4b80fa7542921eadae196c3a734a137b2911c2652cc699ad7a35813363e431a",
+      "sha256": "94e0788c2a1db2347214a0f17a3aa355c71533a6568a50f847d09c35e8465eaa",
       "hardFootprintM": {
         "width": 15,
         "length": 15
@@ -2254,22 +1152,22 @@
       "statusImages": {
         "active": {
           "path": "assets/planner/top-view/buildings/extraction/Build_FrackingSmasher_C.webp",
-          "sha256": "c4b80fa7542921eadae196c3a734a137b2911c2652cc699ad7a35813363e431a"
+          "sha256": "94e0788c2a1db2347214a0f17a3aa355c71533a6568a50f847d09c35e8465eaa"
         },
         "activeWithCrystal": {
           "path": "assets/planner/top-view/buildings/extraction/Build_FrackingSmasher_C.crystal.webp",
-          "sha256": "f57396b1f94155228bebd579e3b4831541920658409e08194e26821eb49b26e1"
+          "sha256": "42c34535456edfd9c0a504a73889d8bb79aa6ac56300bfd587959d39076b8bc8"
         },
         "standby": {
           "path": "assets/planner/top-view/buildings/extraction/Build_FrackingSmasher_C.standby.webp",
-          "sha256": "fdf2a141f702d684a72875ed62ad059e3b8f07e4b3bd4e88c824294f7d02eb5b"
+          "sha256": "42e91dfce83a1828eea2e9ee6a093a61f99562443bfb30fc785511e7cf932119"
         },
         "error": {
           "path": "assets/planner/top-view/buildings/extraction/Build_FrackingSmasher_C.error.webp",
-          "sha256": "87cd1ebc3541e822171e8a3867acd483ff3e02f1386a5a5fa13efe6d6f404a58"
+          "sha256": "acdd0a8d1e9302341a33da14d1f79ac2106b359d9aae31c550f6c5bf443156fa"
         }
       },
-      "approvedCandidateSha256": "08e6a41746a42e2cd981dced076c9d16f76471334f2ba844d2036f0db26d69c4"
+      "approvedCandidateSha256": "64f202d42f7fa82744554e13857145978e13401cb4eb0b6898ecb8566b365ddc"
     },
     {
       "assetId": "Build_GeneratorNuclear_C",
@@ -2284,7 +1182,7 @@
         "width": 1024,
         "height": 1024
       },
-      "sha256": "3f7d71bd15a31bc063dfab1e99104464dd7ee30e783fe5674f64b17b6f0b3945",
+      "sha256": "d820dba4af84ea8dcdd17c4b35c2db046b9dd09f80fd66a202e8b54bc15fa4a3",
       "hardFootprintM": {
         "width": 36,
         "length": 42
@@ -2298,22 +1196,22 @@
       "statusImages": {
         "active": {
           "path": "assets/planner/top-view/buildings/power/Build_GeneratorNuclear_C.webp",
-          "sha256": "3f7d71bd15a31bc063dfab1e99104464dd7ee30e783fe5674f64b17b6f0b3945"
+          "sha256": "d820dba4af84ea8dcdd17c4b35c2db046b9dd09f80fd66a202e8b54bc15fa4a3"
         },
         "activeWithCrystal": {
           "path": "assets/planner/top-view/buildings/power/Build_GeneratorNuclear_C.crystal.webp",
-          "sha256": "92351494eafb2fc899f5df76637b92bf1e7c149f7a75b91fc6ea474e8af3cb73"
+          "sha256": "563195fb2317b2d911e37168d6b80fde80c38c4ede95a559e4af01c609e33fb9"
         },
         "standby": {
           "path": "assets/planner/top-view/buildings/power/Build_GeneratorNuclear_C.standby.webp",
-          "sha256": "bd5800eff31f2b8a62ee8e42dbacf6a9f9049c26abe4f081119b2e36aa1458e6"
+          "sha256": "53b0671b23dedcd25c48572338e391a8c2daf5b6a2de5c3a376f47fe1f4b0a0d"
         },
         "error": {
           "path": "assets/planner/top-view/buildings/power/Build_GeneratorNuclear_C.error.webp",
-          "sha256": "d7fb5092e8d6d73772a8111ca13ac48c7f730672c91d1b71890284a853edd648"
+          "sha256": "69084b231d24485240f4b444fa505997f368d8f8976f981375d6d72919e7bea4"
         }
       },
-      "approvedCandidateSha256": "a91e81aa8ff153b95db7ec0ad0c8194929861a2a049175cced9dc4a5eaa3295c"
+      "approvedCandidateSha256": "61f53473c1db2c51c8234c14088f777a3f3228440b6e58271847a9e6b5b9af4f"
     },
     {
       "assetId": "Build_DroneStation_C",
@@ -2328,7 +1226,7 @@
         "width": 1024,
         "height": 1024
       },
-      "sha256": "c420b39571881acbe504f95d79bdd25e82173b962c70b8c9c195d7752850a2a8",
+      "sha256": "f10752bafa2048a3797f3ac5cf7f8e26ab8e4425b33521426bc8ab9ce30f2028",
       "hardFootprintM": {
         "width": 24,
         "length": 24
@@ -2342,22 +1240,22 @@
       "statusImages": {
         "active": {
           "path": "assets/planner/top-view/buildings/transport/Build_DroneStation_C.webp",
-          "sha256": "c420b39571881acbe504f95d79bdd25e82173b962c70b8c9c195d7752850a2a8"
+          "sha256": "f10752bafa2048a3797f3ac5cf7f8e26ab8e4425b33521426bc8ab9ce30f2028"
         },
         "activeWithCrystal": {
           "path": "assets/planner/top-view/buildings/transport/Build_DroneStation_C.crystal.webp",
-          "sha256": "b6ff35957d2cbab58571f3c04dcb765fa741f1f714576e17b6b2396d410e24ee"
+          "sha256": "5647adac58e3df2353f1a2e0bd3edba0e58473feb12f5e5b3150cee5e4b0e3a1"
         },
         "standby": {
           "path": "assets/planner/top-view/buildings/transport/Build_DroneStation_C.standby.webp",
-          "sha256": "2f5004bd2077ff02483c89b228aee28d1f9b0122b17ecddfff939e7648f3f83b"
+          "sha256": "a1ef235953976afffdb9522b242ca5c56a5ac3f4147dcb02ef25dbd4b7fa8bbe"
         },
         "error": {
           "path": "assets/planner/top-view/buildings/transport/Build_DroneStation_C.error.webp",
-          "sha256": "d01ea79dcfbe76318894746c230df667017f1515a8bd05027db78728268ded52"
+          "sha256": "a32516278c93a1ebdc275d7e5a8de993b8024ffc666f6f796e89f16118f0ecab"
         }
       },
-      "approvedCandidateSha256": "24745d2233e6ed914f5194fac8c7b6cf3feec68da51e52eadeb98030be606a4b"
+      "approvedCandidateSha256": "3424753ab385a9c0132b188ec9cfaae39ab0ddc914a6e36071f55dd4b5809c9b"
     },
     {
       "assetId": "Build_QuantumEncoder_C",
@@ -2372,7 +1270,7 @@
         "width": 1024,
         "height": 1024
       },
-      "sha256": "15dfa98fb4bbe7c4abcade6c7ab3e3a5ed029dbdd8d3f23de2b9255634229092",
+      "sha256": "eccab7141247c5e40ffccdfe1a0d61fad59f90bcb2ba6242e2fa5d27db18e065",
       "hardFootprintM": {
         "width": 22,
         "length": 50
@@ -2386,22 +1284,22 @@
       "statusImages": {
         "active": {
           "path": "assets/planner/top-view/buildings/production/Build_QuantumEncoder_C.webp",
-          "sha256": "15dfa98fb4bbe7c4abcade6c7ab3e3a5ed029dbdd8d3f23de2b9255634229092"
+          "sha256": "eccab7141247c5e40ffccdfe1a0d61fad59f90bcb2ba6242e2fa5d27db18e065"
         },
         "activeWithCrystal": {
           "path": "assets/planner/top-view/buildings/production/Build_QuantumEncoder_C.crystal.webp",
-          "sha256": "dd539f30b9a0c9fcbe63b7e1b9ca61a607886a0903b80e7a4884438da2cd7b7a"
+          "sha256": "e1c554490815b6f16c689bff37a9173588e835725ff84a5491960635e04dcc9f"
         },
         "standby": {
           "path": "assets/planner/top-view/buildings/production/Build_QuantumEncoder_C.standby.webp",
-          "sha256": "73920d71c7644dfa13220cf95134955903c111d41d66109032aec645f4c14865"
+          "sha256": "bb6cb625994759220ffb36da07df585b7c6abc435617ef70c20dad978280aa57"
         },
         "error": {
           "path": "assets/planner/top-view/buildings/production/Build_QuantumEncoder_C.error.webp",
-          "sha256": "91ddad0066d91e0fa629a3e9b13d0ec9f9884a75373609e576b6b7c572b3cd71"
+          "sha256": "1f904793b38ef7cbe4c04fb8ce1145335dee437685599304ebc1d8ae2f3152c8"
         }
       },
-      "approvedCandidateSha256": "231bcece5b13c366e92565e9a5ffec3beda35cb7b2316830cea74712ba3741fd"
+      "approvedCandidateSha256": "b71fc928ad2a498e178cbe70db79469bf5100d10aaa4eb3a157be379e6a5f5a2"
     },
     {
       "assetId": "Build_BlueprintDesigner_C",
@@ -2416,7 +1314,7 @@
         "width": 1024,
         "height": 1024
       },
-      "sha256": "1fab0842a8bea22d34ac99bd7a92f28215478483beee89badad500ecbc116767",
+      "sha256": "417888756c822ce3f83b57cdcd729f091abc503929e64cac3a9dd374e2e3abb2",
       "hardFootprintM": {
         "width": 32,
         "length": 32
@@ -2427,7 +1325,7 @@
         "width": 0.692962815095,
         "height": 0.692962794443
       },
-      "approvedCandidateSha256": "67c31f6b5e373339877b5e7217bb9d9b134fa7d8a4a44b61a520c6b655c50fe3"
+      "approvedCandidateSha256": "96f58117ca594cd5bf3b2f0632b9adec0313c6714f70cddff2589851b25a332a"
     },
     {
       "assetId": "Build_BlueprintDesigner_MK2_C",
@@ -2442,7 +1340,7 @@
         "width": 1024,
         "height": 1024
       },
-      "sha256": "ddf720523d7014634d392a4b706362e7d849a8759e3c6f6a4feb78bd5ac439f0",
+      "sha256": "f422851f0c1518214fd58b2d09293ea4a36afcea137c92701351162ef8d9e1b0",
       "hardFootprintM": {
         "width": 40,
         "length": 40
@@ -2453,111 +1351,7 @@
         "width": 0.727556828235,
         "height": 0.727556828235
       },
-      "approvedCandidateSha256": "b56f23728284f2be4020f49a8033ca5809b47add7d3b36d3498b26e8752d1190"
-    },
-    {
-      "assetId": "Build_TrainPlatformEmpty_C",
-      "buildingClass": "Build_TrainPlatformEmpty_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/transport/Build_TrainPlatformEmpty_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "afe384089042e936840b5a548b58cf7a0da284b1179e75f57d059eaa36283f85",
-      "hardFootprintM": {
-        "width": 16,
-        "length": 34
-      },
-      "occupancyFrame": {
-        "x": 0.286096265412,
-        "y": 0.045454563999,
-        "width": 0.427807469177,
-        "height": 0.909090872001
-      },
-      "approvedCandidateSha256": "0640e775d68badf831fbddc3a53e722b9fa12088d78a37e33bff38b42a40ef8f"
-    },
-    {
-      "assetId": "Build_TrainPlatformEmpty_02_C",
-      "buildingClass": "Build_TrainPlatformEmpty_02_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/transport/Build_TrainPlatformEmpty_02_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "e363b4de3f93b2e29c37af51e5252e99a15d45bdd1f6072dcbfefb313b6a9fe0",
-      "hardFootprintM": {
-        "width": 16,
-        "length": 34
-      },
-      "occupancyFrame": {
-        "x": 0.286088972608,
-        "y": 0.045454563999,
-        "width": 0.427807456427,
-        "height": 0.909090872001
-      },
-      "approvedCandidateSha256": "f803594d8111a85616ed63878dabb6edfb6fe9a9e808587a131591c865f47b68"
-    },
-    {
-      "assetId": "Build_SpaceElevator_C",
-      "buildingClass": "Build_SpaceElevator_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/production/Build_SpaceElevator_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "24c62895d8d7aee9b5bee4500eff442d1eef6dc3d133005614b7441d6b1bc9f3",
-      "hardFootprintM": {
-        "width": 44.5,
-        "length": 48
-      },
-      "occupancyFrame": {
-        "x": 0.100027008073,
-        "y": 0.139770816715,
-        "width": 0.667924944008,
-        "height": 0.720458366571
-      },
-      "approvedCandidateSha256": "40e9c3db62b46c3c9bdb0f1d1abe884faa9c41f55e631d57bc80bdb171491247"
-    },
-    {
-      "assetId": "Build_HadronCollider_C",
-      "buildingClass": "Build_HadronCollider_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/production/Build_HadronCollider_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "b80df98db79ed080df14214b7b047e5fdefdc42c40f95eec43ae47b5deddac43",
-      "hardFootprintM": {
-        "width": 52,
-        "length": 27
-      },
-      "occupancyFrame": {
-        "x": 0.045454551517,
-        "y": 0.276051330886,
-        "width": 0.909090896965,
-        "height": 0.472027965732
-      },
-      "approvedCandidateSha256": "afc646d9b8e8e6063ff22066d641d77c15614faddb3dc4b6e7e23f18039423bb"
+      "approvedCandidateSha256": "f82885eb9f0443671c12e10ed436ee6a93ef4b8b25303dece56a437c8df8e85f"
     },
     {
       "assetId": "Build_RailroadEndStop_C",
@@ -2572,7 +1366,7 @@
         "width": 1024,
         "height": 1024
       },
-      "sha256": "4d96f16e86b1ba7dfd1dd5eae206f5d7a143442577a72af3e77725b14604a31e",
+      "sha256": "668ecfb499f18a5ffc58ea067200fb9f061fba6019b48eb60599448d2051b5b9",
       "hardFootprintM": {
         "width": 6,
         "length": 6
@@ -2583,7 +1377,1213 @@
         "width": 0.598556376385,
         "height": 0.598556376385
       },
-      "approvedCandidateSha256": "79a65ca7ed9c6ed72dcbc27429054803f77e6544708c7d18d19dd82973e73250"
+      "approvedCandidateSha256": "95a8e280c29cd699368488f9f4a973ab0028cb83b02de7028ea9f5b80262e6f4"
+    },
+    {
+      "assetId": "Build_TrainPlatformEmpty_C",
+      "buildingClass": "Build_TrainPlatformEmpty_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/transport/Build_TrainPlatformEmpty_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "6c0dee845945d86cb2ffef28f53cbd93c8079218298630327f9e252fef302e8f",
+      "hardFootprintM": {
+        "width": 16,
+        "length": 34
+      },
+      "occupancyFrame": {
+        "x": 0.286096265412,
+        "y": 0.045454563999,
+        "width": 0.427807469177,
+        "height": 0.909090872001
+      },
+      "approvedCandidateSha256": "dd637d8b1c98d1096b4d2ab128d6863e958597087c1b72aabb8a01996797df85"
+    },
+    {
+      "assetId": "Build_TrainPlatformEmpty_02_C",
+      "buildingClass": "Build_TrainPlatformEmpty_02_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/transport/Build_TrainPlatformEmpty_02_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "3daed1afb95e5b9fa210f5e25c624c7a699e595212e34104a3576bcaa4b9754b",
+      "hardFootprintM": {
+        "width": 16,
+        "length": 34
+      },
+      "occupancyFrame": {
+        "x": 0.286088972608,
+        "y": 0.045454563999,
+        "width": 0.427807456427,
+        "height": 0.909090872001
+      },
+      "approvedCandidateSha256": "5f1e07ae02112b34e2ef764c91ee19ec3294f9512b923774c3c32ec6bf91ebf0"
+    },
+    {
+      "assetId": "Build_SpaceElevator_C",
+      "buildingClass": "Build_SpaceElevator_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/production/Build_SpaceElevator_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "44a3371eaffd815d0422dd9e38a71153ef7a134423dd5cb8f55fb67b86688d01",
+      "hardFootprintM": {
+        "width": 44.5,
+        "length": 48
+      },
+      "occupancyFrame": {
+        "x": 0.101903201736,
+        "y": 0.102246943456,
+        "width": 0.667924944008,
+        "height": 0.720458366571
+      },
+      "approvedCandidateSha256": "e095a51001d4fb0ddef1dbbacd760e6be3f800e953310b94752a0283ba478cf5"
+    },
+    {
+      "assetId": "Build_HadronCollider_C",
+      "buildingClass": "Build_HadronCollider_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/production/Build_HadronCollider_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "9a739047554d5a2b9cc1a6f2c9314ea64615683c0d56862248b8668974c39b3a",
+      "hardFootprintM": {
+        "width": 52,
+        "length": 27
+      },
+      "occupancyFrame": {
+        "x": 0.045454551517,
+        "y": 0.276051330886,
+        "width": 0.909090896965,
+        "height": 0.472027965732
+      },
+      "approvedCandidateSha256": "40e82bcb90a8dd3333e355f022b451f5ab9fa7d5b99143c4a4fe85dfd96677b2"
+    },
+    {
+      "assetId": "Build_WorkBench_C",
+      "buildingClass": "Build_WorkBench_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/production/Build_WorkBench_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "24b99d764c802894d1a70ffe60b18955cb47551519a5732ddf812164b3d1afbf",
+      "hardFootprintM": {
+        "width": 4,
+        "length": 6
+      },
+      "occupancyFrame": {
+        "x": 0.201620812866,
+        "y": 0.052396716815,
+        "width": 0.596758374269,
+        "height": 0.895137561403
+      },
+      "approvedCandidateSha256": "ed80e32774070ba77a2b10cb15734c7492d1074d2c9c9bac1f012c659b0cf818"
+    },
+    {
+      "assetId": "Build_Workshop_C",
+      "buildingClass": "Build_Workshop_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/production/Build_Workshop_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "73b46d6a60973358b08017edc78f6a3c3738353e68e11f7370231156e0a3b0c5",
+      "hardFootprintM": {
+        "width": 6,
+        "length": 10
+      },
+      "occupancyFrame": {
+        "x": 0.227272727273,
+        "y": 0.045454545455,
+        "width": 0.545454545455,
+        "height": 0.909090909091
+      },
+      "approvedCandidateSha256": "8a5734415c0eec14c72eb6b8e57c6f132432aa68ef1383f2d5bde9bfc13f7322"
+    },
+    {
+      "assetId": "Build_Mam_C",
+      "buildingClass": "Build_Mam_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/production/Build_Mam_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "38addd6f0892cdd94df7e48c95afc2c63e65446d63b0e80c68b7e60661ed85fe",
+      "hardFootprintM": {
+        "width": 6,
+        "length": 9
+      },
+      "occupancyFrame": {
+        "x": 0.196969685293,
+        "y": 0.04545452794,
+        "width": 0.606060629414,
+        "height": 0.90909094412
+      },
+      "approvedCandidateSha256": "cf86b7243016af4703a040fb95b11e251841c69435c489d78692354f1e8625ff"
+    },
+    {
+      "assetId": "Build_ConveyorMonitor_C",
+      "buildingClass": "Build_ConveyorMonitor_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/logistics/Build_ConveyorMonitor_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "ab0f8dc77b1c8ea33ee67a484d0087fe93744eb6e11d2159cea47869de152956",
+      "hardFootprintM": {
+        "width": 2,
+        "length": 2.2
+      },
+      "occupancyFrame": {
+        "x": 0.102000783225,
+        "y": 0.062200899504,
+        "width": 0.795998433549,
+        "height": 0.875598295882
+      },
+      "approvedCandidateSha256": "2ace918e50ddeef5297238e4a7b2dd9da29961a3ec85be5e9304acf19e95337a"
+    },
+    {
+      "assetId": "Build_ConveyorWallHole_C",
+      "buildingClass": "Build_ConveyorWallHole_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/logistics/Build_ConveyorWallHole_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "6df35202806c0859262ba7d8755d56848eaa4cc4086c6e5eac6cc5dff0c4e598",
+      "hardFootprintM": {
+        "width": 0.5,
+        "length": 2
+      },
+      "occupancyFrame": {
+        "x": 0.40562544405,
+        "y": 0.122501888704,
+        "width": 0.188749066898,
+        "height": 0.754996245093
+      },
+      "approvedCandidateSha256": "797e7aa34ecdb8cf2a18ee13b6e072763b6a19fd03ec7d52ff06b934b29f25d2"
+    },
+    {
+      "assetId": "Build_AssemblerMk1_C",
+      "buildingClass": "Build_AssemblerMk1_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/production/Build_AssemblerMk1_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "766bd30bec46e34d026b929060a6cf25c6a9943a9f8c5b0a22104d210d85ea91",
+      "hardFootprintM": {
+        "width": 9,
+        "length": 16
+      },
+      "occupancyFrame": {
+        "x": 0.23028416568,
+        "y": 0.045454555307,
+        "width": 0.51136362528,
+        "height": 0.909090889387
+      },
+      "statusImages": {
+        "active": {
+          "path": "assets/planner/top-view/buildings/production/Build_AssemblerMk1_C.webp",
+          "sha256": "766bd30bec46e34d026b929060a6cf25c6a9943a9f8c5b0a22104d210d85ea91"
+        },
+        "activeWithCrystal": {
+          "path": "assets/planner/top-view/buildings/production/Build_AssemblerMk1_C.crystal.webp",
+          "sha256": "1a114653967e615ea27202ffc717ee2e1352fcb4b8c18b5b7ccbe74a4d0b7712"
+        },
+        "standby": {
+          "path": "assets/planner/top-view/buildings/production/Build_AssemblerMk1_C.standby.webp",
+          "sha256": "ec26a52959b6a7ff80adce31bcadd7a5e706d4b3e403bf1227121d1f20b2544b"
+        },
+        "error": {
+          "path": "assets/planner/top-view/buildings/production/Build_AssemblerMk1_C.error.webp",
+          "sha256": "dcd968aa4176e07bb371e6ba7323a79efc487775a811b9f8e14695d030032efb"
+        }
+      },
+      "approvedCandidateSha256": "0478eb59f7ceb1750e588ec3dbc56850573047f587636d0f9fdc748eda172c71"
+    },
+    {
+      "assetId": "Build_ResourceSinkShop_C",
+      "buildingClass": "Build_ResourceSinkShop_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/production/Build_ResourceSinkShop_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "d7d4a1f263cbb4c1c369e3268ae5af3271272e5b690228805cd6066595491697",
+      "hardFootprintM": {
+        "width": 4,
+        "length": 6
+      },
+      "occupancyFrame": {
+        "x": 0.196969692591,
+        "y": 0.045454538887,
+        "width": 0.606060614818,
+        "height": 0.909090922227
+      },
+      "approvedCandidateSha256": "6ab48766d3380ca348b9f7e9f4618328fed8fbe20a01f82e5110b58c1a7a1a34"
+    },
+    {
+      "assetId": "Build_WaterPump_C",
+      "buildingClass": "Build_WaterPump_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/extraction/Build_WaterPump_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "961388cbae9220aff8179801bf5ce18ca461fc3a9878d3ab4cae1d5d307cf55e",
+      "hardFootprintM": {
+        "width": 20,
+        "length": 18
+      },
+      "occupancyFrame": {
+        "x": 0.0912481282,
+        "y": 0.045454552542,
+        "width": 0.8175037436,
+        "height": 0.73575338873
+      },
+      "statusImages": {
+        "active": {
+          "path": "assets/planner/top-view/buildings/extraction/Build_WaterPump_C.webp",
+          "sha256": "961388cbae9220aff8179801bf5ce18ca461fc3a9878d3ab4cae1d5d307cf55e"
+        },
+        "activeWithCrystal": {
+          "path": "assets/planner/top-view/buildings/extraction/Build_WaterPump_C.crystal.webp",
+          "sha256": "01b8dee13f33be8020115c08fcf7775be90f6452be24bbe9eeda9659550001ee"
+        },
+        "standby": {
+          "path": "assets/planner/top-view/buildings/extraction/Build_WaterPump_C.standby.webp",
+          "sha256": "801e94adb1c513b7e9fa476aea19c8194bbdc7f3eed2993bd6237e69a802212d"
+        },
+        "error": {
+          "path": "assets/planner/top-view/buildings/extraction/Build_WaterPump_C.error.webp",
+          "sha256": "bf64d4f2014bcc4e0d4318575e1c0e1b31df5d719a0b4da65cad3bcb75098722"
+        }
+      },
+      "approvedCandidateSha256": "a71bb2901e49182fce8a3b2081bed7e34d7bdcbeae651ed33c3a7ab50e6ae333"
+    },
+    {
+      "assetId": "Build_GeneratorCoal_C",
+      "buildingClass": "Build_GeneratorCoal_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/power/Build_GeneratorCoal_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "d42dd9d8f47a07b034fcba659025394a9b587adfe07b442b3a232934a424950f",
+      "hardFootprintM": {
+        "width": 10,
+        "length": 26
+      },
+      "occupancyFrame": {
+        "x": 0.327484610801,
+        "y": 0.057465424729,
+        "width": 0.345030778398,
+        "height": 0.897080023834
+      },
+      "statusImages": {
+        "active": {
+          "path": "assets/planner/top-view/buildings/power/Build_GeneratorCoal_C.webp",
+          "sha256": "d42dd9d8f47a07b034fcba659025394a9b587adfe07b442b3a232934a424950f"
+        },
+        "activeWithCrystal": {
+          "path": "assets/planner/top-view/buildings/power/Build_GeneratorCoal_C.crystal.webp",
+          "sha256": "6f546ae5bac5bfa83d1e4f384c68470778036d9ca5a6e75e48f3040b8adf6d19"
+        },
+        "standby": {
+          "path": "assets/planner/top-view/buildings/power/Build_GeneratorCoal_C.standby.webp",
+          "sha256": "d4d78e9ad055bb404bb2ea90b2250938313a536a6d577881d6950a924fb5d912"
+        },
+        "error": {
+          "path": "assets/planner/top-view/buildings/power/Build_GeneratorCoal_C.error.webp",
+          "sha256": "012ee32a6eb2793ec419efc472d4a4af2b43cfa04e6fa5caabcb633537a4698d"
+        }
+      },
+      "approvedCandidateSha256": "b852c63f27ad08de1e077944b40b3f077c391dcffcf88b19b02e58568650ae4d"
+    },
+    {
+      "assetId": "Build_FoundryMk1_C",
+      "buildingClass": "Build_FoundryMk1_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/production/Build_FoundryMk1_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "7f575ff7129b876d27ff511eea036226f8c81f22d1ac230f51b714b66b9fd9cc",
+      "hardFootprintM": {
+        "width": 10,
+        "length": 10
+      },
+      "occupancyFrame": {
+        "x": 0.07648676299,
+        "y": 0.107518965838,
+        "width": 0.84702647402,
+        "height": 0.84702647402
+      },
+      "statusImages": {
+        "active": {
+          "path": "assets/planner/top-view/buildings/production/Build_FoundryMk1_C.webp",
+          "sha256": "7f575ff7129b876d27ff511eea036226f8c81f22d1ac230f51b714b66b9fd9cc"
+        },
+        "activeWithCrystal": {
+          "path": "assets/planner/top-view/buildings/production/Build_FoundryMk1_C.crystal.webp",
+          "sha256": "1a0cbc400a75dde96b998efec176aeb510024f6cee563954b781849666150dba"
+        },
+        "standby": {
+          "path": "assets/planner/top-view/buildings/production/Build_FoundryMk1_C.standby.webp",
+          "sha256": "50148a48ce47cb2275b52c45356e17b28f651b0cf95d62cf78dda101a97975c6"
+        },
+        "error": {
+          "path": "assets/planner/top-view/buildings/production/Build_FoundryMk1_C.error.webp",
+          "sha256": "93bfdcfcfd1afe16d57389752c048842517de205ffdb74d0d71fbb2a1f1cbda5"
+        }
+      },
+      "approvedCandidateSha256": "0cc56bc647879ecf634bf98fc4bb42a6859796614f0f8d52a912d34577a601c9"
+    },
+    {
+      "assetId": "Build_PipelineJunction_Cross_C",
+      "buildingClass": "Build_PipelineJunction_Cross_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/logistics/Build_PipelineJunction_Cross_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "a4435d4b4e51df5621ef48428024c92f1d828351aff6dcbd0401834164644055",
+      "hardFootprintM": {
+        "width": 2.4,
+        "length": 2.4
+      },
+      "occupancyFrame": {
+        "x": 0.116286411571,
+        "y": 0.116286411571,
+        "width": 0.767427176857,
+        "height": 0.767427176857
+      },
+      "approvedCandidateSha256": "229f9e73046e08338cadb09b5ffe955f0167d52e68cb125a7c96bf0f1d11662d"
+    },
+    {
+      "assetId": "Build_PipelineJunction_T_C",
+      "buildingClass": "Build_PipelineJunction_T_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/logistics/Build_PipelineJunction_T_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "2e3930f69da0a3c1fd49c514e7e6fc814b8efac7975a5aa386c838c1fbca1df5",
+      "hardFootprintM": {
+        "width": 2.4,
+        "length": 2.4
+      },
+      "occupancyFrame": {
+        "x": 0.116286470078,
+        "y": 0.151702456647,
+        "width": 0.767427059844,
+        "height": 0.767427059844
+      },
+      "approvedCandidateSha256": "cc82918c9a41c053b1450b300945a246f981545fd46bb2b17778b948cbb843dc"
+    },
+    {
+      "assetId": "Build_PipelinePump_C",
+      "buildingClass": "Build_PipelinePump_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/logistics/Build_PipelinePump_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "207b4cda13707d004cc4f0effada50eb1d48faeeef1a01bc2cb26d59b89aec36",
+      "hardFootprintM": {
+        "width": 3.8,
+        "length": 1.2
+      },
+      "occupancyFrame": {
+        "x": 0.067351505737,
+        "y": 0.575666441608,
+        "width": 0.839145127175,
+        "height": 0.264993198748
+      },
+      "statusImages": {
+        "active": {
+          "path": "assets/planner/top-view/buildings/logistics/Build_PipelinePump_C.webp",
+          "sha256": "207b4cda13707d004cc4f0effada50eb1d48faeeef1a01bc2cb26d59b89aec36"
+        },
+        "activeWithCrystal": {
+          "path": "assets/planner/top-view/buildings/logistics/Build_PipelinePump_C.crystal.webp",
+          "sha256": "ecf0607f30413f283cc18816397698ce96c3cb9a22f547856e798dfe911336ec"
+        },
+        "standby": {
+          "path": "assets/planner/top-view/buildings/logistics/Build_PipelinePump_C.standby.webp",
+          "sha256": "3c403b251cf97d6582ac5d5eb5781e8442876068a8f3f9ffd59628b95194c0b5"
+        },
+        "error": {
+          "path": "assets/planner/top-view/buildings/logistics/Build_PipelinePump_C.error.webp",
+          "sha256": "161bcb33cbac38a6f76eeb451f7c05ea9ac0b92bd6b5afbcda5e19c32229c127"
+        }
+      },
+      "approvedCandidateSha256": "bf81b9d954cee2c8754af8b3bbbecabb0a274399dc8ce1270136812810ab9fe9"
+    },
+    {
+      "assetId": "Build_PipeStorageTank_C",
+      "buildingClass": "Build_PipeStorageTank_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/storage/Build_PipeStorageTank_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "ac4e32d2623c57b31cc9c220741c27316cd4da054f06b0c133f5ef2b629af8fc",
+      "hardFootprintM": {
+        "width": 6,
+        "length": 6
+      },
+      "occupancyFrame": {
+        "x": 0.075119401636,
+        "y": 0.075119401636,
+        "width": 0.849761196727,
+        "height": 0.849761196727
+      },
+      "approvedCandidateSha256": "1e3cc05fd4b0b6e2855cc25c4e038016ab58f41730681dbc8eba1d39715ac06d"
+    },
+    {
+      "assetId": "Build_HyperTubeJunction_C",
+      "buildingClass": "Build_HyperTubeJunction_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/logistics/Build_HyperTubeJunction_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "585f637a734ee3357a40cfa44bc00707954ed78c3235d51f452af4f4dd94eae6",
+      "hardFootprintM": {
+        "width": 2,
+        "length": 3.5
+      },
+      "occupancyFrame": {
+        "x": 0.330940444724,
+        "y": 0.160599370631,
+        "width": 0.338119110552,
+        "height": 0.591708423312
+      },
+      "approvedCandidateSha256": "e22c8bb195d09da8e8ef46612a25e6983ca3faaf50016dbc1e493f2e228b7bd5"
+    },
+    {
+      "assetId": "Build_HypertubeTJunction_C",
+      "buildingClass": "Build_HypertubeTJunction_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/logistics/Build_HypertubeTJunction_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "0a0f0a3db6a43d4e971c57b73637d40138a43686e2bd233d2959217f32aab5d5",
+      "hardFootprintM": {
+        "width": 5,
+        "length": 2
+      },
+      "occupancyFrame": {
+        "x": 0.063544737189,
+        "y": 0.182556357754,
+        "width": 0.872910525622,
+        "height": 0.349164199843
+      },
+      "approvedCandidateSha256": "82986f5a4385dde7c6896206eec4e7fcc2b8b85432e94ba050bf6f670205ed0a"
+    },
+    {
+      "assetId": "Build_StorageContainerMk2_C",
+      "buildingClass": "Build_StorageContainerMk2_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/storage/Build_StorageContainerMk2_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "09f294833adfaf5cf63cc87ad028c77ca1d6b95640881b7022fa8a74715d5ae0",
+      "hardFootprintM": {
+        "width": 5,
+        "length": 11
+      },
+      "occupancyFrame": {
+        "x": 0.293388436266,
+        "y": 0.045454559785,
+        "width": 0.413223127468,
+        "height": 0.909090880431
+      },
+      "approvedCandidateSha256": "2afd0085a023efc3e949362ea0f72529b4ac19acd45f32dc63a2e3e438a8e14c"
+    },
+    {
+      "assetId": "Build_OilPump_C",
+      "buildingClass": "Build_OilPump_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/extraction/Build_OilPump_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "ca95ff73458f8ed9fed146211fe9b6505132c6ccc5cd97067bf61ac086c05a78",
+      "hardFootprintM": {
+        "width": 8,
+        "length": 13
+      },
+      "occupancyFrame": {
+        "x": 0.252424195883,
+        "y": 0.045454521307,
+        "width": 0.495151608235,
+        "height": 0.804621363382
+      },
+      "statusImages": {
+        "active": {
+          "path": "assets/planner/top-view/buildings/extraction/Build_OilPump_C.webp",
+          "sha256": "ca95ff73458f8ed9fed146211fe9b6505132c6ccc5cd97067bf61ac086c05a78"
+        },
+        "activeWithCrystal": {
+          "path": "assets/planner/top-view/buildings/extraction/Build_OilPump_C.crystal.webp",
+          "sha256": "38e638cbb812ddf6ff58e423b87322cca67dd81c6145f5341c2040071556c5da"
+        },
+        "standby": {
+          "path": "assets/planner/top-view/buildings/extraction/Build_OilPump_C.standby.webp",
+          "sha256": "8e57e7b704d2388a52eed287660ce72b68eb175322e43048b627b1207a8b9681"
+        },
+        "error": {
+          "path": "assets/planner/top-view/buildings/extraction/Build_OilPump_C.error.webp",
+          "sha256": "a9d9392bcc50fb8bb02a4e2262fa386e099c30910e8c2fbeeba41de1737ba785"
+        }
+      },
+      "approvedCandidateSha256": "2cc2032d3820fb97cc7430058632f2037d23746f86e645ddcff5999b2fbd33b3"
+    },
+    {
+      "assetId": "Build_GeneratorFuel_C",
+      "buildingClass": "Build_GeneratorFuel_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/power/Build_GeneratorFuel_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "a33a45a854f4fd8cbb4902e2834cd0676f2ee682db1a87ec0b6383883c210163",
+      "hardFootprintM": {
+        "width": 22,
+        "length": 20
+      },
+      "occupancyFrame": {
+        "x": 0.316756066899,
+        "y": 0.287139393174,
+        "width": 0.423247631915,
+        "height": 0.384770574468
+      },
+      "statusImages": {
+        "active": {
+          "path": "assets/planner/top-view/buildings/power/Build_GeneratorFuel_C.webp",
+          "sha256": "a33a45a854f4fd8cbb4902e2834cd0676f2ee682db1a87ec0b6383883c210163"
+        },
+        "activeWithCrystal": {
+          "path": "assets/planner/top-view/buildings/power/Build_GeneratorFuel_C.crystal.webp",
+          "sha256": "b44d499f057739d3bbc4fbe4f5dac1c15a4bfa2cc68079dc0b2fb37b5bf0c985"
+        },
+        "standby": {
+          "path": "assets/planner/top-view/buildings/power/Build_GeneratorFuel_C.standby.webp",
+          "sha256": "4cfc6215b7394c9a0490a8abc4742dce9b8ebed14af15c7d3763857e9c705792"
+        },
+        "error": {
+          "path": "assets/planner/top-view/buildings/power/Build_GeneratorFuel_C.error.webp",
+          "sha256": "8c9a1b5f15b877fc827c9718d2876aa15c92147b839e388dd3a934a10f7ea767"
+        }
+      },
+      "approvedCandidateSha256": "bd412e0ff8db4e6fd121d46c2304dba308aa2545165931a11e12af30c18ceffe"
+    },
+    {
+      "assetId": "Build_OilRefinery_C",
+      "buildingClass": "Build_OilRefinery_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/production/Build_OilRefinery_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "6d7f8da7a0b5b1f4cf91ba7a79123753966e4b6cd37cfc4c24d6dd0ce4930d6e",
+      "hardFootprintM": {
+        "width": 10,
+        "length": 22
+      },
+      "occupancyFrame": {
+        "x": 0.293388436266,
+        "y": 0.045454559785,
+        "width": 0.413223127468,
+        "height": 0.909090880431
+      },
+      "statusImages": {
+        "active": {
+          "path": "assets/planner/top-view/buildings/production/Build_OilRefinery_C.webp",
+          "sha256": "6d7f8da7a0b5b1f4cf91ba7a79123753966e4b6cd37cfc4c24d6dd0ce4930d6e"
+        },
+        "activeWithCrystal": {
+          "path": "assets/planner/top-view/buildings/production/Build_OilRefinery_C.crystal.webp",
+          "sha256": "bc65bb4e8e7d15ad717931e2cb62009f7d7220d7fc0ab5d42783d898a0f1a719"
+        },
+        "standby": {
+          "path": "assets/planner/top-view/buildings/production/Build_OilRefinery_C.standby.webp",
+          "sha256": "5e1c889d2285f6be66ab9d185fbaccd60182ea683063fbb1267da0048868458c"
+        },
+        "error": {
+          "path": "assets/planner/top-view/buildings/production/Build_OilRefinery_C.error.webp",
+          "sha256": "e67a378e2e2bc2858df60effed3323d016ff783f1218e907830f36ea5a084191"
+        }
+      },
+      "approvedCandidateSha256": "a6c4cb14e842a3b88925ed1bdf130aaba209fdec4f8603474568d6ea5f35114c"
+    },
+    {
+      "assetId": "Build_Valve_C",
+      "buildingClass": "Build_Valve_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/logistics/Build_Valve_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "93b275b3196bd5feeb91e4d236bb924fd05dd8bf64d91b26018922e2efa98ef7",
+      "hardFootprintM": {
+        "width": 2,
+        "length": 1.2
+      },
+      "occupancyFrame": {
+        "x": 0.045454533357,
+        "y": 0.276747048704,
+        "width": 0.744182019335,
+        "height": 0.446509229344
+      },
+      "approvedCandidateSha256": "bf5b766164a31f40d1108b2d47526afba4017a7b684a495bdc1930cd4271bd68"
+    },
+    {
+      "assetId": "Build_IndustrialTank_C",
+      "buildingClass": "Build_IndustrialTank_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/storage/Build_IndustrialTank_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "ec3bc524cc4c92a34fb9403035ae54c33e7167b0b1adad10c17c37926c52956f",
+      "hardFootprintM": {
+        "width": 14,
+        "length": 14
+      },
+      "occupancyFrame": {
+        "x": 0.045454534195,
+        "y": 0.045454534195,
+        "width": 0.90909093161,
+        "height": 0.90909093161
+      },
+      "approvedCandidateSha256": "65bb48c5dec6500f1579c0914857eaa92f135674ca6972a4f35d64f667cbc152"
+    },
+    {
+      "assetId": "Build_FluidTruckStation_C",
+      "buildingClass": "Build_FluidTruckStation_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/transport/Build_FluidTruckStation_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "8a825b4c46c73fb7db931120428820c984ca244f28cf37410bf31a406b18aeee",
+      "hardFootprintM": {
+        "width": 17,
+        "length": 15
+      },
+      "occupancyFrame": {
+        "x": 0.056351087817,
+        "y": 0.253923510237,
+        "width": 0.79403816292,
+        "height": 0.700621928111
+      },
+      "statusImages": {
+        "active": {
+          "path": "assets/planner/top-view/buildings/transport/Build_FluidTruckStation_C.webp",
+          "sha256": "8a825b4c46c73fb7db931120428820c984ca244f28cf37410bf31a406b18aeee"
+        },
+        "activeWithCrystal": {
+          "path": "assets/planner/top-view/buildings/transport/Build_FluidTruckStation_C.crystal.webp",
+          "sha256": "d85460e7bb6286789922a7d501c951217759e508785fb9cf8131dc1ef907d5fb"
+        },
+        "standby": {
+          "path": "assets/planner/top-view/buildings/transport/Build_FluidTruckStation_C.standby.webp",
+          "sha256": "bc78473465ad612b7918f5a88190df75167e2453f3de132a9ddad9543214f4e7"
+        },
+        "error": {
+          "path": "assets/planner/top-view/buildings/transport/Build_FluidTruckStation_C.error.webp",
+          "sha256": "661d40a2f5b2afd6e0e787a90e686ef6197d5b68c5ec098839bf182bd514a19e"
+        }
+      },
+      "approvedCandidateSha256": "9806f5fae244a35af063ee9dfc3685d6611fa15fef711a1ab21123b6ff426921"
+    },
+    {
+      "assetId": "Build_ManufacturerMk1_C",
+      "buildingClass": "Build_ManufacturerMk1_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/production/Build_ManufacturerMk1_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "ad7e52515c7a5fb8d7fdfc074d7a2c82b589f14015eb6ea0795ec542f81d7c92",
+      "hardFootprintM": {
+        "width": 18,
+        "length": 20
+      },
+      "occupancyFrame": {
+        "x": 0.090909090909,
+        "y": 0.045454545455,
+        "width": 0.818181818182,
+        "height": 0.909090909091
+      },
+      "statusImages": {
+        "active": {
+          "path": "assets/planner/top-view/buildings/production/Build_ManufacturerMk1_C.webp",
+          "sha256": "ad7e52515c7a5fb8d7fdfc074d7a2c82b589f14015eb6ea0795ec542f81d7c92"
+        },
+        "activeWithCrystal": {
+          "path": "assets/planner/top-view/buildings/production/Build_ManufacturerMk1_C.crystal.webp",
+          "sha256": "dd36855eaf4aa28d7c0dc53df231b6f9703a01c06234f83ecb583293343f4004"
+        },
+        "standby": {
+          "path": "assets/planner/top-view/buildings/production/Build_ManufacturerMk1_C.standby.webp",
+          "sha256": "ffe04dd08a7943a5c8a0390578bde27fbfad6155b92daf079c39ef68a66d3a45"
+        },
+        "error": {
+          "path": "assets/planner/top-view/buildings/production/Build_ManufacturerMk1_C.error.webp",
+          "sha256": "80da67393754a626f364bd0df29e7b9084b63b6e17e2eebd024bbb2fb7e1222a"
+        }
+      },
+      "approvedCandidateSha256": "937360040dbbb77978918f88f2a88c629d06d5564a0319b8dcf15e0721267e10"
+    },
+    {
+      "assetId": "Build_PipelinePumpMk2_C",
+      "buildingClass": "Build_PipelinePumpMk2_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/logistics/Build_PipelinePumpMk2_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "f24ad73eba9f362016c7610b48e68ae0cad963c9155a0c54559180227d252ade",
+      "hardFootprintM": {
+        "width": 5,
+        "length": 1.2
+      },
+      "occupancyFrame": {
+        "x": 0.045454545455,
+        "y": 0.390909173272,
+        "width": 0.909090909091,
+        "height": 0.218181826852
+      },
+      "statusImages": {
+        "active": {
+          "path": "assets/planner/top-view/buildings/logistics/Build_PipelinePumpMk2_C.webp",
+          "sha256": "f24ad73eba9f362016c7610b48e68ae0cad963c9155a0c54559180227d252ade"
+        },
+        "activeWithCrystal": {
+          "path": "assets/planner/top-view/buildings/logistics/Build_PipelinePumpMk2_C.crystal.webp",
+          "sha256": "87c6ecaa933f2f9d6b027ca210726b39726fd9e67d578087253724e0ddac6593"
+        },
+        "standby": {
+          "path": "assets/planner/top-view/buildings/logistics/Build_PipelinePumpMk2_C.standby.webp",
+          "sha256": "a73eee089f20ac5e10ac927d09af99b39bf5a31023e83b6620622258cbd42d6a"
+        },
+        "error": {
+          "path": "assets/planner/top-view/buildings/logistics/Build_PipelinePumpMk2_C.error.webp",
+          "sha256": "d9c6eabc49536a380e88f72397c86431d24f91907b78d2a7f19cf21be141a80a"
+        }
+      },
+      "approvedCandidateSha256": "c8b38c20414bbc71b9a3053cb53420e4244f3f24cd0e35028e07f80e38d725f1"
+    },
+    {
+      "assetId": "Build_TrainStation_C",
+      "buildingClass": "Build_TrainStation_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/transport/Build_TrainStation_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "4349164e6ef7e1cc80166dbcdcf9b0e27fd9c34d11efe6823e94185606886a63",
+      "hardFootprintM": {
+        "width": 16,
+        "length": 34
+      },
+      "occupancyFrame": {
+        "x": 0.305099780849,
+        "y": 0.045454563999,
+        "width": 0.427807469177,
+        "height": 0.909090872001
+      },
+      "statusImages": {
+        "active": {
+          "path": "assets/planner/top-view/buildings/transport/Build_TrainStation_C.webp",
+          "sha256": "4349164e6ef7e1cc80166dbcdcf9b0e27fd9c34d11efe6823e94185606886a63"
+        },
+        "activeWithCrystal": {
+          "path": "assets/planner/top-view/buildings/transport/Build_TrainStation_C.crystal.webp",
+          "sha256": "feeb8f06595c14aca2ca8a4c5b4b932072160467ac4102daefed633917d2278c"
+        },
+        "standby": {
+          "path": "assets/planner/top-view/buildings/transport/Build_TrainStation_C.standby.webp",
+          "sha256": "4d462ce10760c04fb9144d76b18ef06f1068c2f9562b7ff49d292ff6f2af7658"
+        },
+        "error": {
+          "path": "assets/planner/top-view/buildings/transport/Build_TrainStation_C.error.webp",
+          "sha256": "c0eebf76a4f67863063523ee4c23dead51719e5254a439b4782cd75461091008"
+        }
+      },
+      "approvedCandidateSha256": "be20880d1116ccdf84470d4dd21c0df12970ef853fecfaebcbcf83006b0edb83"
+    },
+    {
+      "assetId": "Build_Blender_C",
+      "buildingClass": "Build_Blender_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/production/Build_Blender_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "c2afa85f5804c3c6250e14b24d8febcacb9553531c81faa0d99c218582f93ad4",
+      "hardFootprintM": {
+        "width": 18,
+        "length": 16
+      },
+      "occupancyFrame": {
+        "x": 0.375736237938,
+        "y": 0.295370957174,
+        "width": 0.460415346359,
+        "height": 0.409258085652
+      },
+      "statusImages": {
+        "active": {
+          "path": "assets/planner/top-view/buildings/production/Build_Blender_C.webp",
+          "sha256": "c2afa85f5804c3c6250e14b24d8febcacb9553531c81faa0d99c218582f93ad4"
+        },
+        "activeWithCrystal": {
+          "path": "assets/planner/top-view/buildings/production/Build_Blender_C.crystal.webp",
+          "sha256": "bc0374817f4d510c50bc5e439677c98dc644f99b9272226c7f3bbe278a4e0497"
+        },
+        "standby": {
+          "path": "assets/planner/top-view/buildings/production/Build_Blender_C.standby.webp",
+          "sha256": "248fa7681ccca868b3d9c65d5c2ece4ebe6ef15442666c447a5a3350a7c34066"
+        },
+        "error": {
+          "path": "assets/planner/top-view/buildings/production/Build_Blender_C.error.webp",
+          "sha256": "7c9dbb9c2e292cf6a021b153ce5e7982330c1edfa4375b7905bd3e2baa1f49d3"
+        }
+      },
+      "approvedCandidateSha256": "b6769727b317f692820611d66d4965340f176d3043b5759d01a9a5d88e24d4e9"
+    },
+    {
+      "assetId": "Build_FrackingExtractor_C",
+      "buildingClass": "Build_FrackingExtractor_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/extraction/Build_FrackingExtractor_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "882bd922873b08dda2c0681295d3143aef331fe0d44734eafd5075003a2c726a",
+      "hardFootprintM": {
+        "width": 5,
+        "length": 5
+      },
+      "occupancyFrame": {
+        "x": 0.045454545455,
+        "y": 0.045454545455,
+        "width": 0.909090909091,
+        "height": 0.909090909091
+      },
+      "approvedCandidateSha256": "91446e9f3787c29aa666cc7b162df5cfcad148d96916fa9d90abb83878bf5518"
+    },
+    {
+      "assetId": "Build_MinerMk3_C",
+      "buildingClass": "Build_MinerMk3_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/extraction/Build_MinerMk3_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "508ac491f3782da4115bb2f1e6cb7f09dd660e7c51289d4fee2098c98c26bd08",
+      "hardFootprintM": {
+        "width": 6,
+        "length": 14
+      },
+      "occupancyFrame": {
+        "x": 0.334392345296,
+        "y": 0.045454545455,
+        "width": 0.331215309409,
+        "height": 0.772835721954
+      },
+      "statusImages": {
+        "active": {
+          "path": "assets/planner/top-view/buildings/extraction/Build_MinerMk3_C.webp",
+          "sha256": "508ac491f3782da4115bb2f1e6cb7f09dd660e7c51289d4fee2098c98c26bd08"
+        },
+        "activeWithCrystal": {
+          "path": "assets/planner/top-view/buildings/extraction/Build_MinerMk3_C.crystal.webp",
+          "sha256": "2aa2a7b081901c300167005929451c479fb37d6dcadabe993fbe3e7e6f9f8de7"
+        },
+        "standby": {
+          "path": "assets/planner/top-view/buildings/extraction/Build_MinerMk3_C.standby.webp",
+          "sha256": "05aa295a769e3c6b37d97012bd3b16c20688ba0891644b50b748e131a8d445c8"
+        },
+        "error": {
+          "path": "assets/planner/top-view/buildings/extraction/Build_MinerMk3_C.error.webp",
+          "sha256": "59da8b6b6f7120d1a7793978ea1f232ee5dc80028edd5c7830254df1789e6738"
+        }
+      },
+      "approvedCandidateSha256": "88707c2737b4cf5739b3e73945bac217e7581be4cf88be10340250604055769a"
+    },
+    {
+      "assetId": "Build_Converter_C",
+      "buildingClass": "Build_Converter_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/production/Build_Converter_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "1e7f06c3f93dbca1ad6c300d1054d858e21c203f2d01fd20587dd0e691267c0b",
+      "hardFootprintM": {
+        "width": 16,
+        "length": 16
+      },
+      "occupancyFrame": {
+        "x": 0.045454555307,
+        "y": 0.045454555307,
+        "width": 0.909090889387,
+        "height": 0.909090889387
+      },
+      "statusImages": {
+        "active": {
+          "path": "assets/planner/top-view/buildings/production/Build_Converter_C.webp",
+          "sha256": "1e7f06c3f93dbca1ad6c300d1054d858e21c203f2d01fd20587dd0e691267c0b"
+        },
+        "activeWithCrystal": {
+          "path": "assets/planner/top-view/buildings/production/Build_Converter_C.crystal.webp",
+          "sha256": "bc35d66978d6045f596cdc86450b0bee7d8869fe077de12bfa3397f74cca8272"
+        },
+        "standby": {
+          "path": "assets/planner/top-view/buildings/production/Build_Converter_C.standby.webp",
+          "sha256": "54f85e8c56949555e8cad79cde84e1e65d01bd0c2a0b8eb470a9a7001567f94e"
+        },
+        "error": {
+          "path": "assets/planner/top-view/buildings/production/Build_Converter_C.error.webp",
+          "sha256": "e6ec63d48ea45a62fb448d2a8bb817d5e55acf01a6dcf404889498ad3b28cf7f"
+        }
+      },
+      "approvedCandidateSha256": "2ae16e2515b13ae3b8b98b30add6f8d5ea36121106da7f99365a38771b09493f"
+    },
+    {
+      "assetId": "Build_Portal_C",
+      "buildingClass": "Build_Portal_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/transport/Build_Portal_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "75de9fb90982531ca65703f5574db3ca362bf4664b01c820efbfd6f781e2a03b",
+      "hardFootprintM": {
+        "width": 8,
+        "length": 8
+      },
+      "occupancyFrame": {
+        "x": 0.084238775305,
+        "y": 0.068050627306,
+        "width": 0.863898771134,
+        "height": 0.863898719642
+      },
+      "approvedCandidateSha256": "283c2d2aa7bfdd9c3558b2997307c97f900bd5c64fc4a97dc495c36747f37ef0"
+    },
+    {
+      "assetId": "Build_PortalSatellite_C",
+      "buildingClass": "Build_PortalSatellite_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/transport/Build_PortalSatellite_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "9d8541f8d3a1739faf5ca392352bfc6205b45a367e252991164de88c1ed78cfa",
+      "hardFootprintM": {
+        "width": 8,
+        "length": 8
+      },
+      "occupancyFrame": {
+        "x": 0.047732252536,
+        "y": 0.051062275273,
+        "width": 0.897875556489,
+        "height": 0.897875556489
+      },
+      "approvedCandidateSha256": "7c8b3fef865837ca61f6f049c0b6a7dc083092e7793d1eea87f4b33e80f4c79b"
     }
   ]
 }

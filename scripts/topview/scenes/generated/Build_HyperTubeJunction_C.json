@@ -38,18 +38,32 @@
     }
   ],
   "materials": {
-    "albedo": {},
+    "albedo": {
+      "MI_HyperJunction": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/PipeHyperJunction/Texture/TX_HyperJunction_BC.png"
+    },
     "ao": {},
-    "normal": {},
-    "reflection": {},
+    "normal": {
+      "MI_HyperJunction": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/PipeHyperJunction/Texture/TX_HyperJunction_N.png"
+    },
+    "reflection": {
+      "MI_HyperJunction": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/PipeHyperJunction/Texture/TX_HyperJunction_Refl.png"
+    },
     "stateMask": {},
-    "paint": {},
+    "paint": {
+      "MI_HyperJunction": {
+        "primary": "#fa9549",
+        "secondary": "#4f5da4"
+      }
+    },
     "baseColor": {},
     "alpha": [],
-    "pbr": [],
+    "pbr": [
+      "MI_HyperJunction"
+    ],
     "normalOnly": [],
     "emissiveAccent": [],
     "emissiveGeometrySelectors": [],
+    "opacityGeometrySelectors": [],
     "state": {
       "color": "#00ff00",
       "strength": 5
@@ -104,8 +118,18 @@
   "portVisibility": [],
   "materialChecks": [
     {
-      "id": "cue4parse-imported-game-materials",
-      "status": "present"
+      "id": "cue4parse-game-texture-bindings",
+      "status": "present",
+      "bindings": [
+        {
+          "material": "MI_HyperJunction",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        }
+      ]
     }
   ],
   "cameraLightingChecks": [

@@ -56,18 +56,38 @@
     }
   ],
   "materials": {
-    "albedo": {},
+    "albedo": {
+      "DecalColor_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Alb.png",
+      "Decal_Normal": ".cache/topview/satisfactory-material-atlas.png",
+      "MI_ResourceSink_01": ".cache/topview/satisfactory-material-atlas.png",
+      "ResourceSink": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/ResourceSink/Textures/TX_ResourceSink_01_Albedo.png"
+    },
     "ao": {},
-    "normal": {},
-    "reflection": {},
+    "normal": {
+      "DecalColor_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Nor.png",
+      "Decal_Normal": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/PanelAtlas_Nor.png",
+      "MI_ResourceSink_01": ".cache/topview/satisfactory-normal-atlas.png"
+    },
+    "reflection": {
+      "Decal_Normal": ".cache/topview/satisfactory-reflection-atlas.png",
+      "MI_ResourceSink_01": ".cache/topview/satisfactory-reflection-atlas.png"
+    },
     "stateMask": {},
     "paint": {},
     "baseColor": {},
     "alpha": [],
-    "pbr": [],
+    "pbr": [
+      "DecalColor_Masked",
+      "Decal_Normal",
+      "MI_ResourceSink_01",
+      "ResourceSink"
+    ],
     "normalOnly": [],
-    "emissiveAccent": [],
+    "emissiveAccent": [
+      "DecalColor_Masked"
+    ],
     "emissiveGeometrySelectors": [],
+    "opacityGeometrySelectors": [],
     "state": {
       "color": "#00ff00",
       "strength": 5
@@ -115,8 +135,39 @@
   ],
   "materialChecks": [
     {
-      "id": "cue4parse-imported-game-materials",
-      "status": "present"
+      "id": "cue4parse-game-texture-bindings",
+      "status": "present",
+      "bindings": [
+        {
+          "material": "DecalColor_Masked",
+          "channels": [
+            "albedo",
+            "normal"
+          ]
+        },
+        {
+          "material": "Decal_Normal",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_ResourceSink_01",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "ResourceSink",
+          "channels": [
+            "albedo"
+          ]
+        }
+      ]
     }
   ],
   "cameraLightingChecks": [

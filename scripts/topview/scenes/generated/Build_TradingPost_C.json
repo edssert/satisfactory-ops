@@ -2396,18 +2396,443 @@
     }
   ],
   "materials": {
-    "albedo": {},
-    "ao": {},
-    "normal": {},
-    "reflection": {},
+    "albedo": {
+      "MI_CakePieceMug_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/FicsitCakeETC/Textures/TX_CakePieceMug_BC.png",
+      "MI_FicsitSoda_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/FicsitCakeETC/Textures/TX_FicsitSoda_Cap_BC.png",
+      "MI_HubCamera": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Texture/TX_HubCamera_BC.png",
+      "MI_FactoryHelmet_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Character/Player/Texture/Helmet/PaintSupport/TX_FactoryHelmet_01_BC.png",
+      "MI_Plants_02_E": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/World/Environment/Foliage/SmallFoliage/LowerVegatation/Textures/TX_LowerVegetation_02_Alb.png",
+      "MI_Plants_01_E1": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/World/Environment/Foliage/SmallFoliage/LowerVegatation/Textures/TX_LowerVegetation_01_Alb.png",
+      "MI_TradingPostStage1": ".cache/topview/satisfactory-material-atlas.png",
+      "Decal_Normal": ".cache/topview/satisfactory-material-atlas.png",
+      "DecalColor_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Alb.png",
+      "MI_Banan_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/Ficzza/Textures/TX_Ficzza_Banan_BC.png",
+      "MI_Kebab_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/Ficzza/Textures/TX_Ficzza_Kebab_BC.png",
+      "MI_Factory_Base_01": ".cache/topview/satisfactory-material-atlas.png",
+      "MI_Alpaca": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Alpaca_BC.png",
+      "MI_Blender": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Blender_BC.png",
+      "MI_Book_01A": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_01A_BC.png",
+      "MI_Book_01B": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_01B_BC.png",
+      "MI_Book_02A": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_02A_BC.png",
+      "MI_Book_02B": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_02B_BC.png",
+      "MI_Book_02C": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_02C_BC.png",
+      "MI_Book_03A": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_03A_BC.png",
+      "MI_Book_03B": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_03B_BC.png",
+      "MI_Candle": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_ScentedCandle_BC.png",
+      "MI_CoffeeMachine": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Texture/TX_CoffeeMachine_BC.png",
+      "MI_CoffeeDisplay": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Texture/TX_CoffeeDisplay_BC.png",
+      "MM_Cup": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Equipment/Cup/Textures/TX_Cup_low_BaseColor.png",
+      "MI_DeskLamp": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_DeskLamp_BC.png",
+      "HubDecal_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Texture/TX_HubDecal_BC.png",
+      "MI_DoorMat": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_DoorMat_BC.png",
+      "MI_Embroidery": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Embroidery_BC.png",
+      "MI_FicsitManual": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_FicsitManual_BC.png",
+      "MI_FicsmasBlanket": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasBlanket_BC.png",
+      "MI_FicsmasCandle": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasCandle_BC.png",
+      "MI_FicsmasCards": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasCards_BC.png",
+      "MI_SockFur": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_SockFur_BC.png",
+      "MI_FicsmasSock": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasSock_BC.png",
+      "MI_FicsmasSock_02": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasSock_02_BC.png",
+      "MI_FicsmasStar": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasStar_BC.png",
+      "MI_FiczzaBox_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/Ficzza/Textures/TX_FiczzaBox_BC.png",
+      "MI_FridgeMagnets": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FridgeMagnets_BC.png",
+      "MI_GingerBreadCookies": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_GinerBreadCookies_BC.png",
+      "MI_Glogg": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_Glogg_BC.png",
+      "MI_Halmbock": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_Halmbock_BC.png",
+      "MI_HazmatSuit_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Resource/Parts/HazmatSuit/Textures/TX_HazmatSuit_BC.png",
+      "MI_HubComputer": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Computer_BC.png",
+      "HubFicsmasDecal_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasDecal_BC.png",
+      "Placeholder_Garland": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_Garland_BC.png",
+      "MI_HubMirror": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_HubMirror_BC.png",
+      "MI_HubPots": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_HubPots_BC.png",
+      "MI_HubSign": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_HubSign_BC.png",
+      "MI_GoldenJoystick": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_GoldenJoystick_BC.png",
+      "MM_LavaLamp": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_LavaLamp_BC.png",
+      "MI_LunchTray": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_LunchTray_BC.png",
+      "MI_Matches": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_Matches_BC.png",
+      "MI_Meseekbox": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_MeseekBox_BC.png",
+      "MI_Microwave": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_MicroWave_BC.png",
+      "MI_Orange": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_Orange_BC.png",
+      "MI_Bowl": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_Bowl_BC.png",
+      "MI_OstHyvel": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_OstHyvel_BC.png",
+      "MI_PartySpotlight_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartySpotlight/Textures/TX_PartySpotlight_BC.png",
+      "MI_PartyGarland_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartyGarland/Textures/TX_DefaultMaterial_BC.png",
+      "MM_PartySpotlight": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartySpotlight/Textures/TX_PartySpotlight_BC.png",
+      "MI_Pencils_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Pencils_BC.png",
+      "MI_Philodendron_02": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/World/Environment/Foliage/SmallFoliage/Philodendron/Textures/TX_Philodendron_Alb_02.png",
+      "MI_Philodendron_04": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/World/Environment/Foliage/SmallFoliage/Philodendron/Textures/TX_Philodendron_Alb_02.png",
+      "MI_Picture_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_PictureFrame_BC.png",
+      "MI_PictureDiploma": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_PictureDiploma_BC.png",
+      "MI_Picture_02": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_PictureFrame_02_BC.png",
+      "MI_PioneerCutout": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/CardboardPioneers/Cardboard_Pioneers_WhiteBG.png",
+      "MI_PostCard_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_HaigenPostCard_BC.png",
+      "MI_RubiksCube": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_RubiksCube_BC.png",
+      "MI_SantaStatue": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_SantaStatue_BC.png",
+      "MM_SmokeMachine": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/SmokeMachine/Textures/TX_SmokeMachine_01_BC.png",
+      "MI_SnowGlobe": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_SnowGlobe_BC.png",
+      "MI_Snus": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_SnusDosa_BC.png",
+      "MI_socks": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Socks_BC.png",
+      "MI_HubStool": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Stool_BC.png",
+      "MI_ToiletBag": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_ToiletBag_BC.png",
+      "Placeholder_Fur": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/HubToilet/Textures/TX_ToiletCover_BC.png",
+      "MI_HubToiletDecor_02": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/HubToilet/Textures/TX_ToiletDecor_BC.png",
+      "MI_Toothbrush": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Toothbrush_BC.png",
+      "MI_PartySpeaker": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartySpeaker/TX_SM_PartySpeaker_Body_BaseColor.png",
+      "MI_ToiletPoster_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_ToiletPoster_BC.png",
+      "Monitor": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Texture/Monitor_albedo.png"
+    },
+    "ao": {
+      "MI_HubCamera": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Texture/TX_HubCamera_AOMasks.png",
+      "MI_FactoryHelmet_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Character/Player/Texture/Helmet/PaintSupport/TX_FactoryHelmet_01_AOMasks.png",
+      "MI_Alpaca": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Alpaca_AOMasks.png",
+      "MI_Blender": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Blender_AOMasks.png",
+      "MI_Book_01A": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_01A_AOMasks.png",
+      "MI_Book_01B": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_01A_AOMasks.png",
+      "MI_Book_02A": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_02A_AOMasks.png",
+      "MI_Book_02B": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_02A_AOMasks.png",
+      "MI_Book_02C": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_02A_AOMasks.png",
+      "MI_Book_03A": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_03A_AOMasks.png",
+      "MI_Book_03B": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_03A_AOMasks.png",
+      "MI_Candle": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_ScentedCandle_AOMasks.png",
+      "MI_CoffeeMachine": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Texture/TX_CoffeeMachine_AOMasks.png",
+      "MI_DeskLamp": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_DeskLamp_AOMasks.png",
+      "MI_DoorMat": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Alpaca_AOMasks.png",
+      "MI_Embroidery": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Embroidery_AOMasks.png",
+      "MI_FicsitManual": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_FicsitManual_AOMasks.png",
+      "MI_FicsmasBlanket": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasSock_AOMask.png",
+      "MI_FicsmasCandle": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasCandle_AOMask.png",
+      "MI_FicsmasSock": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasSock_AOMask.png",
+      "MI_FicsmasSock_02": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasSock_AOMask.png",
+      "MI_FicsmasStar": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasStar_AOMask.png",
+      "MI_Glogg": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasSock_AOMask.png",
+      "MI_Halmbock": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasSock_AOMask.png",
+      "MI_HubComputer": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Computer_AOMasks.png",
+      "MI_HubMirror": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_HubMirror_AOMasks.png",
+      "MI_HubPots": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_HubPots_AOMasks.png",
+      "MI_HubSign": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_HubSign_AOMasks.png",
+      "MI_GoldenJoystick": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_GoldenJoystick_AOMask.png",
+      "MM_LavaLamp": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_LavaLamp_AOMasks.png",
+      "MI_LunchTray": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_LunchTray_AOMasks.png",
+      "MI_Matches": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasSock_AOMask.png",
+      "MI_Meseekbox": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_MeseekBox_AOMasks.png",
+      "MI_Microwave": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_MicroWave_AOMasks.png",
+      "MI_Orange": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasSock_AOMask.png",
+      "MI_Bowl": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasSock_AOMask.png",
+      "MI_OstHyvel": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_OstHyvel_AOMasks.png",
+      "MM_PartySpotlight": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartySpotlight/Textures/TX_PartySpotlight_AOMasks.png",
+      "MI_Pencils_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Pencils_AOMasks.png",
+      "MI_Picture_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Alpaca_AOMasks.png",
+      "MI_PictureDiploma": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_PictureDiploma_AOMasks.png",
+      "MI_Picture_02": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_PictureFrame_02_AOMasks.png",
+      "MI_PostCard_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_HaigenPostCard_AOMask.png",
+      "MI_RubiksCube": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_RubiksCube_AOMasks.png",
+      "MI_SantaStatue": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_SantaStatue_AOMask.png",
+      "MI_SnowGlobe": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_SnowGlobe_AOMask.png",
+      "MI_Snus": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_SnusDosa_AOMasks.png",
+      "MI_socks": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Socks_AOMasks.png",
+      "MI_HubStool": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Stool_AOMasks.png",
+      "MI_ToiletBag": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_ToiletBag_AOMasks.png",
+      "MI_Toothbrush": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Toothbrush_AOMasks.png",
+      "MI_PartySpeaker": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartySpeaker/TX_PartySpeaker_Body_AOMask.png",
+      "MI_ToiletPoster_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_HubMirror_AOMasks.png"
+    },
+    "normal": {
+      "MI_CakePieceMug_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/FicsitCakeETC/Textures/TX_CakePieceMug_N.png",
+      "MI_FicsitSoda_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/FicsitCakeETC/Textures/TX_FicsitSoda_Cap_N.png",
+      "MI_SodaPlastic_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/FicsitCakeETC/Textures/TX_FicsitSoda_Bottle_N.png",
+      "MI_Soda_01_Inst": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/FicsitCakeETC/Textures/TX_FicsitSoda_Soda_N.png",
+      "MI_HubCamera": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Texture/TX_HubCamera_N.png",
+      "MI_CameraGlass": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Texture/TX_HubCamera_N.png",
+      "MI_FactoryHelmet_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Character/Player/Texture/Helmet/PaintSupport/TX_FactoryHelmet_01_N.png",
+      "MI_Plants_02_E": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/World/Environment/Foliage/SmallFoliage/LowerVegatation/Textures/TX_LowerVegetation_02_Nor.png",
+      "MI_Plants_01_E1": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/World/Environment/Foliage/SmallFoliage/LowerVegatation/Textures/TX_LowerVegetation_01_Nor.png",
+      "MI_TradingPostStage1": ".cache/topview/satisfactory-normal-atlas.png",
+      "Decal_Normal": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/PanelAtlas_Nor.png",
+      "DecalColor_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Nor.png",
+      "MI_Banan_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/Ficzza/Textures/TX_Ficzza_Banan_N.png",
+      "MI_Kebab_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/Ficzza/Textures/TX_Ficzza_Kebab_N.png",
+      "MI_Factory_Base_01": ".cache/topview/satisfactory-normal-atlas.png",
+      "MI_Alpaca": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Alpaca_N.png",
+      "MI_BlenderPitcher": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Blender_N.png",
+      "MI_Blender": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Blender_N.png",
+      "MI_Book_01A": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_01A_N.png",
+      "MI_Book_01B": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_01A_N.png",
+      "MI_Book_02A": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_02A_N.png",
+      "MI_Book_02B": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_02A_N.png",
+      "MI_Book_02C": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_02A_N.png",
+      "MI_Book_03A": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_03A_N.png",
+      "MI_Book_03B": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_03A_N.png",
+      "MI_Candle": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_ScentedCandle_N.png",
+      "MI_CoffeeMachine": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Texture/TX_CoffeeMachine_N.png",
+      "MM_Cup": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Equipment/Cup/Textures/TX_Cup_low_Normal.png",
+      "MI_DeskLamp": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_DeskLamp_N.png",
+      "MM_DiscoBall": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/DiscoBall/TX_DiscoBall_normal.png",
+      "HubDecal_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Texture/TX_HubDecal_N.png",
+      "MI_DoorMat": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_DoorMat_N.png",
+      "MI_Embroidery": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Embroidery_N.png",
+      "MI_FicsitManual": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_FicsitManual_N.png",
+      "MI_FicsmasBlanket": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasBlanket_N.png",
+      "MI_FicsmasCandle": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasCandle_N.png",
+      "MI_FicsmasCards": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasCards_N.png",
+      "MI_SockFur": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_SockFur_N.png",
+      "MI_FicsmasSock": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasSock_N.png",
+      "MI_FicsmasSock_02": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasSock_N.png",
+      "MI_FicsmasStar": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasStar_N.png",
+      "MI_FiczzaBox_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/Ficzza/Textures/TX_FiczzaBox_N.png",
+      "MI_FridgeMagnets": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FridgeMagnets_N.png",
+      "MI_GingerBreadCookies": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_GinerBreadCookies_N.png",
+      "MI_Glogg": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_Glogg_N.png",
+      "MI_Halmbock": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_Halmbock_N.png",
+      "MI_HazmatSuit_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Resource/Parts/HazmatSuit/Textures/TX_HazmatSuit_N.png",
+      "MI_HubComputer": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Computer_N.png",
+      "HubFicsmasDecal_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasDecal_N.png",
+      "Placeholder_Garland": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_Garland_N.png",
+      "MI_HubMirror": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_HubMirror_N.png",
+      "MI_HubPots": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_HubPots_N.png",
+      "MI_HubSign": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_HubSign_N.png",
+      "MI_GoldenJoystick": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_GoldenJoystick_N.png",
+      "MM_LavaLamp": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_LavaLamp_N.png",
+      "MI_LunchTray": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_LunchTray_N.png",
+      "MI_Matches": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_Matches_N.png",
+      "MI_Meseekbox": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_MeseekBox_N.png",
+      "MI_Microwave": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_MicroWave_N.png",
+      "MI_Orange": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_Orange_N.png",
+      "MI_Bowl": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_Bowl_N.png",
+      "MI_OstHyvel": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_OstHyvel_N.png",
+      "MI_PartySpotlight_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartySpotlight/Textures/TX_PartySpotlight_N.png",
+      "MI_PartyGarland_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartyGarland/Textures/TX_DefaultMaterial_N.png",
+      "MM_PartySpotlight": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartySpotlight/Textures/TX_PartySpotlight_N.png",
+      "MI_Pencils_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Pencils_N.png",
+      "MI_Philodendron_02": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/World/Environment/Foliage/SmallFoliage/Philodendron/Textures/TX_Philodendron_Nor_02.png",
+      "MI_Philodendron_04": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/World/Environment/Foliage/SmallFoliage/Philodendron/Textures/TX_Philodendron_Nor_02.png",
+      "MI_Picture_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_PictureFrame_N.png",
+      "MI_PictureDiploma": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_PictureDiploma_N.png",
+      "MI_Picture_02": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_PictureFrame_02_N.png",
+      "MI_PostCard_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_HaigenPostCard_N.png",
+      "MI_RubiksCube": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_RubiksCube_N.png",
+      "MI_SantaStatue": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_SantaStatue_N.png",
+      "MM_SmokeMachine": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/SmokeMachine/Textures/TX_SmokeMachine_01_N.png",
+      "MI_SnowGlobe": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_SnowGlobe_N.png",
+      "MI_SnowGlobeGlass": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/MasterMaterials/Resources/TX_DefaultNormal_01.png",
+      "MI_Snus": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_SnusDosa_N.png",
+      "MI_socks": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Socks_N.png",
+      "MI_HubStool": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Stool_N.png",
+      "MI_ToiletBag": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_ToiletBag_N.png",
+      "Placeholder_Fur": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/HubToilet/Textures/TX_ToiletCover_N.png",
+      "MI_HubToiletDecor_02": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/HubToilet/Textures/TX_ToiletDecor_N.png",
+      "MI_Toothbrush": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Toothbrush_N.png",
+      "MI_PartySpeaker": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Resource/RawResources/SAM/Texture/TX_SamDetail_Normal.png",
+      "MM_SpeakerGrille": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartySpeaker/Speaker_Grille_normal.png",
+      "MI_ToiletPoster_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_ToiletPoster_N.png"
+    },
+    "reflection": {
+      "MI_CakePieceMug_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/FicsitCakeETC/Textures/TX_CakePieceMug_Refl.png",
+      "MI_FicsitSoda_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/FicsitCakeETC/Textures/TX_FicsitSoda_Cap_Refl.png",
+      "MI_SodaPlastic_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/FicsitCakeETC/Textures/TX_FicsitSoda_Bottle_Refl.png",
+      "MI_Soda_01_Inst": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/FicsitCakeETC/Textures/TX_FicsitSoda_Soda_Refl.png",
+      "MI_HubCamera": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Texture/TX_HubCamera_Refl.png",
+      "MI_CameraGlass": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Texture/TX_HubCamera_Refl.png",
+      "MI_FactoryHelmet_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Character/Player/Texture/Helmet/PaintSupport/TX_FactoryHelmet_01_Refl.png",
+      "MI_TradingPostStage1": ".cache/topview/satisfactory-reflection-atlas.png",
+      "Decal_Normal": ".cache/topview/satisfactory-reflection-atlas.png",
+      "MI_Banan_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/Ficzza/Textures/TX_Ficzza_Banan_Refl.png",
+      "MI_Kebab_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/Ficzza/Textures/TX_Ficzza_Kebab_Refl.png",
+      "MI_Factory_Base_01": ".cache/topview/satisfactory-reflection-atlas.png",
+      "MI_Alpaca": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Alpaca_Refl.png",
+      "MI_BlenderPitcher": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Blender_Refl.png",
+      "MI_Blender": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Blender_Refl.png",
+      "MI_Book_01A": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_01A_Refl.png",
+      "MI_Book_01B": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_01A_Refl.png",
+      "MI_Book_02A": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_02A_Refl.png",
+      "MI_Book_02B": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_02A_Refl.png",
+      "MI_Book_02C": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_02A_Refl.png",
+      "MI_Book_03A": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_03A_Refl.png",
+      "MI_Book_03B": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_03A_Refl.png",
+      "MI_Candle": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_ScentedCandle_Refl.png",
+      "MI_CoffeeMachine": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Texture/TX_CoffeeMachine_Refl.png",
+      "MM_Cup": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Equipment/Cup/Textures/TX_Cup_low_MREO.png",
+      "MI_DeskLamp": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_DeskLamp_Refl.png",
+      "HubDecal_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Texture/TX_HubDecal_Refl.png",
+      "MI_DoorMat": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_DoorMat_Refl.png",
+      "MI_Embroidery": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Embroidery_Refl.png",
+      "MI_FicsitManual": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_FicsitManual_Refl.png",
+      "MI_FicsmasBlanket": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasBlanket_Refl.png",
+      "MI_FicsmasCandle": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasCandle_Refl.png",
+      "MI_FicsmasCards": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasCards_REFL.png",
+      "MI_FicsmasSock": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasSock_Refl.png",
+      "MI_FicsmasSock_02": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasSock_Refl.png",
+      "MI_FicsmasStar": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasStar_Refl.png",
+      "MI_FiczzaBox_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/Ficzza/Textures/TX_FiczzaBox_Refl.png",
+      "MI_FridgeMagnets": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FridgeMagnets_REFL.png",
+      "MI_GingerBreadCookies": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_GinerBreadCookies_Refl.png",
+      "MI_Glogg": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_Glogg_Refl.png",
+      "MI_Halmbock": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_Halmbock_Refl.png",
+      "MI_HazmatSuit_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Resource/Parts/HazmatSuit/Textures/TX_HazmatSuit_Relf.png",
+      "MI_HubComputer": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Computer_Refl.png",
+      "HubFicsmasDecal_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_FicsmasDecal_Refl.png",
+      "Placeholder_Garland": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_Garland_Refl.png",
+      "MI_HubMirror": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_HubMirror_Refl.png",
+      "MI_HubPots": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_HubPots_Refl.png",
+      "MI_HubSign": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_HubSign_Refl.png",
+      "MI_GoldenJoystick": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_GoldenJoystick_Refl.png",
+      "MM_LavaLamp": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_LavaLamp_Refl.png",
+      "MI_LunchTray": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_LunchTray_Refl.png",
+      "MI_Matches": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_Matches_Refl.png",
+      "MI_Meseekbox": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_MeseekBox_Refl.png",
+      "MI_Microwave": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_MicroWave_Refl.png",
+      "MI_Orange": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_Orange_Refl.png",
+      "MI_Bowl": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_Bowl_Refl.png",
+      "MI_OstHyvel": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_OstHyvel_Refl.png",
+      "MI_PartySpotlight_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartySpotlight/Textures/TX_PartySPotlight_MREO.png",
+      "MI_PartyGarland_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartyGarland/Textures/TX_DefaultMaterial_MREO.png",
+      "MM_PartySpotlight": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartySpotlight/Textures/TX_PartySPotlight_MREO.png",
+      "MI_Pencils_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Pencils_Refl.png",
+      "MI_Picture_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_PictureFrame_Refl.png",
+      "MI_PictureDiploma": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_PictureDiploma_Refl.png",
+      "MI_Picture_02": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_PictureFrame_02_Refl.png",
+      "MI_PioneerCutout": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/MasterMaterials/Resources/TX_DefaultMasks_01.png",
+      "MI_PostCard_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_HaigenPostCard_Refl.png",
+      "MI_RubiksCube": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_RubiksCube_Refl.png",
+      "MI_SantaStatue": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_SantaStatue_Refl.png",
+      "MM_SmokeMachine": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/SmokeMachine/Textures/TX_SmokeMachine_01_MREO.png",
+      "MI_SnowGlobe": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Christmas/Art/HubFicsmas/Texture/TX_SnowGlobe_Refl.png",
+      "MI_SnowGlobeGlass": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Texture/TX_HubCamera_Refl.png",
+      "MI_Snus": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_SnusDosa_Refl.png",
+      "MI_socks": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Socks_Refl.png",
+      "MI_HubStool": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Stool_Refl.png",
+      "MI_ToiletBag": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_ToiletBag_Refl.png",
+      "Placeholder_Fur": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/HubToilet/Textures/TX_ToiletCover_Refl.png",
+      "MI_HubToiletDecor_02": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/HubToilet/Textures/TX_ToiletDecor_Refl.png",
+      "MI_Toothbrush": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Toothbrush_Refl.png",
+      "MI_PartySpeaker": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Events/Anniversary/Art/PartySpeaker/TX_SM_PartySpeaker_Body_MREO.png",
+      "MI_ToiletPoster_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_ToiletPoster_MREO.png",
+      "Monitor": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Texture/Monitor_refl.png"
+    },
     "stateMask": {},
-    "paint": {},
+    "paint": {
+      "MI_FactoryHelmet_01": {
+        "primary": "#fa9549",
+        "secondary": "#4f5da4"
+      },
+      "MI_CoffeeMachine": {
+        "primary": "#fa9549",
+        "secondary": "#4f5da4"
+      },
+      "MI_DeskLamp": {
+        "primary": "#fa9549",
+        "secondary": "#4f5da4"
+      },
+      "MI_HubStool": {
+        "primary": "#fa9549",
+        "secondary": "#4f5da4"
+      },
+      "MI_PartySpeaker": {
+        "primary": "#fa9549",
+        "secondary": "#4f5da4"
+      }
+    },
     "baseColor": {},
     "alpha": [],
-    "pbr": [],
+    "pbr": [
+      "MI_CakePieceMug_01",
+      "MI_FicsitSoda_01",
+      "MI_SodaPlastic_01",
+      "MI_Soda_01_Inst",
+      "MI_HubCamera",
+      "MI_CameraGlass",
+      "MI_FactoryHelmet_01",
+      "MI_Plants_02_E",
+      "MI_Plants_01_E1",
+      "MI_TradingPostStage1",
+      "Decal_Normal",
+      "DecalColor_Masked",
+      "MI_Banan_01",
+      "MI_Kebab_01",
+      "MI_Factory_Base_01",
+      "MI_Alpaca",
+      "MI_BlenderPitcher",
+      "MI_Blender",
+      "MI_Book_01A",
+      "MI_Book_01B",
+      "MI_Book_02A",
+      "MI_Book_02B",
+      "MI_Book_02C",
+      "MI_Book_03A",
+      "MI_Book_03B",
+      "MI_Candle",
+      "MI_CoffeeMachine",
+      "MI_CoffeeDisplay",
+      "MM_Cup",
+      "MI_DeskLamp",
+      "MM_DiscoBall",
+      "HubDecal_Masked",
+      "MI_DoorMat",
+      "MI_Embroidery",
+      "MI_FicsitManual",
+      "MI_FicsmasBlanket",
+      "MI_FicsmasCandle",
+      "MI_FicsmasCards",
+      "MI_SockFur",
+      "MI_FicsmasSock",
+      "MI_FicsmasSock_02",
+      "MI_FicsmasStar",
+      "MI_FiczzaBox_01",
+      "MI_FridgeMagnets",
+      "MI_GingerBreadCookies",
+      "MI_Glogg",
+      "MI_Halmbock",
+      "MI_HazmatSuit_01",
+      "MI_HubComputer",
+      "HubFicsmasDecal_Masked",
+      "Placeholder_Garland",
+      "MI_HubMirror",
+      "MI_HubPots",
+      "MI_HubSign",
+      "MI_GoldenJoystick",
+      "MM_LavaLamp",
+      "MI_LunchTray",
+      "MI_Matches",
+      "MI_Meseekbox",
+      "MI_Microwave",
+      "MI_Orange",
+      "MI_Bowl",
+      "MI_OstHyvel",
+      "MI_PartySpotlight_01",
+      "MI_PartyGarland_01",
+      "MM_PartySpotlight",
+      "MI_Pencils_01",
+      "MI_Philodendron_02",
+      "MI_Philodendron_04",
+      "MI_Picture_01",
+      "MI_PictureDiploma",
+      "MI_Picture_02",
+      "MI_PioneerCutout",
+      "MI_PostCard_01",
+      "MI_RubiksCube",
+      "MI_SantaStatue",
+      "MM_SmokeMachine",
+      "MI_SnowGlobe",
+      "MI_SnowGlobeGlass",
+      "MI_Snus",
+      "MI_socks",
+      "MI_HubStool",
+      "MI_ToiletBag",
+      "Placeholder_Fur",
+      "MI_HubToiletDecor_02",
+      "MI_Toothbrush",
+      "MI_PartySpeaker",
+      "MM_SpeakerGrille",
+      "MI_ToiletPoster_01",
+      "Monitor"
+    ],
     "normalOnly": [],
-    "emissiveAccent": [],
+    "emissiveAccent": [
+      "DecalColor_Masked",
+      "MI_PartySpotlight_01",
+      "MM_PartySpotlight"
+    ],
     "emissiveGeometrySelectors": [],
+    "opacityGeometrySelectors": [],
     "state": {
       "color": "#00ff00",
       "strength": 5
@@ -3105,8 +3530,764 @@
   ],
   "materialChecks": [
     {
-      "id": "cue4parse-imported-game-materials",
-      "status": "present"
+      "id": "cue4parse-game-texture-bindings",
+      "status": "present",
+      "bindings": [
+        {
+          "material": "MI_CakePieceMug_01",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_FicsitSoda_01",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_SodaPlastic_01",
+          "channels": [
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Soda_01_Inst",
+          "channels": [
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_HubCamera",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_CameraGlass",
+          "channels": [
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_FactoryHelmet_01",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Plants_02_E",
+          "channels": [
+            "albedo",
+            "normal"
+          ]
+        },
+        {
+          "material": "MI_Plants_01_E1",
+          "channels": [
+            "albedo",
+            "normal"
+          ]
+        },
+        {
+          "material": "MI_TradingPostStage1",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "Decal_Normal",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "DecalColor_Masked",
+          "channels": [
+            "albedo",
+            "normal"
+          ]
+        },
+        {
+          "material": "MI_Banan_01",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Kebab_01",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Factory_Base_01",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Alpaca",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_BlenderPitcher",
+          "channels": [
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Blender",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Book_01A",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Book_01B",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Book_02A",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Book_02B",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Book_02C",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Book_03A",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Book_03B",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Candle",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_CoffeeMachine",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_CoffeeDisplay",
+          "channels": [
+            "albedo"
+          ]
+        },
+        {
+          "material": "MM_Cup",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_DeskLamp",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MM_DiscoBall",
+          "channels": [
+            "normal"
+          ]
+        },
+        {
+          "material": "HubDecal_Masked",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_DoorMat",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Embroidery",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_FicsitManual",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_FicsmasBlanket",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_FicsmasCandle",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_FicsmasCards",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_SockFur",
+          "channels": [
+            "albedo",
+            "normal"
+          ]
+        },
+        {
+          "material": "MI_FicsmasSock",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_FicsmasSock_02",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_FicsmasStar",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_FiczzaBox_01",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_FridgeMagnets",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_GingerBreadCookies",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Glogg",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Halmbock",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_HazmatSuit_01",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_HubComputer",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "HubFicsmasDecal_Masked",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "Placeholder_Garland",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_HubMirror",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_HubPots",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_HubSign",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_GoldenJoystick",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MM_LavaLamp",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_LunchTray",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Matches",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Meseekbox",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Microwave",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Orange",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Bowl",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_OstHyvel",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_PartySpotlight_01",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_PartyGarland_01",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MM_PartySpotlight",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Pencils_01",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Philodendron_02",
+          "channels": [
+            "albedo",
+            "normal"
+          ]
+        },
+        {
+          "material": "MI_Philodendron_04",
+          "channels": [
+            "albedo",
+            "normal"
+          ]
+        },
+        {
+          "material": "MI_Picture_01",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_PictureDiploma",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Picture_02",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_PioneerCutout",
+          "channels": [
+            "albedo",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_PostCard_01",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_RubiksCube",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_SantaStatue",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MM_SmokeMachine",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_SnowGlobe",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_SnowGlobeGlass",
+          "channels": [
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Snus",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_socks",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_HubStool",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_ToiletBag",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "Placeholder_Fur",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_HubToiletDecor_02",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Toothbrush",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_PartySpeaker",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MM_SpeakerGrille",
+          "channels": [
+            "normal"
+          ]
+        },
+        {
+          "material": "MI_ToiletPoster_01",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "Monitor",
+          "channels": [
+            "albedo",
+            "reflection"
+          ]
+        }
+      ]
     }
   ],
   "cameraLightingChecks": [

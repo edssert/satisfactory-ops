@@ -110,18 +110,51 @@
     }
   ],
   "materials": {
-    "albedo": {},
-    "ao": {},
-    "normal": {},
-    "reflection": {},
+    "albedo": {
+      "MI_Trainstation": ".cache/topview/satisfactory-material-atlas.png",
+      "Decal_Normal": ".cache/topview/satisfactory-material-atlas.png",
+      "DecalColor_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Alb.png",
+      "MI_Factory_Base_01": ".cache/topview/satisfactory-material-atlas.png",
+      "MI_Freight_Fuel": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Vehicle/Train/Textures/TX_Freight_Fuel_BC.png"
+    },
+    "ao": {
+      "MI_Freight_Fuel": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Vehicle/Train/Textures/TX_Freight_Fuel_AOMask.png"
+    },
+    "normal": {
+      "MI_Trainstation": ".cache/topview/satisfactory-normal-atlas.png",
+      "Decal_Normal": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/PanelAtlas_Nor.png",
+      "DecalColor_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Nor.png",
+      "MI_Factory_Base_01": ".cache/topview/satisfactory-normal-atlas.png",
+      "MI_Freight_Fuel": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Vehicle/Train/Textures/TX_Freight_Fuel_N.png"
+    },
+    "reflection": {
+      "MI_Trainstation": ".cache/topview/satisfactory-reflection-atlas.png",
+      "Decal_Normal": ".cache/topview/satisfactory-reflection-atlas.png",
+      "MI_Factory_Base_01": ".cache/topview/satisfactory-reflection-atlas.png",
+      "MI_Freight_Fuel": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Vehicle/Train/Textures/TX_Freight_Fuel_Refl.png"
+    },
     "stateMask": {},
-    "paint": {},
+    "paint": {
+      "MI_Freight_Fuel": {
+        "primary": "#fa9549",
+        "secondary": "#4f5da4"
+      }
+    },
     "baseColor": {},
     "alpha": [],
-    "pbr": [],
+    "pbr": [
+      "MI_Trainstation",
+      "Decal_Normal",
+      "DecalColor_Masked",
+      "MI_Factory_Base_01",
+      "MI_Freight_Fuel"
+    ],
     "normalOnly": [],
-    "emissiveAccent": [],
+    "emissiveAccent": [
+      "DecalColor_Masked"
+    ],
     "emissiveGeometrySelectors": [],
+    "opacityGeometrySelectors": [],
     "state": {
       "color": "#00ff00",
       "strength": 5
@@ -184,8 +217,50 @@
   ],
   "materialChecks": [
     {
-      "id": "cue4parse-imported-game-materials",
-      "status": "present"
+      "id": "cue4parse-game-texture-bindings",
+      "status": "present",
+      "bindings": [
+        {
+          "material": "MI_Trainstation",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "Decal_Normal",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "DecalColor_Masked",
+          "channels": [
+            "albedo",
+            "normal"
+          ]
+        },
+        {
+          "material": "MI_Factory_Base_01",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Freight_Fuel",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        }
+      ]
     }
   ],
   "cameraLightingChecks": [

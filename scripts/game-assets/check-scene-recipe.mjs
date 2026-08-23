@@ -73,6 +73,14 @@ function rotationEulerMatches(actual, component) {
 
 for (const scenePath of scenePaths) {
   const recipe = JSON.parse(readFileSync(resolve(root, scenePath), 'utf8'));
+  if (scenePath.includes('/generated/')) {
+    const gameTextureCheck = recipe.materialChecks?.find((check) => check.id === 'cue4parse-game-texture-bindings');
+    const albedoCount = Object.keys(recipe.materials?.albedo ?? {}).length;
+    const pbrCount = recipe.materials?.pbr?.length ?? 0;
+    if (gameTextureCheck?.status !== 'present' || albedoCount === 0 || pbrCount === 0) {
+      errors.push(`${recipe.id}: 게임 재질 텍스처 연결 누락`);
+    }
+  }
   const contract = sceneContracts.contracts.find(
     (entry) => entry.buildingClass === recipe.buildingClass
   );

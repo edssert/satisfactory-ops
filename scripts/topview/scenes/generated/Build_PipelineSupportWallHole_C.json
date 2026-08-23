@@ -38,18 +38,32 @@
     }
   ],
   "materials": {
-    "albedo": {},
+    "albedo": {
+      "MI_Pipe_Inst": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/PipelineSupport/Textures/TX_PipePole_Albedo.png"
+    },
     "ao": {},
-    "normal": {},
-    "reflection": {},
+    "normal": {
+      "MI_Pipe_Inst": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/PipelineSupport/Textures/TX_PipePole_Normal.png"
+    },
+    "reflection": {
+      "MI_Pipe_Inst": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/PipelineSupport/Textures/TX_PipePole_Reflection.png"
+    },
     "stateMask": {},
-    "paint": {},
+    "paint": {
+      "MI_Pipe_Inst": {
+        "primary": "#fa9549",
+        "secondary": "#4f5da4"
+      }
+    },
     "baseColor": {},
     "alpha": [],
-    "pbr": [],
+    "pbr": [
+      "MI_Pipe_Inst"
+    ],
     "normalOnly": [],
     "emissiveAccent": [],
     "emissiveGeometrySelectors": [],
+    "opacityGeometrySelectors": [],
     "state": {
       "color": "#00ff00",
       "strength": 5
@@ -92,8 +106,18 @@
   ],
   "materialChecks": [
     {
-      "id": "cue4parse-imported-game-materials",
-      "status": "present"
+      "id": "cue4parse-game-texture-bindings",
+      "status": "present",
+      "bindings": [
+        {
+          "material": "MI_Pipe_Inst",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        }
+      ]
     }
   ],
   "cameraLightingChecks": [

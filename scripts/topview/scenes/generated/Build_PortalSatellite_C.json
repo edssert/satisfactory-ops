@@ -38,18 +38,45 @@
     }
   ],
   "materials": {
-    "albedo": {},
+    "albedo": {
+      "MI_PortalBaked_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Portal/Textures/TX_PortalBaked_Albedo.png",
+      "MI_Portal_Inst": ".cache/topview/satisfactory-material-atlas.png",
+      "Decal_Normal": ".cache/topview/satisfactory-material-atlas.png",
+      "DecalColor_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Alb.png"
+    },
     "ao": {},
-    "normal": {},
-    "reflection": {},
+    "normal": {
+      "MI_PortalBaked_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Portal/Textures/TX_PortalBaked_Normal.png",
+      "MI_Portal_Inst": ".cache/topview/satisfactory-normal-atlas.png",
+      "Decal_Normal": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/PanelAtlas_Nor.png",
+      "DecalColor_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Nor.png"
+    },
+    "reflection": {
+      "MI_PortalBaked_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Portal/Textures/TX_PortalBaked_Reflection.png",
+      "MI_Portal_Inst": ".cache/topview/satisfactory-reflection-atlas.png",
+      "Decal_Normal": ".cache/topview/satisfactory-reflection-atlas.png"
+    },
     "stateMask": {},
-    "paint": {},
+    "paint": {
+      "MI_PortalBaked_01": {
+        "primary": "#fa9549",
+        "secondary": "#4f5da4"
+      }
+    },
     "baseColor": {},
     "alpha": [],
-    "pbr": [],
+    "pbr": [
+      "MI_PortalBaked_01",
+      "MI_Portal_Inst",
+      "Decal_Normal",
+      "DecalColor_Masked"
+    ],
     "normalOnly": [],
-    "emissiveAccent": [],
+    "emissiveAccent": [
+      "DecalColor_Masked"
+    ],
     "emissiveGeometrySelectors": [],
+    "opacityGeometrySelectors": [],
     "state": {
       "color": "#00ff00",
       "strength": 5
@@ -104,8 +131,41 @@
   "portVisibility": [],
   "materialChecks": [
     {
-      "id": "cue4parse-imported-game-materials",
-      "status": "present"
+      "id": "cue4parse-game-texture-bindings",
+      "status": "present",
+      "bindings": [
+        {
+          "material": "MI_PortalBaked_01",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Portal_Inst",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "Decal_Normal",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "DecalColor_Masked",
+          "channels": [
+            "albedo",
+            "normal"
+          ]
+        }
+      ]
     }
   ],
   "cameraLightingChecks": [

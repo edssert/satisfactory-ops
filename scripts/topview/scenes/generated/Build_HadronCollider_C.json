@@ -733,18 +733,40 @@
     }
   ],
   "materials": {
-    "albedo": {},
+    "albedo": {
+      "MI_HadronCollider": ".cache/topview/satisfactory-material-atlas.png",
+      "DecalColor_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Alb.png",
+      "Decal_Normal": ".cache/topview/satisfactory-material-atlas.png",
+      "MI_HadronCollider_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Textures/TX_HadronColliderBaked_Albedo.png"
+    },
     "ao": {},
-    "normal": {},
-    "reflection": {},
+    "normal": {
+      "MI_HadronCollider": ".cache/topview/satisfactory-normal-atlas.png",
+      "DecalColor_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Nor.png",
+      "Decal_Normal": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/PanelAtlas_Nor.png",
+      "MI_HadronCollider_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Textures/TX_HadronColliderBaked_Normal.png"
+    },
+    "reflection": {
+      "MI_HadronCollider": ".cache/topview/satisfactory-reflection-atlas.png",
+      "Decal_Normal": ".cache/topview/satisfactory-reflection-atlas.png",
+      "MI_HadronCollider_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/HadronCollider/Textures/TX_HadronColliderBaked_Reflection.png"
+    },
     "stateMask": {},
     "paint": {},
     "baseColor": {},
     "alpha": [],
-    "pbr": [],
+    "pbr": [
+      "MI_HadronCollider",
+      "DecalColor_Masked",
+      "Decal_Normal",
+      "MI_HadronCollider_01"
+    ],
     "normalOnly": [],
-    "emissiveAccent": [],
+    "emissiveAccent": [
+      "DecalColor_Masked"
+    ],
     "emissiveGeometrySelectors": [],
+    "opacityGeometrySelectors": [],
     "state": {
       "color": "#00ff00",
       "strength": 5
@@ -937,8 +959,41 @@
   ],
   "materialChecks": [
     {
-      "id": "cue4parse-imported-game-materials",
-      "status": "present"
+      "id": "cue4parse-game-texture-bindings",
+      "status": "present",
+      "bindings": [
+        {
+          "material": "MI_HadronCollider",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "DecalColor_Masked",
+          "channels": [
+            "albedo",
+            "normal"
+          ]
+        },
+        {
+          "material": "Decal_Normal",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_HadronCollider_01",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        }
+      ]
     }
   ],
   "cameraLightingChecks": [

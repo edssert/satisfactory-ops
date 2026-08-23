@@ -38,18 +38,34 @@
     }
   ],
   "materials": {
-    "albedo": {},
-    "ao": {},
-    "normal": {},
-    "reflection": {},
+    "albedo": {
+      "MI_PipeJunction_T": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/PipeJunction/Texture/TX_PipeJunction_T_BC.png"
+    },
+    "ao": {
+      "MI_PipeJunction_T": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/PipeJunction/Texture/TX_PipeJunction_T_AOMask.png"
+    },
+    "normal": {
+      "MI_PipeJunction_T": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/PipeJunction/Texture/TX_PipeJunction_T_N.png"
+    },
+    "reflection": {
+      "MI_PipeJunction_T": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/PipeJunction/Texture/TX_PipeJunction_T_Refl.png"
+    },
     "stateMask": {},
-    "paint": {},
+    "paint": {
+      "MI_PipeJunction_T": {
+        "primary": "#fa9549",
+        "secondary": "#4f5da4"
+      }
+    },
     "baseColor": {},
     "alpha": [],
-    "pbr": [],
+    "pbr": [
+      "MI_PipeJunction_T"
+    ],
     "normalOnly": [],
     "emissiveAccent": [],
     "emissiveGeometrySelectors": [],
+    "opacityGeometrySelectors": [],
     "state": {
       "color": "#00ff00",
       "strength": 5
@@ -104,8 +120,19 @@
   "portVisibility": [],
   "materialChecks": [
     {
-      "id": "cue4parse-imported-game-materials",
-      "status": "present"
+      "id": "cue4parse-game-texture-bindings",
+      "status": "present",
+      "bindings": [
+        {
+          "material": "MI_PipeJunction_T",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        }
+      ]
     }
   ],
   "cameraLightingChecks": [

@@ -69,18 +69,44 @@
     }
   ],
   "materials": {
-    "albedo": {},
+    "albedo": {
+      "MI_Converter_Inst": ".cache/topview/satisfactory-material-atlas.png",
+      "DecalColor_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Alb.png",
+      "Decal_Normal": ".cache/topview/satisfactory-material-atlas.png",
+      "MI_VAT_Converter_Idle": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Converter/Textures/TX_Converter_Baked_BC.png",
+      "MI_ProdLight": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/-Shared/ProductionIndicator/Textures/TX_ProductionLight_01_Albedo.png"
+    },
     "ao": {},
-    "normal": {},
-    "reflection": {},
+    "normal": {
+      "MI_Converter_Inst": ".cache/topview/satisfactory-normal-atlas.png",
+      "DecalColor_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Nor.png",
+      "Decal_Normal": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/PanelAtlas_Nor.png",
+      "MI_VAT_Converter_Idle": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Converter/Textures/TX_Converter_Baked_N.png"
+    },
+    "reflection": {
+      "MI_Converter_Inst": ".cache/topview/satisfactory-reflection-atlas.png",
+      "Decal_Normal": ".cache/topview/satisfactory-reflection-atlas.png",
+      "MI_VAT_Converter_Idle": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Converter/Textures/TX_Converter_Baked_REFL.png",
+      "MI_ProdLight": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/-Shared/ProductionIndicator/Textures/TX_ProductionLight_01_Reflection.png"
+    },
     "stateMask": {},
     "paint": {},
     "baseColor": {},
     "alpha": [],
-    "pbr": [],
+    "pbr": [
+      "MI_Converter_Inst",
+      "DecalColor_Masked",
+      "Decal_Normal",
+      "MI_VAT_Converter_Idle",
+      "MI_ProdLight"
+    ],
     "normalOnly": [],
-    "emissiveAccent": [],
+    "emissiveAccent": [
+      "DecalColor_Masked",
+      "MI_ProdLight"
+    ],
     "emissiveGeometrySelectors": [],
+    "opacityGeometrySelectors": [],
     "state": {
       "color": "#00ff00",
       "strength": 5
@@ -147,8 +173,48 @@
   "portVisibility": [],
   "materialChecks": [
     {
-      "id": "cue4parse-imported-game-materials",
-      "status": "present"
+      "id": "cue4parse-game-texture-bindings",
+      "status": "present",
+      "bindings": [
+        {
+          "material": "MI_Converter_Inst",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "DecalColor_Masked",
+          "channels": [
+            "albedo",
+            "normal"
+          ]
+        },
+        {
+          "material": "Decal_Normal",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_VAT_Converter_Idle",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_ProdLight",
+          "channels": [
+            "albedo",
+            "reflection"
+          ]
+        }
+      ]
     }
   ],
   "cameraLightingChecks": [

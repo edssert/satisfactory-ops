@@ -17,8 +17,9 @@ import os from 'node:os';
 import { dirname, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
-import { comparePlannerAssetTargets, requiresRasterTopview } from '../../src/lib/planner-asset-scope.ts';
+import { comparePlannerAssetTargets, requiresOperationalStateAssets, requiresRasterTopview } from '../../src/lib/planner-asset-scope.ts';
 import { RUNTIME_TOPVIEW_SOURCE } from '../../src/lib/topview-assets.ts';
+import { readFactoryAssetRows, resolveSceneGameMaterials } from './material-resolver.mjs';
 
 const root = resolve(fileURLToPath(new URL('../..', import.meta.url)));
 const mode = process.argv[2] ?? 'plan';
@@ -40,6 +41,7 @@ const scope = readJson('src/data/app/planner-asset-scope.json');
 const buildings = readJson('src/data/app/buildings.json');
 const manifest = readJson('src/data/curated/topview-assets.json');
 const factoryScenes = readJson('.cache/game-asset-index/factory-scenes.json');
+const factoryAssetRows = readFactoryAssetRows(root);
 const buildingById = new Map(buildings.map((building) => [building.id, building]));
 const contractById = new Map(factoryScenes.contracts.map((contract) => [contract.buildingClass, contract]));
 const approved = new Set(manifest.assets
@@ -77,7 +79,7 @@ function classify(target) {
     : visual.length === 0
       ? contract.meshReferences.length ? 'mesh-reference-only' : 'missing-visual'
       : skeletalComponents.length ? 'mixed-animation' : 'static-ready';
-  return {
+  const scene = {
     ...target,
     mode,
     contractPackage: contract?.package ?? null,
@@ -268,9 +270,7 @@ function genericScene(target) {
     assemblyFeatures: visualComponents.map((component) => ({
       id: component.id, owner: component.id, status: 'present',
     })),
-    materialChecks: [
-      { id: 'cue4parse-imported-game-materials', status: 'present' },
-    ],
+    materialChecks: [{ id: 'cue4parse-game-texture-bindings', status: 'missing', bindings: [] }],
     cameraLightingChecks: [
       { id: 'runtime-orthographic-top', status: 'present' },
     ],
@@ -282,6 +282,24 @@ function genericScene(target) {
       requiredStages: ['package-graph', 'blueprint-components', 'view-feature-matrix', 'runtime-top-after-assembly'],
     },
   };
+  return resolveSceneGameMaterials(scene, { root, exportRoot, rows: factoryAssetRows }).scene;
+}
+
+function repairPublishedSceneMaterials() {
+  const publishedRoot = resolve(root, 'scripts/topview/scenes/generated');
+  const files = readdirSync(publishedRoot).filter((name) => name.endsWith('.json'));
+  const failures = [];
+  let bindings = 0;
+  for (const file of files) {
+    const path = resolve(publishedRoot, file);
+    const scene = JSON.parse(readFileSync(path, 'utf8'));
+    const result = resolveSceneGameMaterials(scene, { root, exportRoot, rows: factoryAssetRows });
+    if (!result.bindings.length) failures.push(scene.buildingClass);
+    bindings += result.bindings.length;
+    writeFileSync(path, `${JSON.stringify(result.scene, null, 2)}\n`);
+  }
+  if (failures.length) throw new Error(`게임 텍스처 연결 실패 ${failures.length}건: ${failures.slice(0, 8).join(', ')}`);
+  process.stdout.write(`PASS  공개 장면 ${files.length}건 · 게임 재질 ${bindings}개 텍스처 연결\n`);
 }
 
 function writeScenes() {
@@ -367,6 +385,53 @@ async function renderScenes() {
   writeFileSync(resolve(batchRoot, 'render-failures.json'), `${JSON.stringify(failures, null, 2)}\n`);
   if (failures.length) throw new Error(`배치 렌더 실패 ${failures.length}/${ready.length}`);
   process.stdout.write(`PASS  검증 후보 ${ready.length}건 렌더\nOUTPUT=${renderRoot}\n`);
+}
+
+async function rerenderPublishedScenes() {
+  const publishedRoot = resolve(root, 'scripts/topview/scenes/generated');
+  const targetById = new Map(scope.targets.map((target) => [target.buildingClass, target]));
+  const states = [
+    { key: 'activeWithCrystal', color: '#6c8ae1' },
+    { key: 'standby', color: '#ffff00' },
+    { key: 'error', color: '#ff0000' },
+  ];
+  const jobs = readdirSync(publishedRoot).filter((name) => name.endsWith('.json')).flatMap((name) => {
+    const buildingClass = name.replace(/\.json$/, '');
+    const target = targetById.get(buildingClass);
+    const base = { buildingClass, scene: resolve(publishedRoot, name), output: resolve(renderRoot, buildingClass) };
+    return [base, ...(target && requiresOperationalStateAssets(target)
+      ? states.map((state) => ({ ...base, state, output: resolve(renderRoot, buildingClass, 'states', state.key) }))
+      : [])];
+  });
+  const queue = [...jobs];
+  const failures = [];
+  let completed = 0;
+  const runOne = (job) => new Promise((done) => {
+    mkdirSync(job.output, { recursive: true });
+    const args = ['scripts/topview/run-validated-render.mjs', job.scene, job.output];
+    if (job.state) args.push(`--state-color=${job.state.color}`);
+    const child = spawn(process.execPath, args, { cwd: root, stdio: ['ignore', 'pipe', 'pipe'] });
+    let tail = '';
+    child.stdout.on('data', (chunk) => { tail = `${tail}${chunk}`.slice(-4000); });
+    child.stderr.on('data', (chunk) => { tail = `${tail}${chunk}`.slice(-4000); });
+    child.on('close', (code) => {
+      if (code === 0) {
+        completed += 1;
+        process.stdout.write(`PASS  ${job.buildingClass}${job.state ? ` ${job.state.key}` : ''}\n`);
+      } else {
+        failures.push({ buildingClass: job.buildingClass, state: job.state?.key ?? 'active', code, tail });
+        process.stderr.write(`FAIL  ${job.buildingClass}${job.state ? ` ${job.state.key}` : ''} exit=${code}\n`);
+      }
+      done();
+    });
+  });
+  const workers = Array.from({ length: Math.min(concurrency, queue.length) }, async () => {
+    while (queue.length) await runOne(queue.shift());
+  });
+  await Promise.all(workers);
+  writeFileSync(resolve(batchRoot, 'material-rerender-failures.json'), `${JSON.stringify(failures, null, 2)}\n`);
+  if (failures.length) throw new Error(`재질 수정 렌더 실패 ${failures.length}/${jobs.length}`);
+  process.stdout.write(`PASS  재질 수정 탑뷰 ${completed}건 렌더\nOUTPUT=${renderRoot}\n`);
 }
 
 async function renderStateVariants() {
@@ -478,7 +543,10 @@ function publishAcceptedScenes() {
     scene.validationContract = 'batch-static';
     scene.portVisibilityRequired = false;
     scene.portVisibility ??= [];
-    scene.materialChecks = [{ id: 'cue4parse-imported-game-materials', status: 'present' }];
+    if (!scene.materialChecks?.some((check) => check.id === 'cue4parse-game-texture-bindings' && check.status === 'present')) {
+      failures.push({ buildingClass, reason: '게임 텍스처 연결 누락' });
+      continue;
+    }
     scene.cameraLightingChecks = [{ id: 'runtime-orthographic-top', status: 'present' }];
     scene.pipelineAudit = {
       ...scene.pipelineAudit,
@@ -507,7 +575,9 @@ try {
   if (mode === 'plan') process.exit(0);
   if (mode === 'export') exportAssets();
   else if (mode === 'scenes') writeScenes();
+  else if (mode === 'repair-materials') repairPublishedSceneMaterials();
   else if (mode === 'render') await renderScenes();
+  else if (mode === 'rerender-published') await rerenderPublishedScenes();
   else if (mode === 'render-states') await renderStateVariants();
   else if (mode === 'sheet') await writeReviewSheet();
   else if (mode === 'publish-scenes') publishAcceptedScenes();

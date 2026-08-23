@@ -158,37 +158,51 @@
     }
   ],
   "materials": {
-    "albedo": {},
+    "albedo": {
+      "SpaceElevator_Inst": ".cache/topview/satisfactory-material-atlas.png",
+      "DecalColor_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Alb.png",
+      "Decal_Normal": ".cache/topview/satisfactory-material-atlas.png",
+      "Monitor_SpaceElevator": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Interface/UI/Assets/MonitorScreens/Monitor_SpaceElevator.png",
+      "MI_SpaceElevator_MidPart_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SpaceElevator/Texture/TX_SpaceElevator_MidPart_01_BC.png",
+      "SpaceElevatorMid_Inst": ".cache/topview/satisfactory-material-atlas.png"
+    },
     "ao": {},
-    "normal": {},
-    "reflection": {},
+    "normal": {
+      "SpaceElevator_Inst": ".cache/topview/satisfactory-normal-atlas.png",
+      "DecalColor_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Nor.png",
+      "Decal_Normal": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/PanelAtlas_Nor.png",
+      "MI_SpaceElevator_MidPart_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SpaceElevator/Texture/TX_SpaceElevator_MidPart_01_N.png",
+      "SpaceElevatorMid_Inst": ".cache/topview/satisfactory-normal-atlas.png"
+    },
+    "reflection": {
+      "SpaceElevator_Inst": ".cache/topview/satisfactory-reflection-atlas.png",
+      "Decal_Normal": ".cache/topview/satisfactory-reflection-atlas.png",
+      "MI_SpaceElevator_MidPart_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/SpaceElevator/Texture/TX_SpaceElevator_MidPart_01_Refl.png",
+      "SpaceElevatorMid_Inst": ".cache/topview/satisfactory-reflection-atlas.png"
+    },
     "stateMask": {},
     "paint": {},
-    "baseColor": {
-      "Material": "#687787",
-      "MI_SpaceElevator_MidPart_01": "#687787",
-      "Monitor_SpaceElevator": "#1c2732",
-      "SpaceElevator_Inst": "#687787",
-      "SpaceElevatorMid_Inst": "#687787",
-      "Decal_Normal": "#687787"
-    },
+    "baseColor": {},
     "alpha": [],
     "pbr": [
-      "Material",
-      "MI_SpaceElevator_MidPart_01",
-      "Monitor_SpaceElevator",
       "SpaceElevator_Inst",
-      "SpaceElevatorMid_Inst",
-      "Decal_Normal"
+      "DecalColor_Masked",
+      "Decal_Normal",
+      "Monitor_SpaceElevator",
+      "MI_SpaceElevator_MidPart_01",
+      "SpaceElevatorMid_Inst"
     ],
     "normalOnly": [],
-    "emissiveAccent": [],
+    "emissiveAccent": [
+      "DecalColor_Masked",
+      "SpaceElevator_Mid_Lights_Inst"
+    ],
     "emissiveGeometrySelectors": [],
+    "opacityGeometrySelectors": [],
     "state": {
       "color": "#00ff00",
       "strength": 5
-    },
-    "staticBaseMaterial": "SpaceElevator_Inst"
+    }
   },
   "camera": {
     "projection": "orthographic-top",
@@ -252,8 +266,55 @@
   ],
   "materialChecks": [
     {
-      "id": "cue4parse-imported-game-materials",
-      "status": "present"
+      "id": "cue4parse-game-texture-bindings",
+      "status": "present",
+      "bindings": [
+        {
+          "material": "SpaceElevator_Inst",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "DecalColor_Masked",
+          "channels": [
+            "albedo",
+            "normal"
+          ]
+        },
+        {
+          "material": "Decal_Normal",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "Monitor_SpaceElevator",
+          "channels": [
+            "albedo"
+          ]
+        },
+        {
+          "material": "MI_SpaceElevator_MidPart_01",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "SpaceElevatorMid_Inst",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        }
+      ]
     }
   ],
   "cameraLightingChecks": [

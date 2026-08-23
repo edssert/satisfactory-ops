@@ -69,18 +69,65 @@
     }
   ],
   "materials": {
-    "albedo": {},
-    "ao": {},
-    "normal": {},
-    "reflection": {},
+    "albedo": {
+      "QuantumEncoder_Inst": ".cache/topview/satisfactory-material-atlas.png",
+      "DecalColor_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Alb.png",
+      "Decal_Normal": ".cache/topview/satisfactory-material-atlas.png",
+      "MI_QE_Baked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/QuantumEncoder/Textures/TX_QE_Baked_01_BC.png",
+      "MI_QE_Arm": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/QuantumEncoder/Textures/TX_QE_Arm_BC.png",
+      "MI_Factory_01": ".cache/topview/satisfactory-material-atlas.png",
+      "MI_QE_PipeBrain": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/QuantumEncoder/Textures/TX_QE_PipeBrain_01_BC.png",
+      "MI_ProdLight": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/-Shared/ProductionIndicator/Textures/TX_ProductionLight_01_Albedo.png"
+    },
+    "ao": {
+      "MI_QE_Baked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/QuantumEncoder/Textures/TX_QE_Baked_01_AOMasks.png",
+      "MI_QE_Arm": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/QuantumEncoder/Textures/TX_QE_Arm_AOMasks.png",
+      "MI_QE_PipeBrain": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/QuantumEncoder/Textures/TX_QE_PipeBrain_01_AOMasks.png"
+    },
+    "normal": {
+      "QuantumEncoder_Inst": ".cache/topview/satisfactory-normal-atlas.png",
+      "DecalColor_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Nor.png",
+      "Decal_Normal": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/PanelAtlas_Nor.png",
+      "MI_QE_Baked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/QuantumEncoder/Textures/TX_QE_Baked_01_N.png",
+      "MI_QE_Arm": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/QuantumEncoder/Textures/TX_QE_Arm_N.png",
+      "MI_Factory_01": ".cache/topview/satisfactory-normal-atlas.png",
+      "MI_QE_PipeBrain": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/QuantumEncoder/Textures/TX_QE_PipeBrain_01_N.png"
+    },
+    "reflection": {
+      "QuantumEncoder_Inst": ".cache/topview/satisfactory-reflection-atlas.png",
+      "Decal_Normal": ".cache/topview/satisfactory-reflection-atlas.png",
+      "MI_QE_Baked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/QuantumEncoder/Textures/TX_QE_Baked_01_Refl.png",
+      "MI_QE_Arm": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/QuantumEncoder/Textures/TX_QE_Arm_Refl.png",
+      "MI_Factory_01": ".cache/topview/satisfactory-reflection-atlas.png",
+      "MI_QE_PipeBrain": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/QuantumEncoder/Textures/TX_QE_PipeBrain_01_Refl.png",
+      "MI_ProdLight": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/-Shared/ProductionIndicator/Textures/TX_ProductionLight_01_Reflection.png"
+    },
     "stateMask": {},
-    "paint": {},
+    "paint": {
+      "MI_QE_Arm": {
+        "primary": "#fa9549",
+        "secondary": "#4f5da4"
+      }
+    },
     "baseColor": {},
     "alpha": [],
-    "pbr": [],
+    "pbr": [
+      "QuantumEncoder_Inst",
+      "DecalColor_Masked",
+      "Decal_Normal",
+      "MI_QE_Baked",
+      "MI_QE_Arm",
+      "MI_Factory_01",
+      "MI_QE_PipeBrain",
+      "MI_ProdLight"
+    ],
     "normalOnly": [],
-    "emissiveAccent": [],
+    "emissiveAccent": [
+      "DecalColor_Masked",
+      "MI_ProdLight"
+    ],
     "emissiveGeometrySelectors": [],
+    "opacityGeometrySelectors": [],
     "state": {
       "color": "#00ff00",
       "strength": 5
@@ -135,8 +182,75 @@
   ],
   "materialChecks": [
     {
-      "id": "cue4parse-imported-game-materials",
-      "status": "present"
+      "id": "cue4parse-game-texture-bindings",
+      "status": "present",
+      "bindings": [
+        {
+          "material": "QuantumEncoder_Inst",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "DecalColor_Masked",
+          "channels": [
+            "albedo",
+            "normal"
+          ]
+        },
+        {
+          "material": "Decal_Normal",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_QE_Baked",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_QE_Arm",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Factory_01",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_QE_PipeBrain",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_ProdLight",
+          "channels": [
+            "albedo",
+            "reflection"
+          ]
+        }
+      ]
     }
   ],
   "cameraLightingChecks": [

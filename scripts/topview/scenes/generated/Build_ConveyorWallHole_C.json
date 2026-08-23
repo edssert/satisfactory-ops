@@ -38,18 +38,32 @@
     }
   ],
   "materials": {
-    "albedo": {},
+    "albedo": {
+      "MI_ConveyorWall": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Building/Wall/Textures/T_ConveyorWall_Albedo.png"
+    },
     "ao": {},
-    "normal": {},
-    "reflection": {},
+    "normal": {
+      "MI_ConveyorWall": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Building/Wall/Textures/T_ConveyorWall_Normal.png"
+    },
+    "reflection": {
+      "MI_ConveyorWall": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Building/Wall/Textures/T_ConveyorWall_Reflection.png"
+    },
     "stateMask": {},
-    "paint": {},
+    "paint": {
+      "MI_ConveyorWall": {
+        "primary": "#fa9549",
+        "secondary": "#4f5da4"
+      }
+    },
     "baseColor": {},
     "alpha": [],
-    "pbr": [],
+    "pbr": [
+      "MI_ConveyorWall"
+    ],
     "normalOnly": [],
     "emissiveAccent": [],
     "emissiveGeometrySelectors": [],
+    "opacityGeometrySelectors": [],
     "state": {
       "color": "#00ff00",
       "strength": 5
@@ -104,8 +118,18 @@
   "portVisibility": [],
   "materialChecks": [
     {
-      "id": "cue4parse-imported-game-materials",
-      "status": "present"
+      "id": "cue4parse-game-texture-bindings",
+      "status": "present",
+      "bindings": [
+        {
+          "material": "MI_ConveyorWall",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        }
+      ]
     }
   ],
   "cameraLightingChecks": [

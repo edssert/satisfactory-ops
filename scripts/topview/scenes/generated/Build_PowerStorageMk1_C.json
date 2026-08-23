@@ -38,18 +38,45 @@
     }
   ],
   "materials": {
-    "albedo": {},
+    "albedo": {
+      "Decal_Normal": ".cache/topview/satisfactory-material-atlas.png",
+      "MI_PowerStorageBaked_Inst": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/PowerStorage/Textures/TX_PowerStorage_BC.png",
+      "MI_PowerStorage_Inst": ".cache/topview/satisfactory-material-atlas.png",
+      "DecalColor_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Alb.png"
+    },
     "ao": {},
-    "normal": {},
-    "reflection": {},
+    "normal": {
+      "Decal_Normal": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/PanelAtlas_Nor.png",
+      "MI_PowerStorageBaked_Inst": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/PowerStorage/Textures/TX_PowerStorage_N.png",
+      "MI_PowerStorage_Inst": ".cache/topview/satisfactory-normal-atlas.png",
+      "DecalColor_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Nor.png"
+    },
+    "reflection": {
+      "Decal_Normal": ".cache/topview/satisfactory-reflection-atlas.png",
+      "MI_PowerStorageBaked_Inst": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/PowerStorage/Textures/TX_PowerStorage_Refl.png",
+      "MI_PowerStorage_Inst": ".cache/topview/satisfactory-reflection-atlas.png"
+    },
     "stateMask": {},
-    "paint": {},
+    "paint": {
+      "MI_PowerStorageBaked_Inst": {
+        "primary": "#fa9549",
+        "secondary": "#4f5da4"
+      }
+    },
     "baseColor": {},
     "alpha": [],
-    "pbr": [],
+    "pbr": [
+      "Decal_Normal",
+      "MI_PowerStorageBaked_Inst",
+      "MI_PowerStorage_Inst",
+      "DecalColor_Masked"
+    ],
     "normalOnly": [],
-    "emissiveAccent": [],
+    "emissiveAccent": [
+      "DecalColor_Masked"
+    ],
     "emissiveGeometrySelectors": [],
+    "opacityGeometrySelectors": [],
     "state": {
       "color": "#00ff00",
       "strength": 5
@@ -92,8 +119,41 @@
   ],
   "materialChecks": [
     {
-      "id": "cue4parse-imported-game-materials",
-      "status": "present"
+      "id": "cue4parse-game-texture-bindings",
+      "status": "present",
+      "bindings": [
+        {
+          "material": "Decal_Normal",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_PowerStorageBaked_Inst",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_PowerStorage_Inst",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "DecalColor_Masked",
+          "channels": [
+            "albedo",
+            "normal"
+          ]
+        }
+      ]
     }
   ],
   "cameraLightingChecks": [

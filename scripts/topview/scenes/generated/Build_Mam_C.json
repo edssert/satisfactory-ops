@@ -236,18 +236,104 @@
     }
   ],
   "materials": {
-    "albedo": {},
-    "ao": {},
-    "normal": {},
-    "reflection": {},
+    "albedo": {
+      "MM_MamCentrifuge": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_Mam_BC.png",
+      "MI_Mam": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_Mam_BC.png",
+      "Mam_Inst": ".cache/topview/satisfactory-material-atlas.png",
+      "DecalColor_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Alb.png",
+      "Decal_Normal": ".cache/topview/satisfactory-material-atlas.png",
+      "MI_Book_02D": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_02D_BC.png",
+      "MI_MamNotes": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamNotes_BC.png",
+      "MI_MamCaterium": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamCaterium_BC.png",
+      "MI_MamFauna": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamFauna_BC.png",
+      "MI_MamMycelia": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamMycelia_BC.png",
+      "MI_MamNutrients": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamNutrients_BC.png",
+      "MI_MamQuartz": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamQuartz_BC.png",
+      "MI_MamSlug": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamSlugs_BC.png",
+      "MI_PowerSnail_Green": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamSlugs_BC.png",
+      "MI_MamSulphur": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamSulphur_BC.png"
+    },
+    "ao": {
+      "MI_Mam": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_Mam_AOMasks.png",
+      "MI_Book_02D": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_02A_AOMasks.png",
+      "MI_MamNotes": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamNotes_AOMasks.png",
+      "MI_MamFauna": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamNotes_AOMasks.png",
+      "MI_MamMycelia": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamMycelia_AOMasks.png",
+      "MI_MamNutrients": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamNutrients_AOMask.png",
+      "MI_MamSlug": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamSlugs_AOMask.png"
+    },
+    "normal": {
+      "MM_MamCentrifuge": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_Mam_N.png",
+      "MI_Mam": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_Mam_N.png",
+      "Mam_Inst": ".cache/topview/satisfactory-normal-atlas.png",
+      "DecalColor_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Nor.png",
+      "Decal_Normal": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/PanelAtlas_Nor.png",
+      "MI_Book_02D": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_02A_N.png",
+      "MI_MamNotes": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamNotes_N.png",
+      "MI_MamCaterium": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamCaterium_N.png",
+      "MI_MamFauna": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamFauna_N.png",
+      "MI_MamMycelia": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamMycelia_N.png",
+      "MI_Glass": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamNutrients_N.png",
+      "MI_MamNutrients": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamNutrients_N.png",
+      "MI_MamQuartz": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamQuartz_N.png",
+      "MI_MamSlug": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamSlugs_N.png",
+      "MI_PowerSnail_Green": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamSlugs_N.png",
+      "MI_LightBulb": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamSlugs_N.png",
+      "MI_MamSulphur": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamSulphur_N.png"
+    },
+    "reflection": {
+      "MM_MamCentrifuge": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_Mam_Refl.png",
+      "MI_Mam": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_Mam_Refl.png",
+      "Mam_Inst": ".cache/topview/satisfactory-reflection-atlas.png",
+      "Decal_Normal": ".cache/topview/satisfactory-reflection-atlas.png",
+      "MI_Book_02D": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Props/Texture/TX_Book_02A_Refl.png",
+      "MI_MamNotes": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamNotes_Refl.png",
+      "MI_MamCaterium": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamCaterium_Refl.png",
+      "MI_MamFauna": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamFauna_Refl.png",
+      "MI_MamMycelia": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamMycelia_Refl.png",
+      "MI_Glass": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamNutrients_Refl.png",
+      "MI_MamNutrients": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamNutrients_Refl.png",
+      "MI_MamQuartz": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamQuartz_Refl.png",
+      "MI_MamSlug": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamSlugs_Refl.png",
+      "MI_PowerSnail_Green": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamSlugs_Refl.png",
+      "MI_LightBulb": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamSlugs_Refl.png",
+      "MI_MamSulphur": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/Mam/Texture/TX_MamSulphur_Refl.png"
+    },
     "stateMask": {},
-    "paint": {},
+    "paint": {
+      "MI_Mam": {
+        "primary": "#fa9549",
+        "secondary": "#4f5da4"
+      }
+    },
     "baseColor": {},
     "alpha": [],
-    "pbr": [],
+    "pbr": [
+      "MM_MamCentrifuge",
+      "MI_Mam",
+      "Mam_Inst",
+      "DecalColor_Masked",
+      "Decal_Normal",
+      "MI_Book_02D",
+      "MI_MamNotes",
+      "MI_MamCaterium",
+      "MI_MamFauna",
+      "MI_MamMycelia",
+      "MI_Glass",
+      "MI_MamNutrients",
+      "MI_MamQuartz",
+      "MI_MamSlug",
+      "MI_PowerSnail_Green",
+      "MI_LightBulb",
+      "MI_MamSulphur"
+    ],
     "normalOnly": [],
-    "emissiveAccent": [],
+    "emissiveAccent": [
+      "DecalColor_Masked",
+      "MI_LightBulb"
+    ],
     "emissiveGeometrySelectors": [],
+    "opacityGeometrySelectors": [],
     "state": {
       "color": "#00ff00",
       "strength": 5
@@ -357,8 +443,150 @@
   "portVisibility": [],
   "materialChecks": [
     {
-      "id": "cue4parse-imported-game-materials",
-      "status": "present"
+      "id": "cue4parse-game-texture-bindings",
+      "status": "present",
+      "bindings": [
+        {
+          "material": "MM_MamCentrifuge",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Mam",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "Mam_Inst",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "DecalColor_Masked",
+          "channels": [
+            "albedo",
+            "normal"
+          ]
+        },
+        {
+          "material": "Decal_Normal",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Book_02D",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_MamNotes",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_MamCaterium",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_MamFauna",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_MamMycelia",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_Glass",
+          "channels": [
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_MamNutrients",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_MamQuartz",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_MamSlug",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_PowerSnail_Green",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_LightBulb",
+          "channels": [
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MI_MamSulphur",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        }
+      ]
     }
   ],
   "cameraLightingChecks": [

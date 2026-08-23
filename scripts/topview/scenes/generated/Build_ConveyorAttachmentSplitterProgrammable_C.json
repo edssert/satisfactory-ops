@@ -38,18 +38,38 @@
     }
   ],
   "materials": {
-    "albedo": {},
-    "ao": {},
-    "normal": {},
-    "reflection": {},
+    "albedo": {
+      "MI_ProgmmableSplitter_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/CA_SplitterProgrammable/Textures/TX_SplitterProgrammable_BC.png",
+      "ProgrammableSplitter_Monitor": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/CA_SplitterProgrammable/Material/T_PanelTexture_Alb.png"
+    },
+    "ao": {
+      "MI_ProgmmableSplitter_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/CA_SplitterProgrammable/Textures/TX_SplitterProgrammable_AOMasks.png"
+    },
+    "normal": {
+      "MI_ProgmmableSplitter_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/CA_SplitterProgrammable/Textures/TX_SplitterProgrammable_N.png",
+      "ProgrammableSplitter_Monitor": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/CA_SplitterProgrammable/Material/T_PanelTexture_Nor.png"
+    },
+    "reflection": {
+      "MI_ProgmmableSplitter_01": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/CA_SplitterProgrammable/Textures/TX_SplitterProgrammable_Refl.png",
+      "ProgrammableSplitter_Monitor": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/CA_SplitterProgrammable/Material/T_PanelTexture_Refl.png"
+    },
     "stateMask": {},
-    "paint": {},
+    "paint": {
+      "MI_ProgmmableSplitter_01": {
+        "primary": "#fa9549",
+        "secondary": "#4f5da4"
+      }
+    },
     "baseColor": {},
     "alpha": [],
-    "pbr": [],
+    "pbr": [
+      "MI_ProgmmableSplitter_01",
+      "ProgrammableSplitter_Monitor"
+    ],
     "normalOnly": [],
     "emissiveAccent": [],
     "emissiveGeometrySelectors": [],
+    "opacityGeometrySelectors": [],
     "state": {
       "color": "#00ff00",
       "strength": 5
@@ -92,8 +112,27 @@
   ],
   "materialChecks": [
     {
-      "id": "cue4parse-imported-game-materials",
-      "status": "present"
+      "id": "cue4parse-game-texture-bindings",
+      "status": "present",
+      "bindings": [
+        {
+          "material": "MI_ProgmmableSplitter_01",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "ProgrammableSplitter_Monitor",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        }
+      ]
     }
   ],
   "cameraLightingChecks": [

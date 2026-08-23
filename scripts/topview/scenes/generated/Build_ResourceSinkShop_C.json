@@ -56,18 +56,49 @@
     }
   ],
   "materials": {
-    "albedo": {},
-    "ao": {},
-    "normal": {},
-    "reflection": {},
+    "albedo": {
+      "MI_Factory_Base_01": ".cache/topview/satisfactory-material-atlas.png",
+      "Decal_Normal": ".cache/topview/satisfactory-material-atlas.png",
+      "MM_RotatingAssetBaked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/ResourceSinkShop/Textures/TX_ResourceSink_ShopLogo_low_BaseColor.png",
+      "DecalColor_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Alb.png",
+      "MI_Ficsmas_fur": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Character/Player/Texture/Helmet/TX_Ficsmas_Fur_BC.png",
+      "MI_FicsmasHelmet": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Character/Player/Texture/Helmet/TX_Ficsmas_hat_BC.png"
+    },
+    "ao": {
+      "MI_FicsmasHelmet": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Character/Player/Texture/Helmet/TX_Ficsmas_hat_AOMask.png"
+    },
+    "normal": {
+      "MI_Factory_Base_01": ".cache/topview/satisfactory-normal-atlas.png",
+      "Decal_Normal": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/PanelAtlas_Nor.png",
+      "MM_RotatingAssetBaked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/ResourceSinkShop/Textures/TX_ResourceSink_ShopLogo_low_Normal.png",
+      "DecalColor_Masked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/-Shared/Texture/ColorAtlas_Nor.png",
+      "MI_Ficsmas_fur": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Character/Player/Texture/Helmet/TX_Ficsmas_Fur_N.png",
+      "MI_FicsmasHelmet": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Character/Player/Texture/Helmet/TX_Ficsmas_hat_N.png"
+    },
+    "reflection": {
+      "MI_Factory_Base_01": ".cache/topview/satisfactory-reflection-atlas.png",
+      "Decal_Normal": ".cache/topview/satisfactory-reflection-atlas.png",
+      "MM_RotatingAssetBaked": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/ResourceSinkShop/Textures/TX_ResourceSink_ShopLogo_low_MREO.png",
+      "MI_FicsmasHelmet": ".cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Character/Player/Texture/Helmet/TX_Ficsmas_hat_Refl.png"
+    },
     "stateMask": {},
     "paint": {},
     "baseColor": {},
     "alpha": [],
-    "pbr": [],
+    "pbr": [
+      "MI_Factory_Base_01",
+      "Decal_Normal",
+      "MM_RotatingAssetBaked",
+      "DecalColor_Masked",
+      "MI_Ficsmas_fur",
+      "MI_FicsmasHelmet"
+    ],
     "normalOnly": [],
-    "emissiveAccent": [],
+    "emissiveAccent": [
+      "DecalColor_Masked"
+    ],
     "emissiveGeometrySelectors": [],
+    "opacityGeometrySelectors": [],
     "state": {
       "color": "#00ff00",
       "strength": 5
@@ -127,8 +158,57 @@
   "portVisibility": [],
   "materialChecks": [
     {
-      "id": "cue4parse-imported-game-materials",
-      "status": "present"
+      "id": "cue4parse-game-texture-bindings",
+      "status": "present",
+      "bindings": [
+        {
+          "material": "MI_Factory_Base_01",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "Decal_Normal",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "MM_RotatingAssetBaked",
+          "channels": [
+            "albedo",
+            "normal",
+            "reflection"
+          ]
+        },
+        {
+          "material": "DecalColor_Masked",
+          "channels": [
+            "albedo",
+            "normal"
+          ]
+        },
+        {
+          "material": "MI_Ficsmas_fur",
+          "channels": [
+            "albedo",
+            "normal"
+          ]
+        },
+        {
+          "material": "MI_FicsmasHelmet",
+          "channels": [
+            "albedo",
+            "ao",
+            "normal",
+            "reflection"
+          ]
+        }
+      ]
     }
   ],
   "cameraLightingChecks": [
