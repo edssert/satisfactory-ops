@@ -14,7 +14,7 @@ const candidate = `${base}/assets/review/biomass-burner-isometric-foundation-tra
     <header class="iso-review__header">
       <p>VISUAL REVIEW · CURRENT GAME BUILD</p>
       <h1>바이오매스 발전기 아이소메트릭</h1>
-      <span>실제 플레이, 게임 공식 고해상도 렌더, Blender 재구성을 순서대로 비교하세요. 공식 렌더를 새 기준 후보로 삼습니다.</span>
+      <span>실제 플레이, 게임 공식 고해상도 렌더, 게임 그래프 기반 비-AI 교정본을 순서대로 비교하세요.</span>
     </header>
 
     <section class="iso-review__grid" aria-label="인게임과 아이소메트릭 후보 비교">
@@ -43,14 +43,14 @@ const candidate = `${base}/assets/review/biomass-burner-isometric-foundation-tra
         </figcaption>
       </figure>
 
-      <figure class="is-rejected">
+      <figure>
         <div class="iso-review__candidate">
-          <img src={candidate} alt="실제 FICSIT 8×8×1 m 토대 위 바이오매스 발전기 아이소메트릭 후보" />
+          <img src={candidate} alt="게임 그래프에서 추출한 실제 FICSIT 8×8×1 m 토대 위 바이오매스 발전기 비-AI 교정본" />
         </div>
         <figcaption>
-          <strong>재구성 후보 · 폐기</strong>
-          <span>도색용 Unreal 커스텀 데이터와 원본 재질 그래프가 빠져 품질 기준 미달</span>
-          <a href={candidate} target="_blank">원본 1024px 열기</a>
+          <strong>비-AI 교정 후보</strong>
+          <span>게임 공식 설비 렌더 + 그래프 추출 FICSIT 토대 메시·BC/AO/N/Refl · 투명 배경 · 2048px</span>
+          <a href={candidate} target="_blank">원본 2048px 열기</a>
         </figcaption>
       </figure>
     </section>
@@ -78,7 +78,6 @@ const candidate = `${base}/assets/review/biomass-burner-isometric-foundation-tra
   figure { min-width: 0; margin: 0; border: 1px solid var(--line-strong); background: var(--surface); }
   figure.is-reference { border-color: var(--status-ok); }
   figure.is-reference figcaption strong { color: var(--status-ok); }
-  figure.is-rejected { opacity: .72; }
   .iso-review__video { position: relative; aspect-ratio: 16 / 9; background: var(--bg); }
   .iso-review__video a { position: absolute; inset: 0; display: grid; place-items: center; overflow: hidden; color: var(--ink-1); }
   .iso-review__video img { width: 100%; height: 100%; object-fit: cover; }
@@ -98,12 +97,12 @@ const candidate = `${base}/assets/review/biomass-burner-isometric-foundation-tra
   .iso-review__checks p { margin: 16px 0 0; }
   @media (max-width: 1100px) {
     .iso-review__grid { grid-template-columns: 1fr 1fr; }
-    figure.is-rejected { grid-column: 1 / -1; }
+    figure:last-child { grid-column: 1 / -1; }
   }
   @media (max-width: 800px) {
     .iso-review { width: min(100% - 20px, 680px); padding-block: 28px; }
     .iso-review__grid { grid-template-columns: 1fr; }
-    figure.is-rejected { grid-column: auto; }
+    figure:last-child { grid-column: auto; }
     .iso-review__checks ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
   @media (max-width: 430px) {

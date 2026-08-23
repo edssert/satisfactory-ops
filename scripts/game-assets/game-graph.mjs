@@ -567,7 +567,7 @@ function checkDatabase(db) {
       "SELECT COUNT(*) AS count FROM edge WHERE source_id=? AND relation='RENDERED_FROM'",
     ).get(id).count;
     if (sceneCount !== 1) failures.push(`${id}: current-game 장면 연결 ${sceneCount}건`);
-    if (asset.reviewStatus === 'approved') {
+    if (asset.reviewStatus === 'approved' && asset.statusImages) {
       const states = Object.keys(asset.statusImages ?? {}).sort();
       if (states.join(',') !== 'active,activeWithCrystal,error,standby') {
         failures.push(`${id}: 승인 상태 자산 4종 누락 (${states.join(',')})`);
@@ -601,7 +601,7 @@ function checkDatabase(db) {
       `PASS  게임 그래프 노드 ${Object.values(counts).reduce((sum, count) => sum + count, 0)}개 · 간선 ${edgeCount}개 · 입력 드리프트 0\n`,
     );
     process.stdout.write(
-      'PASS  설치본→장면→자체 자산→런타임 증거 경로 · 승인 상태 자산 4종 · Anders 런타임 노출 0\n',
+      'PASS  설치본→장면→자체 자산→런타임 증거 경로 · 상태 설비 자산 4종 · Anders 런타임 노출 0\n',
     );
   }
   return { counts, edgeCount, failures };

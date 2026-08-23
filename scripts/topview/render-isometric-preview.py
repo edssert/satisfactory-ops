@@ -88,17 +88,27 @@ def add_foundation(repository_root, machine_minimum, machine_center):
 
 
 args = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
-if len(args) != 1:
+positional = [arg for arg in args if not arg.startswith("--")]
+foundation_only = "--foundation-only" in args
+resolution_arg = next((arg for arg in args if arg.startswith("--resolution=")), "--resolution=1024")
+resolution = int(resolution_arg.split("=", 1)[1])
+if len(positional) != 1:
     raise ValueError("출력 PNG 경로 하나가 필요합니다.")
 
-output = Path(args[0]).resolve()
+output = Path(positional[0]).resolve()
 output.parent.mkdir(parents=True, exist_ok=True)
 repository_root = Path(__file__).resolve().parents[2]
 scene = bpy.context.scene
 meshes = [obj for obj in scene.objects if obj.type == "MESH" and not obj.name.startswith("Occupancy")]
 minimum, maximum = mesh_bounds(meshes)
 center = (minimum + maximum) / 2
-meshes.extend(add_foundation(repository_root, minimum, center))
+foundation_meshes = add_foundation(repository_root, minimum, center)
+if foundation_only:
+    for obj in meshes:
+        obj.hide_render = True
+    meshes = foundation_meshes
+else:
+    meshes.extend(foundation_meshes)
 minimum, maximum = mesh_bounds(meshes)
 center = (minimum + maximum) / 2
 size = maximum - minimum
@@ -132,17 +142,18 @@ for material in bpy.data.materials:
 
 camera_data = bpy.data.cameras.new("CodexIsometricCamera")
 camera_data.type = "PERSP"
-camera_data.lens = 78
+camera_data.lens = 85 if foundation_only else 78
 camera_data.sensor_width = 36
 camera = bpy.data.objects.new("CodexIsometricCamera", camera_data)
 
 # 화면 기준 전면 우측에서 방위각 45°, 실제 고도 45°로 본다.
-direction = Vector((0.5, -0.5, math.sqrt(0.5))).normalized()
+direction = (Vector((0, -math.cos(math.radians(22)), math.sin(math.radians(22))))
+             if foundation_only else Vector((0.5, -0.5, math.sqrt(0.5)))).normalized()
 vertical_fov = 2 * math.atan((camera_data.sensor_width / 2) / camera_data.lens)
 distance = radius / math.sin(vertical_fov / 2) * 0.84
 camera.location = center + direction * distance
 camera.rotation_euler = (center - camera.location).to_track_quat("-Z", "Y").to_euler()
-camera_data.shift_y = -0.12
+camera_data.shift_y = 0.10 if foundation_only else -0.12
 scene.collection.objects.link(camera)
 scene.camera = camera
 
@@ -159,8 +170,8 @@ background.inputs["Color"].default_value = (0.38, 0.43, 0.49, 1)
 background.inputs["Strength"].default_value = 0.72
 
 scene.render.engine = "BLENDER_EEVEE"
-scene.render.resolution_x = 1024
-scene.render.resolution_y = 1024
+scene.render.resolution_x = resolution
+scene.render.resolution_y = resolution
 scene.render.resolution_percentage = 100
 scene.render.image_settings.file_format = "PNG"
 scene.render.image_settings.color_mode = "RGBA"
