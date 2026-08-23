@@ -70,14 +70,36 @@ def add_foundation(repository_root, machine_minimum, machine_center):
     normal = image_node(nodes, texture_root / "TX_Ficsit_Foundation_01_N.png", True)
     ao_channels = nodes.new("ShaderNodeSeparateColor")
     reflection_channels = nodes.new("ShaderNodeSeparateColor")
-    multiply = nodes.new("ShaderNodeMixRGB")
-    multiply.blend_type = "MULTIPLY"
-    multiply.inputs[0].default_value = 1
+    primary = nodes.new("ShaderNodeRGB")
+    secondary = nodes.new("ShaderNodeRGB")
+    primary.outputs[0].default_value = (0.18, 0.21, 0.24, 1)
+    secondary.outputs[0].default_value = (0.055, 0.065, 0.08, 1)
+    primary_tint = nodes.new("ShaderNodeMixRGB")
+    secondary_tint = nodes.new("ShaderNodeMixRGB")
+    primary_tint.blend_type = "MULTIPLY"
+    secondary_tint.blend_type = "MULTIPLY"
+    primary_tint.inputs[0].default_value = 1
+    secondary_tint.inputs[0].default_value = 1
+    primary_mix = nodes.new("ShaderNodeMixRGB")
+    secondary_mix = nodes.new("ShaderNodeMixRGB")
+    ao_multiply = nodes.new("ShaderNodeMixRGB")
+    ao_multiply.blend_type = "MULTIPLY"
+    ao_multiply.inputs[0].default_value = 1
     normal_map = nodes.new("ShaderNodeNormalMap")
     links.new(ao.outputs["Color"], ao_channels.inputs["Color"])
-    links.new(albedo.outputs["Color"], multiply.inputs[1])
-    links.new(ao_channels.outputs["Red"], multiply.inputs[2])
-    links.new(multiply.outputs["Color"], bsdf.inputs["Base Color"])
+    links.new(albedo.outputs["Color"], primary_tint.inputs[1])
+    links.new(primary.outputs[0], primary_tint.inputs[2])
+    links.new(albedo.outputs["Color"], secondary_tint.inputs[1])
+    links.new(secondary.outputs[0], secondary_tint.inputs[2])
+    links.new(ao_channels.outputs["Green"], primary_mix.inputs[0])
+    links.new(albedo.outputs["Color"], primary_mix.inputs[1])
+    links.new(primary_tint.outputs["Color"], primary_mix.inputs[2])
+    links.new(ao_channels.outputs["Blue"], secondary_mix.inputs[0])
+    links.new(primary_mix.outputs["Color"], secondary_mix.inputs[1])
+    links.new(secondary_tint.outputs["Color"], secondary_mix.inputs[2])
+    links.new(secondary_mix.outputs["Color"], ao_multiply.inputs[1])
+    links.new(ao_channels.outputs["Red"], ao_multiply.inputs[2])
+    links.new(ao_multiply.outputs["Color"], bsdf.inputs["Base Color"])
     links.new(reflection.outputs["Color"], reflection_channels.inputs["Color"])
     links.new(reflection_channels.outputs["Red"], bsdf.inputs["Metallic"])
     links.new(reflection_channels.outputs["Green"], bsdf.inputs["Roughness"])
