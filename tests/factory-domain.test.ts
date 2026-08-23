@@ -118,6 +118,30 @@ test('빈 판은 시공 도면으로 발행하지 않는다', () => {
   assert.ok(result.issues.some((entry) => entry.code === 'EMPTY_PLAN'));
 });
 
+test('Anders 카탈로그에서 직접 그린 수동 벨트는 설비 포트 없이도 유효한 탑뷰 도면이다', () => {
+  const result = validateFactoryPlan({
+    schemaVersion: 1,
+    id: 'manual-belt',
+    placements: [],
+    foundations: [],
+    transports: [{
+      id: 'route-1',
+      from: { placementId: 'manual:route-1', portId: 'start' },
+      to: { placementId: 'manual:route-1', portId: 'end' },
+      medium: 'solid',
+      itemId: 'unassigned',
+      flowPerMinute: 0,
+      transportClass: 'Build_ConveyorBeltMk1_C',
+      capacityPerMinute: 60,
+      pathM: [{ x: 0, y: 0, z: 0 }, { x: 8, y: 0, z: 0 }, { x: 8, y: 8, z: 0 }],
+    }],
+    rails: [],
+    powerSources: [],
+    powerEdges: [],
+  });
+  assert.equal(result.publishable, true, JSON.stringify(result.issues, null, 2));
+});
+
 test('편집 JSON은 운전 설정·수동 경로·층고를 바꾸지 않고 왕복한다', () => {
   const edited = structuredClone(validPlan);
   edited.placements[0].positionM.z = 8;

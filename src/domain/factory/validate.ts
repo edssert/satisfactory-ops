@@ -95,7 +95,7 @@ export interface FactoryValidationOptions {
 
 export function validateFactoryPlan(plan: FactoryPlan, options: FactoryValidationOptions = {}): ValidationResult {
   const issues: ValidationIssue[] = [];
-  if (!plan.placements.length && !(plan.rails?.length)) {
+  if (!plan.placements.length && !plan.foundations.length && !plan.transports.length && !(plan.rails?.length)) {
     issues.push(issue('EMPTY_PLAN', [plan.id], '설비가 하나도 없는 빈 판은 시공 도면으로 발행할 수 없습니다.'));
   }
   const ids = [
@@ -152,24 +152,27 @@ export function validateFactoryPlan(plan: FactoryPlan, options: FactoryValidatio
   const incoming = new Map<string, number>();
   const outgoing = new Map<string, number>();
   for (const route of plan.transports) {
-    const from = findPort(placements, route.from);
-    const to = findPort(placements, route.to);
-    if (!from || !to) {
-      issues.push(issue('UNSUPPORTED_PORT', [route.id], '물류 경로가 존재하지 않는 설비 또는 포트를 참조합니다.'));
-      continue;
-    }
-    if (from.port.direction !== 'output' || to.port.direction !== 'input') {
-      issues.push(issue('PORT_DIRECTION', [route.id], '물류 경로는 출력 포트에서 입력 포트로 연결해야 합니다.'));
-    }
-    if (from.port.medium !== route.medium || to.port.medium !== route.medium) {
-      issues.push(issue('PORT_MEDIUM', [route.id], '경로의 매체와 포트의 매체가 일치하지 않습니다.'));
-    }
-    const start = route.pathM.at(0);
-    const end = route.pathM.at(-1);
-    const expectedStart = portWorldPosition(from.placement, from.port);
-    const expectedEnd = portWorldPosition(to.placement, to.port);
-    if (!start || !end || distance(start, expectedStart) > 0.02 || distance(end, expectedEnd) > 0.02) {
-      issues.push(issue('ROUTE_ENDPOINT', [route.id], '물류 경로 끝점이 실제 설비 포트 좌표에 접속하지 않습니다.'));
+    const manual = route.from.placementId.startsWith('manual:') && route.to.placementId.startsWith('manual:');
+    if (!manual) {
+      const from = findPort(placements, route.from);
+      const to = findPort(placements, route.to);
+      if (!from || !to) {
+        issues.push(issue('UNSUPPORTED_PORT', [route.id], '물류 경로가 존재하지 않는 설비 또는 포트를 참조합니다.'));
+        continue;
+      }
+      if (from.port.direction !== 'output' || to.port.direction !== 'input') {
+        issues.push(issue('PORT_DIRECTION', [route.id], '물류 경로는 출력 포트에서 입력 포트로 연결해야 합니다.'));
+      }
+      if (from.port.medium !== route.medium || to.port.medium !== route.medium) {
+        issues.push(issue('PORT_MEDIUM', [route.id], '경로의 매체와 포트의 매체가 일치하지 않습니다.'));
+      }
+      const start = route.pathM.at(0);
+      const end = route.pathM.at(-1);
+      const expectedStart = portWorldPosition(from.placement, from.port);
+      const expectedEnd = portWorldPosition(to.placement, to.port);
+      if (!start || !end || distance(start, expectedStart) > 0.02 || distance(end, expectedEnd) > 0.02) {
+        issues.push(issue('ROUTE_ENDPOINT', [route.id], '물류 경로 끝점이 실제 설비 포트 좌표에 접속하지 않습니다.'));
+      }
     }
     const parts = transportPathParts(route.pathM);
     parts.lifts.forEach((part) => {
@@ -219,10 +222,12 @@ export function validateFactoryPlan(plan: FactoryPlan, options: FactoryValidatio
         capacityPerMinute: route.capacityPerMinute,
       }));
     }
-    const outgoingKey = `${route.from.placementId}:${route.itemId}`;
-    const incomingKey = `${route.to.placementId}:${route.itemId}`;
-    outgoing.set(outgoingKey, (outgoing.get(outgoingKey) ?? 0) + route.flowPerMinute);
-    incoming.set(incomingKey, (incoming.get(incomingKey) ?? 0) + route.flowPerMinute);
+    if (!manual) {
+      const outgoingKey = `${route.from.placementId}:${route.itemId}`;
+      const incomingKey = `${route.to.placementId}:${route.itemId}`;
+      outgoing.set(outgoingKey, (outgoing.get(outgoingKey) ?? 0) + route.flowPerMinute);
+      incoming.set(incomingKey, (incoming.get(incomingKey) ?? 0) + route.flowPerMinute);
+    }
   }
 
   for (let left = 0; left < plan.transports.length; left += 1) {

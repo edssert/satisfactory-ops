@@ -82,7 +82,10 @@ type DragState = {
   start: Vec3;
 };
 
-type PlacementTool = { kind: 'foundation' } | { kind: 'rail' } | {
+type PlacementTool = { kind: 'foundation' } | { kind: 'rail' }
+  | { kind: 'transport'; medium: 'solid' | 'fluid' }
+  | { kind: 'lift'; medium: 'solid' | 'fluid' }
+  | {
   kind: 'machine';
   buildingClass: string;
   handoff?: PlannerHandoffEntry;
@@ -401,6 +404,7 @@ export default function ValidatedFactoryPlanner({ machines, railName }: Props) {
   const [placementTool, setPlacementTool] = useState<PlacementTool | null>(null);
   const [cursorWorld, setCursorWorld] = useState<Vec3 | null>(null);
   const [railStart, setRailStart] = useState<Vec3 | null>(null);
+  const [transportStart, setTransportStart] = useState<Vec3 | null>(null);
   const [marquee, setMarquee] = useState<{ start: Vec3; end: Vec3 } | null>(null);
   const [query, setQuery] = useState('');
   const [layers, setLayers] = useState<DrawingLayers>({ foundations: true, machines: true, logistics: true, elevation: true, flow: true });
@@ -466,6 +470,7 @@ export default function ValidatedFactoryPlanner({ machines, railName }: Props) {
         setCursorWorld(null);
         setPendingPort(null);
         setRailStart(null);
+        setTransportStart(null);
         setNotice('배치 취소');
         return;
       }
@@ -700,6 +705,20 @@ export default function ValidatedFactoryPlanner({ machines, railName }: Props) {
     setSelectedRailId(null);
     setGroupSelection([]);
     setNotice('철도 · 시작점과 끝점을 차례로 클릭하세요. Esc 종료');
+  }
+
+  function queueTransport(medium: 'solid' | 'fluid') {
+    setPlacementTool({ kind: 'transport', medium });
+    setTransportStart(null);
+    setRailStart(null);
+    setNotice(`${medium === 'solid' ? '컨베이어 벨트' : '파이프'} 시작점을 클릭하세요.`);
+  }
+
+  function queueLift(medium: 'solid' | 'fluid') {
+    setPlacementTool({ kind: 'lift', medium });
+    setTransportStart(null);
+    setRailStart(null);
+    setNotice(`${medium === 'solid' ? '컨베이어 리프트' : '파이프 라이저'} 위치를 클릭하세요.`);
   }
 
   function removeSelected() {
@@ -1028,6 +1047,57 @@ export default function ValidatedFactoryPlanner({ machines, railName }: Props) {
       setNotice('철도 구간 배치 완료 · 다음 시작점을 클릭하거나 Esc로 종료');
       return;
     }
+    if (placementTool.kind === 'transport') {
+      const snapped = { x: Math.round(point.x / SNAP) * SNAP, y: Math.round(point.y / SNAP) * SNAP, z: 0 };
+      if (!transportStart) {
+        setTransportStart(snapped);
+        setNotice(`${placementTool.medium === 'solid' ? '컨베이어 벨트' : '파이프'} 끝점을 클릭하세요.`);
+        return;
+      }
+      if (Math.hypot(snapped.x - transportStart.x, snapped.y - transportStart.y) <= 1e-6) {
+        setNotice('운송 경로 끝점은 시작점과 달라야 합니다.');
+        return;
+      }
+      const id = `route-${seq.current++}`;
+      const spec = transportSpecForFlow(placementTool.medium, 0);
+      const corner = transportStart.x !== snapped.x && transportStart.y !== snapped.y
+        ? [{ x: snapped.x, y: transportStart.y, z: 0 }]
+        : [];
+      recordHistory();
+      setTransports((current) => [...current, {
+        id,
+        from: { placementId: `manual:${id}`, portId: 'start' },
+        to: { placementId: `manual:${id}`, portId: 'end' },
+        medium: placementTool.medium,
+        itemId: 'unassigned',
+        flowPerMinute: 0,
+        transportClass: spec.buildingClass,
+        capacityPerMinute: spec.capacityPerMinute,
+        pathM: [transportStart, ...corner, snapped],
+      }]);
+      setTransportStart(null);
+      setNotice('직선·90° 회전 탑뷰 경로 배치 완료 · 다음 시작점을 클릭하거나 Esc로 종료');
+      return;
+    }
+    if (placementTool.kind === 'lift') {
+      const origin = { x: Math.round(point.x / SNAP) * SNAP, y: Math.round(point.y / SNAP) * SNAP, z: 0 };
+      const id = `route-${seq.current++}`;
+      const spec = transportSpecForFlow(placementTool.medium, 0);
+      recordHistory();
+      setTransports((current) => [...current, {
+        id,
+        from: { placementId: `manual:${id}`, portId: 'bottom' },
+        to: { placementId: `manual:${id}`, portId: 'top' },
+        medium: placementTool.medium,
+        itemId: 'unassigned',
+        flowPerMinute: 0,
+        transportClass: spec.buildingClass,
+        capacityPerMinute: spec.capacityPerMinute,
+        pathM: [origin, { ...origin, z: 4 }],
+      }]);
+      setNotice(`${placementTool.medium === 'solid' ? '컨베이어 리프트' : '파이프 라이저'} 4 m 탑뷰 배치 완료`);
+      return;
+    }
     const machine = byClass.get(placementTool.buildingClass);
     if (machine) addMachine(
       machine,
@@ -1039,6 +1109,14 @@ export default function ValidatedFactoryPlanner({ machines, railName }: Props) {
   function beginCatalogDrag(event: DragEvent, tool: PlacementTool) {
     if (tool.kind === 'rail') {
       queueRail();
+      return;
+    }
+    if (tool.kind === 'transport') {
+      queueTransport(tool.medium);
+      return;
+    }
+    if (tool.kind === 'lift') {
+      queueLift(tool.medium);
       return;
     }
     const payload = tool.kind === 'foundation' ? 'foundation' : `machine:${tool.buildingClass}`;
@@ -1219,7 +1297,7 @@ export default function ValidatedFactoryPlanner({ machines, railName }: Props) {
         {layers.flow && !elevated && labelSegment && (
           <g class="vp-route-label" transform={`translate(${labelSegment.center.x} ${labelSegment.center.y - 1.7})`}>
             <rect x="-8" y="-.7" width="16" height="1.4" rx=".24" />
-            <text>{transport.name} · {itemNames.get(route.itemId) ?? route.itemId} · {fmt(route.flowPerMinute)}/{fmt(route.capacityPerMinute)}/분</text>
+            <text>{transport.name} · {itemNames.get(route.itemId) ?? (route.itemId === 'unassigned' ? '품목 미지정' : route.itemId)} · {fmt(route.flowPerMinute)}/{fmt(route.capacityPerMinute)}/분</text>
           </g>
         )}
       </g>
@@ -1256,7 +1334,7 @@ export default function ValidatedFactoryPlanner({ machines, railName }: Props) {
         {layers.flow && !elevated && labelSegment && (
           <g class="vp-route-label" transform={`translate(${labelSegment.center.x} ${labelSegment.center.y - 1.9})`}>
             <rect x="-9" y="-.7" width="18" height="1.4" rx=".24" />
-            <text>{transport.name} · {itemNames.get(route.itemId) ?? route.itemId} · {fmt(route.flowPerMinute)}/{fmt(route.capacityPerMinute)} m³/분</text>
+            <text>{transport.name} · {itemNames.get(route.itemId) ?? (route.itemId === 'unassigned' ? '유체 미지정' : route.itemId)} · {fmt(route.flowPerMinute)}/{fmt(route.capacityPerMinute)} m³/분</text>
           </g>
         )}
       </g>
@@ -1403,6 +1481,26 @@ export default function ValidatedFactoryPlanner({ machines, railName }: Props) {
             <span class="vp-rail-swatch" aria-hidden="true"><i /><i /><i /></span>
             <span><strong>{railName}</strong><small>두 점을 클릭해 실축 경로 배치</small></span>
             <span class="vp-place-hint" aria-hidden="true">작도</span>
+          </button>
+          <button type="button" class={`vp-machine is-transport${placementTool?.kind === 'transport' && placementTool.medium === 'solid' ? ' is-armed' : ''}`} onClick={() => queueTransport('solid')}>
+            <span class="vp-belt-swatch" aria-hidden="true"><i /><i /><i /></span>
+            <span><strong>컨베이어 벨트</strong><small>두 점 · 직선/직각 경로 · 방향 포함</small></span>
+            <span class="vp-place-hint" aria-hidden="true">작도</span>
+          </button>
+          <button type="button" class={`vp-machine is-transport${placementTool?.kind === 'transport' && placementTool.medium === 'fluid' ? ' is-armed' : ''}`} onClick={() => queueTransport('fluid')}>
+            <span class="vp-pipe-swatch" aria-hidden="true"><i /><i /></span>
+            <span><strong>파이프</strong><small>두 점 · 직선/직각 경로 · Mk 자동</small></span>
+            <span class="vp-place-hint" aria-hidden="true">작도</span>
+          </button>
+          <button type="button" class={`vp-machine is-transport${placementTool?.kind === 'lift' && placementTool.medium === 'solid' ? ' is-armed' : ''}`} onClick={() => queueLift('solid')}>
+            <span class="vp-lift-swatch" aria-hidden="true"><i /><i /></span>
+            <span><strong>컨베이어 리프트</strong><small>끝단 2개 · 기본 높이 4 m</small></span>
+            <span class="vp-place-hint" aria-hidden="true">배치</span>
+          </button>
+          <button type="button" class={`vp-machine is-transport${placementTool?.kind === 'lift' && placementTool.medium === 'fluid' ? ' is-armed' : ''}`} onClick={() => queueLift('fluid')}>
+            <span class="vp-riser-swatch" aria-hidden="true"><i /></span>
+            <span><strong>파이프 라이저</strong><small>수직 끝단 · 기본 높이 4 m</small></span>
+            <span class="vp-place-hint" aria-hidden="true">배치</span>
           </button>
           {visibleMachines.map((machine) => {
             return (

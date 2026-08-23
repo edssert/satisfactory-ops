@@ -241,6 +241,25 @@ test('철도는 시작점과 끝점을 사용자가 찍는 자체 벡터 경로�
   assert.equal(all('.vp-rail').length, 0);
 });
 
+test('Anders 운송 역할은 컨베이어·파이프·리프트·라이저 탑뷰 도구로 직접 배치한다', () => {
+  mount();
+  clickButton('컨베이어 벨트');
+  clickCanvas(430, 330);
+  clickCanvas(690, 470);
+  assert.equal(all('.vp-route.is-solid').length, 1);
+  assert.ok(all('.vp-belt-turn').length > 0);
+  clickButton('컨베이어 리프트');
+  clickCanvas(720, 420);
+  assert.equal(all('.vp-lift').length, 1);
+  clickButton('파이프');
+  clickCanvas(460, 520);
+  clickCanvas(720, 520);
+  assert.equal(all('.vp-route.is-fluid').length, 1);
+  clickButton('파이프 라이저');
+  clickCanvas(760, 500);
+  assert.equal(all('.vp-pipe-riser').length, 1);
+});
+
 test('전체 초기화는 설비·토대·물류를 한 번에 비운다', () => {
   mount();
   clickButton('파운데이션');

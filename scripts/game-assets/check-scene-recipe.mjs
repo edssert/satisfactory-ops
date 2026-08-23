@@ -81,6 +81,18 @@ for (const scenePath of scenePaths) {
       errors.push(`${recipe.id}: 게임 재질 텍스처 연결 누락`);
     }
   }
+  if (recipe.buildingClass === 'Build_TradingPost_C') {
+    const bodyComponents = recipe.components.filter((component) => component.renderMode === 'body');
+    const excluded = bodyComponents.filter((component) =>
+      /\/Events\/|\/World\/Environment\/Foliage\//i.test(component.path)
+      || /BuildEffectOnly/i.test(component.id));
+    if (excluded.length) errors.push(`${recipe.id}: 기본 HUB에 이벤트·장식·건설효과 구성품 ${excluded.length}개 포함`);
+    if (bodyComponents.length !== 2
+      || !bodyComponents.some((component) => /SK_Tradingpost\.glb$/i.test(component.path))
+      || !bodyComponents.some((component) => /SM_Hub_Stg_06\.glb$/i.test(component.path))) {
+      errors.push(`${recipe.id}: 완성 HUB는 SK_Tradingpost + SM_Hub_Stg_06 두 본체만 사용해야 함`);
+    }
+  }
   const contract = sceneContracts.contracts.find(
     (entry) => entry.buildingClass === recipe.buildingClass
   );

@@ -638,32 +638,6 @@
       "approvedCandidateSha256": "bda2320d4a9977b13463de51347fe1c232f1926fbfa3f12a27ee42dc2ff5750a"
     },
     {
-      "assetId": "Build_TradingPost_C",
-      "buildingClass": "Build_TradingPost_C",
-      "role": "building",
-      "path": "assets/planner/top-view/buildings/production/Build_TradingPost_C.webp",
-      "sourceId": "game-install-cl-502094",
-      "derivation": "game-mesh-render",
-      "visualProfile": "anders-reconstructed-blender-2026",
-      "reviewStatus": "approved",
-      "renderPx": {
-        "width": 1024,
-        "height": 1024
-      },
-      "sha256": "ad3c8e7fad2c3ba1d71eeab6f63782a524596ea1056b8f91c2497ba35e6d0637",
-      "hardFootprintM": {
-        "width": 14,
-        "length": 26
-      },
-      "occupancyFrame": {
-        "x": 0.264820901438,
-        "y": 0.046596318392,
-        "width": 0.488895688698,
-        "height": 0.907949136154
-      },
-      "approvedCandidateSha256": "157a878a6c0b716af6ec3908f35395ca9cb7efd94e2f7fdcddd8715ac481e2a9"
-    },
-    {
       "assetId": "Build_ConveyorAttachmentMerger_C",
       "buildingClass": "Build_ConveyorAttachmentMerger_C",
       "role": "building",
@@ -2584,6 +2558,32 @@
         "height": 0.897875556489
       },
       "approvedCandidateSha256": "7c8b3fef865837ca61f6f049c0b6a7dc083092e7793d1eea87f4b33e80f4c79b"
+    },
+    {
+      "assetId": "Build_TradingPost_C",
+      "buildingClass": "Build_TradingPost_C",
+      "role": "building",
+      "path": "assets/planner/top-view/buildings/production/Build_TradingPost_C.webp",
+      "sourceId": "game-install-cl-502094",
+      "derivation": "game-mesh-render",
+      "visualProfile": "anders-reconstructed-blender-2026",
+      "reviewStatus": "approved",
+      "renderPx": {
+        "width": 1024,
+        "height": 1024
+      },
+      "sha256": "6cd5cf3814d891319895d21dc80fcc5574297aa638b4814e7f200485b6be3caa",
+      "hardFootprintM": {
+        "width": 14,
+        "length": 26
+      },
+      "occupancyFrame": {
+        "x": 0.255552155651,
+        "y": 0.046596318392,
+        "width": 0.488895688698,
+        "height": 0.907949136154
+      },
+      "approvedCandidateSha256": "6241ca97030db2bbf135e15deff38f5be332f605cbde8d724fc2dc5c3fae0da4"
     }
   ]
 }

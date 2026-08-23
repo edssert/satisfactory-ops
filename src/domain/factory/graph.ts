@@ -41,7 +41,9 @@ export function projectFactoryTransports(
     id: placement.id,
     data: placement,
   }));
-  const routes = plan.transports.filter((route) => route.medium === medium);
+  const routes = plan.transports.filter((route) => route.medium === medium
+    && !route.from.placementId.startsWith('manual:')
+    && !route.to.placementId.startsWith('manual:'));
   const edges: GraphEdge<TransportRoute>[] = routes.map((route) => ({
     id: route.id,
     from: { nodeId: route.from.placementId, portId: route.from.portId },

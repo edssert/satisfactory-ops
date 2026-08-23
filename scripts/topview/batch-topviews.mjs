@@ -14,7 +14,7 @@
 import { spawn, spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
-import { dirname, relative, resolve } from 'node:path';
+import { relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
 import { comparePlannerAssetTargets, requiresOperationalStateAssets, requiresRasterTopview } from '../../src/lib/planner-asset-scope.ts';
@@ -79,7 +79,7 @@ function classify(target) {
     : visual.length === 0
       ? contract.meshReferences.length ? 'mesh-reference-only' : 'missing-visual'
       : skeletalComponents.length ? 'mixed-animation' : 'static-ready';
-  const scene = {
+  return {
     ...target,
     mode,
     contractPackage: contract?.package ?? null,
@@ -220,7 +220,7 @@ function genericScene(target) {
       Decal_Normal: '#687787',
     };
   }
-  return {
+  const scene = {
     $schemaVersion: 1,
     id: `${target.buildingClass.replace(/^Build_|_C$/g, '').toLowerCase()}-batch-cl-${scope.buildCl}`,
     buildingClass: target.buildingClass,
@@ -333,6 +333,9 @@ function exportAssets() {
         .find((reference) => reference.includes('SM_ProductionLight_01'));
       if (mesh) objectPaths.add(normalizeExportObjectPath(mesh));
     }
+    if (target.buildingClass === 'Build_TradingPost_C') {
+      objectPaths.add('/Game/FactoryGame/Buildable/Factory/TradingPost/Mesh/SM_Hub_Stg_06.SM_Hub_Stg_06');
+    }
   }
   const result = spawnSync('dotnet', [
     'run', '--project', 'scripts/game-assets/Cue4ParseCatalog', '--',
@@ -344,6 +347,33 @@ function exportAssets() {
   if (missing.length) throw new Error(`추출 GLB 누락 ${missing.length}건: ${missing.slice(0, 5).join(', ')}`);
   if (result.status !== 0) process.stderr.write(`WARN  부수 의존성 추출 일부 실패 exit=${result.status}; 필수 GLB는 모두 존재\n`);
   process.stdout.write(`PASS  정적 탑뷰 메시 ${objectPaths.size}건 일괄 추출\nOUTPUT=${exportRoot}\n`);
+}
+
+function repairHubScene() {
+  const path = resolve(root, 'scripts/topview/scenes/generated/Build_TradingPost_C.json');
+  const scene = JSON.parse(readFileSync(path, 'utf8'));
+  const skeletal = scene.components.find((component) => component.id === 'MainMesh_skl_GEN_VARIABLE');
+  if (!skeletal) throw new Error('HUB 기본 골격 메시 누락');
+  scene.components = [
+    skeletal,
+    {
+      id: 'completed-hub-stage-6',
+      renderMode: 'body',
+      path: '.cache/topview/batch/exports/FactoryGame/Content/FactoryGame/Buildable/Factory/TradingPost/Mesh/SM_Hub_Stg_06.glb',
+      transform: [0, 0, 0, 0],
+      rotationEulerDeg: [0, 0, 0],
+      scale: [1, 1, 1],
+      source: 'runtime-upgrade-array:Build_TradingPost_C.mStages[6]',
+      confidence: 'verified',
+    },
+  ];
+  scene.assemblyFeatures = [
+    { id: 'animated-hub-frame', owner: skeletal.id, status: 'present' },
+    { id: 'completed-stage-6-shell', owner: 'completed-hub-stage-6', status: 'present' },
+  ];
+  const result = resolveSceneGameMaterials(scene, { root, exportRoot, rows: factoryAssetRows });
+  writeFileSync(path, `${JSON.stringify(result.scene, null, 2)}\n`);
+  process.stdout.write(`PASS  HUB 완성 6단계 본체 2개 · 이벤트/건설효과 구성품 0개\nOUTPUT=${path}\n`);
 }
 
 async function renderScenes() {
@@ -576,6 +606,7 @@ try {
   if (mode === 'export') exportAssets();
   else if (mode === 'scenes') writeScenes();
   else if (mode === 'repair-materials') repairPublishedSceneMaterials();
+  else if (mode === 'repair-hub') repairHubScene();
   else if (mode === 'render') await renderScenes();
   else if (mode === 'rerender-published') await rerenderPublishedScenes();
   else if (mode === 'render-states') await renderStateVariants();

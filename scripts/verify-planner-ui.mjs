@@ -88,8 +88,8 @@ try {
   await page.waitForURL('**/planner/');
   await page.waitForLoadState('networkidle');
   const catalogCount = await page.locator('.vp-machine').count();
-  assert(catalogCount === expectedMachineCount + 2,
-    `승인 탑뷰 ${expectedMachineCount}개와 파운데이션·철도가 카탈로그에 있어야 합니다: actual=${catalogCount}`);
+  assert(catalogCount === expectedMachineCount + 6,
+    `승인 탑뷰 ${expectedMachineCount}개와 토대·철도·운송 탑뷰 도구 6개가 카탈로그에 있어야 합니다: actual=${catalogCount}`);
   const handoffItem = page.locator('.vp-handoff-item').first();
   assert(await handoffItem.count() === 1, '계산에서 받은 설계 대기열이 없습니다.');
   await page.locator('.vp-catalog').screenshot({ path: 'output/playwright/planner-handoff-qhd.png' });
@@ -107,6 +107,30 @@ try {
   }, PLANNER_HANDOFF_KEY);
   assert(afterHandoffTotal === beforeHandoffTotal - 1, `한 대 배치 후 대기열 잔량이 줄지 않았습니다: ${beforeHandoffTotal} → ${afterHandoffTotal}`);
   if (await page.locator('.vp-handoff > header button').count()) await page.locator('.vp-handoff > header button').click();
+  await page.getByRole('button', { name: '전체 초기화' }).click();
+
+  await page.getByRole('button', { name: /컨베이어 벨트.*두 점/ }).click();
+  const beltStart = await screenPoint(-34, -20);
+  const beltEnd = await screenPoint(-10, -4);
+  await page.mouse.click(beltStart.x, beltStart.y);
+  await page.mouse.click(beltEnd.x, beltEnd.y);
+  assert(await page.locator('.vp-route.is-solid').count() === 1, '카탈로그 컨베이어 탑뷰가 생성되지 않았습니다.');
+  assert(await page.locator('.vp-belt-turn').count() > 0, '카탈로그 컨베이어 직각 부품이 생성되지 않았습니다.');
+  await page.getByRole('button', { name: /컨베이어 리프트.*끝단 2개/ }).click();
+  const liftPoint = await screenPoint(2, -4);
+  await page.mouse.click(liftPoint.x, liftPoint.y);
+  assert(await page.locator('.vp-lift').count() === 1, '컨베이어 리프트 탑뷰가 생성되지 않았습니다.');
+  await page.getByRole('button', { name: /파이프.*두 점/ }).click();
+  const pipeStart = await screenPoint(12, -20);
+  const pipeEnd = await screenPoint(36, -20);
+  await page.mouse.click(pipeStart.x, pipeStart.y);
+  await page.mouse.click(pipeEnd.x, pipeEnd.y);
+  assert(await page.locator('.vp-route.is-fluid').count() === 1, '카탈로그 파이프 탑뷰가 생성되지 않았습니다.');
+  await page.getByRole('button', { name: /파이프 라이저.*수직 끝단/ }).click();
+  const riserPoint = await screenPoint(40, -4);
+  await page.mouse.click(riserPoint.x, riserPoint.y);
+  assert(await page.locator('.vp-pipe-riser').count() === 1, '파이프 라이저 탑뷰가 생성되지 않았습니다.');
+  await page.locator('.vp-stage').screenshot({ path: 'output/playwright/planner-anders-transport-qhd.png' });
   await page.getByRole('button', { name: '전체 초기화' }).click();
 
   await page.getByRole('button', { name: /철도.*두 점/ }).click();
@@ -198,6 +222,7 @@ try {
   console.log('PASS  파운데이션 커서·고스트·실배치 일치 (기본/확대/팬)');
   console.log('PASS  계산 대기열의 레시피·클럭·대수 보존과 한 대씩 수동 배치');
   console.log('PASS  철도 두 점 수동 작도 · 자체 벡터 · v6 상태 저장');
+  console.log('PASS  Anders 운송 역할 카탈로그 · 벨트/직각/방향/리프트/파이프/라이저');
   console.log('PASS  90도 연결부 벡터 렌더 · 외부 운송 이미지 0개');
   console.log('PASS  독립 SVG/PNG · 64px/m 축척 · Mk/유량/용량/깊이 범례');
   console.log('PASS  QHD 랜딩 중복·빈 레일·외부 자산 노출 없음');
