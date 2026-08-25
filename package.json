@@ -46,6 +46,8 @@
     "game:assets:check": "node scripts/game-assets/check-factory-assets.mjs && node scripts/game-assets/check-scene-recipe.mjs",
     "game:assets:query": "node scripts/game-assets/query-factory-assets.mjs",
     "game:render:env": "node scripts/game-assets/check-render-environment.mjs --remote",
+    "game:render:capture:clearance": "node scripts/unreal-render/run-renderdoc-clearance.mjs",
+    "game:render:analyze:clearance": "node scripts/unreal-render/analyze-renderdoc-clearance.mjs .cache/renderdoc/biomass-clearance/clearance-frame.zip 24 .cache/renderdoc/biomass-clearance/clearance-analysis.json",
     "game:assets:probe:unreal:package": "node scripts/unreal-render/package-render-mod.mjs",
     "game:assets:probe:unreal": "node scripts/unreal-render/run-runtime-probe.mjs --all",
     "render": "astro build && node scripts/render-plan.mjs",

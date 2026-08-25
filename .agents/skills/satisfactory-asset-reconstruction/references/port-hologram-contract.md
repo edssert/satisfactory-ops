@@ -36,9 +36,16 @@
   일반 3D 깊이를 사용해도 된다. 이 예외는 포트 frame/arrow에만 적용하며 clearance 셰이더에는 전파하지 않는다.
 - `ClearanceBox + Clearance_Inst`를 독립 생성하거나 visibility·`HMS_OK`만 설정한 캡처는 실제 흰 박스의
   증거가 아니다. `AFGBuildGun::GotoBuildState(<검증된 건물 Recipe>)`를 거친 게임 viewport reference에서
-  효과가 나타나는지 확인한다. `Mam_EdgeLine_Alb`, `Mam_ScanLine_Alb`, `GradientVert`, `edgestr`,
-  `edgesubtr`, `LineStr`, `Glow`의 실행 수식을 복구하지 못하면 cylinder·halo·불투명도·선 폭을 임의로 만들지
-  않고 clearance effect를 `unimplemented`로 차단한다.
+  효과가 나타나는지 확인한다. 제품 후보는 RenderDoc draw의 PSO·셰이더 해시·상수 버퍼·텍스처 바인딩과
+  실행 수식을 영수증으로 남겨야 한다. 현재 정본은 PSO `29568`, RenderDoc shader hash
+  `34f109e3d5357d8297f0d76c2d589217`, DXIL SHA-256
+  `2fdb0174d5497acc800dcdaf3a6bdce84469eba8b8bf4f6d337ddb1caa2a68ee`, UV edge
+  `0.5*(pow(1-sin(pi*U),edgestr)+pow(1-sin(pi*V),edgestr))-edgesubtr`, opacity
+  `saturate(pow(GradientVert.r,5))`, `s1` anisotropic/UVW `WRAP`, additive `ONE+ONE`, depth test off다. Blender technical 렌더는 같은
+  모델·카메라의 clearance 전용 view layer를 base에 additive해 depth test off를 재현하고 포트는 base layer의
+  자연 깊이를 유지한다. 최종 alpha는 base와 clearance의 합집합이어야 하며 토대 밖 hard-clearance를 base
+  alpha로 잘라서는 안 된다. 외부 이미지 합성이나 카메라별 transform 변경은 허용하지 않는다. 이를 복구하지 못한 새 재질에는 cylinder·halo·
+  불투명도·선 폭을 임의로 만들지 않고 clearance effect를 `unimplemented`로 차단한다.
 
 ## 외부 자산과 검사
 

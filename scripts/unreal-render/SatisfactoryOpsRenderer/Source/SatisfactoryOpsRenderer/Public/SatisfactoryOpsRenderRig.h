@@ -68,5 +68,8 @@ private:
     bool bProbeOnly = false;
     bool bViewportReference = false;
     bool bViewportScreenshotRequested = false;
+    bool bRenderDocTriggered = false;
+    bool bRenderDocEnded = false;
+    int32 ReferenceExitDelayFrames = 120;
     FBox SceneBounds;
 };

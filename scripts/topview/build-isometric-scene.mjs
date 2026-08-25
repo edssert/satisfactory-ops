@@ -35,6 +35,9 @@ for (const stale of [
   'fixture-candidate.blend', 'fixture-candidate.png',
   'candidate-045.png', 'candidate-135.png', 'candidate-225.png', 'candidate-315.png',
   'technical-045.png', 'technical-135.png', 'technical-225.png', 'technical-315.png',
+  'technical-045.technical-contract.json', 'technical-135.technical-contract.json',
+  'technical-225.technical-contract.json', 'technical-315.technical-contract.json',
+  'technical-fixture.png', 'technical-fixture.technical-contract.json',
   'top.png', 'top-machine.png', 'product.blend',
 ]) {
   const path = resolve(outputDir, stale);
@@ -119,6 +122,22 @@ if (receipt.status === 'blocked') {
 }
 
 const blender = process.env.BLENDER_EXE ?? 'C:\\Program Files\\Blender Foundation\\Blender 5.2\\blender.exe';
+const blenderRuntimeRoot = resolve(root, '.cache/blender-runtime');
+const blenderUserResources = resolve(blenderRuntimeRoot, 'user-resources');
+const blenderXdgCache = resolve(blenderRuntimeRoot, 'xdg-cache');
+for (const path of [blenderUserResources, blenderXdgCache]) mkdirSync(path, { recursive: true });
+const runBlender = (arguments_) => {
+  const blenderArguments = [...arguments_];
+  const pythonIndex = blenderArguments.indexOf('--python');
+  if (pythonIndex >= 0) blenderArguments.splice(
+    pythonIndex, 0, '--python-expr', "import bpy; bpy.context.preferences.filepaths.file_preview_type='NONE'",
+  );
+  return execFileSync(blender, blenderArguments, {
+    cwd: root,
+    stdio: 'inherit',
+    env: { ...process.env, BLENDER_USER_RESOURCES: blenderUserResources, XDG_CACHE_HOME: blenderXdgCache },
+  });
+};
 const geometryDir = resolve(outputDir, 'geometry');
 if (existsSync(geometryDir)) rmSync(geometryDir, { recursive: true, force: true });
 mkdirSync(geometryDir, { recursive: true });
@@ -138,9 +157,9 @@ execFileSync(process.execPath, [
 ], { cwd: root, stdio: 'inherit' });
 const slug = scene.id.replace(/[^a-z0-9-]+/gi, '-').toLowerCase();
 const geometryBlend = resolve(geometryDir, `${slug}.blend`);
-execFileSync(blender, [
+runBlender([
   geometryBlend, '--background', '--python-exit-code', '3', '--python', 'scripts/topview/audit-emission-materials.py', '--', resolvedScene,
-], { cwd: root, stdio: 'inherit' });
+]);
 const normalBlend = resolve(outputDir, 'normal-decal.blend');
 const normalDecalBindings = resolved.isometricMaterialEvidence.bindings
   .filter((binding) => binding.reconstruction === 'baked-normal-decal-adapter');
@@ -151,54 +170,61 @@ if (normalDecalBindings.length > 1) {
 if (normalDecalBindings.length === 1) {
   const materialName = normalDecalBindings[0].material;
   const decalNormalSource = resolve(root, resolved.materials.normal[materialName]);
-  execFileSync(blender, [
+  runBlender([
     geometryBlend, '--background', '--python-exit-code', '3',
     '--python', 'scripts/topview/apply-mesh-decal-adapter.py', '--',
     normalBlend, decalNormalSource, materialName,
-  ], { cwd: root, stdio: 'inherit' });
-  execFileSync(blender, [
+  ]);
+  runBlender([
     normalBlend, '--background', '--python-exit-code', '3',
     '--python', 'scripts/topview/audit-mesh-decal-adapter.py',
-  ], { cwd: root, stdio: 'inherit' });
+  ]);
 } else {
   copyFileSync(geometryBlend, normalBlend);
 }
 
 const foundationBlend = resolve(outputDir, 'foundation.blend');
 const foundationGlb = resolve(root, '.cache/topview/isometric/foundation-export/FactoryGame/Content/FactoryGame/Buildable/Building/Foundation/FicsitSet/SM_Foundation_FicsitSet_8x1_01.glb');
-execFileSync(blender, [
+runBlender([
   '--background', '--python-exit-code', '3', '--python', 'scripts/topview/apply-foundation-adapter.py', '--',
   foundationGlb, overlayContract, foundationBlend,
-], { cwd: root, stdio: 'inherit' });
-execFileSync(blender, [
+]);
+runBlender([
   foundationBlend, '--background', '--python-exit-code', '3', '--python', 'scripts/topview/audit-foundation-adapter.py', '--', overlayContract,
-], { cwd: root, stdio: 'inherit' });
+]);
 
 const beautyBlend = resolve(outputDir, 'candidate.blend');
-execFileSync(blender, [
+runBlender([
   normalBlend, '--background', '--python-exit-code', '3', '--python', 'scripts/topview/merge-isometric-adapters.py', '--', beautyBlend, foundationBlend,
-], { cwd: root, stdio: 'inherit' });
+]);
 const hologramRoot = resolve(root, '.cache/topview/hologram-export');
 const hologramBlend = resolve(outputDir, 'hologram.blend');
-execFileSync(blender, [
+runBlender([
   '--background', '--python-exit-code', '3', '--python', 'scripts/topview/apply-hologram-adapter.py', '--',
   hologramRoot, overlayContract, hologramBlend,
-], { cwd: root, stdio: 'inherit' });
-execFileSync(blender, [
+]);
+runBlender([
   hologramBlend, '--background', '--python-exit-code', '3', '--python', 'scripts/topview/audit-hologram-adapter.py', '--', overlayContract,
-], { cwd: root, stdio: 'inherit' });
+]);
 const technicalBlend = resolve(outputDir, 'product.blend');
-execFileSync(blender, [
+runBlender([
   beautyBlend, '--background', '--python-exit-code', '3', '--python', 'scripts/topview/merge-isometric-adapters.py', '--', technicalBlend, hologramBlend,
-], { cwd: root, stdio: 'inherit' });
+]);
+const technicalFixture = resolve(outputDir, 'technical-fixture.png');
+runBlender([
+  technicalBlend, '--background', '--python-exit-code', '3', '--python', 'scripts/topview/render-isometric-scene.py', '--',
+  technicalFixture, '256', '--technical', '--orthographic', '--azimuth=135', '--elevation=45', '--frame=1.10',
+]);
+execFileSync(process.execPath, ['scripts/topview/audit-isometric-frame.mjs', technicalFixture, '2'], { cwd: root, stdio: 'inherit' });
+execFileSync(process.execPath, ['scripts/topview/audit-technical-overlay.mjs', technicalFixture], { cwd: root, stdio: 'inherit' });
 const directions = [45, 135, 225, 315];
 const candidateDirections = [];
 for (const azimuth of directions) {
   const path = resolve(outputDir, `candidate-${String(azimuth).padStart(3, '0')}.png`);
-  execFileSync(blender, [
+  runBlender([
     technicalBlend, '--background', '--python-exit-code', '3', '--python', 'scripts/topview/render-isometric-scene.py', '--',
     path, '2048', '--hide-technical', `--azimuth=${azimuth}`, '--elevation=45', '--frame=1.00',
-  ], { cwd: root, stdio: 'inherit' });
+  ]);
   execFileSync(process.execPath, ['scripts/topview/audit-isometric-frame.mjs', path, '8'], { cwd: root, stdio: 'inherit' });
   execFileSync(process.execPath, ['scripts/topview/audit-beauty-isometric.mjs', path], { cwd: root, stdio: 'inherit' });
   execFileSync(process.execPath, ['scripts/topview/audit-emission-pixels.mjs', path, resolvedScene], { cwd: root, stdio: 'inherit' });
@@ -208,24 +234,24 @@ const candidate = resolve(outputDir, 'candidate.png');
 copyFileSync(candidateDirections[1], candidate);
 
 const top = resolve(outputDir, 'top.png');
-execFileSync(blender, [
+runBlender([
   technicalBlend, '--background', '--python-exit-code', '3', '--python', 'scripts/topview/render-isometric-scene.py', '--',
   top, '2048', '--top', '--hide-technical', '--frame=1.08',
-], { cwd: root, stdio: 'inherit' });
+]);
 execFileSync(process.execPath, ['scripts/topview/audit-isometric-frame.mjs', top, '8'], { cwd: root, stdio: 'inherit' });
 const topMachine = resolve(outputDir, 'top-machine.png');
-execFileSync(blender, [
+runBlender([
   technicalBlend, '--background', '--python-exit-code', '3', '--python', 'scripts/topview/render-isometric-scene.py', '--',
   topMachine, '2048', '--top', '--hide-technical', '--hide-foundation', '--frame=1.08',
-], { cwd: root, stdio: 'inherit' });
+]);
 execFileSync(process.execPath, ['scripts/topview/audit-isometric-frame.mjs', topMachine, '8'], { cwd: root, stdio: 'inherit' });
 const technicalDirections = [];
 for (const azimuth of directions) {
   const path = resolve(outputDir, `technical-${String(azimuth).padStart(3, '0')}.png`);
-  execFileSync(blender, [
+  runBlender([
     technicalBlend, '--background', '--python-exit-code', '3', '--python', 'scripts/topview/render-isometric-scene.py', '--',
-    path, '2048', '--technical', '--orthographic', `--azimuth=${azimuth}`, '--elevation=45', '--frame=1.08',
-  ], { cwd: root, stdio: 'inherit' });
+    path, '2048', '--technical', '--orthographic', `--azimuth=${azimuth}`, '--elevation=45', '--frame=1.10',
+  ]);
   execFileSync(process.execPath, ['scripts/topview/audit-isometric-frame.mjs', path, '8'], { cwd: root, stdio: 'inherit' });
   execFileSync(process.execPath, ['scripts/topview/audit-technical-overlay.mjs', path], { cwd: root, stdio: 'inherit' });
   technicalDirections.push(path);
@@ -234,7 +260,7 @@ const technical = resolve(outputDir, 'technical.png');
 copyFileSync(technicalDirections[1], technical);
 
 const sha256 = (path) => createHash('sha256').update(readFileSync(path)).digest('hex');
-receipt.status = 'validated-change-candidate-not-approved';
+receipt.status = 'validated-product-candidate';
 receipt.outputs = {
   candidate: { path: candidate, sha256: sha256(candidate) },
   candidateDirections: candidateDirections.map((path, index) => ({ azimuth: directions[index], path, sha256: sha256(path) })),
@@ -242,8 +268,10 @@ receipt.outputs = {
   topMachine: { path: topMachine, sha256: sha256(topMachine) },
   productBlend: { path: technicalBlend, sha256: sha256(technicalBlend) },
   technical: { path: technical, sha256: sha256(technical) },
-  technicalDirections: technicalDirections.map((path, index) => ({ azimuth: directions[index], path, sha256: sha256(path) })),
+  technicalDirections: technicalDirections.map((path, index) => {
+    const contractPath = path.replace(/\.[^.]+$/, '.technical-contract.json');
+    return { azimuth: directions[index], path, sha256: sha256(path), contractPath, contractSha256: sha256(contractPath) };
+  }),
 };
-receipt.approval = null;
 writeFileSync(resolve(outputDir, 'receipt.json'), `${JSON.stringify(receipt, null, 2)}\n`);
 process.stdout.write(`PASS  아이소메트릭 파이프라인 후보 격리 · ${candidate}\n`);

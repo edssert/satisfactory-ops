@@ -74,7 +74,7 @@ G-30은 다음 항목을 빠짐없이 판정한다.
 |---|---|---|
 | 생산 계산·설계 인계 | PROD-01~04 | 완료 |
 | 수동 설계 편집기·상태 | PLAN-01~08, STATE-01 | 완료 |
-| 탑뷰·토대·운송 자산 | ASSET-01, PLAN-02~07 | 재검증 중 — 포트·재질 파이프라인 승격 차단 |
+| 탑뷰·토대·운송 자산 | ASSET-01, PLAN-02~07 | 재검증 중 — 골든 2종 공용 파이프라인 승격 완료, 나머지 고정 설비 순차 검증 |
 | 벨트·파이프·리프트·깊이 | PLAN-04, PLAN-06~07 | 완료 |
 | SVG·PNG 도면 발행 | PLAN-09 | 완료 |
 | 세이브 해석·진단 | SAVE-01, CHECK-01 | 완료 |
@@ -107,7 +107,7 @@ G-30은 다음 항목을 빠짐없이 판정한다.
    FactorySettings 포트 메시/재질, 저자 피벗, 활성 quaternion, 마스터 depth 속성을 검증하지 못했다.
    현재 승인 완료 주장을 철회하고 자동 바이오매스를 골든 fixture로 메인 파이프라인을 고친 뒤 낮은 티어부터
    부품·재질·포트·4방향 ISO를 다시 검수한다.
-6. **그래프 엔지니어링 2차 기반 완료·Unreal probe→Blender 제품 렌더 전환 진행** — `FactoryGame/Content/` 23,057개 패키지와
+6. **그래프 엔지니어링 2차 기반·Unreal probe→Blender 제품 렌더 골든 2종 완료** — `FactoryGame/Content/` 23,057개 패키지와
    `CommunityResources/Headers.zip` API 심벌과 두 runtime probe를 154,346개 노드·269,036개 간선으로 연결했다.
    `port <BuildClass> <PortId>`가 FactorySettings→포트 메시/재질→저자 bounds→component transform→Headers API를
    compact JSON으로 반환하고 입력 해시 드리프트를 검사한다. Blender Cycles가
@@ -115,10 +115,13 @@ G-30은 다음 항목을 빠짐없이 판정한다.
    Unreal 5.6.1-CSS/SML 런타임 fixture로 확인했다. Unreal은 제품 이미지를 만들지 않고 최종 component transform,
    lightweight instance, MaterialInstance·텍스처, clearance, native 포트 메시·재질을 JSON probe로 그래프에 승격한다.
    제품 후보는 이 probe를 소비하는 하나의 Blender 장면에서 생성하며 포트는 정확한 3D 위치를 유지하되 자연 가림을
-   허용한다. 바이오매스 연소기와 제작기의 토대 없는 2048px 탑뷰와 토대 포함 4방향 beauty ISO는 검증 후
-   설계판·도감에 연결했다. technical ISO는 실제 BuildGun 상태의 viewport reference까지 확보했지만 cooked
-   `Clearance`의 screen-space 선 폭·수직 감쇠를 Blender에서 아직 동일하게 실행하지 못해 차단 상태다. 이
-   어댑터가 verified가 되고 두 기기의 technical 4방향이 통과할 때 이 단계를 완료한다.
+   허용한다. 바이오매스 연소기와 제작기의 토대 포함/제외 2048px 탑뷰와 토대 포함 4방향 beauty ISO는 검증 후
+   설계판·도감에 연결했다. 실제 BuildGun viewport의 RenderDoc PSO `29568`, shader hash
+   `34f109e3d5357d8297f0d76c2d589217`, DXIL SHA-256
+   `2fdb0174d5497acc800dcdaf3a6bdce84469eba8b8bf4f6d337ddb1caa2a68ee`에서 UV edge·`GradientVert^5`
+   opacity·`ONE+ONE` blend·런타임 흰색 cb2를 복구해
+   공용 `BuildHologram` 어댑터로 승격했고, 두 기기의 technical 4방향은 동일 `product.blend`에서 카메라만
+   바꿔 프레임·clearance·포트 오버레이 검사를 모두 통과했다. 다음 고정 설비도 제품별 보정 없이 이 경로를 쓴다.
 7. **저장소 위생 정리 완료** — Blender가 만든 비ASCII 빈 캐시 폴더 16개와 루트 로그·임시 테스트 번들을
    제거하고, 렌더 캐시를 `.cache/blender-runtime/`으로 격리했다. 브라우저 증거는 `output/`의 목적별
    하위 폴더로 정리했으며 `check:hygiene`를 전체 검증 게이트에 추가했다.
@@ -143,9 +146,8 @@ G-30은 다음 항목을 빠짐없이 판정한다.
     옮겨 57.08MB에서 8.93MB로 줄였다. 철도 두 점 작도·선택 삭제·v6 상태·독립 도면도 브라우저에서
     통과했다. GitHub Pages도 Chromium 설치 후 같은 `verify:release`를 통과한 `dist/`만 업로드하며,
     `workflow_dispatch`에서 이전 커밋을 선택해 같은 게이트로 재배포할 수 있다. 현재 공개 URL은
-    `https://edssert.github.io/satisfactory-ops/`에서 HTTPS 200이며, 마지막 성공 배포와 롤백 기준선은
-    `645f2bbea15ee4765344a8a92933f7ab0dd1bf74` / Actions run `32439503533`이다. 새 공개 배포는 커밋·푸시와
-    공개 URL 승인만 남았다.
+    `https://edssert.github.io/satisfactory-ops/`이고, 최신 성공 커밋·Actions run은 배포 워크플로 기록을
+    정본으로 삼아 문서에 고정 번호를 중복 보관하지 않는다.
 
 ## 8. 스트림 완료 조건
 

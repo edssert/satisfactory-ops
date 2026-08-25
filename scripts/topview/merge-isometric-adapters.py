@@ -10,13 +10,20 @@ args = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
 if len(args) < 2:
     raise ValueError("출력 BLEND와 append할 BLEND가 필요합니다.")
 output = Path(args[0]).resolve()
+clearance_collection = bpy.data.collections.get("RuntimeClearanceOverlay")
 for blend_argument in args[1:]:
     blend = Path(blend_argument).resolve()
     with bpy.data.libraries.load(str(blend), link=False) as (source, target):
         target.objects = [name for name in source.objects if name]
     for obj in target.objects:
         if obj is not None and obj.type == "MESH":
-            bpy.context.scene.collection.objects.link(obj)
+            if obj.get("technical_role") == "clearance":
+                if clearance_collection is None:
+                    clearance_collection = bpy.data.collections.new("RuntimeClearanceOverlay")
+                    bpy.context.scene.collection.children.link(clearance_collection)
+                clearance_collection.objects.link(obj)
+            else:
+                bpy.context.scene.collection.objects.link(obj)
 output.parent.mkdir(parents=True, exist_ok=True)
 bpy.ops.wm.save_as_mainfile(filepath=str(output))
 print(f"MERGED_BLEND={output}")

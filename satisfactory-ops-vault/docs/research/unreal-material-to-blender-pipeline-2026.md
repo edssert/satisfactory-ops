@@ -63,10 +63,23 @@ PBR과 `bDisableDepthTest`를 동시에 만족하는 단일 장면 어댑터가 
 2026-08-26 실제 `AFGBuildGun::GotoBuildState(Recipe_GeneratorBiomass_Automated_C)` 생명주기와 게임 viewport
 캡처를 연결했다. 독립 `ClearanceBox + Clearance_Inst`, visibility 강제, `HMS_OK`만으로는 선이 나오지 않았고,
 실제 BuildGun 상태에서만 흰 박스가 나타났다. reference는 4개 세로 사각면으로 된 `ClearanceBox` UV0의
-바닥·천장·수직 12경계, additive 코너 중첩, 높이 감쇠를 확인했다. 참조 마스크는 `Mam_EdgeLine_Alb`,
-`Mam_ScanLine_Alb`, `GradientVert`, 파라미터는 `edgestr=30`, `edgesubtr=0.3`, `LineStr=0.1`, `Glow=3`이다.
-이 값의 Blender UV 후보가 면 전체 발광과 과도한 선 폭을 일으킨 두 실패를 남겼으므로, 임의 보정 대신
-screen-space 수식이 복구될 때까지 technical 승격을 차단한다.
+바닥·천장·수직 12경계, additive 코너 중첩, 높이 감쇠를 확인했다. RenderDoc draw `11401`의 PSO는
+`29568`, shader hash는 `34f109e3d5357d8297f0d76c2d589217`, 추출한 DXIL SHA-256은
+`2fdb0174d5497acc800dcdaf3a6bdce84469eba8b8bf4f6d337ddb1caa2a68ee`다. DXIL에서 edge는
+`0.5*(pow(1-sin(pi*U),edgestr)+pow(1-sin(pi*V),edgestr))-edgesubtr`, opacity는
+`saturate(pow(GradientVert.r,5))`로 확정됐고 blend는 `ONE+ONE`, depth test off다. 정적 MaterialInstance는
+`LineStr=0.1`, `LineColor=(1,0,0)`이지만 실제 draw의 material cb2(root parameter 6, resource 332,
+offset 590336)는 `[(30,0.3,0,0),(1,1,1,3),(0,0,0,0)]`이다. 따라서 유효 배치 런타임은
+`edgestr=30`, `edgesubtr=0.3`, `Glow=3`, `Color=(1,1,1)`, `LineStr=0`, `LineColor=(0,0,0)`,
+`EncroachingAClearance=0`으로 흰 선을 출력한다. 이전의 `Mam_EdgeLine_Alb`·`Mam_ScanLine_Alb` 기반
+거리 정규화는 실제 실행 셰이더가 아니므로 제거했다. Blender 어댑터는 같은 UV 절차식, `GradientVert^5`,
+실제 `s1`의 anisotropic + UVW `WRAP` sampler, 색 lerp와 음수 clamp, Transparent+Emission Add Shader로
+이 additive 계약을 재현한다. clearance view layer는
+같은 모델·카메라에서 base에 additive되며 최종 alpha는 base와 clearance의 합집합이라 8×10 제작기 hard box가
+8×8 토대 밖에서 잘리지 않는다.
+`npm run game:render:capture:clearance`는 포커스를 바꾸지 않는 별도 Win32 desktop에서 실제 BuildGun 프레임을
+캡처하고 `zip.xml` 변환과 draw 상태 분석 JSON까지 연속 생성한다. 기존 캡처를 다시 분석할 때는
+`npm run game:render:analyze:clearance`를 쓴다.
 카메라별 객체 이동과 사용자가 거부한 수동 합성은 대체안으로 채택하지 않는다.
 
 ## 현재 게임 Unreal 실행 경로

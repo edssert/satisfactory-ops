@@ -21,7 +21,10 @@
 #include "Engine/Texture2D.h"
 #include "Engine/Texture2DArray.h"
 #include "Engine/GameViewportClient.h"
+#include "Engine/Engine.h"
 #include "GameFramework/PlayerController.h"
+#include "Widgets/SWindow.h"
+#include "GenericPlatform/GenericWindow.h"
 #include "FGClearanceData.h"
 #include "FGBuildableSubsystem.h"
 #include "FGFactoryConnectionComponent.h"
@@ -37,6 +40,9 @@
 #include "FGVertexAnimatedMeshComponent.h"
 #include "HAL/FileManager.h"
 #include "HAL/PlatformMisc.h"
+#include "HAL/PlatformProcess.h"
+#include "DynamicRHI.h"
+#include "RenderingThread.h"
 #include "ImageCore.h"
 #include "ImageUtils.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -106,6 +112,19 @@ TArray<TSharedPtr<FJsonValue>> StringArrayToJson(const TArray<FString>& Values)
     TArray<TSharedPtr<FJsonValue>> Result;
     for (const FString& Value : Values) Result.Add(MakeShared<FJsonValueString>(Value));
     return Result;
+}
+
+void* ViewportWindowHandle()
+{
+    if (!GEngine || !GEngine->GameViewport) return nullptr;
+    TSharedPtr<SWindow> Window = GEngine->GameViewport->GetWindow();
+    if (!Window.IsValid() || !Window->GetNativeWindow().IsValid()) return nullptr;
+    return Window->GetNativeWindow()->GetOSWindowHandle();
+}
+
+void* NativeRhiDevice()
+{
+    return GDynamicRHI ? GDynamicRHI->RHIGetNativeDevice() : nullptr;
 }
 }
 
@@ -256,6 +275,65 @@ void ASatisfactoryOpsRenderRig::Tick(float DeltaSeconds)
                 }
             }
         }
+        if (FParse::Param(FCommandLine::Get(), TEXT("SatisfactoryOpsRenderDoc")) && !bRenderDocTriggered)
+        {
+            struct FRenderDocApiTable { void* Entries[24]; };
+            using FGetApi = int(*)(int, void**);
+            using FSetCapturePath = void(*)(const char*);
+            using FStartFrameCapture = void(*)(void*, void*);
+            using FSetActiveWindow = void(*)(void*, void*);
+            using FTriggerCapture = void(*)();
+            void* Module = FPlatformProcess::GetDllHandle(TEXT("renderdoc.dll"));
+            FGetApi GetApi = Module
+                ? reinterpret_cast<FGetApi>(FPlatformProcess::GetDllExport(Module, TEXT("RENDERDOC_GetAPI")))
+                : nullptr;
+            FRenderDocApiTable* Api = nullptr;
+            if (GetApi && GetApi(10600, reinterpret_cast<void**>(&Api)) == 1 && Api)
+            {
+                const FString CaptureTemplate = FPaths::Combine(OutputDirectory, TEXT("clearance-frame"));
+                FTCHARToUTF8 CaptureTemplateUtf8(*CaptureTemplate);
+                reinterpret_cast<FSetCapturePath>(Api->Entries[11])(CaptureTemplateUtf8.Get());
+                FlushRenderingCommands();
+                void* Device = NativeRhiDevice();
+                void* WindowHandle = ViewportWindowHandle();
+                if (WindowHandle)
+                {
+                    reinterpret_cast<FSetActiveWindow>(Api->Entries[18])(nullptr, WindowHandle);
+                    reinterpret_cast<FTriggerCapture>(Api->Entries[15])();
+                    bRenderDocEnded = true;
+                }
+                else
+                {
+                    reinterpret_cast<FStartFrameCapture>(Api->Entries[19])(nullptr, WindowHandle);
+                }
+                bRenderDocTriggered = true;
+                UE_LOG(LogSatisfactoryOpsRenderRig, Display, TEXT("RenderDoc 프레임 시작: %s device=%p window=%p"), *CaptureTemplate, Device, WindowHandle);
+                return;
+            }
+            UE_LOG(LogSatisfactoryOpsRenderRig, Error, TEXT("RenderDoc API를 찾지 못했습니다."));
+            FPlatformMisc::RequestExitWithStatus(true, 23);
+            return;
+        }
+        if (FParse::Param(FCommandLine::Get(), TEXT("SatisfactoryOpsRenderDoc")) &&
+            bRenderDocTriggered && bViewportScreenshotRequested && !bRenderDocEnded)
+        {
+            struct FRenderDocApiTable { void* Entries[24]; };
+            using FGetApi = int(*)(int, void**);
+            using FEndFrameCapture = uint32(*)(void*, void*);
+            void* Module = FPlatformProcess::GetDllHandle(TEXT("renderdoc.dll"));
+            FGetApi GetApi = Module
+                ? reinterpret_cast<FGetApi>(FPlatformProcess::GetDllExport(Module, TEXT("RENDERDOC_GetAPI")))
+                : nullptr;
+            FRenderDocApiTable* Api = nullptr;
+            if (GetApi && GetApi(10600, reinterpret_cast<void**>(&Api)) == 1 && Api)
+            {
+                FlushRenderingCommands();
+                const uint32 Saved = reinterpret_cast<FEndFrameCapture>(Api->Entries[21])(nullptr, ViewportWindowHandle());
+                bRenderDocEnded = true;
+                UE_LOG(LogSatisfactoryOpsRenderRig, Display, TEXT("RenderDoc 프레임 종료 saved=%u"), Saved);
+                return;
+            }
+        }
         const FString ScreenshotPath = FPaths::Combine(OutputDirectory, TEXT("clearance-reference.png"));
         if (!bViewportScreenshotRequested)
         {
@@ -265,6 +343,10 @@ void ASatisfactoryOpsRenderRig::Tick(float DeltaSeconds)
         }
         if (FPaths::FileExists(ScreenshotPath))
         {
+            if (FParse::Param(FCommandLine::Get(), TEXT("SatisfactoryOpsRenderDoc")) && ReferenceExitDelayFrames-- > 0)
+            {
+                return;
+            }
             UE_LOG(LogSatisfactoryOpsRenderRig, Display, TEXT("viewport reference 저장: %s"), *ScreenshotPath);
             SetActorTickEnabled(false);
             FPlatformMisc::RequestExitWithStatus(false, 0);

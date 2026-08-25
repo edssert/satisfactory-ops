@@ -24,6 +24,7 @@ public class SatisfactoryOpsRenderer : ModuleRules
             "Json",
             "RenderCore",
             "RHI",
+            "SlateCore",
             "Projects"
         });
     }

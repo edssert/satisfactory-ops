@@ -32,15 +32,29 @@ if contract.get("$schemaVersion") == 2:
             material = next((slot.material for slot in obj.material_slots if slot.material), None)
             if material is None or material.get("adapter") != "BuildHologram":
                 errors.append(f"runtime-technical-{index}-material")
-            elif material.get("depth_test_adapter") not in (None, "natural-scene-depth"):
+            elif entry["role"] != "clearance" and material.get("depth_test_adapter") not in (None, "natural-scene-depth"):
                 errors.append(f"runtime-technical-{index}-depth")
         if entry["role"] == "clearance":
             for obj in matches:
                 material = next((slot.material for slot in obj.material_slots if slot.material), None)
                 if not material or not material.get("clearance_uv_shader"):
                     errors.append(f"runtime-technical-{index}-clearance-uv-shader")
-                elif len(json.loads(material.get("source_masks", "[]"))) != 3:
+                elif len(json.loads(material.get("source_masks", "[]"))) != 1:
                     errors.append(f"runtime-technical-{index}-clearance-source-masks")
+                elif material.get("clearance_renderdoc_shader_hash") != "34f109e3d5357d8297f0d76c2d589217":
+                    errors.append(f"runtime-technical-{index}-clearance-shader")
+                elif material.get("clearance_dxil_sha256") != "2fdb0174d5497acc800dcdaf3a6bdce84469eba8b8bf4f6d337ddb1caa2a68ee":
+                    errors.append(f"runtime-technical-{index}-clearance-dxil")
+                elif json.loads(material.get("clearance_runtime_cbuffer", "{}")).get("registers") != [[30, 0.30000001192092896, 0, 0], [1, 1, 1, 3], [0, 0, 0, 0]]:
+                    errors.append(f"runtime-technical-{index}-clearance-cbuffer")
+                elif json.loads(material.get("clearance_gradient_sampler", "{}")).get("addressV") != "D3D12_TEXTURE_ADDRESS_MODE_WRAP":
+                    errors.append(f"runtime-technical-{index}-clearance-sampler")
+                elif material.get("clearance_uv_formula") != "0.5*(pow(1-sin(pi*U),edgestr)+pow(1-sin(pi*V),edgestr))-edgesubtr":
+                    errors.append(f"runtime-technical-{index}-clearance-formula")
+                elif material.get("blend_contract") != "D3D12 ONE+ONE; Blender AddShader(Transparent,Emission)":
+                    errors.append(f"runtime-technical-{index}-clearance-blend")
+                elif material.get("depth_test_adapter") != "same-scene-view-layer-no-depth":
+                    errors.append(f"runtime-technical-{index}-clearance-depth")
             if index == next((candidate for candidate, item in enumerate(contract["technicalMeshes"]) if item["role"] == "clearance"), -1):
                 points = [obj.matrix_world @ Vector(corner) for obj in matches for corner in obj.bound_box]
                 actual_minimum = [min(point[axis] for point in points) for axis in range(3)]

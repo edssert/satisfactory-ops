@@ -60,7 +60,14 @@ const comparison = resolve(outputDir, `${slug}.comparison.png`);
 const receipt = resolve(outputDir, `${slug}.receipt.json`);
 
 function run(command, args) {
-  const result = spawnSync(command, args, {
+  const commandArgs = [...args];
+  if (command === blender) {
+    const pythonIndex = commandArgs.indexOf('--python');
+    if (pythonIndex >= 0) commandArgs.splice(
+      pythonIndex, 0, '--python-expr', "import bpy; bpy.context.preferences.filepaths.file_preview_type='NONE'",
+    );
+  }
+  const result = spawnSync(command, commandArgs, {
     cwd: root,
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'pipe'],

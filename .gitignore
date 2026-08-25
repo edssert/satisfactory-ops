@@ -34,6 +34,8 @@ scripts/game-assets/Cue4ParseCatalog/bin/
 scripts/game-assets/Cue4ParseCatalog/obj/
 scripts/game-assets/PdbNativeContracts/bin/
 scripts/game-assets/PdbNativeContracts/obj/
+scripts/unreal-render/HiddenDesktopLauncher/bin/
+scripts/unreal-render/HiddenDesktopLauncher/obj/
 scripts/unreal-render/SatisfactoryOpsRenderer/Binaries/
 scripts/unreal-render/SatisfactoryOpsRenderer/Intermediate/
 scripts/unreal-render/SatisfactoryOpsRenderer/Saved/

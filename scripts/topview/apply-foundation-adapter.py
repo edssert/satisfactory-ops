@@ -14,6 +14,7 @@ if len(args) != 3:
 glb, contract_path, output = map(lambda value: Path(value).resolve(), args)
 contract = json.loads(contract_path.read_text(encoding="utf-8"))
 bpy.ops.wm.read_factory_settings(use_empty=True)
+bpy.context.preferences.filepaths.file_preview_type = "NONE"
 before = set(bpy.context.scene.objects)
 bpy.ops.import_scene.gltf(filepath=str(glb), import_shading="NORMALS")
 objects = [obj for obj in bpy.context.scene.objects if obj not in before and obj.type == "MESH"]

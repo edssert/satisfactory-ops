@@ -217,6 +217,10 @@ Blender는 probe와 설치본 추출 텍스처를 소비해 하나의 장면에�
 방위 45/135/225/315의 beauty·technical을 카메라만 바꿔 생성한다. 포트는 정확한 3D 위치를 유지하되 기기에
 가려지는 시점에서는 자연스럽게 가려진다. Foundation 상단과 설비 하단은 각 clearance 로컬 Z 경계로 정렬한다.
 바이오매스 연소기와 제작기의 2048px 토대 없는 탑뷰와 토대 포함 beauty 4방향은 이 계약을 통과해 앱에
-연결됐다. technical 자산은 배포하지 않는다. 실제 `AFGBuildGun::GotoBuildState`를 거친 viewport reference에서
-`ClearanceBox` UV0, `Mam_EdgeLine_Alb`, `Mam_ScanLine_Alb`, `GradientVert`, additive `Glow`의 동작을 확인했지만
-Blender의 screen-space 선 폭이 아직 일치하지 않기 때문이다. 임의 cylinder·halo·불투명도 보정은 금지한다.
+연결됐다. technical 자산은 실제 `AFGBuildGun::GotoBuildState` viewport를 RenderDoc으로 캡처해 PSO `29568`,
+shader hash `34f109e3d5357d8297f0d76c2d589217`, DXIL SHA-256
+`2fdb0174d5497acc800dcdaf3a6bdce84469eba8b8bf4f6d337ddb1caa2a68ee`, `ClearanceBox` UV0의 절차식 edge,
+`GradientVert^5` opacity, `s1` anisotropic/UVW `WRAP`, additive `ONE+ONE`, 런타임 흰색 cb2를 복구한
+공용 어댑터만 사용한다. 토대 밖
+clearance도 최종 alpha에 포함하고 제품별 cylinder·halo·
+불투명도·선 폭 보정은 계속 금지한다.

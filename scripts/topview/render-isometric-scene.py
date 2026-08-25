@@ -1,10 +1,12 @@
 """어댑터 적용이 끝난 BLEND를 재질 변경 없이 투명 아이소메트릭/탑뷰 PNG로 렌더한다."""
 
+import json
 import math
 import sys
 from pathlib import Path
 
 import bpy
+from bpy_extras.object_utils import world_to_camera_view
 from mathutils import Vector
 
 
@@ -36,6 +38,21 @@ meshes = [obj for obj in bpy.context.scene.objects if obj.type == "MESH" and not
 points = [obj.matrix_world @ Vector(corner) for obj in meshes for corner in obj.bound_box]
 for obj in foundation_to_hide:
     obj.hide_render = True
+
+if technical:
+    base_collection = bpy.data.collections.get("RuntimeTechnicalBase") or bpy.data.collections.new("RuntimeTechnicalBase")
+    clearance_collection = bpy.data.collections.get("RuntimeClearanceOverlay")
+    if clearance_collection is None:
+        raise RuntimeError("RuntimeClearanceOverlay collection이 없습니다.")
+    if base_collection.name not in bpy.context.scene.collection.children:
+        bpy.context.scene.collection.children.link(base_collection)
+    for obj in meshes:
+        target = clearance_collection if obj.get("technical_role") == "clearance" else base_collection
+        if target not in obj.users_collection:
+            target.objects.link(obj)
+        for source_collection in list(obj.users_collection):
+            if source_collection != target:
+                source_collection.objects.unlink(obj)
 minimum = Vector(tuple(min(point[index] for point in points) for index in range(3)))
 maximum = Vector(tuple(max(point[index] for point in points) for index in range(3)))
 center = (minimum + maximum) / 2
@@ -102,9 +119,95 @@ scene.render.image_settings.file_format = "PNG"
 scene.render.image_settings.color_mode = "RGBA"
 scene.render.film_transparent = True
 scene.render.filepath = str(output)
-scene.render.use_compositing = False
+scene.render.use_compositing = technical
+if technical:
+    base_layer = scene.view_layers.get("ViewLayer") or scene.view_layers[0]
+    overlay_layer = scene.view_layers.get("ClearanceNoDepth") or scene.view_layers.new("ClearanceNoDepth")
+
+    def layer_collection(layer, name):
+        stack = [layer.layer_collection]
+        while stack:
+            candidate = stack.pop()
+            if candidate.name == name:
+                return candidate
+            stack.extend(candidate.children)
+        raise RuntimeError(f"view layer collection 누락: {name}")
+
+    layer_collection(base_layer, clearance_collection.name).exclude = True
+    layer_collection(overlay_layer, base_collection.name).exclude = True
+    previous_compositor = bpy.data.node_groups.get("SatisfactoryOpsTechnicalComposite")
+    if previous_compositor:
+        bpy.data.node_groups.remove(previous_compositor)
+    compositor = bpy.data.node_groups.new("SatisfactoryOpsTechnicalComposite", "CompositorNodeTree")
+    scene.compositing_node_group = compositor
+    nodes = compositor.nodes
+    links = compositor.links
+    nodes.clear()
+    base_render = nodes.new("CompositorNodeRLayers")
+    base_render.layer = base_layer.name
+    overlay_render = nodes.new("CompositorNodeRLayers")
+    overlay_render.layer = overlay_layer.name
+    additive = nodes.new("ShaderNodeMixRGB")
+    additive.blend_type = "ADD"
+    additive.inputs[0].default_value = 1
+    links.new(base_render.outputs["Image"], additive.inputs[1])
+    links.new(overlay_render.outputs["Image"], additive.inputs[2])
+    preserve_alpha = nodes.new("CompositorNodeSetAlpha")
+    links.new(additive.outputs[0], preserve_alpha.inputs["Image"])
+    alpha_union = nodes.new("ShaderNodeMath")
+    alpha_union.operation = "MAXIMUM"
+    links.new(base_render.outputs["Alpha"], alpha_union.inputs[0])
+    links.new(overlay_render.outputs["Alpha"], alpha_union.inputs[1])
+    links.new(alpha_union.outputs[0], preserve_alpha.inputs["Alpha"])
+    compositor.interface.new_socket(name="Image", in_out="OUTPUT", socket_type="NodeSocketColor")
+    composite = nodes.new("NodeGroupOutput")
+    links.new(preserve_alpha.outputs["Image"], composite.inputs["Image"])
 scene.view_settings.look = "Medium High Contrast"
 scene.view_settings.exposure = 0.85
 output.parent.mkdir(parents=True, exist_ok=True)
+if technical:
+    bpy.context.view_layer.update()
+    projected_edges = []
+    clearance_objects = [candidate for candidate in meshes if candidate.get("technical_role") == "clearance"]
+    if not clearance_objects:
+        raise RuntimeError("clearance mesh가 없습니다.")
+    main_clearance = max(clearance_objects, key=lambda obj: (
+        (obj.matrix_world @ Vector(obj.bound_box[6]) - obj.matrix_world @ Vector(obj.bound_box[0])).length
+    ))
+    for obj in [main_clearance]:
+        local_corners = [Vector(corner) for corner in obj.bound_box]
+        for start_index, start in enumerate(local_corners):
+            for end_index in range(start_index + 1, len(local_corners)):
+                end = local_corners[end_index]
+                differing_axes = sum(abs(start[axis] - end[axis]) > 1e-6 for axis in range(3))
+                if differing_axes != 1:
+                    continue
+                world_start = obj.matrix_world @ start
+                world_end = obj.matrix_world @ end
+                screen_start = world_to_camera_view(scene, camera, world_start)
+                screen_end = world_to_camera_view(scene, camera, world_end)
+                projected_edges.append({
+                    "object": obj.name,
+                    "start": [screen_start.x * resolution, (1 - screen_start.y) * resolution],
+                    "end": [screen_end.x * resolution, (1 - screen_end.y) * resolution],
+                })
+    clearance_material = next((
+        slot.material
+        for obj in meshes if obj.get("technical_role") == "clearance"
+        for slot in obj.material_slots if slot.material
+    ), None)
+    contract_path = output.with_suffix(".technical-contract.json")
+    contract_path.write_text(json.dumps({
+        "$schemaVersion": 1,
+        "resolution": resolution,
+        "mainClearance": main_clearance.name,
+        "clearanceObjects": len(clearance_objects),
+        "clearanceEdges": projected_edges,
+        "depthTest": False,
+        "blend": "ONE+ONE",
+        "alpha": "MAXIMUM(base,clearance)",
+        "runtimeCbuffer": json.loads(clearance_material.get("clearance_runtime_cbuffer", "{}")) if clearance_material else None,
+        "gradientSampler": json.loads(clearance_material.get("clearance_gradient_sampler", "{}")) if clearance_material else None,
+    }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 bpy.ops.render.render(write_still=True)
 print(f"ISOMETRIC={output}")
