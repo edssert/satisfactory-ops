@@ -74,7 +74,7 @@ G-30은 다음 항목을 빠짐없이 판정한다.
 |---|---|---|
 | 생산 계산·설계 인계 | PROD-01~04 | 완료 |
 | 수동 설계 편집기·상태 | PLAN-01~08, STATE-01 | 완료 |
-| 탑뷰·토대·운송 자산 | ASSET-01, PLAN-02~07 | 완료 |
+| 탑뷰·토대·운송 자산 | ASSET-01, PLAN-02~07 | 재검증 중 — 포트·재질 파이프라인 승격 차단 |
 | 벨트·파이프·리프트·깊이 | PLAN-04, PLAN-06~07 | 완료 |
 | SVG·PNG 도면 발행 | PLAN-09 | 완료 |
 | 세이브 해석·진단 | SAVE-01, CHECK-01 | 완료 |
@@ -94,7 +94,7 @@ G-30은 다음 항목을 빠짐없이 판정한다.
 2. **배포 격리 완료·권리 확인 진행** — Anders 연구 대조 바이트를 `scripts/topview/references/`로 옮기고
    `reference-only`로 강등했다. `public/`·`dist/`·서비스워커에는 현재 게임 설치본 기반 `approved` 자산만
    exact allowlist로 허용한다. 원 게시물별 재배포·파생 조건 확인 전 외부 대조 자산은 앱에 포함하지 않는다.
-3. **파일럿 완료·정식화 진행** — FModel/CUE4Parse로 게임 1.2의 패키지 48,573건을 인덱싱하고
+3. **파일럿 재감사 진행** — FModel/CUE4Parse로 게임 1.2의 패키지 48,573건을 인덱싱하고
    정적·스켈레탈/VAT 메시·표시등·재질을 추출했다. Blender 5.2 LTS 프리셋과 채굴기·자동 바이오매스
    후보를 만들었다. 다음 조건은 CUE4Parse 의존성 보안 권고 해소와 복합 Anders 도면 시각 승인이다.
 4. **벨트·파이프·리프트·철도 탑뷰 도구 완료** — Anders의 설계용 운송 역할을 카탈로그에서 직접 고를 수
@@ -103,14 +103,22 @@ G-30은 다음 항목을 빠짐없이 판정한다.
    함께 표시한다. 실제 포트 끝점, 90° 회전, 경사, 높이, 저층/상층 가림, 방향, 유량/용량 라벨과 v4→v5
    저장 마이그레이션을 단위·브라우저 검사로 잠갔다. 철도는 자동 공간 배치 없이 사용자가 시작점·끝점을
    지정하는 자체 벡터 경로이며 선택 삭제·Undo/Redo·v6 저장·JSON·SVG/PNG 발행을 함께 지원한다.
-5. **고정 설비 래스터 탑뷰 63/63 완료** — 현재 게임 메시·재질·Blueprint 조립 계약에서 정적·VAT·
-   스켈레탈·동적 참조를 일괄 추출하고 `ORTHO/-Z`·게임 하드 점유 코너·SHA-256 영수증으로 검증했다.
-   상태 표시 설비 28개는 활성·파워 샤드·대기·오류 4종을 모두 연결했다. 검수 시트에서 부품·회전·카메라
-   클리핑·복합 점유 중심을 실제로 확인했으며 `batch-topviews.mjs plan`의 남은 큐는 0건이다. 다음 자산
-   작업은 별도 WebP 양산이 아니라 벨트·리프트·파이프·철도·부착물 합성 계약이다.
-6. **그래프 엔지니어링 1차 완료** — 설치본 55,753개 노드·95,236개 간선 증거 DB와 검색·경로·드리프트
-   하네스, 포트 인지 방향 다중 그래프 코어, 10,000 노드 반복형 알고리즘, fast-check 속성 테스트,
-   68개 런타임 모듈 경계 검사를 도입했다. 다음은 물류 projection과 기존 검증기의 differential 통합이다.
+5. **고정 설비 래스터 탑뷰 승격 재검증** — 기존 63건 집계는 파일 존재·카메라·점유 영수증은 통과했지만
+   FactorySettings 포트 메시/재질, 저자 피벗, 활성 quaternion, 마스터 depth 속성을 검증하지 못했다.
+   현재 승인 완료 주장을 철회하고 자동 바이오매스를 골든 fixture로 메인 파이프라인을 고친 뒤 낮은 티어부터
+   부품·재질·포트·4방향 ISO를 다시 검수한다.
+6. **그래프 엔지니어링 2차 기반 완료·Unreal probe→Blender 제품 렌더 전환 진행** — `FactoryGame/Content/` 23,057개 패키지와
+   `CommunityResources/Headers.zip` API 심벌과 두 runtime probe를 154,346개 노드·269,036개 간선으로 연결했다.
+   `port <BuildClass> <PortId>`가 FactorySettings→포트 메시/재질→저자 bounds→component transform→Headers API를
+   compact JSON으로 반환하고 입력 해시 드리프트를 검사한다. Blender Cycles가
+   `Hologram_Simple.bDisableDepthTest`의 native 배치와 실제 게임 재질·AbstractInstance/HISM·texture streaming을
+   Unreal 5.6.1-CSS/SML 런타임 fixture로 확인했다. Unreal은 제품 이미지를 만들지 않고 최종 component transform,
+   lightweight instance, MaterialInstance·텍스처, clearance, native 포트 메시·재질을 JSON probe로 그래프에 승격한다.
+   제품 후보는 이 probe를 소비하는 하나의 Blender 장면에서 생성하며 포트는 정확한 3D 위치를 유지하되 자연 가림을
+   허용한다. 바이오매스 연소기와 제작기의 토대 없는 2048px 탑뷰와 토대 포함 4방향 beauty ISO는 검증 후
+   설계판·도감에 연결했다. technical ISO는 실제 BuildGun 상태의 viewport reference까지 확보했지만 cooked
+   `Clearance`의 screen-space 선 폭·수직 감쇠를 Blender에서 아직 동일하게 실행하지 못해 차단 상태다. 이
+   어댑터가 verified가 되고 두 기기의 technical 4방향이 통과할 때 이 단계를 완료한다.
 7. **저장소 위생 정리 완료** — Blender가 만든 비ASCII 빈 캐시 폴더 16개와 루트 로그·임시 테스트 번들을
    제거하고, 렌더 캐시를 `.cache/blender-runtime/`으로 격리했다. 브라우저 증거는 `output/`의 목적별
    하위 폴더로 정리했으며 `check:hygiene`를 전체 검증 게이트에 추가했다.

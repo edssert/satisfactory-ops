@@ -20,8 +20,8 @@
   계획 문서, 전수 조사, release 검증을 산출물보다 먼저 두지 않는다.
 - 구현을 요청받은 가역적 앱 변경은 표적 검사와 실제 화면 확인 뒤 바로 앱에 연결한다. 사용자가 승인 게이트를
   요청했거나 권리·파괴적 변경·해결되지 않은 시각 이견이 있을 때만 멈춰 묻는다.
-- 진행 보고는 중요한 결과·결정 변경·막힘만 자연스러운 한두 문장으로 쓴다. `완료/진행 중/다음` 틀을
-  강제하지 않고, ADHD 응답 모드가 켜져 있어도 모드 이름을 말하지 않는다.
+- 진행 보고는 중요한 결과·결정 변경·막힘만 자연스러운 한두 문장으로 쓰고 `완료/진행 중/다음` 틀을
+  강제하지 않는다.
 - 계획 UI는 여러 파일·단계가 실제로 남은 작업에만 쓰고, 별도 계획 문서는 `architectural` 작업에만 만든다.
 - 변경 중에는 표적 검사를 쓰고 `verify:release`는 앱에 연결한 완료 경계에서 한 번만 실행한다.
 
@@ -45,6 +45,8 @@ Satisfactory(게임)의 **통합 공장 운영·설계 웹앱**이다. 목표 �
 | 규칙 | 왜 | 확인 |
 |---|---|---|
 | 게임 수치를 기억으로 쓰지 않는다 | 기억한 수치가 실제로 틀려 배포된 적이 있다 | 수치는 `src/data/app/*.json`에서 오거나 `src/lib/` 솔버가 계산한다. 새 사실은 `source` + `confidence`(`verified`/`consensus`/`disputed`/`unsourced`)를 붙이고 근거를 `docs/research/`에 남긴다 |
+| 게임 자산의 transform·피벗·재질·포트 배치를 추정 보정하지 않는다 | 비활성 Euler, 메시 재중심화, 유사 재질 대체가 반복해서 거짓 통과했다 | 설치본 카탈로그→`game:graph`→공용 장면 계약 경로를 먼저 연결한다. 그래프 증거가 없거나 Blender가 원본 기능을 재현하지 못하면 `unknown/unimplemented`로 차단하고 제품별 각도·높이·색·투명도 보정을 만들지 않는다 |
+| 설치 파일 조사를 일회성으로 버리지 않는다 | 같은 CDO·헤더·메시 피벗을 세션마다 다시 찾으며 오류와 비용이 반복됐다 | `FactoryGame/Content/` 전체 패키지와 `CommunityResources/Headers.zip`을 파생 그래프 입력으로 유지한다. 새 inspect 필드가 재사용 가치가 있으면 같은 작업에서 카탈로그·그래프 스키마·드리프트 검사로 승격한다 |
 | 아이템·건물 이름을 코드나 마크업에 타이핑하지 않는다 | 게임 공식 한국어 로케일이 정본이라 손으로 쓰면 게임 화면과 대조가 안 된다 (D-011) | `src/lib/gamedata.ts`에서 조회한다. `npm run check:coverage`가 렌더된 HTML과 데이터를 대조해 잡는다 |
 | 색은 `src/styles/tokens.css`의 커스텀 프로퍼티만 쓴다 | 하드코딩 hex는 테마 전환에서 깨진다 | `grep -rn "#[0-9a-fA-F]\{6\}" src/styles src/components \| grep -v tokens.css` — **기존 위반이 `map.css`·`ResourceMap.tsx`에 남아 있으니** 자기 diff에 새 줄이 늘지 않았는지만 본다. 의미와 진화 규격은 `docs/DESIGN.md` |
 | 자원·상태 구분에 색상만 쓰지 않는다 | 색각 이상 대응 (`PRODUCT` QUAL-01) | 항상 텍스트·형태·패턴 중 하나를 병기한다 |
@@ -117,9 +119,12 @@ npm run dev
 | `npm run data:game` / `data:game:ko` / `data:app` | 위를 단계별로 | — | 1단은 새니티 13건, 2단은 검증 18건을 통과해야 파일을 쓴다 |
 | `npm run db` | SQLite로 질의하고 싶을 때 | `.cache/game.db` 생성 | `node scripts/db.mjs "SELECT ..."` 로 임의 질의. DB는 커밋하지 않는다 |
 | `npm run tech` / `npm run assets` | 테크 데이터·아이콘 색인을 다시 만들 때 | — | **`src/data/` 에 파일을 쓴다.** 다른 작업과 겹치면 충돌한다 |
-| `npm run game:assets:check` | 설치본 메시·Blueprint·장면 레시피를 고쳤을 때 | 패키지 6,706건 + 모든 장면 계약 `PASS` | `.cache/game-asset-index/`가 없거나 CDO 메시·transform·생산 표시등이 장면과 어긋났다 |
+| `npm run game:assets:check` | 설치본 메시·Blueprint·장면 레시피를 고쳤을 때 | `FactoryGame/Content` 패키지 23,057건 + Headers API + 모든 장면 계약 `PASS` | `.cache/game-asset-index/`가 없거나 CDO·Headers·메시 bounds·transform·재질·생산 표시등이 장면과 어긋났다 |
 | `npm run game:graph` / `game:graph:check` | 설치본 색인·앱 데이터·탑뷰 계약을 연결하거나 검사할 때 | 노드·간선 수 + 드리프트 0 + 런타임 누출 0 | 입력 해시가 바뀌었거나 관계·상태 자산·런타임 경계가 끊겼다. 파생 DB는 `.cache/game-graph.db` |
-| `npm run game:graph:query -- search <검색어>` | 설치 파일·메시·재질·장면·자산을 찾을 때 | 증거 경로가 붙은 JSON 행 | `building`, `trace`, `path` 하위 명령으로 관계를 더 좁힌다 |
+| `npm run game:graph:query -- search <검색어>` | 설치 파일·메시·재질·장면·자산을 찾을 때 | 증거 경로가 붙은 JSON 행 | `building`, `trace`, `path`로 관계를 좁히고 포트는 `port <BuildClass> <PortId>`로 component·FactorySettings·bounds·material·Headers API를 한 번에 조회한다 |
+| `npm run game:render:env` | Unreal 제품 렌더 환경을 재개할 때 | GitHub 조직·VS2022 필수 구성·UE 5.6.1-CSS·Starter Project·Wwise 통합 상태 | `WAIT`인 항목만 공식 설치/인증 경로로 복구한다 |
+| `npm run game:assets:probe:unreal:package` | 실제 게임 probe 모드를 배치할 때 | Windows Shipping 모드가 `FactoryGame/Mods/SatisfactoryOpsRenderer`에 생성 | Wwise 미통합, UAT 빌드, 게임 CL/SML 범위 불일치를 먼저 고친다 |
+| `npm run game:assets:probe:unreal` | fixture의 최종 런타임 자산 계약을 갱신할 때 | 기기마다 component·instance·material·texture·clearance·port JSON과 SHA | 스크린샷은 입력하지 않고 probe JSON만 그래프·Blender 장면에 연결한다 |
 | `npm run test:sw` | 서비스워커를 고쳤을 때 | 런타임 테스트 통과 | 라우트가 자기 문서를 못 돌려주면 캐시 키가 빗나간 것이다 |
 | `npm run test:save <경로.sav>` | 세이브 파서를 고쳤을 때 | 브라우저에서 실제 `.sav`를 먹여 본다 | 경로를 안 주면 `[실패] 세이브 파일 경로를 주세요` |
 | `npm run font` | 서체를 바꿀 때 | 서브셋 생성 | 외부 도구 `pyftsubset`(fonttools)이 PATH에 있어야 한다 |

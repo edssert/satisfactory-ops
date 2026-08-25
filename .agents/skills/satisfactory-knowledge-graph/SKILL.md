@@ -11,7 +11,13 @@ description: Design and validate Satisfactory Ops graph projections across insta
 2. 노드·간선의 주장은 설치 패키지, 생성 데이터 경로, 코드 심벌, 테스트 또는 승인 영수증을 근거로 갖는다.
 3. 상태를 `observed`, `inferred`, `proposed`, `unknown`으로 분리하고 사람 승인을 자동 추론하지 않는다.
 4. 설치본 그래프는 `.cache/game-asset-index/`에서 재생성하고, 제품 그래프는 `src/data/app/*.json`과 도메인 코드에서 투영한다. 캐시와 생성물을 손으로 고치지 않는다.
+   자산 재구성에서는 `BP_FactorySettings` 기본 메시·재질, StaticMesh 저자 바운드, Material depth/blend 속성,
+   Blueprint component transform을 그래프에 보존해 다음 기기가 같은 조사를 반복하지 않게 한다.
+   `FactoryGame/Content/` 전체 패키지의 export·reference를 얕게라도 색인하고, 작업 중 새로 inspect한 게임 필드는
+   일회성 조사 파일로 끝내지 않는다. 의미가 재사용되면 카탈로그 필드·그래프 노드/간선·드리프트 검사로 승격한다.
 5. 관계명·안정 ID·질의는 [설치본 파생 그래프 스키마](references/game-graph-schema.md)를 따른다.
 6. 변경 후 `npm run game:graph:check`와 영향받은 도메인 검사를 실행한다.
 
-완료 조건은 간선 양 끝의 존재, 역방향 추적 가능성, 레시피·설비·포트 참조 유효성, 장면→검증 렌더→승인 매니페스트→런타임 경로의 연속성이다.
+완료 조건은 간선 양 끝의 존재, 역방향 추적 가능성, 레시피·설비·포트 참조 유효성,
+FactorySettings→native 구현→runtime probe→component/instance/material/clearance→Blender 장면 계약,
+장면→검증 렌더→승인 매니페스트→런타임 경로의 연속성이다.

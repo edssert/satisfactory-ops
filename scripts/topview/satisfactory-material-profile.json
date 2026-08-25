@@ -9,16 +9,17 @@
     "normalSlices": 7
   },
   "sources": [
-    "https://www.reddit.com/r/SatisfactoryGame/comments/q5619z/",
-    "https://www.reddit.com/r/SatisfactoryGame/comments/qom52d/",
-    "FactoryGame/Content/FactoryGame/Buildable/-Shared/Material/Resources/TX_Hologram_01",
-    "https://github.com/DavidHGillen/Satisfactory_ModelingTools"
+    "FactoryGame/Content/FactoryGame/-Shared/Blueprint/BP_BuildableSubsystem.uasset#mColorSlots_Data[0]",
+    "FactoryGame/Content/FactoryGame/Buildable/-Shared/Material/MM_Factory_Array.uasset",
+    "FactoryGame/Content/FactoryGame/Buildable/-Shared/Material/Resources/TX2D_FactoryBase_BC",
+    "FactoryGame/Content/FactoryGame/Buildable/-Shared/Material/Resources/TX2D_FactoryBase_MREO",
+    "FactoryGame/Content/FactoryGame/Buildable/-Shared/Material/Resources/TX2D_FactoryBase_N"
   ],
   "cells": [
     { "row": 0, "column": 0, "role": "paint-primary", "color": "#fa9549", "metallic": 0.55, "roughness": 0.32, "emission": 0 },
-    { "row": 0, "column": 1, "role": "composite", "color": "#bcc1ca", "metallic": 0.15, "roughness": 0.48, "emission": 0 },
-    { "row": 0, "column": 2, "role": "rubber-plastic-dark", "color": "#292728", "metallic": 0, "roughness": 0.78, "emission": 0 },
-    { "row": 1, "column": 0, "role": "paint-secondary", "color": "#4f5da4", "metallic": 0.55, "roughness": 0.34, "emission": 0 },
+    { "row": 0, "column": 1, "role": "composite", "color": "#c0c5cd", "metallic": 0.15, "roughness": 0.48, "emission": 0 },
+    { "row": 0, "column": 2, "role": "rubber-plastic-dark", "color": "#3d3d3d", "metallic": 0, "roughness": 0.78, "emission": 0 },
+    { "row": 1, "column": 0, "role": "paint-secondary", "color": "#5f668c", "metallic": 0.55, "roughness": 0.34, "emission": 0 },
     { "row": 1, "column": 1, "role": "rough-metal", "color": "#8a8c8a", "metallic": 0.88, "roughness": 0.5, "emission": 0 },
     { "row": 1, "column": 2, "role": "plastic-red", "color": "#ff4947", "metallic": 0, "roughness": 0.42, "emission": 0 },
     { "row": 2, "column": 0, "role": "chrome", "color": "#c3c3c3", "metallic": 1, "roughness": 0.15, "emission": 0 },
@@ -44,5 +45,5 @@
     "reflection": { "red": "metallic", "green": "roughness", "blue": "emission-strength" },
     "uvSheet": "3x3 factory material roles with nested lights-and-void cell"
   },
-  "confidence": "consensus"
+  "confidence": "inferred"
 }

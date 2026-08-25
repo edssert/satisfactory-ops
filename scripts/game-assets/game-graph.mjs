@@ -9,6 +9,7 @@
  *   node scripts/game-assets/game-graph.mjs building <Build_*_C>
  *   node scripts/game-assets/game-graph.mjs trace <노드 ID> [깊이]
  *   node scripts/game-assets/game-graph.mjs path <출발 노드 ID> <도착 노드 ID> [최대 깊이]
+ *   node scripts/game-assets/game-graph.mjs port <Build_*_C> <포트 ID>
  *
  * 종료: 성공 0, 사용법/입력 누락 2, 검증·최신성 실패 3.
  * 정본은 입력 JSON과 설치본 색인이다. .cache/game-graph.db는 손으로 고치지 않는다.
@@ -34,16 +35,20 @@ const DB_PATH = resolve(CACHE, 'game-graph.db');
 const TMP_DB_PATH = resolve(CACHE, 'game-graph.tmp.db');
 const ASSET_GRAPH = resolve(INDEX, 'factory-assets.ndjson');
 const FACTORY_SCENES = resolve(INDEX, 'factory-scenes.json');
+const API_CONTRACTS = resolve(INDEX, 'factory-api-contracts.json');
+const NATIVE_CONTRACTS = resolve(INDEX, 'factory-native-contracts.json');
 const APP = resolve(ROOT, 'src/data/app');
 const TOPVIEW_MANIFEST = resolve(ROOT, 'src/data/curated/topview-assets.json');
 const TOPVIEW_SCENES = resolve(ROOT, 'scripts/topview/scenes');
 const RUNTIME_FILTER = resolve(ROOT, 'src/lib/topview-assets.ts');
+const RENDER_CONTRACT = resolve(ROOT, 'scripts/unreal-render/render-contract.json');
+const RUNTIME_PROBES = resolve(INDEX, 'runtime-probes');
 const CURRENT_SOURCE_PREFIX = 'game-install-';
 const command = process.argv[2];
 const args = process.argv.slice(3);
 
 function usage() {
-  process.stderr.write('사용: game-graph.mjs <build|check|search|building|trace|path> [인자]\n');
+  process.stderr.write('사용: game-graph.mjs <build|check|search|building|trace|path|port> [인자]\n');
 }
 
 function readJson(path) {
@@ -64,14 +69,21 @@ function filesRecursive(directory, extension) {
 }
 
 function sourceFiles() {
+  const probeFiles = existsSync(RUNTIME_PROBES)
+    ? filesRecursive(RUNTIME_PROBES, '.json').sort()
+    : [];
   return [
     ASSET_GRAPH,
     FACTORY_SCENES,
+    API_CONTRACTS,
+    NATIVE_CONTRACTS,
     resolve(APP, 'items.json'),
     resolve(APP, 'recipes.json'),
     resolve(APP, 'buildings.json'),
     resolve(APP, 'milestones.json'),
     TOPVIEW_MANIFEST,
+    RENDER_CONTRACT,
+    ...probeFiles,
     ...filesRecursive(TOPVIEW_SCENES, '.json').sort(),
   ];
 }
@@ -87,7 +99,7 @@ function normalizedObjectPath(value) {
 function packagePathForObject(value) {
   const normalized = normalizedObjectPath(value);
   if (!normalized.startsWith('/Game/')) return null;
-  return normalized.replace(/^\/Game\//, 'FactoryGame/Content/') + '.uasset';
+  return normalized.replace(/\.[^/.]+$/, '').replace(/^\/Game\//, 'FactoryGame/Content/') + '.uasset';
 }
 
 function strings(value) {
@@ -118,6 +130,7 @@ function collectGraph() {
   const issues = [];
   const buildingPackages = new Map();
   const sceneByBuilding = new Map();
+  const probeByBuilding = new Map();
 
   function addNode(id, type, label, source, data = {}) {
     const current = nodes.get(id);
@@ -159,7 +172,7 @@ function collectGraph() {
     const objectPath = normalizedObjectPath(raw);
     const id = `object:${objectPath}`;
     const targetPackage = packagePathForObject(objectPath);
-    const kind = /\/Texture\//.test(objectPath)
+    const kind = /\/Textures?\//.test(objectPath)
       ? 'texture-object'
       : /\/Material\//.test(objectPath)
         ? 'material-object'
@@ -171,7 +184,7 @@ function collectGraph() {
       const packageId = `package:${targetPackage}`;
       addNode(packageId, 'package', basename(targetPackage, '.uasset'), source, {
         package: targetPackage,
-        resolved: false,
+        resolved: knownPackages.has(targetPackage.toLowerCase()),
       });
       addEdge(id, 'DECLARED_BY', packageId, source);
     }
@@ -183,7 +196,24 @@ function collectGraph() {
     .split(/\r?\n/)
     .filter(Boolean)
     .map(JSON.parse);
-  const knownPackages = new Set(assetRows.map((row) => row.Package));
+  const knownPackages = new Set(assetRows.map((row) => row.Package.toLowerCase()));
+  const apiContracts = readJson(API_CONTRACTS);
+  const apiSource = evidence(API_CONTRACTS);
+  for (const symbol of apiContracts.Symbols ?? []) {
+    addNode(symbol.Id, 'api-symbol', symbol.Id.split('#').at(-1), apiSource, {
+      role: symbol.Role,
+      header: symbol.Header,
+      headersSha256: apiContracts.SourceSha256,
+    });
+  }
+  const nativeContracts = readJson(NATIVE_CONTRACTS);
+  const nativeSource = evidence(NATIVE_CONTRACTS);
+  const nativeId = 'native:AFGBuildableHologram#SetupFactoryConnectionMesh';
+  addNode(nativeId, 'native-contract', 'SetupFactoryConnectionMesh', nativeSource, nativeContracts.setupFactoryConnectionMesh);
+  addEdge('api:AFGBuildableHologram#SetupFactoryConnectionMesh', 'IMPLEMENTED_BY', nativeId, nativeSource, {
+    pdbSha256: nativeContracts.source.pdbSha256,
+    imageSha256: nativeContracts.source.imageSha256,
+  });
 
   for (const row of assetRows) {
     const source = `${evidence(ASSET_GRAPH)}#${row.Package}`;
@@ -215,7 +245,7 @@ function collectGraph() {
     for (const reference of row.References ?? []) {
       const objectId = addObject(reference, source);
       addEdge(packageId, 'REFERENCES', objectId, source, {
-        resolvedPackage: knownPackages.has(packagePathForObject(reference)),
+        resolvedPackage: knownPackages.has(packagePathForObject(reference)?.toLowerCase()),
       });
     }
     for (const component of row.Components ?? []) {
@@ -227,9 +257,16 @@ function collectGraph() {
           rotation: component.RelativeRotation,
           scale: component.RelativeScale,
         },
+        connection: component.Type === 'FGFactoryConnectionComponent' ? {
+          direction: component.Direction ?? 'EFactoryConnectionDirection::FCD_INPUT',
+          connectorClearanceCm: component.ConnectorClearance ?? 0,
+        } : null,
       });
       addEdge(packageId, 'HAS_COMPONENT', componentId, source, { componentType: component.Type });
       if (buildingId) addEdge(buildingId, 'HAS_COMPONENT', componentId, source);
+      if (component.Type === 'FGFactoryConnectionComponent') {
+        addEdge(componentId, 'IMPLEMENTS_API', 'api:UFGFactoryConnectionComponent#GetConnectorNormal', apiSource);
+      }
       if (component.StaticMesh) {
         addEdge(componentId, 'USES_STATIC_MESH', addObject(component.StaticMesh, source), source);
       }
@@ -240,21 +277,66 @@ function collectGraph() {
         addEdge(componentId, 'OVERRIDES_MATERIAL', addObject(material, source), source);
       }
     }
+    for (const mesh of row.Meshes ?? []) {
+      const exportId = `export:${row.Package}#StaticMesh:${mesh.Name}`;
+      addNode(exportId, 'export', mesh.Name, source, {
+        exportType: 'StaticMesh',
+        authoredBounds: mesh.Bounds,
+      });
+    }
+    if (row.FactorySettings && Object.keys(row.FactorySettings).length) {
+      const settingsId = `settings:${row.Package}#Default__BP_FactorySettings_C`;
+      addNode(settingsId, 'factory-settings', 'Default__BP_FactorySettings_C', source, {
+        fields: row.FactorySettings,
+      });
+      addEdge(packageId, 'DECLARES', settingsId, source, { exportType: 'factory-settings' });
+      addEdge(settingsId, 'ASSEMBLED_BY', 'api:AFGBuildableHologram#SetupFactoryConnectionMesh', apiSource);
+      for (const [field, value] of Object.entries(row.FactorySettings)) {
+        const objectPath = strings(value).find((entry) => entry.startsWith('/Game/'));
+        if (!objectPath) continue;
+        const relation = field.includes('Material')
+          ? 'CONFIGURES_CONNECTION_MATERIAL'
+          : field.includes('Mesh') ? 'CONFIGURES_CONNECTION_MESH' : 'CONFIGURES_DEFAULT';
+        addEdge(settingsId, relation, addObject(objectPath, source), source, { field });
+        const apiId = `api:UFGFactorySettings#${field}`;
+        if (nodes.has(apiId)) addEdge(settingsId, 'IMPLEMENTS_API', apiId, apiSource, { field });
+      }
+    }
     for (const material of row.Materials ?? []) {
       const materialId = `material:${row.Package}#${material.Name}`;
       addNode(materialId, 'material', material.Name, source, {
         scalars: material.Scalars,
         vectors: material.Vectors,
         switches: material.Switches,
+        primitiveData: material.PrimitiveData,
+        runtimeScalars: material.RuntimeScalars,
+        runtimeVectors: material.RuntimeVectors,
+        usesPerInstanceCustomData: material.UsesPerInstanceCustomData,
+        usesVertexInterpolator: material.UsesVertexInterpolator,
+        properties: material.Properties,
       });
       addEdge(packageId, 'DECLARES', materialId, source, { exportType: 'material' });
       if (material.Parent) {
         addEdge(materialId, 'MATERIAL_PARENT', addObject(material.Parent, source), source);
       }
       for (const [parameter, texture] of Object.entries(material.Textures ?? {})) {
-        if (typeof texture !== 'string') continue;
-        addEdge(materialId, 'USES_TEXTURE', addObject(texture, source), source, { parameter });
+        const objectPath = typeof texture === 'string' ? texture : texture?.ObjectPath;
+        if (typeof objectPath !== 'string') continue;
+        addEdge(materialId, 'USES_TEXTURE', addObject(objectPath, source), source, { parameter });
       }
+      for (const materialFunction of material.Functions ?? []) {
+        addEdge(materialId, 'USES_MATERIAL_FUNCTION', addObject(materialFunction, source), source);
+      }
+    }
+    for (const colorSlot of row.ColorSlots ?? []) {
+      const slotId = `color-slot:${row.Package}#${colorSlot.Slot}`;
+      addNode(slotId, 'color-slot', `Factory color slot ${colorSlot.Slot}`, source, {
+        slot: colorSlot.Slot,
+        primaryColor: colorSlot.PrimaryColor,
+        secondaryColor: colorSlot.SecondaryColor,
+        paintFinish: colorSlot.PaintFinish,
+      });
+      addEdge(packageId, 'DECLARES_COLOR_SLOT', slotId, source);
     }
   }
 
@@ -335,7 +417,7 @@ function collectGraph() {
     const packageId = `package:${contract.package}`;
     addNode(packageId, 'package', basename(contract.package, '.uasset'), source, {
       package: contract.package,
-      resolved: knownPackages.has(contract.package),
+      resolved: knownPackages.has(contract.package.toLowerCase()),
     });
     addEdge(buildingId, 'DECLARED_BY', packageId, source);
     for (const component of contract.components ?? []) {
@@ -344,8 +426,12 @@ function collectGraph() {
         componentType: component.type,
         role: component.role,
         transform: component.transform,
+        connection: component.connection,
       });
       addEdge(buildingId, 'HAS_COMPONENT', componentId, source, { role: component.role });
+      if (component.type === 'FGFactoryConnectionComponent') {
+        addEdge(componentId, 'IMPLEMENTS_API', 'api:UFGFactoryConnectionComponent#GetConnectorNormal', apiSource);
+      }
       if (component.staticMesh) {
         addEdge(componentId, 'USES_STATIC_MESH', addObject(component.staticMesh, source), source);
       }
@@ -356,7 +442,7 @@ function collectGraph() {
         const indirectId = `package:${component.indirectBlueprint.package}`;
         addNode(indirectId, 'package', basename(component.indirectBlueprint.package, '.uasset'), source, {
           package: component.indirectBlueprint.package,
-          resolved: knownPackages.has(component.indirectBlueprint.package),
+          resolved: knownPackages.has(component.indirectBlueprint.package.toLowerCase()),
         });
         addEdge(componentId, 'REFERENCES', indirectId, source, { role: 'indirect-blueprint' });
       }
@@ -365,6 +451,67 @@ function collectGraph() {
           role: 'indirect-blueprint',
         });
       }
+    }
+  }
+
+  const renderContract = readJson(RENDER_CONTRACT);
+  const expectedProbeClasses = new Set((renderContract.machines ?? []).map((machine) => machine.buildingClass));
+  for (const probePath of filesRecursive(RUNTIME_PROBES, '.json').sort()) {
+    const probe = readJson(probePath);
+    const buildingClass = probe.machineClassPath?.split('.').at(-1);
+    if (!expectedProbeClasses.has(buildingClass)) continue;
+    const source = evidence(probePath);
+    const probeId = `probe:${renderContract.gameBuild}#${buildingClass}`;
+    const buildingId = `building:${buildingClass}`;
+    probeByBuilding.set(buildingClass, probeId);
+    addNode(probeId, 'runtime-probe', buildingClass, source, {
+      schemaVersion: probe.schemaVersion,
+      mode: probe.mode,
+      gameBuild: renderContract.gameBuild,
+      machineClassPath: probe.machineClassPath,
+      foundationClassPath: probe.foundationClassPath,
+      sceneBounds: probe.sceneBounds,
+      sha256: sha256(probePath),
+    });
+    addEdge(buildingId, 'PROBED_BY', probeId, source);
+
+    for (const [index, component] of (probe.components ?? []).entries()) {
+      const componentId = `runtime-component:${renderContract.gameBuild}#${buildingClass}:${component.owner}:${component.name}:${index}`;
+      addNode(componentId, 'runtime-component', component.name, source, component);
+      addEdge(probeId, 'PROBE_RESOLVES', componentId, source, { role: component.owner });
+      for (const meshPath of [component.staticMesh, component.skeletalMesh].filter(Boolean)) {
+        addEdge(componentId, 'USES_RUNTIME_MESH', addObject(meshPath, source), source);
+      }
+      for (const materialPath of component.materials ?? []) {
+        addEdge(componentId, 'USES_RUNTIME_MATERIAL', addObject(materialPath, source), source);
+      }
+    }
+    for (const [index, technical] of (probe.technicalMeshes ?? []).entries()) {
+      const technicalId = `runtime-technical:${renderContract.gameBuild}#${buildingClass}:${technical.name}:${index}`;
+      addNode(technicalId, 'runtime-technical', technical.name, source, technical);
+      addEdge(probeId, 'PROBE_RESOLVES', technicalId, source, { role: 'port-or-clearance' });
+      if (technical.staticMesh) addEdge(technicalId, 'USES_RUNTIME_MESH', addObject(technical.staticMesh, source), source);
+      for (const materialPath of technical.materials ?? []) {
+        addEdge(technicalId, 'USES_RUNTIME_MATERIAL', addObject(materialPath, source), source);
+      }
+    }
+    for (const material of probe.materials ?? []) {
+      const materialId = addObject(material.path, source);
+      addNode(materialId, 'material-object', material.path.split('/').at(-1), source, {
+        runtimeBaseMaterial: material.baseMaterial,
+        runtimeParent: material.parent,
+        scalarParameters: material.scalarParameters,
+        vectorParameters: material.vectorParameters,
+        textureParameters: material.textureParameters,
+      });
+      addEdge(probeId, 'PROBE_RESOLVES', materialId, source, { role: 'effective-material' });
+    }
+    for (const texture of probe.textures ?? []) {
+      const textureId = addObject(texture.path, source);
+      addNode(textureId, 'texture-object', texture.path.split('/').at(-1), source, texture);
+      addEdge(probeId, 'PROBE_RESOLVES', textureId, source, {
+        role: texture.effectiveMaterialUse ? 'effective-texture' : 'parameter-evidence',
+      });
     }
   }
 
@@ -380,7 +527,24 @@ function collectGraph() {
       frontTiltDeg: scene.camera?.frontTiltDeg,
     });
     addEdge(sceneId, 'SCENE_FOR', buildingId, source);
+    const probeId = probeByBuilding.get(scene.buildingClass);
+    if (probeId) addEdge(probeId, 'CONSUMED_BY', sceneId, source, { renderer: 'blender' });
     const packagePath = buildingPackages.get(scene.buildingClass);
+    const settingsId = 'settings:FactoryGame/Content/FactoryGame/Buildable/Factory/BP_FactorySettings.uasset#Default__BP_FactorySettings_C';
+    for (const port of scene.portVisibility ?? []) {
+      const portId = `port:${source}#${port.id}`;
+      addNode(portId, 'port', port.id, source, {
+        direction: port.direction,
+        positionM: port.positionM,
+        outwardNormalM: port.outwardNormalM,
+      });
+      addEdge(sceneId, 'SCENE_HAS_PORT', portId, source);
+      if (nodes.has(settingsId)) addEdge(portId, 'USES_FACTORY_SETTINGS', settingsId, source);
+      if (packagePath) {
+        const componentId = `component:${packagePath}#${port.id}_GEN_VARIABLE`;
+        if (nodes.has(componentId)) addEdge(portId, 'PORT_FROM_COMPONENT', componentId, source);
+      }
+    }
     for (const component of scene.components ?? []) {
       if (component.path) {
         const fileId = addFile(resolve(ROOT, component.path), source, { role: 'scene-component' });
@@ -554,6 +718,8 @@ function staleSources(db) {
 
 function checkDatabase(db) {
   const failures = [];
+  const renderContract = readJson(RENDER_CONTRACT);
+  const expectedProbeClasses = new Set((renderContract.machines ?? []).map((machine) => machine.buildingClass));
   const stale = staleSources(db);
   if (stale.length) failures.push(`입력 드리프트 ${stale.join(', ')}`);
   for (const issue of db.prepare('SELECT code,message FROM issue ORDER BY code,message').all()) {
@@ -578,6 +744,17 @@ function checkDatabase(db) {
         else if (sha256(absolute) !== image.sha256) failures.push(`${id}: ${state} SHA-256 불일치`);
       }
     }
+  }
+  for (const buildingClass of expectedProbeClasses) {
+    const probeId = `probe:${renderContract.gameBuild}#${buildingClass}`;
+    const probed = db.prepare(
+      "SELECT COUNT(*) AS count FROM edge WHERE source_id=? AND relation='PROBED_BY' AND target_id=?",
+    ).get(`building:${buildingClass}`, probeId).count;
+    if (probed !== 1) failures.push(`${buildingClass}: runtime probe 연결 ${probed}건`);
+    const consumed = db.prepare(
+      "SELECT COUNT(*) AS count FROM edge WHERE source_id=? AND relation='CONSUMED_BY'",
+    ).get(probeId).count;
+    if (consumed !== 1) failures.push(`${buildingClass}: Blender 장면 소비 연결 ${consumed}건`);
   }
   const runtimeId = `file:${relative(ROOT, RUNTIME_FILTER).replaceAll('\\', '/')}`;
   const leakedReference = db.prepare(`
@@ -700,7 +877,96 @@ function findPath(db, fromRaw, toRaw, maxDepth = 8) {
   process.exit(3);
 }
 
-if (!['build', 'check', 'search', 'building', 'trace', 'path'].includes(command)) {
+function compactNode(row) {
+  if (!row) return null;
+  return {
+    id: row.id,
+    type: row.type,
+    label: row.label,
+    evidence: JSON.parse(row.evidence_json),
+    data: JSON.parse(row.data_json),
+  };
+}
+
+function portContract(db, buildingClass, portName) {
+  const port = db.prepare(`
+    SELECT p.*,s.id AS scene_id FROM node p
+    JOIN edge hp ON hp.target_id=p.id AND hp.relation='SCENE_HAS_PORT'
+    JOIN node s ON s.id=hp.source_id
+    JOIN edge sf ON sf.source_id=s.id AND sf.relation='SCENE_FOR'
+    WHERE p.type='port' AND p.label=? AND sf.target_id=?
+    ORDER BY CASE WHEN s.id LIKE '%/generated/%' THEN 1 ELSE 0 END,s.id LIMIT 1
+  `).get(portName, `building:${buildingClass}`);
+  if (!port) {
+    process.stderr.write(`포트 계약 없음: ${buildingClass}.${portName}\n`);
+    process.exit(3);
+  }
+  const component = db.prepare(`
+    SELECT n.* FROM edge e JOIN node n ON n.id=e.target_id
+    WHERE e.source_id=? AND e.relation='PORT_FROM_COMPONENT' LIMIT 1
+  `).get(port.id);
+  const settings = db.prepare(`
+    SELECT n.* FROM edge e JOIN node n ON n.id=e.target_id
+    WHERE e.source_id=? AND e.relation='USES_FACTORY_SETTINGS' LIMIT 1
+  `).get(port.id);
+  const settingsData = settings ? JSON.parse(settings.data_json).fields : {};
+  const objectPath = (field) => settingsData?.[field]?.ObjectPath?.replace(/\.\d+$/, '') ?? null;
+  const objectDetails = (path) => {
+    if (!path) return null;
+    const packagePath = packagePathForObject(path);
+    const name = path.split('/').at(-1);
+    const exportNode = packagePath
+      ? db.prepare('SELECT * FROM node WHERE lower(id)=lower(?)').get(`export:${packagePath}#StaticMesh:${name}`)
+      : null;
+    return { objectPath: path, package: packagePath, export: compactNode(exportNode) };
+  };
+  const direction = JSON.parse(port.data_json).direction;
+  const materialField = direction === 'output' ? 'mDefaultOutputConnectionMaterial' : 'mDefaultInputConnectionMaterial';
+  const materialPath = objectPath(materialField);
+  const materialPackage = materialPath ? packagePathForObject(materialPath) : null;
+  const materialName = materialPath?.split('/').at(-1);
+  const material = materialPackage && materialName
+    ? db.prepare('SELECT * FROM node WHERE lower(id)=lower(?)').get(`material:${materialPackage}#${materialName}`)
+    : null;
+  const parentEdge = material ? db.prepare(
+    "SELECT target_id FROM edge WHERE source_id=? AND relation='MATERIAL_PARENT' LIMIT 1",
+  ).get(material.id) : null;
+  const parentPath = parentEdge?.target_id?.replace(/^object:/, '') ?? null;
+  const parentPackage = parentPath ? packagePathForObject(parentPath) : null;
+  const parentName = parentPath?.split('/').at(-1);
+  const parentMaterial = parentPackage && parentName
+    ? db.prepare('SELECT * FROM node WHERE lower(id)=lower(?)').get(`material:${parentPackage}#${parentName}`)
+    : null;
+  const apiSymbols = db.prepare(`
+    SELECT DISTINCT n.* FROM node n
+    WHERE n.type='api-symbol' AND (
+      n.id='api:UFGFactoryConnectionComponent#GetConnectorNormal' OR
+      n.id='api:AFGBuildableHologram#SetupFactoryConnectionMesh' OR
+      n.id='api:UFGFactorySettings#mDefaultConveyorConnectionFrameMesh' OR
+      n.id='api:UFGFactorySettings#mDefaultConveyorConnectionArrowMesh' OR
+      n.id=?
+    ) ORDER BY n.id
+  `).all(`api:UFGFactorySettings#${materialField}`).map(compactNode);
+  const nativeContract = db.prepare('SELECT * FROM node WHERE id=?').get('native:AFGBuildableHologram#SetupFactoryConnectionMesh');
+  process.stdout.write(JSON.stringify({
+    buildingClass,
+    port: compactNode(port),
+    scene: port.scene_id,
+    component: compactNode(component),
+    factorySettings: compactNode(settings),
+    frameMesh: objectDetails(objectPath('mDefaultConveyorConnectionFrameMesh')),
+    arrowMesh: objectDetails(objectPath('mDefaultConveyorConnectionArrowMesh')),
+    connectionMaterial: {
+      field: materialField,
+      instance: compactNode(material),
+      parent: compactNode(parentMaterial),
+    },
+    apiSymbols,
+    nativeContract: compactNode(nativeContract),
+  }, null, 2) + '\n');
+}
+
+if (!['build', 'check', 'search', 'building', 'trace', 'path', 'port'].includes(command)) {
   usage();
   process.exit(2);
 }
@@ -746,5 +1012,11 @@ if (command === 'build' || command === 'check') {
     process.exit(2);
   }
   findPath(db, args[0], args[1], Number(args[2] ?? 8));
+} else if (command === 'port') {
+  if (!args[0] || !args[1]) {
+    usage();
+    process.exit(2);
+  }
+  portContract(db, args[0], args[1]);
 }
 db.close();

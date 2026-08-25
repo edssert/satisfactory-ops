@@ -1,0 +1,31 @@
+{
+  "FileVersion": 3,
+  "Version": 1,
+  "VersionName": "0.1.0",
+  "SemVersion": "0.1.0",
+  "GameVersion": ">=502094",
+  "FriendlyName": "Satisfactory Ops Renderer",
+  "Description": "현재 게임 런타임의 자산과 BuildGun 표식으로 결정적 제품 이미지를 생성합니다.",
+  "Category": "Modding",
+  "CreatedBy": "Satisfactory Ops",
+  "CanContainContent": false,
+  "Installed": false,
+  "Modules": [
+    {
+      "Name": "SatisfactoryOpsRenderer",
+      "Type": "Runtime",
+      "LoadingPhase": "PostEngineInit"
+    }
+  ],
+  "Plugins": [
+    {
+      "Name": "AbstractInstance",
+      "Enabled": true
+    },
+    {
+      "Name": "SML",
+      "Enabled": true,
+      "SemVersion": "^3.12.0"
+    }
+  ]
+}

@@ -64,6 +64,7 @@ for (const cell of profile.cells) {
   occupied.add(key);
   const color = parseHex(cell.color);
   const left = cell.column * cellPx;
+  // CUE4Parse glTF 변환에서 V축이 이미 뒤집혀 있으므로 프로파일 행을 PNG 순서로 둔다.
   const top = cell.row * cellPx;
   fill(data, left, top, cellPx, cellPx, color);
   fill(reflectionData, left, top, cellPx, cellPx, [cell.metallic, cell.roughness, cell.emission].map((value) => Math.round(Math.max(0, Math.min(1, value)) * 255)));
@@ -92,13 +93,13 @@ for (const cell of profile.cells) {
       const sliceOffset = (localY * cellPx + localX) * 4;
       if (albedoSlice) {
         for (let channel = 0; channel < 3; channel += 1) {
-          const textureFactor = 0.55 + (albedoSlice[sliceOffset + channel] / 255) * 0.45;
-          data[atlasOffset + channel] = Math.round(data[atlasOffset + channel] * textureFactor);
+          data[atlasOffset + channel] = Math.round(data[atlasOffset + channel] * albedoSlice[sliceOffset + channel] / 255);
         }
       }
       if (mreoSlice) {
-        reflectionData[atlasOffset] = Math.round(reflectionData[atlasOffset] * (0.85 + mreoSlice[sliceOffset] / 255 * 0.15));
-        reflectionData[atlasOffset + 1] = Math.min(255, Math.round(reflectionData[atlasOffset + 1] * (0.7 + mreoSlice[sliceOffset + 1] / 255 * 0.6)));
+        reflectionData[atlasOffset] = mreoSlice[sliceOffset];
+        reflectionData[atlasOffset + 1] = mreoSlice[sliceOffset + 1];
+        reflectionData[atlasOffset + 2] = mreoSlice[sliceOffset + 2];
       }
       if (normalSlice) {
         normalData[atlasOffset] = normalSlice[sliceOffset];

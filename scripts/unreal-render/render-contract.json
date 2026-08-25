@@ -1,0 +1,34 @@
+{
+  "$schemaVersion": 1,
+  "engineAssociation": "5.6.1-CSS",
+  "gameBuild": 502094,
+  "smlVersion": "3.12.0",
+  "resolution": 2048,
+  "foundationClass": "/Game/FactoryGame/Buildable/Building/Foundation/Build_Foundation_8x1_01.Build_Foundation_8x1_01_C",
+  "views": {
+    "top": {
+      "projection": "orthographic",
+      "elevationDeg": 90
+    },
+    "isometric": {
+      "projection": "perspective",
+      "elevationDeg": 45,
+      "azimuthDeg": [45, 135, 225, 315],
+      "fieldOfViewDeg": 28
+    }
+  },
+  "machines": [
+    {
+      "id": "biomass-burner",
+      "buildingClass": "Build_GeneratorBiomass_Automated_C",
+      "classPath": "/Game/FactoryGame/Buildable/Factory/GeneratorBiomass/Build_GeneratorBiomass_Automated.Build_GeneratorBiomass_Automated_C",
+      "packageEvidence": "FactoryGame/Content/FactoryGame/Buildable/Factory/GeneratorBiomass/Build_GeneratorBiomass_Automated.uasset"
+    },
+    {
+      "id": "constructor",
+      "buildingClass": "Build_ConstructorMk1_C",
+      "classPath": "/Game/FactoryGame/Buildable/Factory/ConstructorMk1/Build_ConstructorMk1.Build_ConstructorMk1_C",
+      "packageEvidence": "FactoryGame/Content/FactoryGame/Buildable/Factory/ConstructorMk1/Build_ConstructorMk1.uasset"
+    }
+  ]
+}

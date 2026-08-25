@@ -93,7 +93,7 @@
     },
     "alpha": [],
     "pbr": ["GeneratorBiomass_Inst", "MI_VA_GeneratorBiomass_01", "MI_ConveyorBelt_Mk1_01", "DecalColor_Masked", "Decal_Normal"],
-    "normalOnly": [],
+    "normalOnly": ["Decal_Normal"],
     "emissiveAccent": ["DecalColor_Masked"],
     "emissiveGeometrySelectors": [],
     "state": { "color": "#00ff00", "strength": 5 }

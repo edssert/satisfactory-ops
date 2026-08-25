@@ -70,6 +70,12 @@ Anders의 공개 Reddit 원출처 전수 색인은 `src/data/curated/anders-redd
 폭축을 줄이지 않았으며, 실제 포트 높이에서 시작해 경계에 닿는지 검증한다. 상부 구조가 포트를 가리면
 포트를 상단으로 옮기지 않고 해당 그리드·덮개만 국소 투과 처리한다.
 
+위 규칙은 설계판의 연결 경로 증거에 적용한다. 기기 단독 탑뷰·아이소메트릭 본체에는 외부 벨트·파이프를
+기기 부품처럼 합치지 않는다. 기술 포트 표식은 `BP_FactorySettings`가 지정한 conveyor/pipe frame·arrow
+메시와 input/output 재질을 사용하고, Blueprint connection component의 +X 외향축, 메시 저자 피벗과 bounds,
+재질 부모의 depth/blend 속성을 보존한다. `game:graph` 경로가 끊기거나 원본 depth 기능이 미구현이면 제품
+후보를 차단하며 제품별 각도·높이·색·투명도 보정을 허용하지 않는다.
+
 ## 4. 토대와 운송 자산
 
 토대 타일은 인접 배치 시 외곽 프레임만 자연스럽게 이어지고 중앙에 흰 선이나 이중 경계가 생기지 않아야
@@ -86,8 +92,9 @@ Anders의 공개 Reddit 원출처 전수 색인은 `src/data/curated/anders-redd
 Anders가 공개한 제작 원리는 `게임 자산 추출 → glTF → Blender → 사용자 정의 재질·장면 → 투명 탑뷰
 렌더`다. 현재 게임 버전에 적용할 기준 파이프라인은 다음과 같다.
 
-1. CUE4Parse로 `Buildable`, 공용 재질·텍스처, `MasterMaterials`, VAT 원본을 전수 색인한다. 현재 기준은
-   6,706개 패키지, 재질 901개, 구성품 3,809개, 참조 54,868개이며 실패 패키지는 0개다.
+1. CUE4Parse로 `FactoryGame/Content/` 전체와 `CommunityResources/Headers.zip`, 공용 재질·텍스처,
+   `MasterMaterials`, VAT 원본을 전수 색인한다. 현재 기준은 23,057개 패키지, 재질 2,844개,
+   구성품 5,470개, 참조 167,518개이며 실패 패키지는 0개다.
 2. 색인에서 576개 `Build_*` Blueprint 장면 계약을 생성한다. 정적·VAT·생산 표시등 같은 시각 구성품과
    사다리 상호작용·입출력·전력 연결 같은 비시각 구성품을 분리한다.
 3. 현재 Blueprint가 참조하는 메시와 CDO 변환만 장면 레시피에 넣는다. 제련기는 현재형
@@ -105,6 +112,9 @@ Anders가 공개한 제작 원리는 `게임 자산 추출 → glTF → Blender 
 동일 유형 결함이 두 번 발생하거나 여러 부품에 공통 결함이 한 번 발생하면 개별 재질·좌표 조정을
 중단하고 파이프라인 감사를 수행한다. 각 기기는 인게임 대조군별 필수 부품 행렬을 가져야 하며,
 원시 VAT 자세는 Idle/정지 변형 적용 증거 없이 제품 후보가 될 수 없다.
+
+파이프라인 감사에서는 설치본 카탈로그와 그래프가 필요한 CDO 필드·메시 bounds·마스터 재질 속성을 실제로
+보존하는지 먼저 확인한다. Blender 검사는 표시용 Euler가 아니라 활성 quaternion과 `matrix_world`를 사용한다.
 
 조립 검증은 수직 탑뷰에서 시작하지 않는다. 정면·후면·좌·우 직교뷰와 네 방향 아이소메트릭에서
 부품 접합, asset basis, 높이, 좌우, 포트 방향을 먼저 통과한 뒤 수직 탑뷰와 점유 프레임을 생성한다.
@@ -144,20 +154,23 @@ Anders가 공개한 제작 원리는 `게임 자산 추출 → glTF → Blender 
 `(X,-Y,Z,-yaw)` 변환·간접 생산 표시등을 대조한다. 위치 오차는 1e-5m, Unreal rotator의 ±180° 래핑은
 원형 거리 0.002° 이내만 허용한다.
 
-`scripts/game-assets/game-graph.mjs`는 위 두 캐시와 생성 앱 데이터·장면 레시피·탑뷰 매니페스트를
+`scripts/game-assets/game-graph.mjs`는 위 캐시와 Headers API 계약, 생성 앱 데이터·장면 레시피·탑뷰 매니페스트를
 `.cache/game-graph.db`로 연결한다. `game:graph:query`의 `search`, `building`, `trace`, `path`로
 패키지→컴포넌트→메시·재질→장면→승인 자산의 증거를 찾고, `game:graph:check`로 입력 해시 드리프트,
 dangling 관계, 상태 자산 4종과 참조 전용 자산의 런타임 누출을 막는다. 모든 생성 캐시는 커밋하지 않는다.
+포트는 `game:graph:query -- port <BuildClass> <PortId>`로 component transform, FactorySettings frame/arrow,
+저자 bounds, input/output material 부모와 depth 속성, Headers API를 compact JSON으로 조회한다.
 
-채굴기 Mk.1은 현재 게임 메시, 실제 Output0 좌표, Mk.1 벨트 스텁, 수직 정사영과 하드 점유 코너 계약을
-통과해 `approved`다. 자동화 바이오매스 연소기도 입력부를 가리는 별도 투명도 처리 없이 활성·파워 샤드·
-대기·오류 4상태를 현재 게임 메시로 승인해 앱에 연결했다. 구조 검사는 파일 SHA-256, 양수 실축, 0~1 범위
-점유 프레임을 확인한다. Blender 설치와 렌더 성공만으로 시각 승인을 대체하지 않는다.
+기존 채굴기 Mk.1과 자동화 바이오매스 연소기 자산은 파일·점유 구조 검사는 통과했지만, 현재 게임의
+Factory/VAT/Foundation 재질과 `bDisableDepthTest` 포트 표식을 같은 장면에서 재현했다는 증거가 없어
+`approved` 완료 주장을 철회한다. 구조 검사는 파일 SHA-256, 양수 실축, 0~1 범위 점유 프레임을 확인하지만
+렌더러 설치와 이미지 생성만으로 시각 승인을 대체하지 않는다.
 `npm run check:assets:release`는 현재 게임 승인 자산의 exact allowlist와 외부 reference SHA-256 denylist를
 `public/`, `dist/`, 서비스워커에 적용한다.
 
-고정 설비·장치 래스터 대상은 `requiresRasterTopview()`로 63건이며 모두 현재 게임 설치본 기반 자산으로
-승격했다. `scripts/topview/batch-topviews.mjs`는 자동 장면 계약에서 메시를 일괄 추출·렌더하고,
+고정 설비·장치 래스터 대상은 `requiresRasterTopview()`로 63건이다. 기존 파일 존재 기준의 전수 승격은
+철회했으며, 바이오매스 연소기와 제작기의 Unreal 골든 fixture가 승인된 뒤 낮은 티어부터 같은 계약으로
+재검수한다. `scripts/topview/batch-topviews.mjs`는 자동 장면 계약에서 메시를 일괄 추출·렌더하고,
 `src/data/curated/topview-batch-review.json`은 실제 검수에서 통과·제외한 후보를 기록한다. 토대·경로·
 높이 가변 지지대·구멍·철도 신호는 이 집계에 넣지 않고 설계판 합성 계약에서 다룬다.
 
@@ -186,3 +199,24 @@ Anders `Texture 02.png#21`과 `#33`은 컨베이어 리프트의 방향·끝단 
 `Build_Foundation_8x1_01_C → AbstractInstanceDataObject → SM_Foundation_FicsitSet_8x1_01 →
 MI_Foundation_FicsitSet_01 → BC/AO/N/Refl` 경로의 현재 게임 자산을 사용한다. 외부 고해상도 이미지는
 로컬 게임 아이콘과 형상 대조를 통과한 비교 근거로만 쓰며 출처를 표시한다.
+설비 공식 렌더와 토대 렌더를 2D로 겹쳐 배치하지 않는다. 접점·원근·그림자를 공유하는 하나의 3D 장면에서
+완성되지 않은 토대 합성은 제품 후보에서 제외한다.
+재질 복원은 `MaterialInstance → 부모 체인 → 마스터 재질`과 UV·vertex color·Primitive Data 의존성이
+연속될 때만 제품용으로 판정한다. `MM_Factory_Array`를 합성 3×3 PNG로 평탄화한 장면은 형상 진단 후보이며
+`audit-isometric-material-fidelity.mjs --require-product`가 실패하는 동안 승인 자산으로 승격하지 않는다.
+토대 상판 재질은 world-space 최고 높이 면에만 배정하고 `audit-isometric-scene.py`의 옆면 오염 0건을 요구한다.
+사용자 수동 스크린샷은 자산 제작 입력이나 색상 정본으로 사용하지 않는다. 메시·재질·색상 슬롯·클리어런스·
+포트는 설치본 패키지와 CDO에서만 생성한다. 토대 중심은 설비 시각 bounds가 아니라 `mClearanceData` 중심과
+일치해야 하며, Blender 이미지 캐시는 매 렌더마다 현재 생성 아틀라스 해시로 다시 로드한다.
+Unreal 재질 계열별 Blender 어댑터와 제품 차단 조건은 [[research/unreal-material-to-blender-pipeline-2026]]을 따른다.
+제품용 아이소메트릭과 포트 기술뷰는 Blender 재질 근사본을 승격하지 않는다. `SatisfactoryOpsRenderer`는
+SML 3.12.0 실제 게임 런타임에서 cooked Buildable Blueprint를 생성해 최종 component·AbstractInstance,
+MaterialInstance·텍스처, `mClearanceData`, `FGBuildableHologram::Setup*ConnectionMesh`의 메시·재질·transform을
+JSON probe로 내보내는 검증기다. 런타임 스크린샷은 Blender의 제작 입력이나 배포 자산으로 사용하지 않는다.
+Blender는 probe와 설치본 추출 텍스처를 소비해 하나의 장면에서 Foundation·설비·포트를 조립하고 top 1장과
+방위 45/135/225/315의 beauty·technical을 카메라만 바꿔 생성한다. 포트는 정확한 3D 위치를 유지하되 기기에
+가려지는 시점에서는 자연스럽게 가려진다. Foundation 상단과 설비 하단은 각 clearance 로컬 Z 경계로 정렬한다.
+바이오매스 연소기와 제작기의 2048px 토대 없는 탑뷰와 토대 포함 beauty 4방향은 이 계약을 통과해 앱에
+연결됐다. technical 자산은 배포하지 않는다. 실제 `AFGBuildGun::GotoBuildState`를 거친 viewport reference에서
+`ClearanceBox` UV0, `Mam_EdgeLine_Alb`, `Mam_ScanLine_Alb`, `GradientVert`, additive `Glow`의 동작을 확인했지만
+Blender의 screen-space 선 폭이 아직 일치하지 않기 때문이다. 임의 cylinder·halo·불투명도 보정은 금지한다.

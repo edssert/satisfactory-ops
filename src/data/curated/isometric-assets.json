@@ -1,0 +1,31 @@
+{
+  "$schemaVersion": 1,
+  "assets": [
+    {
+      "buildingClass": "Build_GeneratorBiomass_Automated_C",
+      "path": "assets/dex/isometric/Build_GeneratorBiomass_Automated_C-135.webp",
+      "sha256": "73d4dbed2e95bdcb2dd69d95ec37adeae90bd883bac8b60f7ec0355c63ad567f",
+      "renderPx": 2048,
+      "sourceId": "game-install-cl-502094-runtime-probe-blender",
+      "views": [
+        { "azimuth": 45, "path": "assets/dex/isometric/Build_GeneratorBiomass_Automated_C-045.webp", "sha256": "6677ec0b01dd2e949bc7dd28b90f93838db4ce3cd2aa4de8d86c40da89bbe63d" },
+        { "azimuth": 135, "path": "assets/dex/isometric/Build_GeneratorBiomass_Automated_C-135.webp", "sha256": "73d4dbed2e95bdcb2dd69d95ec37adeae90bd883bac8b60f7ec0355c63ad567f" },
+        { "azimuth": 225, "path": "assets/dex/isometric/Build_GeneratorBiomass_Automated_C-225.webp", "sha256": "d30455ac7c45345df0be3a8ff2aa8f8e772cd62fbf7ef82027c29930fd1cb2bb" },
+        { "azimuth": 315, "path": "assets/dex/isometric/Build_GeneratorBiomass_Automated_C-315.webp", "sha256": "780568d0f37d388c7c442814e9627bb1a0f23efeb8cfaa46797cacdba4ebd1f6" }
+      ]
+    },
+    {
+      "buildingClass": "Build_ConstructorMk1_C",
+      "path": "assets/dex/isometric/Build_ConstructorMk1_C-135.webp",
+      "sha256": "324e057d7399f3d0355f6e25deba260fbabd24dbfe63bcc89ae1d7e5ddb69ac6",
+      "renderPx": 2048,
+      "sourceId": "game-install-cl-502094-runtime-probe-blender",
+      "views": [
+        { "azimuth": 45, "path": "assets/dex/isometric/Build_ConstructorMk1_C-045.webp", "sha256": "8059987a82d5b1e5eb6e8d9eceee61446dc1744f8a3d8819b4c14e36b2ff3588" },
+        { "azimuth": 135, "path": "assets/dex/isometric/Build_ConstructorMk1_C-135.webp", "sha256": "324e057d7399f3d0355f6e25deba260fbabd24dbfe63bcc89ae1d7e5ddb69ac6" },
+        { "azimuth": 225, "path": "assets/dex/isometric/Build_ConstructorMk1_C-225.webp", "sha256": "704282757e56438380a1327dce31721cd5d8f839172e89f130fd41c83f1525ed" },
+        { "azimuth": 315, "path": "assets/dex/isometric/Build_ConstructorMk1_C-315.webp", "sha256": "1495400cce69a78cf8fefec544937464d64088fc69e78ac7a270650f207f3d09" }
+      ]
+    }
+  ]
+}

@@ -39,6 +39,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--material-alpha", action="append", default=[])
     parser.add_argument("--material-pbr", action="append", default=[])
     parser.add_argument("--material-normal-only", action="append", default=[])
+    parser.add_argument("--material-legacy-paint", action="append", default=[])
+    parser.add_argument("--material-emission-strength", action="append", default=[])
     parser.add_argument("--material-paint", action="append", default=[])
     parser.add_argument("--material-base-color", action="append", default=[])
     parser.add_argument("--material-emissive-accent", action="append", default=[])
@@ -134,6 +136,8 @@ def apply_scene_config(args: argparse.Namespace) -> argparse.Namespace:
     args.material_alpha = material.get("alpha", [])
     args.material_pbr = material.get("pbr", [])
     args.material_normal_only = material.get("normalOnly", [])
+    args.material_legacy_paint = material.get("legacyPaint", [])
+    args.material_emission_strength = [f"{name}={value}" for name, value in material.get("emissionStrength", {}).items()]
     args.material_paint = [
         f"{name}={colors['primary']},{colors['secondary']}"
         for name, colors in material.get("paint", {}).items()
@@ -238,17 +242,7 @@ def scaled(color: tuple[float, float, float], factor: float) -> tuple[float, flo
 
 
 def palette(material_name: str) -> tuple[float, float, float]:
-    name = material_name.lower()
-    if "decalcolor" in name:
-        return (0.95, 0.28, 0.025)
-    if "decal_normal" in name:
-        return (0.018, 0.032, 0.046)
-    if "biomass" in name:
-        return (0.20, 0.28, 0.34)
-    if "prodlight" in name or "productionlight" in name:
-        return (0.015, 1.0, 0.08)
-    if "va_" in name or "vat" in name:
-        return (0.78, 0.24, 0.035)
+    # 제품명 추측 금지. 게임 재질 binding이 없는 진단 fallback만 중립색을 쓴다.
     return (0.085, 0.13, 0.19)
 
 
@@ -307,6 +301,16 @@ def parse_color_map(entries: list[str]) -> dict[str, tuple[float, float, float, 
     return result
 
 
+def parse_scalar_map(entries: list[str]) -> dict[str, float]:
+    result = {}
+    for entry in entries:
+        name, separator, raw_value = entry.partition("=")
+        if not separator:
+            raise ValueError(f"스칼라 매핑은 material=value 형식이어야 합니다: {entry}")
+        result[name.casefold()] = float(raw_value)
+    return result
+
+
 def add_image_node(nodes: bpy.types.Nodes, path: Path, *, non_color: bool = False) -> bpy.types.Node:
     node = nodes.new("ShaderNodeTexImage")
     node.image = bpy.data.images.load(str(path), check_existing=True)
@@ -341,6 +345,10 @@ def apply_pbr_material(
     base_colors: dict[str, tuple[float, float, float, float]],
     emissive_accent_materials: set[str],
     normal_only_materials: set[str],
+    legacy_paint_materials: set[str],
+    emission_strengths: dict[str, float],
+    state_mask_paths: dict[str, Path],
+    state_color_value: tuple[float, float, float, float],
 ) -> None:
     material.use_nodes = True
     nodes = material.node_tree.nodes
@@ -359,6 +367,7 @@ def apply_pbr_material(
     ao_path = ao_paths.get(material_key)
     normal_path = normal_paths.get(material_key)
     reflection_path = reflection_paths.get(material_key)
+    state_mask_path = state_mask_paths.get(material_key)
 
     if albedo_path:
         albedo = add_image_node(nodes, albedo_path)
@@ -368,6 +377,16 @@ def apply_pbr_material(
         base = nodes.new("ShaderNodeRGB")
         base.outputs[0].default_value = base_colors.get(material_key, (*palette(material.name), 1))
         base_color = base.outputs[0]
+
+    if albedo is not None and material_key in legacy_paint_materials and material_key in paint_colors:
+        primary = nodes.new("ShaderNodeRGB")
+        primary.outputs[0].default_value = paint_colors[material_key][0]
+        painted = nodes.new("ShaderNodeMixRGB")
+        painted.blend_type = "MULTIPLY"
+        painted.inputs[0].default_value = 1.0
+        links.new(base_color, painted.inputs[1])
+        links.new(primary.outputs[0], painted.inputs[2])
+        base_color = painted.outputs["Color"]
 
     if ao_path:
         ao = add_image_node(nodes, ao_path, non_color=True)
@@ -438,11 +457,17 @@ def apply_pbr_material(
         channels = nodes.new("ShaderNodeSeparateColor")
         emission_scale = nodes.new("ShaderNodeMath")
         emission_scale.operation = "MULTIPLY"
-        emission_scale.inputs[1].default_value = 7.5
+        emission_scale.inputs[1].default_value = emission_strengths.get(material_key, 1.0)
         links.new(reflection.outputs["Color"], channels.inputs["Color"])
         links.new(channels.outputs["Red"], bsdf.inputs["Metallic"])
         links.new(channels.outputs["Green"], bsdf.inputs["Roughness"])
-        links.new(base_color, bsdf.inputs["Emission Color"])
+        if state_mask_path:
+            state_color = nodes.new("ShaderNodeRGB")
+            state_color.name = "StateEmissionColor"
+            state_color.outputs[0].default_value = state_color_value
+            links.new(state_color.outputs[0], bsdf.inputs["Emission Color"])
+        else:
+            links.new(base_color, bsdf.inputs["Emission Color"])
         links.new(channels.outputs["Blue"], emission_scale.inputs[0])
         links.new(emission_scale.outputs[0], bsdf.inputs["Emission Strength"])
     else:
@@ -474,6 +499,7 @@ def apply_fake_material(
     state_mask_paths: dict[str, Path],
     state_color_value: tuple[float, float, float, float],
     base_colors: dict[str, tuple[float, float, float, float]],
+    emission_strengths: dict[str, float],
 ) -> None:
     material.use_nodes = True
     nodes = material.node_tree.nodes
@@ -561,7 +587,7 @@ def apply_fake_material(
         ao = nodes.new("ShaderNodeAmbientOcclusion")
         ao.inputs["Distance"].default_value = 2.5
         links.new(ao.outputs["Color"], ao_multiply.inputs[2])
-    emission.inputs["Strength"].default_value = 1.0
+    emission.inputs["Strength"].default_value = emission_strengths.get(material_key, 1.0)
     links.new(facing.outputs["Facing"], ramp.inputs["Fac"])
     links.new(facing_multiply.outputs["Color"], ao_multiply.inputs[1])
     final_color = ao_multiply.outputs["Color"]
@@ -618,7 +644,7 @@ def apply_fake_material(
         metal_highlight.inputs[0].default_value = 1.0
         metal_color = nodes.new("ShaderNodeMixRGB")
         hot_emission = nodes.new("ShaderNodeEmission")
-        hot_emission.inputs["Strength"].default_value = 5.0
+        hot_emission.inputs["Strength"].default_value = emission_strengths.get(material_key, 1.0)
         emissive_mix = nodes.new("ShaderNodeMixShader")
         links.new(reflection.outputs["Color"], reflection_channels.inputs["Color"])
         links.new(reflection_channels.outputs["Green"], invert_roughness.inputs[1])
@@ -1059,12 +1085,14 @@ reflection_paths = parse_material_map(args.material_reflection)
 alpha_materials = {name.casefold() for name in args.material_alpha}
 pbr_materials = {name.casefold() for name in args.material_pbr}
 normal_only_materials = {name.casefold() for name in args.material_normal_only}
+legacy_paint_materials = {name.casefold() for name in args.material_legacy_paint}
 paint_colors = parse_paint_map(args.material_paint)
 base_colors = parse_color_map(args.material_base_color)
 emissive_accent_materials = {name.casefold() for name in args.material_emissive_accent}
 state_mask_paths = parse_material_map(args.material_state_mask)
+emission_strengths = parse_scalar_map(args.material_emission_strength)
 parsed_state_color = parse_hex_color(args.state_color)
-state_color_value = tuple(channel * args.state_strength for channel in parsed_state_color[:3]) + (1.0,)
+state_color_value = parsed_state_color
 for material in bpy.data.materials:
     if canonical_material_key(material.name) in pbr_materials:
         apply_pbr_material(
@@ -1078,6 +1106,10 @@ for material in bpy.data.materials:
             base_colors,
             emissive_accent_materials,
             normal_only_materials,
+            legacy_paint_materials,
+            emission_strengths,
+            state_mask_paths,
+            state_color_value,
         )
     else:
         apply_fake_material(
@@ -1092,6 +1124,7 @@ for material in bpy.data.materials:
             state_mask_paths,
             state_color_value,
             base_colors,
+            emission_strengths,
         )
 
 apply_emissive_geometry_selectors(args.emissive_geometry_selectors, mesh_objects)

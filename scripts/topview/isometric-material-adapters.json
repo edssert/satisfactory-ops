@@ -1,0 +1,38 @@
+{
+  "$schemaVersion": 1,
+  "adapters": [
+    {
+      "id": "MM_Factory_Array",
+      "status": "verified",
+      "evidence": "node scripts/topview/audit-factory-array-adapter.mjs",
+      "sources": ["FactoryGame/Content/FactoryGame/Buildable/-Shared/Material/MM_Factory_Array.uasset", "BP_BuildableSubsystem.mColorSlots_Data[0]"]
+    },
+    {
+      "id": "MM_FactoryBaked_VAT",
+      "status": "verified",
+      "evidence": "node scripts/topview/audit-vat-material-adapter.mjs <generated-vat-profile.json>",
+      "sources": ["FactoryGame/Content/FactoryGame/MasterMaterials/MM_FactoryBaked_VAT.uasset"]
+    },
+    {
+      "id": "Decal_Normal",
+      "status": "verified",
+      "evidence": "blender mesh-decal.blend --background --python scripts/topview/audit-mesh-decal-adapter.py",
+      "sources": ["FactoryGame/Content/FactoryGame/Buildable/-Shared/Material/Decal_Normal.uasset"]
+    },
+    {
+      "id": "MM_BakedStencil_01",
+      "status": "verified",
+      "evidence": "blender foundation-adapter.blend --background --python scripts/topview/audit-foundation-adapter.py",
+      "sources": ["FactoryGame/Content/FactoryGame/MasterMaterials/MM_BakedStencil_01.uasset"]
+    },
+    {
+      "id": "BuildHologram",
+      "status": "blocked",
+      "blocker": "실제 mClearanceSnapMeshVisualization + Clearance_Inst + HMS_OK viewport reference에서도 선 효과가 투명함. BuildGun의 추가 동적 셰이더 상태가 미복구되어 임의 halo/두께/감쇠값을 금지함",
+      "evidence": "blender hologram-adapter.blend --background --python scripts/topview/audit-hologram-adapter.py",
+      "sources": ["runtime-probe#technicalMeshes", "FactoryGame/Content/FactoryGame/Equipment/BuildGun/Material/Hologram_Simple.uasset", "CommunityResources/Headers.zip#AFGBuildableHologram.SetupFactoryConnectionMesh"],
+      "occlusionPolicy": "natural-scene-depth",
+      "unimplemented": ["clearance-edge-thickness", "vertical-gradient", "corner-additive-glow", "scanline-phase"]
+    }
+  ]
+}

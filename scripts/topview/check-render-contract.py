@@ -101,6 +101,8 @@ component_parents = {
     if obj.get("source_component_id")
 }
 for port in recipe.get("portVisibility", []):
+    if not port.get("stubComponent"):
+        continue
     parent = component_parents.get(port["stubComponent"])
     if parent is None:
         raise RuntimeError(f"{port['id']}: 렌더된 실제 벨트 스텁이 없습니다.")

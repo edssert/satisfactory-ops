@@ -7,6 +7,7 @@ import { comparePlannerAssetTargets, requiresRasterTopview } from '../../../lib/
 import { RUNTIME_TOPVIEW_SOURCE, topviewAssets } from '../../../lib/topview-assets';
 import plannerScope from '../../../data/app/planner-asset-scope.json';
 import portData from '../../../data/curated/machine-ports.json';
+import isometricData from '../../../data/curated/isometric-assets.json';
 import '../../../styles/tech.css';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -16,6 +17,7 @@ const assetsByClass = Map.groupBy(
   (asset) => asset.buildingClass,
 );
 const portClasses = new Set(portData.$completeBuildings);
+const isometricByClass = new Map(isometricData.assets.map((asset) => [asset.buildingClass, asset]));
 const CATEGORY: Record<string, string> = {
   facility: '설비', extractor: '추출', generator: '발전', storage: '저장',
   'logistics-device': '물류 장치', 'logistics-support': '물류 지지대',
@@ -38,6 +40,7 @@ const rows = auditTargets.map((target) => {
     building,
     topview,
     image: topview?.path ?? null,
+    isometric: isometricByClass.get(target.buildingClass) ?? null,
     assetStateKey,
     assetState: topview ? '승인' : candidate ? '후보' : reference ? '연구 대조만' : '누락',
     portState: portClasses.has(building.id) ? '재검증 표본 있음' : '미검증',
@@ -85,14 +88,23 @@ const implicitConnections = plannerScope.implicitPowerNetwork.length;
           <span>{tierRows.length}개</span>
         </header>
         <div class="asset-grid">
-          {tierRows.map(({ target, building, topview, image, assetState, assetStateKey, portState }) => (
-            <article class:list={['asset-card', `is-${assetStateKey}`]} data-building-class={target.buildingClass}>
-              <div class="asset-preview">
-                {image
-                  ? <img src={`${base}/${image}`} alt="" width="200" height="200" loading="lazy" />
-                  : <span class="asset-missing-preview" aria-hidden="true">탑뷰 제작 중</span>}
-                <span>{assetState}</span>
-              </div>
+          {tierRows.map(({ target, building, topview, image, isometric, assetState, assetStateKey, portState }) => (
+            <article class:list={['asset-card', `is-${assetStateKey}`, { 'has-isometric': Boolean(isometric) }]} data-building-class={target.buildingClass}>
+              {isometric ? (
+                <button class="asset-preview" type="button" aria-pressed="false" data-isometric-toggle title="호버하거나 클릭해 아이소메트릭 보기">
+                  {image && <img class="asset-topview" src={`${base}/${image}`} alt={`${building.ko} 탑뷰`} width="200" height="200" loading="lazy" />}
+                  <img class="asset-isometric" src={`${base}/${isometric.path}?v=${isometric.sha256.slice(0, 12)}`} alt={`${building.ko} 아이소메트릭`} width="300" height="300" loading="lazy" />
+                  <span class="asset-state">{assetState}</span>
+                  <span class="asset-view-hint">탑뷰 ↔ ISO</span>
+                </button>
+              ) : (
+                <div class="asset-preview">
+                  {image
+                    ? <img src={`${base}/${image}`} alt="" width="200" height="200" loading="lazy" />
+                    : <span class="asset-missing-preview" aria-hidden="true">탑뷰 제작 중</span>}
+                  <span class="asset-state">{assetState}</span>
+                </div>
+              )}
               <div class="asset-copy">
                 <p>{CATEGORY[target.plannerKind] ?? target.plannerKind}</p>
                 <h2>{building.ko}</h2>
@@ -143,8 +155,10 @@ const implicitConnections = plannerScope.implicitPowerNetwork.length;
   .asset-tier > header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--s4); border-bottom: var(--hair) solid var(--line-strong); padding-bottom: var(--s2); }
   .asset-tier > header p { margin: 0; font: 700 var(--t-h3) var(--font-mono); }
   .asset-tier > header span { color: var(--ink-3); font: var(--t-caption) var(--font-mono); }
-  .asset-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--s3); }
+  .asset-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr)); gap: var(--s3); }
   .asset-card { display: grid; grid-template-columns: 104px minmax(0, 1fr); min-width: 0; border: var(--hair) solid var(--line); background: var(--surface); }
+  .asset-card.has-isometric { grid-template-columns: 180px minmax(0, 1fr); }
+  .asset-card.has-isometric .asset-preview { min-height: 200px; }
   .asset-missing-preview { display: grid; width: 100%; min-height: 104px; place-items: center; padding: var(--s2); color: var(--ink-3); font: var(--t-caption) var(--font-mono); text-align: center; }
   .asset-card.is-approved { border-color: color-mix(in oklab, var(--status-ok) 35%, var(--line)); }
   .asset-card.is-missing { border-color: color-mix(in oklab, var(--status-danger) 45%, var(--line)); }
@@ -152,8 +166,19 @@ const implicitConnections = plannerScope.implicitPowerNetwork.length;
   .asset-card.is-reference { border-color: color-mix(in oklab, var(--status-warning) 45%, var(--line)); }
   .asset-card.is-implicit { border-color: color-mix(in oklab, var(--primary) 45%, var(--line)); }
   .asset-preview { position: relative; display: grid; min-height: 148px; place-items: center; overflow: hidden; border-right: var(--hair) solid var(--line); background: var(--bg); }
+  button.asset-preview { width: 100%; border-block: 0; border-left: 0; padding: 0; color: inherit; cursor: pointer; }
   .asset-preview img { width: 92px; height: 116px; object-fit: contain; }
-  .asset-preview span { position: absolute; inset: 7px auto auto 7px; padding: 3px 6px; background: var(--bg); color: var(--ink-2); font: 700 .58rem var(--font-mono); }
+  .asset-preview .asset-state { position: absolute; inset: 7px auto auto 7px; padding: 3px 6px; background: var(--bg); color: var(--ink-2); font: 700 .58rem var(--font-mono); }
+  .asset-view-hint { position: absolute; inset: auto 7px 7px; padding: 3px 6px; background: color-mix(in oklab, var(--bg) 88%, transparent); color: var(--primary); font: 700 .55rem var(--font-mono); }
+  .asset-preview .asset-isometric { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity .16s ease; }
+  .asset-card.is-isometric .asset-isometric,
+  .asset-preview:focus-visible .asset-isometric { opacity: 1; }
+  .asset-card.is-isometric .asset-topview,
+  .asset-preview:focus-visible .asset-topview { opacity: 0; }
+  @media (hover: hover) {
+    .asset-card.has-isometric:hover .asset-isometric { opacity: 1; }
+    .asset-card.has-isometric:hover .asset-topview { opacity: 0; }
+  }
   .asset-copy { min-width: 0; padding: var(--s3); }
   .asset-copy > p { margin: 0 0 var(--s1); color: var(--primary); font: .58rem var(--font-mono); }
   .asset-copy h2 { margin: 0; font-size: var(--t-body); }
@@ -162,5 +187,16 @@ const implicitConnections = plannerScope.implicitPowerNetwork.length;
   .asset-copy dl div { display: grid; grid-template-columns: 78px minmax(0, 1fr); gap: 6px; font-size: .6rem; }
   .asset-copy dt { color: var(--ink-3); }
   .asset-copy dd { min-width: 0; margin: 0; overflow-wrap: anywhere; color: var(--ink-2); }
-  @media (max-width: 520px) { .asset-card { grid-template-columns: 88px minmax(0, 1fr); } .asset-preview img { width: 78px; } .source-method { grid-template-columns: 1fr; } }
+  @media (max-width: 520px) { .asset-card, .asset-card.has-isometric { grid-template-columns: 120px minmax(0, 1fr); } .asset-card.has-isometric .asset-preview { min-height: 168px; } .asset-preview img { width: 104px; } .source-method { grid-template-columns: 1fr; } }
 </style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-isometric-toggle]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const card = button.closest('.asset-card');
+      if (!card) return;
+      const active = card.classList.toggle('is-isometric');
+      button.setAttribute('aria-pressed', String(active));
+    });
+  });
+</script>

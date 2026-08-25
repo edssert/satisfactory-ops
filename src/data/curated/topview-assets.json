@@ -121,10 +121,10 @@
       "visualProfile": "anders-reconstructed-blender-2026",
       "reviewStatus": "approved",
       "renderPx": {
-        "width": 1024,
-        "height": 1024
+        "width": 2048,
+        "height": 2048
       },
-      "sha256": "25ca483c0f0a5cfa6a8493fa10a7d127fc2a7085866d4c2518c5c3f276af82ca",
+      "sha256": "61470cb84dde7a3a4852285f540398cdb1fc83c5fbdbb867b132c51b28857714",
       "hardFootprintM": {
         "width": 8,
         "length": 10
@@ -135,15 +135,15 @@
         "height": 8.3067
       },
       "occupancyFrame": {
-        "x": 0.136363636364,
-        "y": 0.045454545455,
-        "width": 0.727272727273,
-        "height": 0.909090909091
+        "x": 0.115467348582,
+        "y": 0.03452162033,
+        "width": 0.769065302836,
+        "height": 0.961331628545
       },
       "statusImages": {
         "active": {
           "path": "assets/planner/top-view/buildings/production/Build_ConstructorMk1_C.webp",
-          "sha256": "25ca483c0f0a5cfa6a8493fa10a7d127fc2a7085866d4c2518c5c3f276af82ca"
+          "sha256": "61470cb84dde7a3a4852285f540398cdb1fc83c5fbdbb867b132c51b28857714"
         },
         "activeWithCrystal": {
           "path": "assets/planner/top-view/buildings/production/Build_ConstructorMk1_C.crystal.webp",
@@ -158,7 +158,7 @@
           "sha256": "df7631388814f84463b2a44a9ef0467f1611353c9bcfeb0ad4dd7c0060aa8e51"
         }
       },
-      "approvedCandidateSha256": "d9b9f3c5dd9b994da2d95861b3621b6c4d5639e39522ddcd0b50d046f35dd88c"
+      "approvedCandidateSha256": "4980c95746a62a14622b837294a7222444cd3df3c721f80c4333c5674e23a29b"
     },
     {
       "assetId": "Build_SmelterMk1_C",
@@ -494,10 +494,10 @@
       "visualProfile": "anders-reconstructed-blender-2026",
       "reviewStatus": "approved",
       "renderPx": {
-        "width": 1024,
-        "height": 1024
+        "width": 2048,
+        "height": 2048
       },
-      "sha256": "bb6417e391681e87a3094e818b536cd7a1e4c65dc9997cf5788d952da5fc2bd7",
+      "sha256": "4941d585b1d2cb93b3977b5736a9a0f368463282de35b517040d9489629441a1",
       "hardFootprintM": {
         "width": 8,
         "length": 8
@@ -508,15 +508,15 @@
         "height": 7.5881
       },
       "occupancyFrame": {
-        "x": 0.098152789271,
-        "y": 0.051449565209,
-        "width": 0.856392674555,
-        "height": 0.856392700077
+        "x": 0.090711210117,
+        "y": 0.043143072178,
+        "width": 0.872251830832,
+        "height": 0.872251830832
       },
       "statusImages": {
         "active": {
           "path": "assets/planner/top-view/buildings/power/Build_GeneratorBiomass_Automated_C.webp",
-          "sha256": "bb6417e391681e87a3094e818b536cd7a1e4c65dc9997cf5788d952da5fc2bd7"
+          "sha256": "4941d585b1d2cb93b3977b5736a9a0f368463282de35b517040d9489629441a1"
         },
         "activeWithCrystal": {
           "path": "assets/planner/top-view/buildings/power/Build_GeneratorBiomass_Automated_C.crystal.webp",
@@ -531,7 +531,7 @@
           "sha256": "ca922273b829c4b123e0deae1d8db5e857253e96f054c22a6d055ae9d73b294b"
         }
       },
-      "approvedCandidateSha256": "b420e3e4ec315dfcd48e1093aa2d6438b162c2c7b42bb0a9e52def0e7502ef27"
+      "approvedCandidateSha256": "a6d7d5bdf20f02376ef929f13c63135d42ef8f5ba99f5783a6ae3ce4685caa8f"
     },
     {
       "assetId": "ConveyorLiftHeadA",

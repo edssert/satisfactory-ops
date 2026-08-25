@@ -69,6 +69,10 @@ const buildings = rows
         skeletalMesh: component.SkeletalMesh,
         overrideMaterials: component.OverrideMaterials,
         transform: transform(component),
+        connection: component.Type === 'FGFactoryConnectionComponent' ? {
+          direction: component.Direction ?? 'EFactoryConnectionDirection::FCD_INPUT',
+          connectorClearanceCm: component.ConnectorClearance ?? 0,
+        } : null,
         indirectBlueprint: indirectBlueprint(component, row)
       })),
       materialReferences: visualMaterialReferences,
